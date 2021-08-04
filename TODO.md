@@ -25,8 +25,6 @@
   
 * Add data (plant CBNmed ask permission)
 
-* Add option spproject (change name?) to choose between prodmat and loop.
-
 ## 2. Package V2
 * Bien vérifier les packages importés (il y en aura à supprimer...)
 

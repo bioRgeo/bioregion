@@ -6,7 +6,7 @@
 #' @param comat a co-occurence \code{matrix} with sites as rows and species as columns
 #' @param metric a vector of character(s) indicating which similarity
 #' metric(s) to chose (see Details)
-#' @param method a a string indicating what method should be used to compute \code{abc} (see Details),
+#' @param method a string indicating what method should be used to compute \code{abc} (see Details),
 #' \code{method = "prodmat"} by default is more efficient but can greedy in memory and \code{method="loops"} is less efficient
 #' but less greedy in memory
 #' @export
