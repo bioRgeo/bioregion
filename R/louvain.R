@@ -186,13 +186,13 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
 
     # Run LOUVAIN
     if(weight){
-      cmd=paste0("bin/LOUVAIN/net.bin -l -1 -q ", q, " -c ", c , " -k ", k," -w bin/LOUVAIN/net.weights > bin/LOUVAIN/net.tree")
+      cmd=paste0("bin/LOUVAIN/net.bin -l -1 -q ", q, " -c ", c , " -k ", k," -w bin/LOUVAIN/net.weights")
     }else{
-      cmd=paste0("bin/LOUVAIN/net.bin -l -1 -q ", q, " -c ", c , " -k ", k,"  > bin/LOUVAIN/net.tree")
+      cmd=paste0("bin/LOUVAIN/net.bin -l -1 -q ", q, " -c ", c , " -k ", k)
     }
 
     if(os == "Linux"){
-      cmd=paste0("bin/LOUVAIN/louvain_lin ", cmd)
+      cmd=paste0("bin/LOUVAIN/louvain_lin ", cmd, " > bin/LOUVAIN/net.tree")
       system(command = cmd)
     }else if(os == "Windows"){
       cmd=paste0("bin/LOUVAIN/louvain_win.exe ", cmd)
