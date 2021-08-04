@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+src/abc.o
+src/bioRgeo.so
+src/prodmat.o
+src/RcppExports.o
+
+inst/REFERENCES.bib.bak
