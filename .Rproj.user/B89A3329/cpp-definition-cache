@@ -1,0 +1,32 @@
+[
+    {
+        "definitions" : [
+            {
+                "column" : 15,
+                "file" : "/home/maxime/mmmycloud/Research/Articles/InProgress/bioRgeo/bioRgeo/src/abc.cpp",
+                "kind" : 6,
+                "line" : 7,
+                "name" : "abc(Rcpp::NumericMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@abc#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#"
+            }
+        ],
+        "file" : "/home/maxime/mmmycloud/Research/Articles/InProgress/bioRgeo/bioRgeo/src/abc.cpp",
+        "file_last_write" : 1626782065.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/home/maxime/mmmycloud/Research/Articles/InProgress/bioRgeo/bioRgeo/src/prodmat.cpp",
+                "kind" : 6,
+                "line" : 6,
+                "name" : "prodmat(const int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@prodmat#1I#I#"
+            }
+        ],
+        "file" : "/home/maxime/mmmycloud/Research/Articles/InProgress/bioRgeo/bioRgeo/src/prodmat.cpp",
+        "file_last_write" : 1626367944.000000
+    }
+]
