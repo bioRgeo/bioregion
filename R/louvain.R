@@ -161,16 +161,16 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
     # Export input in LOUVAIN folder
     write.table(netemp, paste0(biodir,"/bin/LOUVAIN/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
-    # Prepare commad to run INFOMAP
+    # Prepare commad to run LOUVAIN
     current_path <- getwd()  # Store current working directory
     setwd(biodir)            # Change working directory so the file is saved in the proper place
 
     # Convert net.txt with LOUVAIN
-    if(weight){
-      cmd="-i bin/LOUVAIN/net.txt -o bin/LOUVAIN/net.bin -w bin/LOUVAIN/net.weights"
-    }else{
-      cmd="-i bin/LOUVAIN/net.txt -o bin/LOUVAIN/net.bin"
-    }
+        if(weight){
+          cmd="-i bin/LOUVAIN/net.txt -o bin/LOUVAIN/net.bin -w bin/LOUVAIN/net.weights"
+        }else{
+          cmd="-i bin/LOUVAIN/net.txt -o bin/LOUVAIN/net.bin"
+        }
 
     if(os == "Linux"){
       cmd=paste0("bin/LOUVAIN/convert_lin ", cmd)
@@ -182,7 +182,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
       stop("Linux, Windows or Mac distributions only.")
     }
 
-    system(command = cmd)
+    tree=system(command = cmd)
 
     # Run LOUVAIN
     if(weight){
@@ -193,15 +193,16 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
 
     if(os == "Linux"){
       cmd=paste0("bin/LOUVAIN/louvain_lin ", cmd)
+      system(command = cmd)
     }else if(os == "Windows"){
       cmd=paste0("bin/LOUVAIN/louvain_win.exe ", cmd)
+      tree=system(command = cmd, intern=TRUE)
+      cat(tree[1:(length(tree)-1)], file = "bin/LOUVAIN/net.tree", sep = "\n")
     }else if(os == "Darwin"){
       stop("TO IMPLEMENT")
     }else{
       stop("Linux, Windows or Mac distributions only.")
     }
-
-    system(command = cmd)
 
     # Rechange working directory
     setwd(current_path)

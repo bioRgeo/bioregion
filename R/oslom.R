@@ -188,6 +188,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
       cmd=paste0("bin/OSLOM/oslom_undir_lin ", cmd)
     }
   }else if(os == "Windows"){
+    dir.create("bin/OSLOM/net.txt_oslo_files", showWarnings = FALSE)
     if(directed){
       cmd=paste0("bin/OSLOM/oslom_dir_win.exe ", cmd)
     }else{
