@@ -6,6 +6,9 @@
 #' @param comat a co-occurence \code{matrix} with sites as rows and species as columns
 #' @param metric a vector of character(s) indicating which similarity
 #' metric(s) to chose (see Details)
+#' @param method a a string indicating what method should be used to compute \code{abc} (see Details),
+#' \code{method = "prodmat"} by default is more efficient but can greedy in memory and \code{method="loops"} is less efficient
+#' but less greedy in memory
 #' @export
 #' @details
 #' With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
@@ -53,7 +56,7 @@
 #' \insertRef{Baselga2012}{bioRgeo}
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
-spproject <- function(comat, metric = "Simpson"){
+spproject <- function(comat, metric = "Simpson", method = "prodmat"){
 
   # list of metrics based on abc
   lsmetricabc=c("abc","Jaccard","Jaccardturn","Sorensen","Simpson")
@@ -87,6 +90,12 @@ spproject <- function(comat, metric = "Simpson"){
     stop("Co-occurence matrix should contains only positive real: negative value detected!")
   }
 
+  if(!(method %in% c("prodmat","loops"))){
+    stop("The method is not available.
+     Please chose among the followings:
+         prodmat, loops")
+  }
+
   # Initialize output res (two-column data.frame containing each pair of sites to be compared)
   siteid=rownames(comat)
   res=matrix(0, nrow=length(siteid), ncol=length(siteid), dimnames=list(siteid,siteid))
@@ -97,9 +106,10 @@ spproject <- function(comat, metric = "Simpson"){
   # abcp: compute abc for presence data
   if(length(intersect(lsmetricabc,metric))>0){
 
+    comatp=comat
+    comatp[comatp!=0]=1
+    if(method=="prodmat"){
       # Compute the number of species in common "a" with matricial product a%*%t(a)
-      comatp=comat
-      comatp[comatp!=0]=1
       sumrow=apply(comatp,1,sum)
       abcp=prodmat(comatp,t(comatp))
       rownames(abcp)=siteid
@@ -117,25 +127,31 @@ spproject <- function(comat, metric = "Simpson"){
       abcp$c=0
       abcp[,4]=sumrow[match(abcp[,1],siteid)]-abcp[,3]
       abcp[,5]=sumrow[match(abcp[,2],siteid)]-abcp[,3]
+    }
+    if(method=="loops"){
+      # Use abc Rcpp function in src (three loops)
+      abcp=abc(comatp)
+      abcp=data.frame(Site1=siteid[abcp[,1]], Site2=siteid[abcp[,2]], a=abcp[,3], b=abcp[,4]-abcp[,3], c=abcp[,5]-abcp[,3])
+    }
 
-      # Compute metrics based on abc
-      if("abc" %in% metric){
-        res$a=abcp$a
-        res$b=abcp$b
-        res$c=abcp$c
-      }
-      if("Jaccard" %in% metric){
-        res$Jaccard = 1 - (abcp$b+abcp$c)/(abcp$a+abcp$b+abcp$c)
-      }
-      if("Jaccardturn" %in% metric){
-        res$Jaccardturn = 1 - 2*pmin(abcp$b,abcp$c)/(abcp$a + 2*pmin(abcp$b,abcp$c))
-      }
-      if("Sorensen" %in% metric){
-        res$Sorensen = 1 - (abcp$b+abcp$c)/(2*abcp$a+abcp$b+abcp$c)
-      }
-      if("Simpson" %in% metric){
-        res$Simpson = 1 - pmin(abcp$b,abcp$c)/(abcp$a + pmin(abcp$b,abcp$c))
-      }
+    # Compute metrics based on abc
+    if("abc" %in% metric){
+      res$a=abcp$a
+      res$b=abcp$b
+      res$c=abcp$c
+    }
+    if("Jaccard" %in% metric){
+      res$Jaccard = 1 - (abcp$b+abcp$c)/(abcp$a+abcp$b+abcp$c)
+    }
+    if("Jaccardturn" %in% metric){
+      res$Jaccardturn = 1 - 2*pmin(abcp$b,abcp$c)/(abcp$a + 2*pmin(abcp$b,abcp$c))
+    }
+    if("Sorensen" %in% metric){
+      res$Sorensen = 1 - (abcp$b+abcp$c)/(2*abcp$a+abcp$b+abcp$c)
+    }
+    if("Simpson" %in% metric){
+      res$Simpson = 1 - pmin(abcp$b,abcp$c)/(abcp$a + pmin(abcp$b,abcp$c))
+    }
   }
 
   # abca: compute ABC for abundance data
