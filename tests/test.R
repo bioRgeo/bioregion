@@ -64,7 +64,7 @@ net=spproject(mat,metric=c("Sorensen"))
 com=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
 
 # spproject
-source("bioRgeo/R/spproject.R")
+#source("bioRgeo/R/spproject.R")
 
 test=spproject(mat,metric=c("abc","ABC"), method="loops")
 test[1:10,]

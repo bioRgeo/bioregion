@@ -9,3 +9,4 @@ src/prodmat.o
 src/RcppExports.o
 
 inst/REFERENCES.bib.bak
+docs

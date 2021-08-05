@@ -4,13 +4,17 @@
 \alias{spproject}
 \title{Compute similarity metrics between sites based on species composition}
 \usage{
-spproject(comat, metric = "Simpson")
+spproject(comat, metric = "Simpson", method = "prodmat")
 }
 \arguments{
 \item{comat}{a co-occurence \code{matrix} with sites as rows and species as columns}
 
 \item{metric}{a vector of character(s) indicating which similarity
 metric(s) to chose (see Details)}
+
+\item{method}{a string indicating what method should be used to compute \code{abc} (see Details),
+\code{method = "prodmat"} by default is more efficient but can greedy in memory and \code{method="loops"} is less efficient
+but less greedy in memory}
 }
 \value{
 A \code{data.frame} providing one or several similarity
