@@ -2,8 +2,8 @@
 
 # An R package designed to compare several methods of clustering based on multivariate or network approaches
 
-[![Travis build status](https://travis-ci.org/bioRgeo/bioRgeo)](https://travis-ci.org/bioRgeo/bioRgeo)
-[![licence] (https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
+[![Travis build status](https://travis-ci.org/bioRgeo/bioRgeo)](https://travis-ci.org/bioRgeo/bioRgeo) 
+[![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version)](https://github.com/bioRgeo/bioRgeo)
 
 # 1 Install
@@ -29,7 +29,7 @@ vignette("tutorial", package = "bioRgeo")
 `DescTools`, `ade4`, `cluster`, `sf`, `ggplot2`, `Rcpp`, `SMUT` and
 `igraph`.
 
-# 4 Citation
+# 4  Citation
 
 
 
