@@ -15,11 +15,11 @@ devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
 
 # 2 Tutorial
 
-A tutorial vignette showing the main steps of the processing can be
+A tutorial vignette is available [here](https://jbferet.github.io/biodivMapR/articles/tutorial.html) and can be
 visualised with the following command line:
 
 ``` r
-vignette("tutorial", package = "bioRgeo")
+  vignette("bioRgeo", package = "bioRgeo")
 ```
 
 ## 3 Dependencies
