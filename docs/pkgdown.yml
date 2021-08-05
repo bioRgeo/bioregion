@@ -1,0 +1,8 @@
+pandoc: 2.3.1
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  bioRgeo: bioRgeo.html
+  bioRgeo_1: bioRgeo_1.html
+last_built: 2021-08-05T13:31Z
+
