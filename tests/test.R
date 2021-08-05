@@ -1,5 +1,6 @@
 # bioRgeo
 devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
+vignette("bioRgeo", package = "bioRgeo")
 
 # Import packages
 library(sf)
