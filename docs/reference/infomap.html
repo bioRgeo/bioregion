@@ -107,7 +107,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/article_1.html">Converting a raster file to the proper file format</a>
+      <a href="../articles/article_1.html">test</a>
     </li>
   </ul>
 </li>
@@ -142,7 +142,7 @@
 
     <div class="ref-description">
     <p>This function finds communities in a (un)weighted (un)directed network based on the Infomap algorithm
-(https://github.com/mapequation/infomap, version 1.6.0).</p>
+(<a href='https://github.com/mapequation/infomap'>https://github.com/mapequation/infomap</a>, version 1.6.0).</p>
     </div>
 
     <pre class="usage"><span class='fu'>infomap</span><span class='op'>(</span>
@@ -206,18 +206,21 @@ in fewer modules (default is 1)</p></td>
  that finds communities in (un)weighted and (un)directed networks.
 Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
 as unipartite network. The second possibility is to set the <code>bipartite</code> argument to TRUE in order to
-approximate a two-step random walker (see https://www.mapequation.org/infomap/ for more information).
-This function is based on the 1.6.0 C++ version of Infomap (https://github.com/mapequation/infomap/releases).</p>
+approximate a two-step random walker (see <a href='https://www.mapequation.org/infomap/'>https://www.mapequation.org/infomap/</a> for more information).
+This function is based on the 1.6.0 C++ version of Infomap (<a href='https://github.com/mapequation/infomap/releases'>https://github.com/mapequation/infomap/releases</a>).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Rosvall M, Bergstrom CT (2008).
 &#8220;Maps of random walks on complex networks reveal community structure.&#8221;
 <em>Proceedings of the National Academy of Sciences</em>, <b>105</b>(4), 1118--1123.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='louvain.html'>louvain</a>, <a href='oslom.html'>oslom</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Pierre Denelle <a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>
-Maxime Lenormand <a href='mailto:maxime.lenormand@inrae.fr'>maxime.lenormand@inrae.fr</a>
-Boris Leroy <a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a></p>
+    <p>Pierre Denelle (<a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>),
+Maxime Lenormand (<a href='mailto:maxime.lenormand@inrae.fr'>maxime.lenormand@inrae.fr</a>) and
+Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>comat</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1000</span>,<span class='fl'>50</span><span class='op'>)</span>,<span class='fl'>5</span>,<span class='fl'>10</span><span class='op'>)</span>

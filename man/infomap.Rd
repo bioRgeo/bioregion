@@ -40,15 +40,15 @@ A \code{data.frame} providing one partition by hierarchical level.
 }
 \description{
 This function finds communities in a (un)weighted (un)directed network based on the Infomap algorithm
-(https://github.com/mapequation/infomap, version 1.6.0).
+(\url{https://github.com/mapequation/infomap}, version 1.6.0).
 }
 \details{
 Infomap is a network clustering algorithm based on the Map equation proposed in
 \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
 Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
 as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
-approximate a two-step random walker (see https://www.mapequation.org/infomap/ for more information).
-This function is based on the 1.6.0 C++ version of Infomap (https://github.com/mapequation/infomap/releases).
+approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
+This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
 }
 \examples{
 comat=matrix(sample(1000,50),5,10)
@@ -61,8 +61,11 @@ com=infomap(net)
 \references{
 \insertRef{Rosvall2008}{bioRgeo}
 }
+\seealso{
+\link{louvain}, \link{oslom}
+}
 \author{
-Pierre Denelle \email{pierre.denelle@gmail.com}
-Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-Boris Leroy \email{leroy.boris@gmail.com}
+Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Boris Leroy (\email{leroy.boris@gmail.com})
 }

@@ -29,13 +29,13 @@ comat=matrix(sample(1000,50),5,10)
 rownames(comat)=paste0("Site",1:5)
 colnames(comat)=paste0("Species",1:10)
 
-df=comat_to_df(comat,weight=TRUE)
+df=contingency_to_df(comat,weight=TRUE)
 }
 \seealso{
-[df_to_contingency()]
+\link{df_to_contingency}
 }
 \author{
-Pierre Denelle \email{pierre.denelle@gmail.com}
-Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-Boris Leroy \email{leroy.boris@gmail.com}
+Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Boris Leroy (\email{leroy.boris@gmail.com})
 }

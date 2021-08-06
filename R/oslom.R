@@ -1,7 +1,7 @@
 #' OSLOM community finding
 #'
 #' This function finds communities in a (un)weighted (un)directed network based on the OSLOM algorithm
-#' (http://oslom.org/, version 2.4).
+#' (\url{http://oslom.org/}, version 2.4).
 #'
 #' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
 #' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
@@ -24,17 +24,18 @@
 #' \code{reassign = 'random'} or based on the closest candidate community \code{reassign = 'simil'}
 #' (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 #' By default \code{reassign = 'no'} and all the information is provided.
-#' This function is based on the 2.4 C++ version of OSLOM (http://www.oslom.org/software.htm).
+#' This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
 #'
 #' @return A \code{data.frame} providing one or several modules (according to the chosen option(s)) for each node. If
 #' \code{reassign = simil} or \code{reassign = random} only one column by hierarchical level will be provided. If
-#' \code{reassign = no} the number of columns will depend on the number of overlapping modules (up to three). A value of O
+#' \code{reassign = no} the number of columns will depend on the number of overlapping modules (up to three). A value of 0
 #' indicates that no module were found (i.e. non-overlapping nodes).
 #'
 #' @author
-#' Pierre Denelle \email{pierre.denelle@gmail.com}
-#' Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-#' Boris Leroy \email{leroy.boris@gmail.com}
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com})
+#' @seealso \link{infomap}, \link{louvain}
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)

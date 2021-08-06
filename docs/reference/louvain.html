@@ -106,7 +106,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/article_1.html">Converting a raster file to the proper file format</a>
+      <a href="../articles/article_1.html">test</a>
     </li>
   </ul>
 </li>
@@ -182,8 +182,8 @@ as (un)directed links between pair of nodes and an optional third column indicat
 
     <p>Louvain is a network community detection algorithm proposed in (Blondel et al. 2008)
 . This function
-proposed two implementations of the function (parameter <code>lang</code>): the igraph implementation
-(cluster_louvain()) and the C++ implementation (https://sourceforge.net/projects/louvain/, version 0.3).
+proposed two implementations of the function (parameter <code>lang</code>): the <a href='https://cran.r-project.org/web/packages/igraph/index.html'>igraph</a> implementation
+(<a href='https://rdrr.io/pkg/igraph/man/cluster_louvain.html'>cluster_louvain</a>) and the C++ implementation (<a href='https://sourceforge.net/projects/louvain/'>https://sourceforge.net/projects/louvain/</a>, version 0.3).
 The latest offers the possibility to choose among several quality functions, <code>q = 0</code> for the classical
 Newman-Girvan criterion (also called "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for
 the Owsinski-Zadrozny criterion (you should specify the value of the parameter with option -c), 3	for the Goldberg
@@ -195,11 +195,14 @@ for the Deviation to Uniformity criterion, 7 for the Profile Difference criterio
     <p>Blondel VD, Guillaume JL, Lambiotte R, Mech ELJS (2008).
 &#8220;Fast unfolding of communities in large networks.&#8221;
 <em>J. Stat. Mech</em>, P10008.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='infomap.html'>infomap</a>, <a href='oslom.html'>oslom</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Pierre Denelle <a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>
-Maxime Lenormand <a href='mailto:maxime.lenormand@inrae.fr'>maxime.lenormand@inrae.fr</a>
-Boris Leroy <a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a></p>
+    <p>Pierre Denelle (<a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>),
+Maxime Lenormand (<a href='mailto:maxime.lenormand@inrae.fr'>maxime.lenormand@inrae.fr</a>) and
+Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>comat</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1000</span>,<span class='fl'>50</span><span class='op'>)</span>,<span class='fl'>5</span>,<span class='fl'>10</span><span class='op'>)</span>

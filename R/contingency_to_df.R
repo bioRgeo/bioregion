@@ -13,17 +13,17 @@
 #' @return A \code{data.frame} where each row represents the interaction between
 #' two objects and an optional third column indicating the weight of the interaction.
 #' @author
-#' Pierre Denelle \email{pierre.denelle@gmail.com}
-#' Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-#' Boris Leroy \email{leroy.boris@gmail.com}
-#' @seealso [df_to_contingency()]
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com})
+#' @seealso \link{df_to_contingency}
 #'
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)
 #' colnames(comat)=paste0("Species",1:10)
 #'
-#' df=comat_to_df(comat,weight=TRUE)
+#' df=contingency_to_df(comat,weight=TRUE)
 #' @export
 contingency_to_df <- function(comat, weight = FALSE, remove_absent_objects = TRUE){
 

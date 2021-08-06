@@ -15,15 +15,16 @@
 #' have the same number of elements corresponding to the concatenation of unique objects in  \code{df}'s first and second
 #' columns.
 #' @author
-#' Pierre Denelle \email{pierre.denelle@gmail.com}
-#' Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-#' Boris Leroy \email{leroy.boris@gmail.com}
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com})
+#' @seealso \link{contingency_to_df}
 #' @examples
 #' df <- data.frame(Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
 #' Species = c("a", "b", "a", "c", "d", "b", "d"),
 #' Weight = c(10, 100, 1, 20, 50, 10, 20))
 #'
-#' comat=df_to_comat(df,weight=TRUE)
+#' comat=df_to_contingency(df,weight=TRUE)
 #' @export
 df_to_contingency <- function(df, weight = FALSE, squared = FALSE){
 

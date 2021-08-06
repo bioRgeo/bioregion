@@ -107,7 +107,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/article_1.html">Converting a raster file to the proper file format</a>
+      <a href="../articles/article_1.html">test</a>
     </li>
   </ul>
 </li>
@@ -142,7 +142,7 @@
 
     <div class="ref-description">
     <p>This function finds communities in a (un)weighted (un)directed network based on the OSLOM algorithm
-(http://oslom.org/, version 2.4).</p>
+(<a href='http://oslom.org/'>http://oslom.org/</a>, version 2.4).</p>
     </div>
 
     <pre class="usage"><span class='fu'>oslom</span><span class='op'>(</span>
@@ -206,7 +206,7 @@ in hierarchies)</p></td>
 
     <p>A <code>data.frame</code> providing one or several modules (according to the chosen option(s)) for each node. If
 <code>reassign = simil</code> or <code>reassign = random</code> only one column by hierarchical level will be provided. If
-<code>reassign = no</code> the number of columns will depend on the number of overlapping modules (up to three). A value of O
+<code>reassign = no</code> the number of columns will depend on the number of overlapping modules (up to three). A value of 0
 indicates that no module were found (i.e. non-overlapping nodes).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -217,17 +217,20 @@ may belong to several communities we propose two methods to reassign the 'ovelap
 <code>reassign = 'random'</code> or based on the closest candidate community <code>reassign = 'simil'</code>
 (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 By default <code>reassign = 'no'</code> and all the information is provided.
-This function is based on the 2.4 C++ version of OSLOM (http://www.oslom.org/software.htm).</p>
+This function is based on the 2.4 C++ version of OSLOM (<a href='http://www.oslom.org/software.htm'>http://www.oslom.org/software.htm</a>).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Lancichinetti A, Radicchi F, Ramasco JJ, Fortunato S (2011).
 &#8220;Finding Statistically Significant Communities in Networks.&#8221;
 <em>PLOS ONE</em>, <b>6</b>(4), e18961.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='infomap.html'>infomap</a>, <a href='louvain.html'>louvain</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Pierre Denelle <a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>
-Maxime Lenormand <a href='mailto:maxime.lenormand@inrae.fr'>maxime.lenormand@inrae.fr</a>
-Boris Leroy <a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a></p>
+    <p>Pierre Denelle (<a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>),
+Maxime Lenormand (<a href='mailto:maxime.lenormand@inrae.fr'>maxime.lenormand@inrae.fr</a>) and
+Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>comat</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1000</span>,<span class='fl'>50</span><span class='op'>)</span>,<span class='fl'>5</span>,<span class='fl'>10</span><span class='op'>)</span>

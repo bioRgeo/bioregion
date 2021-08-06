@@ -28,8 +28,8 @@ This function finds communities in a (un)weighted undirected network based on th
 }
 \details{
 Louvain is a network community detection algorithm proposed in \insertCite{Blondel2008}{bioRgeo}. This function
-proposed two implementations of the function (parameter \code{lang}): the igraph implementation
-(\link[igraph]{cluster_louvain()}) and the C++ implementation (https://sourceforge.net/projects/louvain/, version 0.3).
+proposed two implementations of the function (parameter \code{lang}): the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} implementation
+(\link[igraph]{cluster_louvain}) and the C++ implementation (\url{https://sourceforge.net/projects/louvain/}, version 0.3).
 The latest offers the possibility to choose among several quality functions, \code{q = 0} for the classical
 Newman-Girvan criterion (also called "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for
 the Owsinski-Zadrozny criterion (you should specify the value of the parameter with option -c), 3	for the Goldberg
@@ -48,8 +48,11 @@ com=louvain(net)
 \references{
 \insertRef{Blondel2008}{bioRgeo}
 }
+\seealso{
+\link{infomap}, \link{oslom}
+}
 \author{
-Pierre Denelle \email{pierre.denelle@gmail.com}
-Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-Boris Leroy \email{leroy.boris@gmail.com}
+Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Boris Leroy (\email{leroy.boris@gmail.com})
 }

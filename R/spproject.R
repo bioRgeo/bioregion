@@ -43,9 +43,9 @@
 #' One column per similarity metric provided in \code{metric} except for the metric \emph{abc} and \emph{ABC} that
 #' are stored in three columns (one for each letter).
 #' @author
-#' Pierre Denelle \email{pierre.denelle@gmail.com}
-#' Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-#' Boris Leroy \email{leroy.boris@gmail.com}
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)

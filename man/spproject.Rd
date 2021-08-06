@@ -66,7 +66,7 @@ simil=spproject(comat,metric=c("abc","ABC","Simpson","Brayturn"))
 \insertRef{Baselga2013}{bioRgeo}
 }
 \author{
-Pierre Denelle \email{pierre.denelle@gmail.com}
-Maxime Lenormand \email{maxime.lenormand@inrae.fr}
-Boris Leroy \email{leroy.boris@gmail.com}
+Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Boris Leroy (\email{leroy.boris@gmail.com})
 }
