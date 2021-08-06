@@ -19,7 +19,7 @@ A tutorial vignette is available [here](https://jbferet.github.io/biodivMapR/art
 visualised with the following command line:
 
 ``` r
-  vignette("bioRgeo", package = "bioRgeo")
+vignette("bioRgeo", package = "bioRgeo")
 ```
 
 ## 3 Dependencies
