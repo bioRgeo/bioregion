@@ -1,6 +1,6 @@
 # __bioRgeo__ <img src="man/figures/logo.png" align="right" alt="" width="200" />
 
-# An R package designed to compare several methods of clustering based on multivariate or network approaches
+# An R package to compare several methods of bioregionalizations
 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version)](https://github.com/bioRgeo/bioRgeo)
