@@ -5,7 +5,7 @@
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version)](https://github.com/bioRgeo/bioRgeo)
 
-#Œ 1 Install
+## 1 Install
 
 THe package `bioRgeo` can be installed with the following command line in R session:
 
@@ -13,7 +13,7 @@ THe package `bioRgeo` can be installed with the following command line in R sess
 devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
 ```
 
-#Œ 2 Tutorial
+## 2 Tutorial
 
 A tutorial vignette is available [here](https://jbferet.github.io/biodivMapR/articles/tutorial.html) and can be
 visualised with the following command line:
