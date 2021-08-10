@@ -154,7 +154,9 @@
   seed <span class='op'>=</span> <span class='fl'>1</span>,
   t <span class='op'>=</span> <span class='fl'>0.1</span>,
   cp <span class='op'>=</span> <span class='fl'>0.5</span>,
-  directed <span class='op'>=</span> <span class='cn'>FALSE</span>
+  directed <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  delete_temp <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  path_temp <span class='op'>=</span> <span class='st'>"oslom_temp"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -200,6 +202,14 @@ in hierarchies)</p></td>
       <th>directed</th>
       <td><p>a boolean indicating if the network is directed (from column 1 to column 2)</p></td>
     </tr>
+    <tr>
+      <th>delete_temp</th>
+      <td><p>a boolean indicating if the temporary folder should be removed (see Details)</p></td>
+    </tr>
+    <tr>
+      <th>path_temp</th>
+      <td><p>a string indicating the path to the temporary folder (see Details)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -218,6 +228,9 @@ may belong to several communities we propose two methods to reassign the 'ovelap
 (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 By default <code>reassign = 'no'</code> and all the information is provided.
 This function is based on the 2.4 C++ version of OSLOM (<a href='http://www.oslom.org/software.htm'>http://www.oslom.org/software.htm</a>).</p>
+<p>The C++ version of OSLOM generates temporary folders and files that are stored in the <code>path_temp</code> folder
+(folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
+(<code>delete_temp = TRUE</code>).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Lancichinetti A, Radicchi F, Ramasco JJ, Fortunato S (2011).
