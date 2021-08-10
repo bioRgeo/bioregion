@@ -5,13 +5,13 @@ Version: 0.1.0
 Authors@R: 
     c(person(given = "Pierre",
              family = "Denelle",
-             role = c("aut", "cre"),
+             role = c("aut"),
              email = "pierre.denelle@gmail.com",
              comment = c(ORCID = "0000-0001-5037-2281")),
        person(given = "Maxime",
               family = "Lenormand",
               email = "maxime.lenormand@inrae.fr",
-              role = c("aut"),
+              role = c("aut", "cre"),
               comment = c(ORCID = "0000-0001-6362-3473")),
        person(given = "Boris",
               family = "Leroy",
@@ -23,7 +23,7 @@ Description: Aim at testing several methods to delineate bioregions.
              Use methods based on projected or bipartite networks.
 Depends:
   R (>= 3.5.3)
-License: License: GPL-3 + file LICENSE
+License: GPL-3 in file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
