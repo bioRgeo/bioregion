@@ -28,7 +28,7 @@ vignette("bioRgeo", package = "bioRgeo")
 `DescTools`, `ade4`, `cluster`, `sf`, `ggplot2`, `Rcpp`, `SMUT` and
 `igraph`.
 
-#Œ 4  Citation
+## 4  Citation
 
 
 
