@@ -239,6 +239,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
   }
 
   # Return output
+  com[,1]=as.character(com[,1])
   return(com)
 
 }
