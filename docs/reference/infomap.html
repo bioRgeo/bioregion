@@ -153,7 +153,9 @@
   markovtime <span class='op'>=</span> <span class='fl'>1</span>,
   seed <span class='op'>=</span> <span class='fl'>1</span>,
   twolevel <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  directed <span class='op'>=</span> <span class='cn'>FALSE</span>
+  directed <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  delete_temp <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  path_temp <span class='op'>=</span> <span class='st'>"infomap_temp"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -194,6 +196,14 @@ in fewer modules (default is 1)</p></td>
       <th>directed</th>
       <td><p>a boolean indicating if the network is directed (from column 1 to column 2)</p></td>
     </tr>
+    <tr>
+      <th>delete_temp</th>
+      <td><p>a boolean indicating if the temporary folder should be removed (see Details)</p></td>
+    </tr>
+    <tr>
+      <th>path_temp</th>
+      <td><p>a string indicating the path to the temporary folder (see Details)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -208,6 +218,9 @@ Infomap has two ways to deal with bipartite networks. The first possibility is t
 as unipartite network. The second possibility is to set the <code>bipartite</code> argument to TRUE in order to
 approximate a two-step random walker (see <a href='https://www.mapequation.org/infomap/'>https://www.mapequation.org/infomap/</a> for more information).
 This function is based on the 1.6.0 C++ version of Infomap (<a href='https://github.com/mapequation/infomap/releases'>https://github.com/mapequation/infomap/releases</a>).</p>
+<p>The C++ version of Infomap generates temporary folders and/or files that are stored in the <code>path_temp</code> folder
+(folder "infomap_temp" in the workind directory by default). This temporary folder is removed by default
+(<code>delete_temp = TRUE</code>).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Rosvall M, Bergstrom CT (2008).
@@ -229,7 +242,7 @@ Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</
 
 <span class='va'>net</span><span class='op'>=</span><span class='fu'><a href='spproject.html'>spproject</a></span><span class='op'>(</span><span class='va'>comat</span>,metric<span class='op'>=</span><span class='st'>"Simpson"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='input'><span class='va'>com</span><span class='op'>=</span><span class='fu'>infomap</span><span class='op'>(</span><span class='va'>net</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in file(file, ifelse(append, "a", "w")): invalid 'description' argument</span></div></pre>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: tidyr</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

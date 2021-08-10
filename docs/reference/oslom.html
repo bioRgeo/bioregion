@@ -228,7 +228,7 @@ may belong to several communities we propose two methods to reassign the 'ovelap
 (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 By default <code>reassign = 'no'</code> and all the information is provided.
 This function is based on the 2.4 C++ version of OSLOM (<a href='http://www.oslom.org/software.htm'>http://www.oslom.org/software.htm</a>).</p>
-<p>The C++ version of OSLOM generates temporary folders and files that are stored in the <code>path_temp</code> folder
+<p>The C++ version of OSLOM generates temporary folders and/or files that are stored in the <code>path_temp</code> folder
 (folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
 (<code>delete_temp = TRUE</code>).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -252,7 +252,7 @@ Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</
 
 <span class='va'>net</span><span class='op'>=</span><span class='fu'><a href='spproject.html'>spproject</a></span><span class='op'>(</span><span class='va'>comat</span>,metric<span class='op'>=</span><span class='st'>"Simpson"</span><span class='op'>)</span>
 <span class='va'>com</span><span class='op'>=</span><span class='fu'>oslom</span><span class='op'>(</span><span class='va'>net</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>arguments 'show.output.on.console', 'minimized' and 'invisible' are for Windows only</span></div></pre>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='message'>arguments 'show.output.on.console', 'minimized' and 'invisible' are for Windows only</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
