@@ -14,6 +14,8 @@
 #' @param twolevel a boolean indicating if the algorithm should optimize a two-level partition of the network
 #' (default is multi-level)
 #' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
+#' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
+#' @param path_temp a string indicating the path to the temporary folder (see Details)
 #' @export
 #' @details
 #' Infomap is a network clustering algorithm based on the Map equation proposed in
@@ -22,6 +24,10 @@
 #' as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
 #' approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 #' This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
+#'
+#' The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
+#' (folder "infomap_temp" in the workind directory by default). This temporary folder is removed by default
+#' (\code{delete_temp = TRUE}).
 #'
 #' @return A \code{data.frame} providing one partition by hierarchical level.
 #'
@@ -40,7 +46,8 @@
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
-infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime = 1, seed = 1, twolevel = FALSE, directed = FALSE){
+infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime = 1, seed = 1, twolevel = FALSE,
+                    directed = FALSE, delete_temp = TRUE, path_temp = "infomap_temp"){
 
   # Remove warning for tidyr
   defaultW <- getOption("warn")
@@ -134,6 +141,20 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
     stop("directed must be a boolean")
   }
 
+  if(!is.logical(delete_temp)){
+    stop("delete_temp must be a boolean")
+  }
+
+  if(!is.character(path_temp)){
+    stop("path_temp must be a string")
+  }
+
+  # Create temp folder
+  dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+  if(!file.exists(path_temp)){
+    stop(paste0("Impossible to create directory ", path_temp))
+  }
+
   # Prepare input for INFOMAP
   idnode1=as.character(net[,1])
   idnode2=as.character(net[,2])
@@ -162,16 +183,13 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
 
   # Export input in INFOMAP folder
   if(bipartite){ # Add tag if bipartite
-    cat(paste0("*Bipartite ",N),"\n",file=paste0(biodir,"/bin/INFOMAP/net.txt"))
-    write.table(netemp, paste0(biodir,"/bin/INFOMAP/net.txt"), append=TRUE, row.names=FALSE, col.names=FALSE, sep=" ")
+    cat(paste0("*Bipartite ",N),"\n",file=paste0(path_temp,"/net.txt"))
+    write.table(netemp, paste0(path_temp,"/net.txt"), append=TRUE, row.names=FALSE, col.names=FALSE, sep=" ")
   }else{
-    write.table(netemp, paste0(biodir,"/bin/INFOMAP/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+    write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
   }
 
-  # Prepare commad to run INFOMAP
-  current_path <- getwd()  # Store current working directory
-  setwd(biodir)            # Change working directory so the file is saved in the proper place
-
+  # Prepare command to run INFOMAP
   cmd=paste0("--silent --seed ", seed," --preferred-number-of-modules ", nbmod, " --markov-time ", markovtime)
   if(twolevel){
     cmd=paste0(cmd, " --two-level")
@@ -182,15 +200,15 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
     cmd=paste0(cmd, " --flow-model undirected")
   }
   if(bipartite){
-    cmd=paste0("-i bipartite ", cmd, " bin/INFOMAP/net.txt bin/INFOMAP/out")
+    cmd=paste0("-i bipartite ", cmd, " ", path_temp, "/net.txt ", path_temp)
   }else{
-    cmd=paste0("-i link-list ", cmd, " bin/INFOMAP/net.txt bin/INFOMAP/out")
+    cmd=paste0("-i link-list ", cmd, " ", path_temp, "/net.txt ", path_temp)
   }
 
   if(os == "Linux"){
-    cmd=paste0("bin/INFOMAP/infomap_lin ", cmd)
+    cmd=paste0(biodir, "/bin/INFOMAP/infomap_lin ", cmd)
   }else if(os == "Windows"){
-    cmd=paste0("bin/INFOMAP/infomap_win.exe ", cmd)
+    cmd=paste0(biodir, "/bin/INFOMAP/infomap_win.exe ", cmd)
   }else if(os == "Darwin"){
     stop("TO IMPLEMENT")
   }else{
@@ -200,16 +218,13 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
   # Run INFOMAP
   system(command = cmd)
 
-  # Rechange working directory
-  setwd(current_path)
-
   # Control: if the command line did not work
-  if(!("net.tree" %in% list.files(paste0(biodir,"/bin/INFOMAP/out")))){
+  if(!("net.tree" %in% list.files(paste0(path_temp)))){
     stop("Command line was wrongly implemented. Infomap did not run.")
   }
 
   # Retrieve output from net.tree
-  tree=read.table(paste0(biodir,"/bin/INFOMAP/out/net.tree"))
+  tree=read.table(paste0(path_temp,"/net.tree"))
 
   # Reformat tree [TO COMMENT]
   idinf=as.numeric(tree[,4])  # INFOMAP node ids
@@ -261,10 +276,10 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
 
   com=com[,-2] # Remove dum
 
-  # Remove temporary file
-  unlink(paste0(biodir,"/bin/INFOMAP/net.txt"))
-  unlink(paste0(biodir,"/bin/INFOMAP/out/net.tree"))
-
+  # Remove temporary
+  if(delete_temp){
+    unlink(paste0(path_temp), recursive = TRUE)
+  }
 
   # Rename and reorder columns
   com=com[,c(1,dim(com)[2]:2)]
