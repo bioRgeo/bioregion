@@ -23,7 +23,7 @@ Description: Aim at testing several methods to delineate bioregions.
              Use methods based on projected or bipartite networks.
 Depends:
   R (>= 3.5.3)
-License: GPL-3 in file LICENSE
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
