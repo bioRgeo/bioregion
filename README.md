@@ -2,9 +2,9 @@
 
 # An R package to compare several methods of bioregionalizations
 
-[![build](https://img.shields.io/github/workflow/status/bioRgeo/bioRgeo/pkgdown/master)](https://github.com/bioRgeo/bioRgeo/actions)
+  [![build](https://img.shields.io/github/workflow/status/bioRgeo/bioRgeo/pkgdown/master?style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo/actions)
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
-[![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version)](https://github.com/bioRgeo/bioRgeo)
+[![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo)
 
 ## 1 Install
 
