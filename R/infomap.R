@@ -274,6 +274,7 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
   options(warn = defaultW)
 
   # Return output
+  com[,1]=as.character(com[,1])
   return(com)
 
 }
