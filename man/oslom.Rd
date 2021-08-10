@@ -64,7 +64,7 @@ may belong to several communities we propose two methods to reassign the 'ovelap
 By default \code{reassign = 'no'} and all the information is provided.
 This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
 
-The C++ version of OSLOM generates temporary folders and files that are stored in the \code{path_temp} folder
+The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
 (folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
 (\code{delete_temp = TRUE}).
 }
