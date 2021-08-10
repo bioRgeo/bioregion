@@ -9,6 +9,8 @@
 #' @param q the quality function used to compute partition of the graph (modularity is chosen by default, see Details)
 #' @param c the parameter for the Owsinski-Zadrozny quality function (between 0 and 1, 0.5 is chosen by default)
 #' @param k the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)
+#' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
+#' @param path_temp a string indicating the path to the temporary folder (see Details)
 #' @export
 #' @details
 #' Louvain is a network community detection algorithm proposed in \insertCite{Blondel2008}{bioRgeo}. This function
@@ -20,6 +22,10 @@
 #' Density criterion, 4	for the A-weighted Condorcet criterion, 5 for the Deviation to Indetermination criterion, 6
 #' for the Deviation to Uniformity criterion, 7 for the Profile Difference criterion, 8	for the Shi-Malik criterion
 #' (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
+#'
+#' The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
+#' (folder "louvain_temp" in the workind directory by default). This temporary folder is removed by default
+#' (\code{delete_temp = TRUE}).
 #'
 #' @return A \code{data.frame} providing one community by node.
 #'
@@ -38,7 +44,8 @@
 #' @references
 #' \insertRef{Blondel2008}{bioRgeo}
 #' @export
-louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
+louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delete_temp = TRUE,
+                    path_temp = "louvain_temp"){
 
   # Controls
   if(!is.data.frame(net)){
@@ -101,6 +108,20 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
     }
   }
 
+  if(!is.logical(delete_temp)){
+    stop("delete_temp must be a boolean")
+  }
+
+  if(!is.character(path_temp)){
+    stop("path_temp must be a string")
+  }
+
+  # Create temp folder
+  dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+  if(!file.exists(path_temp)){
+    stop(paste0("Impossible to create directory ", path_temp))
+  }
+
   # Prepare input for LOUVAIN
   idnode1=as.character(net[,1])
   idnode2=as.character(net[,2])
@@ -160,23 +181,20 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
     #}
 
     # Export input in LOUVAIN folder
-    write.table(netemp, paste0(biodir,"/bin/LOUVAIN/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+    write.table(netemp, paste0(path_temp, "/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
-    # Prepare commad to run LOUVAIN
-    current_path <- getwd()  # Store current working directory
-    setwd(biodir)            # Change working directory so the file is saved in the proper place
-
+    # Prepare command to run LOUVAIN
     # Convert net.txt with LOUVAIN
         if(weight){
-          cmd="-i bin/LOUVAIN/net.txt -o bin/LOUVAIN/net.bin -w bin/LOUVAIN/net.weights"
+          cmd=paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ", path_temp, "/net.weights")
         }else{
-          cmd="-i bin/LOUVAIN/net.txt -o bin/LOUVAIN/net.bin"
+          cmd=paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin")
         }
 
     if(os == "Linux"){
-      cmd=paste0("bin/LOUVAIN/convert_lin ", cmd)
+      cmd=paste0(biodir, "/bin/LOUVAIN/convert_lin ", cmd)
     }else if(os == "Windows"){
-      cmd=paste0("bin/LOUVAIN/convert_win.exe ", cmd)
+      cmd=paste0(biodir, "/bin/LOUVAIN/convert_win.exe ", cmd)
     }else if(os == "Darwin"){
       stop("TO IMPLEMENT")
     }else{
@@ -187,34 +205,31 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
 
     # Run LOUVAIN
     if(weight){
-      cmd=paste0("bin/LOUVAIN/net.bin -l -1 -q ", q, " -c ", c , " -k ", k," -w bin/LOUVAIN/net.weights")
+      cmd=paste0(path_temp, "/net.bin -l -1 -q ", q, " -c ", c , " -k ", k," -w ", path_temp, "/net.weights")
     }else{
-      cmd=paste0("bin/LOUVAIN/net.bin -l -1 -q ", q, " -c ", c , " -k ", k)
+      cmd=paste0(path_temp, "/net.bin -l -1 -q ", q, " -c ", c , " -k ", k)
     }
 
     if(os == "Linux"){
-      cmd=paste0("bin/LOUVAIN/louvain_lin ", cmd, " > bin/LOUVAIN/net.tree")
+      cmd=paste0(biodir, "/bin/LOUVAIN/louvain_lin ", cmd, " > ", path_temp, "/net.tree")
       system(command = cmd)
     }else if(os == "Windows"){
-      cmd=paste0("bin/LOUVAIN/louvain_win.exe ", cmd)
+      cmd=paste0(biodir, "æbin/LOUVAIN/louvain_win.exe ", cmd)
       tree=system(command = cmd, intern=TRUE)
-      cat(tree[1:(length(tree)-1)], file = "bin/LOUVAIN/net.tree", sep = "\n")
+      cat(tree[1:(length(tree)-1)], file = paste0(path_temp, "/net.tree"), sep = "\n")
     }else if(os == "Darwin"){
       stop("TO IMPLEMENT")
     }else{
       stop("Linux, Windows or Mac distributions only.")
     }
 
-    # Rechange working directory
-    setwd(current_path)
-
     # Control: if the command line did not work
-    if(!("net.tree" %in% list.files(paste0(biodir,"/bin/LOUVAIN")))){
+    if(!("net.tree" %in% list.files(paste0(path_temp)))){
       stop("Command line was wrongly implemented. Louvain did not run.")
     }
 
     # Retrieve output from net.tree
-    tree=read.table(paste0(biodir,"/bin/LOUVAIN/net.tree"))
+    tree=read.table(paste0(path_temp, "/net.tree"))
 
     id0=which(tree[,1]==0)
     tree=tree[(id0[1]+1):(id0[2]-1),]
@@ -225,11 +240,8 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1){
     comc=com
 
     # Remove temporary file
-    unlink(paste0(biodir,"/bin/LOUVAIN/net.txt"))
-    unlink(paste0(biodir,"/bin/LOUVAIN/net.bin"))
-    unlink(paste0(biodir,"/bin/LOUVAIN/net.tree"))
-    if(weight){
-      unlink(paste0(biodir,"/bin/LOUVAIN/net.weights"))
+    if(delete_temp){
+      unlink(paste0(path_temp), recursive = TRUE)
     }
 
   }

@@ -13,7 +13,9 @@ oslom(
   seed = 1,
   t = 0.1,
   cp = 0.5,
-  directed = FALSE
+  directed = FALSE,
+  delete_temp = TRUE,
+  path_temp = "oslom_temp"
 )
 }
 \arguments{
@@ -38,6 +40,10 @@ in hierarchies)}
 0.5, bigger value leads to bigger clusters)}
 
 \item{directed}{a boolean indicating if the network is directed (from column 1 to column 2)}
+
+\item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
+
+\item{path_temp}{a string indicating the path to the temporary folder (see Details)}
 }
 \value{
 A \code{data.frame} providing one or several modules (according to the chosen option(s)) for each node. If
@@ -57,6 +63,10 @@ may belong to several communities we propose two methods to reassign the 'ovelap
 (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 By default \code{reassign = 'no'} and all the information is provided.
 This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
+
+The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
+(folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
+(\code{delete_temp = TRUE}).
 }
 \examples{
 comat=matrix(sample(1000,50),5,10)

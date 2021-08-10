@@ -4,7 +4,16 @@
 \alias{louvain}
 \title{Louvain community finding}
 \usage{
-louvain(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k = 1)
+louvain(
+  net,
+  weight = TRUE,
+  lang = "Cpp",
+  q = 0,
+  c = 0.5,
+  k = 1,
+  delete_temp = TRUE,
+  path_temp = "louvain_temp"
+)
 }
 \arguments{
 \item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
@@ -19,6 +28,10 @@ as (un)directed links between pair of nodes and an optional third column indicat
 \item{c}{the parameter for the Owsinski-Zadrozny quality function (between 0 and 1, 0.5 is chosen by default)}
 
 \item{k}{the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)}
+
+\item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
+
+\item{path_temp}{a string indicating the path to the temporary folder (see Details)}
 }
 \value{
 A \code{data.frame} providing one community by node.
@@ -36,6 +49,10 @@ the Owsinski-Zadrozny criterion (you should specify the value of the parameter w
 Density criterion, 4	for the A-weighted Condorcet criterion, 5 for the Deviation to Indetermination criterion, 6
 for the Deviation to Uniformity criterion, 7 for the Profile Difference criterion, 8	for the Shi-Malik criterion
 (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
+
+The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
+(folder "louvain_temp" in the workind directory by default). This temporary folder is removed by default
+(\code{delete_temp = TRUE}).
 }
 \examples{
 comat=matrix(sample(1000,50),5,10)

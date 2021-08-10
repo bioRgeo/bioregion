@@ -12,7 +12,9 @@ infomap(
   markovtime = 1,
   seed = 1,
   twolevel = FALSE,
-  directed = FALSE
+  directed = FALSE,
+  delete_temp = TRUE,
+  path_temp = "infomap_temp"
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ in fewer modules (default is 1)}
 (default is multi-level)}
 
 \item{directed}{a boolean indicating if the network is directed (from column 1 to column 2)}
+
+\item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
+
+\item{path_temp}{a string indicating the path to the temporary folder (see Details)}
 }
 \value{
 A \code{data.frame} providing one partition by hierarchical level.
@@ -49,6 +55,10 @@ Infomap has two ways to deal with bipartite networks. The first possibility is t
 as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
 approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
+
+The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
+(folder "infomap_temp" in the workind directory by default). This temporary folder is removed by default
+(\code{delete_temp = TRUE}).
 }
 \examples{
 comat=matrix(sample(1000,50),5,10)

@@ -16,6 +16,8 @@
 #' @param cp kind of resolution parameter used to decide between taking some modules or their union (default value is
 #' 0.5, bigger value leads to bigger clusters)
 #' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
+#' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
+#' @param path_temp a string indicating the path to the temporary folder (see Details)
 #' @export
 #' @details
 #' OSLOM is a network community detection algorithm proposed in \insertCite{Lancichinetti2011}{bioRgeo} that
@@ -25,6 +27,10 @@
 #' (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 #' By default \code{reassign = 'no'} and all the information is provided.
 #' This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
+#'
+#' The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
+#' (folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
+#' (\code{delete_temp = TRUE}).
 #'
 #' @return A \code{data.frame} providing one or several modules (according to the chosen option(s)) for each node. If
 #' \code{reassign = simil} or \code{reassign = random} only one column by hierarchical level will be provided. If
@@ -46,7 +52,8 @@
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
-oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1, t = 0.1, cp = 0.5, directed = FALSE){
+oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1, t = 0.1, cp = 0.5, directed = FALSE
+                  , delete_temp = TRUE, path_temp = "oslom_temp"){
 
   # Identify bioRgeo directory on your computer
   biodir <- list.dirs(.libPaths(), recursive = FALSE)
@@ -157,6 +164,20 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
     stop("directed must be a boolean")
   }
 
+  if(!is.logical(delete_temp)){
+    stop("delete_temp must be a boolean")
+  }
+
+  if(!is.character(path_temp)){
+    stop("path_temp must be a string")
+  }
+
+  # Create temp folder
+  dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+  if(!file.exists(path_temp)){
+    stop(paste0("Impossible to create directory ", path_temp))
+  }
+
   # Prepare input for OSLOM
   idnode=c(as.character(net[,1]),as.character(net[,2]))
   idnode=idnode[!duplicated(idnode)]
@@ -168,19 +189,16 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
     netemp=netemp[netemp[,3]>0,]
   }
 
-  # Create OSLOM folder in WD
-  dir.create("bioRgeo_temp/oslom", showWarnings = FALSE, recursive = TRUE)
-
   # Export input in OSLOM folder in WD
-  write.table(netemp, paste0("bioRgeo_temp/oslom/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+  write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
   # Prepare command to run OSLOM
 
   cmd=paste0("-r ", r, " -hr ", hr, " -seed ", seed," -t ", t, " -cp ", cp)
   if(weight){
-    cmd=paste0("-f bioRgeo_temp/oslom/net.txt -w ", cmd)
+    cmd=paste0("-f ", path_temp, "/net.txt -w ", cmd)
   }else{
-    cmd=paste0("-f bioRgeo_temp/oslom/net.txt -uw ", cmd)
+    cmd=paste0("-f ", path_temp, "/net.txt -uw ", cmd)
   }
 
   if(os == "Linux"){
@@ -205,7 +223,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   system(command = cmd, show.output.on.console = FALSE)
 
   # Control: if the command line did not work
-  if(!("tp" %in% list.files(paste0("bioRgeo_temp/oslom/net.txt_oslo_files")))){
+  if(!("tp" %in% list.files(paste0(path_temp, "/net.txt_oslo_files")))){
     stop("Command line was wrongly implemented. OSLOM did not run.")
   }
 
@@ -213,7 +231,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   nblev=1
 
   # Retrieve output from tp [TO COMMENT]
-  com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp"))
+  com=readLines(paste0(path_temp, "/net.txt_oslo_files/tp"))
   cl=list()
   length(cl)=length(com)/2
   for(k in 1:length(com)){
@@ -331,13 +349,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   com=comtp
 
   # If tp1 exists (i.e. hierarchical level)
-  if("tp1" %in% list.files(paste0("bioRgeo_temp/oslom/net.txt_oslo_files"))){
+  if("tp1" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))){
 
     # Number of levels
     nblev=2
 
     # Retrieve output from tp1 [TO COMMENT]
-    com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp1"))
+    com=readLines(paste0(path_temp, "/net.txt_oslo_files/tp1"))
     cl=list()
     length(cl)=length(com)/2
     for(k in 1:length(com)){
@@ -459,13 +477,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   }
 
   # If tp2 exists (i.e. hierarchical level)
-  if("tp2" %in% list.files(paste0("bioRgeo_temp/oslomnet.txt_oslo_files"))){
+  if("tp2" %in% list.files(paste0(path_temp, "/oslomnet.txt_oslo_files"))){
 
     # Number of levels
     nblev=3
 
     # Retrieve output from tp2 [TO COMMENT]
-    com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp2"))
+    com=readLines(paste0(path_temp, "/net.txt_oslo_files/tp2"))
     cl=list()
     length(cl)=length(com)/2
     for(k in 1:length(com)){
@@ -587,13 +605,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   }
 
   # If tp3 exists (i.e. hierarchical level)
-  if("tp3" %in% list.files(paste0("bioRgeo_temp/oslom/net.txt_oslo_files"))){
+  if("tp3" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))){
 
     # Number of levels
     nblev=4
 
     # Retrieve output from tp3 [TO COMMENT]
-    com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp3"))
+    com=readLines(paste0(path_temp, "/net.txt_oslo_files/tp3"))
     cl=list()
     length(cl)=length(com)/2
     for(k in 1:length(com)){
@@ -715,9 +733,11 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   }
 
   # Remove temporary files
-  #unlink(paste0("bioRgeo_temp/oslom/net.txt_oslo_files"), recursive = TRUE)
-  #unlink(paste0("bioRgeo_temp/oslom/net.txt"))
+  if(delete_temp){
+    unlink(paste0(path_temp), recursive = TRUE)
+  }
   unlink("tp")
+  unlink("time_seed.dat")
 
   # Rename and reorder columns
   com=as.character(comtp[,1])
