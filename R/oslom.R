@@ -168,32 +168,32 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
     netemp=netemp[netemp[,3]>0,]
   }
 
-  # Export input in OSLOM folder
-  write.table(netemp, paste0(biodir,"/bin/OSLOM/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+  # Create OSLOM folder in WD
+  dir.create("bioRgeo_temp/oslom", showWarnings = FALSE, recursive = TRUE)
+
+  # Export input in OSLOM folder in WD
+  write.table(netemp, paste0("bioRgeo_temp/oslom/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
   # Prepare command to run OSLOM
-  current_path <- getwd()  # Store current working directory
-  setwd(biodir)            # Change working directory so the file is saved in the proper place
 
   cmd=paste0("-r ", r, " -hr ", hr, " -seed ", seed," -t ", t, " -cp ", cp)
   if(weight){
-    cmd=paste0("-f bin/OSLOM/net.txt -w ", cmd)
+    cmd=paste0("-f bioRgeo_temp/oslom/net.txt -w ", cmd)
   }else{
-    cmd=paste0("-f bin/OSLOM/net.txt -uw ", cmd)
+    cmd=paste0("-f bioRgeo_temp/oslom/net.txt -uw ", cmd)
   }
 
   if(os == "Linux"){
     if(directed){
-      cmd=paste0("bin/OSLOM/oslom_dir_lin ", cmd)
+      cmd=paste0(biodir, "/bin/OSLOM/oslom_dir_lin ", cmd)
     }else{
-      cmd=paste0("bin/OSLOM/oslom_undir_lin ", cmd)
+      cmd=paste0(biodir, "/bin/OSLOM/oslom_undir_lin ", cmd)
     }
   }else if(os == "Windows"){
-    dir.create("bin/OSLOM/net.txt_oslo_files", showWarnings = FALSE)
     if(directed){
-      cmd=paste0("bin/OSLOM/oslom_dir_win.exe ", cmd)
+      cmd=paste0(biodir, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
     }else{
-      cmd=paste0("bin/OSLOM/oslom_undir_win.exe ", cmd)
+      cmd=paste0(biodir, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
     }
   }else if(os == "Darwin"){
     stop("TO IMPLEMENT")
@@ -204,11 +204,8 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   # Run OSLOM
   system(command = cmd, show.output.on.console = FALSE)
 
-  # Rechange working directory
-  setwd(current_path)
-
   # Control: if the command line did not work
-  if(!("tp" %in% list.files(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files")))){
+  if(!("tp" %in% list.files(paste0("bioRgeo_temp/oslom/net.txt_oslo_files")))){
     stop("Command line was wrongly implemented. OSLOM did not run.")
   }
 
@@ -216,7 +213,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   nblev=1
 
   # Retrieve output from tp [TO COMMENT]
-  com=readLines(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files/tp"))
+  com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp"))
   cl=list()
   length(cl)=length(com)/2
   for(k in 1:length(com)){
@@ -334,13 +331,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   com=comtp
 
   # If tp1 exists (i.e. hierarchical level)
-  if("tp1" %in% list.files(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files"))){
+  if("tp1" %in% list.files(paste0("bioRgeo_temp/oslom/net.txt_oslo_files"))){
 
     # Number of levels
     nblev=2
 
     # Retrieve output from tp1 [TO COMMENT]
-    com=readLines(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files/tp1"))
+    com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp1"))
     cl=list()
     length(cl)=length(com)/2
     for(k in 1:length(com)){
@@ -462,13 +459,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   }
 
   # If tp2 exists (i.e. hierarchical level)
-  if("tp2" %in% list.files(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files"))){
+  if("tp2" %in% list.files(paste0("bioRgeo_temp/oslomnet.txt_oslo_files"))){
 
     # Number of levels
     nblev=3
 
     # Retrieve output from tp2 [TO COMMENT]
-    com=readLines(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files/tp2"))
+    com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp2"))
     cl=list()
     length(cl)=length(com)/2
     for(k in 1:length(com)){
@@ -590,13 +587,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   }
 
   # If tp3 exists (i.e. hierarchical level)
-  if("tp3" %in% list.files(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files"))){
+  if("tp3" %in% list.files(paste0("bioRgeo_temp/oslom/net.txt_oslo_files"))){
 
     # Number of levels
     nblev=4
 
     # Retrieve output from tp3 [TO COMMENT]
-    com=readLines(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files/tp3"))
+    com=readLines(paste0("bioRgeo_temp/oslom/net.txt_oslo_files/tp3"))
     cl=list()
     length(cl)=length(com)/2
     for(k in 1:length(com)){
@@ -718,11 +715,12 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
   }
 
   # Remove temporary files
-  unlink(paste0(biodir,"/bin/OSLOM/net.txt_oslo_files"), recursive = TRUE)
-  unlink(paste0(biodir,"/bin/OSLOM/net.txt"))
+  #unlink(paste0("bioRgeo_temp/oslom/net.txt_oslo_files"), recursive = TRUE)
+  #unlink(paste0("bioRgeo_temp/oslom/net.txt"))
+  unlink("tp")
 
   # Rename and reorder columns
-  com=comtp[,1]
+  com=as.character(comtp[,1])
   tempnblev=1
   if(nblev>=4){
     nov=dim(comtphhh)[2]-1
@@ -798,8 +796,13 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
     tempnblev=tempnblev+1
   }
   colnames(com)[1]="ID"
+  com=data.frame(com)
+  for(k in 2:dim(com)[2]){
+    com[,k]=as.numeric(as.character(com[,k]))
+  }
 
   # Return output
-  return(data.frame(com))
+  com[,1]=as.character(com[,1])
+  return(com)
 
 }
