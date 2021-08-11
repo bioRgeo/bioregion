@@ -229,9 +229,9 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
   # Reformat tree [TO COMMENT]
   idinf=as.numeric(tree[,4])  # INFOMAP node ids
 
-  # Extract the modules from tree
-  df=data.frame(x=as.character(tree[,1]))
-  cominf = df %>% tidyr::separate(x, as.character(1:100), sep = ":") # Max 100 levels
+  # require(tidyr) # Extract the modules from tree
+  df <- data.frame(x = as.character(tree[,1]))
+  cominf = tidyr::separate(df, "x", as.character(1:100), sep = ":") # Max 100 levels
   cominf[is.na(cominf)]=0
   for(k in 1:dim(cominf)[2]){ # Transform in numeric
     cominf[,k]=as.numeric(as.character(cominf[,k]))
