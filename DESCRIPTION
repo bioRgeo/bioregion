@@ -30,16 +30,20 @@ Imports:
     cluster,
     dplyr,
     fastcluster,
+    igraph,
     Rcpp,
     RcppEigen,
+    Rdpack,
+    stats,
+    tidyr,
+    utils
+RdMacros: Rdpack
 LinkingTo: Rcpp,
            RcppEigen
-RdMacros: Rdpack
 Suggests:
     cowplot,
     ggplot2,
     knitr,
-    igraph,
     reshape2,
     rmarkdown,
     sf
