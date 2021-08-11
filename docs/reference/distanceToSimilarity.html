@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute similarity metrics between sites based on species composition — spproject • bioRgeo</title>
+<title>Convert distance indices to similarity indices — distanceToSimilarity • bioRgeo</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,9 @@
 
 
 
-<meta property="og:title" content="Compute similarity metrics between sites based on species composition — spproject" />
-<meta property="og:description" content="This function creates a data.frame where each row provides one or several similarity
-metric(s) between each pair of sites from a co-occurence matrix with sites as rows and species as columns." />
+<meta property="og:title" content="Convert distance indices to similarity indices — distanceToSimilarity" />
+<meta property="og:description" content="This function converts a data.frame of distance indices (beta diversity)
+between sites to similarity indices." />
 <meta property="og:image" content="/logo.svg" />
 
 
@@ -135,74 +135,46 @@ metric(s) between each pair of sites from a co-occurence matrix with sites as ro
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute similarity metrics between sites based on species composition</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bioRgeo/bioRgeo/blob/master/R/spproject.R'><code>R/spproject.R</code></a></small>
-    <div class="hidden name"><code>spproject.Rd</code></div>
+    <h1>Convert distance indices to similarity indices</h1>
+    <small class="dont-index">Source: <a href='https://github.com/bioRgeo/bioRgeo/blob/master/R/similarity_distance_conversion.R'><code>R/similarity_distance_conversion.R</code></a></small>
+    <div class="hidden name"><code>distanceToSimilarity.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function creates a <code>data.frame</code> where each row provides one or several similarity
-metric(s) between each pair of sites from a co-occurence <code>matrix</code> with sites as rows and species as columns.</p>
+    <p>This function converts a data.frame of distance indices (beta diversity)
+between sites to similarity indices.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spproject</span><span class='op'>(</span><span class='va'>comat</span>, metric <span class='op'>=</span> <span class='st'>"Simpson"</span>, method <span class='op'>=</span> <span class='st'>"prodmat"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>distanceToSimilarity</span><span class='op'>(</span><span class='va'>distancedata</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>comat</th>
-      <td><p>a co-occurence <code>matrix</code> with sites as rows and species as columns</p></td>
-    </tr>
-    <tr>
-      <th>metric</th>
-      <td><p>a vector of character(s) indicating which similarity
-metric(s) to chose (see Details). If <code>"all"</code> is specified, then all
-metrics will be calculated.</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>a string indicating what method should be used to compute <code>abc</code> (see Details),
-<code>method = "prodmat"</code> by default is more efficient but can greedy in memory and <code>method="loops"</code> is less efficient
-but less greedy in memory</p></td>
+      <th>distancedata</th>
+      <td><p>the output object from <code><a href='similarityToDistance.html'>similarityToDistance</a></code> or a
+<code>data.frame</code> with the first columns called "Site1" and "Site2", and the
+other columns being the similarity metrics.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code> providing one or several similarity
-metric(s) between each pair of sites. The two first columns represents each pair of sites.
-One column per similarity metric provided in <code>metric</code> except for the metric <em>abc</em> and <em>ABC</em> that
-are stored in three columns (one for each letter).</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>A <code>data.frame</code> with additional class <code>bioRgeo.similarity</code></p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>With <code>a</code> the number of species shared by a pair of sites, <code>b</code> species only present in the first site
-and <code>c</code> species only present in the second site.</p>
-<p>\(Jaccard = 1 - (b + c) / (a + b + c)\)</p>
-<p>\(Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))\) (Baselga 2012)</p>
-<p>\(Sorensen = 1 - (b + c) / (2a + b + c)\)</p>
-<p>\(Simpson = 1 - min(b, c) / (a + min(b, c))\)</p>
-<p>If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
-following equation:</p>
-<p>\(Bray = 1 - (B + C) / (2A + B + C)\)</p>
-<p>\(Brayturn = 1 - min(B, C)/(A + min(B, C))\) (Baselga 2013)</p>
-<p>with A the sum of the lesser values for common species shared by a pair of sites.
-B and C are the total number of specimens counted at both sites minus A.</p>
-<p>Euclidean computes the Euclidean similarity between each pair of site following this equation:</p>
-<p>\(Euclidean = 1 / (1 + dij)\)</p>
-<p>Where dij is the Euclidean distance between site i and site j in terms of species composition.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Baselga A (2012).
-&#8220;The Relationship between Species Replacement, Dissimilarity Derived from Nestedness, and Nestedness.&#8221;
-<em>Global Ecology and Biogeography</em>, <b>21</b>(12), 1223--1232.
-
-Baselga A (2013).
-&#8220;Separating the two components of abundance-based dissimilarity: balanced changes in abundance vs. abundance gradients.&#8221;
-<em>Methods in Ecology and Evolution</em>, <b>4</b>(6), 552--557.</p>
+    <p>The behaviour of this function changes depending on column names. Columns
+"Site1" and "Site2" are copied identically. If there are columns called
+"a", "b", "c", "A", "B", "C", they will also be copied identically.</p>
+<p>If a column is called "Euclidean", its similarity will be calculated based
+on the following formula:</p>
+<p>\(Euclidean similarity = (1 - Euclidean distance) / Euclidean distance\)</p>
+<p>Otherwise, all other columns will be transformed into similarity with the
+following formula:</p>
+<p>\(similarity = 1 - distance\)</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='distanceToSimilarity.html'>distanceToSimilarity</a></p></div>
+    <div class='dont-index'><p>distanceToSimilarity</p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Pierre Denelle (<a href='mailto:pierre.denelle@gmail.com'>pierre.denelle@gmail.com</a>),
@@ -214,26 +186,67 @@ Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>comat</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Site"</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>comat</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Species"</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>
 
-<span class='va'>simil</span> <span class='op'>&lt;-</span> <span class='fu'>spproject</span><span class='op'>(</span><span class='va'>comat</span>, metric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"abc"</span>, <span class='st'>"ABC"</span>, <span class='st'>"Simpson"</span>, <span class='st'>"Brayturn"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>simil</span>
+<span class='va'>simil</span> <span class='op'>&lt;-</span> <span class='fu'><a href='spproject.html'>spproject</a></span><span class='op'>(</span><span class='va'>comat</span>, metric <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='input'><span class='va'>simil</span>
 </div><div class='output co'>#&gt; Data.frame of similarity between sites
 #&gt;  - Total number of sites:  5 
 #&gt;  - Number of rows:  10 
-#&gt;  - Number of similarity metrics:  2 
+#&gt;  - Number of similarity metrics:  7 
 #&gt; 
 #&gt; 
-#&gt;    Site1 Site2 a b c   Simpson   A   B    C  Brayturn
-#&gt; 6  Site1 Site2 8 1 1 0.8888889  88 909  593 0.1292217
-#&gt; 11 Site1 Site3 8 1 1 0.8888889 161 836 1009 0.1614845
-#&gt; 16 Site1 Site4 7 2 1 0.8750000 374 623  839 0.3751254
-#&gt; 21 Site1 Site5 8 1 1 0.8888889 379 618  799 0.3801404
-#&gt; 12 Site2 Site3 9 0 0 1.0000000 425 256  745 0.6240822
-#&gt; 17 Site2 Site4 8 1 0 1.0000000 268 413  945 0.3935389
-#&gt; 22 Site2 Site5 8 1 1 0.8888889  69 612 1109 0.1013216
-#&gt; 18 Site3 Site4 8 1 0 1.0000000 469 701  744 0.4008547
-#&gt; 23 Site3 Site5 8 1 1 0.8888889 298 872  880 0.2547009
-#&gt; 24 Site4 Site5 7 1 2 0.8750000 480 733  698 0.4074703</div><div class='input'>
-<span class='va'>simil</span> <span class='op'>&lt;-</span> <span class='fu'>spproject</span><span class='op'>(</span><span class='va'>comat</span>, metric <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
+#&gt;    Site1 Site2 a b c   Jaccard Jaccardturn  Sorensen   Simpson   A    B    C
+#&gt; 6  Site1 Site2 7 2 0 0.7777778   1.0000000 0.8750000 1.0000000 106  665 1071
+#&gt; 11 Site1 Site3 9 0 1 0.9000000   1.0000000 0.9473684 1.0000000 752   19 1319
+#&gt; 16 Site1 Site4 7 2 1 0.7000000   0.7777778 0.8235294 0.8750000  47  724   94
+#&gt; 21 Site1 Site5 7 2 1 0.7000000   0.7777778 0.8235294 0.8750000 132  639 1337
+#&gt; 12 Site2 Site3 7 0 3 0.7000000   1.0000000 0.8235294 1.0000000 291  886 1780
+#&gt; 17 Site2 Site4 6 1 2 0.6666667   0.7500000 0.8000000 0.8571429 106 1071   35
+#&gt; 22 Site2 Site5 5 2 3 0.5000000   0.5555556 0.6666667 0.7142857 379  798 1090
+#&gt; 18 Site3 Site4 8 2 0 0.8000000   1.0000000 0.8888889 1.0000000  49 2022   92
+#&gt; 23 Site3 Site5 8 2 0 0.8000000   1.0000000 0.8888889 1.0000000 151 1920 1318
+#&gt; 24 Site4 Site5 6 2 2 0.6000000   0.6000000 0.7500000 0.7500000  17  124 1452
+#&gt;          Bray  Brayturn    Euclidean
+#&gt; 6  0.10882957 0.1374838 0.0011226063
+#&gt; 11 0.52920479 0.9753567 0.0012971064
+#&gt; 16 0.10307018 0.3333333 0.0018551021
+#&gt; 21 0.11785714 0.1712062 0.0009549093
+#&gt; 12 0.17918719 0.2472387 0.0008596360
+#&gt; 17 0.16084977 0.7517730 0.0013549102
+#&gt; 22 0.28647014 0.3220051 0.0009767579
+#&gt; 18 0.04430380 0.3475177 0.0009435908
+#&gt; 23 0.08531073 0.1027910 0.0007292448
+#&gt; 24 0.02111801 0.1205674 0.0010800075</div><div class='input'>
+<span class='va'>distances</span> <span class='op'>&lt;-</span> <span class='fu'><a href='similarityToDistance.html'>similarityToDistance</a></span><span class='op'>(</span><span class='va'>simil</span><span class='op'>)</span>
+<span class='va'>distances</span>
+</div><div class='output co'>#&gt; Data.frame of distances between sites
+#&gt;  - Total number of sites:  5 
+#&gt;  - Number of rows:  10 
+#&gt;  - Number of distance metrics:  7 
+#&gt; 
+#&gt; 
+#&gt;    Site1 Site2 a b c   Jaccard Jaccardturn   Sorensen   Simpson   A    B    C
+#&gt; 6  Site1 Site2 7 2 0 0.2222222   0.0000000 0.12500000 0.0000000 106  665 1071
+#&gt; 11 Site1 Site3 9 0 1 0.1000000   0.0000000 0.05263158 0.0000000 752   19 1319
+#&gt; 16 Site1 Site4 7 2 1 0.3000000   0.2222222 0.17647059 0.1250000  47  724   94
+#&gt; 21 Site1 Site5 7 2 1 0.3000000   0.2222222 0.17647059 0.1250000 132  639 1337
+#&gt; 12 Site2 Site3 7 0 3 0.3000000   0.0000000 0.17647059 0.0000000 291  886 1780
+#&gt; 17 Site2 Site4 6 1 2 0.3333333   0.2500000 0.20000000 0.1428571 106 1071   35
+#&gt; 22 Site2 Site5 5 2 3 0.5000000   0.4444444 0.33333333 0.2857143 379  798 1090
+#&gt; 18 Site3 Site4 8 2 0 0.2000000   0.0000000 0.11111111 0.0000000  49 2022   92
+#&gt; 23 Site3 Site5 8 2 0 0.2000000   0.0000000 0.11111111 0.0000000 151 1920 1318
+#&gt; 24 Site4 Site5 6 2 2 0.4000000   0.4000000 0.25000000 0.2500000  17  124 1452
+#&gt;         Bray   Brayturn Euclidean
+#&gt; 6  0.8911704 0.86251621  889.7842
+#&gt; 11 0.4707952 0.02464332  769.9468
+#&gt; 16 0.8969298 0.66666667  538.0539
+#&gt; 21 0.8821429 0.82879377 1046.2199
+#&gt; 12 0.8208128 0.75276126 1162.2831
+#&gt; 17 0.8391502 0.24822695  737.0563
+#&gt; 22 0.7135299 0.67799490 1022.7952
+#&gt; 18 0.9556962 0.65248227 1058.7814
+#&gt; 23 0.9146893 0.89720899 1370.2817
+#&gt; 24 0.9788820 0.87943262  924.9195</div><div class='input'>
+<span class='va'>simil</span> <span class='op'>&lt;-</span> <span class='fu'>distanceToSimilarity</span><span class='op'>(</span><span class='va'>distances</span><span class='op'>)</span>
 <span class='va'>simil</span>
 </div><div class='output co'>#&gt; Data.frame of similarity between sites
 #&gt;  - Total number of sites:  5 
@@ -241,29 +254,28 @@ Boris Leroy (<a href='mailto:leroy.boris@gmail.com'>leroy.boris@gmail.com</a>)</
 #&gt;  - Number of similarity metrics:  7 
 #&gt; 
 #&gt; 
-#&gt;    Site1 Site2 a b c   Jaccard Jaccardturn  Sorensen   Simpson   A   B    C
-#&gt; 6  Site1 Site2 8 1 1 0.8000000   0.8000000 0.8888889 0.8888889  88 909  593
-#&gt; 11 Site1 Site3 8 1 1 0.8000000   0.8000000 0.8888889 0.8888889 161 836 1009
-#&gt; 16 Site1 Site4 7 2 1 0.7000000   0.7777778 0.8235294 0.8750000 374 623  839
-#&gt; 21 Site1 Site5 8 1 1 0.8000000   0.8000000 0.8888889 0.8888889 379 618  799
-#&gt; 12 Site2 Site3 9 0 0 1.0000000   1.0000000 1.0000000 1.0000000 425 256  745
-#&gt; 17 Site2 Site4 8 1 0 0.8888889   1.0000000 0.9411765 1.0000000 268 413  945
-#&gt; 22 Site2 Site5 8 1 1 0.8000000   0.8000000 0.8888889 0.8888889  69 612 1109
-#&gt; 18 Site3 Site4 8 1 0 0.8888889   1.0000000 0.9411765 1.0000000 469 701  744
-#&gt; 23 Site3 Site5 8 1 1 0.8000000   0.8000000 0.8888889 0.8888889 298 872  880
-#&gt; 24 Site4 Site5 7 1 2 0.7000000   0.7777778 0.8235294 0.8750000 480 733  698
+#&gt;    Site1 Site2 a b c   Jaccard Jaccardturn  Sorensen   Simpson   A    B    C
+#&gt; 6  Site1 Site2 7 2 0 0.7777778   1.0000000 0.8750000 1.0000000 106  665 1071
+#&gt; 11 Site1 Site3 9 0 1 0.9000000   1.0000000 0.9473684 1.0000000 752   19 1319
+#&gt; 16 Site1 Site4 7 2 1 0.7000000   0.7777778 0.8235294 0.8750000  47  724   94
+#&gt; 21 Site1 Site5 7 2 1 0.7000000   0.7777778 0.8235294 0.8750000 132  639 1337
+#&gt; 12 Site2 Site3 7 0 3 0.7000000   1.0000000 0.8235294 1.0000000 291  886 1780
+#&gt; 17 Site2 Site4 6 1 2 0.6666667   0.7500000 0.8000000 0.8571429 106 1071   35
+#&gt; 22 Site2 Site5 5 2 3 0.5000000   0.5555556 0.6666667 0.7142857 379  798 1090
+#&gt; 18 Site3 Site4 8 2 0 0.8000000   1.0000000 0.8888889 1.0000000  49 2022   92
+#&gt; 23 Site3 Site5 8 2 0 0.8000000   1.0000000 0.8888889 1.0000000 151 1920 1318
+#&gt; 24 Site4 Site5 6 2 2 0.6000000   0.6000000 0.7500000 0.7500000  17  124 1452
 #&gt;          Bray  Brayturn    Euclidean
-#&gt; 6  0.10488677 0.1292217 0.0013444229
-#&gt; 11 0.14859252 0.1614845 0.0010466466
-#&gt; 16 0.33846154 0.3751254 0.0014106396
-#&gt; 21 0.34850575 0.3801404 0.0012673711
-#&gt; 12 0.45921124 0.6240822 0.0021812812
-#&gt; 17 0.28299894 0.3935389 0.0014563119
-#&gt; 22 0.07423346 0.1013216 0.0011428400
-#&gt; 18 0.39362149 0.4008547 0.0012581616
-#&gt; 23 0.25383305 0.2547009 0.0009972849
-#&gt; 24 0.40150565 0.4074703 0.0013021894</div><div class='input'>
-</div></pre>
+#&gt; 6  0.10882957 0.1374838 0.0011226063
+#&gt; 11 0.52920479 0.9753567 0.0012971064
+#&gt; 16 0.10307018 0.3333333 0.0018551021
+#&gt; 21 0.11785714 0.1712062 0.0009549093
+#&gt; 12 0.17918719 0.2472387 0.0008596360
+#&gt; 17 0.16084977 0.7517730 0.0013549102
+#&gt; 22 0.28647014 0.3220051 0.0009767579
+#&gt; 18 0.04430380 0.3475177 0.0009435908
+#&gt; 23 0.08531073 0.1027910 0.0007292448
+#&gt; 24 0.02111801 0.1205674 0.0010800075</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
