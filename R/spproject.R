@@ -80,8 +80,6 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
   }
 
   # Controls
-  require(Rcpp)
-
   if(length(intersect(c(lsmetricabc,lsmetricABC,lsmetrico),metric))!=length(metric)){
     stop("One or several similarity metric(s) chosen is not available.
      Please chose among the followings:
@@ -188,7 +186,7 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
 
   # Compute Euclidean similarity between site using dist()
   if("Euclidean" %in% metric){
-    eucl=as.matrix(dist(comat))
+    eucl=as.matrix(stats::dist(comat))
     rownames(eucl)=siteid
     colnames(eucl)=siteid
     eucl[eucl==0]=-1
