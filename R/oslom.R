@@ -191,7 +191,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   }
 
   # Export input in OSLOM folder in WD
-  write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+  utils::write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
   # Prepare command to run OSLOM
 
