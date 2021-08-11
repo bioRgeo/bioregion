@@ -1,0 +1,37 @@
+destination: docs
+
+toc:
+  depth: 1
+
+reference:
+- title: Utils
+  desc: >
+    test
+  contents:
+  - contingency_to_df
+  - df_to_contingency
+
+- title: Metrics
+  desc: >
+    test
+  contents:
+  - spproject
+  - df_to_contingency
+  - distanceToSimilarity
+  - similarityToDistance
+
+- title: Clustering
+  desc: >
+    test
+  contents:
+  - infomap
+  - louvain
+  - oslom
+
+- title: Data
+  desc: >
+    test
+  contents:
+  - vegedf
+  - vegemat
+  - vegesp
