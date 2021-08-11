@@ -1,4 +1,4 @@
-  #' Louvain community finding
+#' Louvain community finding
 #'
 #' This function finds communities in a (un)weighted undirected network based on the Louvain algorithm.
 #'
@@ -138,10 +138,8 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
 
   if(lang=="igraph" | lang=="all"){
 
-    require(igraph)
-
-    net=graph_from_data_frame(netemp, directed=FALSE)
-    comtemp=cluster_louvain(net)
+    net=igraph::graph_from_data_frame(netemp, directed=FALSE)
+    comtemp=igraph::cluster_louvain(net)
     comtemp=cbind(as.numeric(comtemp$names),as.numeric(comtemp$membership))
 
     com=data.frame(ID=idnode[,2], Com=0)
@@ -181,7 +179,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
     #}
 
     # Export input in LOUVAIN folder
-    write.table(netemp, paste0(path_temp, "/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+    utils::write.table(netemp, paste0(path_temp, "/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
     # Prepare command to run LOUVAIN
     # Convert net.txt with LOUVAIN
@@ -229,7 +227,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
     }
 
     # Retrieve output from net.tree
-    tree=read.table(paste0(path_temp, "/net.tree"))
+    tree=utils::read.table(paste0(path_temp, "/net.tree"))
 
     id0=which(tree[,1]==0)
     tree=tree[(id0[1]+1):(id0[2]-1),]
