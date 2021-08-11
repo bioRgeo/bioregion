@@ -52,8 +52,9 @@
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
-oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1, t = 0.1, cp = 0.5, directed = FALSE
-                  , delete_temp = TRUE, path_temp = "oslom_temp"){
+oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
+                  seed = 1, t = 0.1, cp = 0.5, directed = FALSE,
+                  delete_temp = TRUE, path_temp = "oslom_temp"){
 
   # Identify bioRgeo directory on your computer
   biodir <- list.dirs(.libPaths(), recursive = FALSE)
@@ -213,6 +214,8 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50, seed = 1
     }else{
       cmd=paste0(biodir, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
     }
+    # Create temp folder
+    dir.create(paste0(path_temp, "/net.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
   }else if(os == "Darwin"){
     stop("TO IMPLEMENT")
   }else{

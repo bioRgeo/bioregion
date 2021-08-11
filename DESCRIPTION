@@ -1,6 +1,6 @@
 Package: bioRgeo
 Type: Package
-Title: bioRgeo
+Title: Bioregionalisation Methods in R
 Version: 0.1.0
 Authors@R: 
     c(person(given = "Pierre",
@@ -19,7 +19,7 @@ Authors@R:
               email = "boris.leroy@gmail.com",
               comment = c(ORCID = "0000-0002-7686-4302"))
                     )
-Description: Aim at testing several methods to delineate bioregions.
+Description: bioRgeo provides multiple methods to delineate bioregions.
              Use methods based on projected or bipartite networks.
 Depends:
   R (>= 3.5.3)
@@ -49,6 +49,6 @@ Suggests:
     rmarkdown,
     sf
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 URL: https://github.com/bioRgeo/bioRgeo
 BugReports: https://github.com/bioRgeo/bioRgeo/issues

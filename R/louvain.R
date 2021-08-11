@@ -214,7 +214,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
       cmd=paste0(biodir, "/bin/LOUVAIN/louvain_lin ", cmd, " > ", path_temp, "/net.tree")
       system(command = cmd)
     }else if(os == "Windows"){
-      cmd=paste0(biodir, "æbin/LOUVAIN/louvain_win.exe ", cmd)
+      cmd=paste0(biodir, "/bin/LOUVAIN/louvain_win.exe ", cmd)
       tree=system(command = cmd, intern=TRUE)
       cat(tree[1:(length(tree)-1)], file = paste0(path_temp, "/net.tree"), sep = "\n")
     }else if(os == "Darwin"){
