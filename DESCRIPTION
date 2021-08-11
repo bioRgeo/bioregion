@@ -27,16 +27,11 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    ade4,
     cluster,
-    DescTools,
     dplyr,
     fastcluster,
-    lctools,
     Rcpp,
     RcppEigen,
-    Rdpack,
-    SMUT
 LinkingTo: Rcpp,
            RcppEigen
 RdMacros: Rdpack
