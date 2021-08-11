@@ -10,7 +10,9 @@ library(bioRgeo)
 setwd("/home/maxime/mmmycloud/Research/Articles/InProgress/bioRgeo")
 
 # Import data
-data(VegeCBNMed)
+data(vegedf)
+data(vegemat)
+data(vegesp)
 
 tab=vegedf
 mat=vegemat
