@@ -184,9 +184,9 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
   # Export input in INFOMAP folder
   if(bipartite){ # Add tag if bipartite
     cat(paste0("*Bipartite ",N),"\n",file=paste0(path_temp,"/net.txt"))
-    write.table(netemp, paste0(path_temp,"/net.txt"), append=TRUE, row.names=FALSE, col.names=FALSE, sep=" ")
+    utils::write.table(netemp, paste0(path_temp,"/net.txt"), append=TRUE, row.names=FALSE, col.names=FALSE, sep=" ")
   }else{
-    write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
+    utils::write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
   }
 
   # Prepare command to run INFOMAP
@@ -224,14 +224,14 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
   }
 
   # Retrieve output from net.tree
-  tree=read.table(paste0(path_temp,"/net.tree"))
+  tree=utils::read.table(paste0(path_temp,"/net.tree"))
 
   # Reformat tree [TO COMMENT]
   idinf=as.numeric(tree[,4])  # INFOMAP node ids
 
-  require(tidyr) # Extract the modules from tree
+  # Extract the modules from tree
   df=data.frame(x=as.character(tree[,1]))
-  cominf = df %>% separate(x, as.character(1:100), sep = ":") # Max 100 levels
+  cominf = df %>% tidyr::separate(x, as.character(1:100), sep = ":") # Max 100 levels
   cominf[is.na(cominf)]=0
   for(k in 1:dim(cominf)[2]){ # Transform in numeric
     cominf[,k]=as.numeric(as.character(cominf[,k]))
