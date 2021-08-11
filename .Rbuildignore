@@ -1,4 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
-
+^pkgdown/
+^docs/
+^TODO.md
+^tests/
+^inst/bin/
