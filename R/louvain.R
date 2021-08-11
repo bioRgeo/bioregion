@@ -185,11 +185,11 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
 
     # Prepare command to run LOUVAIN
     # Convert net.txt with LOUVAIN
-        if(weight){
-          cmd=paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ", path_temp, "/net.weights")
-        }else{
-          cmd=paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin")
-        }
+    if(weight){
+      cmd=paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ", path_temp, "/net.weights")
+    }else{
+      cmd=paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin")
+    }
 
     if(os == "Linux"){
       cmd=paste0(biodir, "/bin/LOUVAIN/convert_lin ", cmd)
