@@ -10,7 +10,8 @@ spproject(comat, metric = "Simpson", method = "prodmat")
 \item{comat}{a co-occurence \code{matrix} with sites as rows and species as columns}
 
 \item{metric}{a vector of character(s) indicating which similarity
-metric(s) to chose (see Details)}
+metric(s) to chose (see Details). If \code{"all"} is specified, then all
+metrics will be calculated.}
 
 \item{method}{a string indicating what method should be used to compute \code{abc} (see Details),
 \code{method = "prodmat"} by default is more efficient but can greedy in memory and \code{method="loops"} is less efficient
@@ -30,18 +31,18 @@ metric(s) between each pair of sites from a co-occurence \code{matrix} with site
 With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
 and \code{c} species only present in the second site.
 
-\eqn{Jaccard = 1 - (b+c)/(a + b + c)}
+\eqn{Jaccard = 1 - (b + c) / (a + b + c)}
 
-\eqn{Jaccardturn = 1 - 2min(b, c)/(a + 2min(b, c))} \insertCite{Baselga2012}{bioRgeo}
+\eqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioRgeo}
 
-\eqn{Sorensen = 1 - (b+c)/(2a + b + c)}
+\eqn{Sorensen = 1 - (b + c) / (2a + b + c)}
 
-\eqn{Simpson = 1 - min(b, c)/(a + min(b, c))}
+\eqn{Simpson = 1 - min(b, c) / (a + min(b, c))}
 
 If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
 following equation:
 
-\eqn{Bray = 1- (B+C)/(2A + B + C)}
+\eqn{Bray = 1 - (B + C) / (2A + B + C)}
 
 \eqn{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
 
@@ -50,20 +51,28 @@ B and C are the total number of specimens counted at both sites minus A.
 
 Euclidean computes the Euclidean similarity between each pair of site following this equation:
 
-\eqn{Euclidean = 1 /(1 + dij)}
+\eqn{Euclidean = 1 / (1 + dij)}
 
 Where dij is the Euclidean distance between site i and site j in terms of species composition.
 }
 \examples{
-comat=matrix(sample(1000,50),5,10)
-rownames(comat)=paste0("Site",1:5)
-colnames(comat)=paste0("Species",1:10)
+comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1/1:1001), 5, 10)
+rownames(comat) <- paste0("Site",1:5)
+colnames(comat) <- paste0("Species",1:10)
 
-simil=spproject(comat,metric=c("abc","ABC","Simpson","Brayturn"))
+simil <- spproject(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+simil
+
+simil <- spproject(comat, metric = "all")
+simil
+
 }
 \references{
 \insertRef{Baselga2012}{bioRgeo}
 \insertRef{Baselga2013}{bioRgeo}
+}
+\seealso{
+\link{distanceToSimilarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

@@ -3,7 +3,7 @@
 #' This function converts a data.frame of similarity indices between sites to
 #'  distance indices (= beta diversity).
 #'
-#' @param similaritydata the output object from \link{\code{spproject}} or a
+#' @param similaritydata the output object from \code{\link{spproject}} or a
 #' \code{data.frame} with the first columns called "Site1" and "Site2", and the
 #' other columns being the similarity metrics.
 #' @export
@@ -40,8 +40,6 @@
 #'
 #' distances <- similarityToDistance(simil)
 #' distances
-#' @export
-
 similarityToDistance <- function(similaritydata)
 {
   if(inherits(similaritydata, "bioRgeo.distance"))
@@ -84,7 +82,7 @@ similarityToDistance <- function(similaritydata)
 #' This function converts a data.frame of distance indices (beta diversity)
 #' between sites to similarity indices.
 #'
-#' @param distancedata the output object from \link{\code{similarityToDistance}} or a
+#' @param distancedata the output object from \code{\link{similarityToDistance}} or a
 #' \code{data.frame} with the first columns called "Site1" and "Site2", and the
 #' other columns being the similarity metrics.
 #' @export
@@ -124,7 +122,6 @@ similarityToDistance <- function(similaritydata)
 #'
 #' simil <- distanceToSimilarity(distances)
 #' simil
-#' @export
 distanceToSimilarity <- function(distancedata)
 {
   if(inherits(distancedata, "bioRgeo.similarity"))
