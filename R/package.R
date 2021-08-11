@@ -7,7 +7,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @import Rcpp cluster dplyr fastcluster RcppEigen
+#' @import cluster dplyr fastcluster Rcpp RcppEigen
 #' @importFrom Rcpp evalCpp
 #' @useDynLib bioRgeo, .registration=TRUE
 #' @name bioRgeo
