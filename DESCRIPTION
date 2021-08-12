@@ -27,13 +27,11 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    cluster,
-    dplyr,
-    fastcluster,
     igraph,
     Rcpp,
     RcppEigen,
     Rdpack,
+    reshape2,
     stats,
     tidyr,
     utils
@@ -41,11 +39,7 @@ RdMacros: Rdpack
 LinkingTo: Rcpp,
            RcppEigen
 Suggests:
-    cowplot,
-    ggplot2,
     knitr,
-    reshape2,
-    rmarkdown,
     sf
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
