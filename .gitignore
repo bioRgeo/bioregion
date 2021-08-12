@@ -11,3 +11,6 @@ src/RcppExports.o
 
 inst/REFERENCES.bib.bak
 
+docs/
+pkgdown/
+
