@@ -11,6 +11,7 @@
 #' @param k the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)
 #' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
 #' @param path_temp a string indicating the path to the temporary folder (see Details)
+#' @param binpath a string indicating the path to the bin folder (see \link{bin} and Details)
 #' @export
 #' @details
 #' Louvain is a network community detection algorithm proposed in \insertCite{Blondel2008}{bioRgeo}. This function
@@ -22,6 +23,11 @@
 #' Density criterion, 4	for the A-weighted Condorcet criterion, 5 for the Deviation to Indetermination criterion, 6
 #' for the Deviation to Uniformity criterion, 7 for the Profile Difference criterion, 8	for the Shi-Malik criterion
 #' (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
+#'
+#' The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
+#' This function needs executables files to run. They can be installed with \link{bin}. If you set the the path to
+#' the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
+#' accordingly.
 #'
 #' The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
 #' (folder "louvain_temp" in the workind directory by default). This temporary folder is removed by default
@@ -40,12 +46,12 @@
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=spproject(comat,metric="Simpson")
-#' com=louvain(net)
+#' com=louvain(net, lang="igraph")
 #' @references
 #' \insertRef{Blondel2008}{bioRgeo}
 #' @export
 louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delete_temp = TRUE,
-                    path_temp = "louvain_temp"){
+                    path_temp = "louvain_temp", binpath = NULL){
 
   # Controls
   if(!is.data.frame(net)){
@@ -81,47 +87,6 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
          Cpp, igraph, all")
   }
 
-  if(!is.numeric(q)){
-    stop("q must be numeric")
-  }else{
-    if(q<0){
-      stop("q must be positive")
-    }
-    if((q-floor(q))>0){
-      stop("q must be an integer higher or equal to 0")
-    }
-  }
-
-  if(!is.numeric(c)){
-    stop("c must be numeric")
-  }else{
-    if(c<0 | c>1){
-      stop("c must be in the interval (0,1)")
-    }
-  }
-
-  if(!is.numeric(k)){
-    stop("k must be numeric")
-  }else{
-    if(k<0){
-      stop("k must be positive")
-    }
-  }
-
-  if(!is.logical(delete_temp)){
-    stop("delete_temp must be a boolean")
-  }
-
-  if(!is.character(path_temp)){
-    stop("path_temp must be a string")
-  }
-
-  # Create temp folder
-  dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-  if(!file.exists(path_temp)){
-    stop(paste0("Impossible to create directory ", path_temp))
-  }
-
   # Prepare input for LOUVAIN
   idnode1=as.character(net[,1])
   idnode2=as.character(net[,2])
@@ -151,30 +116,83 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
 
   if(lang=="Cpp" | lang=="all"){
 
-    # Identify bioRgeo directory on your computer
-    biodir <- list.dirs(.libPaths(), recursive = FALSE)
-    biodir <- biodir[grep("bioRgeo", biodir)]
+    # Controls
+    if(!is.numeric(q)){
+      stop("q must be numeric")
+    }else{
+      if(q<0){
+        stop("q must be positive")
+      }
+      if((q-floor(q))>0){
+        stop("q must be an integer higher or equal to 0")
+      }
+    }
+
+    if(!is.numeric(c)){
+      stop("c must be numeric")
+    }else{
+      if(c<0 | c>1){
+        stop("c must be in the interval (0,1)")
+      }
+    }
+
+    if(!is.numeric(k)){
+      stop("k must be numeric")
+    }else{
+      if(k<0){
+        stop("k must be positive")
+      }
+    }
+
+    if(!is.logical(delete_temp)){
+      stop("delete_temp must be a boolean")
+    }
+
+    if(!is.character(path_temp)){
+      stop("path_temp must be a string")
+    }
+
+    # Create temp folder
+    dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+    if(!file.exists(path_temp)){
+      stop(paste0("Impossible to create directory ", path_temp))
+    }
+
+    # Set binpath
+    if(is.null(binpath)){
+      # Identify bioRgeo directory on your computer
+      biodir <- list.dirs(.libPaths(), recursive = FALSE)
+      binpath <- biodir[grep("bioRgeo", biodir)]
+    }else{
+      # Control
+      if(!is.character(binpath)){
+        stop("path must be a string")
+      }
+      if(!file.exists(binpath)){
+        stop(paste0("Impossible to access ", binpath))
+      }
+    }
 
     # Check OS
     os=Sys.info()[['sysname']]
 
     # Check if LOUVAIN is present
-    if(!file.exists(paste0(biodir,"/bin/LOUVAIN/louvain_lin"))){
+    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/louvain_lin"))){
       stop("Louvain is not in bioRgeo/bin directory...")
     }
-    if(!file.exists(paste0(biodir,"/bin/LOUVAIN/convert_lin"))){
+    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/convert_lin"))){
       stop("Louvain is not in bioRgeo/bin directory...")
     }
-    if(!file.exists(paste0(biodir,"/bin/LOUVAIN/louvain_win.exe"))){
+    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/louvain_win.exe"))){
       stop("Louvain is not in bioRgeo/bin directory...")
     }
-    if(!file.exists(paste0(biodir,"/bin/LOUVAIN/convert_win.exe"))){
+    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/convert_win.exe"))){
       stop("Louvain is not in bioRgeo/bin directory...")
     }
-    #if(!file.exists(paste0(biodir,"/bin/LOUVAIN/louvain_mac"))){
+    #if(!file.exists(paste0(binpath,"/bin/LOUVAIN/louvain_mac"))){
     #  stop("Louvain is not in bioRgeo/bin directory...")
     #}
-    #if(!file.exists(paste0(biodir,"/bin/LOUVAIN/convert_mac"))){
+    #if(!file.exists(paste0(binpath,"/bin/LOUVAIN/convert_mac"))){
     #  stop("Louvain is not in bioRgeo/bin directory...")
     #}
 
@@ -190,9 +208,9 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
     }
 
     if(os == "Linux"){
-      cmd=paste0(biodir, "/bin/LOUVAIN/convert_lin ", cmd)
+      cmd=paste0(binpath, "/bin/LOUVAIN/convert_lin ", cmd)
     }else if(os == "Windows"){
-      cmd=paste0(biodir, "/bin/LOUVAIN/convert_win.exe ", cmd)
+      cmd=paste0(binpath, "/bin/LOUVAIN/convert_win.exe ", cmd)
     }else if(os == "Darwin"){
       stop("TO IMPLEMENT")
     }else{
@@ -209,10 +227,10 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
     }
 
     if(os == "Linux"){
-      cmd=paste0(biodir, "/bin/LOUVAIN/louvain_lin ", cmd, " > ", path_temp, "/net.tree")
+      cmd=paste0(binpath, "/bin/LOUVAIN/louvain_lin ", cmd, " > ", path_temp, "/net.tree")
       system(command = cmd)
     }else if(os == "Windows"){
-      cmd=paste0(biodir, "/bin/LOUVAIN/louvain_win.exe ", cmd)
+      cmd=paste0(binpath, "/bin/LOUVAIN/louvain_win.exe ", cmd)
       tree=system(command = cmd, intern=TRUE)
       cat(tree[1:(length(tree)-1)], file = paste0(path_temp, "/net.tree"), sep = "\n")
     }else if(os == "Darwin"){
