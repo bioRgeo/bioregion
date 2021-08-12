@@ -2,6 +2,7 @@
 
 S3method(print,bioRgeo.distance)
 S3method(print,bioRgeo.similarity)
+export(bin)
 export(contingency_to_df)
 export(df_to_contingency)
 export(distanceToSimilarity)
