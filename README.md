@@ -4,7 +4,7 @@
 
 [![build](https://img.shields.io/github/workflow/status/bioRgeo/bioRgeo/pkgdown/master?style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo/actions) 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
-[![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo) 
+[![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo)   
 
 ## 1 Install
 
@@ -25,9 +25,7 @@ vignette("bioRgeo", package = "bioRgeo")
 
 ## 3 Dependencies
 
-`bioRgeo` depends on `dplyr`, `ecodist`, `reshape2`, `fastcluster`,
-`DescTools`, `ade4`, `cluster`, `sf`, `ggplot2`, `Rcpp`, `SMUT` and
-`igraph`.
+`bioRgeo` depends on 'igraph', 'Rcpp', 'RcppEigen', 'Rdpack', 'reshape2', 'stats', 'tidyr' and 'utils'
 
 ## 4  Citation
 
