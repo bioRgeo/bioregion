@@ -120,5 +120,74 @@ bin <- function(binpath = NULL){
 
   }
 
+  if(os == "Windows"){
+
+    # INFOMAP/infomap_win.exe
+    file="INFOMAP/infomap_win.exe"
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      #system(paste0("chmod +x ", binpath, "/bin/", file))
+    }
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
+    }else{
+      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+    }
+
+    # OSLOM/oslom_dir_win.exe
+    file="OSLOM/oslom_dir_win.exe"
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      #system(paste0("chmod +x ", binpath, "/bin/", file))
+    }
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
+    }else{
+      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+    }
+
+    # OSLOM/oslom_undir_win.exe
+    file="OSLOM/oslom_undir_win.exe"
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      #system(paste0("chmod +x ", binpath, "/bin/", file))
+    }
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
+    }else{
+      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+    }
+
+    # LOUVAIN/convert_win.exe
+    file="LOUVAIN/convert_win.exe"
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      #system(paste0("chmod +x ", binpath, "/bin/", file))
+    }
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
+    }else{
+      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+    }
+
+    # LOUVAIN/louvain_win.exe
+    file="LOUVAIN/louvain_win.exe"
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      #system(paste0("chmod +x ", binpath, "/bin/", file))
+    }
+    perm=file.access(paste0(binpath, "/bin/", file), mode = 1)
+    if(perm == -1){
+      print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
+    }else{
+      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+    }
+
+  }
+
 
 }
