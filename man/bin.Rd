@@ -12,8 +12,8 @@ if you use a different folder please be sure to update the \code{binpath} in \li
 and \link{oslom})}
 }
 \description{
-This function download and unzip the bin folder needed to run some bioRgeo's functions. It also check if the files
-have the permissions to be executed as program.
+This function download and unzip the bin folder needed to run some bioRgeo's functions. It also checks if the files
+have the permissions to be executed as programs.
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),
