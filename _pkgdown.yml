@@ -6,23 +6,23 @@ toc:
 reference:
 - title: Utils
   desc: >
-    test
+    description
   contents:
+  - bin
   - contingency_to_df
   - df_to_contingency
 
 - title: Metrics
   desc: >
-    test
+    description
   contents:
   - spproject
-  - df_to_contingency
   - distanceToSimilarity
   - similarityToDistance
 
 - title: Clustering
   desc: >
-    test
+    description
   contents:
   - infomap
   - louvain
@@ -30,7 +30,7 @@ reference:
 
 - title: Data
   desc: >
-    test
+    description
   contents:
   - vegedf
   - vegemat
