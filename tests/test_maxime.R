@@ -21,7 +21,6 @@ G=vegesp
 ############################################################################################
 
 # check results
-
 net=spproject(mat,metric=c("Simpson"))
 
 coml=louvain(net[net[,3]>0.5,], weight=TRUE, q=0, lang="Cpp")
@@ -65,6 +64,11 @@ com=infomap(net[net[,3]>0.5,])
 net=spproject(mat,metric=c("Sorensen"))
 
 com=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
+
+# bin
+source("bioRgeo/R/bin.R")
+
+bin()
 
 # spproject
 #source("bioRgeo/R/spproject.R")
