@@ -16,6 +16,7 @@
 #' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
 #' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
 #' @param path_temp a string indicating the path to the temporary folder (see Details)
+#' @param binpath a string indicating the path to the bin folder (see \link{bin} and Details)
 #' @export
 #' @details
 #' Infomap is a network clustering algorithm based on the Map equation proposed in
@@ -23,7 +24,11 @@
 #' Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
 #' as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
 #' approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
+#'
 #' This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
+#' This function needs executables files to run. They can be installed with \link{bin}. If you set the the path to
+#' the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
+#' accordingly.
 #'
 #' The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
 #' (folder "infomap_temp" in the workind directory by default). This temporary folder is removed by default
@@ -42,32 +47,43 @@
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=spproject(comat,metric="Simpson")
-#' com=infomap(net)
+#' #com=infomap(net) # run bin() to use this function
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
 infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime = 1, seed = 1, twolevel = FALSE,
-                    directed = FALSE, delete_temp = TRUE, path_temp = "infomap_temp"){
+                    directed = FALSE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL){
 
   # Remove warning for tidyr
   defaultW <- getOption("warn")
   options(warn = -1)
 
-  # Identify bioRgeo directory on your computer
-  biodir <- list.dirs(.libPaths(), recursive = FALSE)
-  biodir <- biodir[grep("bioRgeo", biodir)]
+  # Set binpath
+  if(is.null(binpath)){
+    # Identify bioRgeo directory on your computer
+    biodir <- list.dirs(.libPaths(), recursive = FALSE)
+    binpath <- biodir[grep("bioRgeo", biodir)]
+  }else{
+    # Control
+    if(!is.character(binpath)){
+      stop("path must be a string")
+    }
+    if(!file.exists(binpath)){
+      stop(paste0("Impossible to access ", binpath))
+    }
+  }
 
   # Check OS
   os=Sys.info()[['sysname']]
 
   # Check if INFOMAP is present
-  if(!file.exists(paste0(biodir,"/bin/INFOMAP/infomap_lin"))){
+  if(!file.exists(paste0(binpath,"/bin/INFOMAP/infomap_lin"))){
     stop("Infomap is not in bioRgeo/bin directory...")
   }
-  if(!file.exists(paste0(biodir,"/bin/INFOMAP/infomap_win.exe"))){
+  if(!file.exists(paste0(binpath,"/bin/INFOMAP/infomap_win.exe"))){
     stop("Infomap is not in bioRgeo/bin directory...")
   }
-  #if(!file.exists(paste0(biodir,"/bin/INFOMAP/infomap_mac"))){
+  #if(!file.exists(paste0(binpath,"/bin/INFOMAP/infomap_mac"))){
   #  stop("Infomap is not in bioRgeo/bin directory...")
   #}
 
@@ -206,9 +222,9 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
   }
 
   if(os == "Linux"){
-    cmd=paste0(biodir, "/bin/INFOMAP/infomap_lin ", cmd)
+    cmd=paste0(binpath, "/bin/INFOMAP/infomap_lin ", cmd)
   }else if(os == "Windows"){
-    cmd=paste0(biodir, "/bin/INFOMAP/infomap_win.exe ", cmd)
+    cmd=paste0(binpath, "/bin/INFOMAP/infomap_win.exe ", cmd)
   }else if(os == "Darwin"){
     stop("TO IMPLEMENT")
   }else{
