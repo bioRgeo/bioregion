@@ -28,10 +28,10 @@ bin <- function(binpath = NULL){
   }
 
   # Download file
-  utils::download.file("https://www.mmmycloud.com/index.php/s/diAFHLajspZDjYx/download", paste0(binpath,"/bin.zip"))
+  utils::download.file("https://www.mmmycloud.com/index.php/s/diAFHLajspZDjYx/download", paste0(binpath,"/bin.zip"), mode='wb')
 
   # Unzip file
-  utils::unzip(zipfile=paste0(binpath,"/bin.zip"), exdir=binpath)
+    utils::unzip(zipfile=paste0(binpath,"/bin.zip"), exdir=binpath)
 
   # Delete bin.zip
   unlink(paste0(binpath,"/bin.zip"))
@@ -44,7 +44,7 @@ bin <- function(binpath = NULL){
   if(nboslom==4 & nbinfomap==2 & nblouvain==4){
     print(paste0("The folder has been successfully downloaded and dezipped in ", binpath))
   }else{
-    print(paste0("An error occurred, download and/or dezipp failed"))
+    print(paste0("An error occurred, download and/or dezip failed"))
   }
 
   # Check OS
