@@ -18,6 +18,7 @@
 #' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
 #' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
 #' @param path_temp a string indicating the path to the temporary folder (see Details)
+#' @param binpath a string indicating the path to the bin folder (see \link{bin} and Details)
 #' @export
 #' @details
 #' OSLOM is a network community detection algorithm proposed in \insertCite{Lancichinetti2011}{bioRgeo} that
@@ -26,7 +27,11 @@
 #' \code{reassign = 'random'} or based on the closest candidate community \code{reassign = 'simil'}
 #' (only for weighted networks, in this case the closest candidite community is determined with the average similarity).
 #' By default \code{reassign = 'no'} and all the information is provided.
+#'
 #' This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
+#' This function needs executables files to run. They can be installed with \link{bin}. If you set the the path to
+#' the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
+#' accordingly.
 #'
 #' The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
 #' (folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
@@ -48,29 +53,41 @@
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=spproject(comat,metric="Simpson")
-#' com=oslom(net)
+#' #com=oslom(net) # run bin() to use this function
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
 oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
                   seed = 1, t = 0.1, cp = 0.5, directed = FALSE,
-                  delete_temp = TRUE, path_temp = "oslom_temp"){
+                  delete_temp = TRUE, path_temp = "oslom_temp", binpath = NULL){
 
-  # Identify bioRgeo directory on your computer
-  biodir <- list.dirs(.libPaths(), recursive = FALSE)
-  biodir <- biodir[grep("bioRgeo", biodir)]
+  # Set binpath
+  if(is.null(binpath)){
+    # Identify bioRgeo directory on your computer
+    biodir <- list.dirs(.libPaths(), recursive = FALSE)
+    binpath <- biodir[grep("bioRgeo", biodir)]
+  }else{
+    # Control
+    if(!is.character(binpath)){
+      stop("path must be a string")
+    }
+    if(!file.exists(binpath)){
+      stop(paste0("Impossible to access ", binpath))
+    }
+  }
+
 
   # Check OS
   os=Sys.info()[['sysname']]
 
   # Check if OSLOM is present
-  if(!file.exists(paste0(biodir,"/bin/OSLOM/oslom_undir_lin"))){
+  if(!file.exists(paste0(binpath,"/bin/OSLOM/oslom_undir_lin"))){
     stop("OSLOM is not in bioRgeo/bin directory...")
   }
-  if(!file.exists(paste0(biodir,"/bin/OSLOM/oslom_undir_win.exe"))){
+  if(!file.exists(paste0(binpath,"/bin/OSLOM/oslom_undir_win.exe"))){
     stop("OSLOM is not in bioRgeo/bin directory...")
   }
-  #if(!file.exists(paste0(biodir,"/bin/OSLOM/oslom_undir_mac"))){
+  #if(!file.exists(paste0(binpath,"/bin/OSLOM/oslom_undir_mac"))){
   #  stop("OSLOM is not in bioRgeo/bin directory...")
   #}
 
@@ -204,15 +221,15 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
 
   if(os == "Linux"){
     if(directed){
-      cmd=paste0(biodir, "/bin/OSLOM/oslom_dir_lin ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd)
     }else{
-      cmd=paste0(biodir, "/bin/OSLOM/oslom_undir_lin ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd)
     }
   }else if(os == "Windows"){
     if(directed){
-      cmd=paste0(biodir, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
     }else{
-      cmd=paste0(biodir, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
     }
     # Create temp folder
     dir.create(paste0(path_temp, "/net.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
