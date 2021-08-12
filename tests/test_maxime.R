@@ -1,3 +1,6 @@
+# Remove bioRgeo
+unlink("/home/maxime/Applications/R/bioRgeo", recursive=TRUE)
+
 # bioRgeo
 devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
 vignette("bioRgeo", package = "bioRgeo")
