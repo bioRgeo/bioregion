@@ -1,7 +1,7 @@
 #' Download, unzip and check permission of bioRgeo's executables
 #'
-#' This function download and unzip the bin folder needed to run some bioRgeo's functions. It also check if the files
-#' have the permissions to be executed as program.
+#' This function download and unzip the bin folder needed to run some bioRgeo's functions. It also checks if the files
+#' have the permissions to be executed as programs.
 #'
 #' @param binpath a string indicating the path to the folder that will host the bin folder (bioRgeo's package by default,
 #' if you use a different folder please be sure to update the \code{binpath} in \link{infomap}, \link{louvain}
@@ -63,7 +63,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # OSLOM/oslom_dir_lin
@@ -76,7 +76,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # OSLOM/oslom_undir_lin
@@ -89,7 +89,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # LOUVAIN/convert_lin
@@ -102,7 +102,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # LOUVAIN/louvain_lin
@@ -132,7 +132,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # OSLOM/oslom_dir_win.exe
@@ -145,7 +145,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # OSLOM/oslom_undir_win.exe
@@ -158,7 +158,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # LOUVAIN/convert_win.exe
@@ -171,7 +171,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
     # LOUVAIN/louvain_win.exe
@@ -184,7 +184,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
   }
