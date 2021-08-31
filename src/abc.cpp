@@ -25,8 +25,8 @@ NumericMatrix abc(NumericMatrix comat) {
       res(l,0)=(i+1);
       res(l,1)=(j+1);
       res(l,2)=minsum;
-      res(l,3)=sumi;
-      res(l,4)=sumj;
+      res(l,3)=sumi-minsum;
+      res(l,4)=sumj-minsum;
       l++;
     }
   }
