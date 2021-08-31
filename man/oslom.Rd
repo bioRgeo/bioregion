@@ -67,7 +67,7 @@ may belong to several communities we propose two methods to reassign the 'ovelap
 By default \code{reassign = 'no'} and all the information is provided.
 
 This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
-This function needs executables files to run. They can be installed with \link{bin}. If you set the the path to
+This function needs executables files to run. They can be installed with \link{bin}. If you set the path to
 the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
 accordingly.
 
