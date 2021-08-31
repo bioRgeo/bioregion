@@ -25,7 +25,7 @@ vignette("bioRgeo", package = "bioRgeo")
 
 ## 3 Dependencies
 
-`bioRgeo` depends on `igraph`, `RcppEigen`, `Rdpack`, `reshape2`, `stats`, `tidyr` and `utils`
+`bioRgeo` depends on `igraph`, `Matrix`, `RcppEigen`, `Rdpack`, `reshape2`, `stats`, `tidyr` and `utils`
 
 ## 4  Citation  
 
