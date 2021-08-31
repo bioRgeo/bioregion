@@ -59,7 +59,7 @@ as unipartite network. The second possibility is to set the \code{bipartite} arg
 approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 
 This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
-This function needs executables files to run. They can be installed with \link{bin}. If you set the the path to
+This function needs executables files to run. They can be installed with \link{bin}. If you set the path to
 the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
 accordingly.
 
