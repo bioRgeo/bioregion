@@ -105,6 +105,12 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
          prodmat, loops")
   }
 
+  # Extract site id
+  siteid=rownames(comat)
+
+  # Initialize output
+  res=NULL
+
   # abcp: compute abc for presence data
   if(length(intersect(lsmetricabc,metric))>0){
 
@@ -115,8 +121,8 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
       sumrow=apply(comatp,1,sum)
       #abcp=prodmat(comatp,t(comatp))
       abcp=Matrix::tcrossprod(comatp)
-      rownames(abcp)=rownames(comat)
-      colnames(abcp)=rownames(abcp)
+      rownames(abcp)=siteid
+      colnames(abcp)=siteid
 
       # Create a data.frame from the matrix with contingency_to_df (little trick to deal with 0s)
       abcp[abcp==0]=-1
@@ -193,8 +199,8 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
   # Compute Euclidean similarity between site using dist()
   if("Euclidean" %in% metric){
     eucl=as.matrix(stats::dist(comat))
-    rownames(eucl)=rownames(comat)
-    colnames(eucl)=rownames(eucl)
+    rownames(eucl)=siteid
+    colnames(eucl)=siteid
     eucl[eucl==0]=-1
     eucl[lower.tri(eucl, diag=TRUE)]=0
     eucl=contingency_to_df(eucl, weight=TRUE, remove_absent_objects = TRUE)
