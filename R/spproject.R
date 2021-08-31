@@ -178,7 +178,7 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
 
     # Update res if NULL
     if(is.null(res)){
-      res=abcp[,1:2]
+      res=abca[,1:2]
     }
 
     # Compute metrics based on ABC
@@ -209,7 +209,7 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
 
     # Update res if NULL
     if(is.null(res)){
-      res=abcp[,1:2]
+      res=eucl[,1:2]
     }
 
     res$Euclidean=1/(1+eucl$Euclidean)
