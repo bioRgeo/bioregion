@@ -54,8 +54,8 @@ for the Deviation to Uniformity criterion, 7 for the Profile Difference criterio
 (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
 
 The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
-This function needs executables files to run. They can be installed with \link{bin}. If you set the the path to
-the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
+This function needs executables files to run. They can be installed with \link{bin}. If you set the path to
+the folder that will host the bin folder manually while running \link{bin} please make sure to set \code{binpath}
 accordingly.
 
 The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
