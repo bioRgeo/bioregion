@@ -105,13 +105,6 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
          prodmat, loops")
   }
 
-  # Initialize output res (two-column data.frame containing each pair of sites to be compared)
-  siteid=rownames(comat)
-  res=matrix(0, nrow=length(siteid), ncol=length(siteid), dimnames=list(siteid,siteid))
-  res[upper.tri(res)]=1
-  res=contingency_to_df(res, weight=FALSE, remove_absent_objects = TRUE)
-  colnames(res)=c("Site1","Site2")
-
   # abcp: compute abc for presence data
   if(length(intersect(lsmetricabc,metric))>0){
 
@@ -120,9 +113,10 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     if(method=="prodmat"){
       # Compute the number of species in common "a" with matricial product a%*%t(a)
       sumrow=apply(comatp,1,sum)
-      abcp=prodmat(comatp,t(comatp))
-      rownames(abcp)=siteid
-      colnames(abcp)=siteid
+      #abcp=prodmat(comatp,t(comatp))
+      abcp=Matrix::tcrossprod(comatp)
+      rownames(abcp)=rownames(comat)
+      colnames(abcp)=rownames(abcp)
 
       # Create a data.frame from the matrix with contingency_to_df (little trick to deal with 0s)
       abcp[abcp==0]=-1
@@ -140,7 +134,12 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     if(method=="loops"){
       # Use abc Rcpp function in src (three loops)
       abcp=abc(comatp)
-      abcp=data.frame(Site1=siteid[abcp[,1]], Site2=siteid[abcp[,2]], a=abcp[,3], b=abcp[,4]-abcp[,3], c=abcp[,5]-abcp[,3])
+      abcp=data.frame(Site1=siteid[abcp[,1]], Site2=siteid[abcp[,2]], a=abcp[,3], b=abcp[,4], c=abcp[,5])
+    }
+
+    # Update res if NULL
+    if(is.null(res)){
+      res=abcp[,1:2]
     }
 
     # Compute metrics based on abc
@@ -161,6 +160,7 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     if("Simpson" %in% metric){
       res$Simpson = 1 - pmin(abcp$b,abcp$c)/(abcp$a + pmin(abcp$b,abcp$c))
     }
+
   }
 
   # abca: compute ABC for abundance data
@@ -168,7 +168,12 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
 
     # Use abc Rcpp function in src (three loops)
     abca=abc(comat)
-    abca=data.frame(Site1=siteid[abca[,1]], Site2=siteid[abca[,2]], A=abca[,3], B=abca[,4]-abca[,3], C=abca[,5]-abca[,3])
+    abca=data.frame(Site1=siteid[abca[,1]], Site2=siteid[abca[,2]], A=abca[,3], B=abca[,4], C=abca[,5])
+
+    # Update res if NULL
+    if(is.null(res)){
+      res=abcp[,1:2]
+    }
 
     # Compute metrics based on ABC
     if("ABC" %in% metric){
@@ -182,18 +187,24 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     if("Brayturn" %in% metric){
       res$Brayturn = 1 - pmin(abca$B,abca$C)/(abca$A + pmin(abca$B,abca$C))
     }
+
   }
 
   # Compute Euclidean similarity between site using dist()
   if("Euclidean" %in% metric){
     eucl=as.matrix(stats::dist(comat))
-    rownames(eucl)=siteid
-    colnames(eucl)=siteid
+    rownames(eucl)=rownames(comat)
+    colnames(eucl)=rownames(eucl)
     eucl[eucl==0]=-1
     eucl[lower.tri(eucl, diag=TRUE)]=0
     eucl=contingency_to_df(eucl, weight=TRUE, remove_absent_objects = TRUE)
     colnames(eucl)=c("Site1","Site2","Euclidean")
     eucl[eucl[,3]==-1,3]=0
+
+    # Update res if NULL
+    if(is.null(res)){
+      res=abcp[,1:2]
+    }
 
     res$Euclidean=1/(1+eucl$Euclidean)
   }
