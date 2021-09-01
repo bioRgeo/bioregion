@@ -3,13 +3,15 @@
 #' This function creates a \code{data.frame} where each row provides one or several similarity
 #' metric(s) between each pair of sites from a co-occurence \code{matrix} with sites as rows and species as columns.
 #'
-#' @param comat a co-occurence \code{matrix} with sites as rows and species as columns
-#' @param metric a vector of character(s) indicating which similarity
+#' @param comat a co-occurence \code{matrix} with sites as rows and species as columns.
+#' @param metric a vector of string(s) indicating which similarity
 #' metric(s) to chose (see Details). If \code{"all"} is specified, then all
-#' metrics will be calculated.
-#' @param method a string indicating what method should be used to compute \code{abc} (see Details),
-#' \code{method = "prodmat"} by default is more efficient but can greedy in memory and \code{method="loops"} is less efficient
-#' but less greedy in memory
+#' metrics will be calculated. Can be set to \code{NULL} if \code{formula} is used.
+#' @param formula a vector of string(s) with your own formula based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
+#' and \code{C} quantities (see Details). \code{formula} is set to \code{NULL} by default.
+#' @param method a string indicating what method should be used to compute \code{abc} (see Details).
+#' \code{method = "prodmat"} by default is more efficient but can be greedy in memory and \code{method="loops"} is less efficient
+#' but less greedy in memory.
 #' @export
 #' @details
 #' With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
@@ -23,15 +25,19 @@
 #'
 #'\eqn{Simpson = 1 - min(b, c) / (a + min(b, c))}
 #'
-#'If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
-#'following equation:
+#' If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
+#' following equation:
 #'
 #'\eqn{Bray = 1 - (B + C) / (2A + B + C)}
 #'
 #'\eqn{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
 #'
-#'with A the sum of the lesser values for common species shared by a pair of sites.
-#'B and C are the total number of specimens counted at both sites minus A.
+#' with A the sum of the lesser values for common species shared by a pair of sites.
+#' B and C are the total number of specimens counted at both sites minus A.
+#'
+#' \code{formula} can be used to compute customized metrics with the terms \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
+#' and \code{C}. For example \code{formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")} will
+#' compute the Jaccard and Bray-Curtis similarity metrics, respectively.
 #'
 #' Euclidean computes the Euclidean similarity between each pair of site following this equation:
 #'
@@ -41,7 +47,7 @@
 #'
 #' @return A \code{data.frame} providing one or several similarity
 #' metric(s) between each pair of sites. The two first columns represents each pair of sites.
-#' One column per similarity metric provided in \code{metric} except for the metric \emph{abc} and \emph{ABC} that
+#' One column per similarity metric provided in \code{metric} and \code{formula} except for the metric \emph{abc} and \emph{ABC} that
 #' are stored in three columns (one for each letter).
 #' @seealso \link{distanceToSimilarity}
 #' @author
@@ -56,14 +62,14 @@
 #' simil <- spproject(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #' simil
 #'
-#' simil <- spproject(comat, metric = "all")
+#' simil <- spproject(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
 #' simil
 #'
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
-spproject <- function(comat, metric = "Simpson", method = "prodmat"){
+spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat"){
 
   # list of metrics based on abc
   lsmetricabc=c("abc","Jaccard","Jaccardturn","Sorensen","Simpson")
@@ -74,16 +80,26 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
   # list of metrics based on other features
   lsmetrico=c("Euclidean")
 
-  if("all" %in% metric)
-  {
+  if("all" %in% metric){
     metric <- c(lsmetricabc, lsmetricABC, lsmetrico)
   }
 
   # Controls
-  if(length(intersect(c(lsmetricabc,lsmetricABC,lsmetrico),metric))!=length(metric)){
+  if(is.null(metric) & is.null(formula)){
+    stop("metric or formula should be used")
+  }
+
+  if(length(intersect(c(lsmetricabc,lsmetricABC,lsmetrico),metric))!=length(metric) & is.null(formula)){
     stop("One or several similarity metric(s) chosen is not available.
      Please chose among the followings:
          abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, Bray, Brayturn or Euclidean")
+  }
+
+  if(!is.null(formula) & !is.character(formula)){
+    stop("formula should be a vector of characters if not NULL")
+  }else{ # Check if abc and ABC in formula
+    abcinformula=(sum(c(grepl("a", formula), grepl("b", formula), grepl("c", formula)))>0)
+    ABCinformula=(sum(c(grepl("A", formula), grepl("B", formula), grepl("C", formula)))>0)
   }
 
   if(!is.matrix(comat)){
@@ -112,12 +128,13 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
   res=NULL
 
   # abcp: compute abc for presence data
-  if(length(intersect(lsmetricabc,metric))>0){
+  testabc=((length(intersect(lsmetricabc,metric))>0) | abcinformula) # check if abc should be computed
+  if(testabc){
 
     comatp=comat
     comatp[comatp!=0]=1
     if(method=="prodmat"){
-      # Compute the number of species in common "a" with matricial product a%*%t(a)
+      # Compute the number of species in common "a" with matricial product comatp%*%t(comatp)
       sumrow=apply(comatp,1,sum)
       #abcp=prodmat(comatp,t(comatp))
       abcp=Matrix::tcrossprod(comatp)
@@ -167,10 +184,17 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
       res$Simpson = 1 - pmin(abcp$b,abcp$c)/(abcp$a + pmin(abcp$b,abcp$c))
     }
 
+    # Attach abcp if abc in formula
+    if(abcinformula){
+      a=abcp$a
+      b=abcp$b
+      c=abcp$c
+    }
   }
 
   # abca: compute ABC for abundance data
-  if(length(intersect(lsmetricABC,metric))>0){
+  testABC=((length(intersect(lsmetricABC,metric))>0) | ABCinformula) # check if ABC should be computed
+  if(testABC){
 
     # Use abc Rcpp function in src (three loops)
     abca=abc(comat)
@@ -194,6 +218,21 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
       res$Brayturn = 1 - pmin(abca$B,abca$C)/(abca$A + pmin(abca$B,abca$C))
     }
 
+    # Attach abca if ABC in formula
+    if(ABCinformula){
+      A=abca$A
+      B=abca$B
+      C=abca$C
+    }
+
+  }
+
+  # Compute equation in formula
+  if(!is.null(formula)){
+    for(k in 1:length(formula)){
+      res=cbind(res, eval(parse(text = formula[k])))
+      colnames(res)[dim(res)[2]]=formula[k]
+    }
   }
 
   # Compute Euclidean similarity between site using dist()
