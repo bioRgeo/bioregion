@@ -72,7 +72,7 @@ simil
 \insertRef{Baselga2013}{bioRgeo}
 }
 \seealso{
-\link{distanceToSimilarity}
+\link{distance_to_similarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

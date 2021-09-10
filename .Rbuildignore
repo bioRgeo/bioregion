@@ -8,3 +8,4 @@
 ^tests/
 ^inst/bin/
 ^\.github$
+^hierarcluster.R

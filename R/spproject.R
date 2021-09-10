@@ -43,7 +43,7 @@
 #' metric(s) between each pair of sites. The two first columns represents each pair of sites.
 #' One column per similarity metric provided in \code{metric} except for the metric \emph{abc} and \emph{ABC} that
 #' are stored in three columns (one for each letter).
-#' @seealso \link{distanceToSimilarity}
+#' @seealso \link{distance_to_similarity}
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
@@ -144,11 +144,6 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     }
 
     # Compute metrics based on abc
-    if("abc" %in% metric){
-      res$a=abcp$a
-      res$b=abcp$b
-      res$c=abcp$c
-    }
     if("Jaccard" %in% metric){
       res$Jaccard = 1 - (abcp$b+abcp$c)/(abcp$a+abcp$b+abcp$c)
     }
@@ -161,6 +156,11 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     if("Simpson" %in% metric){
       res$Simpson = 1 - pmin(abcp$b,abcp$c)/(abcp$a + pmin(abcp$b,abcp$c))
     }
+    if("abc" %in% metric){
+      res$a=abcp$a
+      res$b=abcp$b
+      res$c=abcp$c
+    }
   }
 
   # abca: compute ABC for abundance data
@@ -171,16 +171,16 @@ spproject <- function(comat, metric = "Simpson", method = "prodmat"){
     abca=data.frame(Site1=siteid[abca[,1]], Site2=siteid[abca[,2]], A=abca[,3], B=abca[,4]-abca[,3], C=abca[,5]-abca[,3])
 
     # Compute metrics based on ABC
-    if("ABC" %in% metric){
-      res$A=abca$A
-      res$B=abca$B
-      res$C=abca$C
-    }
     if("Bray" %in% metric){
       res$Bray = 1 - (abca$B+abca$C)/(2*abca$A+abca$B+abca$C)
     }
     if("Brayturn" %in% metric){
       res$Brayturn = 1 - pmin(abca$B,abca$C)/(abca$A + pmin(abca$B,abca$C))
+    }
+    if("ABC" %in% metric){
+      res$A=abca$A
+      res$B=abca$B
+      res$C=abca$C
     }
   }
 

@@ -29,7 +29,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{distanceToSimilarity}
+#' @seealso \link{distance_to_similarity}
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1/1:1001), 5, 10)
 #' rownames(comat) <- paste0("Site",1:5)
@@ -38,13 +38,13 @@
 #' simil <- spproject(comat, metric = "all")
 #' simil
 #'
-#' distances <- similarityToDistance(simil)
+#' distances <- similarity_to_distance(simil)
 #' distances
-similarityToDistance <- function(similaritydata)
+similarity_to_distance <- function(similaritydata)
 {
   if(inherits(similaritydata, "bioRgeo.distance"))
   {
-    stop("similaritydata is already composed of similarity indices. If you want to convert it to similarity, use distanceToSimilarity()")
+    stop("similaritydata is already composed of similarity indices. If you want to convert it to similarity, use distance_to_similarity()")
   }
 
   distancedata <- similaritydata
@@ -82,7 +82,7 @@ similarityToDistance <- function(similaritydata)
 #' This function converts a data.frame of distance indices (beta diversity)
 #' between sites to similarity indices.
 #'
-#' @param distancedata the output object from \code{\link{similarityToDistance}} or a
+#' @param distancedata the output object from \code{\link{similarity_to_distance}} or a
 #' \code{data.frame} with the first columns called "Site1" and "Site2", and the
 #' other columns being the similarity metrics.
 #' @export
@@ -108,7 +108,7 @@ similarityToDistance <- function(similaritydata)
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{distanceToSimilarity}
+#' @seealso \link{distance_to_similarity}
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1/1:1001), 5, 10)
 #' rownames(comat) <- paste0("Site",1:5)
@@ -117,16 +117,16 @@ similarityToDistance <- function(similaritydata)
 #' simil <- spproject(comat, metric = "all")
 #' simil
 #'
-#' distances <- similarityToDistance(simil)
+#' distances <- similarity_to_distance(simil)
 #' distances
 #'
-#' simil <- distanceToSimilarity(distances)
+#' simil <- distance_to_similarity(distances)
 #' simil
-distanceToSimilarity <- function(distancedata)
+distance_to_similarity <- function(distancedata)
 {
   if(inherits(distancedata, "bioRgeo.similarity"))
   {
-    stop("distancedata is already composed of distance indices. If you want to convert it to similarity, use similarityToDistance()")
+    stop("distancedata is already composed of distance indices. If you want to convert it to similarity, use similarity_to_distance()")
   }
 
   similaritydata <- distancedata
@@ -155,6 +155,5 @@ distanceToSimilarity <- function(distancedata)
     similaritydata[, metrics] <- 1 - similaritydata[, metrics]
   }
 
-  # Create output class
   return(similaritydata)
 }
