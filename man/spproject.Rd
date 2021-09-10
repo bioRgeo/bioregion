@@ -4,23 +4,26 @@
 \alias{spproject}
 \title{Compute similarity metrics between sites based on species composition}
 \usage{
-spproject(comat, metric = "Simpson", method = "prodmat")
+spproject(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 }
 \arguments{
-\item{comat}{a co-occurence \code{matrix} with sites as rows and species as columns}
+\item{comat}{a co-occurence \code{matrix} with sites as rows and species as columns.}
 
-\item{metric}{a vector of character(s) indicating which similarity
+\item{metric}{a vector of string(s) indicating which similarity
 metric(s) to chose (see Details). If \code{"all"} is specified, then all
-metrics will be calculated.}
+metrics will be calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
-\item{method}{a string indicating what method should be used to compute \code{abc} (see Details),
-\code{method = "prodmat"} by default is more efficient but can greedy in memory and \code{method="loops"} is less efficient
-but less greedy in memory}
+\item{formula}{a vector of string(s) with your own formula based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
+and \code{C} quantities (see Details). \code{formula} is set to \code{NULL} by default.}
+
+\item{method}{a string indicating what method should be used to compute \code{abc} (see Details).
+\code{method = "prodmat"} by default is more efficient but can be greedy in memory and \code{method="loops"} is less efficient
+but less greedy in memory.}
 }
 \value{
 A \code{data.frame} providing one or several similarity
 metric(s) between each pair of sites. The two first columns represents each pair of sites.
-One column per similarity metric provided in \code{metric} except for the metric \emph{abc} and \emph{ABC} that
+One column per similarity metric provided in \code{metric} and \code{formula} except for the metric \emph{abc} and \emph{ABC} that
 are stored in three columns (one for each letter).
 }
 \description{
@@ -49,6 +52,10 @@ following equation:
 with A the sum of the lesser values for common species shared by a pair of sites.
 B and C are the total number of specimens counted at both sites minus A.
 
+\code{formula} can be used to compute customized metrics with the terms \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
+and \code{C}. For example \code{formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")} will
+compute the Jaccard and Bray-Curtis similarity metrics, respectively.
+
 Euclidean computes the Euclidean similarity between each pair of site following this equation:
 
 \eqn{Euclidean = 1 / (1 + dij)}
@@ -63,7 +70,7 @@ colnames(comat) <- paste0("Species",1:10)
 simil <- spproject(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 simil
 
-simil <- spproject(comat, metric = "all")
+simil <- spproject(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
 simil
 
 }

@@ -115,7 +115,7 @@ bin <- function(binpath = NULL){
     if(perm == -1){
       print(paste0("Automatic change of permission failed, please allow executing ", file, " as program manually"))
     }else{
-      print(paste0("Automatic change of permission successed, ", file, " can now be executed as progam"))
+      print(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
     }
 
   }

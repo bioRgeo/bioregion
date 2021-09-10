@@ -74,7 +74,15 @@ net=spproject(mat,metric=c("Sorensen"))
 com=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
 
 # spproject
-#source("bioRgeo/R/spproject.R")
+library(Rcpp)
+#library(Matrix)
+sourceCpp("bioRgeo/src/abc.cpp")
+source("bioRgeo/R/spproject.R")
+
+test=spproject(mat, metric=c("Jaccard", "Bray"), formula= c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)"))
+test[1:10,]
+
+
 
 test=spproject(mat,metric=c("abc","ABC"), method="loops")
 test[1:10,]
@@ -82,7 +90,7 @@ test=spproject(mat,metric=c("abc","ABC"))
 test[1:10,]
 test=spproject(mat,metric=c("abc","ABC","Euclidean"))
 test[1:10,]
-test=spproject(mat,metric=c("abc","Jaccard","Jaccardturn","Sorensen","Simpson","Whittaker","ABC","Bray","Brayturn","Euclidean"))
+test=spproject(mat,metric=c("all"))
 test[1:10,]
 
 sum(mat[1,])
