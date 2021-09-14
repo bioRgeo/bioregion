@@ -27,12 +27,14 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    fastcluster,
     igraph,
     Matrix,
     Rcpp,
     RcppEigen,
     Rdpack,
     reshape2,
+    rmarkdown,
     stats,
     tidyr,
     utils
@@ -42,7 +44,6 @@ LinkingTo: Rcpp,
 Suggests:
     knitr,
     markdown,
-    rmarkdown,
     sf
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

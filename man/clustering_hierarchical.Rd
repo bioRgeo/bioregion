@@ -13,9 +13,10 @@ clustering_hierarchical(
   optimal_tree_method = "best",
   n_clust = NULL,
   cut_height = NULL,
-  optim_method = "firstSEmax",
+  find_h = TRUE,
   h_max = 1,
-  h_min = 0
+  h_min = 0,
+  optim_method = "firstSEmax"
 )
 }
 \arguments{
@@ -52,15 +53,18 @@ from the hierarchical tree. Should not be used at the same time as
 should be cut. Should not be used at the same time as \code{n_clust} or
 \code{optim_method}}
 
-\item{optim_method}{a character vector indicating the method to find the
-optimal number of clusters in the tree. Should not be used at the same time
-as \code{n_clust} or \code{cut_height}}
+\item{find_h}{a boolean indicating if the height of cut should be found for
+the requested \code{n_clust}}
 
 \item{h_max}{a numeric indicating the maximum possible tree height for
 the chosen \code{index}}
 
 \item{h_min}{a numeric indicating the minimum possible height in the tree for
 the chosen \code{index}}
+
+\item{optim_method}{a character vector indicating the method to find the
+optimal number of clusters in the tree. Should not be used at the same time
+as \code{n_clust} or \code{cut_height}}
 }
 \value{
 A \code{list} with additional class \code{bioRgeo.hierar.tree}
@@ -128,6 +132,10 @@ tree3 <- clustering_hierarchical(distances,
                                  cut_height = c(.05, .15, .25))
 tree3
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+
+# Recut the tree afterwards
+tree3 <- cut_tree(tree3,
+                  n = 5)
 }
 \seealso{
 \link{distance_to_similarity}

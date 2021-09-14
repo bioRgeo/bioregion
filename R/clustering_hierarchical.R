@@ -34,13 +34,15 @@
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
 #' should be cut. Should not be used at the same time as \code{n_clust} or
 #' \code{optim_method}
-#' @param optim_method a character vector indicating the method to find the
-#' optimal number of clusters in the tree. Should not be used at the same time
-#' as \code{n_clust} or \code{cut_height}
+#' @param find_h a boolean indicating if the height of cut should be found for
+#' the requested \code{n_clust}
 #' @param h_max a numeric indicating the maximum possible tree height for
 #' the chosen \code{index}
 #' @param h_min a numeric indicating the minimum possible height in the tree for
 #' the chosen \code{index}
+#' @param optim_method a character vector indicating the method to find the
+#' optimal number of clusters in the tree. Should not be used at the same time
+#' as \code{n_clust} or \code{cut_height}
 #' @export
 #' @details
 #' The default method for the hierarchical tree is \code{"average"}, i.e.
@@ -104,6 +106,10 @@
 #'                                  cut_height = c(.05, .15, .25))
 #' tree3
 #' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+#'
+#' # Recut the tree afterwards
+#' tree3 <- cut_tree(tree3,
+#'                   n = 5)
 clustering_hierarchical <- function(distances,
                                     index = names(distances)[3],
                                     method = "average",
@@ -112,9 +118,10 @@ clustering_hierarchical <- function(distances,
                                     optimal_tree_method = "best", # best or consensus
                                     n_clust = NULL,
                                     cut_height = NULL,
-                                    optim_method = "firstSEmax",
+                                    find_h = TRUE,
                                     h_max = 1,
-                                    h_min = 0)
+                                    h_min = 0,
+                                    optim_method = "firstSEmax")
 {
 
   # Ajouter la possibilité d'avoir une matrice de distance à la place de dist.df
@@ -156,16 +163,17 @@ clustering_hierarchical <- function(distances,
   dist.obj <- .dfToDist(distances, metric = index)
 
 
-  outputs$args <- list(method = method,
-                       index = index,
+  outputs$args <- list(index = index,
+                       method = method,
                        randomize = randomize,
                        n_runs = n_runs,
-                       optim_method = optim_method,
-                       n_clust = n_clust,
                        optimal_tree_method = optimal_tree_method,
+                       n_clust = n_clust,
                        cut_height = cut_height,
+                       find_h = find_h,
                        h_max = h_max,
-                       h_min = h_min
+                       h_min = h_min,
+                       optim_method = optim_method
   )
 
   outputs$dist.matrix <- dist.obj
@@ -229,53 +237,12 @@ clustering_hierarchical <- function(distances,
     message(paste0("Output tree has a ", round(outputs$final.tree.coph.cor, 2), " cophenetic correlation coefficient with the initial distance matrix\n"))
   }
 
-
-  if(!is.null(n_clust))
-  {
-    message("Determining the cut height to reach ", n_clust, " groups...")
-    k <- 0
-    h1 <- h_max
-    h0 <- h_min
-    h <- h0 + (h1 - h0) / 2
-    # Algorithm to quickly find the height of cut corresponding to the requested number of clusters
-    while(k != n_clust & nchar(h) < 50 & h1 != h0)
-    {
-      h <- h0 + (h1 - h0) / 2
-      cls <- dendextend::cutree(outputs$final.tree, h = h)
-      k <- max(cls)
-      if(k < n_clust)
-      {
-        h1 <- h
-      } else if (k > n_clust)
-      {
-        h0 <- h
-      }
-    }
-    message(paste0("-->", h))
-
-    if(k != n_clust)
-    {
-      warning(paste0("The requested number of cluster could not be found. Closest number found: ", k))
-    }
-
-    outputs$clusters <- data.frame(site = names(cls),
-                                   cluster = as.character(cls))
-    attr(outputs$clusters, "cut_height") <- h
-  } else if(!is.null(cut_height))
-  {
-    cut_height <- cut_height[order(cut_height, decreasing = TRUE)]
-    cls <- dendextend::cutree(outputs$final.tree,
-                              h = cut_height)
-    if(length(cut_height) == 1)
-    {
-      outputs$clusters <- data.frame(site = names(cls),
-                                     cluster = as.character(cls))
-    } else
-    {
-      outputs$clusters <- data.frame(site = rownames(cls),
-                                     cluster = cls)
-    }
-  }
+  outputs$clusters <- cut_tree(outputs$final.tree,
+                               n_clust = n_clust,
+                               cut_height = cut_height,
+                               find_h = find_h,
+                               h_max = h_max,
+                               h_min = h_min)
 
   class(outputs) <- append("bioRgeo.hierar.tree", class(outputs))
   return(outputs)

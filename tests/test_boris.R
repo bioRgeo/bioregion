@@ -42,6 +42,12 @@ tree2$clusters
 
 # Multiple heights
 tree3 <- clustering_hierarchical(distances,
-                                 cut_height = c(.25, .5, .75))
+                                 index = "Simpson",
+                                 cut_height = c(.15, .35, .4))
 tree3
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+
+a <- cut_tree(tree3, n_clust = 5)
+a <- cut_tree(tree3, n_clust = 5, find_h = FALSE)
+cut_tree(tree3$final.tree, n_clust = 5)
+cut_tree(tree3$final.tree, cut_height =  0.3)
