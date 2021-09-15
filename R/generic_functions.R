@@ -1,4 +1,30 @@
 #' @export
+#' @method print bioRgeo.cluster.optimisation
+print.bioRgeo.cluster.optimisation <- function(x, ...)
+{
+  cat("Optimal number(s) of clusters search:\n")
+  cat(" - Range of clusters explored: from ", x$args$k_min, " to ", x$args$k_max, "\n")
+  cat(" - Requested metric(s): ", x$args$eval_metric, "\n")
+  if(length(x$args$eval_metric) > 1)
+  {
+    cat(" - Metric used for optimisation: ", x$args$eval_metric[1], "\n")
+  }
+  cat(" - Criterion chosen to optimise the number of clusters: ", x$args$criterion, "\n")
+  if(x$args$criterion == "gap")
+  {
+    cat("   --> gap quantile chosen: ", x$args$gap_quantile,
+        " (i.e., only the top", (1 -  x$args$gap_quantile) * 100,
+        "% increase in ", x$args$eval_metric[1],
+        " are used as break points for the number of clusters)\n")
+  } else if(x$args$criterion == "cutoff")
+  {
+    cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
+  }
+  cat("\nOptimal number(s) of clusters: \n")
+  cat(x$optimal_nb_clusters)
+}
+
+#' @export
 #' @method str bioRgeo.hierar.tree
 str.bioRgeo.hierar.tree <- function(object, ...)
 {

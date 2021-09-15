@@ -95,7 +95,7 @@ obtained by running \code{spproject} and then \code{similarity_to_distance}.
 \details{
 The default method for the hierarchical tree is \code{"average"}, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
-from beta diversity distances.
+from beta diversity distances \insertCite{Kreft2010}{bioRgeo}
 
 Clusters can be obtained by three methods:
 \itemize{
@@ -136,6 +136,9 @@ tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
 # Recut the tree afterwards
 tree3 <- cut_tree(tree3,
                   n = 5)
+}
+\references{
+\insertRef{Kreft2010}{bioRgeo}
 }
 \seealso{
 \link{distance_to_similarity}

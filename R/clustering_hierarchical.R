@@ -47,7 +47,7 @@
 #' @details
 #' The default method for the hierarchical tree is \code{"average"}, i.e.
 #' UPGMA as it has been recommended as the best method to generate a tree
-#' from beta diversity distances.
+#' from beta diversity distances \insertCite{Kreft2010}{bioRgeo}
 #'
 #' Clusters can be obtained by three methods:
 #' \itemize{
@@ -73,6 +73,8 @@
 #' \item{\code{clusters}: a \code{data.frame} containing the clusters}
 #' }
 #'
+#' @references
+#' \insertRef{Kreft2010}{bioRgeo}
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
