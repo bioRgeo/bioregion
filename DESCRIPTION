@@ -43,6 +43,7 @@ LinkingTo: Rcpp,
            RcppEigen
 Suggests:
     knitr,
+    markdown,
     rmarkdown,
     sf
 VignetteBuilder: knitr
