@@ -45,7 +45,7 @@ LinkingTo: Rcpp,
            RcppEigen
 Suggests:
     knitr,
-    markdown,
+    rmarkdown,
     sf
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
