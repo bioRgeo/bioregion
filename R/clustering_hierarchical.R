@@ -9,9 +9,9 @@
 #' Typically, the distance \code{data.frame} is a \code{bioRgeo.distance} object
 #' obtained by running \code{spproject} and then \code{similarity_to_distance}.
 #'
-#' @param distances the output object from \code{\link{similarity_to_distance}}
-#' or a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the distance indices.
+#' @param distances the output object from \code{\link{similarity_to_distance}},
+#' a \code{data.frame} with the first columns called "Site1" and "Site2", and
+#' the other columns being the distance indices or a \code{dist} object
 #' @param index name of the distance index to use, corresponding to the column
 #' name in \code{distances}. By default, the third column name of
 #'  \code{distances} is used.
@@ -65,12 +65,16 @@
 #'  \code{dist} object}
 #' \item{\code{trials}: a list containing all randomization trials. Each trial
 #' containes the distance matrix, with site order randomized, the associated
-#' tree and the cophenetic correlation coefficient for that tree}
+#' tree and the cophenetic correlation coefficient (spearman) for that tree}
 #' \item{\code{final.tree}: a \code{hclust} object containing the final
 #' hierarchical tree to be used}
 #' \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient
 #' between the initial distance matrix and \code{final.tree}}
 #' \item{\code{clusters}: a \code{data.frame} containing the clusters}
+#' \item{\code{output_n_clust}: a value or vector specifying the number of
+#' clusters in the output \code{cluster} data.frame}
+#' \item{\code{output_cut_height}: a value or vector specifying, if available,
+#' the height(s) of cut of the tree}
 #' }
 #'
 #' @references
@@ -125,12 +129,15 @@ clustering_hierarchical <- function(distances,
                                     h_min = 0,
                                     optim_method = "firstSEmax")
 {
-
-  # Ajouter la possibilité d'avoir une matrice de distance à la place de dist.df
-
   if(inherits(distances, "bioRgeo.similarity"))
   {
     warning("distances seems to be a bioRgeo.similarity object. clusterHierarch should be applied on distances, not similarities. Consider using similarity_to_distance() before using clusterHierarch")
+  } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
+  {
+    if(!(index %in% colnames(distances)))
+    {
+      stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+    }
   }
 
   if(!is.null(n_clust)){
@@ -162,7 +169,10 @@ clustering_hierarchical <- function(distances,
   outputs <- list()
 
   # Checker les index en input, ou créer une boucle pour toutes les implémenter
-  dist.obj <- .dfToDist(distances, metric = index)
+  if(!inherits(distances, "dist"))
+  {
+    dist.obj <- .dfToDist(distances, metric = index)
+  }
 
 
   outputs$args <- list(index = index,
@@ -193,7 +203,7 @@ clustering_hierarchical <- function(distances,
                                                                      method = method)
 
       # Calculate cophenetic correlation coefficient
-      coph <- as.matrix(cophenetic(outputs$trials[[run]]$hierartree))
+      coph <- as.matrix(stats::cophenetic(outputs$trials[[run]]$hierartree))
       # Correct site order to not mess the correlation
       coph <- coph[match(attr(outputs$trials[[run]]$dist.matrix, "Labels"),
                          rownames(coph)),
@@ -201,8 +211,9 @@ clustering_hierarchical <- function(distances,
                          colnames(coph))]
       dist.mat <- as.matrix(outputs$trials[[run]]$dist.matrix)
 
-      outputs$trials[[run]]$cophcor <- cor(dist.mat[lower.tri(dist.mat)],
-                                                  coph[lower.tri(coph)])
+      outputs$trials[[run]]$cophcor <- stats::cor(dist.mat[lower.tri(dist.mat)],
+                                                  coph[lower.tri(coph)],
+                                                  method = "spearman")
     }
 
     if(optimal_tree_method == "best")
@@ -226,27 +237,31 @@ clustering_hierarchical <- function(distances,
   {
     outputs$final.tree <- fastcluster::hclust(outputs$dist.matrix, method = method)
 
-    coph <- as.matrix(cophenetic(outputs$final.tree))
+    coph <- as.matrix(stats::cophenetic(outputs$final.tree))
     coph <- coph[match(attr(dist.obj, "Labels"),
                        rownames(coph)),
                  match(attr(dist.obj, "Labels"),
                        colnames(coph))]
     dist.mat <- as.matrix(dist.obj)
 
-    outputs$final.tree.coph.cor <- cor(dist.mat[lower.tri(dist.mat)],
-                                              coph[lower.tri(coph)])
+    outputs$final.tree.coph.cor <- stats::cor(dist.mat[lower.tri(dist.mat)],
+                                              coph[lower.tri(coph)],
+                                              method = "spearman")
 
     message(paste0("Output tree has a ", round(outputs$final.tree.coph.cor, 2), " cophenetic correlation coefficient with the initial distance matrix\n"))
   }
 
-  outputs$clusters <- cut_tree(outputs$final.tree,
-                               n_clust = n_clust,
-                               cut_height = cut_height,
-                               find_h = find_h,
-                               h_max = h_max,
-                               h_min = h_min)
 
   class(outputs) <- append("bioRgeo.hierar.tree", class(outputs))
+
+  outputs <- cut_tree(outputs,
+                      n_clust = n_clust,
+                      cut_height = cut_height,
+                      find_h = find_h,
+                      h_max = h_max,
+                      h_min = h_min)
+
+
   return(outputs)
 }
 
@@ -267,12 +282,12 @@ clustering_hierarchical <- function(distances,
   distancedf <- rbind(data.frame(Site1 = nodes,
                                  Site2 = nodes,
                                  matrix(data = 0,
-                                        nr = length(unique(c(distancedf$Site1, distancedf$Site2))),
-                                        nc = length(other.cols),
+                                        nrow = length(unique(c(distancedf$Site1, distancedf$Site2))),
+                                        ncol = length(other.cols),
                                         dimnames = list(NULL,
                                                         other.cols))),
                       distancedf)
-  distancematrix <- as.dist(xtabs(distancedf[, metric] ~ distancedf$Site2 + distancedf$Site1))
+  distancematrix <- stats::as.dist(stats::xtabs(distancedf[, metric] ~ distancedf$Site2 + distancedf$Site1))
 
   return(distancematrix)
 }
@@ -281,5 +296,5 @@ clustering_hierarchical <- function(distances,
 {
   distmatrix <- as.matrix(distmatrix)
   ord <- sample(rownames(distmatrix))
-  return(as.dist(distmatrix[ord, ord]))
+  return(stats::as.dist(distmatrix[ord, ord]))
 }

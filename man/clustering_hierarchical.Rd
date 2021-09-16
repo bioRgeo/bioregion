@@ -20,9 +20,9 @@ clustering_hierarchical(
 )
 }
 \arguments{
-\item{distances}{the output object from \code{\link{similarity_to_distance}}
-or a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the distance indices.}
+\item{distances}{the output object from \code{\link{similarity_to_distance}},
+a \code{data.frame} with the first columns called "Site1" and "Site2", and
+the other columns being the distance indices or a \code{dist} object}
 
 \item{index}{name of the distance index to use, corresponding to the column
 name in \code{distances}. By default, the third column name of
@@ -74,12 +74,16 @@ A \code{list} with additional class \code{bioRgeo.hierar.tree}
  \code{dist} object}
 \item{\code{trials}: a list containing all randomization trials. Each trial
 containes the distance matrix, with site order randomized, the associated
-tree and the cophenetic correlation coefficient for that tree}
+tree and the cophenetic correlation coefficient (spearman) for that tree}
 \item{\code{final.tree}: a \code{hclust} object containing the final
 hierarchical tree to be used}
 \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient
 between the initial distance matrix and \code{final.tree}}
 \item{\code{clusters}: a \code{data.frame} containing the clusters}
+\item{\code{output_n_clust}: a value or vector specifying the number of
+clusters in the output \code{cluster} data.frame}
+\item{\code{output_cut_height}: a value or vector specifying, if available,
+the height(s) of cut of the tree}
 }
 }
 \description{

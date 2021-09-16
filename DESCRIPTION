@@ -27,7 +27,9 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    dendextend,
     fastcluster,
+    ggplot2,
     igraph,
     Matrix,
     Rcpp,

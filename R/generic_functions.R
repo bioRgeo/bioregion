@@ -60,10 +60,10 @@ print.bioRgeo.hierar.tree <- function(x, ...)
     if(!is.null(x$args$n_clust))
     {
       cat(" - Number of clusters requested by the user: ", x$args$n_clust, "\n")
-      cat(" - Number of clusters in output: ", max(x$clusters$cluster), "\n")
+      cat(" - Number of clusters in output: ", x$output_n_clust, "\n")
       if(x$args$find_h)
       {
-        cat(" - Height of cut of the hierarchical tree:", attr(x$clusters, "cut_height"))
+        cat(" - Height of cut of the hierarchical tree:", x$output_cut_height)
       } else
       {
         cat(" - Height of cut not searched for.")
@@ -74,14 +74,14 @@ print.bioRgeo.hierar.tree <- function(x, ...)
       if(length(x$args$cut_height) == 1)
       {
         cat(" - Height of cut requested by the user: ", x$args$cut_height, "\n")
-        cat(" - Number of clusters in output: ", max(x$clusters$cluster), "\n")
+        cat(" - Number of clusters in output: ", x$output_n_clust, "\n")
       } else
       {
         cat(" - Heights of cut requested by the user: ", x$args$cut_height, "\n")
         cat(" - Number of clusters in output: \n")
         for(cuts in x$args$cut_height)
         {
-          cat("   > ", cuts, ": ", max(x$clusters[, paste0("cluster.", cuts)]), "\n")
+          cat("   > ", cuts, ": ", x$output_n_clust[paste0("h_", cuts)], "\n")
         }
       }
     }

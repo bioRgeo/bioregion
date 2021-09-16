@@ -60,12 +60,27 @@ distances <- similarity_to_distance(simil)
 tree1 <- clustering_hierarchical(distances,
                                  n_clust = 5)
 tree1
-tree1
+str(tree1)
 
-tree2 <- cut_tree(distances,
+tree2 <- cut_tree(tree1,
                   cut_height = .05)
 tree2
 tree2$clusters
+
+tree3 <- cut_tree(tree1,
+                  n_clust = c(3, 5, 10))
+tree3
+tree3$clusters
+
+tree4 <- cut_tree(tree1,
+                  cut_height = c(.05, .1, .15, .2, .25))
+tree4
+
+tree5 <- cut_tree(tree1,
+                  n_clust = c(3, 5, 10),
+                  find_h = FALSE)
+tree5
+
 
 hclust_tree <- tree2$final.tree
 clusters_2 <- cut_tree(hclust_tree,

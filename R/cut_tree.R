@@ -44,12 +44,27 @@
 #' tree1 <- clustering_hierarchical(distances,
 #'                                  n_clust = 5)
 #' tree1
-#' tree1
+#' str(tree1)
 #'
-#' tree2 <- cut_tree(distances,
+#' tree2 <- cut_tree(tree1,
 #'                   cut_height = .05)
 #' tree2
 #' tree2$clusters
+#'
+#' tree3 <- cut_tree(tree1,
+#'                   n_clust = c(3, 5, 10))
+#' tree3
+#' tree3$clusters
+#'
+#' tree4 <- cut_tree(tree1,
+#'                   cut_height = c(.05, .1, .15, .2, .25))
+#' tree4
+#'
+#' tree5 <- cut_tree(tree1,
+#'                   n_clust = c(3, 5, 10),
+#'                   find_h = FALSE)
+#' tree5
+#'
 #'
 #' hclust_tree <- tree2$final.tree
 #' clusters_2 <- cut_tree(hclust_tree,
@@ -78,7 +93,7 @@ cut_tree <- function(tree,
   if(!is.null(n_clust)){
     if(is.numeric(n_clust))
     {
-      if(!(n_clust %% 1 == 0)) # integer testing ain't easy in R
+      if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
       {
         stop("n_clust must be an integer determining the number of clusters.")
       }
@@ -92,44 +107,65 @@ cut_tree <- function(tree,
     }
   }
 
+  output_cut_height <- NULL
+  output_n_clust <- NULL
   if(!is.null(n_clust))
   {
+    n_clust <- n_clust[order(n_clust)]
     if(find_h)
     {
-      message("Determining the cut height to reach ", n_clust, " groups...")
-      k <- 0
-      h1 <- h_max
-      h0 <- h_min
-      h <- h0 + (h1 - h0) / 2
-      # Algorithm to quickly find the height of cut corresponding to the requested number of clusters
-      while(k != n_clust & nchar(h) < 50 & h1 != h0)
+      clusters <- data.frame(matrix(nrow = length(cur.tree$labels),
+                                    ncol = length(n_clust) + 1,
+                                    dimnames = list(cur.tree$labels,
+                                                    c("site", paste0("k_", n_clust)))))
+      clusters$site <- cur.tree$labels
+      for(cur_n in n_clust)
       {
+        message("Determining the cut height to reach ", cur_n, " groups...")
+        k <- 0
+        h1 <- h_max
+        h0 <- h_min
         h <- h0 + (h1 - h0) / 2
-        cls <- dendextend::cutree(cur.tree, h = h)
-        k <- max(cls)
-        if(k < n_clust)
+        # Algorithm to quickly find the height of cut corresponding to the requested number of clusters
+        while(k != cur_n & nchar(h) < 50 & h1 != h0)
         {
-          h1 <- h
-        } else if (k > n_clust)
-        {
-          h0 <- h
+          h <- h0 + (h1 - h0) / 2
+          cls <- dendextend::cutree(cur.tree, h = h)
+          k <- max(cls)
+          if(k < cur_n)
+          {
+            h1 <- h
+          } else if (k > cur_n)
+          {
+            h0 <- h
+          }
         }
-      }
-      message(paste0("-->", h))
+        message(paste0("--> ", h))
 
-      if(k != n_clust)
-      {
-        warning(paste0("The requested number of cluster could not be found. Closest number found: ", k))
+        if(k != cur_n)
+        {
+          warning(paste0("The requested number of cluster could not be found for k = ", cur_n, ". Closest number found: ", k))
+        }
+        clusters[, paste0("k_", cur_n)] <- as.character(cls)
+        output_cut_height <- c(output_cut_height, h)
+
+        output_n_clust <- c(output_n_clust,
+                            k)
       }
-      clusters <- data.frame(site = names(cls),
-                             cluster = as.character(cls))
-      attr(clusters, "cut_height") <- h
+      names(output_cut_height) <- paste0("k_", n_clust)
     } else
     {
       cls <- dendextend::cutree(cur.tree, k = n_clust)
-      clusters <- data.frame(site = names(cls),
-                             cluster = as.character(cls))
+      clusters <- data.frame(rownames(cls),
+                             cluster = cls)
+      names(clusters) <- c("site", paste0("k_", n_clust))
+      output_cut_height <- "unknown"
+      output_n_clust <- sapply(n_clust,
+                               function(k, cl){
+                                 length(unique(cl[, paste0("k_", k)]))
+                               }, cl = clusters)
     }
+
 
   } else if(!is.null(cut_height))
   {
@@ -139,18 +175,27 @@ cut_tree <- function(tree,
     if(length(cut_height) == 1)
     {
       clusters <- data.frame(site = names(cls),
-                                  cluster = as.character(cls))
+                             cluster = as.character(cls))
     } else
     {
       clusters <- data.frame(site = rownames(cls),
-                                  cluster = cls)
+                             cluster = cls)
     }
+    colnames(clusters) <- c("site", paste0("h_",  cut_height))
+    output_n_clust <- sapply(cut_height,
+                             function(h, cl){
+                               length(unique(cl[, paste0("h_", h)]))
+                             }, cl = clusters)
+    names(output_n_clust) <- paste0("h_", cut_height)
+    output_cut_height <- cut_height
   }
 
   if(inherits(tree, "bioRgeo.hierar.tree"))
   {
     cur.tree$args$cut_height <- cut_height
     tree$clusters <- clusters
+    tree$output_n_clust <- output_n_clust
+    tree$output_cut_height <- output_cut_height
     return(tree)
   } else if (inherits(tree, "hclust"))
   {
