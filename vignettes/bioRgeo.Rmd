@@ -7,7 +7,7 @@ output:
     number_sections: true
 vignette: >
   %\VignetteIndexEntry{Tutorial}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
