@@ -12,6 +12,7 @@ find_nclust_tree(
   eval_metric = "pc_distance",
   criterion = "step",
   step_quantile = 0.99,
+  step_levels = NULL,
   metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
   dist = NULL,
   dist_index = names(dist)[3],
@@ -59,6 +60,19 @@ should be drawn with the identified optimal numbers of cutoffs}
 
 \item{disable_progress}{a boolean to enable or disable the progress bar for
 the exploration of clusters}
+}
+\value{
+a \code{list} of class \code{bioRgeo.nclust.tree} with three elements:
+\itemize{
+\item{\code{args}: input arguments
+}
+\item{\code{evaluation_df}: the data.frame containing \code{eval_metric}
+for all explored numbers of clusters
+}
+\item{\code{optimal_nb_clusters}: a vector containing the optimal number(s)
+of cluster(s) according to the first computed \code{eval_metric} and the
+chosen \code{criterion}
+}}
 }
 \description{
 This function aims at finding an optimal number of clusters in a hierarchical
@@ -114,6 +128,20 @@ This methods consists in specifying the cutoff value(s) in the evaluation
 metric from which the number(s) of clusters should be derived.
 }
 }
+}
+\examples{
+simil <- spproject(vegemat, metric = "all")
+distances <- similarity_to_distance(simil)
+
+# User-defined number of clusters
+tree1 <- clustering_hierarchical(distances,
+                                 n_clust = 5,
+                                 index = "Simpson")
+tree1
+
+find_nclust_tree(tree1)
+
+find_nclust_tree(tree1, step_levels = 5)
 }
 \references{
 \insertRef{Holt2013}{bioRgeo}

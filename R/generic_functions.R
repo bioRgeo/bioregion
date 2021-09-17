@@ -1,6 +1,6 @@
 #' @export
-#' @method print bioRgeo.cluster.optimisation
-print.bioRgeo.cluster.optimisation <- function(x, ...)
+#' @method print bioRgeo.nclust.tree
+print.bioRgeo.nclust.tree <- function(x, ...)
 {
   cat("Optimal number(s) of clusters search:\n")
   cat(" - Range of clusters explored: from ", x$args$k_min, " to ", x$args$k_max, "\n")
@@ -12,7 +12,7 @@ print.bioRgeo.cluster.optimisation <- function(x, ...)
   cat(" - Criterion chosen to optimise the number of clusters: ", x$args$criterion, "\n")
   if(x$args$criterion == "gap")
   {
-    cat("   --> gap quantile chosen: ", x$args$gap_quantile,
+    cat("   --> step quantile chosen: ", x$args$gap_quantile,
         " (i.e., only the top", (1 -  x$args$gap_quantile) * 100,
         "% increase in ", x$args$eval_metric[1],
         " are used as break points for the number of clusters)\n")
@@ -60,7 +60,8 @@ print.bioRgeo.hierar.tree <- function(x, ...)
     if(!is.null(x$args$n_clust))
     {
       cat(" - Number of clusters requested by the user: ", x$args$n_clust, "\n")
-      cat(" - Number of clusters in output: ", x$output_n_clust, "\n")
+      cat(" - Number of clusters in output: ", paste(x$output_n_clust, sep = ", "), "\n")
+
       if(x$args$find_h)
       {
         cat(" - Height of cut of the hierarchical tree:", x$output_cut_height)

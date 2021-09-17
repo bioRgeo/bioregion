@@ -84,7 +84,19 @@
 #' metric from which the number(s) of clusters should be derived.
 #' }
 #' }
-#'
+#' @return
+#' a \code{list} of class \code{bioRgeo.nclust.tree} with three elements:
+#' \itemize{
+#' \item{\code{args}: input arguments
+#' }
+#' \item{\code{evaluation_df}: the data.frame containing \code{eval_metric}
+#' for all explored numbers of clusters
+#' }
+#' \item{\code{optimal_nb_clusters}: a vector containing the optimal number(s)
+#' of cluster(s) according to the first computed \code{eval_metric} and the
+#' chosen \code{criterion}
+#' }}
+#' @export
 #' @references
 #' \insertRef{Holt2013}{bioRgeo}
 #'
@@ -94,6 +106,19 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{clustering_hierarchical}
+#' @examples
+#' simil <- spproject(vegemat, metric = "all")
+#' distances <- similarity_to_distance(simil)
+#'
+#' # User-defined number of clusters
+#' tree1 <- clustering_hierarchical(distances,
+#'                                  n_clust = 5,
+#'                                  index = "Simpson")
+#' tree1
+#'
+#' find_nclust_tree(tree1)
+#'
+#' find_nclust_tree(tree1, step_levels = 5)
 find_nclust_tree <- function(
   tree,
   k_min = 2,
@@ -101,6 +126,7 @@ find_nclust_tree <- function(
   eval_metric = "pc_distance",
   criterion = "step", # step or cutoff for now
   step_quantile = .99,
+  step_levels = NULL,
   metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
   dist = NULL,
   dist_index = names(dist)[3],
@@ -108,6 +134,21 @@ find_nclust_tree <- function(
   disable_progress = FALSE
 )
 {
+  # tree <- tree1
+  # k_min = 2
+  # k_max = 100
+  # eval_metric = c("anosim", "pc_distance")
+  # criterion = "step"
+  # step_quantile = .99
+  # step_levels = 5
+  # metric_cutoffs = c(.5, .75, .9, .95, .99, .999)
+  # dist = NULL
+  # dist_index = names(dist)[3]
+  # plot = TRUE
+  # disable_progress = FALSE
+
+
+
   if(inherits(tree, "bioRgeo.hierar.tree"))
   {
     tree_object <- tree$final.tree
@@ -138,7 +179,14 @@ find_nclust_tree <- function(
 
   if(k_max == "number of sites")
   {
-    k_max <- nb_sites
+    if("anosim" %in% eval_metric)
+    {
+      message("k_max set to nb_sites - 1, such that anosim can be computed")
+      k_max <- nb_sites - 1
+    } else
+    {
+      k_max <- nb_sites
+    }
   } else if(!(k_max %% 1 == 0)) # integer testing ain't easy in R
   {
     stop("k_max must be an integer determining the number of clusters.")
@@ -181,7 +229,9 @@ find_nclust_tree <- function(
                                      names(cls))]
 
 
-    if(eval_metric == "pc_distance")
+
+
+    if("pc_distance" %in% eval_metric)
     {
       # Compute total distance for current number of clusters
       # Create a distance matrix with only distances between clusters - not within
@@ -197,6 +247,31 @@ find_nclust_tree <- function(
       # Calculate sum for the current cluster number
       evaluation_df$pc_distance[which(evaluation_df$n_clusters == k)] <- sum(cur_dist_mat) / dist_sum_total
     }
+
+    # if("anosim" %in% eval_metric)
+    # {
+    #   grouping <- as.factor(clusters[, cur_col])
+    #
+    #   x.rank <- rank(dist_object)
+    #   N <- attr(dist_object, "Size")
+    #   div <- length(dist_object)/2
+    #   irow <- as.vector(as.dist(row(matrix(nrow = N, ncol = N))))
+    #   icol <- as.vector(as.dist(col(matrix(nrow = N, ncol = N))))
+    #   within <- grouping[irow] == grouping[icol]
+    #
+    #   aver <- tapply(x.rank, within, mean)
+    #   statistic <- -diff(aver)/div
+    #
+    #   aos <- vegan::anosim(dist_object,
+    #                        clusters[, cur_col],
+    #                        permutations = anosim_permutations,
+    #                        parallel = anosim_parallel)
+    #   # Analysis of similarities
+    #   evaluation_df$anosim[which(evaluation_df$n_clusters == k)] <- aos$statistic
+    #
+    #   evaluation_df$anosim_signif[which(evaluation_df$n_clusters == k)] <- aos$signif
+    #
+    # }
 
     if(!disable_progress)
     {
@@ -221,17 +296,33 @@ find_nclust_tree <- function(
     # Compute difference between each consecutive nb of clusters
     diffs <- evaluation_df[2:nrow(evaluation_df), eval_metric[1]] -
       evaluation_df[1:(nrow(evaluation_df) - 1), eval_metric[1]]
+    # First difference is considered to be an increment from 0
+    diffs <- c(evaluation_df[1, eval_metric[1]],
+               diffs)
 
-    qt <- stats::quantile(diffs,
-                          step_quantile)
+    evaluation_df$optimal_nclust <- FALSE
 
-    evaluation_df$breaks <- FALSE
-    evaluation_df$breaks[(which(diffs > qt) + 1)] <- TRUE
+
+    if(!is.null(step_levels))
+    {
+      message(paste0("   ° step_levels provided, selecting the ",
+                     step_levels, " highest step(s) as cutoff(s)"))
+      level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:step_levels]
+      evaluation_df$optimal_nclust[which(diffs %in% level_diffs)] <- TRUE
+    } else if(!is.null(step_quantile))
+    {
+      message(paste0("   ° selecting the highest step(s) as cutoff(s) based on
+                     the quantile ", step_quantile))
+      qt <- stats::quantile(diffs,
+                            step_quantile)
+      evaluation_df$optimal_nclust[which(diffs > qt)] <- TRUE
+    }
+
   } else if(criterion == "cutoff")
   {
     message(" - Cutoff method")
 
-    evaluation_df$breaks <- FALSE
+    evaluation_df$optimal_nclust <- FALSE
 
     hits <- sapply(metric_cutoffs,
            function(x, metric)
@@ -245,10 +336,10 @@ find_nclust_tree <- function(
     {
       warning("Could not find suitable number of clusters for cutoff(s): ", metric_cutoffs[which(is.na(hits))])
     } else
-    evaluation_df$breaks[hits] <- TRUE
+    evaluation_df$optimal_nclust[hits] <- TRUE
   }
 
-  optimal_nb_clusters <- evaluation_df$n_clusters[evaluation_df$breaks]
+  optimal_nb_clusters <- evaluation_df$n_clusters[evaluation_df$optimal_nclust]
 
 
   if(plot)
@@ -256,7 +347,9 @@ find_nclust_tree <- function(
     message("Plotting results...")
     p <- ggplot2::ggplot(evaluation_df, ggplot2::aes_string(x = "n_clusters", y = eval_metric[1])) +
       ggplot2::geom_line(col = "darkgrey") +
-      ggplot2::geom_hline(yintercept = evaluation_df[evaluation_df$breaks, eval_metric[1]],
+      ggplot2::geom_hline(yintercept = evaluation_df[evaluation_df$optimal_nclust, eval_metric[1]],
+                          linetype = 2) +
+      ggplot2::geom_vline(xintercept = evaluation_df[evaluation_df$optimal_nclust, "n_clusters"],
                           linetype = 2) +
       ggplot2::theme_bw()
     print(p)
@@ -270,7 +363,7 @@ find_nclust_tree <- function(
                   evaluation_df = evaluation_df,
                   optimal_nb_clusters = optimal_nb_clusters)
 
-  class(outputs) <- append("bioRgeo.cluster.optimisation", class(outputs))
+  class(outputs) <- append("bioRgeo.nclust.tree", class(outputs))
   return(outputs)
 }
 
