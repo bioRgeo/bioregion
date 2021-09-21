@@ -142,6 +142,7 @@ tree1
 find_nclust_tree(tree1)
 
 find_nclust_tree(tree1, step_levels = 5)
+find_nclust_tree(tree1, eval_metric = "anosim")
 }
 \references{
 \insertRef{Holt2013}{bioRgeo}

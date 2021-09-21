@@ -119,6 +119,7 @@
 #' find_nclust_tree(tree1)
 #'
 #' find_nclust_tree(tree1, step_levels = 5)
+#' find_nclust_tree(tree1, eval_metric = "anosim")
 find_nclust_tree <- function(
   tree,
   k_min = 2,
@@ -134,21 +135,6 @@ find_nclust_tree <- function(
   disable_progress = FALSE
 )
 {
-  # tree <- tree1
-  # k_min = 2
-  # k_max = 100
-  # eval_metric = c("anosim", "pc_distance")
-  # criterion = "step"
-  # step_quantile = .99
-  # step_levels = 5
-  # metric_cutoffs = c(.5, .75, .9, .95, .99, .999)
-  # dist = NULL
-  # dist_index = names(dist)[3]
-  # plot = TRUE
-  # disable_progress = FALSE
-
-
-
   if(inherits(tree, "bioRgeo.hierar.tree"))
   {
     tree_object <- tree$final.tree
@@ -216,6 +202,15 @@ find_nclust_tree <- function(
 
   evaluation_df$n_clusters <- k_min:k_max
 
+
+  # Create a vector of positions in the distance matrix indicating to what
+  # row/column each element corresponds
+  # Will be used to distinguish within vs. between clusters
+  rownames_dist <- attr(dist_object, "Labels")[as.vector(as.dist(row(matrix(nrow = nb_sites,
+                                                                            ncol = nb_sites))))]
+  colnames_dist <- attr(dist_object, "Labels")[as.vector(as.dist(col(matrix(nrow = nb_sites,
+                                                                            ncol = nb_sites))))]
+
   cur_col <- 2 # Start at the second column and proceed through all columns
   message(paste0("Exploring all clustering results on the tree between ", k_min,
                  " and ", k_max, " groups, this may take a while..."))
@@ -228,50 +223,39 @@ find_nclust_tree <- function(
     clusters[, cur_col] <- cls[match(rownames(clusters),
                                      names(cls))]
 
+    # cur_clusters <- clusters[, cur_col]
 
-
+    # The next line will create, for each element of the distance matrix, a
+    # vector indicating whether if each distance is within or between clusters
+    within_clusters <- clusters[rownames_dist,
+                                cur_col] == clusters[colnames_dist,
+                                                     cur_col]
 
     if("pc_distance" %in% eval_metric)
     {
       # Compute total distance for current number of clusters
       # Create a distance matrix with only distances between clusters - not within
       # clusters
-      cur_dist_mat <- dist_mat
-      for(cur_cls in unique(clusters[, cur_col]))
-      {
-        # Sites for current cluster
-        cur_sites <- clusters[which(clusters[, cur_col] == cur_cls), "site"]
-        # Distances between sites of current cluster are set to 0
-        cur_dist_mat[cur_sites, cur_sites] <- 0
-      }
+      cur_dist_object <- dist_object
+      # Distances between sites of current cluster are set to 0
+      cur_dist_object[within_clusters] <- 0
+
       # Calculate sum for the current cluster number
-      evaluation_df$pc_distance[which(evaluation_df$n_clusters == k)] <- sum(cur_dist_mat) / dist_sum_total
+      evaluation_df$pc_distance[which(evaluation_df$n_clusters == k)] <- sum(cur_dist_object) / sum(dist_object)
     }
 
-    # if("anosim" %in% eval_metric)
-    # {
-    #   grouping <- as.factor(clusters[, cur_col])
-    #
-    #   x.rank <- rank(dist_object)
-    #   N <- attr(dist_object, "Size")
-    #   div <- length(dist_object)/2
-    #   irow <- as.vector(as.dist(row(matrix(nrow = N, ncol = N))))
-    #   icol <- as.vector(as.dist(col(matrix(nrow = N, ncol = N))))
-    #   within <- grouping[irow] == grouping[icol]
-    #
-    #   aver <- tapply(x.rank, within, mean)
-    #   statistic <- -diff(aver)/div
-    #
-    #   aos <- vegan::anosim(dist_object,
-    #                        clusters[, cur_col],
-    #                        permutations = anosim_permutations,
-    #                        parallel = anosim_parallel)
-    #   # Analysis of similarities
-    #   evaluation_df$anosim[which(evaluation_df$n_clusters == k)] <- aos$statistic
-    #
-    #   evaluation_df$anosim_signif[which(evaluation_df$n_clusters == k)] <- aos$signif
-    #
-    # }
+    if("anosim" %in% eval_metric)
+    {
+
+      dist_ranks <- rank(dist_object)
+
+      denom <- nb_sites * (nb_sites - 1) / 4
+
+      wb_average_rank <- tapply(dist_ranks, within_clusters, mean)
+
+      # Analysis of similarities, formula from the vegan package
+      evaluation_df$anosim[which(evaluation_df$n_clusters == k)] <- -diff(wb_average_rank) / denom
+    }
 
     if(!disable_progress)
     {
