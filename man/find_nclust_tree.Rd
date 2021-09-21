@@ -43,6 +43,9 @@ identify optimal number(s) of clusters. Possible values include \code{"step"},
 of differences between two consecutive k to be used as the cutoff to identify
 the most important steps in \code{eval_metric}}
 
+\item{step_levels}{if \code{criterion = "step"}, specify here the number of
+steps to keep as cutoffs.}
+
 \item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the
 cutoffs of \code{eval_metric} at which the number of clusters should be
 extracted}
@@ -142,7 +145,7 @@ tree1
 find_nclust_tree(tree1)
 
 find_nclust_tree(tree1, step_levels = 5)
-find_nclust_tree(tree1, eval_metric = "anosim")
+find_nclust_tree(tree1, eval_metric =)
 }
 \references{
 \insertRef{Holt2013}{bioRgeo}

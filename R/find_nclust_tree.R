@@ -23,6 +23,8 @@
 #' @param step_quantile if \code{criterion = "step"}, specify here the quantile
 #' of differences between two consecutive k to be used as the cutoff to identify
 #' the most important steps in \code{eval_metric}
+#' @param step_levels if \code{criterion = "step"}, specify here the number of
+#' steps to keep as cutoffs.
 #' @param metric_cutoffs if \code{criterion = "cutoff"}, specify here the
 #' cutoffs of \code{eval_metric} at which the number of clusters should be
 #' extracted
@@ -119,7 +121,7 @@
 #' find_nclust_tree(tree1)
 #'
 #' find_nclust_tree(tree1, step_levels = 5)
-#' find_nclust_tree(tree1, eval_metric = "anosim")
+#' find_nclust_tree(tree1, eval_metric =)
 find_nclust_tree <- function(
   tree,
   k_min = 2,
@@ -206,10 +208,14 @@ find_nclust_tree <- function(
   # Create a vector of positions in the distance matrix indicating to what
   # row/column each element corresponds
   # Will be used to distinguish within vs. between clusters
-  rownames_dist <- attr(dist_object, "Labels")[as.vector(as.dist(row(matrix(nrow = nb_sites,
-                                                                            ncol = nb_sites))))]
-  colnames_dist <- attr(dist_object, "Labels")[as.vector(as.dist(col(matrix(nrow = nb_sites,
-                                                                            ncol = nb_sites))))]
+  rownames_dist <- attr(dist_object,
+                        "Labels")[as.vector(
+                          stats::as.dist(row(matrix(nrow = nb_sites,
+                                                    ncol = nb_sites))))]
+  colnames_dist <- attr(dist_object,
+                        "Labels")[as.vector(
+                          stats::as.dist(col(matrix(nrow = nb_sites,
+                                                    ncol = nb_sites))))]
 
   cur_col <- 2 # Start at the second column and proceed through all columns
   message(paste0("Exploring all clustering results on the tree between ", k_min,
@@ -289,13 +295,13 @@ find_nclust_tree <- function(
 
     if(!is.null(step_levels))
     {
-      message(paste0("   ° step_levels provided, selecting the ",
+      message(paste0("   * step_levels provided, selecting the ",
                      step_levels, " highest step(s) as cutoff(s)"))
       level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:step_levels]
       evaluation_df$optimal_nclust[which(diffs %in% level_diffs)] <- TRUE
     } else if(!is.null(step_quantile))
     {
-      message(paste0("   ° selecting the highest step(s) as cutoff(s) based on
+      message(paste0("   * selecting the highest step(s) as cutoff(s) based on
                      the quantile ", step_quantile))
       qt <- stats::quantile(diffs,
                             step_quantile)
