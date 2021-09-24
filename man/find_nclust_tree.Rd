@@ -132,6 +132,13 @@ metric from which the number(s) of clusters should be derived.
 }
 }
 }
+\note{
+Please note that finding the optimal number of clusters is a procedure
+which normally requires decisions from the users, and as such can hardly be
+fully automatized. Users are strongly advised to read the references
+indicated below to look for guidance on how to choose their optimal number(s)
+of clusters.
+}
 \examples{
 simil <- spproject(vegemat, metric = "all")
 distances <- similarity_to_distance(simil)
@@ -151,6 +158,8 @@ find_nclust_tree(tree1, eval_metric =)
 \insertRef{Holt2013}{bioRgeo}
 
 \insertRef{Kreft2010}{bioRgeo}
+
+\insertRef{Langfelder2008}{bioRgeo}
 }
 \seealso{
 \link{clustering_hierarchical}

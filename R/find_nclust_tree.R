@@ -98,11 +98,18 @@
 #' of cluster(s) according to the first computed \code{eval_metric} and the
 #' chosen \code{criterion}
 #' }}
+#' @note Please note that finding the optimal number of clusters is a procedure
+#' which normally requires decisions from the users, and as such can hardly be
+#' fully automatized. Users are strongly advised to read the references
+#' indicated below to look for guidance on how to choose their optimal number(s)
+#' of clusters.
 #' @export
 #' @references
 #' \insertRef{Holt2013}{bioRgeo}
 #'
 #' \insertRef{Kreft2010}{bioRgeo}
+#'
+#' \insertRef{Langfelder2008}{bioRgeo}
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
