@@ -144,6 +144,7 @@ find_nclust_tree <- function(
   disable_progress = FALSE
 )
 {
+
   if(inherits(tree, "bioRgeo.hierar.tree"))
   {
     tree_object <- tree$final.tree
@@ -287,6 +288,13 @@ find_nclust_tree <- function(
 
   message(paste0("Clustering explorations finished, finding the optimal number(s) of clusters..."))
 
+  # earth::earth(evaluation_df$anosim ~ evaluation_df$n_clusters,
+  #              nfold = 5) -> a
+  # library(KneeArrower)
+  # findCutoff(evaluation_df$n_clusters,
+  #            evaluation_df$anosim,
+  #            method = "curvature")
+
   if(criterion == "step")
   {
     message(" - Step method")
@@ -344,8 +352,8 @@ find_nclust_tree <- function(
     message("Plotting results...")
     p <- ggplot2::ggplot(evaluation_df, ggplot2::aes_string(x = "n_clusters", y = eval_metric[1])) +
       ggplot2::geom_line(col = "darkgrey") +
-      ggplot2::geom_hline(yintercept = evaluation_df[evaluation_df$optimal_nclust, eval_metric[1]],
-                          linetype = 2) +
+      # ggplot2::geom_hline(yintercept = evaluation_df[evaluation_df$optimal_nclust, eval_metric[1]],
+      #                     linetype = 2) +
       ggplot2::geom_vline(xintercept = evaluation_df[evaluation_df$optimal_nclust, "n_clusters"],
                           linetype = 2) +
       ggplot2::theme_bw()

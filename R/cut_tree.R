@@ -18,9 +18,47 @@
 #' finding the height of cut when \code{find_h = TRUE}
 #' @param h_min a numeric indicating the minimum possible height in the tree for
 #' finding the height of cut when \code{find_h = TRUE}
+#' @param dynamic_tree_cut a boolean indicating if the dynamic tree cut method
+#' should be used, in which case \code{n_clust} & \code{cut_height} are ignored
+#' @param dynamic_method a character vector indicating the method to be used
+#' to dynamically cut the tree: either \code{"tree"} (clusters searched only
+#' in the tree) or \code{"hybrid"} (clusters searched on both tree and distance
+#' matrix)
+#' @param dynamic_minClusterSize an integer indicating the minimum cluster size
+#' to use in the dynamic tree cut method (see
+#' \link[dynamicTreeCut:cutreeDynamic])
+#' @param dist_matrix only useful if \code{tree} is not a
+#' \code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
+#' Provide here the distance matrix used to build the \code{tree}
+#' @param ... further arguments to be passed to
+#' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to
+#' customize the dynamic tree cut method.
 #'
 #' @details
-#' Specify \code{n_clust} or \code{cut_height}, but not both at the same time.
+#' The function can cut the tree with two main methods. First, it can cut
+#' the entire tree at the same height (either specified by \code{cut_height} or
+#' automatically defined for the chosen \code{n_clust}). Second, it can use
+#' the dynamic tree cut method \inserReft{Langfelder2008}{bioRgeo}, in which
+#' case clusters are detected with an adapative method based on the shape of
+#' branches in the tree (thus cuts happen at multiple heights depending on
+#' cluster positions in the tree).
+#'
+#' The dynamic tree cut method has two variants.
+#' \itemize{
+#' \item{The tree-based only variant
+#' (\code{dynamic_method = "tree"}) is a top-down approach which relies only
+#' on the tree and follows the order of clustered objects on it}
+#' \item{The hybrid variant
+#' (\code{dynamic_method = "hybrid"}) is a bottom-up approach which relies on
+#' both the tree and the distance matrix to build clusters on the basis of
+#' dissimilarity information among sites. This method is useful to detect
+#' outlying members in each cluster.}
+#' }
+#'
+#' @note
+#' The argument \code{find_h} is ignored if \code{dynamic_tree_cut = TRUE},
+#' because heights of cut cannot be estimated in this case.
+#'
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
@@ -74,22 +112,13 @@ cut_tree <- function(tree,
                      cut_height = NULL,
                      find_h = TRUE,
                      h_max = 1,
-                     h_min = 0)
+                     h_min = 0,
+                     dynamic_tree_cut = FALSE,
+                     dynamic_method = "tree",
+                     dynamic_minClusterSize = 5,
+                     dist_matrix = NULL,
+                     ...)
 {
-  if(inherits(tree, "bioRgeo.hierar.tree"))
-  {
-    cur.tree <- tree$final.tree
-    # Update args
-    tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min")] <-
-      list(n_clust, cut_height, find_h, h_max, h_min)
-  } else if (inherits(tree, "hclust"))
-  {
-    cur.tree <- tree
-  } else
-  {
-    stop("This function is designed to work either on bioRgeo.hierar.tree (output from clustering_hierarchical()) or hclust objects.")
-  }
-
   if(!is.null(n_clust)){
     if(is.numeric(n_clust))
     {
@@ -107,9 +136,77 @@ cut_tree <- function(tree,
     }
   }
 
+  if(dynamic_tree_cut)
+  {
+    if(!is.null(n_clust))
+    {
+      message("The dynamic tree cut method was requested, argument n_clust will be ignored")
+      n_clust <- NULL
+    }
+    if(!is.null(cut_height))
+    {
+      message("The dynamic tree cut method was requested, argument cut_height will be ignored")
+      cut_height <- NULL
+    }
+
+    if(dynamic_method == "hybrid")
+    {
+      if(inherits(tree, "bioRgeo.hierar.tree"))
+      {
+        dist_matrix <- tree$dist.matrix
+      } else if(is.null(dist_matrix))
+      {
+        stop("A distance matrix should be supplied to argument dist_matrix for dynamic_method = 'hybrid'")
+      }
+    }
+  }
+
+  arg_added <- list(...)
+  if(inherits(tree, "bioRgeo.hierar.tree"))
+  {
+    cur.tree <- tree$final.tree
+    # Update args
+    tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min")] <-
+      list(n_clust, cut_height, find_h, h_max, h_min)
+
+    if(dynamic_tree_cut)
+    {
+      tree$args[c("dynamic_tree_cut",
+                  "dynamic_method",
+                  "dynamic_minClusterSize")] <-
+        list(dynamic_tree_cut, dynamic_method,  dynamic_minClusterSize)
+      if(length(arg_added))
+      {
+        tree$args[names(arg_added)] <- arg_added
+      }
+    }
+  } else if (inherits(tree, "hclust"))
+  {
+    cur.tree <- tree
+  } else
+  {
+    stop("This function is designed to work either on bioRgeo.hierar.tree (output from clustering_hierarchical()) or hclust objects.")
+  }
+
+
   output_cut_height <- NULL
   output_n_clust <- NULL
-  if(!is.null(n_clust))
+  if(dynamic_tree_cut)
+  {
+    clusters <- data.frame(site = tree$final.tree$labels,
+                           cluster = dynamicTreeCut::cutreeDynamic(tree$final.tree,
+                                                                   method = dynamic_method,
+                                                                   minClusterSize = dynamic_minClusterSize,
+                                                                   distM = dist_matrix,
+                                                                   ...))
+    # Set NAs for unassigned sites
+    if(any(clusters$cluster == 0))
+    {
+      message("Some sites were not assigned to any cluster. They will have a NA in the cluster data.frame.")
+      clusters$cluster[which(clusters$cluster == 0)] <- NA
+    }
+    output_n_clust <- length(unique(na.omit(clusters$cluster)))
+  } else if(!is.null(n_clust))
   {
     n_clust <- n_clust[order(n_clust)]
     if(find_h)

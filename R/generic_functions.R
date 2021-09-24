@@ -64,13 +64,12 @@ print.bioRgeo.hierar.tree <- function(x, ...)
 
       if(x$args$find_h)
       {
-        cat(" - Height of cut of the hierarchical tree:", x$output_cut_height)
+        cat(" - Height of cut of the hierarchical tree:", x$output_cut_height, "\n")
       } else
       {
-        cat(" - Height of cut not searched for.")
+        cat(" - Height of cut not searched for.", "\n")
       }
-    }
-    if(!is.null(x$args$cut_height))
+    } else if(!is.null(x$args$cut_height))
     {
       if(length(x$args$cut_height) == 1)
       {
@@ -85,7 +84,13 @@ print.bioRgeo.hierar.tree <- function(x, ...)
           cat("   > ", cuts, ": ", x$output_n_clust[paste0("h_", cuts)], "\n")
         }
       }
+    } else if(x$args$dynamic_tree_cut)
+    {
+      cat(paste0(" - Dynamic tree cut method chosen: '", x$args$dynamic_method,
+          "', with minimum cluster size ", x$args$dynamic_minClusterSize, "\n"))
+      cat(" - Number of clusters in output: ", x$output_n_clust, "\n")
     }
+
   }
 }
 
