@@ -35,9 +35,8 @@ metrics, they will all be computed, but only the first will be used to
 find the optimal number(s) of clusters (order \code{eval_metric} accordingly)}
 
 \item{criterion}{character string indicating the criterion to be used to
-identify optimal number(s) of clusters. Possible values include \code{"step"},
-\code{cutoff}, ...
-(to be completed)}
+identify optimal number(s) of clusters. Available methods currently include
+\code{"step"}, \code{"cutoff"}, \code{"elbow"} or \code{"mars"}.}
 
 \item{step_quantile}{if \code{criterion = "step"}, specify here the quantile
 of differences between two consecutive k to be used as the cutoff to identify
@@ -119,7 +118,7 @@ recommended by \insertCite{Kreft2010}{bioRgeo}. To be detailed}
 \bold{Criteria to find optimal number(s) of clusters}
 \itemize{
 \item{\code{step}:
-This methods consists in identifying clusters at the most important
+This method consists in identifying clusters at the most important
 increments, or steps, in the evaluation metric. Therefore, this is relative
 to the distribution of increments in the evaluation metric over the tested
 \code{k}. Specify \code{step_quantile} as the quantile cutoff above which
@@ -127,9 +126,25 @@ increments will be selected as most important (by default, 0.99, i.e. the
 top 1\% increments will be selected).
 }
 \item{\code{cutoffs}:
-This methods consists in specifying the cutoff value(s) in the evaluation
+This method consists in specifying the cutoff value(s) in the evaluation
 metric from which the number(s) of clusters should be derived.
 }
+\item{\code{elbow}:
+This method consists in finding an elbow in the evaluation metric curve.
+It is based on a fast numerical approximation of the elbow.
+The code we use here is based on code written by Alan Tseng in the
+KneeArrower R package \url{https://github.com/agentlans/KneeArrower},
+and uses code from the
+\code{signal} R package written in Octave by Paul Kienzle, modified by
+Pascal Dupuis, and translated to R by Tom Short
+\url{https://cran.r-project.org/package=signal}}
+\item{\code{mars}:
+This method consists in fitting a mars model on the evaluation curve, and
+using it to identify all cutoffs at which there is no more increase in the
+evaluation metric. In other words, this method will find cutoffs with the two
+following conditions: (1) the evaluation metric was increasing before the
+cutoff and (2) there is no more increase or the increase is slower after the
+cutoff. This method uses \link[earth:earth]{earth::earth()}.}
 }
 }
 \note{
@@ -152,7 +167,8 @@ tree1
 find_nclust_tree(tree1)
 
 find_nclust_tree(tree1, step_levels = 5)
-find_nclust_tree(tree1, eval_metric =)
+find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "elbow")
+find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "mars")
 }
 \references{
 \insertRef{Holt2013}{bioRgeo}

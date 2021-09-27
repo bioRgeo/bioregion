@@ -28,9 +28,12 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     dendextend,
+    dynamicTreeCut,
+    earth,
     fastcluster,
     ggplot2,
     igraph,
+    MASS,
     Matrix,
     Rcpp,
     RcppEigen,

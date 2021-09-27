@@ -17,9 +17,8 @@
 #' metrics, they will all be computed, but only the first will be used to
 #' find the optimal number(s) of clusters (order \code{eval_metric} accordingly)
 #' @param criterion character string indicating the criterion to be used to
-#' identify optimal number(s) of clusters. Possible values include \code{"step"},
-#' \code{cutoff}, ...
-#' (to be completed)
+#' identify optimal number(s) of clusters. Available methods currently include
+#' \code{"step"}, \code{"cutoff"}, \code{"elbow"} or \code{"mars"}.
 #' @param step_quantile if \code{criterion = "step"}, specify here the quantile
 #' of differences between two consecutive k to be used as the cutoff to identify
 #' the most important steps in \code{eval_metric}
@@ -74,7 +73,7 @@
 #' \bold{Criteria to find optimal number(s) of clusters}
 #' \itemize{
 #' \item{\code{step}:
-#' This methods consists in identifying clusters at the most important
+#' This method consists in identifying clusters at the most important
 #' increments, or steps, in the evaluation metric. Therefore, this is relative
 #' to the distribution of increments in the evaluation metric over the tested
 #' \code{k}. Specify \code{step_quantile} as the quantile cutoff above which
@@ -82,9 +81,25 @@
 #' top 1\% increments will be selected).
 #' }
 #' \item{\code{cutoffs}:
-#' This methods consists in specifying the cutoff value(s) in the evaluation
+#' This method consists in specifying the cutoff value(s) in the evaluation
 #' metric from which the number(s) of clusters should be derived.
 #' }
+#' \item{\code{elbow}:
+#' This method consists in finding an elbow in the evaluation metric curve.
+#' It is based on a fast numerical approximation of the elbow.
+#' The code we use here is based on code written by Alan Tseng in the
+#' KneeArrower R package \url{https://github.com/agentlans/KneeArrower},
+#' and uses code from the
+#' \code{signal} R package written in Octave by Paul Kienzle, modified by
+#' Pascal Dupuis, and translated to R by Tom Short
+#' \url{https://cran.r-project.org/package=signal}}
+#' \item{\code{mars}:
+#' This method consists in fitting a mars model on the evaluation curve, and
+#' using it to identify all cutoffs at which there is no more increase in the
+#' evaluation metric. In other words, this method will find cutoffs with the two
+#' following conditions: (1) the evaluation metric was increasing before the
+#' cutoff and (2) there is no more increase or the increase is slower after the
+#' cutoff. This method uses \link[earth:earth]{earth::earth()}.}
 #' }
 #' @return
 #' a \code{list} of class \code{bioRgeo.nclust.tree} with three elements:
@@ -128,13 +143,14 @@
 #' find_nclust_tree(tree1)
 #'
 #' find_nclust_tree(tree1, step_levels = 5)
-#' find_nclust_tree(tree1, eval_metric =)
+#' find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "elbow")
+#' find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "mars")
 find_nclust_tree <- function(
   tree,
   k_min = 2,
   k_max = "number of sites",
   eval_metric = "pc_distance",
-  criterion = "step", # step or cutoff for now
+  criterion = "step", # step, elbow or cutoff for now
   step_quantile = .99,
   step_levels = NULL,
   metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
@@ -144,6 +160,19 @@ find_nclust_tree <- function(
   disable_progress = FALSE
 )
 {
+
+  # tree
+  # k_min = 2
+  # k_max = "number of sites"
+  # eval_metric = "pc_distance"
+  # criterion = "step" # step or cutoff for now
+  # step_quantile = .99
+  # step_levels = NULL
+  # metric_cutoffs = c(.5, .75, .9, .95, .99, .999)
+  # dist = NULL
+  # dist_index = names(dist)[3]
+  # plot = TRUE
+  # disable_progress = FALSE
 
   if(inherits(tree, "bioRgeo.hierar.tree"))
   {
@@ -288,14 +317,75 @@ find_nclust_tree <- function(
 
   message(paste0("Clustering explorations finished, finding the optimal number(s) of clusters..."))
 
-  # earth::earth(evaluation_df$anosim ~ evaluation_df$n_clusters,
-  #              nfold = 5) -> a
-  # library(KneeArrower)
-  # findCutoff(evaluation_df$n_clusters,
-  #            evaluation_df$anosim,
-  #            method = "curvature")
+  evaluation_df$optimal_nclust <- FALSE
+  if(criterion == "mars")
+  {
+    mars_model <- earth::earth(evaluation_df[, eval_metric[1]] ~ evaluation_df$n_clusters)
+    mars_sum <- summary(mars_model)
+    if(nrow(mars_sum$coefficients) > 1)
+    {
+      funs <- rownames(mars_sum$coefficients)[2:nrow(mars_sum$coefficients)]
+      funs <- gsub(")", "", gsub("h(", "", funs, fixed = TRUE), fixed = TRUE)
+      funs <- gsub(paste0("evaluation_df$n_clusters"), "", funs, fixed = TRUE)
 
-  if(criterion == "step")
+      mars_hinges <- as.numeric(gsub("-", "", funs))
+      # mars_hinges$form <- "val-N"
+      # if(any(is.na(suppressWarnings(as.numeric(funs)))))
+      # {
+      #   mars_hinges$form[which(is.na(suppressWarnings(as.numeric(funs))))] <- "N-val"
+      # }
+      # mars_hinges$coefs <- mars_sum$coefficients[2:nrow(mars_sum$coefficients)]
+
+      mars_cutoffs <- data.frame(cutoff = unique(mars_hinges),
+                                 before = NA, after = NA)
+      mars_cutoffs <- mars_cutoffs[order(mars_cutoffs$cutoff), ]
+
+      mars_preds <- data.frame(evaluation_df,
+                               stats::predict(mars_model,
+                                       evaluation_df$n_clusters))
+      def_cut <- min(mars_preds$n_clusters)
+
+      for (cur_cut in mars_cutoffs$cutoff)
+      {
+
+        mars_cutoffs$before[mars_cutoffs$cutoff == cur_cut] <-
+          (mars_preds[which(mars_preds$n_clusters == cur_cut), ncol(mars_preds)] -
+             mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
+          (cur_cut - def_cut)
+
+        def_cut <- cur_cut
+      }
+      if(nrow(mars_cutoffs) > 1)
+      {
+        mars_cutoffs$after[1:(nrow(mars_cutoffs) - 1)] <- mars_cutoffs$before[2:nrow(mars_cutoffs)]
+      }
+      mars_cutoffs$after[nrow(mars_cutoffs)] <-
+        (mars_preds[which(mars_preds$n_clusters == max(mars_preds$n_clusters)), ncol(mars_preds)] -
+           mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
+        (max(mars_preds$n_clusters) - def_cut)
+      mars_cutoffs$change_slope <- mars_cutoffs$after - mars_cutoffs$before
+
+      mars_cutoffs$breaks <- ifelse(mars_cutoffs$before > 0 & mars_cutoffs$change_slope < 0, TRUE, FALSE)
+
+      evaluation_df$optimal_nclust[which(evaluation_df$n_clusters %in% mars_cutoffs$cutoff[mars_cutoffs$breaks])] <- TRUE
+    } else
+    {
+      stop("No cutoff point was found with the MARS method")
+    }
+  }
+
+  if(criterion == "elbow")
+  {
+    message(" - Elbow method")
+
+    elbow <- .findCutoff(evaluation_df$n_clusters,
+                            evaluation_df[, eval_metric[1]])
+    message(paste0("   * elbow found at ",
+                   elbow$x, " clusters, rounding to ", round(elbow$x)))
+
+
+    evaluation_df$optimal_nclust[which(evaluation_df$n_clusters == round(elbow$x))] <- TRUE
+  } else if(criterion == "step")
   {
     message(" - Step method")
     # Compute difference between each consecutive nb of clusters
@@ -304,8 +394,6 @@ find_nclust_tree <- function(
     # First difference is considered to be an increment from 0
     diffs <- c(evaluation_df[1, eval_metric[1]],
                diffs)
-
-    evaluation_df$optimal_nclust <- FALSE
 
 
     if(!is.null(step_levels))
@@ -327,7 +415,6 @@ find_nclust_tree <- function(
   {
     message(" - Cutoff method")
 
-    evaluation_df$optimal_nclust <- FALSE
 
     hits <- sapply(metric_cutoffs,
            function(x, metric)
@@ -357,6 +444,13 @@ find_nclust_tree <- function(
       ggplot2::geom_vline(xintercept = evaluation_df[evaluation_df$optimal_nclust, "n_clusters"],
                           linetype = 2) +
       ggplot2::theme_bw()
+    if(criterion == "mars")
+    {
+      message("   (the red line is the prediction from MARS models)")
+      p <- p + ggplot2::geom_line(data = mars_preds,
+                                  ggplot2::aes_string(x = "n_clusters", y = mars_preds[, ncol(mars_preds)]),
+                                  col = "red")
+    }
     print(p)
   }
   outputs <- list(args = list(k_min = k_min,

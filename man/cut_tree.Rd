@@ -10,7 +10,12 @@ cut_tree(
   cut_height = NULL,
   find_h = TRUE,
   h_max = 1,
-  h_min = 0
+  h_min = 0,
+  dynamic_tree_cut = FALSE,
+  dynamic_method = "tree",
+  dynamic_minClusterSize = 5,
+  dist_matrix = NULL,
+  ...
 )
 }
 \arguments{
@@ -32,6 +37,26 @@ finding the height of cut when \code{find_h = TRUE}}
 
 \item{h_min}{a numeric indicating the minimum possible height in the tree for
 finding the height of cut when \code{find_h = TRUE}}
+
+\item{dynamic_tree_cut}{a boolean indicating if the dynamic tree cut method
+should be used, in which case \code{n_clust} & \code{cut_height} are ignored}
+
+\item{dynamic_method}{a character vector indicating the method to be used
+to dynamically cut the tree: either \code{"tree"} (clusters searched only
+in the tree) or \code{"hybrid"} (clusters searched on both tree and distance
+matrix)}
+
+\item{dynamic_minClusterSize}{an integer indicating the minimum cluster size
+to use in the dynamic tree cut method (see
+\link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})}
+
+\item{dist_matrix}{only useful if \code{tree} is not a
+\code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
+Provide here the distance matrix used to build the \code{tree}}
+
+\item{...}{further arguments to be passed to
+\link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to
+customize the dynamic tree cut method.}
 }
 \value{
 If \code{tree} is a \code{bioRgeo.hierar.tree}, then the same object
@@ -46,7 +71,29 @@ of clusters or selected height(s). It also includes a procedure to
 automatically return the height of cut for the chosen number(s) of clusters.
 }
 \details{
-Specify \code{n_clust} or \code{cut_height}, but not both at the same time.
+The function can cut the tree with two main methods. First, it can cut
+the entire tree at the same height (either specified by \code{cut_height} or
+automatically defined for the chosen \code{n_clust}). Second, it can use
+the dynamic tree cut method \insertRef{Langfelder2008}{bioRgeo}, in which
+case clusters are detected with an adapative method based on the shape of
+branches in the tree (thus cuts happen at multiple heights depending on
+cluster positions in the tree).
+
+The dynamic tree cut method has two variants.
+\itemize{
+\item{The tree-based only variant
+(\code{dynamic_method = "tree"}) is a top-down approach which relies only
+on the tree and follows the order of clustered objects on it}
+\item{The hybrid variant
+(\code{dynamic_method = "hybrid"}) is a bottom-up approach which relies on
+both the tree and the distance matrix to build clusters on the basis of
+dissimilarity information among sites. This method is useful to detect
+outlying members in each cluster.}
+}
+}
+\note{
+The argument \code{find_h} is ignored if \code{dynamic_tree_cut = TRUE},
+because heights of cut cannot be estimated in this case.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)

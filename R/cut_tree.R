@@ -26,7 +26,7 @@
 #' matrix)
 #' @param dynamic_minClusterSize an integer indicating the minimum cluster size
 #' to use in the dynamic tree cut method (see
-#' \link[dynamicTreeCut:cutreeDynamic])
+#' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})
 #' @param dist_matrix only useful if \code{tree} is not a
 #' \code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
 #' Provide here the distance matrix used to build the \code{tree}
@@ -38,7 +38,7 @@
 #' The function can cut the tree with two main methods. First, it can cut
 #' the entire tree at the same height (either specified by \code{cut_height} or
 #' automatically defined for the chosen \code{n_clust}). Second, it can use
-#' the dynamic tree cut method \inserReft{Langfelder2008}{bioRgeo}, in which
+#' the dynamic tree cut method \insertRef{Langfelder2008}{bioRgeo}, in which
 #' case clusters are detected with an adapative method based on the shape of
 #' branches in the tree (thus cuts happen at multiple heights depending on
 #' cluster positions in the tree).
@@ -205,7 +205,7 @@ cut_tree <- function(tree,
       message("Some sites were not assigned to any cluster. They will have a NA in the cluster data.frame.")
       clusters$cluster[which(clusters$cluster == 0)] <- NA
     }
-    output_n_clust <- length(unique(na.omit(clusters$cluster)))
+    output_n_clust <- length(unique(stats::na.omit(clusters$cluster)))
   } else if(!is.null(n_clust))
   {
     n_clust <- n_clust[order(n_clust)]
