@@ -16,6 +16,7 @@ find_nclust_tree(
   metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
   dist = NULL,
   dist_index = names(dist)[3],
+  sp_site_table = NULL,
   plot = TRUE,
   disable_progress = FALSE
 )
@@ -29,8 +30,12 @@ explored}
 \item{k_max}{an integer indicating the maximum number of clusters to be
 explored, or "number of sites" to use the number of sites as the maximum}
 
-\item{eval_metric}{metric(s) to be calculated to investigate the effect of
-different number of clusters. Note that if you request several evaluation
+\item{eval_metric}{character string or vector of character strings indicating
+ metric(s) to be calculated to
+investigate the effect of different number of clusters. Available options:
+\code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
+\code{"tot_endemism"}
+Note that if you request several evaluation
 metrics, they will all be computed, but only the first will be used to
 find the optimal number(s) of clusters (order \code{eval_metric} accordingly)}
 
@@ -51,11 +56,16 @@ extracted}
 
 \item{dist}{a \code{dist} object or a \code{bioRgeo.distance} object (output
 from \code{\link{similarity_to_distance}}). Necessary if \code{eval_metric}
-includes \code{pc_distance}}
+includes \code{pc_distance} and \code{tree} is not a
+\code{bioRgeo.hierar.tree} object}
 
 \item{dist_index}{a character string indicating the distance (beta-diversity)
 index to be used in case \code{dist} is a \code{data.frame} with multiple
 distance indices}
+
+\item{sp_site_table}{a \code{matrix} with sites in row and species in
+columns. Should be provided if \code{eval_metric} includes
+\code{"avg_endemism"} or \code{"tot_endemism"}}
 
 \item{plot}{a boolean indicating if a plot of the first \code{eval_metric}
 should be drawn with the identified optimal numbers of cutoffs}
@@ -84,12 +94,17 @@ number(s) of clusters upon this relationship between evaluation metric &
 number of clusters.
 }
 \details{
+\loadmathjax
+
 This function proceeds in three steps. First, the range of clusterisations
 between \code{k_min} and \code{k_max} number of clusters are explored on
- \code{tree} by cutting the tree for each number of groups \code{k} between
-\code{k_min} and \code{k_max}. Second, an evaluation metric
-is calculated for each clusterisation. Third, a criterion is applied on the
-evaluation metric to identify the optimal number of clusers.
+the input object  \code{tree} by cutting the tree for each number of groups
+\code{k} between
+\code{k_min} and \code{k_max}. Second, for each clusterisation, the function
+calculates one or several evaluation metric(s) and stores it. Third, the
+relation ship evaluation metric ~ number of clusters is explored by the
+function, and a criterion is applied on the first
+evaluation metric to return an optimal number of clusters.
 
 Note that multiple evaluation metrics can be requested (e.g., for inspection),
 but only the first one will be used to apply the criterion for optimal
@@ -111,9 +126,51 @@ pairs of sites within the same clusters have their distance set to zero in
 the distance matrix, and then the distance matrix is summed. The
 \code{pc_distance} ratio is obtained by dividing the between-cluster sum
 of distances by the total sum of distances.}
-\itemize{\code{pc_endemism}: this metric is the percentage of endemism as
-recommended by \insertCite{Kreft2010}{bioRgeo}. To be detailed}
+\item{\code{anosim}: This metric is the statistic used in Analysis of
+Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
+\link[vegan:anosim]{vegan::anosim()}). It
+compares the between-cluster dissimilarities to the within-cluster
+dissimilarities. It is based based on the difference of mean ranks between
+groups and within groups with the following formula:
+\mjeqn{R = (r_B - r_W)/(N (N-1) / 4)}{R = (r_B - r_W)/(N (N-1) / 4)},
+where \mjeqn{r_B}{r_B} and \mjeqn{r_W}{r_W} are the average ranks
+between and within clusters respectively, and \mjeqn{N}{N} is the total
+ number of sites.
+Note that the function does not estimate the significance here, it only
+computes the statistic - for significance testing see
+\link[vegan:anosim]{vegan::anosim()}}.
+\item{\code{avg_endemism}: this metric is the average percentage of
+endemism in clusters as
+recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+\mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
+
+where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
+\mjeqn{S_i}{Si} is the number of
+species in cluster i, and K the maximum number of clusters.
 }
+\item{\code{tot_endemism}: this metric is the total endemism in the
+endemism in each cluster as
+recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+\mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
+
+where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
+only one cluster) and \mjeqn{C}{C} is number of non-endemics.
+}
+}
+
+\bold{Please read the note section about the following criteria.}
+
+Here we implemented a set of criteria commonly found in the literature or
+recommended in the bioregionalisation literature. We advocate to move
+beyond the "Search one optimal number of clusters" paradigm, and consider
+investigating "multiple optimal numbers of clusters". Using only one cut on
+a complex tree can overly simplify its information, and ignores the
+hierarchical nature of the tree. Using multiple cuts likely avoids this
+oversimplification bias and conveys more information about the hierarchical
+nature of the tree. See, for example, the reanalysis of Holt et al. (2013)
+by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
+and shallow cuts. Following this rationale, several of the criteria
+implemented here can/will return multiple "optimal" cuts.
 
 \bold{Criteria to find optimal number(s) of clusters}
 \itemize{
@@ -123,14 +180,22 @@ increments, or steps, in the evaluation metric. Therefore, this is relative
 to the distribution of increments in the evaluation metric over the tested
 \code{k}. Specify \code{step_quantile} as the quantile cutoff above which
 increments will be selected as most important (by default, 0.99, i.e. the
-top 1\% increments will be selected).
+top 1\% increments will be selected). Basically this method will emphasize the
+most important changes in the evaluation metric as a first approximation of
+where important cuts can be chosen.
 }
 \item{\code{cutoffs}:
 This method consists in specifying the cutoff value(s) in the evaluation
-metric from which the number(s) of clusters should be derived.
+metric from which the number(s) of clusters should be derived. This is the
+method used by \insertCite{Holt2013}{bioRgeo}. Note, however, that the
+cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only relevant
+at very large spatial scales, and lower cut-offs should be considered at
+finer spatial scales.
 }
 \item{\code{elbow}:
-This method consists in finding an elbow in the evaluation metric curve.
+This method consists in finding one elbow in the evaluation metric curve, as
+is commonly done in clustering analyses. The idea is to approximate the
+number of clusters at which the evaluation metric no longer increments.
 It is based on a fast numerical approximation of the elbow.
 The code we use here is based on code written by Alan Tseng in the
 KneeArrower R package \url{https://github.com/agentlans/KneeArrower},
@@ -152,7 +217,8 @@ Please note that finding the optimal number of clusters is a procedure
 which normally requires decisions from the users, and as such can hardly be
 fully automatized. Users are strongly advised to read the references
 indicated below to look for guidance on how to choose their optimal number(s)
-of clusters.
+of clusters. Consider the "optimal" numbers of clusters returned by this
+function as first approximation of the best numbers for your problematic.
 }
 \examples{
 simil <- spproject(vegemat, metric = "all")
@@ -167,10 +233,22 @@ tree1
 find_nclust_tree(tree1)
 
 find_nclust_tree(tree1, step_levels = 5)
+
+find_nclust_tree(tree1, eval_metric = c("tot_endemism",
+                                        "avg_endemism",
+                                        "pc_distance",
+                                        "anosim"),
+                 criterion = "step",
+                 sp_site_table = vegemat,
+                 k_max = 50) -> b
 find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "elbow")
 find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "mars")
 }
 \references{
+\insertRef{Castro-Insua2018}{bioRgeo}
+
+\insertRef{Ficetola2017}{bioRgeo}
+
 \insertRef{Holt2013}{bioRgeo}
 
 \insertRef{Kreft2010}{bioRgeo}

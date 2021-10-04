@@ -34,6 +34,7 @@ Imports:
     ggplot2,
     igraph,
     MASS,
+    mathjaxr,
     Matrix,
     Rcpp,
     RcppEigen,
@@ -43,7 +44,8 @@ Imports:
     stats,
     tidyr,
     utils
-RdMacros: Rdpack
+RdMacros: mathjaxr,
+          Rdpack
 LinkingTo: Rcpp,
            RcppEigen
 Suggests:
