@@ -7,8 +7,8 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
+#' @importFrom graphics plot
 #' @importFrom Rcpp evalCpp
-#' @importFrom RcppEigen fastLm
 #' @importFrom Rdpack c_Rd
 #' @useDynLib bioRgeo, .registration=TRUE
 #' @name bioRgeo

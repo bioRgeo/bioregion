@@ -11,16 +11,32 @@ reference:
   - bin
   - contingency_to_df
   - df_to_contingency
+  - generic_functions
 
 - title: Metrics
   desc: >
     description
   contents:
   - spproject
-  - distanceToSimilarity
-  - similarityToDistance
+  - distance_to_similarity
+  - similarity_to_distance
 
-- title: Clustering
+- titel: Clustering
+
+- subtitle: Hierarchical clustering
+  desc: >
+    description
+  contents:
+  - clustering_hierarchical
+  - cut_tree
+  - find_nclust_tree
+
+- subtitle: Non-hierarchical clustering
+  desc: >
+    description
+  contents:
+
+- sub   title: Network clustering
   desc: >
     description
   contents:

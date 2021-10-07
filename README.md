@@ -16,7 +16,7 @@ devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
 
 ## 2 Tutorial
 
-A tutorial vignette is available [here](https://jbferet.github.io/biodivMapR/articles/tutorial.html) and can be
+A tutorial vignette is available [here](https://biorgeo.github.io/bioRgeo/articles/bioRgeo.html) and can be
 visualised with the following command line:
 
 ``` r
@@ -25,9 +25,9 @@ vignette("bioRgeo", package = "bioRgeo")
 
 ## 3 Dependencies
 
-`bioRgeo` depends on `igraph`, `Matrix`, `RcppEigen`, `Rdpack`, `reshape2`, `stats`, `tidyr` and `utils`
+`bioRgeo` depends on `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `igraph`, `MASS`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `reshape2`, `rmarkdown`, `stats`, `tidyr` and `utils`
 
-## 4  Citation  
+## 4  Citation
 
-
+  
 
