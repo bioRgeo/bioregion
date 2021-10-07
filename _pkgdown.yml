@@ -21,7 +21,7 @@ reference:
   - distance_to_similarity
   - similarity_to_distance
 
-- titel: Clustering
+- title: Clustering
 
 - subtitle: Hierarchical clustering
   desc: >
@@ -36,7 +36,7 @@ reference:
     description
   contents:
 
-- sub   title: Network clustering
+- subtitle: Network clustering
   desc: >
     description
   contents:
