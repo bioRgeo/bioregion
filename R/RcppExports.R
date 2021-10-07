@@ -5,7 +5,3 @@ abc <- function(comat) {
     .Call(`_bioRgeo_abc`, comat)
 }
 
-prodmat <- function(A, B) {
-    .Call(`_bioRgeo_prodmat`, A, B)
-}
-
