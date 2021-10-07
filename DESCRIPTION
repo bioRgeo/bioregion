@@ -37,7 +37,6 @@ Imports:
     mathjaxr,
     Matrix,
     Rcpp,
-    RcppEigen,
     Rdpack,
     reshape2,
     rmarkdown,
@@ -46,8 +45,7 @@ Imports:
     utils
 RdMacros: mathjaxr,
           Rdpack
-LinkingTo: Rcpp,
-           RcppEigen
+LinkingTo: Rcpp
 Suggests:
     knitr,
     sf
