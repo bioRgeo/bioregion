@@ -32,7 +32,7 @@ Imports:
     earth,
     fastcluster,
     ggplot2,
-    igraph,
+    igraph, 
     MASS,
     mathjaxr,
     Matrix,
@@ -47,8 +47,7 @@ RdMacros: mathjaxr,
           Rdpack
 LinkingTo: Rcpp
 Suggests:
-    knitr,
-    sf
+    knitr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 URL: https://github.com/bioRgeo/bioRgeo
