@@ -6,16 +6,13 @@ toc:
 reference:
 - title: Utils
   desc: >
-    description test
   contents:
   - bin
   - contingency_to_df
   - df_to_contingency
-  - generic_functions
 
 - title: Metrics
   desc: >
-    description
   contents:
   - spproject
   - distance_to_similarity
@@ -25,7 +22,6 @@ reference:
 
 - subtitle: Hierarchical clustering
   desc: >
-    description
   contents:
   - clustering_hierarchical
   - cut_tree
@@ -33,12 +29,10 @@ reference:
 
 - subtitle: Non-hierarchical clustering
   desc: >
-    description
   contents:
 
 - subtitle: Network clustering
   desc: >
-    description
   contents:
   - infomap
   - louvain
@@ -46,7 +40,6 @@ reference:
 
 - title: Data
   desc: >
-    description
   contents:
   - vegedf
   - vegemat
