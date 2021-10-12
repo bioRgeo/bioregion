@@ -13,7 +13,7 @@ A \code{data.frame} with 460,878 rows and 3 columns:
 }
 }
 \source{
-<https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718>
+\href{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}(https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718)
 }
 \usage{
 vegedf
