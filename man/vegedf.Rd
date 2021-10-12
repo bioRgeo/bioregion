@@ -3,22 +3,22 @@
 \docType{data}
 \name{vegedf}
 \alias{vegedf}
-\title{Spatial distribution of Mediterrean Vegetation}
+\title{Spatial distribution of Mediterrean Vegetation (data.frame)}
 \format{
-A
+A \code{data.frame} with 460,878 rows and 3 columns:
 \describe{
-  \item{vegedf}{  }
-  \item{vegemat}{  }
-  \item{vegesp}{  }
+  \item{Site}{Unique site identifier (corresponding to the field ID of vegesp).}
+  \item{Species}{Unique species identifier.}
+  \item{W}{Species abundance}
 }
 }
 \source{
-<http://>
+<https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718>
 }
 \usage{
 vegedf
 }
 \description{
-A dataset containing the
+A dataset containing the abundance of 3,697 species in 715 sites.
 }
 \keyword{datasets}

@@ -3,22 +3,21 @@
 \docType{data}
 \name{vegesp}
 \alias{vegesp}
-\title{Spatial distribution of Mediterrean Vegetation}
+\title{Spatial distribution of Mediterrean Vegetation (spatial grid)}
 \format{
 A
 \describe{
-  \item{vegedf}{  }
-  \item{vegemat}{  }
-  \item{vegesp}{  }
+  \item{ID}{Unique site identifier.}
+  \item{geometry}{Geometry of the site.}
 }
 }
 \source{
-<http://>
+<https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718>
 }
 \usage{
 vegesp
 }
 \description{
-A dataset containing the
+A dataset containing the geometry of the 715 sites.
 }
 \keyword{datasets}

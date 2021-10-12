@@ -35,6 +35,7 @@ reference:
   desc: >
   contents:
   - infomap
+  - greedy
   - louvain
   - oslom
 

@@ -3,22 +3,18 @@
 \docType{data}
 \name{vegemat}
 \alias{vegemat}
-\title{Spatial distribution of Mediterrean Vegetation}
+\title{Spatial distribution of Mediterrean Vegetation (co-occurence matrix)}
 \format{
-A
-\describe{
-  \item{vegedf}{  }
-  \item{vegemat}{  }
-  \item{vegesp}{  }
-}
+A co-occurence \code{matrix} with sites as rows and species as columns. Each element of the matrix
+represents the abundance of the species in the site.
 }
 \source{
-<http://>
+<https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718>
 }
 \usage{
 vegemat
 }
 \description{
-A dataset containing the
+A dataset containing the abundance of each of the 3,697 species in each of the 715 sites.
 }
 \keyword{datasets}
