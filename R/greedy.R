@@ -7,7 +7,7 @@
 #' @param weight a boolean indicating if the weights should be considered if there is a third column
 #' @export
 #' @details
-#' This function is based on the fast greedy modularity optimization algorithm (\insertCite{Clauzet2004}{bioRgeo})
+#' This function is based on the fast greedy modularity optimization algorithm (\insertCite{Clauset2004}{bioRgeo})
 #' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
 #' (\link[igraph]{cluster_fast_greedy}).
 #'
@@ -26,7 +26,7 @@
 #' net=spproject(comat,metric="Simpson")
 #' com=greedy(net)
 #' @references
-#' \insertRef{Clauzet2004}{bioRgeo}
+#' \insertRef{Clauset2004}{bioRgeo}
 #' @export
 greedy <- function(net, weight = TRUE){
 

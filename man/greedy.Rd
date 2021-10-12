@@ -19,7 +19,7 @@ A \code{data.frame} providing one community by node.
 This function finds communities in a (un)weighted undirected network via greedy optimization of modularity.
 }
 \details{
-This function is based on the fast greedy modularity optimization algorithm (\insertCite{Clauzet2004}{bioRgeo})
+This function is based on the fast greedy modularity optimization algorithm (\insertCite{Clauset2004}{bioRgeo})
 as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
 (\link[igraph]{cluster_fast_greedy}).
 }
@@ -32,7 +32,7 @@ net=spproject(comat,metric="Simpson")
 com=greedy(net)
 }
 \references{
-\insertRef{Clauzet2004}{bioRgeo}
+\insertRef{Clauset2004}{bioRgeo}
 }
 \seealso{
 \link{infomap}, \link{oslom}
