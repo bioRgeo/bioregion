@@ -21,13 +21,20 @@ tab=vegedf
 mat=vegemat
 G=vegesp
 
-
-
-############################################################################################
 # bin
 #source("bioRgeo/R/bin.R")
-
 bin()
+
+############################################################################################
+
+
+# greedy
+#source("bioRgeo/R/greedy.R")
+
+net=spproject(mat,metric=c("Simpson"))
+
+com=greedy(net, weight=TRUE)
+
 
 
 # check results
