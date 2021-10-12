@@ -9,11 +9,11 @@ A \code{data.frame} with 460,878 rows and 3 columns:
 \describe{
   \item{Site}{Unique site identifier (corresponding to the field ID of vegesp).}
   \item{Species}{Unique species identifier.}
-  \item{W}{Species abundance}
+  \item{Abundance}{Species abundance}
 }
 }
 \source{
-\href{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}(https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718)
+\url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 }
 \usage{
 vegedf

@@ -9,7 +9,7 @@ A co-occurence \code{matrix} with sites as rows and species as columns. Each ele
 represents the abundance of the species in the site.
 }
 \source{
-\href{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}(https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718)
+\url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 }
 \usage{
 vegemat

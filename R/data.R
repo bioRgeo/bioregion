@@ -6,9 +6,9 @@
 #' \describe{
 #'   \item{Site}{Unique site identifier (corresponding to the field ID of vegesp).}
 #'   \item{Species}{Unique species identifier.}
-#'   \item{W}{Species abundance}
+#'   \item{Abundance}{Species abundance}
 #' }
-#' @source \href{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}(https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718)
+#' @source \url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 "vegedf"
 
 #' Spatial distribution of Mediterrean Vegetation (co-occurence matrix)
@@ -17,7 +17,7 @@
 #'
 #' @format A co-occurence \code{matrix} with sites as rows and species as columns. Each element of the matrix
 #' represents the abundance of the species in the site.
-#' @source \href{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}(https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718)
+#' @source \url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 "vegemat"
 
 #' Spatial distribution of Mediterrean Vegetation (spatial grid)
@@ -29,6 +29,6 @@
 #'   \item{ID}{Unique site identifier.}
 #'   \item{geometry}{Geometry of the site.}
 #' }
-#' @source \href{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}(https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718)
+#' @source \url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 "vegesp"
 
