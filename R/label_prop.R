@@ -28,7 +28,7 @@
 #' @references
 #' \insertRef{Raghavan2007}{bioRgeo}
 #' @export
-label_prop <- function(net, weight = TRUE, directed = FALSE){
+label_prop <- function(net, weight = TRUE){
 
   # Controls
   if(!is.data.frame(net)){

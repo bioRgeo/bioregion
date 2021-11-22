@@ -4,7 +4,7 @@
 \alias{label_prop}
 \title{Finding communities based on propagating labels}
 \usage{
-label_prop(net, weight = TRUE, directed = FALSE)
+label_prop(net, weight = TRUE)
 }
 \arguments{
 \item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
