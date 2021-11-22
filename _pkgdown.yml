@@ -36,6 +36,7 @@ reference:
   contents:
   - infomap
   - greedy
+  - label_prop
   - louvain
   - oslom
 

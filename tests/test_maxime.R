@@ -28,14 +28,20 @@ bin()
 ############################################################################################
 
 
+# label_prop
+#source("bioRgeo/R/label_prop.R")
+
+net=spproject(mat,metric=c("Simpson"))
+
+com=label_prop(net, weight=TRUE)
+
+
 # greedy
 #source("bioRgeo/R/greedy.R")
 
 net=spproject(mat,metric=c("Simpson"))
 
 com=greedy(net, weight=TRUE)
-
-
 
 # check results
 net=spproject(mat,metric=c("Simpson"))
