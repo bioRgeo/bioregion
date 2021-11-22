@@ -58,10 +58,6 @@ label_prop <- function(net, weight = TRUE){
     stop("weight must be a boolean")
   }
 
-  if(!is.logical(directed)){
-    stop("directed must be a boolean")
-  }
-
   # Prepare input
   idnode1=as.character(net[,1])
   idnode2=as.character(net[,2])
