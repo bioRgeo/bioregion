@@ -1,13 +1,13 @@
-#' Community structure via greedy optimization of modularity
+#' Community structure detection via greedy optimization of modularity
 #'
 #' This function finds communities in a (un)weighted undirected network via greedy optimization of modularity.
 #'
 #' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
+#' as undirected links between pair of nodes and an optional third column indicating the weight of the link
 #' @param weight a boolean indicating if the weights should be considered if there is a third column
 #' @export
 #' @details
-#' This function is based on the fast greedy modularity optimization algorithm (\insertCite{Clauset2004}{bioRgeo})
+#' This function is based on the fast greedy modularity optimization algorithm \insertCite{Clauset2004}{bioRgeo}
 #' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
 #' (\link[igraph]{cluster_fast_greedy}).
 #'
