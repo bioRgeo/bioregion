@@ -37,8 +37,10 @@ reference:
   - infomap
   - greedy
   - label_prop
+  - leading_eigen
   - louvain
   - oslom
+  - walktrap
 
 - title: Data
   desc: >

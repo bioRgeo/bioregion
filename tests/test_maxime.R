@@ -27,7 +27,12 @@ bin()
 
 ############################################################################################
 
+# walktrap
+#source("bioRgeo/R/walktrap.R")
 
+net=spproject(mat,metric=c("Simpson"))
+
+com=walktrap(net, weight=TRUE)
 
 # leading_eigen
 #source("bioRgeo/R/leading_eigen.R")
