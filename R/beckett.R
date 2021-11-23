@@ -88,7 +88,7 @@ beckett <- function(net, weight = TRUE, forceLPA = FALSE){
   comat=df_to_contingency(netemp, weight=weight)
 
   # Run algo
-  comtemp=bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1,-c(1,2)]
+    comtemp=bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1,-c(1,2)]
   comtemp=cbind(c(as.numeric(rownames(comat)),as.numeric(colnames(comat))),apply(comtemp,2,function(x) which(x>0)))
 
   com=data.frame(ID=idnode[,2], Com=0)
