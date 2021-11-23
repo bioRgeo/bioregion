@@ -107,7 +107,7 @@ infomap <- function(net, weight = TRUE, bipartite= FALSE, nbmod = 0, markovtime 
 
   if(weight & dim(net)[2]==3){
     if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
-      stop("The third column of df must be numeric")
+      stop("The third column of net must be numeric")
     }
   }
 
