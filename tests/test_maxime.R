@@ -28,13 +28,20 @@ bin()
 ############################################################################################
 
 
+
+# leading_eigen
+#source("bioRgeo/R/leading_eigen.R")
+
+net=spproject(mat,metric=c("Simpson"))
+
+com=leading_eigen(net, weight=TRUE)
+
 # label_prop
 #source("bioRgeo/R/label_prop.R")
 
 net=spproject(mat,metric=c("Simpson"))
 
 com=label_prop(net, weight=TRUE)
-
 
 # greedy
 #source("bioRgeo/R/greedy.R")
