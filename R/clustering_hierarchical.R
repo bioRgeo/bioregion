@@ -172,8 +172,9 @@ clustering_hierarchical <- function(distances,
   if(!inherits(distances, "dist"))
   {
     dist.obj <- .dfToDist(distances, metric = index)
-  }
+    #dist.obj2 <- (df_to_contingency(distances[,1:3], weight=TRUE, squared=TRUE))
 
+  }
 
   outputs$args <- list(index = index,
                        method = method,
