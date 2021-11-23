@@ -159,7 +159,7 @@ test=prodmat(matp,t(matp))
 test=abc(mat)
 
 # df_to_contingency
-source("bioRgeo/R/df_to_contingency.R")
+#source("bioRgeo/R/df_to_contingency.R")
 
 mat2=df_to_contingency(tab,weight=TRUE)
 mat2[1:10,1:10]

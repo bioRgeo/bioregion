@@ -4,7 +4,7 @@
 \alias{df_to_contingency}
 \title{Create a contingency table from a data.frame}
 \usage{
-df_to_contingency(df, weight = FALSE, squared = FALSE)
+df_to_contingency(df, weight = FALSE, squared = FALSE, symmetrical = FALSE)
 }
 \arguments{
 \item{df}{a two- or three-columns \code{data.frame} where
@@ -14,12 +14,15 @@ and an optional third column indicating the weight of the interaction}
 \item{weight}{a boolean indicating if the weight should be considered}
 
 \item{squared}{a boolean indicating if the output matrix should but squared (same objects in rows and columns)}
+
+\item{symmetrical}{a boolean indicating if the resulting matrix should be symmetrical (only if \code{squared = TRUE})}
 }
 \value{
 A \code{matrix} with the first objects (first column of \code{df}) as rows and
 the second objects (second column of \code{df}) as columns. Note that if \code{squared = TRUE} the rows and columns
 have the same number of elements corresponding to the concatenation of unique objects in  \code{df}'s first and second
-columns.
+columns. If \code{squared = TRUE} the matrix can be forced to be symetrical based on the upper triangular part of
+the matrix.
 }
 \description{
 This function creates a contingency table from a two- or three-columns \code{data.frame} where
