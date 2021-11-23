@@ -51,7 +51,7 @@ walktrap <- function(net, weight = TRUE, steps = 4){
 
   if(weight & dim(net)[2]==3){
     if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
-      stop("The third column of df must be numeric")
+      stop("The third column of net must be numeric")
     }
   }
 
