@@ -73,7 +73,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
 
   if(weight & dim(net)[2]==3){
     if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
-      stop("The third column of df must be numeric")
+      stop("The third column of net must be numeric")
     }
   }
 
