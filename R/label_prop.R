@@ -73,7 +73,7 @@ label_prop <- function(net, weight = TRUE){
   }
 
   # Run algo
-  net=igraph::graph_from_data_frame(netemp)
+  net=igraph::graph_from_data_frame(netemp, directed=FALSE)
   comtemp=igraph::cluster_label_prop(net)
   comtemp=cbind(as.numeric(comtemp$names),as.numeric(comtemp$membership))
 
