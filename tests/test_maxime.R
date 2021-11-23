@@ -28,6 +28,24 @@ bin()
 ############################################################################################
 
 
+# clustering_hierarchical
+source("bioRgeo/R/clustering_hierarchical.R")
+
+net=spproject(mat,metric=c("Simpson"))
+net=similarity_to_distance(net)
+
+
+
+com=clustering_hierarchical(net, n_clust = 5)
+
+
+
+
+
+# beckett
+#source("bioRgeo/R/beckett.R")
+
+com=beckett(tab, weight=TRUE, forceLPA=FALSE)
 
 
 # walktrap
@@ -141,7 +159,7 @@ test=prodmat(matp,t(matp))
 test=abc(mat)
 
 # df_to_contingency
-#source("bioRgeo/R/df_to_contingency.R")
+source("bioRgeo/R/df_to_contingency.R")
 
 mat2=df_to_contingency(tab,weight=TRUE)
 mat2[1:10,1:10]

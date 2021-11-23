@@ -9,11 +9,13 @@
 #' and an optional third column indicating the weight of the interaction
 #' @param weight a boolean indicating if the weight should be considered
 #' @param squared a boolean indicating if the output matrix should but squared (same objects in rows and columns)
+#' @param symmetrical a boolean indicating if the resulting matrix should be symmetrical (only if \code{squared = TRUE})
 #' @export
 #' @return A \code{matrix} with the first objects (first column of \code{df}) as rows and
 #' the second objects (second column of \code{df}) as columns. Note that if \code{squared = TRUE} the rows and columns
 #' have the same number of elements corresponding to the concatenation of unique objects in  \code{df}'s first and second
-#' columns.
+#' columns. If \code{squared = TRUE} the matrix can be forced to be symetrical based on the upper triangular part of
+#' the matrix.
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
@@ -26,7 +28,7 @@
 #'
 #' comat=df_to_contingency(df,weight=TRUE)
 #' @export
-df_to_contingency <- function(df, weight = FALSE, squared = FALSE){
+df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical = FALSE){
 
   # Controls
   if(!is.data.frame(df)){
@@ -44,6 +46,10 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE){
 
   if(!is.logical(squared)){
     stop("squared must be a boolean")
+  }
+
+  if(!is.logical(symmetrical)){
+    stop("symmetrical must be a boolean")
   }
 
   if(dim(df)[2]!=2 & dim(df)[2]!=3){
@@ -90,7 +96,7 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE){
 
     # Extract unique objects in both columns (should be the same at this stage)
     idobj1=df$Object1[!duplicated(df$Object1)]
-    idobj2=df$Object2[!duplicated(df$Object2)]
+    idobj2=idobj1
   }
 
   # Create contingency table from df
@@ -111,6 +117,11 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE){
   if(!squared){
     comat <- comat[rowSums(comat) > 0, ]
     comat <- comat[, colSums(comat) > 0]
+  }
+
+  # Force the matrix to be symmetrical if squared = TRUE
+  if(squared & symmetrical){
+    comat[base::lower.tri(comat)]=comat[base::upper.tri(comat)]
   }
 
   # Return the contingency matrix
