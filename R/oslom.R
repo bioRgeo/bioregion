@@ -111,7 +111,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
 
   if(weight & dim(net)[2]==3){
     if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
-      stop("The third column of df must be numeric")
+      stop("The third column of net must be numeric")
     }
   }
 
