@@ -9,7 +9,9 @@
 #' and an optional third column indicating the weight of the interaction
 #' @param weight a boolean indicating if the weight should be considered
 #' @param squared a boolean indicating if the output matrix should but squared (same objects in rows and columns)
-#' @param symmetrical a boolean indicating if the resulting matrix should be symmetrical (only if \code{squared = TRUE})
+#' @param symmetrical a boolean indicating if the resulting matrix should be symmetrical (only if \code{squared = TRUE}).
+#' Note that different weights associated with two opposite pairs already present in df will be preserved.
+#' @param value the value to assign to the pairs of objects not present in df (0 by default)
 #' @export
 #' @return A \code{matrix} with the first objects (first column of \code{df}) as rows and
 #' the second objects (second column of \code{df}) as columns. Note that if \code{squared = TRUE} the rows and columns
@@ -28,7 +30,7 @@
 #'
 #' comat=df_to_contingency(df,weight=TRUE)
 #' @export
-df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical = FALSE){
+df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical = FALSE, value = 0){
 
   # Controls
   if(!is.data.frame(df)){
@@ -50,6 +52,10 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical =
 
   if(!is.logical(symmetrical)){
     stop("symmetrical must be a boolean")
+  }
+
+  if(!squared & symmetrical){
+    stop("symmetrical only for squared matrix!")
   }
 
   if(dim(df)[2]!=2 & dim(df)[2]!=3){
@@ -81,6 +87,7 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical =
   if(weight){
     colnames(df)[3] <- "Weight"
   } else{
+    df=df[,1:2]
     df$Weight <- 1
   }
 
@@ -90,8 +97,8 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical =
     diff21=setdiff(idobj2,idobj1) # Objects contains in the second column but not in the first
 
     # Create a new dataframe containing all objects in both columns
-    obj12=data.frame(Object1=df$Object1[1], Object2=diff12, Weight=0)
-    obj21=data.frame(Object1=diff21, Object2=df$Object2[1], Weight=0)
+    obj12=data.frame(Object1=df$Object1[1], Object2=diff12, Weight=NA)
+    obj21=data.frame(Object1=diff21, Object2=df$Object2[1], Weight=NA)
     df=rbind(df,obj12,obj21)
 
     # Extract unique objects in both columns (should be the same at this stage)
@@ -110,19 +117,24 @@ df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical =
     out
   })
 
-  # Replace NAs with 0s
-  comat[is.na(comat)] <- 0
-
-  # Check for empty rows and columns if squared = FALSE
-  if(!squared){
-    comat <- comat[rowSums(comat) > 0, ]
-    comat <- comat[, colSums(comat) > 0]
-  }
-
   # Force the matrix to be symmetrical if squared = TRUE
   if(squared & symmetrical){
-    comat[base::lower.tri(comat)]=comat[base::upper.tri(comat)]
+    low=base::lower.tri(comat)
+    up=base::upper.tri(comat)
+    nacomat=is.na(comat)
+    temp=t(comat)
+    comat[low & nacomat]=temp[low & nacomat]
+    comat[up & nacomat]=temp[up & nacomat]
   }
+
+  # Replace NAs with 0s
+  comat[is.na(comat)] <- value
+
+  # Check for empty rows and columns if squared = FALSE
+  #if(!squared){
+  #  comat <- comat[rowSums(comat) > 0,]
+  #  comat <- comat[, colSums(comat) > 0]
+  #}
 
   # Return the contingency matrix
   return(comat)
