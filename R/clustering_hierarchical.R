@@ -171,8 +171,8 @@ clustering_hierarchical <- function(distances,
   # Checker les index en input, ou créer une boucle pour toutes les implémenter
   if(!inherits(distances, "dist"))
   {
-    dist.obj <- .dfToDist(distances, metric = index)
-    #dist.obj2 <- (df_to_contingency(distances[,1:3], weight=TRUE, squared=TRUE))
+      dist.obj <- .dfToDist(distances, metric = index)
+      #dist.obj <- as.dist(df_to_contingency(distances[,1:3], weight=TRUE, squared=TRUE, symmetrical=TRUE))
 
   }
 
@@ -268,7 +268,7 @@ clustering_hierarchical <- function(distances,
 
 
 # Internal functions for clustering_hierarchical
-.dfToDist <- function(distancedf, metric)
+  .dfToDist <- function(distancedf, metric)
 {
   if(inherits(distancedf, "bioRgeo.distance"))
   {

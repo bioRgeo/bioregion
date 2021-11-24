@@ -30,18 +30,9 @@ bin()
 
 # clustering_hierarchical
 source("bioRgeo/R/clustering_hierarchical.R")
-source("bioRgeo/R/df_to_contingency.R")
 
 net=spproject(mat,metric=c("Simpson"))
 net=similarity_to_distance(net)
-
-
-test=df_to_contingency(net,weight=TRUE,squared=TRUE)
-test[1:10,1:10]
-test=df_to_contingency(net,weight=TRUE,squared=TRUE,symmetrical=TRUE)
-test[1:10,1:10]
-
-
 
 com=clustering_hierarchical(net, n_clust = 5)
 
