@@ -8,6 +8,7 @@
 #' other columns being the similarity metrics.
 #' @export
 #' @note
+#' \loadmathjax
 #' The behaviour of this function changes depending on column names. Columns
 #' "Site1" and "Site2" are copied identically. If there are columns called
 #' "a", "b", "c", "A", "B", "C", they will also be copied identically.
@@ -15,12 +16,12 @@
 #' If a column is called "Euclidean", its distance will be calculated based
 #' on the following formula:
 #'
-#' \mjeqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
+#' \mjeqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
 #'
 #' Otherwise, all other columns will be transformed into distances with the
 #' following formula:
 #'
-#' \mjeqn{distance = 1 - similarity}
+#' \mjeqn{distance = 1 - similarity}{distance = 1 - similarity}
 #'
 #'
 #' @return A \code{data.frame} with additional class \code{bioRgeo.distance}
