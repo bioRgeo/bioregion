@@ -14,23 +14,24 @@
 #' but less greedy in memory.
 #' @export
 #' @details
+#' \loadmathjax
 #' With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
 #' and \code{c} species only present in the second site.
 #'
-#'\mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}
+#'\mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 #'
-#'\mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioRgeo}
+#'\mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}\insertCite{Baselga2012}{bioRgeo}
 #'
-#'\mjeqn{Sorensen = 1 - (b + c) / (2a + b + c)}
+#'\mjeqn{Sorensen = 1 - (b + c) / (2a + b + c)}{Sorensen = 1 - (b + c) / (2a + b + c)}
 #'
-#'\mjeqn{Simpson = 1 - min(b, c) / (a + min(b, c))}
+#'\mjeqn{Simpson = 1 - min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
 #'
 #' If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
 #' following equation:
 #'
-#'\mjeqn{Bray = 1 - (B + C) / (2A + B + C)}
+#'\mjeqn{Bray = 1 - (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
 #'
-#'\mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
+#'\mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
 #'
 #' with A the sum of the lesser values for common species shared by a pair of sites.
 #' B and C are the total number of specimens counted at both sites minus A.
@@ -41,7 +42,7 @@
 #'
 #' Euclidean computes the Euclidean similarity between each pair of site following this equation:
 #'
-#' \eqn{Euclidean = 1 / (1 + dij)}
+#' \mjeqn{Euclidean = 1 / (1 + dij)}{Euclidean = 1 / (1 + dij)}
 #'
 #' Where dij is the Euclidean distance between site i and site j in terms of species composition.
 #'
