@@ -26,12 +26,12 @@ The behaviour of this function changes depending on column names. Columns
 If a column is called "Euclidean", its distance will be calculated based
 on the following formula:
 
-\eqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
+\mjeqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
 
 Otherwise, all other columns will be transformed into distances with the
 following formula:
 
-\eqn{distance = 1 - similarity}
+\mjeqn{distance = 1 - similarity}
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1/1:1001), 5, 10)

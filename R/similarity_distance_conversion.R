@@ -15,12 +15,12 @@
 #' If a column is called "Euclidean", its distance will be calculated based
 #' on the following formula:
 #'
-#' \eqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
+#' \mjeqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
 #'
 #' Otherwise, all other columns will be transformed into distances with the
 #' following formula:
 #'
-#' \eqn{distance = 1 - similarity}
+#' \mjeqn{distance = 1 - similarity}
 #'
 #'
 #' @return A \code{data.frame} with additional class \code{bioRgeo.distance}
