@@ -17,7 +17,7 @@
 #' With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
 #' and \code{c} species only present in the second site.
 #'
-#'\eqn{Jaccard = 1 - (b + c) / (a + b + c)}
+#'\mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}
 #'
 #'\eqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioRgeo}
 #'
