@@ -144,7 +144,7 @@ endemism in clusters as
 recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 \mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
 
-where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
+ where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
 \mjeqn{S_i}{Si} is the number of
 species in cluster i, and K the maximum number of clusters.
 }
