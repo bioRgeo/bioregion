@@ -9,3 +9,4 @@
 ^inst/bin/
 ^\.github$
 ^hierarcluster.R
+^CITATION\.cff$

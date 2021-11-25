@@ -1,0 +1,61 @@
+# -----------------------------------------------------------
+# CITATION file created with {cffr} R package, v0.1.1
+# See also: https://docs.ropensci.org/cffr/
+# -----------------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "bioRgeo" in publications use:'
+type: software
+license: GPL-3.0-only
+title: 'bioRgeo: Bioregionalisation Methods in R'
+version: 0.1.0
+abstract: bioRgeo provides multiple methods to delineate bioregions. Use methods based
+  on projected or bipartite networks.
+authors:
+- family-names: Denelle
+  given-names: Pierre
+  email: pierre.denelle@gmail.com
+  orcid: https://orcid.org/0000-0001-5037-2281
+- family-names: Lenormand
+  given-names: Maxime
+  email: maxime.lenormand@inrae.fr
+  orcid: https://orcid.org/0000-0001-6362-3473
+- family-names: Leroy
+  given-names: Boris
+  email: boris.leroy@gmail.com
+  orcid: https://orcid.org/0000-0002-7686-4302
+preferred-citation:
+  type: manual
+  title: 'bioRgeo: Bioregionalisation Methods in R'
+  authors:
+  - family-names: Denelle
+    given-names: Pierre
+    email: pierre.denelle@gmail.com
+    orcid: https://orcid.org/0000-0001-5037-2281
+  - family-names: Lenormand
+    given-names: Maxime
+    email: maxime.lenormand@inrae.fr
+    orcid: https://orcid.org/0000-0001-6362-3473
+  - family-names: Leroy
+    given-names: Boris
+    email: boris.leroy@gmail.com
+    orcid: https://orcid.org/0000-0002-7686-4302
+  version: 0.1.0
+  abstract: bioRgeo provides multiple methods to delineate bioregions. Use methods
+    based on projected or bipartite networks.
+  repository-code: https://github.com/bioRgeo/bioRgeo
+  url: https://github.com/bioRgeo/bioRgeo
+  contact:
+  - family-names: Lenormand
+    given-names: Maxime
+    email: maxime.lenormand@inrae.fr
+    orcid: https://orcid.org/0000-0001-6362-3473
+  license: GPL-3.0-only
+  year: '2021'
+repository-code: https://github.com/bioRgeo/bioRgeo
+url: https://github.com/bioRgeo/bioRgeo
+contact:
+- family-names: Lenormand
+  given-names: Maxime
+  email: maxime.lenormand@inrae.fr
+  orcid: https://orcid.org/0000-0001-6362-3473
