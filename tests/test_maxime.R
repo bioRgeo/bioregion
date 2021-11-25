@@ -31,6 +31,20 @@ bin()
 # clustering_hierarchical
 source("bioRgeo/R/clustering_hierarchical.R")
 
+comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
+rownames(comat) <- paste0("Site",1:20)
+colnames(comat) <- paste0("Species",1:25)
+
+simil <- spproject(comat, metric = "all")
+distances <- similarity_to_distance(simil)
+
+# User-defined number of clusters
+tree1 <- clustering_hierarchical(distances,
+                                 n_clust = 5)
+
+
+
+
 net=spproject(mat,metric=c("Simpson"))
 net=similarity_to_distance(net)
 
