@@ -4,6 +4,13 @@
 
 ## 1. Package V1
 
+* bien se mettre d'accord sur les args
+
+* faire la vignette
+
+* écrire article blog sur bin()
+
+* homogénéiser la terminologie
 
 * Bien vérifier les packages importés (il y en aura à supprimer...)
 
@@ -15,7 +22,7 @@
 
 * Bien vérifier les formules de projection dans "spproject" 
 
-* renommer spproject
+* renommer spproject ?
 
 * remove prodmat ?
 
