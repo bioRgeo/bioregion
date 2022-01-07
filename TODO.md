@@ -4,6 +4,8 @@
 
 ## 1. Package V1
 
+### 1.1 Améliorations générales
+
 * bien se mettre d'accord sur les args
 
 * faire la vignette
@@ -18,21 +20,34 @@
 
 * Bien vérifier les potentiels problèmes NA, integer, numeric pour les présences et abondances
 
+* executables (Mac)
+
+* decide name and order column outputs algo community detection (+ description in Details)
+  
+* plant CBNmed ask permission 
+
+* Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
+
+
+### 1.2 Amélirations spécifiques dans des fonctions
+
+#### contingency_to_df
 * Se mettre d'accord sur les noms des deux colonnes de df dans contingency_to_df appelé "Object" pour l'instant
 
+#### spproject
 * Bien vérifier les formules de projection dans "spproject" 
 
 * renommer spproject ?
 
 * remove prodmat ?
 
-* Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
+* Ajouter transformation data.frame en matrix dans spproject plutôt qu'une erreur
 
-* executables (Mac)
+#### find_nclust_tree
 
-* decide name and order column outputs algo community detection (+ description in Details)
-  
-* plant CBNmed ask permission 
+* décider si MARS utile ou pas. Switcher vers segmented?
+
+* Voir si rounding nécessaire avec la nouvelle version de elbow
 
 ## 2. Package V2
 

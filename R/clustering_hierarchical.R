@@ -28,34 +28,30 @@
 #' should be obtained from all trials. The only option currently is
 #' \code{"best"}, which means the tree with the best cophenetic correlation
 #' coefficient will be chosen.
-#' @param n_clust an integer indicating the number of clusters to be obtained
-#' from the hierarchical tree. Should not be used at the same time as
-#' \code{cut_height} or \code{optim_method}
+#' @param n_clust an integer or a vector of integers indicating the number of
+#' clusters to be obtained from the hierarchical tree, or the output from
+#' \link{find_nclust_tree}. Should not be used at the same time as
+#' \code{cut_height}
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
-#' should be cut. Should not be used at the same time as \code{n_clust} or
-#' \code{optim_method}
+#' should be cut. Should not be used at the same time as \code{n_clust}
 #' @param find_h a boolean indicating if the height of cut should be found for
 #' the requested \code{n_clust}
 #' @param h_max a numeric indicating the maximum possible tree height for
 #' the chosen \code{index}
 #' @param h_min a numeric indicating the minimum possible height in the tree for
 #' the chosen \code{index}
-#' @param optim_method a character vector indicating the method to find the
-#' optimal number of clusters in the tree. Should not be used at the same time
-#' as \code{n_clust} or \code{cut_height}
 #' @export
 #' @details
 #' The default method for the hierarchical tree is \code{"average"}, i.e.
 #' UPGMA as it has been recommended as the best method to generate a tree
 #' from beta diversity distances \insertCite{Kreft2010}{bioRgeo}
 #'
-#' Clusters can be obtained by three methods:
+#' Clusters can be obtained by two methods:
 #' \itemize{
 #' \item{Specifying a desired number of clusters in \code{n_clust}}
-#' \item{Specifying one or several heights of cut in \code{cut_height}}
-#' \item{Specifying an optimization method in \code{optim_method} to find the
-#' optimal number of clusters}}
+#' \item{Specifying one or several heights of cut in \code{cut_height}}}
 #'
+#' To find an optimal number of clusters, see \code{find_nclust_tree}
 #'
 #'
 #' @return A \code{list} with additional class \code{bioRgeo.hierar.tree}
@@ -126,12 +122,13 @@ clustering_hierarchical <- function(distances,
                                     cut_height = NULL,
                                     find_h = TRUE,
                                     h_max = 1,
-                                    h_min = 0,
-                                    optim_method = "firstSEmax")
+                                    h_min = 0)
 {
   if(inherits(distances, "bioRgeo.similarity"))
   {
-    warning("distances seems to be a bioRgeo.similarity object. clusterHierarch should be applied on distances, not similarities. Consider using similarity_to_distance() before using clusterHierarch")
+    stop("distances seems to be a bioRgeo.similarity object.
+         clustering_hierarchical() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using clustering_hierarchical()")
   } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
   {
     if(!(index %in% colnames(distances)))
@@ -149,7 +146,16 @@ clustering_hierarchical <- function(distances,
       }
     } else
     {
-      stop("n_clust must be an integer determining the number of clusters.")
+      if(inherits(n_clust, "bioRgeo.nclust.tree"))
+      {
+        n_clust <- n_clust$optimal_nb_clusters
+      } else
+      {
+        stop("n_clust must be one of those:
+        * an integer determining the number of clusters
+        * a vector of integers determining the numbers of clusters for each cut
+        * the output from find_nclust_tree()")
+      }
     }
     if(!is.null(cut_height))
     {
@@ -185,8 +191,7 @@ clustering_hierarchical <- function(distances,
                        cut_height = cut_height,
                        find_h = find_h,
                        h_max = h_max,
-                       h_min = h_min,
-                       optim_method = optim_method
+                       h_min = h_min
   )
 
   outputs$dist.matrix <- dist.obj
@@ -255,12 +260,16 @@ clustering_hierarchical <- function(distances,
 
   class(outputs) <- append("bioRgeo.hierar.tree", class(outputs))
 
-  outputs <- cut_tree(outputs,
-                      n_clust = n_clust,
-                      cut_height = cut_height,
-                      find_h = find_h,
-                      h_max = h_max,
-                      h_min = h_min)
+  if(!is.null(n_clust))
+  {
+    outputs <- cut_tree(outputs,
+                        n_clust = n_clust,
+                        cut_height = cut_height,
+                        find_h = find_h,
+                        h_max = h_max,
+                        h_min = h_min)
+  }
+
 
 
   return(outputs)
@@ -268,14 +277,14 @@ clustering_hierarchical <- function(distances,
 
 
 # Internal functions for clustering_hierarchical
-  .dfToDist <- function(distancedf, metric)
+.dfToDist <- function(distancedf, metric)
 {
   if(inherits(distancedf, "bioRgeo.distance"))
   {
     other.cols <- colnames(distancedf)[-which(colnames(distancedf) %in% c("Site1", "Site2"))]
   } else
   {
-    stop("distancedf should be a distance data.frame of class bioRgeo.distance")
+    stop("distancedf should be a distance data.frame of class bioRgeo.distance.")
   }
 
   nodes <- unique(c(distancedf$Site1, distancedf$Site2))

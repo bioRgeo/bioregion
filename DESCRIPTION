@@ -22,7 +22,7 @@ Authors@R:
 Description: bioRgeo provides multiple methods to delineate bioregions.
              Use methods based on projected or bipartite networks.
 Depends:
-  R (>= 3.6.0)
+  R (>= 4.0.0)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

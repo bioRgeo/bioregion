@@ -6,8 +6,9 @@
 #' automatically return the height of cut for the chosen number(s) of clusters.
 #'
 #' @param tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
-#' @param n_clust an integer indicating the number of clusters to be obtained
-#' from the hierarchical tree. Should not be used at the same time as
+#' @param n_clust an integer or a vector of integers indicating the number of
+#' clusters to be obtained from the hierarchical tree, or the output from
+#' \link{find_nclust_tree}. Should not be used at the same time as
 #' \code{cut_height}
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
 #' should be cut. Should not be used at the same time as \code{n_clust} or
@@ -126,9 +127,16 @@ cut_tree <- function(tree,
       {
         stop("n_clust must be an integer determining the number of clusters.")
       }
+
+    } else if(inherits(n_clust, "bioRgeo.nclust.tree"))
+    {
+      n_clust <- n_clust$optimal_nb_clusters
     } else
     {
-      stop("n_clust must be an integer determining the number of clusters.")
+      stop("n_clust must be one of those:
+        * an integer determining the number of clusters
+        * a vector of integers determining the numbers of clusters for each cut
+        * the output from find_nclust_tree()")
     }
     if(!is.null(cut_height))
     {

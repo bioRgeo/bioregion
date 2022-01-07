@@ -15,8 +15,7 @@ clustering_hierarchical(
   cut_height = NULL,
   find_h = TRUE,
   h_max = 1,
-  h_min = 0,
-  optim_method = "firstSEmax"
+  h_min = 0
 )
 }
 \arguments{
@@ -45,13 +44,13 @@ should be obtained from all trials. The only option currently is
 \code{"best"}, which means the tree with the best cophenetic correlation
 coefficient will be chosen.}
 
-\item{n_clust}{an integer indicating the number of clusters to be obtained
-from the hierarchical tree. Should not be used at the same time as
-\code{cut_height} or \code{optim_method}}
+\item{n_clust}{an integer or a vector of integers indicating the number of
+clusters to be obtained from the hierarchical tree, or the output from
+\link{find_nclust_tree}. Should not be used at the same time as
+\code{cut_height}}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the tree
-should be cut. Should not be used at the same time as \code{n_clust} or
-\code{optim_method}}
+should be cut. Should not be used at the same time as \code{n_clust}}
 
 \item{find_h}{a boolean indicating if the height of cut should be found for
 the requested \code{n_clust}}
@@ -61,10 +60,6 @@ the chosen \code{index}}
 
 \item{h_min}{a numeric indicating the minimum possible height in the tree for
 the chosen \code{index}}
-
-\item{optim_method}{a character vector indicating the method to find the
-optimal number of clusters in the tree. Should not be used at the same time
-as \code{n_clust} or \code{cut_height}}
 }
 \value{
 A \code{list} with additional class \code{bioRgeo.hierar.tree}
@@ -101,12 +96,12 @@ The default method for the hierarchical tree is \code{"average"}, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
 from beta diversity distances \insertCite{Kreft2010}{bioRgeo}
 
-Clusters can be obtained by three methods:
+Clusters can be obtained by two methods:
 \itemize{
 \item{Specifying a desired number of clusters in \code{n_clust}}
-\item{Specifying one or several heights of cut in \code{cut_height}}
-\item{Specifying an optimization method in \code{optim_method} to find the
-optimal number of clusters}}
+\item{Specifying one or several heights of cut in \code{cut_height}}}
+
+To find an optimal number of clusters, see \code{find_nclust_tree}
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)

@@ -21,8 +21,9 @@ cut_tree(
 \arguments{
 \item{tree}{a \code{bioRgeo.hierar.tree} or a \code{hclust} object}
 
-\item{n_clust}{an integer indicating the number of clusters to be obtained
-from the hierarchical tree. Should not be used at the same time as
+\item{n_clust}{an integer or a vector of integers indicating the number of
+clusters to be obtained from the hierarchical tree, or the output from
+\link{find_nclust_tree}. Should not be used at the same time as
 \code{cut_height}}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the tree

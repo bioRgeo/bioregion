@@ -196,13 +196,12 @@ finer spatial scales.
 This method consists in finding one elbow in the evaluation metric curve, as
 is commonly done in clustering analyses. The idea is to approximate the
 number of clusters at which the evaluation metric no longer increments.
-It is based on a fast numerical approximation of the elbow.
-The code we use here is based on code written by Alan Tseng in the
-KneeArrower R package \url{https://github.com/agentlans/KneeArrower},
-and uses code from the
-\code{signal} R package written in Octave by Paul Kienzle, modified by
-Pascal Dupuis, and translated to R by Tom Short
-\url{https://cran.r-project.org/package=signal}}
+It is based on a fast method finding the maximum distance between the curve
+and a straight line linking the minimum and maximum number of points.
+The code we use here is based on code written by Esben Eickhardt available
+here \url{https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075}.
+The code has been modified to work on both increasing and decreasing
+evaluation metrics.}
 \item{\code{mars}:
 This method consists in fitting a mars model on the evaluation curve, and
 using it to identify all cutoffs at which there is no more increase in the
@@ -240,7 +239,7 @@ find_nclust_tree(tree1, eval_metric = c("tot_endemism",
                                         "anosim"),
                  criterion = "step",
                  sp_site_table = vegemat,
-                 k_max = 50) -> b
+                 k_max = 50)
 find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "elbow")
 find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "mars")
 }
