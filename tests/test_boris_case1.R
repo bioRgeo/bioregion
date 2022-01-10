@@ -45,3 +45,16 @@ plot(inv_hclust_cut5)
 inv_hclust_cut1 <- cut_tree(inv_hclust,
                             n_clust = c(14, 18, 22))
 plot(inv_hclust_cut1)
+
+site_loc <- merge(site_loc,
+                  inv_hclust_cut1$clusters,
+                  by.x = "station_id",
+                  by.y = "site")
+library(ggplot2)
+ggplot(site_loc) +
+  geom_point(aes(x = X, y = Y, col = k_22)) +
+  coord_fixed() +
+  scale_color_discrete(type = wesanderson::wes_palette(n = 22, name = 'Zissou1', type = 'continuous'))
+
+
+

@@ -177,8 +177,11 @@ clustering_hierarchical <- function(distances,
   # Checker les index en input, ou créer une boucle pour toutes les implémenter
   if(!inherits(distances, "dist"))
   {
-      dist.obj <- .dfToDist(distances, metric = index)
-      #dist.obj <- as.dist(df_to_contingency(distances[,1:3], weight=TRUE, squared=TRUE, symmetrical=TRUE))
+      # dist.obj <- .dfToDist(distances, metric = index)
+    dist.obj <- stats::as.dist(
+      df_to_contingency(distances[, c(1, 2,
+                                      which(colnames(distances) == index))],
+                        weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
   }
 
@@ -277,30 +280,30 @@ clustering_hierarchical <- function(distances,
 
 
 # Internal functions for clustering_hierarchical
-.dfToDist <- function(distancedf, metric)
-{
-  if(inherits(distancedf, "bioRgeo.distance"))
-  {
-    other.cols <- colnames(distancedf)[-which(colnames(distancedf) %in% c("Site1", "Site2"))]
-  } else
-  {
-    stop("distancedf should be a distance data.frame of class bioRgeo.distance.")
-  }
-
-  nodes <- unique(c(distancedf$Site1, distancedf$Site2))
-
-  distancedf <- rbind(data.frame(Site1 = nodes,
-                                 Site2 = nodes,
-                                 matrix(data = 0,
-                                        nrow = length(unique(c(distancedf$Site1, distancedf$Site2))),
-                                        ncol = length(other.cols),
-                                        dimnames = list(NULL,
-                                                        other.cols))),
-                      distancedf)
-  distancematrix <- stats::as.dist(stats::xtabs(distancedf[, metric] ~ distancedf$Site2 + distancedf$Site1))
-
-  return(distancematrix)
-}
+# .dfToDist <- function(distancedf, metric)
+# {
+#   if(inherits(distancedf, "bioRgeo.distance"))
+#   {
+#     other.cols <- colnames(distancedf)[-which(colnames(distancedf) %in% c("Site1", "Site2"))]
+#   } else
+#   {
+#     stop("distancedf should be a distance data.frame of class bioRgeo.distance.")
+#   }
+#
+#   nodes <- unique(c(distancedf$Site1, distancedf$Site2))
+#
+#   distancedf <- rbind(data.frame(Site1 = nodes,
+#                                  Site2 = nodes,
+#                                  matrix(data = 0,
+#                                         nrow = length(unique(c(distancedf$Site1, distancedf$Site2))),
+#                                         ncol = length(other.cols),
+#                                         dimnames = list(NULL,
+#                                                         other.cols))),
+#                       distancedf)
+#   distancematrix <- stats::as.dist(stats::xtabs(distancedf[, metric] ~ distancedf$Site2 + distancedf$Site1))
+#
+#   return(distancematrix)
+# }
 
 .randomizeDistance <- function(distmatrix)
 {
