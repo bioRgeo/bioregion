@@ -10,3 +10,6 @@
 ^\.github$
 ^hierarcluster.R
 ^CITATION\.cff$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
