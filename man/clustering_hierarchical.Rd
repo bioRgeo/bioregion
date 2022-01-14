@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering_hierarchical.R
 \name{clustering_hierarchical}
 \alias{clustering_hierarchical}
-\title{Hierarchical clustering from distances or beta-diversity}
+\title{Hierarchical clustering based distances or beta-diversity}
 \usage{
 clustering_hierarchical(
   distances,
@@ -101,7 +101,7 @@ Clusters can be obtained by two methods:
 \item{Specifying a desired number of clusters in \code{n_clust}}
 \item{Specifying one or several heights of cut in \code{cut_height}}}
 
-To find an optimal number of clusters, see \code{find_nclust_tree}
+To find an optimal number of clusters, see \code{\link{find_nclust_tree}}
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)

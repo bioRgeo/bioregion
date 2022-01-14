@@ -251,7 +251,11 @@ find_nclust_tree <- function(
       stop("If tree is a hclust object, then you must provide the original distance matrix in dist_matrix")
     } else if (inherits(dist, "bioRgeo.distance") | dist_index %in% colnames(dist))
     {
-      dist_object <- .dfToDist(dist, dist_index)
+      # dist_object <- .dfToDist(dist, dist_index)
+      dist_object <- stats::as.dist(
+        df_to_contingency(dist[, c(1, 2,
+                                        which(colnames(dist) == dist_index))],
+                          weight = TRUE, squared = TRUE, symmetrical = TRUE))
     } else if (!inherits(dist, "dist"))
     {
       stop("dist is not a distance matrix")
@@ -478,7 +482,8 @@ find_nclust_tree <- function(
     message(" - Elbow method")
 
     elbow <- .elbow_finder(evaluation_df$n_clusters,
-                         evaluation_df[, eval_metric[1]])
+                         evaluation_df[, eval_metric[1]],
+                         correct_decrease = TRUE)
     message(paste0("   * elbow found at ",
                    elbow[1], " clusters, rounding to ", round(elbow[1])))
 

@@ -27,7 +27,10 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    ape,
     bipartite,  
+    cluster,
+    dbscan,
     dendextend,
     dynamicTreeCut,
     earth,
@@ -37,6 +40,7 @@ Imports:
     MASS,
     mathjaxr,
     Matrix,
+    mclust,
     Rcpp,
     Rdpack,
     reshape2,

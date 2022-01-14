@@ -2,13 +2,15 @@
 # Credit to Jonas for original idea and Esben Eickhardt for R implementation
 # https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve
 
-.elbow_finder <- function(x_values, y_values) {
-
-  test_increase <- stats::lm(y_values ~ x_values)
-  if(stats::coef(test_increase)[2] > 0)
+.elbow_finder <- function(x_values, y_values, correct_decrease = FALSE) {
+  if(correct_decrease)
   {
-    y_values <- -y_values
+    test_increase <- stats::lm(y_values ~ x_values)
+    if (stats::coef(test_increase)[2] > 0) {
+      y_values <- -y_values
+    }
   }
+
 
   # Max values to create line
   max_x_x <- max(x_values)
@@ -22,17 +24,20 @@
 
   # Distance from point to line
   distances <- c()
-  for(i in 1:length(x_values)) {
-    distances <- c(distances, abs(stats::coef(fit)[2]*x_values[i] - y_values[i] +
-                                    stats::coef(fit)[1]) / sqrt(stats::coef(fit)[2]^2 + 1^2))
+  for (i in 1:length(x_values)) {
+    distances <- c(distances, abs(stats::coef(fit)[2] * x_values[i] - y_values[i] +
+      stats::coef(fit)[1]) / sqrt(stats::coef(fit)[2]^2 + 1^2))
   }
 
   # Max distance point
   x_max_dist <- x_values[which.max(distances)]
   y_max_dist <- y_values[which.max(distances)]
-  if(stats::coef(test_increase)[2] > 0)
+
+  if(correct_decrease)
   {
-    y_max_dist <- -y_max_dist
+    if (stats::coef(test_increase)[2] > 0) {
+      y_max_dist <- -y_max_dist
+    }
   }
 
   return(c(x_max_dist, y_max_dist))

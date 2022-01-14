@@ -43,11 +43,23 @@
 
 * Ajouter transformation data.frame en matrix dans spproject plutôt qu'une erreur
 
+#### clustering_nonhierarchical
+
+* Ajouter une recherche le nombre optimal de clusters
+
+#### clustering_hierarchical
+
+* Ajouter l'algorithme `diana` ?
+
 #### find_nclust_tree
 
 * décider si MARS utile ou pas. Switcher vers segmented?
 
 * Voir si rounding nécessaire avec la nouvelle version de elbow
+
+* Implémenter la parallélisation de la recherche de clusters 
+
+* Fusionner le hiérarchique et le non hiérarchique dans cette fonction ?
 
 ## 2. Package V2
 

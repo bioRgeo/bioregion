@@ -1,4 +1,4 @@
-#' Hierarchical clustering from distances or beta-diversity
+#' Hierarchical clustering based distances or beta-diversity
 #'
 #' This function generates a hierarchical tree from a distance (beta-diversity)
 #'  \code{data.frame},
@@ -51,7 +51,7 @@
 #' \item{Specifying a desired number of clusters in \code{n_clust}}
 #' \item{Specifying one or several heights of cut in \code{cut_height}}}
 #'
-#' To find an optimal number of clusters, see \code{find_nclust_tree}
+#' To find an optimal number of clusters, see \code{\link{find_nclust_tree}}
 #'
 #'
 #' @return A \code{list} with additional class \code{bioRgeo.hierar.tree}
