@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 abc <- function(comat) {
-    .Call(`_bioRgeo_abc`, comat)
+    .Call('_bioRgeo_abc', PACKAGE = 'bioRgeo', comat)
 }
 
