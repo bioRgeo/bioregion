@@ -12,4 +12,5 @@
 #' @importFrom Rdpack c_Rd
 #' @useDynLib bioRgeo, .registration=TRUE
 #' @name bioRgeo
+#' @noRd
 NULL
