@@ -25,7 +25,7 @@ vignette("bioRgeo", package = "bioRgeo")
 
 ## 3 Dependencies
 
-`bioRgeo` depends on `bipartite`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `igraph`, `MASS`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `reshape2`, `rmarkdown`, `stats`, `tidyr` and `utils`
+`bioRgeo` depends on `ape`, `bipartite`, `dbscan`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `igraph`, `MASS`, `mathjaxr`, `Matrix`, `mclust`, `Rcpp`, `Rdpack`, `reshape2`, `rmarkdown`, `stats`, `tidyr` and `utils`
 
 ## 4  Citation
 

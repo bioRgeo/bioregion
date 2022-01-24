@@ -2,3 +2,53 @@ url: ~
 template:
   bootstrap: 5
 
+toc:
+  depth: 1
+
+reference:
+- title: Utils
+  desc: >
+  contents:
+  - bin
+  - contingency_to_df
+  - df_to_contingency
+
+- title: Metrics
+  desc: >
+  contents:
+  - spproject
+  - distance_to_similarity
+  - similarity_to_distance
+
+- title: Clustering
+
+- subtitle: Hierarchical clustering
+  desc: >
+  contents:
+  - clustering_hierarchical
+  - cut_tree
+  - find_nclust_tree
+
+- subtitle: Non-hierarchical clustering
+  desc: >
+  contents:
+  - clustering_nonhierarchical
+
+- subtitle: Network clustering
+  desc: >
+  contents:
+  - beckett
+  - infomap
+  - greedy
+  - label_prop
+  - leading_eigen
+  - louvain
+  - oslom
+  - walktrap
+
+- title: Data
+  desc: >
+  contents:
+  - vegedf
+  - vegemat
+  - vegesp
