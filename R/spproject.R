@@ -167,6 +167,13 @@ spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodm
     }
 
     # Compute metrics based on abc
+    if("abc" %in% metric){
+      res$a=abcp$a
+      res$b=abcp$b
+      res$c=abcp$c
+    }
+
+    # Compute metrics based on abc
     if("Jaccard" %in% metric){
       res$Jaccard = 1 - (abcp$b+abcp$c)/(abcp$a+abcp$b+abcp$c)
     }
@@ -199,6 +206,12 @@ spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodm
     # Update res if NULL
     if(is.null(res)){
       res=abca[,1:2]
+    }
+
+    if("ABC" %in% metric){
+      res$A=abca$A
+      res$B=abca$B
+      res$C=abca$C
     }
 
     # Compute metrics based on ABC
