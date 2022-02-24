@@ -28,6 +28,8 @@
 
 * Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
 
+* vérifier les NAs, négatif et 0 pour les réseaux
+
 
 ### 1.2 Amélirations spécifiques dans des fonctions
 
