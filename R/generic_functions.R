@@ -1,4 +1,21 @@
 #' @export
+#' @method print bioRgeo.nonhierar.cluster
+print.bioRgeo.nonhierar.cluster <- function(x, ...)
+{
+  cat("Non-hierarchical clustering based on distances between sites\n")
+  cat(" - Number of sites: ", attr(x$dist.matrix, "Size"), "\n")
+  cat(" - Clustering method(s): ", x$args$method, "\n")
+  cat(" - Name of distance column used: ", x$args$index, "\n")
+  cat(" - Number of clusters: ",
+      ifelse(length(x$args$n_clust),
+             paste0(x$args$n_clust, " clusters (user-defined)"),
+             paste0("NA", " clusters (determined with the ",
+                    x$args$nclust_find_method,
+                    " method)")))
+}
+
+
+#' @export
 #' @method print bioRgeo.nclust.tree
 print.bioRgeo.nclust.tree <- function(x, ...)
 {

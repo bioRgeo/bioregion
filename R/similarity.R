@@ -60,17 +60,17 @@
 #' rownames(comat) <- paste0("Site",1:5)
 #' colnames(comat) <- paste0("Species",1:10)
 #'
-#' simil <- spproject(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+#' simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #' simil
 #'
-#' simil <- spproject(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
+#' simil <- similarity(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
 #' simil
 #'
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
-spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat"){
+similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat"){
 
   # list of metrics based on abc
   lsmetricabc=c("abc","Jaccard","Jaccardturn","Sorensen","Simpson")
@@ -142,10 +142,10 @@ spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodm
       rownames(abcp)=siteid
       colnames(abcp)=siteid
 
-      # Create a data.frame from the matrix with contingency_to_df (little trick to deal with 0s)
+      # Create a data.frame from the matrix with mat_to_net (little trick to deal with 0s)
       abcp[abcp==0]=-1
       abcp[lower.tri(abcp, diag=TRUE)]=0
-      abcp=contingency_to_df(abcp, weight=TRUE, remove_absent_objects = TRUE)
+      abcp=mat_to_net(abcp, weight=TRUE, remove_absent_objects = TRUE)
       colnames(abcp)=c("Site1","Site2","a")
       abcp[abcp[,3]==-1,3]=0
 
@@ -233,7 +233,7 @@ spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodm
     colnames(eucl)=siteid
     eucl[eucl==0]=-1
     eucl[lower.tri(eucl, diag=TRUE)]=0
-    eucl=contingency_to_df(eucl, weight=TRUE, remove_absent_objects = TRUE)
+    eucl=mat_to_net(eucl, weight=TRUE, remove_absent_objects = TRUE)
     colnames(eucl)=c("Site1","Site2","Euclidean")
     eucl[eucl[,3]==-1,3]=0
 

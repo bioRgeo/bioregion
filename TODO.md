@@ -16,7 +16,7 @@
 
 * Bien vérifier les packages importés (il y en aura à supprimer...)
 
-* Bien vérifier les potentiels problèmes character, numeric, factor pour les sites/species des data.frame (df_to_contingency et contingency_to_df)  
+* Bien vérifier les potentiels problèmes character, numeric, factor pour les sites/species des data.frame (net_to_mat et mat_to_net)  
 
 * Bien vérifier les potentiels problèmes NA, integer, numeric pour les présences et abondances
 
@@ -33,8 +33,8 @@
 
 ### 1.2 Amélirations spécifiques dans des fonctions
 
-#### contingency_to_df
-* Se mettre d'accord sur les noms des deux colonnes de df dans contingency_to_df appelé "Object" pour l'instant
+#### mat_to_net
+* Se mettre d'accord sur les noms des deux colonnes de df dans mat_to_net appelé "Object" pour l'instant
 
 #### spproject
 * Bien vérifier les formules de projection dans "spproject" 
@@ -52,6 +52,10 @@
 #### clustering_hierarchical
 
 * Ajouter l'algorithme `diana` ?
+
+* Vérifier arguments en entrée standard
+
+* 
 
 #### find_nclust_tree
 

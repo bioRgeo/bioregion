@@ -7,7 +7,7 @@
 #' implements randomization of the distance matrix to generate the tree, with
 #' a selection method based on the optimal cophenetic correlation coefficient.
 #' Typically, the distance \code{data.frame} is a \code{bioRgeo.distance} object
-#' obtained by running \code{spproject} and then \code{similarity_to_distance}.
+#' obtained by running \code{similarity} and then \code{similarity_to_distance}.
 #'
 #' @param distances the output object from \code{\link{similarity_to_distance}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
@@ -85,7 +85,7 @@
 #' rownames(comat) <- paste0("Site",1:20)
 #' colnames(comat) <- paste0("Species",1:25)
 #'
-#' simil <- spproject(comat, metric = "all")
+#' simil <- similarity(comat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters
@@ -129,11 +129,18 @@ clustering_hierarchical <- function(distances,
     stop("distances seems to be a bioRgeo.similarity object.
          clustering_hierarchical() should be applied on distances, not similarities.
          Use similarity_to_distance() before using clustering_hierarchical()")
+
   } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
   {
     if(!(index %in% colnames(distances)))
     {
       stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+    }
+  } else if(inherits(distances, "bioRgeo.distance"))
+  {
+    if(!(index %in% colnames(distances)))
+    {
+      stop("Argument index should be one of the column names of distance")
     }
   }
 
@@ -179,7 +186,7 @@ clustering_hierarchical <- function(distances,
   {
       # dist.obj <- .dfToDist(distances, metric = index)
     dist.obj <- stats::as.dist(
-      df_to_contingency(distances[, c(1, 2,
+      net_to_mat(distances[, c(1, 2,
                                       which(colnames(distances) == index))],
                         weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
@@ -263,7 +270,7 @@ clustering_hierarchical <- function(distances,
 
   class(outputs) <- append("bioRgeo.hierar.tree", class(outputs))
 
-  if(!is.null(n_clust))
+  if(any(!is.null(n_clust) | !is.null(cut_height)))
   {
     outputs <- cut_tree(outputs,
                         n_clust = n_clust,
@@ -272,7 +279,6 @@ clustering_hierarchical <- function(distances,
                         h_max = h_max,
                         h_min = h_min)
   }
-
 
 
   return(outputs)

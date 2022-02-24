@@ -3,7 +3,7 @@
 #' This function converts a data.frame of similarity indices between sites to
 #'  distance indices (= beta diversity).
 #'
-#' @param similaritydata the output object from \code{\link{spproject}} or a
+#' @param similaritydata the output object from \code{\link{similarity}} or a
 #' \code{data.frame} with the first columns called "Site1" and "Site2", and the
 #' other columns being the similarity metrics.
 #' @export
@@ -36,7 +36,7 @@
 #' rownames(comat) <- paste0("Site",1:5)
 #' colnames(comat) <- paste0("Species",1:10)
 #'
-#' simil <- spproject(comat, metric = "all")
+#' simil <- similarity(comat, metric = "all")
 #' simil
 #'
 #' distances <- similarity_to_distance(simil)
@@ -115,7 +115,7 @@ similarity_to_distance <- function(similaritydata)
 #' rownames(comat) <- paste0("Site",1:5)
 #' colnames(comat) <- paste0("Species",1:10)
 #'
-#' simil <- spproject(comat, metric = "all")
+#' simil <- similarity(comat, metric = "all")
 #' simil
 #'
 #' distances <- similarity_to_distance(simil)

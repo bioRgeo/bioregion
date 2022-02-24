@@ -22,15 +22,15 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{contingency_to_df}
+#' @seealso \link{mat_to_net}
 #' @examples
 #' df <- data.frame(Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
 #' Species = c("a", "b", "a", "c", "d", "b", "d"),
 #' Weight = c(10, 100, 1, 20, 50, 10, 20))
 #'
-#' comat=df_to_contingency(df,weight=TRUE)
+#' comat=net_to_mat(df,weight=TRUE)
 #' @export
-df_to_contingency <- function(df, weight = FALSE, squared = FALSE, symmetrical = FALSE, value = 0){
+net_to_mat <- function(df, weight = FALSE, squared = FALSE, symmetrical = FALSE, value = 0){
 
   # Controls
   if(!is.data.frame(df)){

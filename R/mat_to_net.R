@@ -16,16 +16,16 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{df_to_contingency}
+#' @seealso \link{net_to_mat}
 #'
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)
 #' colnames(comat)=paste0("Species",1:10)
 #'
-#' df=contingency_to_df(comat,weight=TRUE)
+#' df=mat_to_net(comat,weight=TRUE)
 #' @export
-contingency_to_df <- function(comat, weight = FALSE, remove_absent_objects = TRUE){
+mat_to_net <- function(comat, weight = FALSE, remove_absent_objects = TRUE){
 
   # Controls
   if(!is.matrix(comat)){

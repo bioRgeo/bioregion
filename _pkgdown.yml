@@ -10,13 +10,13 @@ reference:
   desc: >
   contents:
   - bin
-  - contingency_to_df
-  - df_to_contingency
+  - mat_to_net
+  - net_to_mat
 
 - title: Metrics
   desc: >
   contents:
-  - spproject
+  - similarity
   - distance_to_similarity
   - similarity_to_distance
 

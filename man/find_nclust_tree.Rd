@@ -220,7 +220,7 @@ of clusters. Consider the "optimal" numbers of clusters returned by this
 function as first approximation of the best numbers for your problematic.
 }
 \examples{
-simil <- spproject(vegemat, metric = "all")
+simil <- similarity(vegemat, metric = "all")
 distances <- similarity_to_distance(simil)
 
 # User-defined number of clusters

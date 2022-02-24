@@ -89,7 +89,7 @@ and can get clusters from the tree if requested by the user. The function
 implements randomization of the distance matrix to generate the tree, with
 a selection method based on the optimal cophenetic correlation coefficient.
 Typically, the distance \code{data.frame} is a \code{bioRgeo.distance} object
-obtained by running \code{spproject} and then \code{similarity_to_distance}.
+obtained by running \code{similarity} and then \code{similarity_to_distance}.
 }
 \details{
 The default method for the hierarchical tree is \code{"average"}, i.e.
@@ -108,7 +108,7 @@ comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20,
 rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
 
-simil <- spproject(comat, metric = "all")
+simil <- similarity(comat, metric = "all")
 distances <- similarity_to_distance(simil)
 
 # User-defined number of clusters

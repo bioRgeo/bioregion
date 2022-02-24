@@ -7,7 +7,7 @@
 similarity_to_distance(similaritydata)
 }
 \arguments{
-\item{similaritydata}{the output object from \code{\link{spproject}} or a
+\item{similaritydata}{the output object from \code{\link{similarity}} or a
 \code{data.frame} with the first columns called "Site1" and "Site2", and the
 other columns being the similarity metrics.}
 }
@@ -39,7 +39,7 @@ comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1/1:1001), 5, 1
 rownames(comat) <- paste0("Site",1:5)
 colnames(comat) <- paste0("Species",1:10)
 
-simil <- spproject(comat, metric = "all")
+simil <- similarity(comat, metric = "all")
 simil
 
 distances <- similarity_to_distance(simil)

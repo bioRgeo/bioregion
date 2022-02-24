@@ -80,7 +80,7 @@ comat=matrix(sample(1000,50),5,10)
 rownames(comat)=paste0("Site",1:5)
 colnames(comat)=paste0("Species",1:10)
 
-net=spproject(comat,metric="Simpson")
+net=similarity(comat,metric="Simpson")
 #com=oslom(net) # run bin() to use this function
 }
 \references{

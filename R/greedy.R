@@ -23,7 +23,7 @@
 #' rownames(comat)=paste0("Site",1:5)
 #' colnames(comat)=paste0("Species",1:10)
 #'
-#' net=spproject(comat,metric="Simpson")
+#' net=similarity(comat,metric="Simpson")
 #' com=greedy(net)
 #' @references
 #' \insertRef{Clauset2004}{bioRgeo}
