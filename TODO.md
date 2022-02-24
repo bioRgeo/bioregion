@@ -51,6 +51,10 @@
 
 * Ajouter l'algorithme `diana` ?
 
+* Vérifier arguments en entrée standard
+
+* 
+
 #### find_nclust_tree
 
 * décider si MARS utile ou pas. Switcher vers segmented?

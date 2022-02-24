@@ -129,11 +129,18 @@ clustering_hierarchical <- function(distances,
     stop("distances seems to be a bioRgeo.similarity object.
          clustering_hierarchical() should be applied on distances, not similarities.
          Use similarity_to_distance() before using clustering_hierarchical()")
+
   } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
   {
     if(!(index %in% colnames(distances)))
     {
       stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+    }
+  } else if(inherits(distances, "bioRgeo.distance"))
+  {
+    if(!(index %in% colnames(distances)))
+    {
+      stop("Argument index should be one of the column names of distance")
     }
   }
 
@@ -263,7 +270,7 @@ clustering_hierarchical <- function(distances,
 
   class(outputs) <- append("bioRgeo.hierar.tree", class(outputs))
 
-  if(!is.null(n_clust))
+  if(any(!is.null(n_clust) | !is.null(cut_height)))
   {
     outputs <- cut_tree(outputs,
                         n_clust = n_clust,
@@ -272,7 +279,6 @@ clustering_hierarchical <- function(distances,
                         h_max = h_max,
                         h_min = h_min)
   }
-
 
 
   return(outputs)

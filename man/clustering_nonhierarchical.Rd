@@ -133,3 +133,24 @@ k-means, dbscan, optics, and model-based clustering based on Gaussian
 
  }
 }
+\examples{
+comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
+rownames(comat) <- paste0("Site",1:20)
+colnames(comat) <- paste0("Species",1:25)
+
+simil <- spproject(comat, metric = "all")
+distances <- similarity_to_distance(simil)
+
+# User-defined number of clusters
+# clust1 <- clustering_nonhierarchical(distances,
+#                                    n_clust = 5,
+#                                     index = "Simpson")
+
+#  clust2 <- clustering_nonhierarchical(distances,
+#                                     method = c("pam", "kmeans", "dbscan",
+#                                                 "optics", "mclust"),
+#                                     n_clust = 5,
+#                                     index = "Simpson",
+#                                     dbscan_minPts = 5,
+#                                     dbscan_eps = 0.06)
+}

@@ -101,6 +101,25 @@
 #' @export
 #'
 #' @examples
+#' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
+#' rownames(comat) <- paste0("Site",1:20)
+#' colnames(comat) <- paste0("Species",1:25)
+#'
+#' simil <- spproject(comat, metric = "all")
+#' distances <- similarity_to_distance(simil)
+#'
+#' # User-defined number of clusters
+#' # clust1 <- clustering_nonhierarchical(distances,
+#' #                                    n_clust = 5,
+#' #                                     index = "Simpson")
+#'
+#' #  clust2 <- clustering_nonhierarchical(distances,
+#' #                                     method = c("pam", "kmeans", "dbscan",
+#' #                                                 "optics", "mclust"),
+#' #                                     n_clust = 5,
+#' #                                     index = "Simpson",
+#' #                                     dbscan_minPts = 5,
+#' #                                     dbscan_eps = 0.06)
 clustering_nonhierarchical <- function(distances,
                                        index = names(distances)[3],
                                        method = "pam",
@@ -118,23 +137,29 @@ clustering_nonhierarchical <- function(distances,
                                        )
 {
   if(!(all(method %in% c("pam", "kmeans", "dbscan",
-                         "gmm", "diana", "pam")))){
+                         "mclust", "optics")))){
     stop("The chosen clustering method is not available.
      Please chose among the followings:
-         'kmeans', 'meanshift', 'dbscan', 'gmm', 'diana' or
-         'pam'.")
+         'pam', 'kmeans', 'dbscan', 'optic', 'mclust'")
   }
 
   if(inherits(distances, "bioRgeo.similarity"))
   {
     stop("distances seems to be a bioRgeo.similarity object.
          clustering_hierarchical() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using clustering_nonhierarchical()")
+         Use similarity_to_distance() before using clustering_hierarchical()")
+
   } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
   {
     if(!(index %in% colnames(distances)))
     {
       stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+    }
+  } else if(inherits(distances, "bioRgeo.distance"))
+  {
+    if(!(index %in% colnames(distances)))
+    {
+      stop("Argument index should be one of the column names of distance")
     }
   }
 
@@ -174,15 +199,20 @@ clustering_nonhierarchical <- function(distances,
            to start k-means analysis.")
   }
 
+  # Unused arguments
   # if(!(kmeans_B %% 1 == 0)){
   #   stop("B must be an integer determining the number of Monte Carlo bootstrap
   #          samples.")
   # }
-
-  if(!(kmeans_Kmax %% 1 == 0)){
-    stop("K.max must be a numeric determining the maximum number of clusters
-           to consider.")
-  }
+  # if(!(kmeans_Kmax %% 1 == 0)){
+  #   stop("K.max must be a numeric determining the maximum number of clusters
+  #          to consider.")
+  # }
+  #   if (kmeans_Kmax > length(labels(dist.obj))) {
+  #     warning("kmeans_Kmax should not be superior to the number of sites,
+  # reducing to number of sites.")
+  #     kmeans_Kmax <- length(labels(dist.obj))
+  #   }
 
 
   outputs <- list()
@@ -198,11 +228,6 @@ clustering_nonhierarchical <- function(distances,
 
   }
 
-  if (kmeans_Kmax > length(labels(dist.obj))) {
-    warning("kmeans_Kmax should not be superior to the number of sites,
-reducing to number of sites.")
-    kmeans_Kmax <- length(labels(dist.obj))
-  }
 
 
   # COMPLETER LES ARGUMENTS A LA FIN
@@ -320,6 +345,12 @@ reducing to number of sites.")
 
   if("optics" %in% method)
   {
+    if(is.null(dbscan_minPts))
+    {
+      # Using a default value of minPts if none provided by the user
+      dbscan_minPts <- log(length(labels(dist.obj)))
+    }
+
     outputs$clustering_algorithms$optics <- dbscan::optics(x = dist.obj,
                                               minPts = dbscan_minPts)
     outputs$clustering_algorithms$optics <-
@@ -333,6 +364,7 @@ reducing to number of sites.")
 
   if("mclust" %in% method)
   {
+    mclustBIC <- mclust::mclustBIC
     outputs$clustering_algorithms$mclust <-
       mclust::Mclust(dist.obj)
     outputs$clusters$mclust <-

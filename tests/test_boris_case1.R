@@ -13,7 +13,12 @@ dist_inv <- similarity_to_distance(similarity_inv)
 inv_hclust <- clustering_hierarchical(dist_inv)
 
 # Compute the tree and cut it with 12 clusters
-inv_hclust <- clustering_hierarchical(dist_inv, n_clust = 12)
+inv_hclust <- clustering_hierarchical(dist_inv,
+                                      cut_height = seq(0, 0.4, length = 50))
+
+cuts <- cut_tree(inv_hclust,
+                 cut_height = seq(0, 0.4, length = 50))
+
 
 plot(inv_hclust)
 
