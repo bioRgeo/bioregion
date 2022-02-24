@@ -16,7 +16,7 @@ reference:
 - title: Metrics
   desc: >
   contents:
-  - spproject
+  - similarity
   - distance_to_similarity
   - similarity_to_distance
 

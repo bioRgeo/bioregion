@@ -7,7 +7,7 @@ mat=vegemat
 G=vegesp
 
 
-simil <- spproject(vegemat, metric = "all")
+simil <- similarity(vegemat, metric = "all")
 
 # test generic output
 simil

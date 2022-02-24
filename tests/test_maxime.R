@@ -35,7 +35,7 @@ comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20,
 rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
 
-simil <- spproject(comat, metric = "all")
+simil <- similarity(comat, metric = "all")
 distances <- similarity_to_distance(simil)
 
 # User-defined number of clusters
@@ -45,7 +45,7 @@ tree1 <- clustering_hierarchical(distances,
 
 
 
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 net=similarity_to_distance(net)
 
 com=clustering_hierarchical(net, n_clust = 5)
@@ -63,33 +63,33 @@ com=beckett(tab, weight=TRUE, forceLPA=FALSE)
 # walktrap
 #source("bioRgeo/R/walktrap.R")
 
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 
 com=walktrap(net, weight=TRUE)
 
 # leading_eigen
 #source("bioRgeo/R/leading_eigen.R")
 
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 
 com=leading_eigen(net, weight=TRUE)
 
 # label_prop
 #source("bioRgeo/R/label_prop.R")
 
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 
 com=label_prop(net, weight=TRUE)
 
 # greedy
 #source("bioRgeo/R/greedy.R")
 
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 
 com=greedy(net, weight=TRUE)
 
 # check results
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 
 coml=louvain(net[net[,3]>0.5,], weight=TRUE, q=0, lang="Cpp")
 comi=infomap(net[net[,3]>0.5,], weight=TRUE, markovtime=1)
@@ -115,40 +115,40 @@ plot(sp)
 # louvain
 #source("bioRgeo/R/louvain.R")
 
-net=spproject(mat,metric=c("Simpson"))
+net=similarity(mat,metric=c("Simpson"))
 
 com=louvain(net, weight=TRUE, lang="all")
 
 # infomap
 #source("bioRgeo/R/infomap.R")
 
-net=spproject(mat,metric=c("Jaccard"))
+net=similarity(mat,metric=c("Jaccard"))
 
 com=infomap(net[net[,3]>0.5,])
 
 # oslom
 #source("bioRgeo/R/oslom.R")
 
-net=spproject(mat,metric=c("Sorensen"))
+net=similarity(mat,metric=c("Sorensen"))
 
 com=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
 
-# spproject
+# similarity
 #library(Rcpp)
 #library(Matrix)
 #sourceCpp("bioRgeo/src/abc.cpp")
-#source("bioRgeo/R/spproject.R")
+#source("bioRgeo/R/similarity.R")
 
-test=spproject(mat, metric=NULL, formula= c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)"))
+test=similarity(mat, metric=NULL, formula= c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)"))
 test[1:10,]
 
-test=spproject(mat,metric=c("abc","ABC"), method="loops")
+test=similarity(mat,metric=c("abc","ABC"), method="loops")
 test[1:10,]
-test=spproject(mat,metric=c("abc","ABC"))
+test=similarity(mat,metric=c("abc","ABC"))
 test[1:10,]
-test=spproject(mat,metric=c("abc","ABC","Euclidean"))
+test=similarity(mat,metric=c("abc","ABC","Euclidean"))
 test[1:10,]
-test=spproject(mat,metric=c("all"))
+test=similarity(mat,metric=c("all"))
 test[1:10,]
 
 sum(mat[1,])
