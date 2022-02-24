@@ -105,7 +105,7 @@
 #' rownames(comat) <- paste0("Site",1:20)
 #' colnames(comat) <- paste0("Species",1:25)
 #'
-#' simil <- spproject(comat, metric = "all")
+#' simil <- similarity(comat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters

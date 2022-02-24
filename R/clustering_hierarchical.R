@@ -7,7 +7,7 @@
 #' implements randomization of the distance matrix to generate the tree, with
 #' a selection method based on the optimal cophenetic correlation coefficient.
 #' Typically, the distance \code{data.frame} is a \code{bioRgeo.distance} object
-#' obtained by running \code{spproject} and then \code{similarity_to_distance}.
+#' obtained by running \code{similarity} and then \code{similarity_to_distance}.
 #'
 #' @param distances the output object from \code{\link{similarity_to_distance}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
@@ -85,7 +85,7 @@
 #' rownames(comat) <- paste0("Site",1:20)
 #' colnames(comat) <- paste0("Species",1:25)
 #'
-#' simil <- spproject(comat, metric = "all")
+#' simil <- similarity(comat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters

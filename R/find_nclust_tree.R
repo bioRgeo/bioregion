@@ -198,7 +198,7 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{clustering_hierarchical}
 #' @examples
-#' simil <- spproject(vegemat, metric = "all")
+#' simil <- similarity(vegemat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters

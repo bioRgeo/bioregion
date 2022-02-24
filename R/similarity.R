@@ -60,17 +60,17 @@
 #' rownames(comat) <- paste0("Site",1:5)
 #' colnames(comat) <- paste0("Species",1:10)
 #'
-#' simil <- spproject(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+#' simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #' simil
 #'
-#' simil <- spproject(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
+#' simil <- similarity(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
 #' simil
 #'
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
-spproject <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat"){
+similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat"){
 
   # list of metrics based on abc
   lsmetricabc=c("abc","Jaccard","Jaccardturn","Sorensen","Simpson")
