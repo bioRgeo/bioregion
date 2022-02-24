@@ -170,24 +170,24 @@ test=prodmat(matp,t(matp))
 
 test=abc(mat)
 
-# df_to_contingency
-#source("bioRgeo/R/df_to_contingency.R")
+# net_to_mat
+#source("bioRgeo/R/net_to_mat.R")
 
-mat2=df_to_contingency(tab,weight=TRUE)
+mat2=net_to_mat(tab,weight=TRUE)
 mat2[1:10,1:10]
-mat2=df_to_contingency(tab,weight=TRUE,squared=TRUE)
+mat2=net_to_mat(tab,weight=TRUE,squared=TRUE)
 mat2[1:10,1:10]
-mat2=df_to_contingency(tab,weight=FALSE)
+mat2=net_to_mat(tab,weight=FALSE)
 mat2[1:10,1:10]
 
-# contingency_to_df
-#source("bioRgeo/R/contingency_to_df.R")
+# mat_to_net
+#source("bioRgeo/R/mat_to_net.R")
 
-tab2=contingency_to_df(mat)
+tab2=mat_to_net(mat)
 tab2[1:10,]
-tab2=contingency_to_df(mat,weight=TRUE)
+tab2=mat_to_net(mat,weight=TRUE)
 tab2[1:10,]
-tab2=contingency_to_df(mat,weight=TRUE,remove_absent_objects=FALSE)
+tab2=mat_to_net(mat,weight=TRUE,remove_absent_objects=FALSE)
 tab2[1:10,]
 
 

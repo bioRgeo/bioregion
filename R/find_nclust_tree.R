@@ -253,7 +253,7 @@ find_nclust_tree <- function(
     {
       # dist_object <- .dfToDist(dist, dist_index)
       dist_object <- stats::as.dist(
-        df_to_contingency(dist[, c(1, 2,
+        net_to_mat(dist[, c(1, 2,
                                         which(colnames(dist) == dist_index))],
                           weight = TRUE, squared = TRUE, symmetrical = TRUE))
     } else if (!inherits(dist, "dist"))

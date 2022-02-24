@@ -85,7 +85,7 @@ beckett <- function(net, weight = TRUE, forceLPA = FALSE){
   }
 
   # Transform netemp into a contingency table
-  comat=df_to_contingency(netemp, weight=weight)
+  comat=net_to_mat(netemp, weight=weight)
 
   # Run algo
     comtemp=bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1,-c(1,2)]

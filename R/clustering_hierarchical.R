@@ -186,7 +186,7 @@ clustering_hierarchical <- function(distances,
   {
       # dist.obj <- .dfToDist(distances, metric = index)
     dist.obj <- stats::as.dist(
-      df_to_contingency(distances[, c(1, 2,
+      net_to_mat(distances[, c(1, 2,
                                       which(colnames(distances) == index))],
                         weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
