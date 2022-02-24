@@ -5,7 +5,7 @@
 #' and an optional third column indicating the weight of the interaction (if \code{weight = TRUE})
 #' from a contingency table (sites as rows and species as columns for example).
 #'
-#' @param comat a contingency table (i.e. \code{matrix})
+#' @param mat a contingency table (i.e. \code{matrix})
 #' @param weight a boolean indicating if the value are weights
 #' @param remove_absent_objects a boolean determining whether absent
 #' objects from the contingency table have to be removed from the output
@@ -19,55 +19,56 @@
 #' @seealso \link{net_to_mat}
 #'
 #' @examples
-#' comat=matrix(sample(1000,50),5,10)
-#' rownames(comat)=paste0("Site",1:5)
-#' colnames(comat)=paste0("Species",1:10)
+#' mat <- matrix(sample(1000, 50), 5, 10)
+#' rownames(mat) <- paste0("Site", 1:5)
+#' colnames(mat) <- paste0("Species", 1:10)
 #'
-#' df=mat_to_net(comat,weight=TRUE)
+#' net <- mat_to_net(mat, weight = TRUE)
 #' @export
-mat_to_net <- function(comat, weight = FALSE, remove_absent_objects = TRUE){
+mat_to_net <- function(mat, weight = FALSE, remove_absent_objects = TRUE) {
 
   # Controls
-  if(!is.matrix(comat)){
+  if (!is.matrix(mat)) {
     stop("Contingency table should be a matrix")
   }
 
-  sco=sum(is.na(comat))
-  if(sco>0){
+  sco <- sum(is.na(mat))
+  if (sco > 0) {
     stop("NA(s) detected in the contingency table")
   }
 
-  if(!is.logical(weight)){
+  if (!is.logical(weight)) {
     stop("weight must be a boolean")
   }
 
-  if(!is.logical(remove_absent_objects)){
+  if (!is.logical(remove_absent_objects)) {
     stop("remove_absent_objects must be a boolean")
   }
 
   # Conversion as data.frame
-  df <- reshape2::melt(comat)
-  colnames(df) <- c("Object1", "Object2", "Weight")
+  net <- reshape2::melt(mat)
+  colnames(net) <- c("Object1", "Object2", "Weight")
 
   # Remove interactions with weight equal 0
-  if(remove_absent_objects == TRUE){
-    df <- df[df$Weight != 0,]
+  if (remove_absent_objects == TRUE) {
+    net <- net[net$Weight != 0, ]
   }
 
   # Remove the weight column if weight is set to FALSE
-  if(!weight){
-    df=df[,-3]
+  if (!weight) {
+    net <- net[, -3]
   }
 
   # Reorder by Object 1 and 2
-  df$Object1=factor(df$Object1,levels=rownames(comat))
-  df$Object2=factor(df$Object2,levels=colnames(comat))
-  df=df[order(df$Object1,df$Object2),]
+  net$Object1 <- factor(net$Object1, levels = rownames(mat))
+  net$Object2 <- factor(net$Object2, levels = colnames(mat))
+  net <- net[order(net$Object1, net$Object2), ]
 
   # Transform the two first columns in character
-  df[,1]=as.character(df[,1])
-  df[,2]=as.character(df[,2])
+  net[, 1] <- as.character(net[, 1])
+  net[, 2] <- as.character(net[, 2])
 
   # Return the data.frame
-  return(df)
+  return(net)
+
 }
