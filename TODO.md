@@ -6,6 +6,10 @@
 
 ### 1.1 Améliorations générales
 
+* glossaire
+
+* see also
+
 * bien se mettre d'accord sur les args
 
 * faire la vignette
