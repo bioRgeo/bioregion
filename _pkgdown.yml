@@ -13,10 +13,11 @@ reference:
   - mat_to_net
   - net_to_mat
 
-- title: Metrics
+- title: Pairwise similarity and distance metrics
   desc: >
   contents:
   - similarity
+  - distance
   - distance_to_similarity
   - similarity_to_distance
 

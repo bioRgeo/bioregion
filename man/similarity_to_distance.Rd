@@ -2,7 +2,7 @@
 % Please edit documentation in R/similarity_distance_conversion.R
 \name{similarity_to_distance}
 \alias{similarity_to_distance}
-\title{Convert similarity indices to distance indices}
+\title{Convert similarity indices to distance metrics}
 \usage{
 similarity_to_distance(similaritydata)
 }
@@ -15,8 +15,8 @@ other columns being the similarity metrics.}
 A \code{data.frame} with additional class \code{bioRgeo.distance}
 }
 \description{
-This function converts a data.frame of similarity indices between sites to
- distance indices (= beta diversity).
+This function converts a data.frame of similarity metrics between sites to
+ distance metrics (= beta diversity).
 }
 \note{
 \loadmathjax
@@ -35,9 +35,9 @@ following formula:
 \mjeqn{distance = 1 - similarity}{distance = 1 - similarity}
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1/1:1001), 5, 10)
-rownames(comat) <- paste0("Site",1:5)
-colnames(comat) <- paste0("Species",1:10)
+comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1 / 1:1001), 5, 10)
+rownames(comat) <- paste0("Site", 1:5)
+colnames(comat) <- paste0("Species", 1:10)
 
 simil <- similarity(comat, metric = "all")
 simil
