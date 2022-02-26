@@ -9,7 +9,7 @@ reference:
 - title: Utils
   desc: >
   contents:
-  - bin
+  - install_binaries
   - mat_to_net
   - net_to_mat
 
