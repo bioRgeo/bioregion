@@ -46,7 +46,7 @@ in hierarchies)}
 
 \item{path_temp}{a string indicating the path to the temporary folder (see Details)}
 
-\item{binpath}{a string indicating the path to the bin folder (see \link{bin} and Details)}
+\item{binpath}{a string indicating the path to the bin folder (see \link{install_binaries} and Details)}
 }
 \value{
 A \code{data.frame} providing one or several modules (according to the chosen option(s)) for each node. If
@@ -61,18 +61,18 @@ This function finds communities in a (un)weighted (un)directed network based on 
 \details{
 OSLOM is a network community detection algorithm proposed in \insertCite{Lancichinetti2011}{bioRgeo} that
 finds statistically significant (overlapping) communities in (un)weighted and (un)directed networks. Since a node
-may belong to several communities we propose two methods to reassign the 'ovelapping' nodes randomly
+may belong to several communities we propose two methods to reassign the 'overlapping' nodes randomly
 \code{reassign = 'random'} or based on the closest candidate community \code{reassign = 'simil'}
-(only for weighted networks, in this case the closest candidite community is determined with the average similarity).
+(only for weighted networks, in this case the closest candidate community is determined with the average similarity).
 By default \code{reassign = 'no'} and all the information is provided.
 
 This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
-This function needs executables files to run. They can be installed with \link{bin}. If you set the path to
-the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
+This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
+the folder that will host the bin folder  manually while running \link{install_binaries} please make sure to set \code{binpath}
 accordingly.
 
 The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
-(folder "oslom_temp" in the workind directory by default). This temporary folder is removed by default
+(folder "oslom_temp" in the working directory by default). This temporary folder is removed by default
 (\code{delete_temp = TRUE}).
 }
 \examples{
