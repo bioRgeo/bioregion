@@ -35,9 +35,6 @@ install_binaries <- function(binpath = NULL) {
   if (dir.exists(paste0(binpath, "/bin"))) {
     unlink(paste0(binpath, "/bin"), recursive = TRUE)
   }
-  if (dir.exists(paste0(binpath, "/bin2"))) { # TO REMOVE AFTER TEST
-    unlink(paste0(binpath, "/bin2"), recursive = TRUE)
-  }
 
   # Download file
   message(" ")
@@ -120,7 +117,7 @@ install_binaries <- function(binpath = NULL) {
           #system(paste0("chmod +x ", file))
         }
         if (osid == "mac") { # Mac
-          #system(paste0("chmod +x ", file))
+          system(paste0("chmod 755 ", file))
         }
         perm[f] <- file.access(file, mode = 1)
         if (perm[f] == -1) {
@@ -196,8 +193,12 @@ install_binaries <- function(binpath = NULL) {
 
   cmd=paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
   if(osid == "lin"){
-    cmd=paste0(cmd, " >/dev/null")
+    cmd=paste0(cmd, " >/dev/null 2>&1")
   }
+  if(osid == "mac"){
+    cmd=paste0(cmd, " >/dev/null 2>&1")
+  }
+  
   system(cmd)
   testopm=TRUE
   if(!("example.tree" %in% list.files(path))){
@@ -209,8 +210,12 @@ install_binaries <- function(binpath = NULL) {
 
   cmd=paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
   if(osid == "lin"){
-    cmd=paste0(cmd, " >/dev/null")
+    cmd=paste0(cmd, " >/dev/null 2>&1")
   }
+  if(osid == "mac"){
+    cmd=paste0(cmd, " >/dev/null 2>&1")
+  }
+  
   system(cmd)
   testnoopm=TRUE
   if(!("example.tree" %in% list.files(path))){
@@ -221,14 +226,20 @@ install_binaries <- function(binpath = NULL) {
   }
 
   if(!(testopm | testnoopm)){
-    message("Infomap is not running...")
+    message(" ")
+    message("Infomap is not running...") 
+    message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   }else{
     if(testopm){
       message("Congratulation, you successfully install the ", version, " OpenMP version of Infomap!")
       file.copy(paste0(path, files[1]), paste0(path, "infomap_", substr(files[1],13,nchar(file[1]))))
     }else{
+      message(" ")
       message("Congratulation, you successfully install the ", version, " no OpenMP version of Infomap!")
       file.copy(paste0(path, files[2]), paste0(path, "infomap_", substr(files[1],13,nchar(file[1]))))
+      message(" ")
+      message("A library is probably missing to install the OpenMP version...")
+      message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
     }
     utils::write.table(1, paste0(path, "check.txt"))
   }
@@ -248,7 +259,10 @@ install_binaries <- function(binpath = NULL) {
 
   cmd=paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
   if(osid == "lin"){
-    cmd=paste0(cmd, " >/dev/null")
+    cmd=paste0(cmd, " >/dev/null 2>&1")
+  }
+  if(osid == "mac"){
+    cmd=paste0(cmd, " >/dev/null 2>&1")
   }
   system(cmd)
   testconvert=TRUE
@@ -270,7 +284,9 @@ install_binaries <- function(binpath = NULL) {
   }
 
   if(!testlouvain){
-    message("Louvain is not running...")
+    message(" ")
+    message("Louvain is not running...") 
+    message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   }else{
     message("Congratulation, you successfully install the version ", version, " of Louvain!")
     utils::write.table(1, paste0(path, "check.txt"))
@@ -293,6 +309,11 @@ install_binaries <- function(binpath = NULL) {
   if(osid == "lin"){
     cmd=paste0(cmd, " >/dev/null 2>&1")
   }
+  if(osid == "mac"){
+    cmd1=paste0("cd ", path, " >/dev/null 2>&1")
+    cmd2=paste0("./oslom_undir_mac -f example.txt -uw > /dev/null 2>&1")
+    cmd=paste0(cmd1, " && ", cmd2)
+  }
   system(cmd)
   testundir=TRUE
   if(!("tp" %in% list.files(paste0(path, "example.txt_oslo_files")))){
@@ -301,8 +322,14 @@ install_binaries <- function(binpath = NULL) {
   if (dir.exists(paste0(path,"example.txt_oslo_files"))) {
     unlink(paste0(path,"example.txt_oslo_files"), recursive=TRUE)
   }
+  if(file.exists(paste0(path,"tp"))){
+    unlink(paste0(path,"tp"))
+  }
   if(file.exists("tp")){
     unlink("tp")
+  }
+  if(file.exists(paste0(path,"time_seed.dat"))){
+    unlink(paste0(path,"time_seed.dat"))
   }
   if(file.exists("time_seed.dat")){
     unlink("time_seed.dat")
@@ -312,6 +339,11 @@ install_binaries <- function(binpath = NULL) {
   if(osid == "lin"){
     cmd=paste0(cmd, " >/dev/null 2>&1")
   }
+  if(osid == "mac"){
+    cmd1=paste0("cd ", path, " >/dev/null 2>&1")
+    cmd2=paste0("./oslom_dir_mac -f example.txt -uw > /dev/null 2>&1")
+    cmd=paste0(cmd1, " && ", cmd2)
+  }
   system(cmd)
   testdir=TRUE
   if(!("tp" %in% list.files(paste0(path, "example.txt_oslo_files")))){
@@ -320,20 +352,31 @@ install_binaries <- function(binpath = NULL) {
   if (dir.exists(paste0(path,"example.txt_oslo_files"))) {
     unlink(paste0(path,"example.txt_oslo_files"), recursive=TRUE)
   }
+  if(file.exists(paste0(path,"tp"))){
+    unlink(paste0(path,"tp"))
+  }
   if(file.exists("tp")){
     unlink("tp")
+  }
+  if(file.exists(paste0(path,"time_seed.dat"))){
+    unlink(paste0(path,"time_seed.dat"))
   }
   if(file.exists("time_seed.dat")){
     unlink("time_seed.dat")
   }
 
   if(!testundir){
-    message("OSLOM is not running...")
+    message(" ")
+    message("OSLOM is not running...") 
+    message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+    
   }else{
     message("Congratulation, you successfully install the version ", version, " of OSLOM!")
     utils::write.table(1, paste0(path, "check.txt"))
     if(!testdir){
-      message("Warning: only the undirected version of OSLOM has been install!")
+      message("Warning: only the undirected version of OSLOM has been install...")
+      message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+      
     }
   }
 
