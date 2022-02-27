@@ -1,0 +1,22 @@
+---
+title: "Install binaries"
+author: "Pierre Denelle, Maxime Lenormand and Boris Leroy"
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{test}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval=FALSE
+)
+```
+
+test
