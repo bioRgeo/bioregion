@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{test}
+  %\VignetteIndexEntry{Install binaries}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
