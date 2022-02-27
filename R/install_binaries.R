@@ -182,6 +182,10 @@ install_binaries <- function(binpath = NULL) {
   }
 
   # Test INFOMAP
+  message(" ")
+  message("4. Test Infomap")
+  message(" ")
+
   path=paste0(binpath, "/bin/INFOMAP/")
   version=list.files(path)[substr(list.files(path),1,7)=="version"]
   version=substr(version, 9, nchar(version))
@@ -217,15 +221,12 @@ install_binaries <- function(binpath = NULL) {
   }
 
   if(!(testopm | testnoopm)){
-    message(" ")
-    message("Infomap is not running!")
+    message("Infomap is not running...")
   }else{
     if(testopm){
-      message(" ")
       message("Congratulation, you successfully install the ", version, " OpenMP version of Infomap!")
       file.copy(paste0(path, files[1]), paste0(path, "infomap_", substr(files[1],13,nchar(file[1]))))
     }else{
-      message(" ")
       message("Congratulation, you successfully install the ", version, " no OpenMP version of Infomap!")
       file.copy(paste0(path, files[2]), paste0(path, "infomap_", substr(files[1],13,nchar(file[1]))))
     }
@@ -233,6 +234,10 @@ install_binaries <- function(binpath = NULL) {
   }
 
   # Test LOUVAIN
+  message(" ")
+  message("5. Test Louvain")
+  message(" ")
+
   path=paste0(binpath, "/bin/LOUVAIN/")
   version=list.files(path)[substr(list.files(path),1,7)=="version"]
   version=substr(version, 9, nchar(version))
@@ -265,15 +270,17 @@ install_binaries <- function(binpath = NULL) {
   }
 
   if(!testlouvain){
-    message(" ")
-    message("Louvain is not running!")
+    message("Louvain is not running...")
   }else{
-    message(" ")
     message("Congratulation, you successfully install the version ", version, " of Louvain!")
     utils::write.table(1, paste0(path, "check.txt"))
   }
 
   # Test OSLOM
+  message(" ")
+  message("5. Test OSLOM")
+  message(" ")
+
   path=paste0(binpath, "/bin/OSLOM/")
   version=list.files(path)[substr(list.files(path),1,7)=="version"]
   version=substr(version, 9, nchar(version))
@@ -294,6 +301,12 @@ install_binaries <- function(binpath = NULL) {
   if (dir.exists(paste0(path,"example.txt_oslo_files"))) {
     unlink(paste0(path,"example.txt_oslo_files"), recursive=TRUE)
   }
+  if(file.exists("tp")){
+    unlink("tp")
+  }
+  if(file.exists("time_seed.dat")){
+    unlink("time_seed.dat")
+  }
 
   cmd=paste0(path, files[2], " -f ", path, "example.txt -uw")
   if(osid == "lin"){
@@ -309,10 +322,8 @@ install_binaries <- function(binpath = NULL) {
   }
 
   if(!testundir){
-    message(" ")
-    message("OSLOM is not running!")
+    message("OSLOM is not running...")
   }else{
-    message(" ")
     message("Congratulation, you successfully install the version ", version, " of OSLOM!")
     utils::write.table(1, paste0(path, "check.txt"))
     if(!testdir){
