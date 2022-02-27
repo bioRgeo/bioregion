@@ -75,7 +75,7 @@ install_binaries <- function(binpath = NULL) {
 
   # List files
   files <- c(
-    paste0(binpath, "/bin/INFOMAP/infomap_opm_", osid), paste0(binpath, "/bin/INFOMAP/infomap_noopm_", osid),
+    paste0(binpath, "/bin/INFOMAP/infomap_omp_", osid), paste0(binpath, "/bin/INFOMAP/infomap_noomp_", osid),
     paste0(binpath, "/bin/LOUVAIN/convert_", osid), paste0(binpath, "/bin/LOUVAIN/louvain_", osid),
     paste0(binpath, "/bin/OSLOM/oslom_dir_", osid), paste0(binpath, "/bin/OSLOM/oslom_undir_", osid)
   )
@@ -186,20 +186,22 @@ install_binaries <- function(binpath = NULL) {
   path=paste0(binpath, "/bin/INFOMAP/")
   version=list.files(path)[substr(list.files(path),1,7)=="version"]
   version=substr(version, 9, nchar(version))
-  files <- c(paste0("infomap_opm_", osid), paste0("infomap_noopm_", osid))
-  if (osid == "win") {
-    files <- paste0(files, ".exe")
-  }
-
-  cmd=paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+  files <- c(paste0("infomap_omp_", osid), paste0("infomap_noomp_", osid))
   if(osid == "lin"){
+    cmd=paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
   if(osid == "mac"){
+    cmd=paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
-  
-  system(cmd)
+  if(osid == "win"){
+    files <- paste0(files, ".exe")
+    cmd=paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    system(cmd, show.output.on.console = FALSE)
+  }
   testopm=TRUE
   if(!("example.tree" %in% list.files(path))){
     testopm=FALSE
@@ -208,15 +210,20 @@ install_binaries <- function(binpath = NULL) {
     unlink(paste0(path,"/example.tree"))
   }
 
-  cmd=paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
   if(osid == "lin"){
+    cmd=paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
   if(osid == "mac"){
+    cmd=paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
-  
-  system(cmd)
+  if(osid == "win"){
+    cmd=paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    system(cmd, show.output.on.console = FALSE)
+  }
   testnoopm=TRUE
   if(!("example.tree" %in% list.files(path))){
     testnoopm=FALSE
@@ -253,18 +260,21 @@ install_binaries <- function(binpath = NULL) {
   version=list.files(path)[substr(list.files(path),1,7)=="version"]
   version=substr(version, 9, nchar(version))
   files <- c(paste0("convert_", osid), paste0("louvain_", osid))
-  if (osid == "win") {
-    files <- paste0(files, ".exe")
-  }
-
-  cmd=paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
   if(osid == "lin"){
+    cmd=paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
   if(osid == "mac"){
+    cmd=paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
-  system(cmd)
+  if(osid == "win"){
+    files <- paste0(files, ".exe")
+    cmd=paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
+    system(cmd, show.output.on.console = FALSE)
+  }
   testconvert=TRUE
   if(!("example.bin" %in% list.files(path))){
     testconvert=FALSE
@@ -301,20 +311,24 @@ install_binaries <- function(binpath = NULL) {
   version=list.files(path)[substr(list.files(path),1,7)=="version"]
   version=substr(version, 9, nchar(version))
   files <- c(paste0("oslom_undir_", osid), paste0("oslom_dir_", osid))
-  if (osid == "win") {
-    files <- paste0(files, ".exe")
-  }
-
-  cmd=paste0(path, files[1], " -f ", path, "example.txt -uw")
   if(osid == "lin"){
+    cmd=paste0(path, files[1], " -f ", path, "example.txt -uw")
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
   if(osid == "mac"){
     cmd1=paste0("cd ", path, " >/dev/null 2>&1")
     cmd2=paste0("./oslom_undir_mac -f example.txt -uw > /dev/null 2>&1")
     cmd=paste0(cmd1, " && ", cmd2)
+    system(cmd)
   }
-  system(cmd)
+  if(osid == "win"){
+    files <- paste0(files, ".exe")
+    cmd=paste0(path, files[1], " -f ", path, "example.txt -uw")
+    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+    system(cmd, show.output.on.console = FALSE)
+  }
+  
   testundir=TRUE
   if(!("tp" %in% list.files(paste0(path, "example.txt_oslo_files")))){
     testundir=FALSE
@@ -335,16 +349,22 @@ install_binaries <- function(binpath = NULL) {
     unlink("time_seed.dat")
   }
 
-  cmd=paste0(path, files[2], " -f ", path, "example.txt -uw")
   if(osid == "lin"){
+    cmd=paste0(path, files[2], " -f ", path, "example.txt -uw")
     cmd=paste0(cmd, " >/dev/null 2>&1")
+    system(cmd)
   }
   if(osid == "mac"){
     cmd1=paste0("cd ", path, " >/dev/null 2>&1")
-    cmd2=paste0("./oslom_dir_mac -f example.txt -uw > /dev/null 2>&1")
+    cmd2=paste0("./oslom_undir_mac -f example.txt -uw > /dev/null 2>&1")
     cmd=paste0(cmd1, " && ", cmd2)
+    system(cmd)
   }
-  system(cmd)
+  if(osid == "win"){
+    cmd=paste0(path, files[2], " -f ", path, "example.txt -uw")
+    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+    system(cmd, show.output.on.console = FALSE)
+  }
   testdir=TRUE
   if(!("tp" %in% list.files(paste0(path, "example.txt_oslo_files")))){
     testdir=FALSE
