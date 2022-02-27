@@ -320,6 +320,12 @@ install_binaries <- function(binpath = NULL) {
   if (dir.exists(paste0(path,"example.txt_oslo_files"))) {
     unlink(paste0(path,"example.txt_oslo_files"), recursive=TRUE)
   }
+  if(file.exists("tp")){
+    unlink("tp")
+  }
+  if(file.exists("time_seed.dat")){
+    unlink("time_seed.dat")
+  }
 
   if(!testundir){
     message("OSLOM is not running...")
