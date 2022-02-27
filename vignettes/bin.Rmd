@@ -20,3 +20,10 @@ knitr::opts_chunk$set(
 ```
 
 test
+
+
+https://brew.sh
+
+brew install libomp
+
+
