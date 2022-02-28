@@ -398,7 +398,7 @@ install_binaries <- function(binpath = NULL) {
   }
 
   # Remove unnecessary files in INFOMAP
-  if (paste0(binpath, "/bin/INFOMAP/check.txt")) {
+  if (file.exists(paste0(binpath, "/bin/INFOMAP/check.txt"))) {
     unlink(paste0(binpath, "/bin/INFOMAP/infomap_noomp_mac"))
     unlink(paste0(binpath, "/bin/INFOMAP/infomap_omp_mac"))
     unlink(paste0(binpath, "/bin/INFOMAP/infomap_noomp_win.exe"))
@@ -411,7 +411,7 @@ install_binaries <- function(binpath = NULL) {
   }
 
   # Remove unnecessary files in LOUVAIN
-  if (paste0(binpath, "/bin/LOUVAIN/check.txt")) {
+  if (file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
     if (osid == "lin") {
       unlink(paste0(binpath, "/bin/LOUVAIN/convert_mac"))
       unlink(paste0(binpath, "/bin/LOUVAIN/louvain_mac"))
@@ -435,7 +435,7 @@ install_binaries <- function(binpath = NULL) {
   }
 
   # Remove unnecessary files in OSLOM
-  if (paste0(binpath, "/bin/OSLOM/check.txt")) {
+  if (file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
     if (osid == "lin") {
       unlink(paste0(binpath, "/bin/OSLOM/oslom_dir_mac"))
       unlink(paste0(binpath, "/bin/OSLOM/oslom_undir_mac"))
