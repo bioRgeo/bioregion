@@ -1,12 +1,12 @@
 ---
-title: "test"
+title: "Matrix and Network formats"
 author: "Pierre Denelle, Maxime Lenormand and Boris Leroy"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{test}
+  %\VignetteIndexEntry{Matrix and Network formats}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

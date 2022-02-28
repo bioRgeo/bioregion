@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Tutorial}
+  %\VignetteIndexEntry{Tutorial for bioRgeo}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -20,7 +20,12 @@ knitr::opts_chunk$set(
 ```
 
 
-This tutorial aims at describing the processing workflow ... divided into ... steps:
+This tutorial aims at describing the bioRgeo's processing workflow 
 
 
 Below is the typical flow chart of ... with __bioRgeo__ :
+
+<img align="bottom" width="100%" height="100%" src="../vignettes/figures/Workflow.png">
+
+
+
