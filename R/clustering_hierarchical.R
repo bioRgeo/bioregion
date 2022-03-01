@@ -24,6 +24,9 @@
 #' @param randomize a boolean indicating if the distance matrix should be
 #' randomized, to account for the order of sites in the distance matrix
 #' @param n_runs number of trials to randomize the distance matrix
+#' @param keep_trials a boolean indicating if all random trial results
+#' should be stored in the output object (set to FALSE to save space if your
+#' \code{distances} object is large)
 #' @param optimal_tree_method a character vector indicating how the final tree
 #' should be obtained from all trials. The only option currently is
 #' \code{"best"}, which means the tree with the best cophenetic correlation
@@ -116,7 +119,8 @@ clustering_hierarchical <- function(distances,
                                     index = names(distances)[3],
                                     method = "average",
                                     randomize = TRUE,
-                                    n_runs = 100,
+                                    n_runs = 30,
+                                    keep_trials = FALSE,
                                     optimal_tree_method = "best", # best or consensus
                                     n_clust = NULL,
                                     cut_height = NULL,
@@ -124,23 +128,24 @@ clustering_hierarchical <- function(distances,
                                     h_max = 1,
                                     h_min = 0)
 {
-  if(inherits(distances, "bioRgeo.similarity"))
+  if(inherits(distances, "bioRgeo.pairwise.metric"))
   {
-    stop("distances seems to be a bioRgeo.similarity object.
+    if(attr(distances, "type") == "similarity")
+    {
+      stop("distances seems to be a similarity object.
          clustering_hierarchical() should be applied on distances, not similarities.
          Use similarity_to_distance() before using clustering_hierarchical()")
+    }
+    if(!(index %in% colnames(distances)))
+    {
+      stop("Argument index should be one of the column names of distance")
+    }
 
-  } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
+  } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
   {
     if(!(index %in% colnames(distances)))
     {
       stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
-    }
-  } else if(inherits(distances, "bioRgeo.distance"))
-  {
-    if(!(index %in% colnames(distances)))
-    {
-      stop("Argument index should be one of the column names of distance")
     }
   }
 
@@ -179,7 +184,7 @@ clustering_hierarchical <- function(distances,
   }
 
 
-  outputs <- list()
+  outputs <- list(name = "hierarchical_clustering")
 
   # Checker les index en input, ou créer une boucle pour toutes les implémenter
   if(!inherits(distances, "dist"))
@@ -204,30 +209,30 @@ clustering_hierarchical <- function(distances,
                        h_min = h_min
   )
 
-  outputs$dist.matrix <- dist.obj
+  # outputs$dist.matrix <- dist.obj
 
   if(randomize)
   {
     message(paste0("Randomizing the distance matrix with ", n_runs, " trials"))
     for(run in 1:n_runs)
     {
-      outputs$trials[[run]] <- list()
-      outputs$trials[[run]]$dist.matrix <- .randomizeDistance(dist.obj)
+      outputs$algorithm$trials[[run]] <- list()
+      outputs$algorithm$trials[[run]]$dist.matrix <- .randomizeDistance(dist.obj)
 
       # Compute hierarchical tree
-      outputs$trials[[run]]$hierartree <- fastcluster::hclust(outputs$trials[[run]]$dist.matrix,
+      outputs$algorithm$trials[[run]]$hierartree <- fastcluster::hclust(outputs$algorithm$trials[[run]]$dist.matrix,
                                                                      method = method)
 
       # Calculate cophenetic correlation coefficient
-      coph <- as.matrix(stats::cophenetic(outputs$trials[[run]]$hierartree))
+      coph <- as.matrix(stats::cophenetic(outputs$algorithm$trials[[run]]$hierartree))
       # Correct site order to not mess the correlation
-      coph <- coph[match(attr(outputs$trials[[run]]$dist.matrix, "Labels"),
+      coph <- coph[match(attr(outputs$algorithm$trials[[run]]$dist.matrix, "Labels"),
                          rownames(coph)),
-                   match(attr(outputs$trials[[run]]$dist.matrix, "Labels"),
+                   match(attr(outputs$algorithm$trials[[run]]$dist.matrix, "Labels"),
                          colnames(coph))]
-      dist.mat <- as.matrix(outputs$trials[[run]]$dist.matrix)
+      dist.mat <- as.matrix(outputs$algorithm$trials[[run]]$dist.matrix)
 
-      outputs$trials[[run]]$cophcor <- stats::cor(dist.mat[lower.tri(dist.mat)],
+      outputs$algorithm$trials[[run]]$cophcor <- stats::cor(dist.mat[lower.tri(dist.mat)],
                                                   coph[lower.tri(coph)],
                                                   method = "spearman")
     }
@@ -236,39 +241,39 @@ clustering_hierarchical <- function(distances,
     {
       coph.coeffs <- sapply(1:n_runs, function(x)
       {
-        outputs$trials[[x]]$cophcor
+        outputs$algorithm$trials[[x]]$cophcor
       })
 
       message(paste0(" -- range of cophenetic correlation coefficients among trials: ", round(min(coph.coeffs), 2), " - ", round(max(coph.coeffs), 2)))
 
       best.run <- which(coph.coeffs == max(coph.coeffs))[1] # There might be multiple trees with the highest cophenetic correlation coefficient, so we arbritrarily take the first one
 
-      outputs$final.tree <- outputs$trials[[best.run]]$hierartree
-      outputs$final.tree.coph.cor <- max(coph.coeffs)
+      outputs$algorithm$final.tree <- outputs$algorithm$trials[[best.run]]$hierartree
+      outputs$algorithm$final.tree.coph.cor <- max(coph.coeffs)
     }
 
-    message(paste0("Optimal tree has a ", round(outputs$final.tree.coph.cor, 2), " cophenetic correlation coefficient with the initial distance matrix\n"))
+    message(paste0("Optimal tree has a ", round(outputs$algorithm$final.tree.coph.cor, 2), " cophenetic correlation coefficient with the initial distance matrix\n"))
 
   } else
   {
-    outputs$final.tree <- fastcluster::hclust(outputs$dist.matrix, method = method)
+    outputs$algorithm$final.tree <- fastcluster::hclust(dist.obj, method = method)
 
-    coph <- as.matrix(stats::cophenetic(outputs$final.tree))
+    coph <- as.matrix(stats::cophenetic(outputs$algorithm$final.tree))
     coph <- coph[match(attr(dist.obj, "Labels"),
                        rownames(coph)),
                  match(attr(dist.obj, "Labels"),
                        colnames(coph))]
     dist.mat <- as.matrix(dist.obj)
 
-    outputs$final.tree.coph.cor <- stats::cor(dist.mat[lower.tri(dist.mat)],
+    outputs$algorithm$final.tree.coph.cor <- stats::cor(dist.mat[lower.tri(dist.mat)],
                                               coph[lower.tri(coph)],
                                               method = "spearman")
 
-    message(paste0("Output tree has a ", round(outputs$final.tree.coph.cor, 2), " cophenetic correlation coefficient with the initial distance matrix\n"))
+    message(paste0("Output tree has a ", round(outputs$algorithm$final.tree.coph.cor, 2), " cophenetic correlation coefficient with the initial distance matrix\n"))
   }
 
 
-  class(outputs) <- append("bioRgeo.hierar.tree", class(outputs))
+  class(outputs) <- append("bioRgeo.clusters", class(outputs))
 
   if(any(!is.null(n_clust) | !is.null(cut_height)))
   {
@@ -280,36 +285,15 @@ clustering_hierarchical <- function(distances,
                         h_min = h_min)
   }
 
+  if(!keep_trials)
+  {
+    outputs$algorithm$trials <- "Trials not stored in output"
+  }
+
 
   return(outputs)
 }
 
-
-# Internal functions for clustering_hierarchical
-# .dfToDist <- function(distancedf, metric)
-# {
-#   if(inherits(distancedf, "bioRgeo.distance"))
-#   {
-#     other.cols <- colnames(distancedf)[-which(colnames(distancedf) %in% c("Site1", "Site2"))]
-#   } else
-#   {
-#     stop("distancedf should be a distance data.frame of class bioRgeo.distance.")
-#   }
-#
-#   nodes <- unique(c(distancedf$Site1, distancedf$Site2))
-#
-#   distancedf <- rbind(data.frame(Site1 = nodes,
-#                                  Site2 = nodes,
-#                                  matrix(data = 0,
-#                                         nrow = length(unique(c(distancedf$Site1, distancedf$Site2))),
-#                                         ncol = length(other.cols),
-#                                         dimnames = list(NULL,
-#                                                         other.cols))),
-#                       distancedf)
-#   distancematrix <- stats::as.dist(stats::xtabs(distancedf[, metric] ~ distancedf$Site2 + distancedf$Site1))
-#
-#   return(distancematrix)
-# }
 
 .randomizeDistance <- function(distmatrix)
 {

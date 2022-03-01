@@ -5,12 +5,17 @@ site_loc <- readRDS("./data-raw/benthic_invertebrates_sites.RDS")
 
 #### Distance-based hierarchical clustering
 # Calculate similarity
-similarity_inv <- spproject(contin)
+similarity_inv <- similarity(contin)
 # Convert to distance
 dist_inv <- similarity_to_distance(similarity_inv)
 
 # Compute the hierarchical tree
 inv_hclust <- clustering_hierarchical(dist_inv)
+
+
+# Compute the hierarchical tree
+inv_hclust <- clustering_hierarchical(dist_inv,
+                                      keep_trials = FALSE)
 
 # Compute the tree and cut it with 12 clusters
 inv_hclust <- clustering_hierarchical(dist_inv,

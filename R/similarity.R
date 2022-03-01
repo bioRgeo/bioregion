@@ -258,8 +258,12 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     res$C=abca$C
   }
 
+
   # Create output class
-  class(res) <- append("bioRgeo.similarity", class(res))
+  class(res) <- append("bioRgeo.pairwise.metric", class(res))
+
+  # Inform nature of the output
+  attr(res, "type") <- "similarity"
 
   # Return the output
   return(res)

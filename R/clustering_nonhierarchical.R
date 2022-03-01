@@ -143,23 +143,24 @@ clustering_nonhierarchical <- function(distances,
          'pam', 'kmeans', 'dbscan', 'optic', 'mclust'")
   }
 
-  if(inherits(distances, "bioRgeo.similarity"))
+  if(inherits(distances, "bioRgeo.pairwise.metric"))
   {
-    stop("distances seems to be a bioRgeo.similarity object.
-         clustering_hierarchical() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using clustering_hierarchical()")
+    if(attr(distances, "type") == "similarity")
+    {
+      stop("distances seems to be a similarity object.
+         clustering_nonhierarchical() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using clustering_nonhierarchical()")
+    }
+    if(!(index %in% colnames(distances)))
+    {
+      stop("Argument index should be one of the column names of distance")
+    }
 
-  } else if(!any(inherits(distances, "bioRgeo.distance"), inherits(distances, "dist")))
+  } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
   {
     if(!(index %in% colnames(distances)))
     {
       stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
-    }
-  } else if(inherits(distances, "bioRgeo.distance"))
-  {
-    if(!(index %in% colnames(distances)))
-    {
-      stop("Argument index should be one of the column names of distance")
     }
   }
 

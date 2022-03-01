@@ -117,7 +117,7 @@ cut_tree <- function(tree,
                      dynamic_tree_cut = FALSE,
                      dynamic_method = "tree",
                      dynamic_minClusterSize = 5,
-                     dist_matrix = NULL,
+                     distances = NULL,
                      ...)
 {
   if(!is.null(n_clust)){
@@ -159,12 +159,22 @@ cut_tree <- function(tree,
 
     if(dynamic_method == "hybrid")
     {
-      if(inherits(tree, "bioRgeo.hierar.tree"))
+      if(inherits(distances, "bioRgeo.pairwise.metric"))
       {
-        dist_matrix <- tree$dist.matrix
-      } else if(is.null(dist_matrix))
+        if(attr(distances, "type") == "similarity")
+        {
+          stop("distances seems to be a similarity object.
+         clustering_hierarchical() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using clustering_hierarchical()")
+        }
+        index <- colnames(distances)[3]
+
+      } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
       {
-        stop("A distance matrix should be supplied to argument dist_matrix for dynamic_method = 'hybrid'")
+        if(ncol(distances) != 3)
+        {
+          stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+        }
       }
     }
   }

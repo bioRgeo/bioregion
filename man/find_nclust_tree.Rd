@@ -231,7 +231,7 @@ tree1
 
 find_nclust_tree(tree1)
 
-find_nclust_tree(tree1, step_levels = 5)
+find_nclust_tree(tree1, k_max = 50, step_levels = 5)
 
 find_nclust_tree(tree1, eval_metric = c("tot_endemism",
                                         "avg_endemism",
@@ -239,9 +239,11 @@ find_nclust_tree(tree1, eval_metric = c("tot_endemism",
                                         "anosim"),
                  criterion = "step",
                  sp_site_table = vegemat,
-                 k_max = 50)
-find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "elbow")
-find_nclust_tree(tree1, eval_metric = "pc_distance", criterion = "mars")
+                 k_max = 15)
+find_nclust_tree(tree1, eval_metric = "pc_distance",  k_max = 50,
+                 criterion = "elbow")
+find_nclust_tree(tree1, eval_metric = "pc_distance",  k_max = 50,
+                 criterion = "mars")
 }
 \references{
 \insertRef{Castro-Insua2018}{bioRgeo}
