@@ -245,9 +245,9 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
     system(command = cmd, show.output.on.console = FALSE)
   }else if(os == "Darwin"){
     if(directed){
-      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd, " > /dev/null 2>&1")
     }else{
-      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd, " > /dev/null 2>&1")
     }
     system(command = cmd)
   }else{
