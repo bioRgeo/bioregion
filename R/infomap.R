@@ -48,7 +48,7 @@
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' # com=infomap(net) # run bin() to use this function
+#' # com=infomap(net) # run install_binaries() to use this function
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
@@ -96,13 +96,6 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
     stop("NA(s) detected in the data.frame")
   }
 
-  if (dim(net)[2] == 3) {
-    minet <- min(net[, 3])
-    if (minet < 0) {
-      stop("The third column of net should contains only positive real: negative value detected!")
-    }
-  }
-
   # Control parameters
   if (!is.logical(weight)) {
     stop("weight must be a boolean")
@@ -113,8 +106,13 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
   }
 
   if (weight & dim(net)[2] == 3) {
-    if (class(net[, 3]) != "numeric" & class(net[, 3]) != "integer") {
+    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
       stop("The third column of net must be numeric")
+    }else{
+      minet <- min(net[, 3])
+      if (minet < 0) {
+        stop("The third column of net should contains only positive real: negative value detected!")
+      }
     }
   }
 
@@ -132,7 +130,6 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
       stop("nbmod must be an integer higher than 0")
     }
   }
-
 
   if (!is.numeric(markovtime)) {
     stop("markovtime must be numeric")
