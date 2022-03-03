@@ -33,10 +33,10 @@ controls=function(X, weight = TRUE, name = "net", type = c("data.frame, matrix, 
 knbclu=function(partitions, method = "max"){
 
   # Number of partitions
-  nb = dim(partitions)[2]
+  nb = dim(partitions)[2] - 1
 
   # Number of clusters per partitions
-  if(nb==2){
+  if(nb==1){
     if(method=="length"){
       colnames(partitions)[2]=paste0("K_", length(table(partitions[,2])))
     }
@@ -47,17 +47,17 @@ knbclu=function(partitions, method = "max"){
     if(method == "length"){
       nbclus=NULL
       for(i in 1:nb){
-        nbclus[i]=length(table(partitions[,i+1]))
+        nbclus=c(nbclus,length(table(partitions[,i+1])))
       }
     }
     if(method=="max"){
-      nbclus=apply(partitions, 2, max)
+      nbclus=apply(partitions[,-1], 2, max)
     }
 
-    ord=cbind(2:nb,nbclus)
-    ord=ord[order(ord[,2]),1]
+    ord=cbind(2:(nb+1),nbclus)
+    ord=as.numeric(ord[order(ord[,2]),1])
     partitions=partitions[,c(1,ord)]
-    colnames(partitions)[2:nb]=paste0("K_",nbclus)
+    colnames(partitions)[2:(nb+1)]=paste0("K_",nbclus)
   }
 
   partitions
