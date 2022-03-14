@@ -11,6 +11,7 @@ infomap(
   nbmod = 0,
   markovtime = 1,
   seed = 1,
+  numtrials = 1,
   twolevel = FALSE,
   directed = FALSE,
   delete_temp = TRUE,
@@ -32,6 +33,8 @@ as (un)directed links between pair of nodes and an optional third column indicat
 in fewer modules (default is 1)}
 
 \item{seed}{for the random number generator}
+
+\item{numtrials}{for the number of trials before picking up the best solution}
 
 \item{twolevel}{a boolean indicating if the algorithm should optimize a two-level partition of the network
 (default is multi-level)}
@@ -58,9 +61,9 @@ Infomap has two ways to deal with bipartite networks. The first possibility is t
 as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
 approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 
-This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
+This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
 This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-the folder that will host the bin folder  manually while running \link{install_binaries} please make sure to set \code{binpath}
+the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
 accordingly.
 
 The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
@@ -68,12 +71,12 @@ The C++ version of Infomap generates temporary folders and/or files that are sto
 (\code{delete_temp = TRUE}).
 }
 \examples{
-comat=matrix(sample(1000,50),5,10)
-rownames(comat)=paste0("Site",1:5)
-colnames(comat)=paste0("Species",1:10)
+comat <- matrix(sample(1000, 50), 5, 10)
+rownames(comat) <- paste0("Site", 1:5)
+colnames(comat) <- paste0("Species", 1:10)
 
-net=similarity(comat,metric="Simpson")
-#com=infomap(net) # run bin() to use this function
+net <- similarity(comat, metric = "Simpson")
+# com=infomap(net) # run install_binaries() to use this function
 }
 \references{
 \insertRef{Rosvall2008}{bioRgeo}

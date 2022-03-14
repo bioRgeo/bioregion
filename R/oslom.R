@@ -53,7 +53,7 @@
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=similarity(comat,metric="Simpson")
-#' #com=oslom(net) # run bin() to use this function
+#' #com=oslom(net) # run install_binaries() to use this function
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
@@ -76,47 +76,56 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
     }
   }
 
-
   # Check OS
   os=Sys.info()[['sysname']]
 
-  # Check if OSLOM is present
-  if(!file.exists(paste0(binpath,"/bin/OSLOM/oslom_undir_lin"))){
-    stop("OSLOM is not in bioRgeo/bin directory...")
-  }
-  if(!file.exists(paste0(binpath,"/bin/OSLOM/oslom_undir_win.exe"))){
-    stop("OSLOM is not in bioRgeo/bin directory...")
-  }
-  #if(!file.exists(paste0(binpath,"/bin/OSLOM/oslom_undir_mac"))){
-  #  stop("OSLOM is not in bioRgeo/bin directory...")
-  #}
-
-  # Controls
-  if(!is.data.frame(net)){
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  if(dim(net)[2]!=2 & dim(net)[2]!=3){
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  sco=sum(is.na(net))
-  if(sco>0){
-    stop("NA(s) detected in the data.frame")
-  }
-
-  if(weight & dim(net)[2]==2){
-    stop("net must be a three-columns data.frame if weight equal TRUE")
-  }
-
-  if(weight & dim(net)[2]==3){
-    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
-      stop("The third column of net must be numeric")
+  # Check if OSLOM has successfully been installed
+  if(!directed){
+    if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
+      stop("OSLOM is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+    }
+  }else{
+    if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
+      stop("OSLOM is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+    }else{
+      if(!file.exists(paste0(binpath,"/bin/OSLOM/checkdir"))){
+        stop("The directed version of OSLOM is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+      }
     }
   }
 
-  if(!is.logical(weight)){
+  # Control input net
+  if (!is.data.frame(net)) {
+    stop("net must be a two- or three-columns data.frame")
+  }
+
+  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
+    stop("net must be a two- or three-columns data.frame")
+  }
+
+  nbna <- sum(is.na(net))
+  if (nbna > 0) {
+    stop("NA(s) detected in the data.frame")
+  }
+
+  # Control parameters
+  if (!is.logical(weight)) {
     stop("weight must be a boolean")
+  }
+
+  if (weight & dim(net)[2] == 2) {
+    stop("net must be a three-columns data.frame if weight equal TRUE")
+  }
+
+  if (weight & dim(net)[2] == 3) {
+    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
+      stop("The third column of net must be numeric")
+    }else{
+      minet <- min(net[, 3])
+      if (minet < 0) {
+        stop("The third column of net should contains only positive real: negative value detected!")
+      }
+    }
   }
 
   if(!(reassign %in% c("no","random","simil"))){
@@ -211,7 +220,6 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   utils::write.table(netemp, paste0(path_temp,"/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
   # Prepare command to run OSLOM
-
   cmd=paste0("-r ", r, " -hr ", hr, " -seed ", seed," -t ", t, " -cp ", cp)
   if(weight){
     cmd=paste0("-f ", path_temp, "/net.txt -w ", cmd)
@@ -219,28 +227,32 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
     cmd=paste0("-f ", path_temp, "/net.txt -uw ", cmd)
   }
 
+  # Run OSLOM
   if(os == "Linux"){
     if(directed){
-      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd, " > /dev/null 2>&1")
     }else{
-      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd)
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd, " > /dev/null 2>&1")
     }
+    system(command = cmd)
   }else if(os == "Windows"){
     if(directed){
       cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
     }else{
       cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
     }
-    # Create temp folder
     dir.create(paste0(path_temp, "/net.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+    system(command = cmd, show.output.on.console = FALSE)
   }else if(os == "Darwin"){
-    stop("TO IMPLEMENT")
+    if(directed){
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd, " > /dev/null 2>&1")
+    }else{
+      cmd=paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd, " > /dev/null 2>&1")
+    }
+    system(command = cmd)
   }else{
     stop("Linux, Windows or Mac distributions only.")
   }
-
-  # Run OSLOM
-  system(command = cmd, show.output.on.console = FALSE)
 
   # Control: if the command line did not work
   if(!("tp" %in% list.files(paste0(path_temp, "/net.txt_oslo_files")))){
@@ -765,35 +777,34 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   if(nblev>=4){
     nov=dim(comtphhh)[2]-1
     if(nov==1){
-      colnames(comtphhh)[2]=paste0("Com",tempnblev)
+      colnames(comtphhh)[2]=paste0("K_",max(comtphhh[,2]))
       com=cbind(com,comtphhh[,2])
-      colnames(com)[dim(com)[2]]=paste0("Com",tempnblev)
+      colnames(com)[dim(com)[2]]=paste0("K_",max(comtphhh))
     }else{
-      colnames(comtphhh)[2]=paste0("Com",tempnblev)
+      colnames(comtphhh)[2]=paste0("K_",max(comtphhh[,2]),"_semel")
       if(nov>=2){
-        colnames(comtphhh)[3]=paste0("Com",tempnblev,"bis")
+        colnames(comtphhh)[3]=paste0("K_",max(comtphhh[,2]),"_bis")
       }
       if(nov==3){
-        colnames(comtphhh)[4]=paste0("Com",tempnblev,"ter")
+        colnames(comtphhh)[4]=paste0("K_",max(comtphhh[,2]),"_ter")
       }
       com=cbind(com,comtphhh[,-1])
     }
-
     tempnblev=tempnblev+1
   }
   if(nblev>=3){
     nov=dim(comtphh)[2]-1
     if(nov==1){
-      colnames(comtphh)[2]=paste0("Com",tempnblev)
+      colnames(comtphh)[2]=paste0("K_",max(comtphh[,2]))
       com=cbind(com,comtphh[,2])
-      colnames(com)[dim(com)[2]]=paste0("Com",tempnblev)
+      colnames(com)[dim(com)[2]]=paste0("K_",max(comtphh[,2]))
     }else{
-      colnames(comtphh)[2]=paste0("Com",tempnblev)
+      colnames(comtphh)[2]=paste0("K_",max(comtphh[,2]),"_semel")
       if(nov>=2){
-        colnames(comtphh)[3]=paste0("Com",tempnblev,"bis")
+        colnames(comtphh)[3]=paste0("K_",max(comtphh[,2]),"_bis")
       }
       if(nov==3){
-        colnames(comtphh)[4]=paste0("Com",tempnblev,"ter")
+        colnames(comtphh)[4]=paste0("K_",max(comtphh[,2]),"_ter")
       }
       com=cbind(com,comtphh[,-1])
     }
@@ -802,16 +813,16 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   if(nblev>=2){
     nov=dim(comtph)[2]-1
     if(nov==1){
-      colnames(comtph)[2]=paste0("Com",tempnblev)
+      colnames(comtph)[2]=paste0("K_",max(comtph[,2]))
       com=cbind(com,comtph[,2])
-      colnames(com)[dim(com)[2]]=paste0("Com",tempnblev)
+      colnames(com)[dim(com)[2]]=paste0("K_",max(comtph[,2]))
     }else{
-      colnames(comtph)[2]=paste0("Com",tempnblev)
+      colnames(comtph)[2]=paste0("K_",max(comtph[,2]),"_semel")
       if(nov>=2){
-        colnames(comtph)[3]=paste0("Com",tempnblev,"bis")
+        colnames(comtph)[3]=paste0("K_",max(comtph[,2]),"_bis")
       }
       if(nov==3){
-        colnames(comtph)[4]=paste0("Com",tempnblev,"ter")
+        colnames(comtph)[4]=paste0("K_",max(comtph[,2]),"_ter")
       }
       com=cbind(com,comtph[,-1])
     }
@@ -820,16 +831,16 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   if(nblev>=1){
     nov=dim(comtp)[2]-1
     if(nov==1){
-      colnames(comtp)[2]=paste0("Com",tempnblev)
+      colnames(comtp)[2]=paste0("K_",max(comtp[,2]))
       com=cbind(com,comtp[,2])
-      colnames(com)[dim(com)[2]]=paste0("Com",tempnblev)
+      colnames(com)[dim(com)[2]]=paste0("K_",max(comtp[,2]))
     }else{
-      colnames(comtp)[2]=paste0("Com",tempnblev)
+      colnames(comtp)[2]=paste0("K_",max(comtp[,2]),"_semel")
       if(nov>=2){
-        colnames(comtp)[3]=paste0("Com",tempnblev,"bis")
+        colnames(comtp)[3]=paste0("K_",max(comtp[,2]),"_bis")
       }
       if(nov==3){
-        colnames(comtp)[4]=paste0("Com",tempnblev,"ter")
+        colnames(comtp)[4]=paste0("K_",max(comtp[,2]),"_ter")
       }
       com=cbind(com,comtp[,-1])
     }
@@ -842,7 +853,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   }
 
   # Return output
-  com[,1]=as.character(com[,1])
+  com[, 1] <- as.character(com[, 1])
   return(com)
 
 }

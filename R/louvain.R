@@ -53,32 +53,38 @@
 louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delete_temp = TRUE,
                     path_temp = "louvain_temp", binpath = NULL){
 
-  # Controls
-  if(!is.data.frame(net)){
+  # Control input net
+  if (!is.data.frame(net)) {
     stop("net must be a two- or three-columns data.frame")
   }
 
-  if(dim(net)[2]!=2 & dim(net)[2]!=3){
+  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
     stop("net must be a two- or three-columns data.frame")
   }
 
-  sco=sum(is.na(net))
-  if(sco>0){
+  nbna <- sum(is.na(net))
+  if (nbna > 0) {
     stop("NA(s) detected in the data.frame")
   }
 
-  if(weight & dim(net)[2]==2){
+  # Control parameters
+  if (!is.logical(weight)) {
+    stop("weight must be a boolean")
+  }
+
+  if (weight & dim(net)[2] == 2) {
     stop("net must be a three-columns data.frame if weight equal TRUE")
   }
 
-  if(weight & dim(net)[2]==3){
+  if (weight & dim(net)[2] == 3) {
     if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
       stop("The third column of net must be numeric")
+    }else{
+      minet <- min(net[, 3])
+      if (minet < 0) {
+        stop("The third column of net should contains only positive real: negative value detected!")
+      }
     }
-  }
-
-  if(!is.logical(weight)){
-    stop("weight must be a boolean")
   }
 
   if(!(lang %in% c("Cpp","igraph","all"))){
@@ -116,7 +122,36 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
 
   if(lang=="Cpp" | lang=="all"){
 
-    # Controls
+    # Set binpath
+    if(is.null(binpath)){
+      # Identify bioRgeo directory on your computer
+      biodir <- list.dirs(.libPaths(), recursive = FALSE)
+      binpath <- biodir[grep("bioRgeo", biodir)]
+    }else{
+      # Control
+      if(!is.character(binpath)){
+        stop("path must be a string")
+      }
+      if(!file.exists(binpath)){
+        stop(paste0("Impossible to access ", binpath))
+      }
+    }
+
+    # Check OS
+    os=Sys.info()[['sysname']]
+
+    # Check if LOUVAIN has successfully been installed
+    if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
+      stop("Louvain is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+    }
+
+    # Create temp folder
+    dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+    if(!file.exists(path_temp)){
+      stop(paste0("Impossible to create directory ", path_temp))
+    }
+
+    # Control parameters
     if(!is.numeric(q)){
       stop("q must be numeric")
     }else{
@@ -152,50 +187,6 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
       stop("path_temp must be a string")
     }
 
-    # Create temp folder
-    dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-    if(!file.exists(path_temp)){
-      stop(paste0("Impossible to create directory ", path_temp))
-    }
-
-    # Set binpath
-    if(is.null(binpath)){
-      # Identify bioRgeo directory on your computer
-      biodir <- list.dirs(.libPaths(), recursive = FALSE)
-      binpath <- biodir[grep("bioRgeo", biodir)]
-    }else{
-      # Control
-      if(!is.character(binpath)){
-        stop("path must be a string")
-      }
-      if(!file.exists(binpath)){
-        stop(paste0("Impossible to access ", binpath))
-      }
-    }
-
-    # Check OS
-    os=Sys.info()[['sysname']]
-
-    # Check if LOUVAIN is present
-    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/louvain_lin"))){
-      stop("Louvain is not in bioRgeo/bin directory...")
-    }
-    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/convert_lin"))){
-      stop("Louvain is not in bioRgeo/bin directory...")
-    }
-    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/louvain_win.exe"))){
-      stop("Louvain is not in bioRgeo/bin directory...")
-    }
-    if(!file.exists(paste0(binpath,"/bin/LOUVAIN/convert_win.exe"))){
-      stop("Louvain is not in bioRgeo/bin directory...")
-    }
-    #if(!file.exists(paste0(binpath,"/bin/LOUVAIN/louvain_mac"))){
-    #  stop("Louvain is not in bioRgeo/bin directory...")
-    #}
-    #if(!file.exists(paste0(binpath,"/bin/LOUVAIN/convert_mac"))){
-    #  stop("Louvain is not in bioRgeo/bin directory...")
-    #}
-
     # Export input in LOUVAIN folder
     utils::write.table(netemp, paste0(path_temp, "/net.txt"), row.names=FALSE, col.names=FALSE, sep=" ")
 
@@ -212,7 +203,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
     }else if(os == "Windows"){
       cmd=paste0(binpath, "/bin/LOUVAIN/convert_win.exe ", cmd)
     }else if(os == "Darwin"){
-      stop("TO IMPLEMENT")
+      cmd=paste0(binpath, "/bin/LOUVAIN/convert_mac ", cmd)
     }else{
       stop("Linux, Windows or Mac distributions only.")
     }
@@ -234,7 +225,8 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
       tree=system(command = cmd, intern=TRUE)
       cat(tree[1:(length(tree)-1)], file = paste0(path_temp, "/net.tree"), sep = "\n")
     }else if(os == "Darwin"){
-      stop("TO IMPLEMENT")
+      cmd=paste0(binpath, "/bin/LOUVAIN/louvain_mac ", cmd, " > ", path_temp, "/net.tree")
+      system(command = cmd)
     }else{
       stop("Linux, Windows or Mac distributions only.")
     }
@@ -263,11 +255,14 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
   }
 
   if(lang=="all"){
-    com=cbind(comr,comc)
+    com=cbind(comr,comc[,-1])
   }
 
+  # Rename and reorder columns
+  com[, 1] <- as.character(com[, 1])
+  com <- knbclu(com)
+
   # Return output
-  com[,1]=as.character(com[,1])
   return(com)
 
 }

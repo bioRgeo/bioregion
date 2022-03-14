@@ -233,7 +233,7 @@ install_binaries <- function(binpath = NULL) {
 
   if (!(testopm | testnoopm)) {
     message(" ")
-    message("Infomap is not running...")
+    message("Infomap is not installed...")
     message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
     if (testopm) {
@@ -294,7 +294,7 @@ install_binaries <- function(binpath = NULL) {
 
   if (!testlouvain) {
     message(" ")
-    message("Louvain is not running...")
+    message("Louvain is not installed...")
     message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
     message("Congratulation, you successfully install the version ", version, " of Louvain!")
@@ -386,7 +386,7 @@ install_binaries <- function(binpath = NULL) {
 
   if (!testundir) {
     message(" ")
-    message("OSLOM is not running...")
+    message("OSLOM is not installed...")
     message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
     message("Congratulation, you successfully install the version ", version, " of OSLOM!")
@@ -394,6 +394,8 @@ install_binaries <- function(binpath = NULL) {
     if (!testdir) {
       message("Warning: only the undirected version of OSLOM has been install...")
       message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+    }else{
+      utils::write.table(1, paste0(path, "checkdir.txt"))
     }
   }
 
