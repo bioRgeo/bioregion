@@ -4,10 +4,16 @@
 \alias{net_to_mat}
 \title{Create a contingency table from a data.frame}
 \usage{
-net_to_mat(df, weight = FALSE, squared = FALSE, symmetrical = FALSE, value = 0)
+net_to_mat(
+  net,
+  weight = FALSE,
+  squared = FALSE,
+  symmetrical = FALSE,
+  value = 0
+)
 }
 \arguments{
-\item{df}{a two- or three-columns \code{data.frame} where
+\item{net}{a two- or three-columns \code{data.frame} where
 each row represents the interaction between two objects (site and species for example)
 and an optional third column indicating the weight of the interaction}
 
@@ -16,14 +22,14 @@ and an optional third column indicating the weight of the interaction}
 \item{squared}{a boolean indicating if the output matrix should but squared (same objects in rows and columns)}
 
 \item{symmetrical}{a boolean indicating if the resulting matrix should be symmetrical (only if \code{squared = TRUE}).
-Note that different weights associated with two opposite pairs already present in df will be preserved.}
+Note that different weights associated with two opposite pairs already present in net will be preserved.}
 
-\item{value}{the value to assign to the pairs of objects not present in df (0 by default)}
+\item{value}{the value to assign to the pairs of objects not present in net (0 by default)}
 }
 \value{
-A \code{matrix} with the first objects (first column of \code{df}) as rows and
-the second objects (second column of \code{df}) as columns. Note that if \code{squared = TRUE} the rows and columns
-have the same number of elements corresponding to the concatenation of unique objects in  \code{df}'s first and second
+A \code{matrix} with the first objects (first column of \code{net}) as rows and
+the second objects (second column of \code{net}) as columns. Note that if \code{squared = TRUE} the rows and columns
+have the same number of elements corresponding to the concatenation of unique objects in  \code{net}'s first and second
 columns. If \code{squared = TRUE} the matrix can be forced to be symetrical based on the upper triangular part of
 the matrix.
 }
@@ -33,11 +39,13 @@ each row represents the interaction between two objects (site and species for ex
 and an optional third column indicating the weight of the interaction (if \code{weight = TRUE}).
 }
 \examples{
-df <- data.frame(Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
-Species = c("a", "b", "a", "c", "d", "b", "d"),
-Weight = c(10, 100, 1, 20, 50, 10, 20))
+net <- data.frame(
+  Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
+  Species = c("a", "b", "a", "c", "d", "b", "d"),
+  Weight = c(10, 100, 1, 20, 50, 10, 20)
+)
 
-comat=net_to_mat(df,weight=TRUE)
+mat <- net_to_mat(net, weight = TRUE)
 }
 \seealso{
 \link{mat_to_net}

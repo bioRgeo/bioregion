@@ -11,7 +11,7 @@
 #' @param k the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)
 #' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
 #' @param path_temp a string indicating the path to the temporary folder (see Details)
-#' @param binpath a string indicating the path to the bin folder (see \link{bin} and Details)
+#' @param binpath a string indicating the path to the bin folder (see \link{install_binaries} and Details)
 #' @export
 #' @details
 #' Louvain is a network community detection algorithm proposed in \insertCite{Blondel2008}{bioRgeo}. This function
@@ -25,12 +25,12 @@
 #' (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
 #'
 #' The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
-#' This function needs executables files to run. They can be installed with \link{bin}. If you set the path to
-#' the folder that will host the bin folder manually while running \link{bin} please make sure to set \code{binpath}
+#' This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
+#' the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
 #' accordingly.
 #'
 #' The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
-#' (folder "louvain_temp" in the workind directory by default). This temporary folder is removed by default
+#' (folder "louvain_temp" in the working directory by default). This temporary folder is removed by default
 #' (\code{delete_temp = TRUE}).
 #'
 #' @return A \code{data.frame} providing one community by node.

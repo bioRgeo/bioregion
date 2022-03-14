@@ -4,10 +4,10 @@
 \alias{mat_to_net}
 \title{Create a data.frame from a contingency table}
 \usage{
-mat_to_net(comat, weight = FALSE, remove_absent_objects = TRUE)
+mat_to_net(mat, weight = FALSE, remove_absent_objects = TRUE)
 }
 \arguments{
-\item{comat}{a contingency table (i.e. \code{matrix})}
+\item{mat}{a contingency table (i.e. \code{matrix})}
 
 \item{weight}{a boolean indicating if the value are weights}
 
@@ -25,11 +25,11 @@ and an optional third column indicating the weight of the interaction (if \code{
 from a contingency table (sites as rows and species as columns for example).
 }
 \examples{
-comat=matrix(sample(1000,50),5,10)
-rownames(comat)=paste0("Site",1:5)
-colnames(comat)=paste0("Species",1:10)
+mat <- matrix(sample(1000, 50), 5, 10)
+rownames(mat) <- paste0("Site", 1:5)
+colnames(mat) <- paste0("Species", 1:10)
 
-df=mat_to_net(comat,weight=TRUE)
+net <- mat_to_net(mat, weight = TRUE)
 }
 \seealso{
 \link{net_to_mat}

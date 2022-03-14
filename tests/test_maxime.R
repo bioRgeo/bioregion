@@ -21,36 +21,11 @@ tab=vegedf
 mat=vegemat
 G=vegesp
 
-# bin
-#source("bioRgeo/R/bin.R")
-bin()
+# install_binaries
+#source("bioRgeo/R/install_binaries.R")
+install_binaries()
 
 ############################################################################################
-
-
-# clustering_hierarchical
-source("bioRgeo/R/clustering_hierarchical.R")
-
-comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
-rownames(comat) <- paste0("Site",1:20)
-colnames(comat) <- paste0("Species",1:25)
-
-simil <- similarity(comat, metric = "all")
-distances <- similarity_to_distance(simil)
-
-# User-defined number of clusters
-tree1 <- clustering_hierarchical(distances,
-                                 n_clust = 5)
-
-
-
-
-net=similarity(mat,metric=c("Simpson"))
-net=similarity_to_distance(net)
-
-com=clustering_hierarchical(net, n_clust = 5)
-
-
 
 
 

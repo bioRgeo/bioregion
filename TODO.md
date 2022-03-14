@@ -6,6 +6,10 @@
 
 ### 1.1 Améliorations générales
 
+* glossaire
+
+* see also
+
 * bien se mettre d'accord sur les args
 
 * faire la vignette
@@ -27,6 +31,8 @@
 * plant CBNmed ask permission 
 
 * Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
+
+* vérifier les NAs, négatif et 0 pour les réseaux
 
 
 ### 1.2 Amélirations spécifiques dans des fonctions

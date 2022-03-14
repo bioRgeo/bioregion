@@ -1,7 +1,7 @@
-#' Convert similarity indices to distance indices
+#' Convert similarity indices to distance metrics
 #'
-#' This function converts a data.frame of similarity indices between sites to
-#'  distance indices (= beta diversity).
+#' This function converts a data.frame of similarity metrics between sites to
+#'  distance metrics (= beta diversity).
 #'
 #' @param similaritydata the output object from \code{\link{similarity}} or a
 #' \code{data.frame} with the first columns called "Site1" and "Site2", and the
@@ -42,6 +42,7 @@
 #' distances <- similarity_to_distance(simil)
 #' distances
 similarity_to_distance <- function(similaritydata) {
+
   if (!inherits(similaritydata, "bioRgeo.pairwise.metric")) {
     stop("similaritydata should be a bioRgeo object created by similarity() or distance_to_similarity()")
   }
@@ -53,6 +54,7 @@ similarity_to_distance <- function(similaritydata) {
 
   # Overwrite attribute
   attr(distancedata, "type") <- "distance"
+
 
   metrics <- colnames(similaritydata)[-which(colnames(similaritydata) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
 
@@ -120,6 +122,7 @@ distance_to_similarity <- function(distancedata) {
   }
   if (attr(similaritydata, "type") == "similarity") {
     stop("distancedata is already composed of similarity indices. If you want to convert it to distance, use similarity_to_distance()")
+
   }
 
   similaritydata <- distancedata

@@ -42,7 +42,7 @@ in fewer modules (default is 1)}
 
 \item{path_temp}{a string indicating the path to the temporary folder (see Details)}
 
-\item{binpath}{a string indicating the path to the bin folder (see \link{bin} and Details)}
+\item{binpath}{a string indicating the path to the bin folder (see \link{install_binaries} and Details)}
 }
 \value{
 A \code{data.frame} providing one partition by hierarchical level.
@@ -59,12 +59,12 @@ as unipartite network. The second possibility is to set the \code{bipartite} arg
 approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 
 This function is based on the 1.6.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
-This function needs executables files to run. They can be installed with \link{bin}. If you set the path to
-the folder that will host the bin folder  manually while running \link{bin} please make sure to set \code{binpath}
+This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
+the folder that will host the bin folder  manually while running \link{install_binaries} please make sure to set \code{binpath}
 accordingly.
 
 The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
-(folder "infomap_temp" in the workind directory by default). This temporary folder is removed by default
+(folder "infomap_temp" in the working directory by default). This temporary folder is removed by default
 (\code{delete_temp = TRUE}).
 }
 \examples{
