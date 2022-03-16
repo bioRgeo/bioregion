@@ -209,6 +209,12 @@ clustering_hierarchical <- function(distances,
                        h_min = h_min
   )
 
+  outputs$inputs <- list(bipartite = FALSE,
+                         weight = TRUE,
+                         pairwise.metric = TRUE,
+                         distance = TRUE,
+                         nb_sites = attr(dist.obj, "Size"))
+
   # outputs$dist.matrix <- dist.obj
 
   if(randomize)
@@ -289,6 +295,9 @@ clustering_hierarchical <- function(distances,
   {
     outputs$algorithm$trials <- "Trials not stored in output"
   }
+
+
+
 
 
   return(outputs)

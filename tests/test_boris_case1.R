@@ -30,7 +30,13 @@ plot(inv_hclust)
 # Cut the tree with dynamic cutting
 inv_hclust_cutdyn <- cut_tree(inv_hclust,
                             dynamic_tree_cut = TRUE)
-plot(inv_hclust_cut1)
+plot(inv_hclust_cutdyn) # ERROR TO CORRECT
+
+
+# test error messages
+partition_metrics(inv_hclust,
+                  eval_metric = c("pc_distance",
+                                  "avg_endemism"))
 
 # Search for optimal number of clusters
 optim_n_1 <- find_nclust_tree(inv_hclust)

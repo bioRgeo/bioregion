@@ -120,7 +120,7 @@ distance_to_similarity <- function(distancedata) {
   if (!inherits(distancedata, "bioRgeo.pairwise.metric")) {
     stop("distancedata should be a bioRgeo object created by distance() or similarity_to_distance()")
   }
-  if (attr(similaritydata, "type") == "similarity") {
+  if (attr(distancedata, "type") == "similarity") {
     stop("distancedata is already composed of similarity indices. If you want to convert it to distance, use similarity_to_distance()")
 
   }
@@ -128,9 +128,9 @@ distance_to_similarity <- function(distancedata) {
   similaritydata <- distancedata
 
   # Overwrite attribute
-  attr(distancedata, "type") <- "distance"
+  attr(similaritydata, "type") <- "distance"
 
-  metrics <- colnames(distancedata)[-which(colnames(distancedata) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
+  metrics <- colnames(similaritydata)[-which(colnames(similaritydata) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
   # Special case for Euclidean distances
   if ("Euclidean" %in% metrics) {
     similaritydata[, "Euclidean"] <- 1 / (1 + distancedata[, "Euclidean"])

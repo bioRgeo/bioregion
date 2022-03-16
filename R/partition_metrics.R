@@ -7,7 +7,7 @@
 #' number(s) of clusters upon this relationship between evaluation metric &
 #' number of clusters.
 #'
-#' @param tree tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
+#' @param cluster_object tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
 #' @param k_min an integer indicating the minimum number of clusters to be
 #' explored
 #' @param k_max an integer indicating the maximum number of clusters to be
@@ -164,7 +164,7 @@
 #' cutoff. This method uses \link[earth:earth]{earth::earth()}.}
 #' }
 #' @return
-#' a \code{list} of class \code{bioRgeo.nclust.tree} with three elements:
+#' a \code{list} of class \code{bioRgeo.partition.metrics} with three elements:
 #' \itemize{
 #' \item{\code{args}: input arguments
 #' }
@@ -207,23 +207,25 @@
 #'                                  index = "Simpson")
 #' tree1
 #'
-#' find_nclust_tree(tree1)
+#' partition_metrics(tree1)
 #'
-#' find_nclust_tree(tree1, k_max = 50, step_levels = 5)
+#' partition_metrics(tree1, k_max = 50, step_levels = 5)
 #'
-#' find_nclust_tree(tree1, eval_metric = c("tot_endemism",
+#' partition_metrics(tree1, eval_metric = c("tot_endemism",
 #'                                         "avg_endemism",
 #'                                         "pc_distance",
 #'                                         "anosim"),
 #'                  criterion = "step",
 #'                  sp_site_table = vegemat,
 #'                  k_max = 15)
-#' find_nclust_tree(tree1, eval_metric = "pc_distance",  k_max = 50,
+#' partition_metrics(tree1, eval_metric = "pc_distance",  k_max = 50,
 #'                  criterion = "elbow")
-#' find_nclust_tree(tree1, eval_metric = "pc_distance",  k_max = 50,
+#' partition_metrics(tree1, eval_metric = "pc_distance",  k_max = 50,
 #'                  criterion = "mars")
-find_nclust_tree <- function(
-  tree,
+partition_metrics <- function(
+  cluster_object,
+  distances = NULL,
+  distance_index = names(distances)[3],
   k_min = 2,
   k_max = "number of sites",
   eval_metric = "pc_distance",
@@ -231,43 +233,101 @@ find_nclust_tree <- function(
   step_quantile = .99,
   step_levels = NULL,
   metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
-  dist = NULL,
-  dist_index = names(dist)[3],
   sp_site_table = NULL,
   plot = TRUE,
   disable_progress = FALSE
 )
 {
+  distance_based_metrics <- c("pc_distance",
+                              "anosim")
+  compo_based_metrics <- c("avg_endemism",
+                           "tot_endemism")
 
-  if(inherits(tree, "bioRgeo.hierar.tree"))
-  {
-    tree_object <- tree$final.tree
-    dist_object <- tree$dist.matrix
-    # Update args
-    # tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min")] <-
-      # list(n_clust, cut_height, find_h, h_max, h_min)
-  } else if (inherits(tree, "hclust"))
-  {
-    if(is.null(dist))
-    {
-      stop("If tree is a hclust object, then you must provide the original distance matrix in dist_matrix")
-    } else if (inherits(dist, "bioRgeo.distance") | dist_index %in% colnames(dist))
-    {
-      # dist_object <- .dfToDist(dist, dist_index)
-      dist_object <- stats::as.dist(
-        net_to_mat(dist[, c(1, 2,
-                                        which(colnames(dist) == dist_index))],
-                          weight = TRUE, squared = TRUE, symmetrical = TRUE))
-    } else if (!inherits(dist, "dist"))
-    {
-      stop("dist is not a distance matrix")
+  # 1. Does input object contains partitions already?
+  if (inherits(cluster_object, "bioRgeo.clusters")) {
+    if (length(dim(cluster_object$clusters)) > 1) {
+      has.clusters <- TRUE
+    } else {
+      if (cluster_object$name == "clustering_hierarchical") {
+        has.clusters <- FALSE
+        tree_object <- cluster_object$algorithm$final.tree
+      } else {
+        stop("cluster_object does not have the expected type of 'clusters' slot")
+      }
     }
-    tree_object <- tree
-    dist_object <- dist
-  } else
-  {
-    stop("This function is designed to work either on bioRgeo.hierar.tree (output from clustering_hierarchical()) or hclust objects.")
+  } else if (!inherits(cluster_object, "hclust")) {
+    stop("This function is designed to work either on bioRgeo.clusters objects (outputs from clustering functions) or hclust objects.")
+  } else {
+    tree_object <- cluster_object
   }
+
+
+  if (is.null(distances)) {
+    has.distances <- FALSE
+    if(any(eval_metric %in% distance_based_metrics))
+    {
+      warning(paste0("No distance matrix provided, so metrics ",
+                     eval_metric[which(eval_metric %in% distance_based_metrics)],
+                     " will not be computed"))
+      eval_metric <- eval_metric[-which(eval_metric %in% distance_based_metrics)]
+    }
+  } else if (inherits(distances, "bioRgeo.pairwise.metric")) {
+    if (attr(distances, "type") == "distance") {
+      dist_object <- stats::as.dist(
+        net_to_mat(dist[, c(
+          1, 2,
+          which(colnames(dist) == dist_index)
+        )],
+        weight = TRUE, squared = TRUE, symmetrical = TRUE
+        )
+      )
+      has.distances <- TRUE
+    } else
+    {
+      stop("distances must be an object containing distances from distance() or similarity_to_distance(), or an object of class dist")
+    }
+  } else if (!inherits(distances, "dist")) {
+    stop("distances must be an object containing distances from distance() or similarity_to_distance(), or an object of class dist")
+  }
+
+  if (is.null(sp_site_table)) {
+    has.contin <- FALSE
+    if(any(eval_metric %in% compo_based_metrics))
+    {
+      warning(paste0("No species-site table provided, so metrics ",
+                     eval_metric[which(eval_metric %in% compo_based_metrics)],
+                     " will not be computed"))
+      eval_metric <- eval_metric[-which(eval_metric %in% compo_based_metrics)]
+    }
+  } else {
+    if(has.cluster)
+    {
+      if(any(!rownames(sp_site_table) %in% cluster_object$clusters$site))
+      {
+        stop("sp_site_table should be a matrix with sites in rows, species in columns.\nRow names should be site names, and should be identical to site names in the cluster object")
+      }
+    } else
+    {
+      if(any(!rownames(sp_site_table) %in% tree_object$labels))
+      {
+        stop("sp_site_table should be a matrix with sites in rows, species in columns.\nRow names should be site names, and should be identical to names in the tree")
+      }
+    }
+    has.contin <- TRUE
+  }
+
+  if(!length(eval_metric))
+  {
+    stop("No evaluation metric can be computed because of missing arguments. Check arguments distance and sp_site_table")
+  }
+
+
+  # 2. Create partitions on hclust objects if need be
+  # tree_object <- cluster_object$algorithm$final.tree
+  # dist_object <- cluster_object$dist.matrix
+  # Update args
+  # cluster_object$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min")] <-
+  # list(n_clust, cut_height, find_h, h_max, h_min)
 
   nb_sites <- attr(dist_object, "Size")
 
@@ -568,7 +628,7 @@ find_nclust_tree <- function(
                   evaluation_df = evaluation_df,
                   optimal_nb_clusters = optimal_nb_clusters)
 
-  class(outputs) <- append("bioRgeo.nclust.tree", class(outputs))
+  class(outputs) <- append("bioRgeo.partition.metrics", class(outputs))
   return(outputs)
 }
 

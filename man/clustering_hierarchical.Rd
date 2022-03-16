@@ -9,7 +9,8 @@ clustering_hierarchical(
   index = names(distances)[3],
   method = "average",
   randomize = TRUE,
-  n_runs = 100,
+  n_runs = 30,
+  keep_trials = FALSE,
   optimal_tree_method = "best",
   n_clust = NULL,
   cut_height = NULL,
@@ -38,6 +39,10 @@ name in \code{distances}. By default, the third column name of
 randomized, to account for the order of sites in the distance matrix}
 
 \item{n_runs}{number of trials to randomize the distance matrix}
+
+\item{keep_trials}{a boolean indicating if all random trial results
+should be stored in the output object (set to FALSE to save space if your
+\code{distances} object is large)}
 
 \item{optimal_tree_method}{a character vector indicating how the final tree
 should be obtained from all trials. The only option currently is

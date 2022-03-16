@@ -14,7 +14,7 @@ cut_tree(
   dynamic_tree_cut = FALSE,
   dynamic_method = "tree",
   dynamic_minClusterSize = 5,
-  dist_matrix = NULL,
+  distances = NULL,
   ...
 )
 }
@@ -51,9 +51,9 @@ matrix)}
 to use in the dynamic tree cut method (see
 \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})}
 
-\item{dist_matrix}{only useful if \code{tree} is not a
+\item{distances}{only useful if \code{tree} is not a
 \code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
-Provide here the distance matrix used to build the \code{tree}}
+Provide here the distance \code{data.frame} used to build the \code{tree}}
 
 \item{...}{further arguments to be passed to
 \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to
@@ -130,9 +130,13 @@ tree5 <- cut_tree(tree1,
 tree5
 
 
-hclust_tree <- tree2$final.tree
+hclust_tree <- tree2$algorithm$final.tree
 clusters_2 <- cut_tree(hclust_tree,
                        n_clust = 10)
+
+cluster_dynamic <- cut_tree(tree1,
+                            dynamic_tree_cut = TRUE,
+                            distances = distances)
 }
 \seealso{
 \link{clustering_hierarchical}

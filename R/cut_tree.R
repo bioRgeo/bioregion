@@ -28,9 +28,9 @@
 #' @param dynamic_minClusterSize an integer indicating the minimum cluster size
 #' to use in the dynamic tree cut method (see
 #' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})
-#' @param dist_matrix only useful if \code{tree} is not a
+#' @param distances only useful if \code{tree} is not a
 #' \code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
-#' Provide here the distance matrix used to build the \code{tree}
+#' Provide here the distance \code{data.frame} used to build the \code{tree}
 #' @param ... further arguments to be passed to
 #' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to
 #' customize the dynamic tree cut method.
@@ -105,9 +105,13 @@
 #' tree5
 #'
 #'
-#' hclust_tree <- tree2$final.tree
+#' hclust_tree <- tree2$algorithm$final.tree
 #' clusters_2 <- cut_tree(hclust_tree,
 #'                        n_clust = 10)
+#'
+#' cluster_dynamic <- cut_tree(tree1,
+#'                             dynamic_tree_cut = TRUE,
+#'                             distances = distances)
 cut_tree <- function(tree,
                      n_clust = NULL,
                      cut_height = NULL,
@@ -130,7 +134,7 @@ cut_tree <- function(tree,
 
     } else if(inherits(n_clust, "bioRgeo.nclust.tree"))
     {
-      n_clust <- n_clust$optimal_nb_clusters
+      n_clust <- n_clust$algorithm$optimal_nb_clusters
     } else
     {
       stop("n_clust must be one of those:
@@ -169,33 +173,48 @@ cut_tree <- function(tree,
         }
         index <- colnames(distances)[3]
 
+        dist_matrix <- stats::as.dist(
+          net_to_mat(distances[, c(1, 2,
+                                   which(colnames(distances) == index))],
+                     weight = TRUE, squared = TRUE, symmetrical = TRUE))
+
+
       } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
       {
         if(ncol(distances) != 3)
         {
           stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
         }
+        dist_matrix <- stats::as.dist(
+          net_to_mat(distances[, c(1, 2,
+                                   which(colnames(distances) == index))],
+                     weight = TRUE, squared = TRUE, symmetrical = TRUE))
+
+      } else
+      {
+        dist_matrix <- distances
       }
     }
   }
 
   arg_added <- list(...)
-  if(inherits(tree, "bioRgeo.hierar.tree"))
+  if(inherits(tree, "bioRgeo.clusters"))
   {
-    cur.tree <- tree$final.tree
-    # Update args
-    tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min")] <-
-      list(n_clust, cut_height, find_h, h_max, h_min)
+    if (tree$name == "hierarchical_clustering") {
+      cur.tree <- tree$algorithm$final.tree
+      # Update args
+      tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min", "dynamic_tree_cut")] <-
+        list(n_clust, cut_height, find_h, h_max, h_min, dynamic_tree_cut)
 
-    if(dynamic_tree_cut)
-    {
-      tree$args[c("dynamic_tree_cut",
-                  "dynamic_method",
-                  "dynamic_minClusterSize")] <-
-        list(dynamic_tree_cut, dynamic_method,  dynamic_minClusterSize)
-      if(length(arg_added))
+      if(dynamic_tree_cut)
       {
-        tree$args[names(arg_added)] <- arg_added
+        tree$args[c("dynamic_method",
+                    "dynamic_minClusterSize")] <-
+          list(dynamic_method,  dynamic_minClusterSize)
+        if(length(arg_added))
+        {
+          tree$args[names(arg_added)] <- arg_added
+        }
       }
     }
   } else if (inherits(tree, "hclust"))
@@ -203,7 +222,7 @@ cut_tree <- function(tree,
     cur.tree <- tree
   } else
   {
-    stop("This function is designed to work either on bioRgeo.hierar.tree (output from clustering_hierarchical()) or hclust objects.")
+    stop("This function is designed to work either on outputs from clustering_hierarchical() or hclust objects.")
   }
 
 
@@ -211,8 +230,8 @@ cut_tree <- function(tree,
   output_n_clust <- NULL
   if(dynamic_tree_cut)
   {
-    clusters <- data.frame(site = tree$final.tree$labels,
-                           cluster = dynamicTreeCut::cutreeDynamic(tree$final.tree,
+    clusters <- data.frame(site = tree$algorithm$final.tree$labels,
+                           cluster = dynamicTreeCut::cutreeDynamic(tree$algorithm$final.tree,
                                                                    method = dynamic_method,
                                                                    minClusterSize = dynamic_minClusterSize,
                                                                    distM = dist_matrix,
@@ -305,12 +324,14 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
 
-  if(inherits(tree, "bioRgeo.hierar.tree"))
+  clusters <- knbclu(clusters)
+
+  if(inherits(tree, "bioRgeo.clusters"))
   {
     cur.tree$args$cut_height <- cut_height
     tree$clusters <- clusters
-    tree$output_n_clust <- output_n_clust
-    tree$output_cut_height <- output_cut_height
+    tree$algorithm$output_n_clust <- output_n_clust
+    tree$algorithm$output_cut_height <- output_cut_height
     return(tree)
   } else if (inherits(tree, "hclust"))
   {
