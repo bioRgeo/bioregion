@@ -30,34 +30,37 @@ controls=function(X, weight = TRUE, name = "net", type = c("data.frame, matrix, 
 
 }
 
-knbclu=function(partitions, method = "max"){
+knbclu=function(partitions, method = "max", # Changer le défaut par length ?
+                reorder = TRUE,
+                remove.duplicates = FALSE){
 
   # Number of partitions
   nb = dim(partitions)[2] - 1
 
-  # Number of clusters per partitions
-  if(nb==1){
-    if(method=="length"){
-      colnames(partitions)[2]=paste0("K_", length(table(partitions[,2])))
-    }
-    if(method=="max"){
-      colnames(partitions)[2]=paste0("K_", max(partitions[,2]))
-    }
-  }else{
-    if(method == "length"){
-      nbclus=NULL
-      for(i in 1:nb){
-        nbclus=c(nbclus,length(table(partitions[,i+1])))
-      }
-    }
-    if(method=="max"){
-      nbclus=apply(partitions[,-1], 2, max)
-    }
+  if(method == "max")
+  {
+    nbclus <- as.numeric(apply(partitions[, 2:(nb + 1), drop = FALSE],
+                               2,
+                               function (x) max(x)))
+  } else if(method == "length") {
+    nbclus <- apply(partitions[, 2:(nb + 1), drop = FALSE],
+                    2,
+                    function (x) length(unique(x)))
+  }
 
-    ord=cbind(2:(nb+1),nbclus)
-    ord=as.numeric(ord[order(ord[,2]),1])
-    partitions=partitions[,c(1,ord)]
-    colnames(partitions)[2:(nb+1)]=paste0("K_",nbclus)
+
+  if (reorder) {
+    ord <- cbind(2:(nb + 1), nbclus)
+    ord <- ord[order(ord[, 2]), , drop = FALSE]
+    partitions <- partitions[, c(1, ord[, 1])]
+    colnames(partitions)[2:(nb + 1)] <- paste0("K_", ord[, 2])
+  } else {
+    colnames(partitions)[2:(nb + 1)] <- paste0("K_", nbclus)
+  }
+
+  if(remove.duplicates)
+  {
+    partitions <- partitions[!duplicated(as.list(partitions))]
   }
 
   partitions
