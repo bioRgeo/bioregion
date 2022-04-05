@@ -51,7 +51,7 @@ coefficient will be chosen.}
 
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\link{find_nclust_tree}. Should not be used at the same time as
+\link{partition_metrics}. Should not be used at the same time as
 \code{cut_height}}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the tree
@@ -106,7 +106,7 @@ Clusters can be obtained by two methods:
 \item{Specifying a desired number of clusters in \code{n_clust}}
 \item{Specifying one or several heights of cut in \code{cut_height}}}
 
-To find an optimal number of clusters, see \code{\link{find_nclust_tree}}
+To find an optimal number of clusters, see \code{\link{partition_metrics}}
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)

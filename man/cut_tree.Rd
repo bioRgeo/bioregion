@@ -23,7 +23,7 @@ cut_tree(
 
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\link{find_nclust_tree}. Should not be used at the same time as
+\code{\link{partition_metrics}}. Should not be used at the same time as
 \code{cut_height}}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the tree

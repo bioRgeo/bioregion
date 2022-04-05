@@ -41,7 +41,7 @@ print.bioRgeo.clusters <- function(x, ...)
 
 
   # number of clusters -----
-  if (!is.null(x$clusters)) {
+  if (inherits(x$clusters, "data.frame")) {
 
     # Further methodological details if hclust
     if(x$name == "hierarchical_clustering") {
@@ -170,49 +170,48 @@ plot.bioRgeo.clusters <- function(x, ...)
   }
 }
 
-#' @export
-#' @method print bioRgeo.nonhierar.cluster
-print.bioRgeo.nonhierar.cluster <- function(x, ...)
-{
-  cat("Non-hierarchical clustering based on distances between sites\n")
-  cat(" - Number of sites: ", attr(x$dist.matrix, "Size"), "\n")
-  cat(" - Clustering method(s): ", x$args$method, "\n")
-  cat(" - Name of distance column used: ", x$args$index, "\n")
-  cat(" - Number of clusters: ",
-      ifelse(length(x$args$n_clust),
-             paste0(x$args$n_clust, " clusters (user-defined)"),
-             paste0("NA", " clusters (determined with the ",
-                    x$args$nclust_find_method,
-                    " method)")))
-}
-
 
 #' @export
-#' @method print bioRgeo.nclust.tree
-print.bioRgeo.nclust.tree <- function(x, ...)
+#' @method print bioRgeo.partition.metrics
+print.bioRgeo.partition.metrics <- function(x, ...)
 {
-  cat("Optimal number(s) of clusters search:\n")
-  cat(" - Range of clusters explored: from ", x$args$k_min, " to ",
-      x$args$k_max, "\n")
+  cat("Partition metrics:\n")
+  cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
+  cat(" - Range of clusters explored: from ", min(x$evaluation_df$n_clusters), " to ",
+      max(x$evaluation_df$n_clusters), "\n")
   cat(" - Requested metric(s): ", x$args$eval_metric, "\n")
-  if(length(x$args$eval_metric) > 1)
-  {
-    cat(" - Metric used for optimisation: ", x$args$eval_metric[1], "\n")
+  cat(" - Metric summary:\n")
+
+  print(data.frame(sapply(x$evaluation_df[x$args$eval_metric],
+               function(x) {
+                 c(min(x), mean(x), max(x))}),
+             row.names = c("Min", "Mean", "Max")))
+
+  if(x$args$partition_optimisation){
+    cat("\nPotential optimal partition(s):\n")
+    if(length(x$args$eval_metric) > 1)
+    {
+      cat(" - Metric used for optimisation: ", x$args$eval_metric[1], "\n")
+    }
+    cat(" - Criterion chosen to optimise the number of clusters: ",
+        x$args$criterion, "\n")
+    if(x$args$criterion == "step")
+    {
+      cat("   (step quantile chosen: ", x$args$step_quantile,
+          " (i.e., only the top", (1 -  x$args$step_quantile) * 100,
+          "% increase in ", x$args$eval_metric[1],
+          " are used as break points for the number of clusters)\n")
+    } else if(x$args$criterion == "cutoff")
+    {
+      cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
+    }
+    cat(" - Optimal partition(s) of clusters:\n")
+    cat("\n", x$evaluation_df$K[x$evaluation_df$optimal_nclust], "\n\n")
+    cat(" - Respective optimal number(s) of clusters:\n")
+    cat("\n", x$optimal_nb_clusters, "\n")
   }
-  cat(" - Criterion chosen to optimise the number of clusters: ",
-      x$args$criterion, "\n")
-  if(x$args$criterion == "gap")
-  {
-    cat("   --> step quantile chosen: ", x$args$gap_quantile,
-        " (i.e., only the top", (1 -  x$args$gap_quantile) * 100,
-        "% increase in ", x$args$eval_metric[1],
-        " are used as break points for the number of clusters)\n")
-  } else if(x$args$criterion == "cutoff")
-  {
-    cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
-  }
-  cat("\nOptimal number(s) of clusters: \n")
-  cat(x$optimal_nb_clusters)
+
+  cat("Access the data.frame of metrics with your_object$evaluation_df")
 }
 
 #' @export

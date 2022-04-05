@@ -8,21 +8,34 @@
 #' number of clusters.
 #'
 #' @param cluster_object tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
-#' @param k_min an integer indicating the minimum number of clusters to be
-#' explored
-#' @param k_max an integer indicating the maximum number of clusters to be
-#' explored, or "number of sites" to use the number of sites as the maximum
 #' @param eval_metric character string or vector of character strings indicating
 #'  metric(s) to be calculated to
 #' investigate the effect of different number of clusters. Available options:
 #' \code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
 #' \code{"tot_endemism"}
-#' Note that if you request several evaluation
-#' metrics, they will all be computed, but only the first will be used to
-#' find the optimal number(s) of clusters (order \code{eval_metric} accordingly)
+#' @param distances a \code{dist} object or a \code{bioRgeo.distance} object (output
+#' from \code{\link{similarity_to_distance}}). Necessary if \code{eval_metric}
+#' includes \code{pc_distance} and \code{tree} is not a
+#' \code{bioRgeo.hierar.tree} object
+#' @param distance_index a character string indicating the distance (beta-diversity)
+#' index to be used in case \code{dist} is a \code{data.frame} with multiple
+#' distance indices
+#' @param tree_k_min an integer indicating the minimum number of clusters to be
+#' explored. Only useful if
+#' \code{cluster_object} is based on \code{\link{clustering_hierarchical}}.
+#' @param tree_k_max an integer indicating the maximum number of clusters to be
+#' explored, or "number of sites" to use the number of sites as the maximum.
+#' Only useful if
+#' \code{cluster_object} is based on \code{\link{clustering_hierarchical}}.
+#' @param tree_force_repartitioning a boolean indicating if the function should
+#' re-partition clusters based on \code{tree_k_min} and \code{tree_k_max}. Only useful if
+#' \code{cluster_object} is based on \code{\link{clustering_hierarchical}}.
+#' @param partition_optimisation a boolean specifying if the function should
+#' find an optimal number of clusters, based on the chosen \code{criterion}
 #' @param criterion character string indicating the criterion to be used to
 #' identify optimal number(s) of clusters. Available methods currently include
-#' \code{"step"}, \code{"cutoff"}, \code{"elbow"} or \code{"mars"}.
+#' \code{"step"}, \code{"cutoff"}, \code{"elbow"}, \code{"mars"}, \code{"min"} or
+#' \code{"max"}.
 #' @param step_quantile if \code{criterion = "step"}, specify here the quantile
 #' of differences between two consecutive k to be used as the cutoff to identify
 #' the most important steps in \code{eval_metric}
@@ -31,13 +44,6 @@
 #' @param metric_cutoffs if \code{criterion = "cutoff"}, specify here the
 #' cutoffs of \code{eval_metric} at which the number of clusters should be
 #' extracted
-#' @param dist a \code{dist} object or a \code{bioRgeo.distance} object (output
-#' from \code{\link{similarity_to_distance}}). Necessary if \code{eval_metric}
-#' includes \code{pc_distance} and \code{tree} is not a
-#' \code{bioRgeo.hierar.tree} object
-#' @param dist_index a character string indicating the distance (beta-diversity)
-#' index to be used in case \code{dist} is a \code{data.frame} with multiple
-#' distance indices
 #' @param sp_site_table a \code{matrix} with sites in row and species in
 #' columns. Should be provided if \code{eval_metric} includes
 #' \code{"avg_endemism"} or \code{"tot_endemism"}
@@ -50,10 +56,10 @@
 #' \loadmathjax
 #'
 #' This function proceeds in three steps. First, the range of clusterisations
-#' between \code{k_min} and \code{k_max} number of clusters are explored on
+#' between \code{tree_k_min} and \code{tree_k_max} number of clusters are explored on
 #' the input object  \code{tree} by cutting the tree for each number of groups
 #' \code{k} between
-#' \code{k_min} and \code{k_max}. Second, for each clusterisation, the function
+#' \code{tree_k_min} and \code{tree_k_max}. Second, for each clusterisation, the function
 #' calculates one or several evaluation metric(s) and stores it. Third, the
 #' relation ship evaluation metric ~ number of clusters is explored by the
 #' function, and a criterion is applied on the first
@@ -127,13 +133,20 @@
 #'
 #' \bold{Criteria to find optimal number(s) of clusters}
 #' \itemize{
-#' \item{\code{step}:
+#' \item{\code{increasing_step} or \code{decreasing_step}:
 #' This method consists in identifying clusters at the most important
-#' increments, or steps, in the evaluation metric. Therefore, this is relative
-#' to the distribution of increments in the evaluation metric over the tested
+#' changes, or steps, in the evaluation metric. The objective can be to either
+#' look for largest increases (\code{increasing_step}) or largest decreases
+#' \code{decreasing_step}. Steps are calculated based on the pairwise
+#' differences between partitions.
+#' Therefore, this is relative
+#' to the distribution of changes in the evaluation metric over the tested
 #' \code{k}. Specify \code{step_quantile} as the quantile cutoff above which
-#' increments will be selected as most important (by default, 0.99, i.e. the
-#' top 1\% increments will be selected). Basically this method will emphasize the
+#' steps will be selected as most important (by default, 0.99, i.e. the
+#' largest 1\% steps will be selected).Alternatively, you can also choose to
+#' specify the number of top steps to keep, e.g. to keep the largest three
+#' steps, specify \code{step_level = 3}
+#' Basically this method will emphasize the
 #' most important changes in the evaluation metric as a first approximation of
 #' where important cuts can be chosen.
 #' }
@@ -162,6 +175,10 @@
 #' following conditions: (1) the evaluation metric was increasing before the
 #' cutoff and (2) there is no more increase or the increase is slower after the
 #' cutoff. This method uses \link[earth:earth]{earth::earth()}.}
+#'
+#' \item{\code{min} & \code{max}:
+#' Picks the optimal partition(s) respectively at the minimum or maximum value
+#' of the evaluation metric.}
 #' }
 #' @return
 #' a \code{list} of class \code{bioRgeo.partition.metrics} with three elements:
@@ -207,29 +224,80 @@
 #'                                  index = "Simpson")
 #' tree1
 #'
-#' partition_metrics(tree1)
+#' a <- partition_metrics(tree1,
+#'                   distances = distances,
+#'                   eval_metric = c("tot_endemism",
+#'                                   "avg_endemism",
+#'                                   "pc_distance",
+#'                                   "anosim"))
 #'
-#' partition_metrics(tree1, k_max = 50, step_levels = 5)
+#' a <- partition_metrics(tree1, tree_k_max = 50,
+#'                   tree_force_repartitioning = TRUE,
+#'                   distances = distances,
+#'                   step_levels = 5)
+#'  a <- partition_metrics(tree1, tree_k_max = 50,
+#'                   eval_metric = c("tot_endemism",
+#'                                   "avg_endemism",
+#'                                   "pc_distance",
+#'                                   "anosim"),
+#'                   tree_force_repartitioning = TRUE,
+#'                   distances = distances,
+#'                   sp_site_table = vegemat)
 #'
-#' partition_metrics(tree1, eval_metric = c("tot_endemism",
-#'                                         "avg_endemism",
-#'                                         "pc_distance",
-#'                                         "anosim"),
-#'                  criterion = "step",
-#'                  sp_site_table = vegemat,
-#'                  k_max = 15)
-#' partition_metrics(tree1, eval_metric = "pc_distance",  k_max = 50,
+#' a <- partition_metrics(tree1,
+#'                   eval_metric = c("tot_endemism",
+#'                                   "avg_endemism",
+#'                                   "pc_distance",
+#'                                   "anosim"),
+#'                   tree_k_max = 25,
+#'                   tree_force_repartitioning = TRUE,
+#'                   partition_optimisation = TRUE,
+#'                   distances = distances,
+#'                   sp_site_table = vegemat,
+#'                   criterion = "decreasing_step",
+#'                   step_levels = 5)
+#'
+#' partition_metrics(tree1,
+#'                  distances = distances,
+#'                  eval_metric = "pc_distance",
+#'                  tree_k_max = 50,
+#'                  tree_force_repartitioning = TRUE,
+#'                  partition_optimisation = TRUE,
 #'                  criterion = "elbow")
-#' partition_metrics(tree1, eval_metric = "pc_distance",  k_max = 50,
+#'
+#' partition_metrics(tree1,
+#'                  distances = distances,
+#'                  eval_metric = "pc_distance",
+#'                  tree_k_max = 50,
+#'                  tree_force_repartitioning = TRUE,
+#'                  partition_optimisation = TRUE,
+#'                  criterion = "increasing_step")
+#'
+#' partition_metrics(tree1,
+#'                  distances = distances,
+#'                  eval_metric = "pc_distance",
+#'                  tree_k_max = 50,
+#'                  tree_force_repartitioning = TRUE,
+#'                  partition_optimisation = TRUE,
 #'                  criterion = "mars")
+#'
+#' partition_metrics(tree1,
+#'                  sp_site_table = vegemat,
+#'                  eval_metric = "tot_endemism",
+#'                  tree_k_max = 50,
+#'                  tree_force_repartitioning = TRUE,
+#'                  partition_optimisation = TRUE,
+#'                  criterion = "max")
 partition_metrics <- function(
   cluster_object,
   distances = NULL,
   distance_index = names(distances)[3],
-  k_min = 2,
-  k_max = "number of sites",
   eval_metric = "pc_distance",
-  criterion = "step", # step, elbow or cutoff for now
+  tree_k_min = 2,
+  tree_k_max = "number of sites",
+  tree_force_repartitioning = FALSE,
+  partition_optimisation = FALSE,
+  criterion = "elbow", # step, elbow, cutoff, min, max and mars for now
   step_quantile = .99,
   step_levels = NULL,
   metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
@@ -243,12 +311,14 @@ partition_metrics <- function(
   compo_based_metrics <- c("avg_endemism",
                            "tot_endemism")
 
-  # 1. Does input object contains partitions already?
+  # 1. Does input object contains partitions already? ---------------
   if (inherits(cluster_object, "bioRgeo.clusters")) {
-    if (length(dim(cluster_object$clusters)) > 1) {
+    if (inherits(cluster_object$clusters, "data.frame") & # Partitions already exist?
+        !all(tree_force_repartitioning & # Or should we force repartition, if object comes from hierarchical clustering?
+             cluster_object$name == "hierarchical_clustering")) {
       has.clusters <- TRUE
     } else {
-      if (cluster_object$name == "clustering_hierarchical") {
+      if (cluster_object$name == "hierarchical_clustering") {
         has.clusters <- FALSE
         tree_object <- cluster_object$algorithm$final.tree
       } else {
@@ -267,16 +337,17 @@ partition_metrics <- function(
     if(any(eval_metric %in% distance_based_metrics))
     {
       warning(paste0("No distance matrix provided, so metrics ",
-                     eval_metric[which(eval_metric %in% distance_based_metrics)],
+                     paste(eval_metric[which(eval_metric %in% distance_based_metrics)],
+                           collapse = ", "),
                      " will not be computed"))
       eval_metric <- eval_metric[-which(eval_metric %in% distance_based_metrics)]
     }
   } else if (inherits(distances, "bioRgeo.pairwise.metric")) {
     if (attr(distances, "type") == "distance") {
       dist_object <- stats::as.dist(
-        net_to_mat(dist[, c(
+        net_to_mat(distances[, c(
           1, 2,
-          which(colnames(dist) == dist_index)
+          which(colnames(distances) == distance_index)
         )],
         weight = TRUE, squared = TRUE, symmetrical = TRUE
         )
@@ -295,12 +366,13 @@ partition_metrics <- function(
     if(any(eval_metric %in% compo_based_metrics))
     {
       warning(paste0("No species-site table provided, so metrics ",
-                     eval_metric[which(eval_metric %in% compo_based_metrics)],
+                     paste(eval_metric[which(eval_metric %in% compo_based_metrics)],
+                           collapse = ", "),
                      " will not be computed"))
       eval_metric <- eval_metric[-which(eval_metric %in% compo_based_metrics)]
     }
   } else {
-    if(has.cluster)
+    if(has.clusters)
     {
       if(any(!rownames(sp_site_table) %in% cluster_object$clusters$site))
       {
@@ -318,133 +390,127 @@ partition_metrics <- function(
 
   if(!length(eval_metric))
   {
-    stop("No evaluation metric can be computed because of missing arguments. Check arguments distance and sp_site_table")
+    stop("No evaluation metric can be computed because of missing arguments. Check arguments distances and sp_site_table")
+  }
+
+  if(partition_optimisation & length(criterion) > 2)
+  {
+    stop("Please provide only one method to select the optimal number of clusters, in argument 'criterion'")
   }
 
 
-  # 2. Create partitions on hclust objects if need be
-  # tree_object <- cluster_object$algorithm$final.tree
-  # dist_object <- cluster_object$dist.matrix
-  # Update args
-  # cluster_object$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min")] <-
-  # list(n_clust, cut_height, find_h, h_max, h_min)
+  # 2. Create partitions on hclust objects if need be --------------
+  nb_sites <- cluster_object$inputs$nb_sites
 
-  nb_sites <- attr(dist_object, "Size")
+  if(!has.clusters) {
 
-  if(k_max == "number of sites")
-  {
-    if("anosim" %in% eval_metric)
+    if(tree_k_max == "number of sites")
     {
-      message("k_max set to nb_sites - 1, such that anosim can be computed")
-      k_max <- nb_sites - 1
-    } else
+      if("anosim" %in% eval_metric)
+      {
+        message("tree_k_max set to nb_sites - 1, such that anosim can be computed")
+        tree_k_max <- nb_sites - 1
+      } else
+      {
+        tree_k_max <- nb_sites
+      }
+    } else if(!(tree_k_max %% 1 == 0)) # integer testing ain't easy in R
     {
-      k_max <- nb_sites
+      stop("tree_k_max must be an integer determining the number of clusters.")
     }
-  } else if(!(k_max %% 1 == 0)) # integer testing ain't easy in R
-  {
-    stop("k_max must be an integer determining the number of clusters.")
+
+    cluster_object <- suppressMessages(cut_tree(cluster_object,
+                                                n_clust = tree_k_min:tree_k_max))
+
   }
 
-  if(any(c("avg_endemism", "tot_endemism") %in% eval_metric))
-  {
-    if(is.null(sp_site_table))
-    {
-      stop("To calculate endemism metrics, you have to provide the species-site table in the sp_site_table argument.")
-    }
-    if(any(!rownames(sp_site_table) %in% tree_object$labels))
-    {
-      stop("sp_site_table should be a matrix with sites in rows, species in columns.\nRow names should be site names, and should be identical to names in the tree")
-    }
-  }
+  clusters <- cluster_object$clusters
 
+
+
+  # 3. Calculate metrics ---------------------
   # Labels are not in the same order in the tree and in the distance matrix.
   # tree_object$labels == attr(dist_object, "Labels")
   # cbind(tree_object$labels,
   #       attr(dist_object, "Labels"))
 
-  # Create a df with sites in rows and clusters in columns
-  clusters <- data.frame(matrix(nrow = nb_sites,
-                                ncol = length(k_min:k_max) + 1,
-                                dimnames = list(attr(dist_object, "Labels"),
-                                                c("site", paste0("k_", (k_min:k_max))))))
+  if(has.distances) {
+    dist_mat <- as.matrix(dist_object)
+    dist_sum_total <- sum(dist_mat) # Calculation for metric "pc_distance"
 
-  clusters$site <- attr(dist_object, "Labels")
+    # Create a vector of positions in the distance matrix indicating to what
+    # row/column each element corresponds
+    # Will be used to distinguish within vs. between clusters
+    rownames_dist <- attr(dist_object,
+                          "Labels")[as.vector(
+                            stats::as.dist(row(matrix(nrow = nb_sites,
+                                                      ncol = nb_sites))))]
+    colnames_dist <- attr(dist_object,
+                          "Labels")[as.vector(
+                            stats::as.dist(col(matrix(nrow = nb_sites,
+                                                      ncol = nb_sites))))]
+  }
 
-  dist_mat <- as.matrix(dist_object)
-  dist_sum_total <- sum(dist_mat) # Calculation for metric "pc_distance"
 
   # Prepare evaluation data.frame
-  evaluation_df <- data.frame(matrix(nrow = length(k_min:k_max),
-                                     ncol = 1 + length(eval_metric),
-                                     dimnames = list(k_min:k_max,
-                                                     c("n_clusters", eval_metric))))
+  evaluation_df <- data.frame(matrix(nrow = ncol(cluster_object$clusters) - 1,
+                                     ncol = 2 + length(eval_metric),
+                                     dimnames = list(colnames(cluster_object$clusters)[2:ncol(cluster_object$clusters)],
+                                                     c("K", "n_clusters", eval_metric))))
+  evaluation_df$K <- colnames(cluster_object$clusters)[2:ncol(cluster_object$clusters)]
+  evaluation_df$n_clusters <- apply(cluster_object$clusters[, 2:(ncol(cluster_object$clusters)), drop = FALSE],
+                                    2,
+                                    function (x) length(unique(x)))
 
-  evaluation_df$n_clusters <- k_min:k_max
+  evaluation_df <- evaluation_df[order(evaluation_df$n_clusters), ]
 
 
-  # Create a vector of positions in the distance matrix indicating to what
-  # row/column each element corresponds
-  # Will be used to distinguish within vs. between clusters
-  rownames_dist <- attr(dist_object,
-                        "Labels")[as.vector(
-                          stats::as.dist(row(matrix(nrow = nb_sites,
-                                                    ncol = nb_sites))))]
-  colnames_dist <- attr(dist_object,
-                        "Labels")[as.vector(
-                          stats::as.dist(col(matrix(nrow = nb_sites,
-                                                    ncol = nb_sites))))]
 
   cur_col <- 2 # Start at the second column and proceed through all columns
-  message(paste0("Exploring all clustering results on the tree between ", k_min,
-                 " and ", k_max, " groups, this may take a while..."))
-
-  for(k in k_min:k_max)
+  message("Exploring metrics for all partitions, this may take a while...")
+  for(cls_col in 2:ncol(clusters))
   {
-    # Cut the tree for given k
-    cls <- dendextend::cutree(tree_object, k = k)
-    # Make sure clusters are assigned to their respective sites
-    clusters[, paste0("k_", k)] <- cls[match(rownames(clusters),
-                                             names(cls))]
 
     # cur_clusters <- clusters[, cur_col]
 
-    # The next line will create, for each element of the distance matrix, a
-    # vector indicating whether if each distance is within or between clusters
-    within_clusters <- clusters[rownames_dist,
-                                cur_col] == clusters[colnames_dist,
-                                                     cur_col]
+    if(has.distances){
+      # The next line will create, for each element of the distance matrix, a
+      # vector indicating whether if each distance is within or between clusters
+      within_clusters <- clusters[rownames_dist,
+                                  cls_col] == clusters[colnames_dist,
+                                                       cls_col]
 
-    if("pc_distance" %in% eval_metric)
-    {
-      # Compute total distance for current number of clusters
-      # Create a distance matrix with only distances between clusters - not within
-      # clusters
-      cur_dist_object <- dist_object
-      # Distances between sites of current cluster are set to 0
-      cur_dist_object[within_clusters] <- 0
+      if("pc_distance" %in% eval_metric)
+      {
+        # Compute total distance for current number of clusters
+        # Create a distance matrix with only distances between clusters - not within
+        # clusters
+        cur_dist_object <- dist_object
+        # Distances between sites of current cluster are set to 0
+        cur_dist_object[within_clusters] <- 0
 
-      # Calculate sum for the current cluster number
-      evaluation_df$pc_distance[which(evaluation_df$n_clusters == k)] <- sum(cur_dist_object) / sum(dist_object)
+        # Calculate sum for the current cluster number
+        evaluation_df$pc_distance[cls_col - 1] <- sum(cur_dist_object) / sum(dist_object)
+      }
+
+      if("anosim" %in% eval_metric)
+      {
+        dist_ranks <- rank(dist_object)
+
+        denom <- nb_sites * (nb_sites - 1) / 4
+
+        wb_average_rank <- tapply(dist_ranks, within_clusters, mean)
+
+        # Analysis of similarities, formula from the vegan package
+        evaluation_df$anosim[cls_col - 1] <- -diff(wb_average_rank) / denom
+      }
     }
 
-    if("anosim" %in% eval_metric)
-    {
 
-      dist_ranks <- rank(dist_object)
-
-      denom <- nb_sites * (nb_sites - 1) / 4
-
-      wb_average_rank <- tapply(dist_ranks, within_clusters, mean)
-
-      # Analysis of similarities, formula from the vegan package
-      evaluation_df$anosim[which(evaluation_df$n_clusters == k)] <- -diff(wb_average_rank) / denom
-    }
-
-    if(any(c("avg_endemism", "tot_endemism") %in% eval_metric))
+    if(has.contin)
     {
       cur_contin <- as.data.frame(sp_site_table)
-      cur_contin$cluster <- clusters[match(rownames(cur_contin), clusters$site), paste0("k_", k)]
+      cur_contin$cluster <- clusters[match(rownames(cur_contin), clusters$site), cls_col]
       cluster_contin <- stats::aggregate(. ~ cluster, cur_contin, sum)
       rownames(cluster_contin) <- cluster_contin[, 1]
       cluster_contin <- cluster_contin[, -1]
@@ -462,169 +528,227 @@ partition_metrics <- function(
       # Average endemism per cluster
       if("avg_endemism" %in% eval_metric)
       {
-        evaluation_df$avg_endemism[which(evaluation_df$n_clusters == k)] <- mean(pc_endemism_per_cluster)
+        evaluation_df$avg_endemism[cls_col - 1] <- mean(pc_endemism_per_cluster)
       }
       # Total endemism
       if("tot_endemism" %in% eval_metric)
       {
-        evaluation_df$tot_endemism[which(evaluation_df$n_clusters == k)] <- length(which(occ == 1)) / length(which(occ != 1))
+        evaluation_df$tot_endemism[cls_col - 1] <- length(which(occ == 1)) / length(which(occ != 1))
       }
     }
 
     if(!disable_progress)
     {
       cat(".")
-      if((cur_col - 1) == length(k_min:k_max))
+      if(cls_col == ncol(clusters))
       {
         cat("Complete\n")
-      } else if((cur_col - 1) %% 50 == 0)
+      } else if((cls_col - 1) %% 50 == 0)
       {
-        cat(paste0("k = ", cur_col - 1, " ~ ", round(100 * (cur_col - 1) / k_max, 2), "% complete\n"))
+        cat(paste0("k = ", cls_col - 1, " ~ ", round(100 * (cls_col - 1) / tree_k_max, 2), "% complete\n"))
       }
     }
-    # Move on to next k
-    cur_col <- cur_col + 1
   }
 
-  message(paste0("Clustering explorations finished, finding the optimal number(s) of clusters..."))
 
-  evaluation_df$optimal_nclust <- FALSE
-  if(criterion == "mars")
+  # 4 find optimal number of clusters? ------------------
+  if(partition_optimisation)
   {
-    mars_model <- earth::earth(evaluation_df[, eval_metric[1]] ~ evaluation_df$n_clusters)
-    mars_sum <- summary(mars_model)
-    if(nrow(mars_sum$coefficients) > 1)
+    if(ncol(cluster_object$clusters) == 2)
     {
-      funs <- rownames(mars_sum$coefficients)[2:nrow(mars_sum$coefficients)]
-      funs <- gsub(")", "", gsub("h(", "", funs, fixed = TRUE), fixed = TRUE)
-      funs <- gsub(paste0("evaluation_df$n_clusters"), "", funs, fixed = TRUE)
-
-      mars_hinges <- as.numeric(gsub("-", "", funs))
-
-      mars_cutoffs <- data.frame(cutoff = unique(mars_hinges),
-                                 before = NA, after = NA)
-      mars_cutoffs <- mars_cutoffs[order(mars_cutoffs$cutoff), ]
-
-      mars_preds <- data.frame(evaluation_df,
-                               stats::predict(mars_model,
-                                       evaluation_df$n_clusters))
-      def_cut <- min(mars_preds$n_clusters)
-
-      for (cur_cut in mars_cutoffs$cutoff)
-      {
-
-        mars_cutoffs$before[mars_cutoffs$cutoff == cur_cut] <-
-          (mars_preds[which(mars_preds$n_clusters == cur_cut), ncol(mars_preds)] -
-             mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
-          (cur_cut - def_cut)
-
-        def_cut <- cur_cut
-      }
-      if(nrow(mars_cutoffs) > 1)
-      {
-        mars_cutoffs$after[1:(nrow(mars_cutoffs) - 1)] <- mars_cutoffs$before[2:nrow(mars_cutoffs)]
-      }
-      mars_cutoffs$after[nrow(mars_cutoffs)] <-
-        (mars_preds[which(mars_preds$n_clusters == max(mars_preds$n_clusters)), ncol(mars_preds)] -
-           mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
-        (max(mars_preds$n_clusters) - def_cut)
-      mars_cutoffs$change_slope <- mars_cutoffs$after - mars_cutoffs$before
-
-      mars_cutoffs$breaks <- ifelse(mars_cutoffs$before > 0 & mars_cutoffs$change_slope < 0, TRUE, FALSE)
-
-      evaluation_df$optimal_nclust[which(evaluation_df$n_clusters %in% mars_cutoffs$cutoff[mars_cutoffs$breaks])] <- TRUE
+      message("Only one partition in the cluster table, skipping optimal number of cluster analysis")
+      optimal_nb_clusters = NULL
     } else
     {
-      stop("No cutoff point was found with the MARS method")
-    }
-  }
+      message(paste0("Number of partitions: ", ncol(cluster_object$clusters) - 1), "\n")
 
-  if(criterion == "elbow")
-  {
-    message(" - Elbow method")
+      if(criterion %in% c("elbow",
+                          "increasing_step",
+                          "decreasing_step",
+                          "mars")) {
+        if(ncol(cluster_object$clusters) <= 5) {
+          message(paste0("...Caveat: be cautious with the interpretation of metric analyses with such a low number of partitions"))
+        }
+      } else if(!(criterion %in% c("min", "max", "cutoff"))) {
+        stop("criterion must be one of elbow, increasing_step, decreasing_step, min, max, cutoff or mars")
+      }
 
-    elbow <- .elbow_finder(evaluation_df$n_clusters,
-                         evaluation_df[, eval_metric[1]],
-                         correct_decrease = TRUE)
-    message(paste0("   * elbow found at ",
-                   elbow[1], " clusters, rounding to ", round(elbow[1])))
+      message(paste0("Searching for potential optimal number(s) of clusters based on the ",
+                     criterion, " method"))
+
+      evaluation_df$optimal_nclust <- FALSE
+      if(criterion == "mars")
+      {
+        mars_model <- earth::earth(evaluation_df[, eval_metric[1]] ~ evaluation_df$n_clusters)
+        mars_sum <- summary(mars_model)
+        if(nrow(mars_sum$coefficients) > 1)
+        {
+          funs <- rownames(mars_sum$coefficients)[2:nrow(mars_sum$coefficients)]
+          funs <- gsub(")", "", gsub("h(", "", funs, fixed = TRUE), fixed = TRUE)
+          funs <- gsub(paste0("evaluation_df$n_clusters"), "", funs, fixed = TRUE)
+
+          mars_hinges <- as.numeric(gsub("-", "", funs))
+
+          mars_cutoffs <- data.frame(cutoff = unique(mars_hinges),
+                                     before = NA, after = NA)
+          mars_cutoffs <- mars_cutoffs[order(mars_cutoffs$cutoff), ]
+
+          mars_preds <- data.frame(evaluation_df,
+                                   stats::predict(mars_model,
+                                                  evaluation_df$n_clusters))
+          def_cut <- min(mars_preds$n_clusters)
+
+          for (cur_cut in mars_cutoffs$cutoff)
+          {
+
+            mars_cutoffs$before[mars_cutoffs$cutoff == cur_cut] <-
+              (mars_preds[which(mars_preds$n_clusters == cur_cut), ncol(mars_preds)] -
+                 mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
+              (cur_cut - def_cut)
+
+            def_cut <- cur_cut
+          }
+          if(nrow(mars_cutoffs) > 1)
+          {
+            mars_cutoffs$after[1:(nrow(mars_cutoffs) - 1)] <- mars_cutoffs$before[2:nrow(mars_cutoffs)]
+          }
+          mars_cutoffs$after[nrow(mars_cutoffs)] <-
+            (mars_preds[which(mars_preds$n_clusters == max(mars_preds$n_clusters)), ncol(mars_preds)] -
+               mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
+            (max(mars_preds$n_clusters) - def_cut)
+          mars_cutoffs$change_slope <- mars_cutoffs$after - mars_cutoffs$before
+
+          mars_cutoffs$breaks <- ifelse(mars_cutoffs$before > 0 & mars_cutoffs$change_slope < 0, TRUE, FALSE)
+
+          evaluation_df$optimal_nclust[which(evaluation_df$n_clusters %in% mars_cutoffs$cutoff[mars_cutoffs$breaks])] <- TRUE
+        } else
+        {
+          stop("No cutoff point was found with the MARS method")
+        }
+      }
+
+      if(criterion == "elbow")
+      {
+        message(" - Elbow method")
+
+        elbow <- .elbow_finder(evaluation_df$n_clusters,
+                               evaluation_df[, eval_metric[1]],
+                               correct_decrease = TRUE)
+        message(paste0("   * elbow found at ",
+                       elbow[1], " clusters, rounding to ", round(elbow[1])))
 
 
-    evaluation_df$optimal_nclust[which(evaluation_df$n_clusters == round(elbow[1]))] <- TRUE
-  } else if(criterion == "step")
-  {
-    message(" - Step method")
-    # Compute difference between each consecutive nb of clusters
-    diffs <- evaluation_df[2:nrow(evaluation_df), eval_metric[1]] -
-      evaluation_df[1:(nrow(evaluation_df) - 1), eval_metric[1]]
-    # First difference is considered to be an increment from 0
-    diffs <- c(evaluation_df[1, eval_metric[1]],
-               diffs)
+        evaluation_df$optimal_nclust[which(evaluation_df$n_clusters == round(elbow[1]))] <- TRUE
+      }
+      if(criterion %in% c("increasing_step",
+                          "decreasing_step"))
+      {
+        message(" - Step method")
+        # Compute difference between each consecutive nb of clusters
+        diffs <- evaluation_df[2:nrow(evaluation_df), eval_metric[1]] -
+          evaluation_df[1:(nrow(evaluation_df) - 1), eval_metric[1]]
+        # Should the first difference is considered to be an increment from 0?
+        # diffs <- c(evaluation_df[1, eval_metric[1]],
+        #                diffs)
+        if(criterion == "decreasing_step"){
+          diffs <- - diffs
+        }
 
-
-    if(!is.null(step_levels))
-    {
-      message(paste0("   * step_levels provided, selecting the ",
-                     step_levels, " highest step(s) as cutoff(s)"))
-      level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:step_levels]
-      evaluation_df$optimal_nclust[which(diffs %in% level_diffs)] <- TRUE
-    } else if(!is.null(step_quantile))
-    {
-      message(paste0("   * selecting the highest step(s) as cutoff(s) based on
+        if(!is.null(step_levels))
+        {
+          message(paste0("   * step_levels provided, selecting the ",
+                         step_levels, " ",
+                         "largest step(s) as cutoff(s)"))
+          level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:step_levels]
+          evaluation_df$optimal_nclust[which(diffs %in% level_diffs) + 1] <- TRUE
+        } else if(!is.null(step_quantile))
+        {
+          message(paste0("   * selecting the largest step(s) as cutoff(s) based on
                      the quantile ", step_quantile))
-      qt <- stats::quantile(diffs,
-                            step_quantile)
-      evaluation_df$optimal_nclust[which(diffs > qt)] <- TRUE
+          qt <- stats::quantile(diffs,
+                                step_quantile)
+          evaluation_df$optimal_nclust[which(diffs > qt) + 1] <- TRUE
+        }
+
+      }
+      if(criterion == "cutoff")
+      {
+        message(" - Cutoff method")
+
+
+        hits <- sapply(metric_cutoffs,
+                       function(x, metric)
+                       {
+                         which(metric - x > 0)[1]
+                       }, metric = evaluation_df[, eval_metric])
+        if(all(is.na(hits)))
+        {
+          stop("No number of cluster satisfied the requested metric_cutoffs")
+        } else if(any(is.na(hits)))
+        {
+          warning("Could not find suitable number of clusters for cutoff(s): ", metric_cutoffs[which(is.na(hits))])
+        } else
+          evaluation_df$optimal_nclust[hits] <- TRUE
+      }
+
+      if(criterion == "max")
+      {
+        message(" - Max value method")
+
+        evaluation_df$optimal_nclust[
+          which(evaluation_df[, eval_metric] ==
+                  max(evaluation_df[, eval_metric]))] <- TRUE
+      }
+
+      if(criterion == "min")
+      {
+        message(" - Min value method")
+
+        evaluation_df$optimal_nclust[
+          which(evaluation_df[, eval_metric] ==
+                  max(evaluation_df[, eval_metric]))] <- TRUE
+      }
+
+      optimal_nb_clusters <- evaluation_df$n_clusters[evaluation_df$optimal_nclust]
+
+
+      if(plot)
+      {
+        message("Plotting results...")
+        p <- ggplot2::ggplot(evaluation_df, ggplot2::aes_string(x = "n_clusters", y = eval_metric[1])) +
+          ggplot2::geom_line(col = "darkgrey") +
+          # ggplot2::geom_hline(yintercept = evaluation_df[evaluation_df$optimal_nclust, eval_metric[1]],
+          #                     linetype = 2) +
+          ggplot2::geom_vline(xintercept = evaluation_df[evaluation_df$optimal_nclust, "n_clusters"],
+                              linetype = 2) +
+          ggplot2::theme_bw()
+        if(criterion == "mars")
+        {
+          message("   (the red line is the prediction from MARS models)")
+          p <- p + ggplot2::geom_line(data = mars_preds,
+                                      ggplot2::aes_string(x = "n_clusters", y = mars_preds[, ncol(mars_preds)]),
+                                      col = "red")
+        }
+        print(p)
+      }
     }
-
-  } else if(criterion == "cutoff")
+  } else
   {
-    message(" - Cutoff method")
-
-
-    hits <- sapply(metric_cutoffs,
-           function(x, metric)
-             {
-             which(metric - x > 0)[1]
-           }, metric = evaluation_df[ eval_metric])
-    if(all(is.na(hits)))
-    {
-      stop("No number of cluster satisfied the requested metric_cutoffs")
-    } else if(any(is.na(hits)))
-    {
-      warning("Could not find suitable number of clusters for cutoff(s): ", metric_cutoffs[which(is.na(hits))])
-    } else
-    evaluation_df$optimal_nclust[hits] <- TRUE
+    optimal_nb_clusters = NULL
   }
 
-  optimal_nb_clusters <- evaluation_df$n_clusters[evaluation_df$optimal_nclust]
-
-
-  if(plot)
-  {
-    message("Plotting results...")
-    p <- ggplot2::ggplot(evaluation_df, ggplot2::aes_string(x = "n_clusters", y = eval_metric[1])) +
-      ggplot2::geom_line(col = "darkgrey") +
-      # ggplot2::geom_hline(yintercept = evaluation_df[evaluation_df$optimal_nclust, eval_metric[1]],
-      #                     linetype = 2) +
-      ggplot2::geom_vline(xintercept = evaluation_df[evaluation_df$optimal_nclust, "n_clusters"],
-                          linetype = 2) +
-      ggplot2::theme_bw()
-    if(criterion == "mars")
-    {
-      message("   (the red line is the prediction from MARS models)")
-      p <- p + ggplot2::geom_line(data = mars_preds,
-                                  ggplot2::aes_string(x = "n_clusters", y = mars_preds[, ncol(mars_preds)]),
-                                  col = "red")
-    }
-    print(p)
-  }
-  outputs <- list(args = list(k_min = k_min,
-                              k_max = k_max,
-                              eval_metric = eval_metric,
+  outputs <- list(args = list(eval_metric = eval_metric,
+                              tree_k_min = ifelse(has.clusters, NA,
+                                                  tree_k_min),
+                              tree_k_max = ifelse(has.clusters, NA,
+                                                  tree_k_max),
+                              tree_force_repartitioning = tree_force_repartitioning,
+                              partition_optimisation = partition_optimisation,
                               criterion = criterion,
                               metric_cutoffs = metric_cutoffs,
-                              step_quantile = step_quantile),
+                              step_quantile = step_quantile,
+                              step_levels = step_levels,
+                              has_clusters = has.clusters),
                   evaluation_df = evaluation_df,
                   optimal_nb_clusters = optimal_nb_clusters)
 

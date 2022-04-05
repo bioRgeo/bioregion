@@ -8,7 +8,7 @@
 #' @param tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' \link{find_nclust_tree}. Should not be used at the same time as
+#' \code{\link{partition_metrics}}. Should not be used at the same time as
 #' \code{cut_height}
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
 #' should be cut. Should not be used at the same time as \code{n_clust} or
@@ -132,15 +132,20 @@ cut_tree <- function(tree,
         stop("n_clust must be an integer determining the number of clusters.")
       }
 
-    } else if(inherits(n_clust, "bioRgeo.nclust.tree"))
+    } else if(inherits(n_clust, "bioRgeo.partition.metrics"))
     {
-      n_clust <- n_clust$algorithm$optimal_nb_clusters
+      if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
+        n_clust <- n_clust$algorithm$optimal_nb_clusters
+      } else {
+        stop("n_clust does not have an optimal number of clusters. Did you specify
+             partition_optimisation = TRUE in partition_metrics()?")
+      }
     } else
     {
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from find_nclust_tree()")
+        * the output from partition_metrics()")
     }
     if(!is.null(cut_height))
     {
@@ -324,7 +329,9 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
 
-  clusters <- knbclu(clusters)
+  clusters <- knbclu(clusters,
+                     reorder = FALSE,
+                     method = "length")
 
   if(inherits(tree, "bioRgeo.clusters"))
   {

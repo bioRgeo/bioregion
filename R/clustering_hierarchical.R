@@ -33,7 +33,7 @@
 #' coefficient will be chosen.
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' \link{find_nclust_tree}. Should not be used at the same time as
+#' \link{partition_metrics}. Should not be used at the same time as
 #' \code{cut_height}
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
 #' should be cut. Should not be used at the same time as \code{n_clust}
@@ -54,7 +54,7 @@
 #' \item{Specifying a desired number of clusters in \code{n_clust}}
 #' \item{Specifying one or several heights of cut in \code{cut_height}}}
 #'
-#' To find an optimal number of clusters, see \code{\link{find_nclust_tree}}
+#' To find an optimal number of clusters, see \code{\link{partition_metrics}}
 #'
 #'
 #' @return A \code{list} with additional class \code{bioRgeo.hierar.tree}
@@ -152,34 +152,29 @@ clustering_hierarchical <- function(distances,
   if(!is.null(n_clust)){
     if(is.numeric(n_clust))
     {
-      if(!(n_clust %% 1 == 0)) # integer testing ain't easy in R
+      if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
       {
         stop("n_clust must be an integer determining the number of clusters.")
       }
+
+    } else if(inherits(n_clust, "bioRgeo.partition.metrics"))
+    {
+      if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
+        n_clust <- n_clust$algorithm$optimal_nb_clusters
+      } else {
+        stop("n_clust does not have an optimal number of clusters. Did you specify
+             partition_optimisation = TRUE in partition_metrics()?")
+      }
     } else
     {
-      if(inherits(n_clust, "bioRgeo.nclust.tree"))
-      {
-        n_clust <- n_clust$optimal_nb_clusters
-      } else
-      {
-        stop("n_clust must be one of those:
+      stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from find_nclust_tree()")
-      }
+        * the output from partition_metrics()")
     }
     if(!is.null(cut_height))
     {
       stop("Please provide either n_clust or cut_height, but not both at the same time.")
-    }
-  }
-
-  if(!is.null(cut_height))
-  {
-    if(!is.numeric(cut_height))
-    {
-      stop("cut.height must be a numeric determing the height(s) of cut on the hierarchical tree.")
     }
   }
 
@@ -289,6 +284,8 @@ clustering_hierarchical <- function(distances,
                         find_h = find_h,
                         h_max = h_max,
                         h_min = h_min)
+  } else{
+    outputs$clusters <- NA
   }
 
   if(!keep_trials)
