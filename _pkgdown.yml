@@ -28,7 +28,7 @@ reference:
   contents:
   - clustering_hierarchical
   - cut_tree
-  - find_nclust_tree
+  - partition_metrics
 
 - subtitle: Non-hierarchical clustering
   desc: >
