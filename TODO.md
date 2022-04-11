@@ -14,7 +14,9 @@
 
 * faire la vignette
 
-* écrire article blog sur bin()
+* écrire article blog sur binaires
+
+* écrire article blog sur format matrix/network
 
 * homogénéiser la terminologie
 
@@ -24,30 +26,21 @@
 
 * Bien vérifier les potentiels problèmes NA, integer, numeric pour les présences et abondances
 
-* executables (Mac)
-
-* decide name and order column outputs algo community detection (+ description in Details)
-  
 * plant CBNmed ask permission 
 
 * Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
 
 * vérifier les NAs, négatif et 0 pour les réseaux
 
+* créer une fonction générique pour les controles ?
+
+* créer fonction is_bipartite ?
+
+* créer une fonction minimaliste pour faire des cartes
+
 
 ### 1.2 Amélirations spécifiques dans des fonctions
 
-#### mat_to_net
-* Se mettre d'accord sur les noms des deux colonnes de df dans mat_to_net appelé "Object" pour l'instant
-
-#### spproject
-* Bien vérifier les formules de projection dans "spproject" 
-
-* renommer spproject ?
-
-* remove prodmat ?
-
-* Ajouter transformation data.frame en matrix dans spproject plutôt qu'une erreur
 
 #### clustering_nonhierarchical
 
