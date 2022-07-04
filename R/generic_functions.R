@@ -65,7 +65,7 @@ print.bioRgeo.clusters <- function(x, ...)
 
     cat("Clustering results:\n")
     cat(" - Number of partitions: ",
-        ncol(x$clusters), "\n")
+        ncol(x$clusters) - 1, "\n")
     cat(" - Number of clusters: ",
         apply(x$clusters[, 2:ncol(x$clusters), drop = FALSE],
               2, function(y) length(unique(y))),
