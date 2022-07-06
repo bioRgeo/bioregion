@@ -67,11 +67,18 @@ the chosen \code{index}}
 the chosen \code{index}}
 }
 \value{
-A \code{list} with additional class \code{bioRgeo.hierar.tree}
+A \code{list} of class \code{bioRgeo.clusters} with five slots:
+\enumerate{
+\item{\bold{name}: \code{character string} containing the name of the algorihtm}
+\item{\bold{args}: \code{list} of input arguments as provided by the user}
+\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+\item{\bold{algorithm}: \code{list} of all objects associated with the
+ clustering procedure, such as original cluster objects}
+\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, users can find the following elements:
+
 \itemize{
-\item{\code{args}: the input arguments}
-\item{\code{dist.matrix}: the distance/beta diversity matrix as a
- \code{dist} object}
 \item{\code{trials}: a list containing all randomization trials. Each trial
 containes the distance matrix, with site order randomized, the associated
 tree and the cophenetic correlation coefficient (spearman) for that tree}
@@ -79,11 +86,6 @@ tree and the cophenetic correlation coefficient (spearman) for that tree}
 hierarchical tree to be used}
 \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient
 between the initial distance matrix and \code{final.tree}}
-\item{\code{clusters}: a \code{data.frame} containing the clusters}
-\item{\code{output_n_clust}: a value or vector specifying the number of
-clusters in the output \code{cluster} data.frame}
-\item{\code{output_cut_height}: a value or vector specifying, if available,
-the height(s) of cut of the tree}
 }
 }
 \description{

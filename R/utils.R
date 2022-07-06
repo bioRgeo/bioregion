@@ -1,4 +1,4 @@
-controls=function(X, weight = TRUE, name = "net", type = c("data.frame, matrix, dist")){
+controls <- function(X, weight = TRUE, name = "net", type = c("data.frame, matrix, dist")){
 
   # data.frame
   if(type == "date.frame"){
@@ -30,12 +30,12 @@ controls=function(X, weight = TRUE, name = "net", type = c("data.frame, matrix, 
 
 }
 
-knbclu=function(partitions, method = "max", # Changer le défaut par length ?
+knbclu <- function(partitions, method = "max", # Changer le défaut par length ?
                 reorder = TRUE,
                 remove.duplicates = FALSE){
 
   # Number of partitions
-  nb = dim(partitions)[2] - 1
+  nb <- dim(partitions)[2] - 1
 
   if(method == "max")
   {
