@@ -1,7 +1,7 @@
-#' Non hierarchical clustering: partitioning around medoids
+#' Non hierarchical clustering: k-means analysis
 #'
 #' This function performs non hierarchical
-#' clustering on the basis of distances with partioning around medoids.
+#' clustering on the basis of distances with a k-means analysis.
 #'
 #' @param distances the output object from \code{\link{similarity_to_distance}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
@@ -12,25 +12,25 @@
 #'  \code{distances} is used.
 #' @param n_clust an \code{integer} or a \code{vector} of \code{integers}
 #' specifying the requested number(s) of clusters
-#' @param variant a \code{character} string specifying the variant of pam
-#' to use, by default "faster". See \link[cluster:pam]{cluster::pam()} for
-#' more details
-#' @param nstart an \code{integer} specifying the number of random “starts”
-#' for the pam algorithm. By default, 1 (for the \code{"faster"} variant)
-#' @param cluster_only a \code{boolean} specifying if only the clustering
-#' should be returned from the \link[cluster:pam]{cluster::pam()} function
-#' (more efficient)
-#' @param ... you can add here further arguments to be passed to \code{pam()}
-#' (see \link[cluster:pam]{cluster::pam()})
+#' @param iter_max an \code{integer} specifying the maximum number of
+#' iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})
+#' @param nstart an \code{integer} specifying how many random sets of
+#' \code{n_clust} should be selected as starting points for the kmeans analysis
+#' (see \link[stats:kmeans]{stats::kmeans()})
+#' @param algorithm a \code{character string} specifying the algorithm to use for
+#' kmean (see \link[stats:kmeans]{stats::kmeans()})
 #'
 #' @details
-#' This method partitions data into
-#'  the chosen number of cluster on the basis of the input distance matrix.
-#'  It is more robust than k-means because it minimizes the sum of distances
-#'  between cluster centres and points assigned to the cluster -
-#'  whereas the k-means approach minimizes the sum of squared euclidean
-#'  distances (thus k-means cannot be applied directly on the input distance
-#'  matrix if the distances are not euclidean).
+#' This method partitions the data into k groups
+#'  such that that the sum of squares of euclidean distances from points to the
+#'  assigned cluster centres is minimized. k-means cannot be applied directly
+#'  on dissimilarity/beta-diversity metrics, because these distances are not
+#'  euclidean. Therefore, it requires first to transform the distance matrix
+#'  with a Principal Coordinate Analysis (using the function
+#'  \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
+#'  of points in the PCoA. Because this makes an additional transformation of
+#'  the initial matrix of distance, the partitioning around medoids method
+#'  should be prefered (\code{\link{nhclu_pam}})
 #'
 #'
 #' @return
@@ -49,10 +49,10 @@
 #' simil <- similarity(vegemat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
-#' clust1 <- nhclu_pam(distances,
+#' clust1 <- nhclu_kmeans(distances,
 #'     n_clust = 2:10,
 #'     index = "Simpson")
-#' clust2 <- nhclu_pam(distances,
+#' clust2 <- nhclu_kmeans(distances,
 #'     n_clust = 2:25,
 #'     index = "Simpson")
 #' partition_metrics(clust2,
@@ -63,13 +63,12 @@
 #'                   sp_site_table = vegemat,
 #'                   eval_metric = "avg_endemism",
 #'                   partition_optimisation = TRUE)
-nhclu_pam <- function(distances,
-                      index = names(distances)[3],
-                      n_clust = NULL,
-                      nstart = if(variant == "faster") 1 else NA,
-                      variant = "faster", # c("original", "o_1", "o_2", "f_3", "f_4", "f_5", "faster")
-                      cluster_only = FALSE,# To reduce computation time & memory, can be provided to cluster functions
-                      ... # Further arguments to be passed to cluster::pam
+nhclu_kmeans <- function(distances,
+                         index = names(distances)[3],
+                         n_clust = NULL,
+                         iter_max = 10,
+                         nstart = 10,
+                         algorithm = "Hartigan-Wong"
 )
 {
   if(inherits(distances, "bioRgeo.pairwise.metric"))
@@ -77,8 +76,8 @@ nhclu_pam <- function(distances,
     if(attr(distances, "type") == "similarity")
     {
       stop("distances seems to be a similarity object.
-         nhclu_pam() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using nhclu_pam()")
+         nhclu_kmeans() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using nhclu_kmeans()")
     }
     if(!(index %in% colnames(distances)))
     {
@@ -117,13 +116,13 @@ nhclu_pam <- function(distances,
 
 
 
-  outputs <- list(name = "pam")
+  outputs <- list(name = "kmeans")
 
   outputs$args <- list(index = index,
                        n_clust = n_clust,
+                       iter_max = iter_max,
                        nstart = nstart,
-                       variant = variant,
-                       cluster_only = cluster_only
+                       algorithm = algorithm
   )
 
   outputs$inputs <- list(bipartite = FALSE,
@@ -141,24 +140,28 @@ nhclu_pam <- function(distances,
 
   outputs$clusters$site <- labels(dist.obj)
 
-  outputs$algorithm$pam <- lapply(n_clust,
-                                  function(x)
-                                    cluster::pam(dist.obj,
-                                                 k = x,
-                                                 diss = TRUE,
-                                                 keep.diss = FALSE,
-                                                 keep.data = FALSE,
-                                                 nstart = nstart,
-                                                 variant = variant,
-                                                 cluster.only = cluster_only,
-                                                 ...))
 
-  names(outputs$algorithm$pam) <- paste0("K_", n_clust)
+  # kmeans only works on Euclidean distances, so the distance matrix needs to
+  # be transformed into a multivariate space with euclidean distances
+  # with a Principal Coordinate Analysis
+  outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)
+
+  # Performing the kmeans on the PCoA with all axes
+  outputs$algorithm$kmeans <- lapply(n_clust,
+                                     function(x)
+                                       stats::kmeans(dist.obj,
+                                                     centers = x,
+                                                     iter.max = iter_max,
+                                                     nstart = nstart,
+                                                     algorithm = algorithm))
+
+
+  names(outputs$algorithm$kmeans) <- paste0("K_", n_clust)
 
   outputs$clusters <- data.frame(outputs$clusters,
-                                 data.frame(lapply(names(outputs$algorithm$pam),
+                                 data.frame(lapply(names(outputs$algorithm$kmeans),
                                                    function(x)
-                                                     outputs$algorithm$pam[[x]]$clustering)))
+                                                     outputs$algorithm$kmeans[[x]]$cluster)))
   outputs$clusters <- bioRgeo:::knbclu(outputs$clusters)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
