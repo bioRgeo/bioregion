@@ -10,27 +10,35 @@
 #' index to use, corresponding to the column
 #' name in \code{distances}. By default, the third column name of
 #'  \code{distances} is used.
-#' @param n_clust an \code{integer} or a \code{vector} of \code{integers}
-#' specifying the requested number(s) of clusters
-#' @param variant a \code{character} string specifying the variant of pam
-#' to use, by default "faster". See \link[cluster:pam]{cluster::pam()} for
-#' more details
-#' @param nstart an \code{integer} specifying the number of random “starts”
-#' for the pam algorithm. By default, 1 (for the \code{"faster"} variant)
-#' @param cluster_only a \code{boolean} specifying if only the clustering
-#' should be returned from the \link[cluster:pam]{cluster::pam()} function
-#' (more efficient)
-#' @param ... you can add here further arguments to be passed to \code{pam()}
-#' (see \link[cluster:pam]{cluster::pam()})
+#' @param minPts a \code{numeric} value specifying the minPts argument
+#' of \link[dbscan:dbscan]{dbscan::dbscan()}). By default, it is set to the
+#' natural logarithm of the number of sites in \code{distances}.
+#' @param eps a \code{numeric} value specifying the eps argument
+#' of \link[dbscan:dbscan]{dbscan::dbscan()}). The value of eps depends on the
+#' minPts argument, and should be chosen by identifying a knee in the k-nearest
+#' neighbour distance plot. By default the function will try to automatically
+#' find a knee, but the result is uncertain, and so the user should inspect the
+#' graph and modify \code{dbscan_eps} accordingly.
+#' @param plot a \code{boolean} indicating if the  k-nearest
+#' neighbour distance plot should be plotted.
+#' @param ... you can add here further arguments to be passed to \code{dbscan()}
+#' (see \link[dbscan:dbscan]{dbscan::dbscan()})
 #'
 #' @details
-#' This method partitions data into
-#'  the chosen number of cluster on the basis of the input distance matrix.
-#'  It is more robust than k-means because it minimizes the sum of distances
-#'  between cluster centres and points assigned to the cluster -
-#'  whereas the k-means approach minimizes the sum of squared euclidean
-#'  distances (thus k-means cannot be applied directly on the input distance
-#'  matrix if the distances are not euclidean).
+#' The dbscan (Density-based spatial clustering of
+#'  applications with noise) clustering algorithm clusters points on the basis
+#'  of the density of neighbours around each data points. It necessitates two
+#'  main arguments, minPts, which stands for the minimum number of points to
+#'  identify a core, and eps, which is the radius to find neighbours.
+#'  minPts and eps should be defined by the user, which is not straightforward.
+#'  We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
+#'  to learn how to set these arguments, as well as the paper
+#'  \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
+#'  are points which were deemed as noise by the algorithm.
+#'
+#'  By default the function will select values for \code{minPts} and
+#'  \code{eps}. However, these values can be inadequate and the users is advised
+#'  to tune these values by running the function multiple times.
 #'
 #'
 #' @return
@@ -49,10 +57,9 @@
 #' simil <- similarity(vegemat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
-#' clust1 <- nhclu_pam(distances,
-#'     n_clust = 2:10,
+#' clust1 <- nhclu_dbscan(distances,
 #'     index = "Simpson")
-#' clust2 <- nhclu_pam(distances,
+#' clust2 <- nhclu_dbscan(distances,
 #'     n_clust = 2:25,
 #'     index = "Simpson")
 #' partition_metrics(clust2,
@@ -63,13 +70,12 @@
 #'                   sp_site_table = vegemat,
 #'                   eval_metric = "avg_endemism",
 #'                   partition_optimisation = TRUE)
-nhclu_pam <- function(distances,
+nhclu_dbscan <- function(distances,
                       index = names(distances)[3],
-                      n_clust = NULL,
-                      nstart = if(variant == "faster") 1 else NA,
-                      variant = "faster", # c("original", "o_1", "o_2", "f_3", "f_4", "f_5", "faster")
-                      cluster_only = FALSE,# To reduce computation time & memory, can be provided to cluster functions
-                      ... # Further arguments to be passed to cluster::pam
+                      minPts = NULL,
+                      eps = NULL,
+                      plot = TRUE,
+                      ...
 )
 {
   if(inherits(distances, "bioRgeo.pairwise.metric"))
@@ -77,8 +83,8 @@ nhclu_pam <- function(distances,
     if(attr(distances, "type") == "similarity")
     {
       stop("distances seems to be a similarity object.
-         nhclu_pam() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using nhclu_pam()")
+         nhclu_dbscan() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using nhclu_dbscan()")
     }
     if(!(index %in% colnames(distances)))
     {
@@ -117,13 +123,12 @@ nhclu_pam <- function(distances,
 
 
 
-  outputs <- list(name = "pam")
+  outputs <- list(name = "dbscan")
 
   outputs$args <- list(index = index,
-                       n_clust = n_clust,
-                       nstart = nstart,
-                       variant = variant,
-                       cluster_only = cluster_only,
+                       minPts = minPts,
+                       eps = eps,
+                       plot = plot,
                        ...
   )
 
@@ -142,24 +147,48 @@ nhclu_pam <- function(distances,
 
   outputs$clusters$site <- labels(dist.obj)
 
-  outputs$algorithm$pam <- lapply(n_clust,
-                                  function(x)
-                                    cluster::pam(dist.obj,
-                                                 k = x,
-                                                 diss = TRUE,
-                                                 keep.diss = FALSE,
-                                                 keep.data = FALSE,
-                                                 nstart = nstart,
-                                                 variant = variant,
-                                                 cluster.only = cluster_only,
-                                                 ...))
+  if(is.null(minPts))
+  {
+    # Using a default value of minPts if none provided by the user
+    minPts <- log(length(labels(dist.obj)))
+  }
 
-  names(outputs$algorithm$pam) <- paste0("K_", n_clust)
 
-  outputs$clusters <- data.frame(outputs$clusters,
-                                 data.frame(lapply(names(outputs$algorithm$pam),
-                                                   function(x)
-                                                     outputs$algorithm$pam[[x]]$clustering)))
+  knnp <- dbscan::kNNdist(dist.obj,
+                          k = minPts - 1)
+
+
+  x_ <- order(knnp)
+
+  # Trying to find the knee, and not the elbow
+  knee <- bioRgeo:::.elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
+
+  if (is.null(eps)) {
+    eps <- knee[2]
+  }
+
+  if(plot)
+  {
+    plot(knnp[order(knnp)], type = "l",
+         main = "dbscan parameter choice:\nchoose eps where there is a knee in the curve",
+         xlab = "", ylab = "epsilon")
+    graphics::abline(h = eps)
+    graphics::text(x = 0,
+                   y = knee[2] + 0.025 * (max(knnp) - min(knnp)),
+                   labels = paste0("Selected eps value: ",
+                                   round(eps, 3)),
+                   adj = 0)
+  }
+
+  outputs$clustering_algorithms$dbscan <-
+    dbscan::dbscan(dist.obj,
+                   minPts = minPts,
+                   eps = eps)
+
+  # NOTE: values of 0 mean "noise / no cluster" with dbscan
+  outputs$clusters$dbscan <-
+    outputs$clustering_algorithms$dbscan$cluster
+
   outputs$clusters <- bioRgeo:::knbclu(outputs$clusters)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
