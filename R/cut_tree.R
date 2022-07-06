@@ -129,7 +129,7 @@ cut_tree <- function(tree,
     {
       if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
       {
-        stop("n_clust must be an integer determining the number of clusters.")
+        stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
 
     } else if(inherits(n_clust, "bioRgeo.partition.metrics"))

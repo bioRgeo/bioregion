@@ -2,7 +2,7 @@
 % Please edit documentation in R/pam.R
 \name{pam}
 \alias{pam}
-\title{Non hierarchical clustering based on based on distances or beta-diversity}
+\title{Non hierarchical clustering: partitioning around medoids}
 \usage{
 pam(
   distances,
@@ -51,104 +51,40 @@ iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})}
 \code{n_clust} should be selected as starting points for the kmeans analysis
 (see \link[stats:kmeans]{stats::kmeans()})}
 
-\item{dbscan_minPts}{a \code{numeric} value specifying the minPts argument
-of \link[dbscan:dbscan]{dbscan::dbscan()}). By default, it is set to the
-natural logarithm of the number of sites in \code{distances}.}
-
-\item{dbscan_eps}{a \code{numeric} value specifying the eps argument
-of \link[dbscan:dbscan]{dbscan::dbscan()}). The value of eps depends on the
-minPts argument, and should be chosen by identifying a knee in the k-nearest
-neighbour distance plot. By default the function will try to automatically
-find a knee, but the result is uncertain, and so the user should inspect the
-graph and modify \code{dbscan_eps} accordingly.}
-
-\item{dbscan_plot}{a \code{boolean} indicating if the  k-nearest
-neighbour distance plot should be plotted.}
-
 \item{optics_xi}{a \code{numeric} value specifying}
 }
 \value{
 to fill
 }
 \description{
-This function includes several algorithms to perform non hierarchical
-clustering on the basis of distances: partioning around medoids / k-medoids,
-k-means, dbscan, optics, and model-based clustering based on Gaussian
- mixture models.
+This function performs non hierarchical
+clustering on the basis of distances with partioning around medoids.
 }
 \details{
-\itemize{
- \item{\bold{Partitioning around medoids}: This method partitions data into
+This method partitions data into
  the chosen number of cluster on the basis of the input distance matrix.
  It is more robust than k-means because it minimizes the sum of distances
  between cluster centres and points assigned to the cluster -
  whereas the k-means approach minimizes the sum of squared euclidean
  distances (thus k-means cannot be applied directly on the input distance
- matrix if the distances are not euclidean).}
- \item{\bold{k-means}: This method partitions the data into k groups
- such that that the sum of squares of euclidean distances from points to the
- assigned cluster centres is minimized. k-means cannot be applied directly
- on dissimilarity/beta-diversity metrics, because these distances are not
- euclidean. Therefore, it requires first to transform the distance matrix
- with a Principal Coordinate Analysis (using the function
- \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
- of points in the PCoA.}
- \item{\bold{dbscan}: The dbscan (Density-based spatial clustering of
- applications with noise) clustering algorithm clusters points on the basis
- of the density of neighbours around each data points. It necessitates two
- main arguments, minPts, which stands for the minimum number of points to
- identify a core, and eps, which is the radius to find neighbours.
- minPts and eps should be defined by the user, which is not straightforward.
- We recommend reading the helpo in \link[dbscan:dbscan]{dbscan::dbscan()})
- to learn how to set these arguments, as well as the paper
- \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
- are points which were deemed as noise by the algorithm.
-  }
- \item{\bold{optics}: The optics (Ordering points to identify the clustering
- structure) is a semi-hierarchical clustering algorithm which orders the
- points in the dataset such that points which are closest become neighbours,
- and calculates a reachability distance for each point. Then, clusters
- can be extracted in a hierarchical manner from this reachability distance,
- by identifying clusters depending on changes in the relative cluster
- density. The reachability plot should be explored to understand
- the clusters and their hierarchical nature, by running plot on the output
- of the function: \code{plot(object$outputs$clustering_algorithms$optics)}.
- We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
- algorithm, how it works, and what the clusters mean.}
- \item{\bold{mclust}: Model-based clustering based on Gaussian mixture
- models. This method is normally designed to be applied on the raw dataset,
- i.e. not directly on the distance matrix. However, we have found that it
- provides insightful results when applied on a distance matrix. Because this
- is an unusual application, we recommend users to be careful with the
- interpretation. See \insertCite{Scrucca2016}{bioRgeo} for more information
- on this method.}
-
- }
+ matrix if the distances are not euclidean).
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
-rownames(comat) <- paste0("Site",1:20)
-colnames(comat) <- paste0("Species",1:25)
-
-simil <- similarity(comat, metric = "all")
+simil <- similarity(vegemat, metric = "all")
 distances <- similarity_to_distance(simil)
 
-a <- pam(distances,
+clust1 <- pam(distances,
     n_clust = 5,
     index = "Simpson")
-a <- pam(distances,
-    n_clust = 2:19,
+clust2 <- pam(distances,
+    n_clust = 2:25,
     index = "Simpson")
-# User-defined number of clusters
-# clust1 <- clustering_nonhierarchical(distances,
-#                                    n_clust = 5,
-#                                     index = "Simpson")
-
-#  clust2 <- clustering_nonhierarchical(distances,
-#                                     method = c("pam", "kmeans", "dbscan",
-#                                                 "optics", "mclust"),
-#                                     n_clust = 5,
-#                                     index = "Simpson",
-#                                     dbscan_minPts = 5,
-#                                     dbscan_eps = 0.06)
+partition_metrics(clust2,
+                  distances = distances,
+                  eval_metric = "pc_distance",
+                  partition_optimisation = TRUE)
+partition_metrics(clust2,
+                  sp_site_table = vegemat,
+                  eval_metric = "avg_endemism",
+                  partition_optimisation = TRUE)
 }

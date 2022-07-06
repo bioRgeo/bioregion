@@ -169,11 +169,11 @@ clustering_nonhierarchical <- function(distances,
     {
       if(!(n_clust %% 1 == 0)) # Integer testing
       {
-        stop("n_clust must be an integer determining the number of clusters.")
+        stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
     } else
     {
-      stop("n_clust must be an integer determining the number of clusters.")
+      stop("n_clust must an integer or a vector of integers determining the number of clusters.")
     }
   }
 

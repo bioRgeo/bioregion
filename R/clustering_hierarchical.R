@@ -154,7 +154,7 @@ clustering_hierarchical <- function(distances,
     {
       if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
       {
-        stop("n_clust must be an integer determining the number of clusters.")
+        stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
 
     } else if(inherits(n_clust, "bioRgeo.partition.metrics"))
@@ -206,7 +206,7 @@ clustering_hierarchical <- function(distances,
 
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
-                         pairwise.metric = TRUE,
+                         pairwise_metric = TRUE,
                          distance = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
 

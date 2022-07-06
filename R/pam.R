@@ -1,9 +1,7 @@
-#' Non hierarchical clustering based on based on distances or beta-diversity
+#' Non hierarchical clustering: partitioning around medoids
 #'
-#' This function includes several algorithms to perform non hierarchical
-#' clustering on the basis of distances: partioning around medoids / k-medoids,
-#' k-means, dbscan, optics, and model-based clustering based on Gaussian
-#'  mixture models.
+#' This function performs non hierarchical
+#' clustering on the basis of distances with partioning around medoids.
 #'
 #' @param distances the output object from \code{\link{similarity_to_distance}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
@@ -32,68 +30,17 @@
 #' @param kmeans_nstart an \code{integer} specifying how many random sets of
 #' \code{n_clust} should be selected as starting points for the kmeans analysis
 #' (see \link[stats:kmeans]{stats::kmeans()})
-#' @param dbscan_minPts a \code{numeric} value specifying the minPts argument
-#' of \link[dbscan:dbscan]{dbscan::dbscan()}). By default, it is set to the
-#' natural logarithm of the number of sites in \code{distances}.
-#' @param dbscan_eps a \code{numeric} value specifying the eps argument
-#' of \link[dbscan:dbscan]{dbscan::dbscan()}). The value of eps depends on the
-#' minPts argument, and should be chosen by identifying a knee in the k-nearest
-#' neighbour distance plot. By default the function will try to automatically
-#' find a knee, but the result is uncertain, and so the user should inspect the
-#' graph and modify \code{dbscan_eps} accordingly.
-#' @param dbscan_plot a \code{boolean} indicating if the  k-nearest
-#' neighbour distance plot should be plotted.
 #' @param optics_xi a \code{numeric} value specifying
 #'
 #' @details
-#'
-#' \itemize{
-#'  \item{\bold{Partitioning around medoids}: This method partitions data into
+#' This method partitions data into
 #'  the chosen number of cluster on the basis of the input distance matrix.
 #'  It is more robust than k-means because it minimizes the sum of distances
 #'  between cluster centres and points assigned to the cluster -
 #'  whereas the k-means approach minimizes the sum of squared euclidean
 #'  distances (thus k-means cannot be applied directly on the input distance
-#'  matrix if the distances are not euclidean).}
-#'  \item{\bold{k-means}: This method partitions the data into k groups
-#'  such that that the sum of squares of euclidean distances from points to the
-#'  assigned cluster centres is minimized. k-means cannot be applied directly
-#'  on dissimilarity/beta-diversity metrics, because these distances are not
-#'  euclidean. Therefore, it requires first to transform the distance matrix
-#'  with a Principal Coordinate Analysis (using the function
-#'  \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
-#'  of points in the PCoA.}
-#'  \item{\bold{dbscan}: The dbscan (Density-based spatial clustering of
-#'  applications with noise) clustering algorithm clusters points on the basis
-#'  of the density of neighbours around each data points. It necessitates two
-#'  main arguments, minPts, which stands for the minimum number of points to
-#'  identify a core, and eps, which is the radius to find neighbours.
-#'  minPts and eps should be defined by the user, which is not straightforward.
-#'  We recommend reading the helpo in \link[dbscan:dbscan]{dbscan::dbscan()})
-#'  to learn how to set these arguments, as well as the paper
-#'  \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
-#'  are points which were deemed as noise by the algorithm.
-#'   }
-#'  \item{\bold{optics}: The optics (Ordering points to identify the clustering
-#'  structure) is a semi-hierarchical clustering algorithm which orders the
-#'  points in the dataset such that points which are closest become neighbours,
-#'  and calculates a reachability distance for each point. Then, clusters
-#'  can be extracted in a hierarchical manner from this reachability distance,
-#'  by identifying clusters depending on changes in the relative cluster
-#'  density. The reachability plot should be explored to understand
-#'  the clusters and their hierarchical nature, by running plot on the output
-#'  of the function: \code{plot(object$outputs$clustering_algorithms$optics)}.
-#'  We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
-#'  algorithm, how it works, and what the clusters mean.}
-#'  \item{\bold{mclust}: Model-based clustering based on Gaussian mixture
-#'  models. This method is normally designed to be applied on the raw dataset,
-#'  i.e. not directly on the distance matrix. However, we have found that it
-#'  provides insightful results when applied on a distance matrix. Because this
-#'  is an unusual application, we recommend users to be careful with the
-#'  interpretation. See \insertCite{Scrucca2016}{bioRgeo} for more information
-#'  on this method.}
+#'  matrix if the distances are not euclidean).
 #'
-#'  }
 #'
 #' @return
 #' to fill
@@ -105,7 +52,7 @@
 #' distances <- similarity_to_distance(simil)
 #'
 #' clust1 <- pam(distances,
-#'     n_clust = 5,
+#'     n_clust = 2:10,
 #'     index = "Simpson")
 #' clust2 <- pam(distances,
 #'     n_clust = 2:25,
@@ -118,18 +65,12 @@
 #'                   sp_site_table = vegemat,
 #'                   eval_metric = "avg_endemism",
 #'                   partition_optimisation = TRUE)
-pam <- function(distances,
-                index = names(distances)[3],
-                n_clust = NULL,
-                nstart = 10,
-                variant = "faster", # c("original", "o_1", "o_2", "f_3", "f_4", "f_5", "faster")
-                cluster_only = FALSE# , # To reduce computation time & memory, can be provided to cluster functions
-                # find_nclust = FALSE,
-                # find_nclust_metric = "pc_distance",
-                # find_nclust_criterion = "elbow",
-                # find_nclust_kmin = 2,
-                # find_nclust_kmax = "number of sites",
-                # find_nclust_sp_site_table = NULL
+cl_pam <- function(distances,
+                  index = names(distances)[3],
+                  n_clust = NULL,
+                  nstart = 10,
+                  variant = "faster", # c("original", "o_1", "o_2", "f_3", "f_4", "f_5", "faster")
+                  cluster_only = FALSE# To reduce computation time & memory, can be provided to cluster functions
 )
 {
   if(inherits(distances, "bioRgeo.pairwise.metric"))
@@ -158,31 +99,14 @@ pam <- function(distances,
     {
       if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
       {
-        stop("n_clust must be an integer determining the number of clusters.")
+        stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
     } else
     {
-      stop("n_clust must be an integer determining the number of clusters.")
+      stop("n_clust must an integer or a vector of integers determining the number of clusters.")
     }
   }
 
-  # if(is.null(n_clust)){
-  #   # if(!(find_nclust_metric %in% c("pc_distance", "anosim", "avg_endemism",
-  #   #                                "tot_endemism"))){
-  #   #   stop("find_nclust_method must be one of pc_distance, anosim, avg_endemism or tot_endemism")
-  #   # }
-  #   # if(!(find_nclust_criterion %in% c("elbow",
-  #   #                                   "increasing_step",
-  #   #                                   "decreasing_step",
-  #   #                                   "mars",
-  #   #                                   "min",
-  #   #                                   "max",
-  #   #                                   "cutoff"))){
-  #   #   stop("criterion must be one of elbow, increasing_step, decreasing_step, min, max, cutoff or mars")
-  #   # }
-  # }
-
-  # Checker les index en input, ou créer une boucle pour toutes les implémenter
   if(!inherits(distances, "dist"))
   {
     dist.obj <- stats::as.dist(
@@ -200,16 +124,12 @@ pam <- function(distances,
                        n_clust = n_clust,
                        nstart = nstart,
                        variant = variant,
-                       cluster_only = cluster_only,
-                       find_nclust_metric = find_nclust_metric,
-                       find_nclust_criterion = find_nclust_criterion,
-                       find_nclust_kmin = find_nclust_kmin,
-                       find_nclust_kmax = find_nclust_kmax
+                       cluster_only = cluster_only
   )
 
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
-                         pairwise.metric = TRUE,
+                         pairwise_metric = TRUE,
                          distance = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
 
