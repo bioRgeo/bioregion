@@ -87,7 +87,8 @@ optim_n_5 <- partition_metrics(inv_hclust,
 
 
 inv_hclust_cut1 <- cut_tree(inv_hclust,
-                            n_clust = optim_n_1)
+                            n_clust = optim_n_1) # ERROR TO CORRECT
+
 plot(inv_hclust_cut1)
 inv_hclust_cut5 <- cut_tree(inv_hclust,
                             n_clust = optim_n_5)
@@ -107,5 +108,20 @@ ggplot(site_loc) +
   coord_fixed() +
   scale_color_discrete(type = wesanderson::wes_palette(n = 22, name = 'Zissou1', type = 'continuous'))
 
+# Non hierarchical clustering
 
+clust1 <- nhclu_dbscan(dist_inv,
+    index = "Simpson")
+clust2 <- nhclu_dbscan(dist_inv,
+    index = "Simpson",
+    eps = 0.02)
+
+partition_metrics(clust2,
+                  distances = dist_inv,
+                  eval_metric = "pc_distance",
+                  partition_optimisation = TRUE)$evaluation_df
+partition_metrics(clust2,
+                  sp_site_table = vegemat,
+                  eval_metric = "avg_endemism",
+                  partition_optimisation = TRUE)
 

@@ -53,7 +53,7 @@ A \code{list} of class \code{bioRgeo.clusters} with five slots:
 }
 \description{
 This function performs non hierarchical
-clustering on the basis of distances with partioning around medoids.
+clustering on the basis of distances with partitioning around medoids.
 }
 \details{
 This method partitions data into

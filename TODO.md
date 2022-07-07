@@ -44,7 +44,7 @@
 
 #### clustering_nonhierarchical
 
-* Ajouter une recherche le nombre optimal de clusters
+* permettre de lancer plusieurs dbscan et optics avec différentes valeurs de paramètres ?
 
 #### clustering_hierarchical
 

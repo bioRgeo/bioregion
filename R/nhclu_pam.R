@@ -1,7 +1,7 @@
 #' Non hierarchical clustering: partitioning around medoids
 #'
 #' This function performs non hierarchical
-#' clustering on the basis of distances with partioning around medoids.
+#' clustering on the basis of distances with partitioning around medoids.
 #'
 #' @param distances the output object from \code{\link{similarity_to_distance}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and

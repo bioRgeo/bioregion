@@ -1,8 +1,7 @@
-#' Non hierarchical clustering: dbscan
+#' Non hierarchical clustering: partitioning around medoids
 #'
 #' This function performs non hierarchical
-#' clustering on the basis of distances with Density-based Spatial Clustering of
-#'  Applications with Noise (DBSCAN)
+#' clustering on the basis of distances with partioning around medoids.
 #'
 #' @param distances the output object from \code{\link{similarity_to_distance}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
@@ -11,17 +10,17 @@
 #' index to use, corresponding to the column
 #' name in \code{distances}. By default, the third column name of
 #'  \code{distances} is used.
-#' @param minPts a \code{numeric} value or a vector of \code{numeric} values
-#'  specifying the minPts argument
+#' @param minPts a \code{numeric} value specifying the minPts argument
 #' of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
-#' points to form a dense region. By default, it is set to the
-#' natural logarithm of the number of sites in \code{distances}. See details
-#' for guidance on choosing this parameter.
-#' @param eps a \code{numeric} value or a vector of \code{numeric} values
-#' specifying the eps argument
-#' of \link[dbscan:dbscan]{dbscan::dbscan()}). eps specifies how similar points
-#' should be to each other to be considered a part of a cluster. See details
-#' for guidance on choosing this parameter.
+#' points to form a dense region.
+#' By default, it is set to the
+#' natural logarithm of the number of sites in \code{distances}.
+#' @param eps a \code{numeric} value specifying the eps argument
+#' of \link[dbscan:dbscan]{dbscan::dbscan()}). The value of eps depends on the
+#' minPts argument, and should be chosen by identifying a knee in the k-nearest
+#' neighbour distance plot. By default the function will try to automatically
+#' find a knee, but the result is uncertain, and so the user should inspect the
+#' graph and modify \code{dbscan_eps} accordingly.
 #' @param plot a \code{boolean} indicating if the  k-nearest
 #' neighbour distance plot should be plotted.
 #' @param ... you can add here further arguments to be passed to \code{dbscan()}
@@ -43,22 +42,8 @@
 #'  \code{eps}. However, these values can be inadequate and the users is advised
 #'  to tune these values by running the function multiple times.
 #'
-#'  \bold{Choosing minPts:} how many points should be necessary to make a cluster?
-#'  i.e., what is the minimum number of sites you expect in a bioregion? Set a
-#'  value sufficiently large for your dataset and your expectations.
+#'  \bold{Choosing minPts:} the larger the
 #'
-#'  \bold{Choosing eps:} how similar should sites be in a cluster?  If eps is
-#'  too small, then a majority of points will be considered to distinct and will
-#'  not be clustered at all (i.e., considered as noise)? If the value is too high,
-#'  then clusters will merge together.
-#'  The value of eps depends on the minPts argument, and the literature
-#'  recommends to choose eps by identifying a knee in the k-nearest neighbour
-#'  distance plot. By default
-#'  the function will try to automatically find a knee in that curve, but the
-#'  result is uncertain, and so the user should inspect the graph and modify
-#'  dbscan_eps accordingly.To explore eps values, follow the
-#'  recommendation by the function when you launch it a first time without
-#'  defining eps. Then, adjust depending on your clustering results.
 #'
 #' @return
 #' A \code{list} of class \code{bioRgeo.clusters} with five slots:
@@ -76,15 +61,11 @@
 #' simil <- similarity(vegemat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
-#' clust1 <- nhclu_dbscan(distances,
+#' clust1 <- nhclu_optics(distances,
 #'     index = "Simpson")
-#' clust2 <- nhclu_dbscan(distances,
+#' clust2 <- nhclu_optics(distances,
 #'     index = "Simpson",
 #'     eps = 0.2)
-#' clust3 <- nhclu_dbscan(distances,
-#'     index = "Simpson",
-#'     minPts = c(5, 10, 15, 20),
-#'     eps = c(.1, .15, .2, .25, .3))
 #' partition_metrics(clust2,
 #'                   distances = distances,
 #'                   eval_metric = "pc_distance",
@@ -93,12 +74,12 @@
 #'                   sp_site_table = vegemat,
 #'                   eval_metric = "avg_endemism",
 #'                   partition_optimisation = TRUE)
-nhclu_dbscan <- function(distances,
-                      index = names(distances)[3],
-                      minPts = NULL,
-                      eps = NULL,
-                      plot = TRUE,
-                      ...
+nhclu_optics <- function(distances,
+                         index = names(distances)[3],
+                         minPts = NULL,
+                         eps = NULL,
+                         xi = 0.05,
+                         ...
 )
 {
   if(inherits(distances, "bioRgeo.pairwise.metric"))
@@ -164,61 +145,17 @@ nhclu_dbscan <- function(distances,
   }
 
 
-  if (is.null(eps)) {
-    message("Trying to find a knee in the curve to search for an optimal eps value...
-            NOTE: this automatic identification of the knee may not work properly if the curve has knees and elbows
-            Please adjust eps manually by inspecting the curve, identifying a knee as follows:
+  outputs$algorithm$optics <- dbscan::optics(x = dist.obj,
+                                             minPts = minPts,
+                                             eps = eps,
+                                             ...)
+  outputs$algorithm$optics <-
+    dbscan::extractXi(outputs$algorithm$optics,
+                      xi = xi)
 
-                           /
-                 curve    /
-              ___________/  <- knee
-  elbow ->   /
-            /
-           /")
-  }
+  outputs$clusters$optics <-
+    outputs$algorithm$optics$cluster
 
-  for(minPtsi in minPts)
-  {
-    knnp <- dbscan::kNNdist(dist.obj,
-                            k = minPtsi - 1)
-    x_ <- order(knnp)
-
-    # Trying to find the knee, and not the elbow
-    if (is.null(eps)) {
-      knee <- bioRgeo:::.elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
-
-      eps <- knee[2]
-    }
-
-    if(plot)
-    {
-      plot(knnp[order(knnp)], type = "l",
-           main = "dbscan parameter choice:\nchoose eps where there is a knee in the curve",
-           xlab = "", ylab = "epsilon")
-      graphics::abline(h = eps)
-      graphics::text(x = 0,
-                     y = eps + 0.025 * (max(knnp) - min(knnp)),
-                     labels = paste0("Selected eps value: ",
-                                     round(eps, 3)),
-                     adj = 0)
-    }
-
-    for(epsi in eps) {
-      outputs$algorithm$dbscan[[paste0("dbscan_minPts",
-                                       minPtsi,
-                                       "_eps", epsi)]]<-
-        dbscan::dbscan(dist.obj,
-                       minPts = minPtsi,
-                       eps = epsi)
-    }
-  }
-
-
-  # NOTE: values of 0 mean "noise / no cluster" with dbscan
-  outputs$clusters <- data.frame(outputs$clusters,
-                                 data.frame(lapply(names(outputs$algorithm$dbscan),
-                                                   function(x)
-                                                     outputs$algorithm$dbscan[[x]]$cluster)))
 
   outputs$clusters <- bioRgeo:::knbclu(outputs$clusters)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
