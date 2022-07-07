@@ -41,18 +41,18 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{louvain}, \link{oslom}
+#' @seealso \link{netclu_louvain}, \link{netclu_oslom}
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' # com=infomap(net) # run install_binaries() to use this function
+#' # com=netclu_infomap(net) # run install_binaries() to use this function
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
-infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE,
+netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE,
                     directed = FALSE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL) {
 
   # Remove warning for tidyr
@@ -106,7 +106,7 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
   }
 
   if (weight & dim(net)[2] == 3) {
-    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
+    if(!is.numeric(net[,3])){
       stop("The third column of net must be numeric")
     }else{
       minet <- min(net[, 3])
@@ -125,9 +125,10 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
   } else {
     if (nbmod < 0) {
       stop("nbmod must be positive")
-    }
-    if ((nbmod - floor(nbmod)) > 0) {
-      stop("nbmod must be an integer higher than 0")
+    }else{
+      if (nbmod %% 1 != 0) {
+        stop("nbmod must be an integer")
+      }
     }
   }
 
@@ -144,9 +145,10 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
   } else {
     if (seed <= 0) {
       stop("seed must be strictly higher than 0")
-    }
-    if ((seed - floor(seed)) > 0) {
-      stop("seed must be an integer higher or equal to 0")
+    }else{
+      if (seed %% 1 != 0) {
+        stop("nbmod must be an integer")
+      }
     }
   }
 
@@ -155,9 +157,10 @@ infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime
   } else {
     if (numtrials <= 0) {
       stop("numtrials must be strictly higher than 0")
-    }
-    if ((seed - floor(numtrials)) > 0) {
-      stop("numtrials must be an integer higher or equal to 0")
+    }else{
+      if (numtrials %% 1 != 0) {
+        stop("nbmod must be an integer")
+      }
     }
   }
 

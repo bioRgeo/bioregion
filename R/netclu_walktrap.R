@@ -1,19 +1,16 @@
-#' Community structure detection in weighted bipartite network via modularity optimisation
+#' Community structure detection via short random walks
 #'
-#' This function takes a bipartite weighted graph and computes modules by applying Newman’s modularity
-#' measure in a bipartite weighted version to it.
+#' This function finds communities in a (un)weighted undirected network via short random walks.
 #'
 #' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
 #' as undirected links between pair of nodes and an optional third column indicating the weight of the link
 #' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param forceLPA a boolean indicating if the even faster pure LPA-algorithm of Beckett should be used? DIRT-
-#' LPA, the default, is less likely to get trapped in a local minimum, but is slightly
-#' slower. Defaults to FALSE.
+#' @param steps the length of the random walks to perform
 #' @export
 #' @details
-#' This function is based on the modularity optimization algorithm provided by Stephen Beckett \insertCite{Beckett2016}{bioRgeo}
-#' as implemented in the \href{https://cran.r-project.org/web/packages/bipartite/index.html}{bipartite} package
-#' (\link[bipartite]{computeModules}).
+#' This function is based on random walks \insertCite{Pons2005}{bioRgeo}
+#' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
+#' (\link[igraph]{cluster_walktrap}).
 #'
 #' @return A \code{data.frame} providing one community by node.
 #'
@@ -21,17 +18,18 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{infomap}, \link{oslom}
+#' @seealso \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
-#' net <- data.frame(Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
-#' Species = c("a", "b", "a", "c", "d", "b", "d"),
-#' Weight = c(10, 100, 1, 20, 50, 10, 20))
+#' comat=matrix(sample(1000,50),5,10)
+#' rownames(comat)=paste0("Site",1:5)
+#' colnames(comat)=paste0("Species",1:10)
 #'
-#' com=beckett(net)
+#' net=similarity(comat,metric="Simpson")
+#' com=netclu_walktrap(net)
 #' @references
-#' \insertRef{Beckett2016}{bioRgeo}
+#' \insertRef{Pons2005}{bioRgeo}
 #' @export
-beckett <- function(net, weight = TRUE, forceLPA = FALSE){
+netclu_walktrap <- function(net, weight = TRUE, steps = 4){
 
   # Controls
   if(!is.data.frame(net)){
@@ -52,7 +50,7 @@ beckett <- function(net, weight = TRUE, forceLPA = FALSE){
   }
 
   if(weight & dim(net)[2]==3){
-    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
+    if(!is.numeric(net[,3])){
       stop("The third column of net must be numeric")
     }
   }
@@ -61,18 +59,20 @@ beckett <- function(net, weight = TRUE, forceLPA = FALSE){
     stop("weight must be a boolean")
   }
 
-  if(!is.logical(forceLPA)){
-    stop("forceLPA must be a boolean")
+  if(!is.numeric(steps)){
+    stop("steps must be numeric")
+  }else{
+    if(steps<=0){
+      stop("steps must be strictly higher than 0")
+    }
+    if((steps-floor(steps))>0){
+      stop("steps must be an integer higher or equal to 0")
+    }
   }
 
   # Prepare input
   idnode1=as.character(net[,1])
   idnode2=as.character(net[,2])
-
-  if(length(intersect(idnode1,idnode2))>0){ # Control bipartite
-    stop("The network should be bipartite!")
-  }
-
   idnode=c(idnode1,idnode2)
   idnode=idnode[!duplicated(idnode)]
   idnode=data.frame(ID=1:length(idnode),ID_NODE=idnode)
@@ -84,12 +84,10 @@ beckett <- function(net, weight = TRUE, forceLPA = FALSE){
     colnames(netemp)[3]="weight"
   }
 
-  # Transform netemp into a contingency table
-  comat=net_to_mat(netemp, weight=weight)
-
   # Run algo
-    comtemp=bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1,-c(1,2)]
-  comtemp=cbind(c(as.numeric(rownames(comat)),as.numeric(colnames(comat))),apply(comtemp,2,function(x) which(x>0)))
+  net=igraph::graph_from_data_frame(netemp, directed=FALSE)
+  comtemp=igraph::cluster_walktrap(net, steps=steps)
+  comtemp=cbind(as.numeric(comtemp$names),as.numeric(comtemp$membership))
 
   com=data.frame(ID=idnode[,2], Com=0)
   com[match(comtemp[,1],idnode[,1]),2]=comtemp[,2]

@@ -39,18 +39,18 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{infomap}, \link{oslom}
+#' @seealso \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=similarity(comat,metric="Simpson")
-#' com=louvain(net, lang="igraph")
+#' com=netclu_louvain(net, lang="igraph")
 #' @references
 #' \insertRef{Blondel2008}{bioRgeo}
 #' @export
-louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delete_temp = TRUE,
+netclu_louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delete_temp = TRUE,
                     path_temp = "louvain_temp", binpath = NULL){
 
   # Control input net
@@ -77,7 +77,7 @@ louvain <- function(net, weight = TRUE, lang="Cpp", q = 0, c = 0.5, k = 1, delet
   }
 
   if (weight & dim(net)[2] == 3) {
-    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
+    if(!is.numeric(net[,3])){
       stop("The third column of net must be numeric")
     }else{
       minet <- min(net[, 3])

@@ -4,8 +4,8 @@
 #' have the permissions to be executed as programs. It finally tests if the executable are running properly.
 #'
 #' @param binpath a string indicating the path to the folder that will host the bin folder (bioRgeo's package by default,
-#' if you use a different folder please be sure to update the \code{binpath} in \link{infomap}, \link{louvain}
-#' and \link{oslom})
+#' if you use a different folder please be sure to update the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain}
+#' and \link{netclu_oslom})
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and

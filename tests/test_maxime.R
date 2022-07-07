@@ -3,7 +3,7 @@ unlink("/home/maxime/Applications/R/bioRgeo", recursive=TRUE)
 
 # bioRgeo
 devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
-vignette("bioRgeo", package = "bioRgeo")
+#vignette("bioRgeo", package = "bioRgeo")
 
 # Import packages
 library(sf)
@@ -26,6 +26,13 @@ G=vegesp
 install_binaries()
 
 ############################################################################################
+
+
+
+
+
+
+
 
 
 
@@ -63,6 +70,9 @@ net=similarity(mat,metric=c("Simpson"))
 
 com=greedy(net, weight=TRUE)
 
+
+
+
 # check results
 net=similarity(mat,metric=c("Simpson"))
 
@@ -87,19 +97,21 @@ sp=cbind(sp,como[,2],comi[,2],coml[,2])
 
 plot(sp)
 
-# louvain
-#source("bioRgeo/R/louvain.R")
-
-net=similarity(mat,metric=c("Simpson"))
-
-com=louvain(net, weight=TRUE, lang="all")
-
 # infomap
+#source("bioRgeo/R/utils.R")
 #source("bioRgeo/R/infomap.R")
 
 net=similarity(mat,metric=c("Jaccard"))
 
 com=infomap(net[net[,3]>0.5,])
+
+# louvain
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/louvain.R")
+
+net=similarity(mat,metric=c("Simpson"))
+
+com=louvain(net, weight=TRUE, lang="all")
 
 # oslom
 #source("bioRgeo/R/oslom.R")
@@ -107,6 +119,10 @@ com=infomap(net[net[,3]>0.5,])
 net=similarity(mat,metric=c("Sorensen"))
 
 com=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
+
+
+
+
 
 # similarity
 #library(Rcpp)

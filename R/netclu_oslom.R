@@ -46,18 +46,18 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{infomap}, \link{louvain}
+#' @seealso \link{netclu_infomap}, \link{netclu_louvain}
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=similarity(comat,metric="Simpson")
-#' #com=oslom(net) # run install_binaries() to use this function
+#' #com=netclu_oslom(net) # run install_binaries() to use this function
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
-oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
+netclu_oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
                   seed = 1, t = 0.1, cp = 0.5, directed = FALSE,
                   delete_temp = TRUE, path_temp = "oslom_temp", binpath = NULL){
 
@@ -118,7 +118,7 @@ oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   }
 
   if (weight & dim(net)[2] == 3) {
-    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
+    if(!is.numeric(net[,3])){
       stop("The third column of net must be numeric")
     }else{
       minet <- min(net[, 3])
