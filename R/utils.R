@@ -58,11 +58,15 @@ knbclu=function(partitions, method = "max", # Changer le défaut par length ?
 
   # Rename duplicates
   if(rename_duplicates){
-
+    colnames(partitions)[2:(nb + 1)]=make.unique.2(colnames(partitions)[2:(nb + 1)],sep="_")
   }
 
   partitions
 
+}
+
+make.unique.2 = function(x, sep='.'){ # From https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
+    ave(x, x, FUN=function(a){if(length(a) > 1){paste(a, 1:length(a), sep=sep)} else {a}})
 }
 
 
