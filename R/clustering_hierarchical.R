@@ -95,29 +95,29 @@
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters
-#' tree1 <- clustering_hierarchical(distances,
-#'                                  n_clust = 5)
-#' tree1
-#' plot(tree1)
-#' str(tree1)
-#' tree1$clusters
-#'
+#' #tree1 <- clustering_hierarchical(distances,
+#' #                                 n_clust = 5)
+#' #tree1
+#' #plot(tree1)
+#' #str(tree1)
+#' #tree1$clusters
+#' #
 #' # User-defined height cut
 #' # Only one height
-#' tree2 <- clustering_hierarchical(distances,
-#'                                  cut_height = .05)
-#' tree2
-#' tree2$clusters
-#'
+#' #tree2 <- clustering_hierarchical(distances,
+#' #                                 cut_height = .05)
+#' #tree2
+#' #tree2$clusters
+#' #
 #' # Multiple heights
-#' tree3 <- clustering_hierarchical(distances,
-#'                                  cut_height = c(.05, .15, .25))
-#' tree3
-#' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
-#'
+#' #tree3 <- clustering_hierarchical(distances,
+#' #                                 cut_height = c(.05, .15, .25))
+#' #tree3
+#' #tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+#' #
 #' # Recut the tree afterwards
-#' tree3 <- cut_tree(tree3,
-#'                   n = 5)
+#' #tree3 <- cut_tree(tree3,
+#' #                  n = 5)
 clustering_hierarchical <- function(distances,
                                     index = names(distances)[3],
                                     method = "average",

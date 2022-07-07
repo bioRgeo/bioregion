@@ -219,75 +219,75 @@
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters
-#' tree1 <- clustering_hierarchical(distances,
-#'                                  n_clust = 5,
-#'                                  index = "Simpson")
-#' tree1
+#' #tree1 <- clustering_hierarchical(distances,
+#' #                                  n_clust = 5,
+#' #                                  index = "Simpson")
+#' #tree1
 #'
-#' a <- partition_metrics(tree1,
-#'                   distances = distances,
-#'                   eval_metric = c("tot_endemism",
-#'                                   "avg_endemism",
-#'                                   "pc_distance",
-#'                                   "anosim"))
+#' #a <- partition_metrics(tree1,
+#'#                   distances = distances,
+#'#                   eval_metric = c("tot_endemism",
+#'#                                   "avg_endemism",
+#'#                                   "pc_distance",
+#'#                                   "anosim"))
+#'#
+#' #a <- partition_metrics(tree1, tree_k_max = 50,
+#'#                   tree_force_repartitioning = TRUE,
+#'#                   distances = distances,
+#'#                   step_levels = 5)
+#'#  a <- partition_metrics(tree1, tree_k_max = 50,
+#'#                   eval_metric = c("tot_endemism",
+#'#                                   "avg_endemism",
+#'#                                   "pc_distance",
+#'#                                   "anosim"),
+#'#                   tree_force_repartitioning = TRUE,
+#'#                   distances = distances,
+#'#                   sp_site_table = vegemat)
 #'
-#' a <- partition_metrics(tree1, tree_k_max = 50,
-#'                   tree_force_repartitioning = TRUE,
-#'                   distances = distances,
-#'                   step_levels = 5)
-#'  a <- partition_metrics(tree1, tree_k_max = 50,
-#'                   eval_metric = c("tot_endemism",
-#'                                   "avg_endemism",
-#'                                   "pc_distance",
-#'                                   "anosim"),
-#'                   tree_force_repartitioning = TRUE,
-#'                   distances = distances,
-#'                   sp_site_table = vegemat)
+#' #a <- partition_metrics(tree1,
+#'  #                 eval_metric = c("tot_endemism",
+#'  #                                 "avg_endemism",
+#'  #                                 "pc_distance",
+#'   #                                "anosim"),
+#'  #                 tree_k_max = 25,
+#'  #                 tree_force_repartitioning = TRUE,
+#'  #                 partition_optimisation = TRUE,
+#'  #                 distances = distances,
+#'  #                 sp_site_table = vegemat,
+#'  #                 criterion = "decreasing_step",
+#'  #                 step_levels = 5)
 #'
-#' a <- partition_metrics(tree1,
-#'                   eval_metric = c("tot_endemism",
-#'                                   "avg_endemism",
-#'                                   "pc_distance",
-#'                                   "anosim"),
-#'                   tree_k_max = 25,
-#'                   tree_force_repartitioning = TRUE,
-#'                   partition_optimisation = TRUE,
-#'                   distances = distances,
-#'                   sp_site_table = vegemat,
-#'                   criterion = "decreasing_step",
-#'                   step_levels = 5)
+#' #partition_metrics(tree1,
+#'#                  distances = distances,
+#'#                  eval_metric = "pc_distance",
+#' #                 tree_k_max = 50,
+#'  #                tree_force_repartitioning = TRUE,
+#'  #                partition_optimisation = TRUE,
+#'  #                criterion = "elbow")
 #'
-#' partition_metrics(tree1,
-#'                  distances = distances,
-#'                  eval_metric = "pc_distance",
-#'                  tree_k_max = 50,
-#'                  tree_force_repartitioning = TRUE,
-#'                  partition_optimisation = TRUE,
-#'                  criterion = "elbow")
+#'# partition_metrics(tree1,
+#'  #                distances = distances,
+#'  #                eval_metric = "pc_distance",
+#'  #                tree_k_max = 50,
+#'  #                tree_force_repartitioning = TRUE,
+#'  #                partition_optimisation = TRUE,
+#'  #                criterion = "increasing_step")
 #'
-#' partition_metrics(tree1,
-#'                  distances = distances,
-#'                  eval_metric = "pc_distance",
-#'                  tree_k_max = 50,
-#'                  tree_force_repartitioning = TRUE,
-#'                  partition_optimisation = TRUE,
-#'                  criterion = "increasing_step")
+#' #partition_metrics(tree1,
+#'#                  distances = distances,
+#'  #                eval_metric = "pc_distance",
+#'  #                tree_k_max = 50,
+#'  #                tree_force_repartitioning = TRUE,
+#'  #                partition_optimisation = TRUE,
+#'  #                criterion = "mars")
 #'
-#' partition_metrics(tree1,
-#'                  distances = distances,
-#'                  eval_metric = "pc_distance",
-#'                  tree_k_max = 50,
-#'                  tree_force_repartitioning = TRUE,
-#'                  partition_optimisation = TRUE,
-#'                  criterion = "mars")
-#'
-#' partition_metrics(tree1,
-#'                  sp_site_table = vegemat,
-#'                  eval_metric = "tot_endemism",
-#'                  tree_k_max = 50,
-#'                  tree_force_repartitioning = TRUE,
-#'                  partition_optimisation = TRUE,
-#'                  criterion = "max")
+#' #partition_metrics(tree1,
+#'  #                sp_site_table = vegemat,
+#'  #                eval_metric = "tot_endemism",
+#'  #                tree_k_max = 50,
+#'  #                tree_force_repartitioning = TRUE,
+#'  #                partition_optimisation = TRUE,
+#'  #                criterion = "max")
 partition_metrics <- function(
   cluster_object,
   distances = NULL,

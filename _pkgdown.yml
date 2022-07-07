@@ -38,14 +38,14 @@ reference:
 - subtitle: Network clustering
   desc: >
   contents:
-  - beckett
-  - infomap
-  - greedy
-  - label_prop
-  - leading_eigen
-  - louvain
-  - oslom
-  - walktrap
+  - netclu_beckett
+  - netclu_infomap
+  - netclu_greedy
+  - netclu_labelprop
+  - netclu_leadingeigen
+  - netclu_louvain
+  - netclu_oslom
+  - netclu_walktrap
 
 - title: Data
   desc: >

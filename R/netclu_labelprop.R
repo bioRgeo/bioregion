@@ -1,15 +1,15 @@
-#' Community structure detection via greedy optimization of modularity
+#' Finding communities based on propagating labels
 #'
-#' This function finds communities in a (un)weighted undirected network via greedy optimization of modularity.
+#' This function finds communities in a (un)weighted undirected network based on propagating labels.
 #'
 #' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as undirected links between pair of nodes and an optional third column indicating the weight of the link
+#' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
 #' @param weight a boolean indicating if the weights should be considered if there is a third column
 #' @export
 #' @details
-#' This function is based on the fast greedy modularity optimization algorithm \insertCite{Clauset2004}{bioRgeo}
+#' This function is based on propagating labels \insertCite{Raghavan2007}{bioRgeo}
 #' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
-#' (\link[igraph]{cluster_fast_greedy}).
+#' (\link[igraph]{cluster_label_prop}).
 #'
 #' @return A \code{data.frame} providing one community by node.
 #'
@@ -17,18 +17,18 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{infomap}, \link{oslom}
+#' @seealso \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
 #' comat=matrix(sample(1000,50),5,10)
 #' rownames(comat)=paste0("Site",1:5)
 #' colnames(comat)=paste0("Species",1:10)
 #'
 #' net=similarity(comat,metric="Simpson")
-#' com=greedy(net)
+#' com=netclu_labelprop(net)
 #' @references
-#' \insertRef{Clauset2004}{bioRgeo}
+#' \insertRef{Raghavan2007}{bioRgeo}
 #' @export
-greedy <- function(net, weight = TRUE){
+netclu_labelprop <- function(net, weight = TRUE){
 
   # Controls
   if(!is.data.frame(net)){
@@ -49,7 +49,7 @@ greedy <- function(net, weight = TRUE){
   }
 
   if(weight & dim(net)[2]==3){
-    if(class(net[,3])!="numeric" & class(net[,3])!="integer"){
+    if(!is.numeric(net[,3])){
       stop("The third column of net must be numeric")
     }
   }
@@ -74,7 +74,7 @@ greedy <- function(net, weight = TRUE){
 
   # Run algo
   net=igraph::graph_from_data_frame(netemp, directed=FALSE)
-  comtemp=igraph::cluster_fast_greedy(net)
+  comtemp=igraph::cluster_label_prop(net)
   comtemp=cbind(as.numeric(comtemp$names),as.numeric(comtemp$membership))
 
   com=data.frame(ID=idnode[,2], Com=0)

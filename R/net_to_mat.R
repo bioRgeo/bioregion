@@ -69,7 +69,7 @@ net_to_mat <- function(net, weight = FALSE, squared = FALSE, symmetrical = FALSE
   }
 
   if (weight & dim(net)[2] == 3) {
-    if (class(net[, 3]) != "numeric" & class(net[, 3]) != "integer") {
+    if (!is.numeric(net[, 3])) {
       stop("The third column of net must be numeric")
     }
   }
