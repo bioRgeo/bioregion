@@ -38,17 +38,52 @@ partition_metrics(inv_hclust,
                   eval_metric = c("pc_distance",
                                   "avg_endemism"))
 
+partition_metrics(inv_hclust,
+                  distances = dist_inv,
+                  sp_site_table = contin,
+                  eval_metric = c("pc_distance",
+                                  "avg_endemism"))
+
 # Search for optimal number of clusters
-optim_n_1 <- find_nclust_tree(inv_hclust)
-optim_n_2 <- find_nclust_tree(inv_hclust, eval_metric = "anosim")
-optim_n_3 <- find_nclust_tree(inv_hclust, eval_metric = "avg_endemism",
-                            sp_site_table = contin,
-                            criterion = "elbow")
-optim_n_4 <- find_nclust_tree(inv_hclust, eval_metric = "tot_endemism",
-                            sp_site_table = contin,
-                            criterion = "elbow")
-optim_n_5 <- find_nclust_tree(inv_hclust, eval_metric = "pc_distance",
-                              criterion = "elbow")
+partition_metrics(inv_hclust,
+                  distances = dist_inv,
+                  sp_site_table = contin,
+                  eval_metric = c("pc_distance",
+                                  "avg_endemism"),
+                  partition_optimisation = TRUE)
+
+
+optim_n_1 <- partition_metrics(inv_hclust,
+                               distances = dist_inv,
+                               sp_site_table = contin,
+                               eval_metric = c("pc_distance",
+                                               "avg_endemism"),
+                               partition_optimisation = TRUE)
+optim_n_2 <- partition_metrics(inv_hclust,
+                               distances = dist_inv,
+                               sp_site_table = contin,
+                               eval_metric = c("anosim"),
+                               partition_optimisation = TRUE,
+                               criterion = "increasing_step")
+
+optim_n_3 <- partition_metrics(inv_hclust,
+                               distances = dist_inv,
+                               sp_site_table = contin,
+                               eval_metric = c("avg_endemism"),
+                               partition_optimisation = TRUE,
+                               criterion = "elbow")
+optim_n_4 <- partition_metrics(inv_hclust,
+                               distances = dist_inv,
+                               sp_site_table = contin,
+                               eval_metric = c("tot_endemism"),
+                               partition_optimisation = TRUE,
+                               criterion = "elbow")
+optim_n_5 <- partition_metrics(inv_hclust,
+                               distances = dist_inv,
+                               sp_site_table = contin,
+                               eval_metric = c("pc_distance"),
+                               partition_optimisation = TRUE,
+                               criterion = "increasing_step")
 
 
 inv_hclust_cut1 <- cut_tree(inv_hclust,

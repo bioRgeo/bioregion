@@ -48,12 +48,20 @@ print.bioRgeo.clusters <- function(x, ...)
       if(!is.null(x$args$n_clust))
       {
         cat(" - Number of clusters requested by the user: ",
-            x$args$n_clust, "\n")
+            ifelse(length(x$args$n_clust) > 10,
+                   paste0(paste(x$args$n_clust[1:10], collapse = " "),
+                          " ... (with ",
+                          length(x$args$n_clust) - 10, " more values)"),
+                   x$args$n_clust), "\n")
       }
       if(!is.null(x$args$cut_height))
       {
         cat(" - Heights of cut requested by the user: ",
-            round(x$args$cut_height, 3), "\n")
+            ifelse(length(x$args$cut_height) > 10,
+                   paste0(paste(round(x$args$cut_height, 3)[1:10], collapse = " "),
+                          " ... (with ",
+                          length(x$args$cut_height) - 10, " more values)"),
+                   round(x$args$cut_height, 3)), "\n")
       }
       if(x$args$dynamic_tree_cut)
       {
@@ -66,16 +74,27 @@ print.bioRgeo.clusters <- function(x, ...)
     cat("Clustering results:\n")
     cat(" - Number of partitions: ",
         ncol(x$clusters) - 1, "\n")
+
+    nclust <- apply(x$clusters[, 2:ncol(x$clusters), drop = FALSE],
+                    2, function(y) length(unique(y)))
+
     cat(" - Number of clusters: ",
-        apply(x$clusters[, 2:ncol(x$clusters), drop = FALSE],
-              2, function(y) length(unique(y))),
+        ifelse(length(nclust) > 10,
+               paste0(paste(nclust[1:10], collapse = " "),
+                      " ... (with ",
+                      length(nclust) - 10, " more values)"),
+               nclust),
         "\n")
 
     if(x$name == "hierarchical_clustering") {
       if(x$args$find_h)
       {
         cat(" - Height of cut of the hierarchical tree:",
-            round(x$algorithm$output_cut_height, 3), "\n")
+            ifelse(length(x$algorithm$output_cut_height) > 10,
+                   paste0(paste(round(x$algorithm$output_cut_height, 3)[1:10], collapse = " "),
+                          " ... (with ",
+                          length(x$algorithm$output_cut_height) - 10, " more values)"),
+                   round(x$algorithm$output_cut_height, 3)), "\n")
       } else
       {
         cat(" - Height of cut not searched for.", "\n")

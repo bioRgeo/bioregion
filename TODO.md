@@ -54,11 +54,13 @@
 
 * 
 
-#### find_nclust_tree
+#### partition_metrics
 
 * décider si MARS utile ou pas. Switcher vers segmented?
 
 * Voir si rounding nécessaire avec la nouvelle version de elbow
+
+* séparer en deux fonctions, l'une pour calculer les métriques, l'autre pour chercher un nombre optimal
 
 * Implémenter la parallélisation de la recherche de clusters 
 
