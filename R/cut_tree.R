@@ -256,7 +256,7 @@ cut_tree <- function(tree,
       clusters <- data.frame(matrix(nrow = length(cur.tree$labels),
                                     ncol = length(n_clust) + 1,
                                     dimnames = list(cur.tree$labels,
-                                                    c("site", paste0("k_", n_clust)))))
+                                                    c("name", paste0("k_", n_clust)))))
       clusters$site <- cur.tree$labels
       for(cur_n in n_clust)
       {
@@ -297,7 +297,7 @@ cut_tree <- function(tree,
       cls <- dendextend::cutree(cur.tree, k = n_clust)
       clusters <- data.frame(rownames(cls),
                              cluster = cls)
-      names(clusters) <- c("site", paste0("k_", n_clust))
+      names(clusters) <- c("name", paste0("k_", n_clust))
       output_cut_height <- "unknown"
       output_n_clust <- sapply(n_clust,
                                function(k, cl){

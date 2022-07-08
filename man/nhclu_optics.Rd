@@ -2,7 +2,7 @@
 % Please edit documentation in R/hclu_optics.R
 \name{nhclu_optics}
 \alias{nhclu_optics}
-\title{Non hierarchical clustering: partitioning around medoids}
+\title{Non hierarchical clustering: OPTICS}
 \usage{
 nhclu_optics(
   distances,
@@ -10,6 +10,8 @@ nhclu_optics(
   minPts = NULL,
   eps = NULL,
   xi = 0.05,
+  minimum = FALSE,
+  show_hierarchy = FALSE,
   ...
 )
 }
@@ -30,17 +32,31 @@ By default, it is set to the
 natural logarithm of the number of sites in \code{distances}.}
 
 \item{eps}{a \code{numeric} value specifying the eps argument
-of \link[dbscan:dbscan]{dbscan::dbscan()}). The value of eps depends on the
-minPts argument, and should be chosen by identifying a knee in the k-nearest
-neighbour distance plot. By default the function will try to automatically
-find a knee, but the result is uncertain, and so the user should inspect the
-graph and modify \code{dbscan_eps} accordingly.}
+of \link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
+of the epsilon neighborhood. Limiting the neighborhood size improves
+performance and has no or very little impact on the ordering as long as it
+is not set too low. If not specified (default behaviour), the largest
+minPts-distance in the
+data set is used which gives the same result as infinity.}
 
-\item{...}{you can add here further arguments to be passed to \code{dbscan()}
-(see \link[dbscan:dbscan]{dbscan::dbscan()})}
+\item{xi}{a \code{numeric} value specifying the steepness threshold to
+identify clusters hierarchically using the Xi method
+(see \link[dbscan:optics]{dbscan::optics()})}
 
-\item{plot}{a \code{boolean} indicating if the  k-nearest
-neighbour distance plot should be plotted.}
+\item{minimum}{a \code{boolean} specifying if the hierarchy should be pruned
+out from the output to only keep clusters at the "minimal" level, i.e.
+only leaf / non-overlapping clusters.
+If \code{TRUE}, then argument \code{show_hierarchy} should be \code{FALSE}}
+
+\item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
+clusters should be included in the output. By default, the hierarchy is not
+visible in the clusters obtained from OPTICS - it can only be visualised by
+visualising the plot of the OPTICS object. If \code{show_hierarchy = TRUE},
+then the output cluster \code{data.frame} will contain additional columns
+showing the hierarchy of clusters.}
+
+\item{...}{you can add here further arguments to be passed to \code{optics()}
+(see \link[dbscan:optics]{dbscan::optics()})}
 }
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
@@ -53,26 +69,27 @@ A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
 }
 \description{
-This function performs non hierarchical
-clustering on the basis of distances with partioning around medoids.
+This function performs semi-hierarchical
+clustering on the basis of distances with the OPTICS algorithm (Ordering
+Points To Identify the Clustering Structure)
 }
 \details{
-The dbscan (Density-based spatial clustering of
- applications with noise) clustering algorithm clusters points on the basis
- of the density of neighbours around each data points. It necessitates two
- main arguments, minPts, which stands for the minimum number of points to
- identify a core, and eps, which is the radius to find neighbours.
- minPts and eps should be defined by the user, which is not straightforward.
- We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
- to learn how to set these arguments, as well as the paper
- \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
- are points which were deemed as noise by the algorithm.
+The optics (Ordering points to identify the clustering
+ structure) is a semi-hierarchical clustering algorithm which orders the
+ points in the dataset such that points which are closest become neighbours,
+ and calculates a reachability distance for each point. Then, clusters
+ can be extracted in a hierarchical manner from this reachability distance,
+ by identifying clusters depending on changes in the relative cluster
+ density. The reachability plot should be explored to understand
+ the clusters and their hierarchical nature, by running plot on the output
+ of the function: \code{plot(object$algorithm$optics)}.
+ We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
+ algorithm, how it works, and what the clusters mean.
 
- By default the function will select values for \code{minPts} and
- \code{eps}. However, these values can be inadequate and the users is advised
- to tune these values by running the function multiple times.
-
- \bold{Choosing minPts:} the larger the
+ To extract the clusters, we use the
+ \link[dbscan:extractXi]{dbscan::extractXi()} function which is based on
+ the steepness of the reachability plot
+ (see \link[dbscan:optics]{dbscan::optics()})
 }
 \examples{
 simil <- similarity(vegemat, metric = "all")
@@ -80,15 +97,16 @@ distances <- similarity_to_distance(simil)
 
 clust1 <- nhclu_optics(distances,
     index = "Simpson")
-clust2 <- nhclu_optics(distances,
+clust1
+clust1$clusters
+
+# Visualise the optics plot (the hierarchy of clusters is illustrated at the bottom)
+plot(plot(clust1$algorithm$optics))
+
+# Extract the hierarchy of clusters
+clust1 <- nhclu_optics(distances,
     index = "Simpson",
-    eps = 0.2)
-partition_metrics(clust2,
-                  distances = distances,
-                  eval_metric = "pc_distance",
-                  partition_optimisation = TRUE)
-partition_metrics(clust2,
-                  sp_site_table = vegemat,
-                  eval_metric = "avg_endemism",
-                  partition_optimisation = TRUE)
+    show_hierarchy = TRUE)
+clust1
+clust1$clusters
 }

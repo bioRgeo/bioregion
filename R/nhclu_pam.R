@@ -138,7 +138,7 @@ nhclu_pam <- function(distances,
   outputs$clusters <- data.frame(matrix(ncol = 1,
                                         nrow = length(labels(dist.obj)),
                                         dimnames = list(labels(dist.obj),
-                                                        "site")))
+                                                        "name")))
 
   outputs$clusters$site <- labels(dist.obj)
 
