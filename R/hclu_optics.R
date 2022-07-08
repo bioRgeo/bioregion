@@ -74,7 +74,7 @@
 #' simil <- similarity(vegemat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
-#' clust1 <- nhclu_optics(distances,
+#' clust1 <- hclu_optics(distances,
 #'     index = "Simpson")
 #' clust1
 #' head(clust1$clusters)
@@ -83,12 +83,12 @@
 #' plot(clust1$algorithm$optics)
 #'
 #' # Extract the hierarchy of clusters
-#' clust1 <- nhclu_optics(distances,
+#' clust1 <- hclu_optics(distances,
 #'     index = "Simpson",
 #'     show_hierarchy = TRUE)
 #' clust1
 #' head(clust1$clusters)
-nhclu_optics <- function(distances,
+hclu_optics <- function(distances,
                          index = names(distances)[3],
                          minPts = NULL,
                          eps = NULL,

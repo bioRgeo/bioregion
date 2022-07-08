@@ -26,14 +26,16 @@ reference:
 - subtitle: Hierarchical clustering
   desc: >
   contents:
-  - clustering_hierarchical
+  - hclu_hierarclust
+  - hclu_optics
   - cut_tree
-  - partition_metrics
 
 - subtitle: Non-hierarchical clustering
   desc: >
   contents:
-  - clustering_nonhierarchical
+  - nhclu_dbscan
+  - nhclu_kmeans
+  - nhclu_dbscan
 
 - subtitle: Network clustering
   desc: >
@@ -46,6 +48,11 @@ reference:
   - netclu_louvain
   - netclu_oslom
   - netclu_walktrap
+
+- title: Clustering analysis
+  desc: >
+  contents:
+  - partition_metrics
 
 - title: Data
   desc: >
