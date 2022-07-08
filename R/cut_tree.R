@@ -69,7 +69,7 @@
 #' is returned with content updated (i.e., \code{args} and \code{clusters}). If
 #' \code{tree} is a \code{hclust} object, then a \code{data.frame} containing
 #' the clusters is returned.
-#' @seealso \link{clustering_hierarchical}
+#' @seealso \link{hclu_hierarclust}
 #' @export
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
@@ -80,7 +80,7 @@
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters
-#' #tree1 <- clustering_hierarchical(distances,
+#' #tree1 <- hclu_hierarclust(distances,
 #' #                                  n_clust = 5)
 #' #tree1
 #' #str(tree1)
@@ -173,8 +173,8 @@ cut_tree <- function(tree,
         if(attr(distances, "type") == "similarity")
         {
           stop("distances seems to be a similarity object.
-         clustering_hierarchical() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using clustering_hierarchical()")
+         hclu_hierarclust() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using hclu_hierarclust()")
         }
         index <- colnames(distances)[3]
 
@@ -227,7 +227,7 @@ cut_tree <- function(tree,
     cur.tree <- tree
   } else
   {
-    stop("This function is designed to work either on outputs from clustering_hierarchical() or hclust objects.")
+    stop("This function is designed to work either on outputs from hclu_hierarclust() or hclust objects.")
   }
 
 
@@ -257,7 +257,7 @@ cut_tree <- function(tree,
                                     ncol = length(n_clust) + 1,
                                     dimnames = list(cur.tree$labels,
                                                     c("name", paste0("k_", n_clust)))))
-      clusters$site <- cur.tree$labels
+      clusters$name <- cur.tree$labels
       for(cur_n in n_clust)
       {
         message("Determining the cut height to reach ", cur_n, " groups...")

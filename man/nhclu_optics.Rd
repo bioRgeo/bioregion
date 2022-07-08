@@ -98,15 +98,15 @@ distances <- similarity_to_distance(simil)
 clust1 <- nhclu_optics(distances,
     index = "Simpson")
 clust1
-clust1$clusters
+head(clust1$clusters)
 
 # Visualise the optics plot (the hierarchy of clusters is illustrated at the bottom)
-plot(plot(clust1$algorithm$optics))
+plot(clust1$algorithm$optics)
 
 # Extract the hierarchy of clusters
 clust1 <- nhclu_optics(distances,
     index = "Simpson",
     show_hierarchy = TRUE)
 clust1
-clust1$clusters
+head(clust1$clusters)
 }

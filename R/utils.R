@@ -67,7 +67,7 @@ knbclu=function(partitions, method = "max", # Changer le défaut par length ?
 }
 
 make.unique.2 = function(x, sep='.'){ # From https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
-    ave(x, x, FUN=function(a){if(length(a) > 1){paste(a, 1:length(a), sep=sep)} else {a}})
+    stats::ave(x, x, FUN=function(a){if(length(a) > 1){paste(a, 1:length(a), sep=sep)} else {a}})
 }
 
 

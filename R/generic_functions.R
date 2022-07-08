@@ -230,7 +230,7 @@ print.bioRgeo.partition.metrics <- function(x, ...)
     cat("\n", x$optimal_nb_clusters, "\n")
   }
 
-  cat("Access the data.frame of metrics with your_object$evaluation_df")
+  cat("Access the data.frame of metrics with your_object$evaluation_df\n")
 }
 
 #' @export

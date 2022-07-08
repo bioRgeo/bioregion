@@ -62,15 +62,15 @@
 # dist1 <- as.matrix(a)
 #
 #
-# a <- clustering_hierarchical(distances, n_clust = 7)
-# a <- clustering_hierarchical(distances, cut_height = c(.3, .4))
+# a <- hclu_hierarclust(distances, n_clust = 7)
+# a <- hclu_hierarclust(distances, cut_height = c(.3, .4))
 #
 # plot(a$hclust$final.tree)
 #
 #
 #
-# a <- clustering_hierarchical(distances, n_clust = 7)
-# a <- clustering_hierarchical(distances, cut_height = 0.3)
+# a <- hclu_hierarclust(distances, n_clust = 7)
+# a <- hclu_hierarclust(distances, cut_height = 0.3)
 #
 #
 # #   ## 1. Controls ----

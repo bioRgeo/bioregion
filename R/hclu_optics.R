@@ -77,17 +77,17 @@
 #' clust1 <- nhclu_optics(distances,
 #'     index = "Simpson")
 #' clust1
-#' clust1$clusters
+#' head(clust1$clusters)
 #'
 #' # Visualise the optics plot (the hierarchy of clusters is illustrated at the bottom)
-#' plot(plot(clust1$algorithm$optics))
+#' plot(clust1$algorithm$optics)
 #'
 #' # Extract the hierarchy of clusters
 #' clust1 <- nhclu_optics(distances,
 #'     index = "Simpson",
 #'     show_hierarchy = TRUE)
 #' clust1
-#' clust1$clusters
+#' head(clust1$clusters)
 nhclu_optics <- function(distances,
                          index = names(distances)[3],
                          minPts = NULL,
@@ -217,7 +217,7 @@ nhclu_optics <- function(distances,
     }
     max.col <- max(lengths(regmatches(cls_hierarchy$new_cls_id, gregexpr("\\.", cls_hierarchy$new_cls_id)))) + 1
     cls_hierarchy <- tidyr::separate(data = cls_hierarchy,
-                                     col = new_cls_id,
+                                     col = "new_cls_id",
                                      remove = FALSE,
                                      into = paste0("lvl", 1:max.col),
                                      sep = "\\.",
@@ -228,9 +228,9 @@ nhclu_optics <- function(distances,
                                                  c("cluster_id", "new_cls_id", paste0("lvl", 1:max.col))])
   }
 
-  outputs$clusters <- bioRgeo:::knbclu(outputs$clusters,
-                                       method = "length",
-                                       reorder = FALSE)
+  outputs$clusters <- knbclu(outputs$clusters,
+                             method = "length",
+                             reorder = FALSE)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
   return(outputs)
 }

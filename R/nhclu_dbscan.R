@@ -87,12 +87,10 @@
 #'     eps = c(.1, .15, .2, .25, .3))
 #' partition_metrics(clust2,
 #'                   distances = distances,
-#'                   eval_metric = "pc_distance",
-#'                   partition_optimisation = TRUE)
+#'                   eval_metric = "pc_distance")
 #' partition_metrics(clust2,
 #'                   sp_site_table = vegemat,
-#'                   eval_metric = "avg_endemism",
-#'                   partition_optimisation = TRUE)
+#'                   eval_metric = "avg_endemism")
 nhclu_dbscan <- function(distances,
                       index = names(distances)[3],
                       minPts = NULL,
@@ -153,9 +151,9 @@ nhclu_dbscan <- function(distances,
   outputs$clusters <- data.frame(matrix(ncol = 1,
                                         nrow = length(labels(dist.obj)),
                                         dimnames = list(labels(dist.obj),
-                                                        "site")))
+                                                        "name")))
 
-  outputs$clusters$site <- labels(dist.obj)
+  outputs$clusters$name <- labels(dist.obj)
 
   if(is.null(minPts))
   {
@@ -185,7 +183,7 @@ nhclu_dbscan <- function(distances,
 
     # Trying to find the knee, and not the elbow
     if (is.null(eps)) {
-      knee <- bioRgeo:::.elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
+      knee <- .elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
 
       eps <- knee[2]
     }
@@ -220,7 +218,7 @@ nhclu_dbscan <- function(distances,
                                                    function(x)
                                                      outputs$algorithm$dbscan[[x]]$cluster)))
 
-  outputs$clusters <- bioRgeo:::knbclu(outputs$clusters)
+  outputs$clusters <- knbclu(outputs$clusters)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
   return(outputs)

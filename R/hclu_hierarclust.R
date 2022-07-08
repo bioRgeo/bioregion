@@ -95,7 +95,7 @@
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters
-#' #tree1 <- clustering_hierarchical(distances,
+#' #tree1 <- hclu_hierarclust(distances,
 #' #                                 n_clust = 5)
 #' #tree1
 #' #plot(tree1)
@@ -104,13 +104,13 @@
 #' #
 #' # User-defined height cut
 #' # Only one height
-#' #tree2 <- clustering_hierarchical(distances,
+#' #tree2 <- hclu_hierarclust(distances,
 #' #                                 cut_height = .05)
 #' #tree2
 #' #tree2$clusters
 #' #
 #' # Multiple heights
-#' #tree3 <- clustering_hierarchical(distances,
+#' #tree3 <- hclu_hierarclust(distances,
 #' #                                 cut_height = c(.05, .15, .25))
 #' #tree3
 #' #tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
@@ -118,7 +118,7 @@
 #' # Recut the tree afterwards
 #' #tree3 <- cut_tree(tree3,
 #' #                  n = 5)
-clustering_hierarchical <- function(distances,
+hclu_hierarclust <- function(distances,
                                     index = names(distances)[3],
                                     method = "average",
                                     randomize = TRUE,
@@ -136,8 +136,8 @@ clustering_hierarchical <- function(distances,
     if(attr(distances, "type") == "similarity")
     {
       stop("distances seems to be a similarity object.
-         clustering_hierarchical() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using clustering_hierarchical()")
+         hclu_hierarclust() should be applied on distances, not similarities.
+         Use similarity_to_distance() before using hclu_hierarclust()")
     }
     if(!(index %in% colnames(distances)))
     {

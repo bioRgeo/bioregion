@@ -105,7 +105,7 @@ simil <- similarity(comat, metric = "all")
 distances <- similarity_to_distance(simil)
 
 # User-defined number of clusters
-#tree1 <- clustering_hierarchical(distances,
+#tree1 <- hclu_hierarclust(distances,
 #                                  n_clust = 5)
 #tree1
 #str(tree1)
@@ -139,7 +139,7 @@ distances <- similarity_to_distance(simil)
 #                             distances = distances)
 }
 \seealso{
-\link{clustering_hierarchical}
+\link{hclu_hierarclust}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

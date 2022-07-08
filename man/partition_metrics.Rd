@@ -43,16 +43,16 @@ investigate the effect of different number of clusters. Available options:
 
 \item{tree_k_min}{an integer indicating the minimum number of clusters to be
 explored. Only useful if
-\code{cluster_object} is based on \code{\link{clustering_hierarchical}}.}
+\code{cluster_object} is based on \code{\link{hclu_hierarclust}}.}
 
 \item{tree_k_max}{an integer indicating the maximum number of clusters to be
 explored, or "number of sites" to use the number of sites as the maximum.
 Only useful if
-\code{cluster_object} is based on \code{\link{clustering_hierarchical}}.}
+\code{cluster_object} is based on \code{\link{hclu_hierarclust}}.}
 
 \item{tree_force_repartitioning}{a boolean indicating if the function should
 re-partition clusters based on \code{tree_k_min} and \code{tree_k_max}. Only useful if
-\code{cluster_object} is based on \code{\link{clustering_hierarchical}}.}
+\code{cluster_object} is based on \code{\link{hclu_hierarclust}}.}
 
 \item{partition_optimisation}{a boolean specifying if the function should
 find an optimal number of clusters, based on the chosen \code{criterion}}
@@ -245,7 +245,7 @@ simil <- similarity(vegemat, metric = "all")
 distances <- similarity_to_distance(simil)
 
 # User-defined number of clusters
-#tree1 <- clustering_hierarchical(distances,
+#tree1 <- hclu_hierarclust(distances,
 #                                  n_clust = 5,
 #                                  index = "Simpson")
 #tree1
@@ -327,7 +327,7 @@ distances <- similarity_to_distance(simil)
 \insertRef{Langfelder2008}{bioRgeo}
 }
 \seealso{
-\link{clustering_hierarchical}
+\link{hclu_hierarclust}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

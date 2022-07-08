@@ -22,14 +22,14 @@
 #' distance indices
 #' @param tree_k_min an integer indicating the minimum number of clusters to be
 #' explored. Only useful if
-#' \code{cluster_object} is based on \code{\link{clustering_hierarchical}}.
+#' \code{cluster_object} is based on \code{\link{hclu_hierarclust}}.
 #' @param tree_k_max an integer indicating the maximum number of clusters to be
 #' explored, or "number of sites" to use the number of sites as the maximum.
 #' Only useful if
-#' \code{cluster_object} is based on \code{\link{clustering_hierarchical}}.
+#' \code{cluster_object} is based on \code{\link{hclu_hierarclust}}.
 #' @param tree_force_repartitioning a boolean indicating if the function should
 #' re-partition clusters based on \code{tree_k_min} and \code{tree_k_max}. Only useful if
-#' \code{cluster_object} is based on \code{\link{clustering_hierarchical}}.
+#' \code{cluster_object} is based on \code{\link{hclu_hierarclust}}.
 #' @param partition_optimisation a boolean specifying if the function should
 #' find an optimal number of clusters, based on the chosen \code{criterion}
 #' @param criterion character string indicating the criterion to be used to
@@ -213,13 +213,13 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{clustering_hierarchical}
+#' @seealso \link{hclu_hierarclust}
 #' @examples
 #' simil <- similarity(vegemat, metric = "all")
 #' distances <- similarity_to_distance(simil)
 #'
 #' # User-defined number of clusters
-#' #tree1 <- clustering_hierarchical(distances,
+#' #tree1 <- hclu_hierarclust(distances,
 #' #                                  n_clust = 5,
 #' #                                  index = "Simpson")
 #' #tree1
@@ -374,7 +374,7 @@ partition_metrics <- function(
   } else {
     if(has.clusters)
     {
-      if(any(!rownames(sp_site_table) %in% cluster_object$clusters$site))
+      if(any(!rownames(sp_site_table) %in% cluster_object$clusters$name))
       {
         stop("sp_site_table should be a matrix with sites in rows, species in columns.\nRow names should be site names, and should be identical to site names in the cluster object")
       }
@@ -510,7 +510,7 @@ partition_metrics <- function(
     if(has.contin)
     {
       cur_contin <- as.data.frame(sp_site_table)
-      cur_contin$cluster <- clusters[match(rownames(cur_contin), clusters$site), cls_col]
+      cur_contin$cluster <- clusters[match(rownames(cur_contin), clusters$name), cls_col]
       cluster_contin <- stats::aggregate(. ~ cluster, cur_contin, sum)
       rownames(cluster_contin) <- cluster_contin[, 1]
       cluster_contin <- cluster_contin[, -1]

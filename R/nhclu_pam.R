@@ -140,7 +140,7 @@ nhclu_pam <- function(distances,
                                         dimnames = list(labels(dist.obj),
                                                         "name")))
 
-  outputs$clusters$site <- labels(dist.obj)
+  outputs$clusters$name <- labels(dist.obj)
 
   outputs$algorithm$pam <- lapply(n_clust,
                                   function(x)
@@ -160,7 +160,7 @@ nhclu_pam <- function(distances,
                                  data.frame(lapply(names(outputs$algorithm$pam),
                                                    function(x)
                                                      outputs$algorithm$pam[[x]]$clustering)))
-  outputs$clusters <- bioRgeo:::knbclu(outputs$clusters)
+  outputs$clusters <- knbclu(outputs$clusters)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
   return(outputs)

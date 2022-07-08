@@ -105,10 +105,8 @@ clust3 <- nhclu_dbscan(distances,
     eps = c(.1, .15, .2, .25, .3))
 partition_metrics(clust2,
                   distances = distances,
-                  eval_metric = "pc_distance",
-                  partition_optimisation = TRUE)
+                  eval_metric = "pc_distance")
 partition_metrics(clust2,
                   sp_site_table = vegemat,
-                  eval_metric = "avg_endemism",
-                  partition_optimisation = TRUE)
+                  eval_metric = "avg_endemism")
 }

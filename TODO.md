@@ -41,10 +41,9 @@
 
 ### 1.2 Amélirations spécifiques dans des fonctions
 
+#### optics
 
-#### clustering_nonhierarchical
-
-* permettre de lancer plusieurs dbscan et optics avec différentes valeurs de paramètres ?
+* permettre de lancer plusieurs optics avec différentes valeurs de paramètres ?
 
 #### clustering_hierarchical
 
@@ -52,19 +51,25 @@
 
 * Vérifier arguments en entrée standard
 
-* 
-
 #### partition_metrics
+
+* séparer en deux fonctions, l'une pour calculer les métriques, l'autre pour chercher un nombre optimal
 
 * décider si MARS utile ou pas. Switcher vers segmented?
 
 * Voir si rounding nécessaire avec la nouvelle version de elbow
 
-* séparer en deux fonctions, l'une pour calculer les métriques, l'autre pour chercher un nombre optimal
-
 * Implémenter la parallélisation de la recherche de clusters 
 
 * Fusionner le hiérarchique et le non hiérarchique dans cette fonction ?
+
+### 1.3 Amélioration des classes
+
+* Ajouter un tableau pour faire la correspondance entre l'objet clusters et la requête des utilisateurs + autres paramètres définissant chaque cluster
+
+### 1.4 Fonctions génériques
+
+* Envisager une fonction générique plot qui s'adapte au type de cluster pour la classe bioRgeo.clusters
 
 ## 2. Package V2
 

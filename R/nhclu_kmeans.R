@@ -138,7 +138,7 @@ nhclu_kmeans <- function(distances,
                                         dimnames = list(labels(dist.obj),
                                                         "name")))
 
-  outputs$clusters$site <- labels(dist.obj)
+  outputs$clusters$name <- labels(dist.obj)
 
 
   # kmeans only works on Euclidean distances, so the distance matrix needs to
@@ -162,7 +162,7 @@ nhclu_kmeans <- function(distances,
                                  data.frame(lapply(names(outputs$algorithm$kmeans),
                                                    function(x)
                                                      outputs$algorithm$kmeans[[x]]$cluster)))
-  outputs$clusters <- bioRgeo:::knbclu(outputs$clusters)
+  outputs$clusters <- knbclu(outputs$clusters)
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
   return(outputs)
