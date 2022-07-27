@@ -7,13 +7,17 @@
 netclu_infomap(
   net,
   weight = TRUE,
-  bipartite = FALSE,
   nbmod = 0,
   markovtime = 1,
   seed = 1,
   numtrials = 1,
   twolevel = FALSE,
   directed = FALSE,
+  bipartite_version = FALSE,
+  bipartite = FALSE,
+  primary_col = 1,
+  feature_col = 2,
+  remove_feature = TRUE,
   delete_temp = TRUE,
   path_temp = "infomap_temp",
   binpath = NULL
@@ -24,8 +28,6 @@ netclu_infomap(
 as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
 
 \item{weight}{a boolean indicating if the weights should be considered if there is a third column}
-
-\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
 
 \item{nbmod}{penalize solutions the more they differ from this number (0 by default for no preferred number of modules)}
 
@@ -40,6 +42,16 @@ in fewer modules (default is 1)}
 (default is multi-level)}
 
 \item{directed}{a boolean indicating if the network is directed (from column 1 to column 2)}
+
+\item{bipartite_version}{a boolean indicating if the bipartite version of Infomap should be used (see Details)}
+
+\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+
+\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+
+\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+
+\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
 
 \item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
 
@@ -58,7 +70,8 @@ This function finds communities in a (un)weighted (un)directed network based on 
 Infomap is a network clustering algorithm based on the Map equation proposed in
 \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
 Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
-as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
+as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}). The second possibility
+is to set the \code{bipartite_version} argument to TRUE in order to
 approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 
 This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).

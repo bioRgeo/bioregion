@@ -6,7 +6,6 @@
 #' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
 #' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
 #' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param bipartite a boolean indicating if the network is bipartite (see Details)
 #' @param nbmod penalize solutions the more they differ from this number (0 by default for no preferred number of modules)
 #' @param markovtime scales link flow to change the cost of moving between modules, higher values results
 #' in fewer modules (default is 1)
@@ -15,6 +14,11 @@
 #' @param twolevel a boolean indicating if the algorithm should optimize a two-level partition of the network
 #' (default is multi-level)
 #' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
+#' @param bipartite a boolean indicating if the network is bipartite (see Details)
+#' @param bipartite_version a boolean indicating if the bipartite version of Infomap should be used (see Details)
+#' @param primary_col name or number for the column of primary nodes (i.e. site)
+#' @param feature_col name or number for the column of feature nodes (i.e. species)
+#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
 #' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
 #' @param path_temp a string indicating the path to the temporary folder (see Details)
 #' @param binpath a string indicating the path to the bin folder (see \link{install_binaries} and Details)
@@ -23,7 +27,8 @@
 #' Infomap is a network clustering algorithm based on the Map equation proposed in
 #' \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
 #' Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
-#' as unipartite network. The second possibility is to set the \code{bipartite} argument to TRUE in order to
+#' as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}). The second possibility
+#' is to set the \code{bipartite_version} argument to TRUE in order to
 #' approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 #'
 #' This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
@@ -52,8 +57,9 @@
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
-netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE,
-                    directed = FALSE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL) {
+netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE,
+                           directed = FALSE, bipartite_version = FALSE, bipartite = FALSE, primary_col = 1, feature_col = 2,
+                           remove_feature = TRUE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL) {
 
   # Remove warning for tidyr
   defaultW <- getOption("warn")
@@ -106,9 +112,9 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
   }
 
   if (weight & dim(net)[2] == 3) {
-    if(!is.numeric(net[,3])){
+    if (!is.numeric(net[, 3])) {
       stop("The third column of net must be numeric")
-    }else{
+    } else {
       minet <- min(net[, 3])
       if (minet < 0) {
         stop("The third column of net should contains only positive real: negative value detected!")
@@ -116,16 +122,12 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
     }
   }
 
-  if (!is.logical(bipartite)) {
-    stop("bipartite must be a boolean")
-  }
-
   if (!is.numeric(nbmod)) {
     stop("nbmod must be numeric")
   } else {
     if (nbmod < 0) {
       stop("nbmod must be positive")
-    }else{
+    } else {
       if (nbmod %% 1 != 0) {
         stop("nbmod must be an integer")
       }
@@ -145,7 +147,7 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
   } else {
     if (seed <= 0) {
       stop("seed must be strictly higher than 0")
-    }else{
+    } else {
       if (seed %% 1 != 0) {
         stop("nbmod must be an integer")
       }
@@ -157,7 +159,7 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
   } else {
     if (numtrials <= 0) {
       stop("numtrials must be strictly higher than 0")
-    }else{
+    } else {
       if (numtrials %% 1 != 0) {
         stop("nbmod must be an integer")
       }
@@ -180,6 +182,51 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
     stop("path_temp must be a string")
   }
 
+  # Controls bipartite arguments
+  if (!is.logical(bipartite)) {
+    stop("bipartite must be a boolean")
+  }
+
+  if (!is.logical(bipartite_version)) {
+    stop("bipartite_version must be a boolean")
+  }
+
+  if (is.character(primary_col)) {
+    if (!(primary_col %in% colnames(net))) {
+      stop("primary_col should be a column name")
+    }
+  } else if (is.numeric(primary_col)) {
+    if (primary_col <= 0) {
+      stop("primary_col must be strictly positive")
+    } else {
+      if (primary_col %% 1 != 0) {
+        stop("primary_col must be an integer")
+      }
+    }
+  } else {
+    stop("primary_col should be numeric or character")
+  }
+
+  if (is.character(feature_col)) {
+    if (!(feature_col %in% colnames(net))) {
+      stop("feature_col should be a column name")
+    }
+  } else if (is.numeric(feature_col)) {
+    if (feature_col <= 0) {
+      stop("feature_col must be strictly positive")
+    } else {
+      if (feature_col %% 1 != 0) {
+        stop("feature_col must be an integer")
+      }
+    }
+  } else {
+    stop("feature_col should be numeric or character")
+  }
+
+  if (!is.logical(remove_feature)) {
+    stop("remove_feature must be a boolean")
+  }
+
   # Create temp folder
   dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
   if (!file.exists(path_temp)) {
@@ -187,20 +234,28 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
   }
 
   # Prepare input for INFOMAP
-  idnode1 <- as.character(net[, 1])
-  idnode2 <- as.character(net[, 2])
-  if (bipartite) {
+  if (bipartite | bipartite_version) {
+    idprim <- as.character(net[, primary_col])
+    idfeat <- as.character(net[, feature_col])
     # Control bipartite
-    if (length(intersect(idnode1, idnode2)) > 0) {
-      stop("If bipartite = TRUE primary and feature nodes should be different.")
+    if (length(intersect(idprim, idfeat)) > 0) {
+      stop("If bipartite = TRUE or bipartite_version = TRUE primary and feature nodes should be different.")
     }
-    idnode1 <- idnode1[!duplicated(idnode1)]
-    idnode1 <- data.frame(ID = 1:length(idnode1), ID_NODE = idnode1, Type = 1) # Primary nodes
-    idnode2 <- idnode2[!duplicated(idnode2)]
-    idnode2 <- data.frame(ID = ((dim(idnode1)[1] + 1):(dim(idnode1)[1] + length(idnode2))), ID_NODE = idnode2, Type = 2) # Feature nodes
-    N <- dim(idnode1)[1] + 1 # First node id of the feature node type
-    idnode <- rbind(idnode1, idnode2)
+    idprim <- idprim[!duplicated(idprim)]
+    idprim <- data.frame(ID = 1:length(idprim), ID_NODE = idprim, Type = 1) # Primary nodes
+    idfeat <- idfeat[!duplicated(idfeat)]
+    idfeat <- data.frame(ID = ((dim(idprim)[1] + 1):(dim(idprim)[1] + length(idfeat))), ID_NODE = idfeat, Type = 2) # Feature nodes
+    N <- dim(idprim)[1] + 1 # First node id of the feature node type
+    idnode <- rbind(idprim, idfeat)
+    if (!bipartite_version) {
+      idnode <- idnode[, 1:2]
+    }
   } else {
+    idnode1 <- as.character(net[, 1])
+    idnode2 <- as.character(net[, 2])
+    if (length(intersect(idnode1, idnode2)) == 0) {
+      stop("The network is bipartite! The bipartite or bipartite_version argument should be set to TRUE.")
+    }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
@@ -213,7 +268,7 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
   }
 
   # Export input in INFOMAP folder
-  if (bipartite) { # Add tag if bipartite
+  if (bipartite_version) { # Add tag if bipartite
     cat(paste0("*Bipartite ", N), "\n", file = paste0(path_temp, "/net.txt"))
     utils::write.table(netemp, paste0(path_temp, "/net.txt"), append = TRUE, row.names = FALSE, col.names = FALSE, sep = " ")
   } else {
@@ -308,6 +363,11 @@ netclu_infomap <- function(net, weight = TRUE, bipartite = FALSE, nbmod = 0, mar
   # Remove temporary
   if (delete_temp) {
     unlink(paste0(path_temp), recursive = TRUE)
+  }
+
+  # Remove feature nodes
+  if (remove_feature) {
+    com <- com[match(idprim$ID_NODE, com[, 1]), ]
   }
 
   # Rename and reorder columns

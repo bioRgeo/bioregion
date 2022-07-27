@@ -9,6 +9,9 @@
 #' @param forceLPA a boolean indicating if the even faster pure LPA-algorithm of Beckett should be used? DIRT-
 #' LPA, the default, is less likely to get trapped in a local minimum, but is slightly
 #' slower. Defaults to FALSE.
+#' @param primary_col name or number for the column of primary nodes (i.e. site)
+#' @param feature_col name or number for the column of feature nodes (i.e. species)
+#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
 #' @export
 #' @details
 #' This function is based on the modularity optimization algorithm provided by Stephen Beckett \insertCite{Beckett2016}{bioRgeo}
@@ -23,79 +26,123 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
-#' net <- data.frame(Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
-#' Species = c("a", "b", "a", "c", "d", "b", "d"),
-#' Weight = c(10, 100, 1, 20, 50, 10, 20))
+#' net <- data.frame(
+#'   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
+#'   Species = c("a", "b", "a", "c", "d", "b", "d"),
+#'   Weight = c(10, 100, 1, 20, 50, 10, 20)
+#' )
 #'
-#' com=netclu_beckett(net)
+#' com <- netclu_beckett(net)
 #' @references
 #' \insertRef{Beckett2016}{bioRgeo}
 #' @export
-netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE){
+netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE, primary_col = 1, feature_col = 2, remove_feature = TRUE) {
 
-  # Controls
-  if(!is.data.frame(net)){
+  # Controls input net
+  if (!is.data.frame(net)) {
     stop("net must be a two- or three-columns data.frame")
   }
 
-  if(dim(net)[2]!=2 & dim(net)[2]!=3){
+  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
     stop("net must be a two- or three-columns data.frame")
   }
 
-  sco=sum(is.na(net))
-  if(sco>0){
+  sco <- sum(is.na(net))
+  if (sco > 0) {
     stop("NA(s) detected in the data.frame")
   }
 
-  if(weight & dim(net)[2]==2){
+  # Controls parameters
+  if (weight & dim(net)[2] == 2) {
     stop("net must be a three-columns data.frame if weight equal TRUE")
   }
 
-  if(weight & dim(net)[2]==3){
-    if(!is.numeric(net[,3])){
+  if (weight & dim(net)[2] == 3) {
+    if (!is.numeric(net[, 3])) {
       stop("The third column of net must be numeric")
     }
   }
 
-  if(!is.logical(weight)){
+  if (!is.logical(weight)) {
     stop("weight must be a boolean")
   }
 
-  if(!is.logical(forceLPA)){
+  if (!is.logical(forceLPA)) {
     stop("forceLPA must be a boolean")
   }
 
-  # Prepare input
-  idnode1=as.character(net[,1])
-  idnode2=as.character(net[,2])
+  # Controls bipartite arguments
+  if (is.character(primary_col)) {
+    if (!(primary_col %in% colnames(net))) {
+      stop("primary_col should be a column name")
+    }
+  } else if (is.numeric(primary_col)) {
+    if (primary_col <= 0) {
+      stop("primary_col must be strictly positive")
+    } else {
+      if (primary_col %% 1 != 0) {
+        stop("primary_col must be an integer")
+      }
+    }
+  } else {
+    stop("primary_col should be numeric or character")
+  }
 
-  if(length(intersect(idnode1,idnode2))>0){ # Control bipartite
+  if (is.character(feature_col)) {
+    if (!(feature_col %in% colnames(net))) {
+      stop("feature_col should be a column name")
+    }
+  } else if (is.numeric(feature_col)) {
+    if (feature_col <= 0) {
+      stop("feature_col must be strictly positive")
+    } else {
+      if (feature_col %% 1 != 0) {
+        stop("feature_col must be an integer")
+      }
+    }
+  } else {
+    stop("feature_col should be numeric or character")
+  }
+  
+  if (!is.logical(remove_feature)) {
+    stop("remove_feature must be a boolean")
+  }
+
+  # Prepare input
+  idprim <- as.character(net[, primary_col])
+  idfeat <- as.character(net[, feature_col])
+
+  if (length(intersect(idprim, idfeat)) > 0) { # Control bipartite
     stop("The network should be bipartite!")
   }
 
-  idnode=c(idnode1,idnode2)
-  idnode=idnode[!duplicated(idnode)]
-  idnode=data.frame(ID=1:length(idnode),ID_NODE=idnode)
+  idnode <- c(idprim, idfeat)
+  idnode <- idnode[!duplicated(idnode)]
+  idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
 
-  netemp=data.frame(node1=idnode[match(net[,1],idnode[,2]),1],node2=idnode[match(net[,2],idnode[,2]),1])
-  if(weight){
-    netemp=cbind(netemp,net[,3])
-    netemp=netemp[netemp[,3]>0,]
-    colnames(netemp)[3]="weight"
+  netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
+  if (weight) {
+    netemp <- cbind(netemp, net[, 3])
+    netemp <- netemp[netemp[, 3] > 0, ]
+    colnames(netemp)[3] <- "weight"
   }
 
   # Transform netemp into a contingency table
-  comat=net_to_mat(netemp, weight=weight)
+  comat <- net_to_mat(netemp, weight = weight)
 
   # Run algo
-    comtemp=bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1,-c(1,2)]
-  comtemp=cbind(c(as.numeric(rownames(comat)),as.numeric(colnames(comat))),apply(comtemp,2,function(x) which(x>0)))
+  comtemp <- bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1, -c(1, 2)]
+  comtemp <- cbind(c(as.numeric(rownames(comat)), as.numeric(colnames(comat))), apply(comtemp, 2, function(x) which(x > 0)))
 
-  com=data.frame(ID=idnode[,2], Com=0)
-  com[match(comtemp[,1],idnode[,1]),2]=comtemp[,2]
+  com <- data.frame(ID = idnode[, 2], Com = 0)
+  com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
+
+  # Remove feature nodes
+  if (remove_feature) {
+    com <- com[match(idprim[!duplicated(idprim)], com[, 1]), ]
+  }
 
   # Return output
-  com[,1]=as.character(com[,1])
+  com[, 1] <- as.character(com[, 1])
   return(com)
-
 }

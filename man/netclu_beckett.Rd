@@ -4,7 +4,14 @@
 \alias{netclu_beckett}
 \title{Community structure detection in weighted bipartite network via modularity optimisation}
 \usage{
-netclu_beckett(net, weight = TRUE, forceLPA = FALSE)
+netclu_beckett(
+  net,
+  weight = TRUE,
+  forceLPA = FALSE,
+  primary_col = 1,
+  feature_col = 2,
+  remove_feature = TRUE
+)
 }
 \arguments{
 \item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
@@ -15,6 +22,12 @@ as undirected links between pair of nodes and an optional third column indicatin
 \item{forceLPA}{a boolean indicating if the even faster pure LPA-algorithm of Beckett should be used? DIRT-
 LPA, the default, is less likely to get trapped in a local minimum, but is slightly
 slower. Defaults to FALSE.}
+
+\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+
+\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+
+\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
 }
 \value{
 A \code{data.frame} providing one community by node.
@@ -29,11 +42,13 @@ as implemented in the \href{https://cran.r-project.org/web/packages/bipartite/in
 (\link[bipartite]{computeModules}).
 }
 \examples{
-net <- data.frame(Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
-Species = c("a", "b", "a", "c", "d", "b", "d"),
-Weight = c(10, 100, 1, 20, 50, 10, 20))
+net <- data.frame(
+  Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
+  Species = c("a", "b", "a", "c", "d", "b", "d"),
+  Weight = c(10, 100, 1, 20, 50, 10, 20)
+)
 
-com=netclu_beckett(net)
+com <- netclu_beckett(net)
 }
 \references{
 \insertRef{Beckett2016}{bioRgeo}
