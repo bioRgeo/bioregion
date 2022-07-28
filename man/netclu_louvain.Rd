@@ -11,6 +11,10 @@ netclu_louvain(
   q = 0,
   c = 0.5,
   k = 1,
+  bipartite = FALSE,
+  primary_col = 1,
+  feature_col = 2,
+  remove_feature = TRUE,
   delete_temp = TRUE,
   path_temp = "louvain_temp",
   binpath = NULL
@@ -29,6 +33,14 @@ as (un)directed links between pair of nodes and an optional third column indicat
 \item{c}{the parameter for the Owsinski-Zadrozny quality function (between 0 and 1, 0.5 is chosen by default)}
 
 \item{k}{the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)}
+
+\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+
+\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+
+\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+
+\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
 
 \item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
 
@@ -53,6 +65,10 @@ Density criterion, 4	for the A-weighted Condorcet criterion, 5 for the Deviation
 for the Deviation to Uniformity criterion, 7 for the Profile Difference criterion, 8	for the Shi-Malik criterion
 (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
 
+Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
+the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
+\code{feature_col} and \code{remove_feature}).
+
 The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
 This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
 the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
@@ -63,12 +79,12 @@ The C++ version of Louvain generates temporary folders and/or files that are sto
 (\code{delete_temp = TRUE}).
 }
 \examples{
-comat=matrix(sample(1000,50),5,10)
-rownames(comat)=paste0("Site",1:5)
-colnames(comat)=paste0("Species",1:10)
+comat <- matrix(sample(1000, 50), 5, 10)
+rownames(comat) <- paste0("Site", 1:5)
+colnames(comat) <- paste0("Species", 1:10)
 
-net=similarity(comat,metric="Simpson")
-com=netclu_louvain(net, lang="igraph")
+net <- similarity(comat, metric = "Simpson")
+com <- netclu_louvain(net, lang = "igraph")
 }
 \references{
 \insertRef{Blondel2008}{bioRgeo}

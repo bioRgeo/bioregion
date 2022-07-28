@@ -36,7 +36,8 @@
 #' @references
 #' \insertRef{Beckett2016}{bioRgeo}
 #' @export
-netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE, primary_col = 1, feature_col = 2, remove_feature = TRUE) {
+netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE,
+                           primary_col = 1, feature_col = 2, remove_feature = TRUE) {
 
   # Controls input net
   if (!is.data.frame(net)) {
@@ -103,21 +104,22 @@ netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE, primary_col = 1
   } else {
     stop("feature_col should be numeric or character")
   }
-  
+
   if (!is.logical(remove_feature)) {
     stop("remove_feature must be a boolean")
   }
 
   # Prepare input
   idprim <- as.character(net[, primary_col])
+  idprim <- idprim[!duplicated(idprim)]
   idfeat <- as.character(net[, feature_col])
+  idfeat <- idfeat[!duplicated(idfeat)]
 
   if (length(intersect(idprim, idfeat)) > 0) { # Control bipartite
     stop("The network should be bipartite!")
   }
 
   idnode <- c(idprim, idfeat)
-  idnode <- idnode[!duplicated(idnode)]
   idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
 
   netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
@@ -139,10 +141,13 @@ netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE, primary_col = 1
 
   # Remove feature nodes
   if (remove_feature) {
-    com <- com[match(idprim[!duplicated(idprim)], com[, 1]), ]
+    com <- com[match(idprim, com[, 1]), ]
   }
 
-  # Return output
+  # Rename and reorder columns
   com[, 1] <- as.character(com[, 1])
+  com <- knbclu(com)
+
+  # Return output
   return(com)
 }

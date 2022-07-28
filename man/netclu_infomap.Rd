@@ -70,8 +70,8 @@ This function finds communities in a (un)weighted (un)directed network based on 
 Infomap is a network clustering algorithm based on the Map equation proposed in
 \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
 Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
-as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}). The second possibility
-is to set the \code{bipartite_version} argument to TRUE in order to
+as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}).
+The second possibility is to set the \code{bipartite_version} argument to TRUE in order to
 approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 
 This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).

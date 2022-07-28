@@ -4,13 +4,28 @@
 \alias{netclu_leadingeigen}
 \title{Finding communities based on leading eigenvector of the community matrix}
 \usage{
-netclu_leadingeigen(net, weight = TRUE)
+netclu_leadingeigen(
+  net,
+  weight = TRUE,
+  bipartite = FALSE,
+  primary_col = 1,
+  feature_col = 2,
+  remove_feature = TRUE
+)
 }
 \arguments{
 \item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
 as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
 
 \item{weight}{a boolean indicating if the weights should be considered if there is a third column}
+
+\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+
+\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+
+\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+
+\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
 }
 \value{
 A \code{data.frame} providing one community by node.
@@ -23,14 +38,18 @@ of the community matrix.
 This function is based on leading eigenvector of the community matrix \insertCite{Newman2006}{bioRgeo}
 as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
 (\link[igraph]{cluster_leading_eigen}).
+
+Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
+the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
+\code{feature_col} and \code{remove_feature}).
 }
 \examples{
-comat=matrix(sample(1000,50),5,10)
-rownames(comat)=paste0("Site",1:5)
-colnames(comat)=paste0("Species",1:10)
+comat <- matrix(sample(1000, 50), 5, 10)
+rownames(comat) <- paste0("Site", 1:5)
+colnames(comat) <- paste0("Species", 1:10)
 
-net=similarity(comat,metric="Simpson")
-com=netclu_leadingeigen(net)
+net <- similarity(comat, metric = "Simpson")
+com <- netclu_leadingeigen(net)
 }
 \references{
 \insertRef{Newman2006}{bioRgeo}

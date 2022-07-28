@@ -27,8 +27,8 @@
 #' Infomap is a network clustering algorithm based on the Map equation proposed in
 #' \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
 #' Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
-#' as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}). The second possibility
-#' is to set the \code{bipartite_version} argument to TRUE in order to
+#' as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}).
+#' The second possibility is to set the \code{bipartite_version} argument to TRUE in order to
 #' approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
 #'
 #' This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
@@ -57,8 +57,8 @@
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
-netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE,
-                           directed = FALSE, bipartite_version = FALSE, bipartite = FALSE, primary_col = 1, feature_col = 2,
+netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE, directed = FALSE,
+                           bipartite_version = FALSE, bipartite = FALSE, primary_col = 1, feature_col = 2,
                            remove_feature = TRUE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL) {
 
   # Remove warning for tidyr
@@ -236,20 +236,21 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
   # Prepare input for INFOMAP
   if (bipartite | bipartite_version) {
     idprim <- as.character(net[, primary_col])
+    idprim <- idprim[!duplicated(idprim)]
     idfeat <- as.character(net[, feature_col])
+    idfeat <- idfeat[!duplicated(idfeat)]
     # Control bipartite
     if (length(intersect(idprim, idfeat)) > 0) {
       stop("If bipartite = TRUE or bipartite_version = TRUE primary and feature nodes should be different.")
     }
-    idprim <- idprim[!duplicated(idprim)]
     idprim <- data.frame(ID = 1:length(idprim), ID_NODE = idprim, Type = 1) # Primary nodes
-    idfeat <- idfeat[!duplicated(idfeat)]
     idfeat <- data.frame(ID = ((dim(idprim)[1] + 1):(dim(idprim)[1] + length(idfeat))), ID_NODE = idfeat, Type = 2) # Feature nodes
     N <- dim(idprim)[1] + 1 # First node id of the feature node type
     idnode <- rbind(idprim, idfeat)
     if (!bipartite_version) {
       idnode <- idnode[, 1:2]
     }
+    netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
@@ -259,9 +260,9 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
+    netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], node2 = idnode[match(net[, 2], idnode[, 2]), 1])
   }
 
-  netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], node2 = idnode[match(net[, 2], idnode[, 2]), 1])
   if (weight) {
     netemp <- cbind(netemp, net[, 3])
     netemp <- netemp[netemp[, 3] > 0, ]
@@ -366,13 +367,11 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
   }
 
   # Remove feature nodes
-  if (remove_feature) {
+  if ((bipartite | bipartite_version) & remove_feature) {
     com <- com[match(idprim$ID_NODE, com[, 1]), ]
   }
 
   # Rename and reorder columns
-  # com=com[,c(1,dim(com)[2]:2)]
-  # colnames(com)[2:dim(com)[2]]=paste0("Com",1:(dim(com)[2]-1))
   com[, 1] <- as.character(com[, 1])
   com <- knbclu(com)
 

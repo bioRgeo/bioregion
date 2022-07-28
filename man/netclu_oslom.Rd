@@ -14,6 +14,10 @@ netclu_oslom(
   t = 0.1,
   cp = 0.5,
   directed = FALSE,
+  bipartite = FALSE,
+  primary_col = 1,
+  feature_col = 2,
+  remove_feature = TRUE,
   delete_temp = TRUE,
   path_temp = "oslom_temp",
   binpath = NULL
@@ -42,6 +46,14 @@ in hierarchies)}
 
 \item{directed}{a boolean indicating if the network is directed (from column 1 to column 2)}
 
+\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+
+\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+
+\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+
+\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
+
 \item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
 
 \item{path_temp}{a string indicating the path to the temporary folder (see Details)}
@@ -66,6 +78,10 @@ may belong to several communities we propose two methods to reassign the 'overla
 (only for weighted networks, in this case the closest candidate community is determined with the average similarity).
 By default \code{reassign = 'no'} and all the information is provided.
 
+Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
+the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
+\code{feature_col} and \code{remove_feature}).
+
 This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
 This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
 the folder that will host the bin folder  manually while running \link{install_binaries} please make sure to set \code{binpath}
@@ -76,12 +92,12 @@ The C++ version of OSLOM generates temporary folders and/or files that are store
 (\code{delete_temp = TRUE}).
 }
 \examples{
-comat=matrix(sample(1000,50),5,10)
-rownames(comat)=paste0("Site",1:5)
-colnames(comat)=paste0("Species",1:10)
+comat <- matrix(sample(1000, 50), 5, 10)
+rownames(comat) <- paste0("Site", 1:5)
+colnames(comat) <- paste0("Species", 1:10)
 
-net=similarity(comat,metric="Simpson")
-#com=netclu_oslom(net) # run install_binaries() to use this function
+net <- similarity(comat, metric = "Simpson")
+# com=netclu_oslom(net) # run install_binaries() to use this function
 }
 \references{
 \insertRef{Lancichinetti2011}{bioRgeo}
