@@ -30,25 +30,29 @@
 #
 # }
 
-knbclu=function(partitions, method = "max", # Changer le défaut par length ?
-                reorder = TRUE, rename_duplicates = TRUE){
+knbclu <- function(partitions, method = "length",
+                   reorder = TRUE, rename_duplicates = TRUE) {
 
   # Identify the number of clusters per partition
-  nb = dim(partitions)[2] - 1
+  nb <- dim(partitions)[2] - 1
 
 
-  if(method == "max"){
-    nbclus <- as.numeric(apply(partitions[, 2:(nb + 1), drop = FALSE],
-                               2,
-                               function (x) max(x)))
-  } else if(method == "length") {
-    nbclus <- apply(partitions[, 2:(nb + 1), drop = FALSE],
-                    2,
-                    function (x) length(unique(x)))
+  if (method == "max") {
+    nbclus <- as.numeric(apply(
+      partitions[, 2:(nb + 1), drop = FALSE],
+      2,
+      function(x) max(x)
+    ))
+  } else if (method == "length") {
+    nbclus <- apply(
+      partitions[, 2:(nb + 1), drop = FALSE],
+      2,
+      function(x) length(unique(x))
+    )
   }
 
   # Rename and reorder
-  if (reorder){
+  if (reorder) {
     ord <- cbind(2:(nb + 1), nbclus)
     ord <- ord[order(ord[, 2]), , drop = FALSE]
     partitions <- partitions[, c(1, ord[, 1])]
@@ -58,17 +62,19 @@ knbclu=function(partitions, method = "max", # Changer le défaut par length ?
   }
 
   # Rename duplicates
-  if(rename_duplicates){
-    colnames(partitions)[2:(nb + 1)]=make.unique.2(colnames(partitions)[2:(nb + 1)],sep="_")
+  if (rename_duplicates) {
+    colnames(partitions)[2:(nb + 1)] <- make.unique.2(colnames(partitions)[2:(nb + 1)], sep = "_")
   }
 
   partitions
-
 }
 
-make.unique.2 = function(x, sep='.'){ # From https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
-    stats::ave(x, x, FUN=function(a){if(length(a) > 1){paste(a, 1:length(a), sep=sep)} else {a}})
+make.unique.2 <- function(x, sep = ".") { # From https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
+  stats::ave(x, x, FUN = function(a) {
+    if (length(a) > 1) {
+      paste(a, 1:length(a), sep = sep)
+    } else {
+      a
+    }
+  })
 }
-
-
-
