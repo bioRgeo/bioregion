@@ -18,7 +18,7 @@
 #'
 #' Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
 #' the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-#' \code{feature_col} and \code{remove_feature}).
+#' \code{feature_col} and \code{remove_feature}.
 #'
 #' @return A \code{data.frame} providing one community by node.
 #'

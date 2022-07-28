@@ -67,7 +67,7 @@ for the Deviation to Uniformity criterion, 7 for the Profile Difference criterio
 
 Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
 the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-\code{feature_col} and \code{remove_feature}).
+\code{feature_col} and \code{remove_feature}.
 
 The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
 This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to

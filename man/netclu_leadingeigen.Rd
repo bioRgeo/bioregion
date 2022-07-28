@@ -41,7 +41,7 @@ as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index
 
 Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
 the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-\code{feature_col} and \code{remove_feature}).
+\code{feature_col} and \code{remove_feature}.
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)

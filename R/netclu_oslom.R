@@ -34,7 +34,7 @@
 #'
 #' Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
 #' the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-#' \code{feature_col} and \code{remove_feature}).
+#' \code{feature_col} and \code{remove_feature}.
 #'
 #' This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
 #' This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
