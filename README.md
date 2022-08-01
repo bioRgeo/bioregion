@@ -8,7 +8,7 @@
 
 ## 1 Install
 
-THe package `bioRgeo` can be installed with the following command line in R session:
+The package `bioRgeo` can be installed with the following command line in R session:
 
 ``` r
 devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
