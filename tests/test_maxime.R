@@ -29,50 +29,6 @@ install_binaries()
 
 
 
-
-
-
-
-
-
-
-# beckett
-#source("bioRgeo/R/beckett.R")
-
-com=beckett(tab, weight=TRUE, forceLPA=FALSE)
-
-
-# walktrap
-#source("bioRgeo/R/walktrap.R")
-
-net=similarity(mat,metric=c("Simpson"))
-
-com=walktrap(net, weight=TRUE)
-
-# leading_eigen
-#source("bioRgeo/R/leading_eigen.R")
-
-net=similarity(mat,metric=c("Simpson"))
-
-com=leading_eigen(net, weight=TRUE)
-
-# label_prop
-#source("bioRgeo/R/label_prop.R")
-
-net=similarity(mat,metric=c("Simpson"))
-
-com=label_prop(net, weight=TRUE)
-
-# greedy
-#source("bioRgeo/R/greedy.R")
-
-net=similarity(mat,metric=c("Simpson"))
-
-com=greedy(net, weight=TRUE)
-
-
-
-
 # check results
 net=similarity(mat,metric=c("Simpson"))
 
@@ -97,33 +53,110 @@ sp=cbind(sp,como[,2],comi[,2],coml[,2])
 
 plot(sp)
 
-# infomap
+
+
+
+
+
+
+
+
+############################################################################################
+# walktrap
 #source("bioRgeo/R/utils.R")
-#source("bioRgeo/R/infomap.R")
-
-net=similarity(mat,metric=c("Jaccard"))
-
-com=infomap(net[net[,3]>0.5,])
-
-# louvain
-#source("bioRgeo/R/utils.R")
-#source("bioRgeo/R/louvain.R")
+#source("bioRgeo/R/netclu_walktrap.R")
 
 net=similarity(mat,metric=c("Simpson"))
 
-com=louvain(net, weight=TRUE, lang="all")
+com=netclu_walktrap(net, weight=TRUE)
+com[1:10,]
+
+com=netclu_walktrap(tab[1:1000,], bipartite = TRUE)
+com[1:10,]
+
+# leadingeigen
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_leadingeigen.R")
+
+net=similarity(mat,metric=c("Simpson"))
+
+com=netclu_leadingeigen(net, weight=TRUE)
+com[1:10,]
+
+com=netclu_leadingeigen(tab[1:1000,], bipartite = TRUE)
+com[1:10,]
+
+# labelprop
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_labelprop.R")
+
+net=similarity(mat,metric=c("Simpson"))
+
+com=netclu_labelprop(net, weight=TRUE)
+com[1:10,]
+
+com=netclu_labelprop(tab[1:1000,], bipartite = TRUE)
+com[1:10,]
+
+# greedy
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_greedy.R")
+
+net=similarity(mat,metric=c("Simpson"))
+
+com=netclu_greedy(net, weight=TRUE)
+com[1:10,]
+
+com=netclu_greedy(tab[1:1000,], bipartite = TRUE)
+com[1:10,]
 
 # oslom
-#source("bioRgeo/R/oslom.R")
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_oslom.R")
 
-net=similarity(mat,metric=c("Sorensen"))
+net=similarity(mat,metric=c("Jaccard"))
 
-com=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
+com=netclu_oslom(net[net[,3]>0.5,], r=1, reassign="simil")
+com[1:10,]
+
+com=netclu_oslom(tab[1:1000,], r=1, reassign="simil")
+com[1:10,]
+
+# louvain
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_louvain.R")
+
+net=similarity(mat,metric=c("Jaccard"))
+
+com=netclu_louvain(net[net[,3]>0.5,])
+com[1:10,]
+
+com=netclu_louvain(tab[1:1000,], bipartite = TRUE)
+com[1:10,]
+
+# infomap
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_infomap.R")
+
+net=similarity(mat,metric=c("Jaccard"))
+
+com=netclu_infomap(net[net[,3]>0.5,])
+com[1:10,]
+
+com=netclu_infomap(tab[1:1000,], bipartite = TRUE)
+com[1:10,]
+
+# beckett
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_beckett.R")
+
+com=netclu_beckett(tab[1:1000,], weight=TRUE, forceLPA=FALSE)
+com[1:10,]
+############################################################################################
 
 
 
-
-
+############################################################################################
 # similarity
 #library(Rcpp)
 #library(Matrix)
@@ -180,7 +213,7 @@ tab2=mat_to_net(mat,weight=TRUE)
 tab2[1:10,]
 tab2=mat_to_net(mat,weight=TRUE,remove_absent_objects=FALSE)
 tab2[1:10,]
-
+############################################################################################
 
 
 
