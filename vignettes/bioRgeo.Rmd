@@ -4,7 +4,7 @@ author: "Pierre Denelle, Maxime Lenormand and Boris Leroy"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
-    number_sections: true
+    number_sections: false
 vignette: >
   %\VignetteIndexEntry{Tutorial for bioRgeo}
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,13 +19,56 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Brief introduction
 
-This tutorial aims at describing the bioRgeo's processing workflow 
+This tutorial aims at describing the different features of the R package `bioRgeo`. The main purpose of the `bioRgeo`'s package is to propose a transparent methodological framework to compare bioregionalization methods. Below is the typical flow chart of bioregions' identification from a site-species bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflow can be divided into four main steps:
+
+1. Data preprocessing (matrix or network formats)
+2. Compute similarity/distance metrics between sites based on species composition (optional).
+3. Run the different algorithms to identify different set of bioregions.
+4. Evaluation and visualization of the results.
+
+<p>&nbsp;</p>
+<center>
+  <img align="bottom" width="100%" height="100%" src="../man/figures/Workflow.png">
+</center> 
+<p>&nbsp;</p>
+<center>
+  <b>Figure 1: Workflow of the bioRgeo's package.</b>
+</center> 
+<p>&nbsp;</p>
+
+## Matrix or Network formats
 
 
-Below is the typical flow chart of ... with __bioRgeo__ :
+## Pairwise similarity and distance metrics
 
-<img align="bottom" width="100%" height="100%" src="../man/figures/Workflow.png">
+
+## Clustering algorithms
+
+### Install binaries
+
+Some algorithms (listed below) require binary files to run. Pleas check this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/bin.html) to get instructions to install the binary files.
+
+* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
+* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
+* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
+
+### Hierarchical clustering
+
+### Non-hierarchical clustering
+
+### Network clustering
+
+## Visualization and evaluation of the results
+
+
+
+
+
+
+
+
 
 
 
