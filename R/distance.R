@@ -63,6 +63,7 @@
 #' dist
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
+#' 
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
 distance <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat") {

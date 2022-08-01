@@ -67,6 +67,7 @@
 #' simil
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
+#' 
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
 similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat") {
