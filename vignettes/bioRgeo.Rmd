@@ -5,28 +5,41 @@ date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: false
+  html_document:
+    toc: true
+    toc_float:
+    collapsed: false
+    smooth_scroll: false
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{Tutorial for bioRgeo}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval=FALSE
-)
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 8)
+# Packages --------------------------------------------------------------------
+suppressPackageStartupMessages({
+  suppressWarnings({
+    library(bioRgeo)
+  })
+})
+
+options(tinytex.verbose = TRUE)
+
 ```
 
 ## Brief introduction
 
-This tutorial aims at describing the different features of the R package `bioRgeo`. The main purpose of the `bioRgeo`'s package is to propose a transparent methodological framework to compare bioregionalization methods. Below is the typical flow chart of bioregions' identification from a site-species bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflow can be divided into four main steps:
+This tutorial aims at describing the different features of the R package `bioRgeo`. The main purpose of the `bioRgeo`'s package is to propose a transparent methodological framework to compare bioregionalization methods. Below is the typical flow chart of bioregions' identification based on a site-species bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflow can be divided into four main steps:
 
-1. Data preprocessing (matrix or network formats)
-2. Compute similarity/distance metrics between sites based on species composition (optional).
-3. Run the different algorithms to identify different set of bioregions.
-4. Evaluation and visualization of the results.
+1. Preprocess the data (matrix or network formats)
+2. Compute similarity/distance metrics between sites based on species composition
+3. Run the different algorithms to identify different set of bioregions
+4. Evaluate and visualize the results
 
 <p>&nbsp;</p>
 <center>
@@ -40,15 +53,18 @@ This tutorial aims at describing the different features of the R package `bioRge
 
 ## Matrix or Network formats
 
+The `bioRgeo`'s package takes as input site-species information stored in a bipartite network or a co-occurence matrix. It handles both the matrix and network formats throughout the workflow. 
+
 
 ## Pairwise similarity and distance metrics
+
 
 
 ## Clustering algorithms
 
 ### Install binaries
 
-Some algorithms (listed below) require binary files to run. Pleas check this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/bin.html) to get instructions to install the binary files.
+Some functions or at least part of them (listed below) require binary files to run. Please check this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/bin.html) to get instructions regarding the installation of binary files.
 
 * [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
 * [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
