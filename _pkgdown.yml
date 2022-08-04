@@ -17,9 +17,9 @@ reference:
   desc: >
   contents:
   - similarity
-  - distance
-  - distance_to_similarity
-  - similarity_to_distance
+  - dissimilarity
+  - similarity_to_dissimilarity
+  - dissimilarity_to_similarity
 
 - title: Clustering
 
