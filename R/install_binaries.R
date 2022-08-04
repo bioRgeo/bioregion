@@ -303,7 +303,7 @@ install_binaries <- function(binpath = NULL) {
 
   # Test OSLOM
   message(" ")
-  message("5. Test OSLOM")
+  message("6. Test OSLOM")
   message(" ")
 
   path <- paste0(binpath, "/bin/OSLOM/")
