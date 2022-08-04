@@ -17,7 +17,7 @@ basins <- st_as_sf(basins)
 
 fish_comat <- net_to_mat(fish)
 
-fish_dist <- distance(fish_comat)
+fish_dist <- bioRgeo::distance(fish_comat)
 
 
 ##### INFOMAP #####

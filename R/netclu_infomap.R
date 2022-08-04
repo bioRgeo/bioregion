@@ -267,6 +267,34 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
     netemp <- cbind(netemp, net[, 3])
     netemp <- netemp[netemp[, 3] > 0, ]
   }
+  
+  
+  # Class preparation
+  outputs <- list(name = "infomap")
+  
+  outputs$args <- list(weight = weight, nbmod = nbmod, markovtime = markovtime, 
+                       seed = seed,
+                       numtrials = numtrials, twolevel = twolevel, 
+                       directed = directed,
+                       bipartite_version = bipartite_version, 
+                       bipartite = bipartite, 
+                       primary_col = primary_col, feature_col = feature_col,
+                       remove_feature = remove_feature, 
+                       delete_temp = delete_temp,
+                       path_temp = path_temp, binpath = binpath
+  )
+  
+  outputs$inputs <- list(bipartite = bipartite|bipartite_version,
+                         weight = weight,
+                         pairwise = ifelse(bipartite|bipartite_version,
+                                           FALSE, TRUE),
+                         pairwise_metric = ifelse(bipartite|bipartite_version,
+                                                  NA, index),
+                         distance = FALSE,
+                         nb_sites = NA) # Compléter
+  
+  outputs$algorithm <- list()
+  
 
   # Export input in INFOMAP folder
   if (bipartite_version) { # Add tag if bipartite
@@ -299,7 +327,10 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
   } else {
     stop("Linux, Windows or Mac distributions only.")
   }
-
+  
+  outputs$algorithm$cmd <- cmd
+  # Ajouter version + site web
+  
   # Run INFOMAP
   system(command = cmd)
 
@@ -372,12 +403,15 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
   }
 
   # Rename and reorder columns
-  com[, 1] <- as.character(com[, 1])
   com <- knbclu(com)
 
   # Put the warning back
   options(warn = defaultW)
 
   # Return output
-  return(com)
+  outputs$clusters <- com
+  
+  class(outputs) <-  append("bioRgeo.clusters", class(outputs))
+  
+  return(outputs)
 }
