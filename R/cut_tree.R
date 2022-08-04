@@ -174,7 +174,7 @@ cut_tree <- function(tree,
         {
           stop("dissimilarity seems to be a similarity object.
          hclu_hierarclust() should be applied on dissimilarity, not similarity.
-         Use similarity_to_distance() before using hclu_hierarclust()")
+         Use similarity_to_dissimilarity() before using hclu_hierarclust()")
         }
         index <- colnames(dissimilarity)[3]
 
