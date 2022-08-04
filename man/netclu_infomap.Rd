@@ -7,6 +7,7 @@
 netclu_infomap(
   net,
   weight = TRUE,
+  index = names(net)[3],
   nbmod = 0,
   markovtime = 1,
   seed = 1,
@@ -28,6 +29,11 @@ netclu_infomap(
 as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
 
 \item{weight}{a boolean indicating if the weights should be considered if there is a third column}
+
+\item{index}{a \code{character} string providing the name of the dissimilarity
+index to use, corresponding to the column
+name in \code{dissimilarity}. By default, the third column name of
+ \code{net} is used.}
 
 \item{nbmod}{penalize solutions the more they differ from this number (0 by default for no preferred number of modules)}
 

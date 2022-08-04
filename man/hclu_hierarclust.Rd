@@ -147,7 +147,7 @@ dissimilarity <- similarity_to_dissimilarity(simil)
 \insertRef{Kreft2010}{bioRgeo}
 }
 \seealso{
-\link{dissimilarity_to_similarity}
+\link{dissimilarity_to_similarity} \link{cut_tree} \link{dissimilarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

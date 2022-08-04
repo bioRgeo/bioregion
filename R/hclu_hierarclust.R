@@ -85,7 +85,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{dissimilarity_to_similarity}
+#' @seealso \link{dissimilarity_to_similarity} \link{cut_tree} \link{dissimilarity}
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
 #' rownames(comat) <- paste0("Site",1:20)
