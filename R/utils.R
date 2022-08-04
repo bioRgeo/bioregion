@@ -66,6 +66,11 @@ knbclu <- function(partitions, method = "length",
     colnames(partitions)[2:(nb + 1)] <- make.unique.2(colnames(partitions)[2:(nb + 1)], sep = "_")
   }
 
+  # Convert in character
+  for (k in 1:(nb + 1)) {
+    partitions[, k] <- as.character(partitions[, k])
+  }
+
   partitions
 }
 

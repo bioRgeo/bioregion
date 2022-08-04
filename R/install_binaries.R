@@ -1,6 +1,6 @@
 #' Download, unzip, check permission and test the bioRgeo's executables
 #'
-#' This function download and unzip the bin folder needed to run some bioRgeo's functions. It also checks if the files
+#' This function downloads and unzips the bin folder needed to run some bioRgeo's functions. It also checks if the files
 #' have the permissions to be executed as programs. It finally tests if the executable are running properly.
 #'
 #' @param binpath a string indicating the path to the folder that will host the bin folder (bioRgeo's package by default,
