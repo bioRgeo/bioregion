@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 *.Rproj
+*.bak
 
 src/abc.o
 src/bioRgeo.so

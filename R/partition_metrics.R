@@ -1,4 +1,4 @@
-#' Find an optimal number of clusters in a hierachical tree based on distances
+#' Find an optimal number of clusters in a hierachical tree based on dissimilarity
 #' or beta-diversity indices.
 #'
 #' This function aims at finding an optimal number of clusters in a hierarchical
@@ -13,13 +13,13 @@
 #' investigate the effect of different number of clusters. Available options:
 #' \code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
 #' \code{"tot_endemism"}
-#' @param distances a \code{dist} object or a \code{bioRgeo.distance} object (output
-#' from \code{\link{similarity_to_distance}}). Necessary if \code{eval_metric}
+#' @param dissimilarity a \code{dist} object or a \code{bioRgeo.pairwise.metric} object (output
+#' from \code{\link{similarity_to_dissimilarity}}). Necessary if \code{eval_metric}
 #' includes \code{pc_distance} and \code{tree} is not a
 #' \code{bioRgeo.hierar.tree} object
-#' @param distance_index a character string indicating the distance (beta-diversity)
+#' @param dissimilarity_index a character string indicating the dissimilarity (beta-diversity)
 #' index to be used in case \code{dist} is a \code{data.frame} with multiple
-#' distance indices
+#' dissimilarity indices
 #' @param tree_k_min an integer indicating the minimum number of clusters to be
 #' explored. Only useful if
 #' \code{cluster_object} is based on \code{\link{hclu_hierarclust}}.
@@ -72,19 +72,19 @@
 #' \bold{Evaluation metrics:}
 #' \itemize{
 #' \item{\code{pc_distance}: this metric is the method used by
-#' \insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of distances
+#' \insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of dissimilarity
 #' (beta-diversity)
-#' versus the total sum of distances (beta-diversity) for the full distance
+#' versus the total sum of dissimilarity (beta-diversity) for the full dissimilarity
 #' matrix. In
 #' other words, it is calculated on the basis of two elements. First, the total
-#' sum of distances is calculated by summing the entire distance matrix
-#' (\code{dist}). Second, the between-cluster sum of distances is calculated as
-#' follows: for a given number of cluster, the distances are only
+#' sum of dissimilarity is calculated by summing the entire dissimilarity matrix
+#' (\code{dist}). Second, the between-cluster sum of dissimilarity is calculated as
+#' follows: for a given number of cluster, the dissimilarity is only
 #' summed between clusters, not within clusters. To do that efficiently, all
-#' pairs of sites within the same clusters have their distance set to zero in
-#' the distance matrix, and then the distance matrix is summed. The
+#' pairs of sites within the same clusters have their dissimilarity set to zero in
+#' the dissimilarity matrix, and then the dissimilarity matrix is summed. The
 #' \code{pc_distance} ratio is obtained by dividing the between-cluster sum
-#' of distances by the total sum of distances.}
+#' of dissimilarity by the total sum of dissimilarity.}
 #' \item{\code{anosim}: This metric is the statistic used in Analysis of
 #' Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
 #' \link[vegan:anosim]{vegan::anosim()}). It
@@ -216,16 +216,16 @@
 #' @seealso \link{hclu_hierarclust}
 #' @examples
 #' simil <- similarity(vegemat, metric = "all")
-#' distances <- similarity_to_distance(simil)
+#' dissimilarity <- similarity_to_dissimilarity(simil)
 #'
 #' # User-defined number of clusters
-#' #tree1 <- hclu_hierarclust(distances,
+#' #tree1 <- hclu_hierarclust(dissimilarity,
 #' #                                  n_clust = 5,
 #' #                                  index = "Simpson")
 #' #tree1
 #'
 #' #a <- partition_metrics(tree1,
-#'#                   distances = distances,
+#'#                   dissimilarity = dissimilarity,
 #'#                   eval_metric = c("tot_endemism",
 #'#                                   "avg_endemism",
 #'#                                   "pc_distance",
@@ -233,7 +233,7 @@
 #'#
 #' #a <- partition_metrics(tree1, tree_k_max = 50,
 #'#                   tree_force_repartitioning = TRUE,
-#'#                   distances = distances,
+#'#                   dissimilarity = dissimilarity,
 #'#                   step_levels = 5)
 #'#  a <- partition_metrics(tree1, tree_k_max = 50,
 #'#                   eval_metric = c("tot_endemism",
@@ -241,7 +241,7 @@
 #'#                                   "pc_distance",
 #'#                                   "anosim"),
 #'#                   tree_force_repartitioning = TRUE,
-#'#                   distances = distances,
+#'#                   dissimilarity = dissimilarity,
 #'#                   sp_site_table = vegemat)
 #'
 #' #a <- partition_metrics(tree1,
@@ -252,13 +252,13 @@
 #'  #                 tree_k_max = 25,
 #'  #                 tree_force_repartitioning = TRUE,
 #'  #                 partition_optimisation = TRUE,
-#'  #                 distances = distances,
+#'  #                 dissimilarity = dissimilarity,
 #'  #                 sp_site_table = vegemat,
 #'  #                 criterion = "decreasing_step",
 #'  #                 step_levels = 5)
 #'
 #' #partition_metrics(tree1,
-#'#                  distances = distances,
+#'#                  dissimilarity = dissimilarity,
 #'#                  eval_metric = "pc_distance",
 #' #                 tree_k_max = 50,
 #'  #                tree_force_repartitioning = TRUE,
@@ -266,7 +266,7 @@
 #'  #                criterion = "elbow")
 #'
 #'# partition_metrics(tree1,
-#'  #                distances = distances,
+#'  #                dissimilarity = dissimilarity,
 #'  #                eval_metric = "pc_distance",
 #'  #                tree_k_max = 50,
 #'  #                tree_force_repartitioning = TRUE,
@@ -274,7 +274,7 @@
 #'  #                criterion = "increasing_step")
 #'
 #' #partition_metrics(tree1,
-#'#                  distances = distances,
+#'#                  dissimilarity = dissimilarity,
 #'  #                eval_metric = "pc_distance",
 #'  #                tree_k_max = 50,
 #'  #                tree_force_repartitioning = TRUE,
@@ -290,8 +290,8 @@
 #'  #                criterion = "max")
 partition_metrics <- function(
   cluster_object,
-  distances = NULL,
-  distance_index = names(distances)[3],
+  dissimilarity = NULL,
+  dissimilarity_index = names(dissimilarity)[3],
   eval_metric = "pc_distance",
   tree_k_min = 2,
   tree_k_max = "number of sites",
@@ -306,7 +306,7 @@ partition_metrics <- function(
   disable_progress = FALSE
 )
 {
-  distance_based_metrics <- c("pc_distance",
+  dissimilarity_based_metrics <- c("pc_distance",
                               "anosim")
   compo_based_metrics <- c("avg_endemism",
                            "tot_endemism")
@@ -332,33 +332,33 @@ partition_metrics <- function(
   }
 
 
-  if (is.null(distances)) {
-    has.distances <- FALSE
-    if(any(eval_metric %in% distance_based_metrics))
+  if (is.null(dissimilarity)) {
+    has.dissimilarity <- FALSE
+    if(any(eval_metric %in% dissimilarity_based_metrics))
     {
-      warning(paste0("No distance matrix provided, so metrics ",
-                     paste(eval_metric[which(eval_metric %in% distance_based_metrics)],
+      warning(paste0("No dissimilarity matrix provided, so metrics ",
+                     paste(eval_metric[which(eval_metric %in% dissimilarity_based_metrics)],
                            collapse = ", "),
                      " will not be computed"))
-      eval_metric <- eval_metric[-which(eval_metric %in% distance_based_metrics)]
+      eval_metric <- eval_metric[-which(eval_metric %in% dissimilarity_based_metrics)]
     }
-  } else if (inherits(distances, "bioRgeo.pairwise.metric")) {
-    if (attr(distances, "type") == "distance") {
+  } else if (inherits(dissimilarity, "bioRgeo.pairwise.metric")) {
+    if (attr(dissimilarity, "type") == "dissimilarity") {
       dist_object <- stats::as.dist(
-        net_to_mat(distances[, c(
+        net_to_mat(dissimilarity[, c(
           1, 2,
-          which(colnames(distances) == distance_index)
+          which(colnames(dissimilarity) == dissimilarity_index)
         )],
         weight = TRUE, squared = TRUE, symmetrical = TRUE
         )
       )
-      has.distances <- TRUE
+      has.dissimilarity <- TRUE
     } else
     {
-      stop("distances must be an object containing distances from distance() or similarity_to_distance(), or an object of class dist")
+      stop("dissimilarity must be an object containing dissimilarity indices from dissimilarity() or similarity_to_dissimilarity(), or an object of class dist")
     }
-  } else if (!inherits(distances, "dist")) {
-    stop("distances must be an object containing distances from distance() or similarity_to_distance(), or an object of class dist")
+  } else if (!inherits(dissimilarity, "dist")) {
+    stop("dissimilarity must be an object containing dissimilarity indices from dissimilarity() or similarity_to_dissimilarity(), or an object of class dist")
   }
 
   if (is.null(sp_site_table)) {
@@ -390,7 +390,7 @@ partition_metrics <- function(
 
   if(!length(eval_metric))
   {
-    stop("No evaluation metric can be computed because of missing arguments. Check arguments distances and sp_site_table")
+    stop("No evaluation metric can be computed because of missing arguments. Check arguments dissimilarity and sp_site_table")
   }
 
   if(partition_optimisation & length(criterion) > 2)
@@ -429,16 +429,12 @@ partition_metrics <- function(
 
 
   # 3. Calculate metrics ---------------------
-  # Labels are not in the same order in the tree and in the distance matrix.
-  # tree_object$labels == attr(dist_object, "Labels")
-  # cbind(tree_object$labels,
-  #       attr(dist_object, "Labels"))
 
-  if(has.distances) {
+  if(has.dissimilarity) {
     dist_mat <- as.matrix(dist_object)
     dist_sum_total <- sum(dist_mat) # Calculation for metric "pc_distance"
 
-    # Create a vector of positions in the distance matrix indicating to what
+    # Create a vector of positions in the dissimilarity matrix indicating to what
     # row/column each element corresponds
     # Will be used to distinguish within vs. between clusters
     rownames_dist <- attr(dist_object,
@@ -473,20 +469,20 @@ partition_metrics <- function(
 
     # cur_clusters <- clusters[, cur_col]
 
-    if(has.distances){
-      # The next line will create, for each element of the distance matrix, a
-      # vector indicating whether if each distance is within or between clusters
+    if(has.dissimilarity){
+      # The next line will create, for each element of the dissimilarity matrix, a
+      # vector indicating whether if each dissimilarity is within or between clusters
       within_clusters <- clusters[rownames_dist,
                                   cls_col] == clusters[colnames_dist,
                                                        cls_col]
 
       if("pc_distance" %in% eval_metric)
       {
-        # Compute total distance for current number of clusters
-        # Create a distance matrix with only distances between clusters - not within
+        # Compute total dissimilarity for current number of clusters
+        # Create a dissimilarity matrix with only dissimilarity between clusters - not within
         # clusters
         cur_dist_object <- dist_object
-        # Distances between sites of current cluster are set to 0
+        # dissimilarity between sites of current cluster are set to 0
         cur_dist_object[within_clusters] <- 0
 
         # Calculate sum for the current cluster number

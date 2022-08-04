@@ -19,7 +19,7 @@ print.bioRgeo.clusters <- function(x, ...)
   cat("Clustering results for algorithm : ")
   cat(x$name, "\n")
   if(x$name == "hierarchical_clustering") {
-    cat("\t(hierarchical clustering based on a distance matrix)\n")
+    cat("\t(hierarchical clustering based on a dissimilarity matrix)\n")
   }
 
   # dataset characteristics -----
@@ -27,12 +27,12 @@ print.bioRgeo.clusters <- function(x, ...)
 
   # methodological details -----
   if(x$name == "hierarchical_clustering") {
-    cat(" - Name of distance metric: ",
+    cat(" - Name of dissimilarity metric: ",
         ifelse(is.null(x$args$index),
                        "Undefined",
                        x$args$index), "\n")
     cat(" - Tree construction method: ", x$args$method, "\n")
-    cat(" - Randomization of the distance matrix: ",
+    cat(" - Randomization of the dissimilarity matrix: ",
         ifelse(x$args$randomize, paste0("yes, number of trials ",
                                         x$args$n_runs), "no"), "\n")
     cat(" - Cophenetic correlation coefficient: ",
@@ -120,7 +120,7 @@ plot.bioRgeo.clusters <- function(x, ...)
     }
     if(is.null(args$ylab))
     {
-      args$ylab <- paste0(x$args$index, " distance")
+      args$ylab <- paste0(x$args$index, " dissimilarity")
     }
     if(is.null(args$main))
     {
@@ -251,11 +251,11 @@ str.bioRgeo.hierar.tree <- function(object, ...)
 #' @method print bioRgeo.hierar.tree
 print.bioRgeo.hierar.tree <- function(x, ...)
 {
-  cat("Hierarchical tree based on distances between sites\n")
+  cat("Hierarchical tree based on dissimilarity between sites\n")
   cat(" - Number of sites: ", attr(x$dist.matrix, "Size"), "\n")
   cat(" - Tree construction method: ", x$args$method, "\n")
-  cat(" - Name of distance column used: ", x$args$index, "\n")
-  cat(" - Randomization of the distance matrix: ",
+  cat(" - Name of dissimilarity column used: ", x$args$index, "\n")
+  cat(" - Randomization of the dissimilarity matrix: ",
       ifelse(x$args$randomize, paste0("yes, number of trials ",
                                       x$args$n_runs), "no"), "\n")
   cat(" - Cophenetic correlation coefficient: ",
@@ -318,31 +318,17 @@ print.bioRgeo.pairwise.metric <- function(x, ...)
   cat(paste0("Data.frame of ",
              ifelse(attr(x, "type") == "similarity",
                     "similarity",
-                    "distance"),
+                    "dissimilarity"),
                     " between sites\n"))
   cat(" - Total number of sites: ", length(unique(c(x$Site1, x$Site2))), "\n")
   cat(" - Number of rows: ", nrow(x), "\n")
   # Warning, next line can be wrong if users alter the object
   cat(" - Number of", ifelse(attr(x, "type") == "similarity",
                               "similarity",
-                              "distance"), "metrics: ",
+                              "dissimilarity"), "metrics: ",
       length(metrics), "\n")
   cat("\n\n")
   print(as.data.frame(x))
 }
 
-#' #' @export
-#' #' @method print bioRgeo.distance
-#' print.bioRgeo.distance <- function(x, ...)
-#' {
-#'   metrics <- colnames(x)[-which(colnames(x) %in%
-#'                                   c("Site1", "Site2", "a", "b",
-#'                                     "c", "A", "B", "C"))]
-#'   cat("Data.frame of distances between sites\n")
-#'   cat(" - Total number of sites: ", length(unique(c(x$Site1, x$Site2))), "\n")
-#'   cat(" - Number of rows: ", nrow(x), "\n")
-#'   # Warning, next line can be wrong if users alter the object
-#'   cat(" - Number of distance metrics: ", length(metrics), "\n")
-#'   cat("\n\n")
-#'   print(as.data.frame(x))
-#' }
+

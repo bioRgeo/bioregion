@@ -1,15 +1,15 @@
 #' Non hierarchical clustering: k-means analysis
 #'
 #' This function performs non hierarchical
-#' clustering on the basis of distances with a k-means analysis.
+#' clustering on the basis of dissimilarity with a k-means analysis.
 #'
-#' @param distances the output object from \code{\link{similarity_to_distance}},
+#' @param dissimilarity the output object from \code{\link{similarity_to_dissimilarity}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the distance indices or a \code{dist} object
-#' @param index a \code{character} string providing the name of the distance
+#' the other columns being the dissimilarity indices or a \code{dist} object
+#' @param index a \code{character} string providing the name of the dissimilarity
 #' index to use, corresponding to the column
-#' name in \code{distances}. By default, the third column name of
-#'  \code{distances} is used.
+#' name in \code{dissimilarity}. By default, the third column name of
+#'  \code{dissimilarity} is used.
 #' @param n_clust an \code{integer} or a \code{vector} of \code{integers}
 #' specifying the requested number(s) of clusters
 #' @param iter_max an \code{integer} specifying the maximum number of
@@ -25,11 +25,11 @@
 #'  such that that the sum of squares of euclidean distances from points to the
 #'  assigned cluster centres is minimized. k-means cannot be applied directly
 #'  on dissimilarity/beta-diversity metrics, because these distances are not
-#'  euclidean. Therefore, it requires first to transform the distance matrix
+#'  euclidean. Therefore, it requires first to transform the dissimilarity matrix
 #'  with a Principal Coordinate Analysis (using the function
 #'  \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
 #'  of points in the PCoA. Because this makes an additional transformation of
-#'  the initial matrix of distance, the partitioning around medoids method
+#'  the initial matrix of dissimilarity, the partitioning around medoids method
 #'  should be prefered (\code{\link{nhclu_pam}})
 #'
 #'
@@ -47,48 +47,48 @@
 #'
 #' @examples
 #' simil <- similarity(vegemat, metric = "all")
-#' distances <- similarity_to_distance(simil)
+#' dissimilarity <- similarity_to_dissimilarity(simil)
 #'
-#' clust1 <- nhclu_kmeans(distances,
+#' clust1 <- nhclu_kmeans(dissimilarity,
 #'     n_clust = 2:10,
 #'     index = "Simpson")
-#' clust2 <- nhclu_kmeans(distances,
+#' clust2 <- nhclu_kmeans(dissimilarity,
 #'     n_clust = 2:25,
 #'     index = "Simpson")
 #' partition_metrics(clust2,
-#'                   distances = distances,
+#'                   dissimilarity = dissimilarity,
 #'                   eval_metric = "pc_distance",
 #'                   partition_optimisation = TRUE)
 #' partition_metrics(clust2,
 #'                   sp_site_table = vegemat,
 #'                   eval_metric = "avg_endemism",
 #'                   partition_optimisation = TRUE)
-nhclu_kmeans <- function(distances,
-                         index = names(distances)[3],
+nhclu_kmeans <- function(dissimilarity,
+                         index = names(dissimilarity)[3],
                          n_clust = NULL,
                          iter_max = 10,
                          nstart = 10,
                          algorithm = "Hartigan-Wong"
 )
 {
-  if(inherits(distances, "bioRgeo.pairwise.metric"))
+  if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
   {
-    if(attr(distances, "type") == "similarity")
+    if(attr(dissimilarity, "type") == "similarity")
     {
-      stop("distances seems to be a similarity object.
-         nhclu_kmeans() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using nhclu_kmeans()")
+      stop("dissimilarity seems to be a similarity object.
+         nhclu_kmeans() should be applied on dissimilarity, not similarities.
+         Use similarity_to_dissimilarity() before using nhclu_kmeans()")
     }
-    if(!(index %in% colnames(distances)))
+    if(!(index %in% colnames(dissimilarity)))
     {
-      stop("Argument index should be one of the column names of distance")
+      stop("Argument index should be one of the column names of dissimilarity")
     }
 
-  } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
+  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
   {
-    if(!(index %in% colnames(distances)))
+    if(!(index %in% colnames(dissimilarity)))
     {
-      stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
     }
   }
 
@@ -105,11 +105,11 @@ nhclu_kmeans <- function(distances,
     }
   }
 
-  if(!inherits(distances, "dist"))
+  if(!inherits(dissimilarity, "dist"))
   {
     dist.obj <- stats::as.dist(
-      net_to_mat(distances[, c(1, 2,
-                               which(colnames(distances) == index))],
+      net_to_mat(dissimilarity[, c(1, 2,
+                               which(colnames(dissimilarity) == index))],
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
   }
@@ -128,7 +128,7 @@ nhclu_kmeans <- function(distances,
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise_metric = TRUE,
-                         distance = TRUE,
+                         dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
 
   outputs$algorithm <- list()
@@ -141,7 +141,7 @@ nhclu_kmeans <- function(distances,
   outputs$clusters$name <- labels(dist.obj)
 
 
-  # kmeans only works on Euclidean distances, so the distance matrix needs to
+  # kmeans only works on Euclidean distances, so the dissimilarity matrix needs to
   # be transformed into a multivariate space with euclidean distances
   # with a Principal Coordinate Analysis
   outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)

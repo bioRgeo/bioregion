@@ -2,13 +2,13 @@
 % Please edit documentation in R/partition_metrics.R
 \name{partition_metrics}
 \alias{partition_metrics}
-\title{Find an optimal number of clusters in a hierachical tree based on distances
+\title{Find an optimal number of clusters in a hierachical tree based on dissimilarity
 or beta-diversity indices.}
 \usage{
 partition_metrics(
   cluster_object,
-  distances = NULL,
-  distance_index = names(distances)[3],
+  dissimilarity = NULL,
+  dissimilarity_index = names(dissimilarity)[3],
   eval_metric = "pc_distance",
   tree_k_min = 2,
   tree_k_max = "number of sites",
@@ -26,14 +26,14 @@ partition_metrics(
 \arguments{
 \item{cluster_object}{tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object}
 
-\item{distances}{a \code{dist} object or a \code{bioRgeo.distance} object (output
-from \code{\link{similarity_to_distance}}). Necessary if \code{eval_metric}
+\item{dissimilarity}{a \code{dist} object or a \code{bioRgeo.pairwise.metric} object (output
+from \code{\link{similarity_to_dissimilarity}}). Necessary if \code{eval_metric}
 includes \code{pc_distance} and \code{tree} is not a
 \code{bioRgeo.hierar.tree} object}
 
-\item{distance_index}{a character string indicating the distance (beta-diversity)
+\item{dissimilarity_index}{a character string indicating the dissimilarity (beta-diversity)
 index to be used in case \code{dist} is a \code{data.frame} with multiple
-distance indices}
+dissimilarity indices}
 
 \item{eval_metric}{character string or vector of character strings indicating
  metric(s) to be calculated to
@@ -123,19 +123,19 @@ number of clusters.
 \bold{Evaluation metrics:}
 \itemize{
 \item{\code{pc_distance}: this metric is the method used by
-\insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of distances
+\insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of dissimilarity
 (beta-diversity)
-versus the total sum of distances (beta-diversity) for the full distance
+versus the total sum of dissimilarity (beta-diversity) for the full dissimilarity
 matrix. In
 other words, it is calculated on the basis of two elements. First, the total
-sum of distances is calculated by summing the entire distance matrix
-(\code{dist}). Second, the between-cluster sum of distances is calculated as
-follows: for a given number of cluster, the distances are only
+sum of dissimilarity is calculated by summing the entire dissimilarity matrix
+(\code{dist}). Second, the between-cluster sum of dissimilarity is calculated as
+follows: for a given number of cluster, the dissimilarity is only
 summed between clusters, not within clusters. To do that efficiently, all
-pairs of sites within the same clusters have their distance set to zero in
-the distance matrix, and then the distance matrix is summed. The
+pairs of sites within the same clusters have their dissimilarity set to zero in
+the dissimilarity matrix, and then the dissimilarity matrix is summed. The
 \code{pc_distance} ratio is obtained by dividing the between-cluster sum
-of distances by the total sum of distances.}
+of dissimilarity by the total sum of dissimilarity.}
 \item{\code{anosim}: This metric is the statistic used in Analysis of
 Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
 \link[vegan:anosim]{vegan::anosim()}). It
@@ -242,16 +242,16 @@ function as first approximation of the best numbers for your problematic.
 }
 \examples{
 simil <- similarity(vegemat, metric = "all")
-distances <- similarity_to_distance(simil)
+dissimilarity <- similarity_to_dissimilarity(simil)
 
 # User-defined number of clusters
-#tree1 <- hclu_hierarclust(distances,
+#tree1 <- hclu_hierarclust(dissimilarity,
 #                                  n_clust = 5,
 #                                  index = "Simpson")
 #tree1
 
 #a <- partition_metrics(tree1,
-#                   distances = distances,
+#                   dissimilarity = dissimilarity,
 #                   eval_metric = c("tot_endemism",
 #                                   "avg_endemism",
 #                                   "pc_distance",
@@ -259,7 +259,7 @@ distances <- similarity_to_distance(simil)
 #
 #a <- partition_metrics(tree1, tree_k_max = 50,
 #                   tree_force_repartitioning = TRUE,
-#                   distances = distances,
+#                   dissimilarity = dissimilarity,
 #                   step_levels = 5)
 #  a <- partition_metrics(tree1, tree_k_max = 50,
 #                   eval_metric = c("tot_endemism",
@@ -267,7 +267,7 @@ distances <- similarity_to_distance(simil)
 #                                   "pc_distance",
 #                                   "anosim"),
 #                   tree_force_repartitioning = TRUE,
-#                   distances = distances,
+#                   dissimilarity = dissimilarity,
 #                   sp_site_table = vegemat)
 
 #a <- partition_metrics(tree1,
@@ -278,13 +278,13 @@ distances <- similarity_to_distance(simil)
  #                 tree_k_max = 25,
  #                 tree_force_repartitioning = TRUE,
  #                 partition_optimisation = TRUE,
- #                 distances = distances,
+ #                 dissimilarity = dissimilarity,
  #                 sp_site_table = vegemat,
  #                 criterion = "decreasing_step",
  #                 step_levels = 5)
 
 #partition_metrics(tree1,
-#                  distances = distances,
+#                  dissimilarity = dissimilarity,
 #                  eval_metric = "pc_distance",
 #                 tree_k_max = 50,
  #                tree_force_repartitioning = TRUE,
@@ -292,7 +292,7 @@ distances <- similarity_to_distance(simil)
  #                criterion = "elbow")
 
 # partition_metrics(tree1,
- #                distances = distances,
+ #                dissimilarity = dissimilarity,
  #                eval_metric = "pc_distance",
  #                tree_k_max = 50,
  #                tree_force_repartitioning = TRUE,
@@ -300,7 +300,7 @@ distances <- similarity_to_distance(simil)
  #                criterion = "increasing_step")
 
 #partition_metrics(tree1,
-#                  distances = distances,
+#                  dissimilarity = dissimilarity,
  #                eval_metric = "pc_distance",
  #                tree_k_max = 50,
  #                tree_force_repartitioning = TRUE,

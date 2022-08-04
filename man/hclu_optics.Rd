@@ -5,8 +5,8 @@
 \title{Non hierarchical clustering: OPTICS}
 \usage{
 hclu_optics(
-  distances,
-  index = names(distances)[3],
+  dissimilarity,
+  index = names(dissimilarity)[3],
   minPts = NULL,
   eps = NULL,
   xi = 0.05,
@@ -16,20 +16,20 @@ hclu_optics(
 )
 }
 \arguments{
-\item{distances}{the output object from \code{\link{similarity_to_distance}},
+\item{dissimilarity}{the output object from \code{\link{similarity_to_dissimilarity}},
 a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the distance indices or a \code{dist} object}
+the other columns being the dissimilarity indices or a \code{dist} object}
 
-\item{index}{a \code{character} string providing the name of the distance
+\item{index}{a \code{character} string providing the name of the dissimilarity
 index to use, corresponding to the column
-name in \code{distances}. By default, the third column name of
- \code{distances} is used.}
+name in \code{dissimilarity}. By default, the third column name of
+ \code{dissimilarity} is used.}
 
 \item{minPts}{a \code{numeric} value specifying the minPts argument
 of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
 points to form a dense region.
 By default, it is set to the
-natural logarithm of the number of sites in \code{distances}.}
+natural logarithm of the number of sites in \code{dissimilarity}.}
 
 \item{eps}{a \code{numeric} value specifying the eps argument
 of \link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
@@ -70,7 +70,7 @@ A \code{list} of class \code{bioRgeo.clusters} with five slots:
 }
 \description{
 This function performs semi-hierarchical
-clustering on the basis of distances with the OPTICS algorithm (Ordering
+clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
 Points To Identify the Clustering Structure)
 }
 \details{
@@ -93,9 +93,9 @@ The optics (Ordering points to identify the clustering
 }
 \examples{
 simil <- similarity(vegemat, metric = "all")
-distances <- similarity_to_distance(simil)
+dissimilarity <- similarity_to_dissimilarity(simil)
 
-clust1 <- hclu_optics(distances,
+clust1 <- hclu_optics(dissimilarity,
     index = "Simpson")
 clust1
 head(clust1$clusters)
@@ -104,7 +104,7 @@ head(clust1$clusters)
 plot(clust1$algorithm$optics)
 
 # Extract the hierarchy of clusters
-clust1 <- hclu_optics(distances,
+clust1 <- hclu_optics(dissimilarity,
     index = "Simpson",
     show_hierarchy = TRUE)
 clust1

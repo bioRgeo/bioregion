@@ -6,6 +6,10 @@
 #' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
 #' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
 #' @param weight a boolean indicating if the weights should be considered if there is a third column
+#' @param index a \code{character} string providing the name of the dissimilarity
+#' index to use, corresponding to the column
+#' name in \code{dissimilarity}. By default, the third column name of
+#'  \code{net} is used.
 #' @param nbmod penalize solutions the more they differ from this number (0 by default for no preferred number of modules)
 #' @param markovtime scales link flow to change the cost of moving between modules, higher values results
 #' in fewer modules (default is 1)
@@ -57,7 +61,10 @@
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
-netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE, directed = FALSE,
+netclu_infomap <- function(net, 
+                           weight = TRUE,
+                           index = names(net)[3],
+                           nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE, directed = FALSE,
                            bipartite_version = FALSE, bipartite = FALSE, primary_col = 1, feature_col = 2,
                            remove_feature = TRUE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL) {
 
@@ -290,7 +297,7 @@ netclu_infomap <- function(net, weight = TRUE, nbmod = 0, markovtime = 1, seed =
                                            FALSE, TRUE),
                          pairwise_metric = ifelse(bipartite|bipartite_version,
                                                   NA, index),
-                         distance = FALSE,
+                         dissimilarity = FALSE,
                          nb_sites = NA) # Compléter
   
   outputs$algorithm <- list()

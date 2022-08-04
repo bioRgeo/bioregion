@@ -1,6 +1,6 @@
-#' Compute distance metrics between sites based on species composition
+#' Compute dissimilarity metrics (beta-diversity) between sites based on species composition
 #'
-#' This function creates a \code{data.frame} where each row provides one or several distance
+#' This function creates a \code{data.frame} where each row provides one or several dissimilarity
 #' metric(s) between each pair of sites from a co-occurence \code{matrix} with sites as rows and species as columns.
 #'
 #' @param comat a co-occurence \code{matrix} with sites as rows and species as columns.
@@ -38,15 +38,15 @@
 #'
 #' \code{formula} can be used to compute customized metrics with the terms \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
 #' and \code{C}. For example \code{formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")} will
-#' compute the Jaccard and Bray-Curtis distance metrics, respectively.
+#' compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.
 #'
 #' Euclidean computes the Euclidean distance between each pair of sites.
 #'
-#' @return A \code{data.frame} providing one or several distance
+#' @return A \code{data.frame} providing one or several dissimilarity
 #' metric(s) between each pair of sites. The two first columns represents each pair of sites.
-#' One column per distance metric provided in \code{metric} and \code{formula} except for the metric \emph{abc} and \emph{ABC} that
+#' One column per dissimilarity metric provided in \code{metric} and \code{formula} except for the metric \emph{abc} and \emph{ABC} that
 #' are stored in three columns (one for each letter).
-#' @seealso \link{similarity} \link{distance_to_similarity} \link{similarity_to_distance}
+#' @seealso \link{similarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
@@ -56,23 +56,23 @@
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
-#' dist <- distance(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+#' dist <- dissimilarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #' dist
 #'
-#' simil <- distance(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
+#' simil <- dissimilarity(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
 #' dist
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
 #' 
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
-distance <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat") {
+dissimilarity <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat") {
 
   # Compute similarities
   res <- similarity(comat, metric = metric, formula = formula, method = method)
 
-  # Comute distance
-  res <- similarity_to_distance(res)
+  # Compute dissimilarity
+  res <- similarity_to_dissimilarity(res)
 
   # Return the output
   return(res)

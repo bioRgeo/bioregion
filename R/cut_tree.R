@@ -23,14 +23,14 @@
 #' should be used, in which case \code{n_clust} & \code{cut_height} are ignored
 #' @param dynamic_method a character vector indicating the method to be used
 #' to dynamically cut the tree: either \code{"tree"} (clusters searched only
-#' in the tree) or \code{"hybrid"} (clusters searched on both tree and distance
+#' in the tree) or \code{"hybrid"} (clusters searched on both tree and dissimilarity
 #' matrix)
 #' @param dynamic_minClusterSize an integer indicating the minimum cluster size
 #' to use in the dynamic tree cut method (see
 #' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})
-#' @param distances only useful if \code{tree} is not a
+#' @param dissimilarity only useful if \code{tree} is not a
 #' \code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
-#' Provide here the distance \code{data.frame} used to build the \code{tree}
+#' Provide here the dissimilarity \code{data.frame} used to build the \code{tree}
 #' @param ... further arguments to be passed to
 #' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to
 #' customize the dynamic tree cut method.
@@ -51,7 +51,7 @@
 #' on the tree and follows the order of clustered objects on it}
 #' \item{The hybrid variant
 #' (\code{dynamic_method = "hybrid"}) is a bottom-up approach which relies on
-#' both the tree and the distance matrix to build clusters on the basis of
+#' both the tree and the dissimilarity matrix to build clusters on the basis of
 #' dissimilarity information among sites. This method is useful to detect
 #' outlying members in each cluster.}
 #' }
@@ -77,10 +77,10 @@
 #' colnames(comat) <- paste0("Species",1:25)
 #'
 #' simil <- similarity(comat, metric = "all")
-#' distances <- similarity_to_distance(simil)
+#' dissimilarity <- similarity_to_dissimilarity(simil)
 #'
 #' # User-defined number of clusters
-#' #tree1 <- hclu_hierarclust(distances,
+#' #tree1 <- hclu_hierarclust(dissimilarity,
 #' #                                  n_clust = 5)
 #' #tree1
 #' #str(tree1)
@@ -111,7 +111,7 @@
 #'
 #' #cluster_dynamic <- cut_tree(tree1,
 #' #                             dynamic_tree_cut = TRUE,
-#' #                             distances = distances)
+#' #                             dissimilarity = dissimilarity)
 cut_tree <- function(tree,
                      n_clust = NULL,
                      cut_height = NULL,
@@ -121,7 +121,7 @@ cut_tree <- function(tree,
                      dynamic_tree_cut = FALSE,
                      dynamic_method = "tree",
                      dynamic_minClusterSize = 5,
-                     distances = NULL,
+                     dissimilarity = NULL,
                      ...)
 {
   if(!is.null(n_clust)){
@@ -168,36 +168,36 @@ cut_tree <- function(tree,
 
     if(dynamic_method == "hybrid")
     {
-      if(inherits(distances, "bioRgeo.pairwise.metric"))
+      if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
       {
-        if(attr(distances, "type") == "similarity")
+        if(attr(dissimilarity, "type") == "similarity")
         {
-          stop("distances seems to be a similarity object.
-         hclu_hierarclust() should be applied on distances, not similarities.
+          stop("dissimilarity seems to be a similarity object.
+         hclu_hierarclust() should be applied on dissimilarity, not similarity.
          Use similarity_to_distance() before using hclu_hierarclust()")
         }
-        index <- colnames(distances)[3]
+        index <- colnames(dissimilarity)[3]
 
         dist_matrix <- stats::as.dist(
-          net_to_mat(distances[, c(1, 2,
-                                   which(colnames(distances) == index))],
+          net_to_mat(dissimilarity[, c(1, 2,
+                                   which(colnames(dissimilarity) == index))],
                      weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
 
-      } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
+      } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
       {
-        if(ncol(distances) != 3)
+        if(ncol(dissimilarity) != 3)
         {
-          stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+          stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
         }
         dist_matrix <- stats::as.dist(
-          net_to_mat(distances[, c(1, 2,
-                                   which(colnames(distances) == index))],
+          net_to_mat(dissimilarity[, c(1, 2,
+                                   which(colnames(dissimilarity) == index))],
                      weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
       } else
       {
-        dist_matrix <- distances
+        dist_matrix <- dissimilarity
       }
     }
   }

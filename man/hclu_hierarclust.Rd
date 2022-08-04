@@ -2,11 +2,11 @@
 % Please edit documentation in R/hclu_hierarclust.R
 \name{hclu_hierarclust}
 \alias{hclu_hierarclust}
-\title{Hierarchical clustering based distances or beta-diversity}
+\title{Hierarchical clustering based on dissimilarity or beta-diversity}
 \usage{
 hclu_hierarclust(
-  distances,
-  index = names(distances)[3],
+  dissimilarity,
+  index = names(dissimilarity)[3],
   method = "average",
   randomize = TRUE,
   n_runs = 30,
@@ -20,13 +20,13 @@ hclu_hierarclust(
 )
 }
 \arguments{
-\item{distances}{the output object from \code{\link{similarity_to_distance}},
+\item{dissimilarity}{the output object from \code{\link{similarity_to_dissimilarity}},
 a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the distance indices or a \code{dist} object}
+the other columns being the dissimilarity indices or a \code{dist} object}
 
-\item{index}{name of the distance index to use, corresponding to the column
-name in \code{distances}. By default, the third column name of
- \code{distances} is used.}
+\item{index}{name of the dissimilarity index to use, corresponding to the column
+name in \code{dissimilarity}. By default, the third column name of
+ \code{dissimilarity} is used.}
 
 \item{method}{name of the hierarchical classification method, as in
 \link[stats:hclust]{stats::hclust()}. Should be one of This should be one of
@@ -35,14 +35,14 @@ name in \code{distances}. By default, the third column name of
 (= UPGMA), \code{"mcquitty"} (= WPGMA),
 \code{"median"} (= WPGMC) or \code{"centroid"} (= UPGMC).}
 
-\item{randomize}{a boolean indicating if the distance matrix should be
-randomized, to account for the order of sites in the distance matrix}
+\item{randomize}{a boolean indicating if the dissimilarity matrix should be
+randomized, to account for the order of sites in the dissimilarity matrix}
 
-\item{n_runs}{number of trials to randomize the distance matrix}
+\item{n_runs}{number of trials to randomize the dissimilarity matrix}
 
 \item{keep_trials}{a boolean indicating if all random trial results
 should be stored in the output object (set to FALSE to save space if your
-\code{distances} object is large)}
+\code{dissimilarity} object is large)}
 
 \item{optimal_tree_method}{a character vector indicating how the final tree
 should be obtained from all trials. The only option currently is
@@ -80,28 +80,28 @@ In the \code{algorithm} slot, users can find the following elements:
 
 \itemize{
 \item{\code{trials}: a list containing all randomization trials. Each trial
-containes the distance matrix, with site order randomized, the associated
+containes the dissimilarity matrix, with site order randomized, the associated
 tree and the cophenetic correlation coefficient (spearman) for that tree}
 \item{\code{final.tree}: a \code{hclust} object containing the final
 hierarchical tree to be used}
 \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient
-between the initial distance matrix and \code{final.tree}}
+between the initial dissimilarity matrix and \code{final.tree}}
 }
 }
 \description{
-This function generates a hierarchical tree from a distance (beta-diversity)
+This function generates a hierarchical tree from a dissimilarity (beta-diversity)
  \code{data.frame},
 calculates the cophenetic correlation coefficient,
 and can get clusters from the tree if requested by the user. The function
-implements randomization of the distance matrix to generate the tree, with
+implements randomization of the dissimilarity matrix to generate the tree, with
 a selection method based on the optimal cophenetic correlation coefficient.
-Typically, the distance \code{data.frame} is a \code{bioRgeo.distance} object
-obtained by running \code{similarity} and then \code{similarity_to_distance}.
+Typically, the dissimilarity \code{data.frame} is a \code{bioRgeo.pairwise.metric} object
+obtained by running \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
 \details{
 The default method for the hierarchical tree is \code{"average"}, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
-from beta diversity distances \insertCite{Kreft2010}{bioRgeo}
+from beta diversity dissimilarity \insertCite{Kreft2010}{bioRgeo}
 
 Clusters can be obtained by two methods:
 \itemize{
@@ -116,10 +116,10 @@ rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
 
 simil <- similarity(comat, metric = "all")
-distances <- similarity_to_distance(simil)
+dissimilarity <- similarity_to_dissimilarity(simil)
 
 # User-defined number of clusters
-#tree1 <- hclu_hierarclust(distances,
+#tree1 <- hclu_hierarclust(dissimilarity,
 #                                 n_clust = 5)
 #tree1
 #plot(tree1)
@@ -128,13 +128,13 @@ distances <- similarity_to_distance(simil)
 #
 # User-defined height cut
 # Only one height
-#tree2 <- hclu_hierarclust(distances,
+#tree2 <- hclu_hierarclust(dissimilarity,
 #                                 cut_height = .05)
 #tree2
 #tree2$clusters
 #
 # Multiple heights
-#tree3 <- hclu_hierarclust(distances,
+#tree3 <- hclu_hierarclust(dissimilarity,
 #                                 cut_height = c(.05, .15, .25))
 #tree3
 #tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
@@ -147,7 +147,7 @@ distances <- similarity_to_distance(simil)
 \insertRef{Kreft2010}{bioRgeo}
 }
 \seealso{
-\link{distance_to_similarity}
+\link{dissimilarity_to_similarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

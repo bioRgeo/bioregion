@@ -1,21 +1,21 @@
 #' Non hierarchical clustering: OPTICS
 #'
 #' This function performs semi-hierarchical
-#' clustering on the basis of distances with the OPTICS algorithm (Ordering
+#' clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
 #' Points To Identify the Clustering Structure)
 #'
-#' @param distances the output object from \code{\link{similarity_to_distance}},
+#' @param dissimilarity the output object from \code{\link{similarity_to_dissimilarity}},
 #' a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the distance indices or a \code{dist} object
-#' @param index a \code{character} string providing the name of the distance
+#' the other columns being the dissimilarity indices or a \code{dist} object
+#' @param index a \code{character} string providing the name of the dissimilarity
 #' index to use, corresponding to the column
-#' name in \code{distances}. By default, the third column name of
-#'  \code{distances} is used.
+#' name in \code{dissimilarity}. By default, the third column name of
+#'  \code{dissimilarity} is used.
 #' @param minPts a \code{numeric} value specifying the minPts argument
 #' of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
 #' points to form a dense region.
 #' By default, it is set to the
-#' natural logarithm of the number of sites in \code{distances}.
+#' natural logarithm of the number of sites in \code{dissimilarity}.
 #' @param eps a \code{numeric} value specifying the eps argument
 #' of \link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
 #' of the epsilon neighborhood. Limiting the neighborhood size improves
@@ -72,9 +72,9 @@
 #'
 #' @examples
 #' simil <- similarity(vegemat, metric = "all")
-#' distances <- similarity_to_distance(simil)
+#' dissimilarity <- similarity_to_dissimilarity(simil)
 #'
-#' clust1 <- hclu_optics(distances,
+#' clust1 <- hclu_optics(dissimilarity,
 #'     index = "Simpson")
 #' clust1
 #' head(clust1$clusters)
@@ -83,13 +83,13 @@
 #' plot(clust1$algorithm$optics)
 #'
 #' # Extract the hierarchy of clusters
-#' clust1 <- hclu_optics(distances,
+#' clust1 <- hclu_optics(dissimilarity,
 #'     index = "Simpson",
 #'     show_hierarchy = TRUE)
 #' clust1
 #' head(clust1$clusters)
-hclu_optics <- function(distances,
-                         index = names(distances)[3],
+hclu_optics <- function(dissimilarity,
+                         index = names(dissimilarity)[3],
                          minPts = NULL,
                          eps = NULL,
                          xi = 0.05,
@@ -99,32 +99,32 @@ hclu_optics <- function(distances,
                          ...
 )
 {
-  if(inherits(distances, "bioRgeo.pairwise.metric"))
+  if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
   {
-    if(attr(distances, "type") == "similarity")
+    if(attr(dissimilarity, "type") == "similarity")
     {
-      stop("distances seems to be a similarity object.
-         nhclu_dbscan() should be applied on distances, not similarities.
-         Use similarity_to_distance() before using nhclu_dbscan()")
+      stop("dissimilarity seems to be a similarity object.
+         nhclu_dbscan() should be applied on dissimilarity, not similarities.
+         Use similarity_to_dissimilarity() before using nhclu_dbscan()")
     }
-    if(!(index %in% colnames(distances)))
+    if(!(index %in% colnames(dissimilarity)))
     {
-      stop("Argument index should be one of the column names of distance")
+      stop("Argument index should be one of the column names of dissimilarity")
     }
 
-  } else if(!any(inherits(distances, "bioRgeo.pairwise.metric"), inherits(distances, "dist")))
+  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
   {
-    if(!(index %in% colnames(distances)))
+    if(!(index %in% colnames(dissimilarity)))
     {
-      stop("distances is not a bioRgeo.distance object, a distance matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your distance index)")
+      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
     }
   }
 
-  if(!inherits(distances, "dist"))
+  if(!inherits(dissimilarity, "dist"))
   {
     dist.obj <- stats::as.dist(
-      net_to_mat(distances[, c(1, 2,
-                               which(colnames(distances) == index))],
+      net_to_mat(dissimilarity[, c(1, 2,
+                               which(colnames(dissimilarity) == index))],
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
   }
@@ -152,7 +152,7 @@ hclu_optics <- function(distances,
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise_metric = TRUE,
-                         distance = TRUE,
+                         dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
 
   outputs$algorithm <- list()

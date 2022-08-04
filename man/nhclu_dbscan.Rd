@@ -5,8 +5,8 @@
 \title{Non hierarchical clustering: dbscan}
 \usage{
 nhclu_dbscan(
-  distances,
-  index = names(distances)[3],
+  dissimilarity,
+  index = names(dissimilarity)[3],
   minPts = NULL,
   eps = NULL,
   plot = TRUE,
@@ -14,20 +14,20 @@ nhclu_dbscan(
 )
 }
 \arguments{
-\item{distances}{the output object from \code{\link{similarity_to_distance}},
+\item{dissimilarity}{the output object from \code{\link{similarity_to_dissimilarity}},
 a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the distance indices or a \code{dist} object}
+the other columns being the dissimilarity indices or a \code{dist} object}
 
-\item{index}{a \code{character} string providing the name of the distance
+\item{index}{a \code{character} string providing the name of the dissimilarity
 index to use, corresponding to the column
-name in \code{distances}. By default, the third column name of
- \code{distances} is used.}
+name in \code{dissimilarity}. By default, the third column name of
+ \code{dissimilarity} is used.}
 
 \item{minPts}{a \code{numeric} value or a vector of \code{numeric} values
  specifying the minPts argument
 of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
 points to form a dense region. By default, it is set to the
-natural logarithm of the number of sites in \code{distances}. See details
+natural logarithm of the number of sites in \code{dissimilarity}. See details
 for guidance on choosing this parameter.}
 
 \item{eps}{a \code{numeric} value or a vector of \code{numeric} values
@@ -54,7 +54,7 @@ A \code{list} of class \code{bioRgeo.clusters} with five slots:
 }
 \description{
 This function performs non hierarchical
-clustering on the basis of distances with Density-based Spatial Clustering of
+clustering on the basis of dissimilarity with Density-based Spatial Clustering of
  Applications with Noise (DBSCAN)
 }
 \details{
@@ -92,19 +92,19 @@ The dbscan (Density-based spatial clustering of
 }
 \examples{
 simil <- similarity(vegemat, metric = "all")
-distances <- similarity_to_distance(simil)
+dissimilarity <- similarity_to_dissimilarity(simil)
 
-clust1 <- nhclu_dbscan(distances,
+clust1 <- nhclu_dbscan(dissimilarity,
     index = "Simpson")
-clust2 <- nhclu_dbscan(distances,
+clust2 <- nhclu_dbscan(dissimilarity,
     index = "Simpson",
     eps = 0.2)
-clust3 <- nhclu_dbscan(distances,
+clust3 <- nhclu_dbscan(dissimilarity,
     index = "Simpson",
     minPts = c(5, 10, 15, 20),
     eps = c(.1, .15, .2, .25, .3))
 partition_metrics(clust2,
-                  distances = distances,
+                  dissimilarity = dissimilarity,
                   eval_metric = "pc_distance")
 partition_metrics(clust2,
                   sp_site_table = vegemat,

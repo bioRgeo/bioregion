@@ -5,8 +5,8 @@
 \title{Non hierarchical clustering: partitioning around medoids}
 \usage{
 nhclu_pam(
-  distances,
-  index = names(distances)[3],
+  dissimilarity,
+  index = names(dissimilarity)[3],
   n_clust = NULL,
   nstart = if (variant == "faster") 1 else NA,
   variant = "faster",
@@ -15,14 +15,14 @@ nhclu_pam(
 )
 }
 \arguments{
-\item{distances}{the output object from \code{\link{similarity_to_distance}},
+\item{dissimilarity}{the output object from \code{\link{similarity_to_dissimilarity}},
 a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the distance indices or a \code{dist} object}
+the other columns being the dissimilarity indices or a \code{dist} object}
 
-\item{index}{a \code{character} string providing the name of the distance
+\item{index}{a \code{character} string providing the name of the dissimilarity
 index to use, corresponding to the column
-name in \code{distances}. By default, the third column name of
- \code{distances} is used.}
+name in \code{dissimilarity}. By default, the third column name of
+ \code{dissimilarity} is used.}
 
 \item{n_clust}{an \code{integer} or a \code{vector} of \code{integers}
 specifying the requested number(s) of clusters}
@@ -53,29 +53,29 @@ A \code{list} of class \code{bioRgeo.clusters} with five slots:
 }
 \description{
 This function performs non hierarchical
-clustering on the basis of distances with partitioning around medoids.
+clustering on the basis of dissimilarity with partitioning around medoids.
 }
 \details{
 This method partitions data into
- the chosen number of cluster on the basis of the input distance matrix.
- It is more robust than k-means because it minimizes the sum of distances
+ the chosen number of cluster on the basis of the input dissimilarity matrix.
+ It is more robust than k-means because it minimizes the sum of dissimilarity
  between cluster centres and points assigned to the cluster -
  whereas the k-means approach minimizes the sum of squared euclidean
- distances (thus k-means cannot be applied directly on the input distance
+ distances (thus k-means cannot be applied directly on the input dissimilarity
  matrix if the distances are not euclidean).
 }
 \examples{
 simil <- similarity(vegemat, metric = "all")
-distances <- similarity_to_distance(simil)
+dissimilarity <- similarity_to_dissimilarity(simil)
 
-clust1 <- nhclu_pam(distances,
+clust1 <- nhclu_pam(dissimilarity,
     n_clust = 2:10,
     index = "Simpson")
-clust2 <- nhclu_pam(distances,
+clust2 <- nhclu_pam(dissimilarity,
     n_clust = 2:25,
     index = "Simpson")
 partition_metrics(clust2,
-                  distances = distances,
+                  dissimilarity = dissimilarity,
                   eval_metric = "pc_distance",
                   partition_optimisation = TRUE)
 partition_metrics(clust2,

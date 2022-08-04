@@ -80,7 +80,7 @@ simil
 \insertRef{Baselga2013}{bioRgeo}
 }
 \seealso{
-\link{distance} \link{distance_to_similarity} \link{similarity_to_distance}
+\link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

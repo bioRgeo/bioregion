@@ -50,7 +50,7 @@
 #' metric(s) between each pair of sites. The two first columns represents each pair of sites.
 #' One column per similarity metric provided in \code{metric} and \code{formula} except for the metric \emph{abc} and \emph{ABC} that
 #' are stored in three columns (one for each letter).
-#' @seealso \link{distance} \link{distance_to_similarity} \link{similarity_to_distance}
+#' @seealso \link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
