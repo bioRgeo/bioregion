@@ -119,17 +119,17 @@
 #' #tree3 <- cut_tree(tree3,
 #' #                  n = 5)
 hclu_hierarclust <- function(distances,
-                                    index = names(distances)[3],
-                                    method = "average",
-                                    randomize = TRUE,
-                                    n_runs = 30,
-                                    keep_trials = FALSE,
-                                    optimal_tree_method = "best", # best or consensus
-                                    n_clust = NULL,
-                                    cut_height = NULL,
-                                    find_h = TRUE,
-                                    h_max = 1,
-                                    h_min = 0)
+                             index = names(distances)[3],
+                             method = "average",
+                             randomize = TRUE,
+                             n_runs = 30,
+                             keep_trials = FALSE,
+                             optimal_tree_method = "best", # best or consensus
+                             n_clust = NULL,
+                             cut_height = NULL,
+                             find_h = TRUE,
+                             h_max = 1,
+                             h_min = 0)
 {
   if(inherits(distances, "bioRgeo.pairwise.metric"))
   {
@@ -155,7 +155,7 @@ hclu_hierarclust <- function(distances,
   if(!is.null(n_clust)){
     if(is.numeric(n_clust))
     {
-      if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
+      if(any(!(n_clust %% 1 == 0)))
       {
         stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
@@ -295,10 +295,6 @@ hclu_hierarclust <- function(distances,
   {
     outputs$algorithm$trials <- "Trials not stored in output"
   }
-
-
-
-
 
   return(outputs)
 }

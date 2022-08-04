@@ -222,10 +222,26 @@ hclu_optics <- function(distances,
                                      into = paste0("lvl", 1:max.col),
                                      sep = "\\.",
                                      fill = "right")
+    
+    cls_hierarchy[which(is.na(cls_hierarchy), arr.ind = TRUE)] <- 0
+    
+    for(lvl in grep("lvl", colnames(cls_hierarchy))[2:max.col]) {
+      cls_hierarchy[, lvl] <- paste(cls_hierarchy[, lvl - 1],
+                                    cls_hierarchy[, lvl],
+                                    sep = ".")
+    }
+    
+    cls_hierarchy[grep("lvl", colnames(cls_hierarchy))] <- lapply(cls_hierarchy[grep("lvl", colnames(cls_hierarchy))],
+                            function(x) gsub("\\.0", "", x))
+                            
+                            
+
+    
+    
     outputs$clusters <- data.frame(outputs$clusters,
                                    cls_hierarchy[match(outputs$algorithm$optics$cluster,
                                                        cls_hierarchy$cluster_id),
-                                                 c("cluster_id", "new_cls_id", paste0("lvl", 1:max.col))])
+                                                 paste0("lvl", 1:max.col)])
   }
 
   outputs$clusters <- knbclu(outputs$clusters,

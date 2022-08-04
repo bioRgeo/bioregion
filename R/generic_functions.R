@@ -83,7 +83,7 @@ print.bioRgeo.clusters <- function(x, ...)
                paste0(paste(nclust[1:10], collapse = " "),
                       " ... (with ",
                       length(nclust) - 10, " more values)"),
-               nclust),
+               paste(nclust, collapse = " ")),
         "\n")
 
     if(x$name == "hierarchical_clustering") {
