@@ -374,7 +374,7 @@ partition_metrics <- function(
   } else {
     if(has.clusters)
     {
-      if(any(!rownames(sp_site_table) %in% cluster_object$clusters$name))
+      if(any(!rownames(sp_site_table) %in% cluster_object$clusters$ID))
       {
         stop("sp_site_table should be a matrix with sites in rows, species in columns.\nRow names should be site names, and should be identical to site names in the cluster object")
       }
@@ -506,7 +506,7 @@ partition_metrics <- function(
     if(has.contin)
     {
       cur_contin <- as.data.frame(sp_site_table)
-      cur_contin$cluster <- clusters[match(rownames(cur_contin), clusters$name), cls_col]
+      cur_contin$cluster <- clusters[match(rownames(cur_contin), clusters$ID), cls_col]
       cluster_contin <- stats::aggregate(. ~ cluster, cur_contin, sum)
       rownames(cluster_contin) <- cluster_contin[, 1]
       cluster_contin <- cluster_contin[, -1]
