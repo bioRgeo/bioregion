@@ -7,13 +7,16 @@
 #' implements randomization of the dissimilarity matrix to generate the tree, with
 #' a selection method based on the optimal cophenetic correlation coefficient.
 #' Typically, the dissimilarity \code{data.frame} is a \code{bioRgeo.pairwise.metric} object
-#' obtained by running \code{similarity} and then \code{similarity_to_dissimilarity}.
+#' obtained by running \code{similarity} or \code{similarity} and then 
+#' \code{similarity_to_dissimilarity}.
 #'
-#' @param dissimilarity the output object from \code{\link{similarity_to_dissimilarity}},
-#' a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the dissimilarity indices or a \code{dist} object
-#' @param index name of the dissimilarity index to use, corresponding to the column
-#' name in \code{dissimilarity}. By default, the third column name of
+#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
+#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+#'  If a \code{data.frame} is used, the first two 
+#' columns represent pairs of sites (or any pair of nodes), and the next column(s)
+#' are the dissimilarity indices, 
+#' @param index name or number of the dissimilarity column to use. By default, 
+#' the third column name of
 #'  \code{dissimilarity} is used.
 #' @param method name of the hierarchical classification method, as in
 #' \link[stats:hclust]{stats::hclust()}. Should be one of This should be one of
@@ -82,42 +85,42 @@
 #' @references
 #' \insertRef{Kreft2010}{bioRgeo}
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-#' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{dissimilarity_to_similarity} \link{cut_tree} \link{dissimilarity}
+#' Boris Leroy (\email{leroy.boris@gmail.com}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
+#' 
+#' @seealso \link{cut_tree} 
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
 #' rownames(comat) <- paste0("Site",1:20)
 #' colnames(comat) <- paste0("Species",1:25)
 #'
-#' simil <- similarity(comat, metric = "all")
-#' dissimilarity <- similarity_to_dissimilarity(simil)
+#' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' # User-defined number of clusters
-#' #tree1 <- hclu_hierarclust(dissimilarity,
-#' #                                 n_clust = 5)
-#' #tree1
-#' #plot(tree1)
-#' #str(tree1)
-#' #tree1$clusters
-#' #
+#' tree1 <- hclu_hierarclust(dissim,
+#'                                  n_clust = 5)
+#' tree1
+#' plot(tree1)
+#' str(tree1)
+#' tree1$clusters
+#' 
 #' # User-defined height cut
 #' # Only one height
-#' #tree2 <- hclu_hierarclust(dissimilarity,
-#' #                                 cut_height = .05)
-#' #tree2
-#' #tree2$clusters
+#' tree2 <- hclu_hierarclust(dissimilarity,
+#'                                  cut_height = .05)
+#' tree2
+#' tree2$clusters
 #' #
 #' # Multiple heights
-#' #tree3 <- hclu_hierarclust(dissimilarity,
-#' #                                 cut_height = c(.05, .15, .25))
-#' #tree3
-#' #tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
-#' #
+#' tree3 <- hclu_hierarclust(dissimilarity,
+#'                                  cut_height = c(.05, .15, .25))
+#' tree3
+#' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+#' 
 #' # Recut the tree afterwards
-#' #tree3 <- cut_tree(tree3,
-#' #                  n = 5)
+#' tree3 <- cut_tree(tree3,
+#'                  n = 5)
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
                              method = "average",

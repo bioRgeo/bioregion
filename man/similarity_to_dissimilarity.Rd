@@ -4,10 +4,10 @@
 \alias{similarity_to_dissimilarity}
 \title{Convert similarity indices to dissimilarity metrics}
 \usage{
-similarity_to_dissimilarity(similaritydata)
+similarity_to_dissimilarity(similarity)
 }
 \arguments{
-\item{similaritydata}{the output object from \code{\link{similarity}} or a
+\item{similarity}{the output object from \code{\link{similarity}} or a
 \code{data.frame} with the first columns called "Site1" and "Site2", and the
 other columns being the similarity metrics.}
 }
