@@ -131,6 +131,7 @@ hclu_hierarclust <- function(dissimilarity,
                              h_max = 1,
                              h_min = 0)
 {
+
   if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
   {
     if(attr(dissimilarity, "type") == "similarity")
@@ -139,6 +140,10 @@ hclu_hierarclust <- function(dissimilarity,
          hclu_hierarclust() should be applied on dissimilarity, not similarities.
          Use similarity_to_dissimilarity() before using hclu_hierarclust()")
     }
+    if(is.numeric(index))
+    {
+      index <- names(dissimilarity)[index]
+    }
     if(!(index %in% colnames(dissimilarity)))
     {
       stop("Argument index should be one of the column names of dissimilarity")
@@ -146,6 +151,10 @@ hclu_hierarclust <- function(dissimilarity,
 
   } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
   {
+    if(is.numeric(index))
+    {
+      index <- names(dissimilarity)[index]
+    }
     if(!(index %in% colnames(dissimilarity)))
     {
       stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
@@ -188,8 +197,7 @@ hclu_hierarclust <- function(dissimilarity,
   {
       # dist.obj <- .dfToDist(dissimilarity, metric = index)
     dist.obj <- stats::as.dist(
-      net_to_mat(dissimilarity[, c(1, 2,
-                                      which(colnames(dissimilarity) == index))],
+      net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2], index)],
                         weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
   } else {

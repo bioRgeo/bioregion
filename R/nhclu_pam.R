@@ -80,6 +80,10 @@ nhclu_pam <- function(dissimilarity,
          nhclu_pam() should be applied on dissimilarity, not similarities.
          Use similarity_to_dissimilarity() before using nhclu_pam()")
     }
+    if(is.numeric(index))
+    {
+      index <- names(dissimilarity)[index]
+    }
     if(!(index %in% colnames(dissimilarity)))
     {
       stop("Argument index should be one of the column names of dissimilarity")
@@ -87,6 +91,10 @@ nhclu_pam <- function(dissimilarity,
 
   } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
   {
+    if(is.numeric(index))
+    {
+      index <- names(dissimilarity)[index]
+    }
     if(!(index %in% colnames(dissimilarity)))
     {
       stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
@@ -109,8 +117,7 @@ nhclu_pam <- function(dissimilarity,
   if(!inherits(dissimilarity, "dist"))
   {
     dist.obj <- stats::as.dist(
-      net_to_mat(dissimilarity[, c(1, 2,
-                               which(colnames(dissimilarity) == index))],
+      net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2], index)],
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
   } else {
