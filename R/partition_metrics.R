@@ -307,7 +307,7 @@ partition_metrics <- function(
 )
 {
   dissimilarity_based_metrics <- c("pc_distance",
-                              "anosim")
+                                   "anosim")
   compo_based_metrics <- c("avg_endemism",
                            "tot_endemism")
 

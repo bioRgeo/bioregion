@@ -3,7 +3,7 @@
 #' This function converts a data.frame of similarity metrics between sites to
 #'  dissimilarity metrics (= beta diversity).
 #'
-#' @param similaritydata the output object from \code{\link{similarity}} or a
+#' @param similarity the output object from \code{\link{similarity}} or a
 #' \code{data.frame} with the first columns called "Site1" and "Site2", and the
 #' other columns being the similarity metrics.
 #' @export
@@ -41,31 +41,31 @@
 #'
 #' dissimilarity <- similarity_to_dissimilarity(simil)
 #' dissimilarity
-similarity_to_dissimilarity <- function(similaritydata) {
+similarity_to_dissimilarity <- function(similarity) {
 
-  if (!inherits(similaritydata, "bioRgeo.pairwise.metric")) {
-    stop("similaritydata should be a bioRgeo object created by similarity() or dissimilarity_to_similarity()")
+  if (!inherits(similarity, "bioRgeo.pairwise.metric")) {
+    stop("similarity should be a bioRgeo object created by similarity() or dissimilarity_to_similarity()")
   }
-  if (attr(similaritydata, "type") == "dissimilarity") {
-    stop("similaritydata is already composed of dissimilarity indices. If you want to convert it to similarity, use dissimilarity_to_similarity()")
+  if (attr(similarity, "type") == "dissimilarity") {
+    stop("similarity is already composed of dissimilarity indices. If you want to convert it to similarity, use dissimilarity_to_similarity()")
   }
 
-  dissimilaritydata <- similaritydata
+  dissimilaritydata <- similarity
 
   # Overwrite attribute
   attr(dissimilaritydata, "type") <- "dissimilarity"
 
 
-  metrics <- colnames(similaritydata)[-which(colnames(similaritydata) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
+  metrics <- colnames(similarity)[-which(colnames(similarity) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
 
   # Special case for Euclidean distances
   if ("Euclidean" %in% metrics) {
-    dissimilaritydata[, "Euclidean"] <- (1 - similaritydata[, "Euclidean"]) / similaritydata[, "Euclidean"]
+    dissimilaritydata[, "Euclidean"] <- (1 - similarity[, "Euclidean"]) / similarity[, "Euclidean"]
     metrics <- metrics[-which(metrics == "Euclidean")]
   }
   # If there are other metrics than Euclidean, we use the same formula for all of them
   if (length(metrics)) {
-    dissimilaritydata[, metrics] <- 1 - similaritydata[, metrics]
+    dissimilaritydata[, metrics] <- 1 - similarity[, metrics]
   }
 
   return(dissimilaritydata)
@@ -125,22 +125,22 @@ dissimilarity_to_similarity <- function(dissimilaritydata) {
 
   }
 
-  similaritydata <- dissimilaritydata
+  similarity <- dissimilaritydata
 
   # Overwrite attribute
-  attr(similaritydata, "type") <- "dissimilarity"
+  attr(similarity, "type") <- "dissimilarity"
 
-  metrics <- colnames(similaritydata)[-which(colnames(similaritydata) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
+  metrics <- colnames(similarity)[-which(colnames(similarity) %in% c("Site1", "Site2", "a", "b", "c", "A", "B", "C"))]
   # Special case for Euclidean distances
   if ("Euclidean" %in% metrics) {
-    similaritydata[, "Euclidean"] <- 1 / (1 + dissimilaritydata[, "Euclidean"])
+    similarity[, "Euclidean"] <- 1 / (1 + dissimilaritydata[, "Euclidean"])
     metrics <- metrics[-which(metrics == "Euclidean")]
   }
 
   # If there are other metrics than Euclidean, we use the same formula for all fo them
   if (length(metrics)) {
-    similaritydata[, metrics] <- 1 - similaritydata[, metrics]
+    similarity[, metrics] <- 1 - similarity[, metrics]
   }
 
-  return(similaritydata)
+  return(similarity)
 }
