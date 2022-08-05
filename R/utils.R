@@ -1,34 +1,40 @@
-# controls=function(X, weight = TRUE, name = "net", type = c("data.frame, matrix, dist")){
-#
-#   # data.frame
-#   if(type == "date.frame"){
-#
-#     if(!is.data.frame(X)){
-#       stop(paste0(name, " must be a two- or three-columns data.frame"))
-#     }
-#
-#     if(dim(X)[2]!=2 & dim(X)[2]!=3){
-#       stop(paste0(name, " must be a two- or three-columns data.frame"))
-#     }
-#
-#     sco=sum(is.na(X))
-#     if(sco>0){
-#       stop(paste0("NA(s) detected in ", name))
-#     }
-#
-#     if(weight & dim(X)[2]==2){
-#       stop(paste0(name, " must be a three-columns data.frame if weight equal TRUE"))
-#     }
-#
-#     if(weight & dim(X)[2]==3){
-#       if(class(X[,3])!="numeric" & class(X[,3])!="integer"){
-#         stop(paste0("The third column of ", name," must be numeric"))
-#       }
-#     }
-#
-#   }
-#
-# }
+reformat_hierarchy <- function(input, integerize = FALSE){
+  
+  input=as.character(as.vector(as.matrix(input)))
+  
+  print(input)
+  
+  nblev <- max(lengths(regmatches(input, gregexpr("\\.", input)))) + 1
+  
+  print(nblev)
+  
+  output <- tidyr::separate(data = data.frame(input),
+                            col = input,
+                            remove = FALSE,
+                            into = paste0("lvl", 1:nblev),
+                            sep = "\\.",
+                            fill = "right")
+
+  output[which(is.na(output), arr.ind = TRUE)] <- 0
+  
+  for(lvl in grep("lvl", colnames(output))[2:nblev]) {
+    output[, lvl] <- paste(output[, lvl - 1], output[, lvl],sep = ".")
+  }
+  
+  print(output)
+  
+  output[grep("lvl", colnames(output))] <- lapply(output[grep("lvl", colnames(output))],
+                                                  function(x) gsub("\\.0", "", x))
+
+  if(integerize){
+    for(k in 2:(nblev+1)){
+      output[,k]=as.numeric(as.factor(output[,k]))
+    }
+  }  
+
+  return(output)
+
+}
 
 knbclu <- function(partitions, method = "length",
                    reorder = TRUE, rename_duplicates = TRUE) {
@@ -70,6 +76,9 @@ knbclu <- function(partitions, method = "length",
   for (k in 1:(nb + 1)) {
     partitions[, k] <- as.character(partitions[, k])
   }
+  
+  # Change colnames 1 en ID
+  colnames(partitions)[1]="ID"
 
   partitions
 }
