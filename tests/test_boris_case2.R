@@ -17,7 +17,7 @@ basins <- st_as_sf(basins)
 
 fish_comat <- net_to_mat(fish)
 
-fish_dist <- bioRgeo::distance(fish_comat)
+fish_dist <- bioRgeo::dissimilarity(fish_comat)
 
 
 ##### INFOMAP #####
@@ -39,6 +39,9 @@ ggplot() +
   geom_sf(data = basins,
           aes(fill = cl_infomap)) +
   scale_fill_discrete()
+
+partition_metrics(cl_infomap,
+                  dissimilarity = fish_dist)
 
 ##### Beckett #####
 cl_beckett <- netclu_beckett(fish,

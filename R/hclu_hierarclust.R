@@ -184,7 +184,6 @@ hclu_hierarclust <- function(dissimilarity,
 
   outputs <- list(name = "hierarchical_clustering")
 
-  # Checker les index en input, ou créer une boucle pour toutes les implémenter
   if(!inherits(dissimilarity, "dist"))
   {
       # dist.obj <- .dfToDist(dissimilarity, metric = index)
@@ -193,6 +192,8 @@ hclu_hierarclust <- function(dissimilarity,
                                       which(colnames(dissimilarity) == index))],
                         weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
+  } else {
+    dist.obj <- dissimilarity
   }
 
   outputs$args <- list(index = index,

@@ -127,6 +127,8 @@ hclu_optics <- function(dissimilarity,
                                which(colnames(dissimilarity) == index))],
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
+  } else {
+    dist.obj <- dissimilarity
   }
 
   if(minimum & show_hierarchy)

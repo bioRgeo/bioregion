@@ -112,6 +112,8 @@ nhclu_kmeans <- function(dissimilarity,
                                which(colnames(dissimilarity) == index))],
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
 
+  } else {
+    dist.obj <- dissimilarity
   }
 
 
