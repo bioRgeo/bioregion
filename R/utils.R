@@ -1,3 +1,58 @@
+controls = function(args=NULL, data=NULL, type="input_net"){
+  
+  # Input network
+  if(type=="input_net"){
+    if (!is.data.frame(data)) {
+      stop("net must be a data.frame")
+    }
+    if (dim(data)[2] < 2) {
+      stop("net must be a data.frame with at least two columns")
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop("NA(s) detected in the data.frame")
+    }
+  }
+  
+  # Input weight
+  if(type=="input_weight"){
+    if (!is.logical(args)) {
+      stop(paste0(deparse(substitute(args)), " must be a boolean"))
+    }
+    if (args & dim(data)[2] == 2) {
+      stop("net must be a data.frame with at least three columns if weight equal TRUE")
+    }
+  }
+
+  # Input index
+  if(type=="input_index"){
+
+  }
+  
+  # Character
+  if(type=="character"){
+    if (!is.character(args)) {
+      stop(paste0(deparse(substitute(args)), " must be a character"))
+    }
+    if(is.factor(args)){
+      args=as.character(args)
+    }
+    return(args)
+  }
+  
+  # Boolean
+  if(type=="boolean"){
+    if (!is.logical(args)) {
+      stop(paste0(deparse(substitute(args)), " must be a boolean"))
+    }
+  }
+  
+
+  
+  
+}
+
+
 reformat_hierarchy <- function(input, integerize = FALSE){
   
   input=as.character(as.vector(as.matrix(input)))
