@@ -1,26 +1,26 @@
 #' Create a contingency table from a data.frame
 #'
 #' This function creates a contingency table from a two- or three-columns \code{data.frame} where
-#' each row represents the interaction between two objects (site and species for example)
+#' each row represents the interaction between two nodes (site and species for example)
 #' and an optional third column indicating the weight of the interaction (if \code{weight = TRUE}).
 #'
 #' @param net a two- or three-columns \code{data.frame} where
-#' each row represents the interaction between two objects (site and species for example)
+#' each row represents the interaction between two nodes (site and species for example)
 #' and an optional third column indicating the weight of the interaction
 #' @param weight a boolean indicating if the weight should be considered
-#' @param squared a boolean indicating if the output matrix should but squared (same objects in rows and columns)
+#' @param squared a boolean indicating if the output matrix should but squared (same nodes in rows and columns)
 #' @param symmetrical a boolean indicating if the resulting matrix should be symmetrical (only if \code{squared = TRUE}).
 #' Note that different weights associated with two opposite pairs already present in net will be preserved.
-#' @param value the value to assign to the pairs of objects not present in net (0 by default)
+#' @param missing_value the value to assign to the pairs of nodes not present in net (0 by default)
 #' @export
-#' @return A \code{matrix} with the first objects (first column of \code{net}) as rows and
-#' the second objects (second column of \code{net}) as columns. Note that if \code{squared = TRUE} the rows and columns
+#' @return A \code{matrix} with the first nodes (first column of \code{net}) as rows and
+#' the second nodes (second column of \code{net}) as columns. Note that if \code{squared = TRUE} the rows and columns
 #' have the same number of elements corresponding to the concatenation of unique objects in  \code{net}'s first and second
-#' columns. If \code{squared = TRUE} the matrix can be forced to be symetrical based on the upper triangular part of
+#' columns. If \code{squared = TRUE} the matrix can be forced to be symmetrical based on the upper triangular part of
 #' the matrix.
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{mat_to_net}
 #' @examples
@@ -32,7 +32,7 @@
 #'
 #' mat <- net_to_mat(net, weight = TRUE)
 #' @export
-net_to_mat <- function(net, weight = FALSE, squared = FALSE, symmetrical = FALSE, value = 0) {
+net_to_mat <- function(net, weight = FALSE, squared = FALSE, symmetrical = FALSE, missing_value = 0) {
 
   # Controls
   if (!is.data.frame(net)) {
@@ -132,7 +132,7 @@ net_to_mat <- function(net, weight = FALSE, squared = FALSE, symmetrical = FALSE
   }
 
   # Replace NAs with 0s
-  mat[is.na(mat)] <- value
+  mat[is.na(mat)] <- missing_value
 
   # Check for empty rows and columns if squared = FALSE
   # if(!squared){
