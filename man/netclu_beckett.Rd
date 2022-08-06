@@ -10,7 +10,7 @@ netclu_beckett(
   forceLPA = FALSE,
   primary_col = 1,
   feature_col = 2,
-  remove_feature = TRUE
+  remove_feature = FALSE
 )
 }
 \arguments{

@@ -37,7 +37,7 @@
 #' \insertRef{Beckett2016}{bioRgeo}
 #' @export
 netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE,
-                           primary_col = 1, feature_col = 2, remove_feature = TRUE) {
+                           primary_col = 1, feature_col = 2, remove_feature = FALSE) {
 
   # Controls input net
   if (!is.data.frame(net)) {
