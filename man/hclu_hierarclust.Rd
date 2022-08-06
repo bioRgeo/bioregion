@@ -130,13 +130,13 @@ tree1$clusters
 
 # User-defined height cut
 # Only one height
-tree2 <- hclu_hierarclust(dissimilarity,
+tree2 <- hclu_hierarclust(dissim,
                                  cut_height = .05)
 tree2
 tree2$clusters
 #
 # Multiple heights
-tree3 <- hclu_hierarclust(dissimilarity,
+tree3 <- hclu_hierarclust(dissim,
                                  cut_height = c(.05, .15, .25))
 tree3
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
