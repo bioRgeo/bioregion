@@ -2,13 +2,9 @@ Package: bioRgeo
 Type: Package
 Title: Bioregionalisation Methods in R
 Version: 0.1.0
+Date: 2022-08-05
 Authors@R: 
-    c(person(given = "Pierre",
-             family = "Denelle",
-             role = c("aut"),
-             email = "pierre.denelle@gmail.com",
-             comment = c(ORCID = "0000-0001-5037-2281")),
-       person(given = "Maxime",
+    c(person(given = "Maxime",
               family = "Lenormand",
               email = "maxime.lenormand@inrae.fr",
               role = c("aut", "cre"),
@@ -17,10 +13,14 @@ Authors@R:
               family = "Leroy",
               role = c("aut"),
               email = "boris.leroy@gmail.com",
-              comment = c(ORCID = "0000-0002-7686-4302"))
-                    )
-Description: bioRgeo provides multiple methods to delineate bioregions.
-             Use methods based on projected or bipartite networks.
+              comment = c(ORCID = "0000-0002-7686-4302")),
+       person(given = "Pierre",
+             family = "Denelle",
+             role = c("aut"),
+             email = "pierre.denelle@gmail.com",
+             comment = c(ORCID = "0000-0001-5037-2281"))
+       )
+Description: An R package to compare several methods of bioregionalisation.
 Depends:
   R (>= 4.0.0)
 License: GPL-3 + file LICENSE
