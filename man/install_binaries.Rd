@@ -2,7 +2,7 @@
 % Please edit documentation in R/install_binaries.R
 \name{install_binaries}
 \alias{install_binaries}
-\title{Download, unzip, check permission and test the bioRgeo's executables}
+\title{Download, unzip, check permission and test the bioRgeo's binary files}
 \usage{
 install_binaries(binpath = NULL)
 }
@@ -12,11 +12,12 @@ if you use a different folder please be sure to update the \code{binpath} in \li
 and \link{netclu_oslom})}
 }
 \description{
-This function downloads and unzips the bin folder needed to run some bioRgeo's functions. It also checks if the files
-have the permissions to be executed as programs. It finally tests if the executable are running properly.
+This function downloads and unzips the bin folder needed to run some bioRgeo's 
+functions. It also checks if the files have the permissions to be executed as 
+programs. It finally tests if the binary files are running properly.
 }
 \author{
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Boris Leroy (\email{leroy.boris@gmail.com}) and
 Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-Boris Leroy (\email{leroy.boris@gmail.com})
 }
