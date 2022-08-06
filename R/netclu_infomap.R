@@ -79,9 +79,7 @@ netclu_infomap <- function(net,
     binpath <- biodir[grep("bioRgeo", biodir)]
   } else {
     # Control
-    if (!is.character(binpath)) {
-      stop("path must be a string")
-    }
+    controls(args=binpath, data=NULL, type="character")
     if (!file.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath))
     }
@@ -95,28 +93,16 @@ netclu_infomap <- function(net,
     stop("Infomap is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
   }
 
-  # Control input net
-  if (!is.data.frame(net)) {
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  nbna <- sum(is.na(net))
-  if (nbna > 0) {
-    stop("NA(s) detected in the data.frame")
+  # Controls input net
+  controls(args=NULL, data=net, type="input_net")
+  
+  # Controls input weight & index
+  controls(args=weight, data=net, type="input_weight")
+  if(weight){
+    controls(args=index, data=net, type="input_index")
   }
 
   # Control parameters
-  if (!is.logical(weight)) {
-    stop("weight must be a boolean")
-  }
-
-  if (weight & dim(net)[2] == 2) {
-    stop("net must be a three-columns data.frame if weight equal TRUE")
-  }
 
   if (weight & dim(net)[2] == 3) {
     if (!is.numeric(net[, 3])) {
