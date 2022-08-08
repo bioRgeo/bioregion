@@ -24,7 +24,7 @@ hclu_hierarclust(
  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
  If a \code{data.frame} is used, the first two 
 columns represent pairs of sites (or any pair of nodes), and the next column(s)
-are the dissimilarity indices,}
+are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default, 
 the third column name of
@@ -38,13 +38,13 @@ the third column name of
 \code{"median"} (= WPGMC) or \code{"centroid"} (= UPGMC).}
 
 \item{randomize}{a boolean indicating if the dissimilarity matrix should be
-randomized, to account for the order of sites in the dissimilarity matrix}
+randomized, to account for the order of sites in the dissimilarity matrix.}
 
-\item{n_runs}{number of trials to randomize the dissimilarity matrix}
+\item{n_runs}{number of trials to randomize the dissimilarity matrix.}
 
-\item{keep_trials}{a boolean indicating if all random trial results
+\item{keep_trials}{a boolean indicating if all random trial results.
 should be stored in the output object (set to FALSE to save space if your
-\code{dissimilarity} object is large)}
+\code{dissimilarity} object is large).}
 
 \item{optimal_tree_method}{a character vector indicating how the final tree
 should be obtained from all trials. The only option currently is
@@ -54,19 +54,19 @@ coefficient will be chosen.}
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
 \link{partition_metrics}. Should not be used at the same time as
-\code{cut_height}}
+\code{cut_height}.}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the tree
-should be cut. Should not be used at the same time as \code{n_clust}}
+should be cut. Should not be used at the same time as \code{n_clust}.}
 
 \item{find_h}{a boolean indicating if the height of cut should be found for
-the requested \code{n_clust}}
+the requested \code{n_clust}.}
 
 \item{h_max}{a numeric indicating the maximum possible tree height for
-the chosen \code{index}}
+the chosen \code{index}.}
 
 \item{h_min}{a numeric indicating the minimum possible height in the tree for
-the chosen \code{index}}
+the chosen \code{index}.}
 }
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:

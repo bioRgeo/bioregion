@@ -15,13 +15,14 @@ nhclu_pam(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link{similarity_to_dissimilarity}},
-a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the dissimilarity indices or a \code{dist} object}
+\item{dissimilarity}{the output object from \code{\link{dissimilarity}} or
+ \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+ If a \code{data.frame} is used, the first two 
+columns represent pairs of sites (or any pair of nodes), and the next column(s)
+are the dissimilarity indices.}
 
-\item{index}{a \code{character} string providing the name of the dissimilarity
-index to use, corresponding to the column
-name in \code{dissimilarity}. By default, the third column name of
+\item{index}{name or number of the dissimilarity column to use. By default, 
+the third column name of
  \code{dissimilarity} is used.}
 
 \item{n_clust}{an \code{integer} or a \code{vector} of \code{integers}
@@ -65,8 +66,7 @@ This method partitions data into
  matrix if the distances are not euclidean).
 }
 \examples{
-simil <- similarity(vegemat, metric = "all")
-dissimilarity <- similarity_to_dissimilarity(simil)
+dissimilarity <- dissimilarity(simil, metric = "all")
 
 clust1 <- nhclu_pam(dissimilarity,
     n_clust = 2:10,
@@ -82,4 +82,12 @@ partition_metrics(clust2,
                   sp_site_table = vegemat,
                   eval_metric = "avg_endemism",
                   partition_optimisation = TRUE)
+}
+\seealso{
+\link{nhclu_kmeans}
+}
+\author{
+Boris Leroy (\email{leroy.boris@gmail.com}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

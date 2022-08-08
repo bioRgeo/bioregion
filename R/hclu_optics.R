@@ -1,15 +1,16 @@
-#' Non hierarchical clustering: OPTICS
+#' OPTICS hierarchical clustering algorithm
 #'
 #' This function performs semi-hierarchical
 #' clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
 #' Points To Identify the Clustering Structure)
 #'
-#' @param dissimilarity the output object from \code{\link{similarity_to_dissimilarity}},
-#' a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the dissimilarity indices or a \code{dist} object
-#' @param index a \code{character} string providing the name of the dissimilarity
-#' index to use, corresponding to the column
-#' name in \code{dissimilarity}. By default, the third column name of
+#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
+#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+#'  If a \code{data.frame} is used, the first two 
+#' columns represent pairs of sites (or any pair of nodes), and the next column(s)
+#' are the dissimilarity indices. 
+#' @param index name or number of the dissimilarity column to use. By default, 
+#' the third column name of
 #'  \code{dissimilarity} is used.
 #' @param minPts a \code{numeric} value specifying the minPts argument
 #' of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
@@ -57,7 +58,9 @@
 #'  the steepness of the reachability plot
 #'  (see \link[dbscan:optics]{dbscan::optics()})
 #'
-#'
+#' @references 
+#' \insertRef{Hahsler2019}{bioRgeo}
+#' 
 #' @return
 #' A \code{list} of class \code{bioRgeo.clusters} with five slots:
 #' \enumerate{
@@ -70,9 +73,14 @@
 #'
 #' @export
 #'
+#' @author
+#' Boris Leroy (\email{leroy.boris@gmail.com}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
+#' 
+#' @seealso \link{nhclu_dbscan} 
 #' @examples
-#' simil <- similarity(vegemat, metric = "all")
-#' dissimilarity <- similarity_to_dissimilarity(simil)
+#' dissimilarity <- dissimilarity(simil, metric = "all")
 #'
 #' clust1 <- hclu_optics(dissimilarity,
 #'     index = "Simpson")

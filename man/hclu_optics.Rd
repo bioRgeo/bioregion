@@ -2,7 +2,7 @@
 % Please edit documentation in R/hclu_optics.R
 \name{hclu_optics}
 \alias{hclu_optics}
-\title{Non hierarchical clustering: OPTICS}
+\title{OPTICS hierarchical clustering algorithm}
 \usage{
 hclu_optics(
   dissimilarity,
@@ -16,13 +16,14 @@ hclu_optics(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link{similarity_to_dissimilarity}},
-a \code{data.frame} with the first columns called "Site1" and "Site2", and
-the other columns being the dissimilarity indices or a \code{dist} object}
+\item{dissimilarity}{the output object from \code{\link{dissimilarity}} or
+ \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+ If a \code{data.frame} is used, the first two 
+columns represent pairs of sites (or any pair of nodes), and the next column(s)
+are the dissimilarity indices.}
 
-\item{index}{a \code{character} string providing the name of the dissimilarity
-index to use, corresponding to the column
-name in \code{dissimilarity}. By default, the third column name of
+\item{index}{name or number of the dissimilarity column to use. By default, 
+the third column name of
  \code{dissimilarity} is used.}
 
 \item{minPts}{a \code{numeric} value specifying the minPts argument
@@ -92,8 +93,7 @@ The optics (Ordering points to identify the clustering
  (see \link[dbscan:optics]{dbscan::optics()})
 }
 \examples{
-simil <- similarity(vegemat, metric = "all")
-dissimilarity <- similarity_to_dissimilarity(simil)
+dissimilarity <- dissimilarity(simil, metric = "all")
 
 clust1 <- hclu_optics(dissimilarity,
     index = "Simpson")
@@ -109,4 +109,15 @@ clust1 <- hclu_optics(dissimilarity,
     show_hierarchy = TRUE)
 clust1
 head(clust1$clusters)
+}
+\references{
+\insertRef{Hahsler2019}{bioRgeo}
+}
+\seealso{
+\link{nhclu_dbscan}
+}
+\author{
+Boris Leroy (\email{leroy.boris@gmail.com}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

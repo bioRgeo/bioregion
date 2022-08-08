@@ -44,20 +44,20 @@ partition_metrics(cl_infomap,
                   dissimilarity = fish_dist)
 
 ##### Beckett #####
-cl_beckett <- netclu_beckett(fish,
-                             weight = FALSE,
-                             primary_col = "X1.Basin.Name",
-                             feature_col = "X6.Fishbase.Valid.Species.Name",
-                             remove_feature = FALSE)
-
-basins$cl_beckett <- cl_beckett[match(basins$BasinName,
-                                      cl_beckett$ID), 2]
-basins$cl_beckett <- as.factor(basins$cl_beckett)
-
-ggplot() +
-  geom_sf(data = basins,
-          aes(fill = cl_infomap)) +
-  scale_fill_discrete()
+# cl_beckett <- netclu_beckett(fish,
+#                              weight = FALSE,
+#                              primary_col = "X1.Basin.Name",
+#                              feature_col = "X6.Fishbase.Valid.Species.Name",
+#                              remove_feature = FALSE)
+# 
+# basins$cl_beckett <- cl_beckett[match(basins$BasinName,
+#                                       cl_beckett$ID), 2]
+# basins$cl_beckett <- as.factor(basins$cl_beckett)
+# 
+# ggplot() +
+#   geom_sf(data = basins,
+#           aes(fill = cl_infomap)) +
+#   scale_fill_discrete()
 
 
 ##### greedy #####

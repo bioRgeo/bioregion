@@ -3,12 +3,13 @@
 #' This function performs non hierarchical
 #' clustering on the basis of dissimilarity with a k-means analysis.
 #'
-#' @param dissimilarity the output object from \code{\link{similarity_to_dissimilarity}},
-#' a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the dissimilarity indices or a \code{dist} object
-#' @param index a \code{character} string providing the name of the dissimilarity
-#' index to use, corresponding to the column
-#' name in \code{dissimilarity}. By default, the third column name of
+#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
+#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+#'  If a \code{data.frame} is used, the first two 
+#' columns represent pairs of sites (or any pair of nodes), and the next column(s)
+#' are the dissimilarity indices. 
+#' @param index name or number of the dissimilarity column to use. By default, 
+#' the third column name of
 #'  \code{dissimilarity} is used.
 #' @param n_clust an \code{integer} or a \code{vector} of \code{integers}
 #' specifying the requested number(s) of clusters
@@ -32,6 +33,7 @@
 #'  the initial matrix of dissimilarity, the partitioning around medoids method
 #'  should be prefered (\code{\link{nhclu_pam}})
 #'
+#' @seealso \link{nhclu_pam} 
 #'
 #' @return
 #' A \code{list} of class \code{bioRgeo.clusters} with five slots:
@@ -44,11 +46,15 @@
 #' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
 #'
 #' @export
-#'
+#' @author
+#' Boris Leroy (\email{leroy.boris@gmail.com}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
+#' 
+#' @seealso \link{cut_tree} 
 #' @examples
-#' simil <- similarity(vegemat, metric = "all")
-#' dissimilarity <- similarity_to_dissimilarity(simil)
-#'
+#' dissimilarity <- dissimilarity(simil, metric = "all")
+#' 
 #' clust1 <- nhclu_kmeans(dissimilarity,
 #'     n_clust = 2:10,
 #'     index = "Simpson")

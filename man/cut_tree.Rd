@@ -51,8 +51,7 @@ matrix)}
 to use in the dynamic tree cut method (see
 \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})}
 
-\item{dissimilarity}{only useful if \code{tree} is not a
-\code{bioRgeo.hierar.tree} object and \code{dynamic_method = "hybrid"}.
+\item{dissimilarity}{only useful if \code{dynamic_method = "hybrid"}.
 Provide here the dissimilarity \code{data.frame} used to build the \code{tree}}
 
 \item{...}{further arguments to be passed to
@@ -60,14 +59,18 @@ Provide here the dissimilarity \code{data.frame} used to build the \code{tree}}
 customize the dynamic tree cut method.}
 }
 \value{
-If \code{tree} is a \code{bioRgeo.hierar.tree}, then the same object
+If \code{tree} is an output from \code{\link{hclu_hierarclust}},
+then the same object
 is returned with content updated (i.e., \code{args} and \code{clusters}). If
 \code{tree} is a \code{hclust} object, then a \code{data.frame} containing
 the clusters is returned.
 }
 \description{
-This functions is designed to work on both \code{hclust} objects and
-\code{bioRgeo.hierar.tree} objects. It cuts the tree for the chosen number(s)
+This functions is designed to work on a hierarchical tree and cut it 
+at user-selected 
+heights.
+It works on either outputs from \code{hclu_hierarclust} or \code{hclust}
+objects. It cuts the tree for the chosen number(s)
 of clusters or selected height(s). It also includes a procedure to
 automatically return the height of cut for the chosen number(s) of clusters.
 }

@@ -1,15 +1,16 @@
-#' Non hierarchical clustering: dbscan
+#' dbscan clustering
 #'
 #' This function performs non hierarchical
 #' clustering on the basis of dissimilarity with Density-based Spatial Clustering of
 #'  Applications with Noise (DBSCAN)
 #'
-#' @param dissimilarity the output object from \code{\link{similarity_to_dissimilarity}},
-#' a \code{data.frame} with the first columns called "Site1" and "Site2", and
-#' the other columns being the dissimilarity indices or a \code{dist} object
-#' @param index a \code{character} string providing the name of the dissimilarity
-#' index to use, corresponding to the column
-#' name in \code{dissimilarity}. By default, the third column name of
+#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
+#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+#'  If a \code{data.frame} is used, the first two 
+#' columns represent pairs of sites (or any pair of nodes), and the next column(s)
+#' are the dissimilarity indices. 
+#' @param index name or number of the dissimilarity column to use. By default, 
+#' the third column name of
 #'  \code{dissimilarity} is used.
 #' @param minPts a \code{numeric} value or a vector of \code{numeric} values
 #'  specifying the minPts argument
@@ -70,11 +71,17 @@
 #'  clustering procedure, such as original cluster objects}
 #' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
 #'
+#' @author
+#' Boris Leroy (\email{leroy.boris@gmail.com}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
+#' 
+#' @seealso \link{hclu_optics} 
+#' 
 #' @export
 #'
 #' @examples
-#' simil <- similarity(vegemat, metric = "all")
-#' dissimilarity <- similarity_to_dissimilarity(simil)
+#' dissimilarity <- dissimilarity(simil, metric = "all")
 #'
 #' clust1 <- nhclu_dbscan(dissimilarity,
 #'     index = "Simpson")

@@ -14,7 +14,7 @@
 #'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
 #'  If a \code{data.frame} is used, the first two 
 #' columns represent pairs of sites (or any pair of nodes), and the next column(s)
-#' are the dissimilarity indices, 
+#' are the dissimilarity indices. 
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of
 #'  \code{dissimilarity} is used.
@@ -25,11 +25,11 @@
 #' (= UPGMA), \code{"mcquitty"} (= WPGMA),
 #' \code{"median"} (= WPGMC) or \code{"centroid"} (= UPGMC).
 #' @param randomize a boolean indicating if the dissimilarity matrix should be
-#' randomized, to account for the order of sites in the dissimilarity matrix
-#' @param n_runs number of trials to randomize the dissimilarity matrix
-#' @param keep_trials a boolean indicating if all random trial results
+#' randomized, to account for the order of sites in the dissimilarity matrix.
+#' @param n_runs number of trials to randomize the dissimilarity matrix.
+#' @param keep_trials a boolean indicating if all random trial results.
 #' should be stored in the output object (set to FALSE to save space if your
-#' \code{dissimilarity} object is large)
+#' \code{dissimilarity} object is large).
 #' @param optimal_tree_method a character vector indicating how the final tree
 #' should be obtained from all trials. The only option currently is
 #' \code{"best"}, which means the tree with the best cophenetic correlation
@@ -37,15 +37,15 @@
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
 #' \link{partition_metrics}. Should not be used at the same time as
-#' \code{cut_height}
+#' \code{cut_height}.
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
-#' should be cut. Should not be used at the same time as \code{n_clust}
+#' should be cut. Should not be used at the same time as \code{n_clust}.
 #' @param find_h a boolean indicating if the height of cut should be found for
-#' the requested \code{n_clust}
+#' the requested \code{n_clust}.
 #' @param h_max a numeric indicating the maximum possible tree height for
-#' the chosen \code{index}
+#' the chosen \code{index}.
 #' @param h_min a numeric indicating the minimum possible height in the tree for
-#' the chosen \code{index}
+#' the chosen \code{index}.
 #' @export
 #' @details
 #' The default method for the hierarchical tree is \code{"average"}, i.e.
