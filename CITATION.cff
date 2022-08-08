@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.1.1
+# CITATION file created with {cffr} R package, v0.2.2
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -51,7 +51,7 @@ preferred-citation:
     email: maxime.lenormand@inrae.fr
     orcid: https://orcid.org/0000-0001-6362-3473
   license: GPL-3.0-only
-  year: '2021'
+  year: '2022'
 repository-code: https://github.com/bioRgeo/bioRgeo
 url: https://github.com/bioRgeo/bioRgeo
 contact:
@@ -59,3 +59,459 @@ contact:
   given-names: Maxime
   email: maxime.lenormand@inrae.fr
   orcid: https://orcid.org/0000-0001-6362-3473
+references:
+- type: software
+  title: 'R: A Language and Environment for Statistical Computing'
+  notes: Depends
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+  version: '>= 4.0.0'
+- type: software
+  title: ape
+  abstract: 'ape: Analyses of Phylogenetics and Evolution'
+  notes: Imports
+  authors:
+  - family-names: Paradis
+    given-names: Emmanuel
+    email: Emmanuel.Paradis@ird.fr
+    orcid: https://orcid.org/0000-0003-3092-2199
+  - family-names: Blomberg
+    given-names: Simon
+    orcid: https://orcid.org/0000-0003-1062-0839
+  - family-names: Bolker
+    given-names: Ben
+    orcid: https://orcid.org/0000-0002-2127-0443
+  - family-names: Brown
+    given-names: Joseph
+    orcid: https://orcid.org/0000-0002-3835-8062
+  - family-names: Claramunt
+    given-names: Santiago
+    orcid: https://orcid.org/0000-0002-8926-5974
+  - family-names: Claude
+    given-names: Julien
+    orcid: https://orcid.org/0000-0002-9267-1228
+  - family-names: Cuong
+    given-names: Hoa Sien
+  - family-names: Desper
+    given-names: Richard
+  - family-names: Didier
+    given-names: Gilles
+    orcid: https://orcid.org/0000-0003-0596-9112
+  - family-names: Durand
+    given-names: Benoit
+  - family-names: Dutheil
+    given-names: Julien
+    orcid: https://orcid.org/0000-0001-7753-4121
+  - family-names: Ewing
+    given-names: RJ
+  - family-names: Gascuel
+    given-names: Olivier
+  - family-names: Guillerme
+    given-names: Thomas
+    orcid: https://orcid.org/0000-0003-4325-1275
+  - family-names: Heibl
+    given-names: Christoph
+    orcid: https://orcid.org/0000-0002-7655-3299
+  - family-names: Ives
+    given-names: Anthony
+    orcid: https://orcid.org/0000-0001-9375-9523
+  - family-names: Jones
+    given-names: Bradley
+    orcid: https://orcid.org/0000-0003-4498-1069
+  - family-names: Krah
+    given-names: Franz
+    orcid: https://orcid.org/0000-0001-7866-7508
+  - family-names: Lawson
+    given-names: Daniel
+    orcid: https://orcid.org/0000-0002-5311-6213
+  - family-names: Lefort
+    given-names: Vincent
+  - family-names: Legendre
+    given-names: Pierre
+    orcid: https://orcid.org/0000-0002-3838-3305
+  - family-names: Lemon
+    given-names: Jim
+  - family-names: Louvel
+    given-names: Guillaume
+    orcid: https://orcid.org/0000-0002-7745-0785
+  - family-names: Marcon
+    given-names: Eric
+    orcid: https://orcid.org/0000-0002-5249-321X
+  - family-names: McCloskey
+    given-names: Rosemary
+    orcid: https://orcid.org/0000-0002-9772-8553
+  - family-names: Nylander
+    given-names: Johan
+  - family-names: Opgen-Rhein
+    given-names: Rainer
+  - family-names: Popescu
+    given-names: Andrei-Alin
+  - family-names: Royer-Carenzi
+    given-names: Manuela
+  - family-names: Schliep
+    given-names: Klaus
+    orcid: https://orcid.org/0000-0003-2941-0161
+  - family-names: Strimmer
+    given-names: Korbinian
+    orcid: https://orcid.org/0000-0001-7917-2056
+  - family-names: de Vienne
+    given-names: Damien
+    orcid: https://orcid.org/0000-0001-9532-5251
+  year: '2022'
+  url: https://CRAN.R-project.org/package=ape
+- type: software
+  title: bipartite
+  abstract: 'bipartite: Visualising Bipartite Networks and Calculating Some (Ecological)
+    Indices'
+  notes: Imports
+  authors:
+  - family-names: Dormann
+    given-names: Carsten F.
+  - family-names: Fruend
+    given-names: Jochen
+  - family-names: Gruber
+    given-names: Bernd
+  - family-names: Beckett
+    given-names: with additional code from Stephen
+  - family-names: Devoto
+    given-names: Mariano
+  - family-names: Felix
+    given-names: Gabriel
+  - family-names: Iriondo
+    given-names: Jose
+  - family-names: Opsahl
+    given-names: Tove
+  - family-names: Pinheiro
+    given-names: Rafael
+  - family-names: Strauss
+    given-names: Rouven
+  - family-names: Vazquez
+    given-names: Diego
+  - family-names: Bluethgen
+    given-names: also based on C-code developed by Nils
+  - family-names: Strauss
+    given-names: Aaron Clauset/Rouven
+  - family-names: Rodriguez-Girones
+    given-names: Miguel
+  year: '2022'
+  url: https://CRAN.R-project.org/package=bipartite
+- type: software
+  title: cluster
+  abstract: 'cluster: "Finding Groups in Data": Cluster Analysis Extended Rousseeuw
+    et al.'
+  notes: Imports
+  authors:
+  - family-names: Maechler
+    given-names: Martin
+    email: maechler@stat.math.ethz.ch
+    orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Rousseeuw
+    given-names: Peter
+    email: peter.rousseeuw@kuleuven.be
+    orcid: https://orcid.org/0000-0002-3807-5353
+  - family-names: Struyf
+    given-names: Anja
+  - family-names: Hubert
+    given-names: Mia
+    email: Mia.Hubert@uia.ua.ac.be
+    orcid: https://orcid.org/0000-0001-6398-4850
+  year: '2022'
+  url: https://CRAN.R-project.org/package=cluster
+- type: software
+  title: dbscan
+  abstract: 'dbscan: Density-Based Spatial Clustering of Applications with Noise (DBSCAN)
+    and Related Algorithms'
+  notes: Imports
+  authors:
+  - family-names: Hahsler
+    given-names: Michael
+    email: mhahsler@lyle.smu.edu
+  - family-names: Piekenbrock
+    given-names: Matthew
+  year: '2022'
+  url: https://CRAN.R-project.org/package=dbscan
+- type: software
+  title: dendextend
+  abstract: 'dendextend: Extending ''dendrogram'' Functionality in R'
+  notes: Imports
+  authors:
+  - family-names: Galili
+    given-names: Tal
+    email: tal.galili@gmail.com
+  - family-names: Jefferis
+    given-names: Gregory
+    email: jefferis@gmail.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=dendextend
+- type: software
+  title: dynamicTreeCut
+  abstract: 'dynamicTreeCut: Methods for Detection of Clusters in Hierarchical Clustering
+    Dendrograms'
+  notes: Imports
+  authors:
+  - family-names: Langfelder
+    given-names: Peter
+    email: Peter.Langfelder@gmail.com
+  - family-names: Zhang
+    given-names: Bin
+    email: binzhang.ucla@gmail.com
+  - family-names: Horvath
+    given-names: with contributions from Steve
+    email: SHorvath@mednet.ucla.edu
+  year: '2022'
+  url: https://CRAN.R-project.org/package=dynamicTreeCut
+- type: software
+  title: earth
+  abstract: 'earth: Multivariate Adaptive Regression Splines'
+  notes: Imports
+  authors:
+  - family-names: Hastie
+    given-names: Stephen Milborrow. Derived from mda:mars by Trevor
+  - family-names: wrapper.
+    given-names: Rob Tibshirani. Uses Alan Miller's Fortran utilities with Thomas
+      Lumley's leaps
+  year: '2022'
+  url: https://CRAN.R-project.org/package=earth
+- type: software
+  title: fastcluster
+  abstract: 'fastcluster: Fast Hierarchical Clustering Routines for R and ''Python'''
+  notes: Imports
+  authors:
+  - family-names: Müllner
+    given-names: Daniel
+    email: daniel@danifold.net
+  year: '2022'
+  url: https://CRAN.R-project.org/package=fastcluster
+- type: software
+  title: ggplot2
+  abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
+  notes: Imports
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Chang
+    given-names: Winston
+    orcid: https://orcid.org/0000-0002-1576-2126
+  - family-names: Henry
+    given-names: Lionel
+  - family-names: Pedersen
+    given-names: Thomas Lin
+    email: thomas.pedersen@rstudio.com
+    orcid: https://orcid.org/0000-0002-5147-4711
+  - family-names: Takahashi
+    given-names: Kohske
+  - family-names: Wilke
+    given-names: Claus
+    orcid: https://orcid.org/0000-0002-7470-9261
+  - family-names: Woo
+    given-names: Kara
+    orcid: https://orcid.org/0000-0002-5125-4188
+  - family-names: Yutani
+    given-names: Hiroaki
+    orcid: https://orcid.org/0000-0002-3385-7233
+  - family-names: Dunnington
+    given-names: Dewey
+    orcid: https://orcid.org/0000-0002-9415-4582
+  year: '2022'
+  url: https://CRAN.R-project.org/package=ggplot2
+- type: software
+  title: igraph
+  abstract: 'igraph: Network Analysis and Visualization'
+  notes: Imports
+  authors:
+  - family-names: file.
+    given-names: See AUTHORS
+  year: '2022'
+  url: https://CRAN.R-project.org/package=igraph
+- type: software
+  title: MASS
+  abstract: 'MASS: Support Functions and Datasets for Venables and Ripley''s MASS'
+  notes: Imports
+  authors:
+  - family-names: Ripley
+    given-names: Brian
+    email: ripley@stats.ox.ac.uk
+  year: '2022'
+  url: https://CRAN.R-project.org/package=MASS
+- type: software
+  title: mathjaxr
+  abstract: 'mathjaxr: Using ''Mathjax'' in Rd Files'
+  notes: Imports
+  authors:
+  - family-names: Viechtbauer
+    given-names: Wolfgang
+    email: wvb@wvbauer.com
+    orcid: https://orcid.org/0000-0003-3463-4063
+  year: '2022'
+  url: https://CRAN.R-project.org/package=mathjaxr
+- type: software
+  title: Matrix
+  abstract: 'Matrix: Sparse and Dense Matrix Classes and Methods'
+  notes: Imports
+  authors:
+  - family-names: Bates
+    given-names: Douglas
+  - family-names: Maechler
+    given-names: Martin
+    email: mmaechler+Matrix@gmail.com
+    orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Jagan
+    given-names: Mikael
+  year: '2022'
+  url: https://CRAN.R-project.org/package=Matrix
+- type: software
+  title: mclust
+  abstract: 'mclust: Gaussian Mixture Modelling for Model-Based Clustering, Classification,
+    and Density Estimation'
+  notes: Imports
+  authors:
+  - family-names: Fraley
+    given-names: Chris
+  - family-names: Raftery
+    given-names: Adrian E.
+    orcid: https://orcid.org/0000-0002-6589-301X
+  - family-names: Scrucca
+    given-names: Luca
+    email: luca.scrucca@unipg.it
+    orcid: https://orcid.org/0000-0003-3826-0484
+  year: '2022'
+  url: https://CRAN.R-project.org/package=mclust
+- type: software
+  title: Rcpp
+  abstract: 'Rcpp: Seamless R and C++ Integration'
+  notes: Imports
+  authors:
+  - family-names: Eddelbuettel
+    given-names: Dirk
+  - family-names: Francois
+    given-names: Romain
+  - family-names: Allaire
+    given-names: JJ
+  - family-names: Ushey
+    given-names: Kevin
+  - family-names: Kou
+    given-names: Qiang
+  - family-names: Russell
+    given-names: Nathan
+  - family-names: Ucar
+    given-names: Inaki
+  - family-names: Bates
+    given-names: Douglas
+  - family-names: Chambers
+    given-names: John
+  year: '2022'
+  url: https://CRAN.R-project.org/package=Rcpp
+- type: software
+  title: Rdpack
+  abstract: 'Rdpack: Update and Manipulate Rd Documentation Objects'
+  notes: Imports
+  authors:
+  - family-names: Boshnakov
+    given-names: Georgi N.
+    email: georgi.boshnakov@manchester.ac.uk
+  year: '2022'
+  url: https://CRAN.R-project.org/package=Rdpack
+- type: software
+  title: reshape2
+  abstract: 'reshape2: Flexibly Reshape Data: A Reboot of the Reshape Package'
+  notes: Imports
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: h.wickham@gmail.com
+  year: '2022'
+  url: https://CRAN.R-project.org/package=reshape2
+- type: software
+  title: rmarkdown
+  abstract: 'rmarkdown: Dynamic Documents for R'
+  notes: Imports
+  authors:
+  - family-names: Allaire
+    given-names: JJ
+    email: jj@rstudio.com
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: McPherson
+    given-names: Jonathan
+    email: jonathan@rstudio.com
+  - family-names: Luraschi
+    given-names: Javier
+    email: javier@rstudio.com
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevin@rstudio.com
+  - family-names: Atkins
+    given-names: Aron
+    email: aron@rstudio.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  - family-names: Cheng
+    given-names: Joe
+    email: joe@rstudio.com
+  - family-names: Chang
+    given-names: Winston
+    email: winston@rstudio.com
+  - family-names: Iannone
+    given-names: Richard
+    email: rich@rstudio.com
+    orcid: https://orcid.org/0000-0003-3925-190X
+  year: '2022'
+  url: https://CRAN.R-project.org/package=rmarkdown
+- type: software
+  title: stats
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: tidyr
+  abstract: 'tidyr: Tidy Messy Data'
+  notes: Imports
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  - family-names: Girlich
+    given-names: Maximilian
+  year: '2022'
+  url: https://CRAN.R-project.org/package=tidyr
+- type: software
+  title: utils
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2022'
+  url: https://www.R-project.org/
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: knitr
+  abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
+  notes: Suggests
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  year: '2022'
+  url: https://CRAN.R-project.org/package=knitr

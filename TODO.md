@@ -8,33 +8,17 @@
 
 * glossaire
 
-* see also
-
-* bien se mettre d'accord sur les args
-
 * faire la vignette
 
 * écrire article blog sur binaires
 
 * écrire article blog sur format matrix/network
 
-* homogénéiser la terminologie
-
 * Bien vérifier les packages importés (il y en aura à supprimer...)
-
-* Bien vérifier les potentiels problèmes character, numeric, factor pour les sites/species des data.frame (net_to_mat et mat_to_net)  
-
-* Bien vérifier les potentiels problèmes NA, integer, numeric pour les présences et abondances
 
 * plant CBNmed ask permission 
 
 * Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
-
-* vérifier les NAs, négatif et 0 pour les réseaux
-
-* créer une fonction générique pour les controles ?
-
-* créer fonction is_bipartite ?
 
 * créer une fonction minimaliste pour faire des cartes
 
@@ -49,11 +33,7 @@
 
 * Ajouter l'algorithme `diana` ?
 
-* Vérifier arguments en entrée standard
-
 #### partition_metrics
-
-* séparer en deux fonctions, l'une pour calculer les métriques, l'autre pour chercher un nombre optimal
 
 * décider si MARS utile ou pas. Switcher vers segmented?
 
@@ -61,11 +41,7 @@
 
 * Implémenter la parallélisation de la recherche de clusters 
 
-* Fusionner le hiérarchique et le non hiérarchique dans cette fonction ?
-
 ### 1.3 Amélioration des classes
-
-* Ajouter un tableau pour faire la correspondance entre l'objet clusters et la requête des utilisateurs + autres paramètres définissant chaque cluster
 
 ### 1.4 Fonctions génériques
 
@@ -73,9 +49,6 @@
 
 ## 2. Package V2
 
-* Faire une fonction d'evaluation des bioregionalisations: a quel point la partition qu'on obtient est significative ou non (exemple: metrique de modularite pour les reseaux, l'ideal serait d'avoir une metrique simple et commune a tous les algos)
-
 ## 3. Other
 
-* rendre les vignettes le plus simple et explicite possible
 

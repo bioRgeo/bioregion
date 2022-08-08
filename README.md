@@ -1,6 +1,6 @@
 # __bioRgeo__ <img src="man/figures/logo.png" align="right" alt="" width="200" />
 
-# An R package to compare several methods of bioregionalizations
+# Bioregionalisation Methods in R
 
 [![R build status](https://github.com/bioRgeo/bioRgeo/workflows/R-CMD-check/badge.svg)](https://github.com/bioRgeo/bioRgeo/actions) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo) 
@@ -11,17 +11,12 @@
 The package `bioRgeo` can be installed with the following command line in R session:
 
 ``` r
-devtools::install_github("bioRgeo/bioRgeo", build_vignettes = TRUE)
+devtools::install_github("bioRgeo/bioRgeo")
 ```
 
 ## 2 Tutorial
 
-A tutorial vignette is available [here](https://biorgeo.github.io/bioRgeo/articles/bioRgeo.html) and can be
-visualised with the following command line:
-
-``` r
-vignette("bioRgeo", package = "bioRgeo")
-```
+A tutorial vignette is available [here](https://biorgeo.github.io/bioRgeo/articles/bioRgeo.html).
 
 ## 3 Dependencies
 

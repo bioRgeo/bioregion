@@ -1,20 +1,20 @@
 #' Create a data.frame from a contingency table
 #'
 #' This function creates a two- or three-columns \code{data.frame} where
-#' each row represents the interaction between two objects (site and species for example)
+#' each row represents the interaction between two nodes (site and species for example)
 #' and an optional third column indicating the weight of the interaction (if \code{weight = TRUE})
 #' from a contingency table (sites as rows and species as columns for example).
 #'
 #' @param mat a contingency table (i.e. \code{matrix})
 #' @param weight a boolean indicating if the value are weights
-#' @param remove_absent_objects a boolean determining whether absent
-#' objects from the contingency table have to be removed from the output
+#' @param remove_zeroes a boolean determining whether interactions with weight 
+#' equal to 0 should be removed from the output
 #' @export
 #' @return A \code{data.frame} where each row represents the interaction between
-#' two objects and an optional third column indicating the weight of the interaction.
+#' two nodes and an optional third column indicating the weight of the interaction.
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{net_to_mat}
 #'
@@ -25,7 +25,7 @@
 #'
 #' net <- mat_to_net(mat, weight = TRUE)
 #' @export
-mat_to_net <- function(mat, weight = FALSE, remove_absent_objects = TRUE) {
+mat_to_net <- function(mat, weight = FALSE, remove_zeroes = TRUE) {
 
   # Controls
   if (!is.matrix(mat)) {
@@ -41,16 +41,16 @@ mat_to_net <- function(mat, weight = FALSE, remove_absent_objects = TRUE) {
     stop("weight must be a boolean")
   }
 
-  if (!is.logical(remove_absent_objects)) {
-    stop("remove_absent_objects must be a boolean")
+  if (!is.logical(remove_zeroes)) {
+    stop("remove_zeroes must be a boolean")
   }
 
   # Conversion as data.frame
   net <- reshape2::melt(mat)
-  colnames(net) <- c("Object1", "Object2", "Weight")
+  colnames(net) <- c("Node1", "Node2", "Weight")
 
   # Remove interactions with weight equal 0
-  if (remove_absent_objects == TRUE) {
+  if (remove_zeroes == TRUE) {
     net <- net[net$Weight != 0, ]
   }
 
@@ -59,10 +59,10 @@ mat_to_net <- function(mat, weight = FALSE, remove_absent_objects = TRUE) {
     net <- net[, -3]
   }
 
-  # Reorder by Object 1 and 2
-  net$Object1 <- factor(net$Object1, levels = rownames(mat))
-  net$Object2 <- factor(net$Object2, levels = colnames(mat))
-  net <- net[order(net$Object1, net$Object2), ]
+  # Reorder by Nodes 1 and 2
+  net$Node1 <- factor(net$Node1, levels = rownames(mat))
+  net$Node2 <- factor(net$Node2, levels = colnames(mat))
+  net <- net[order(net$Node1, net$Node2), ]
 
   # Transform the two first columns in character
   net[, 1] <- as.character(net[, 1])

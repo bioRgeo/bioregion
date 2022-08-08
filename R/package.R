@@ -4,9 +4,9 @@
 #'
 #' @docType package
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-#' Boris Leroy (\email{leroy.boris@gmail.com})
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' @importFrom graphics plot
 #' @importFrom MASS fbeta
 #' @importFrom mathjaxr preview_rd

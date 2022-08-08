@@ -4,23 +4,23 @@
 \alias{mat_to_net}
 \title{Create a data.frame from a contingency table}
 \usage{
-mat_to_net(mat, weight = FALSE, remove_absent_objects = TRUE)
+mat_to_net(mat, weight = FALSE, remove_zeroes = TRUE)
 }
 \arguments{
 \item{mat}{a contingency table (i.e. \code{matrix})}
 
 \item{weight}{a boolean indicating if the value are weights}
 
-\item{remove_absent_objects}{a boolean determining whether absent
-objects from the contingency table have to be removed from the output}
+\item{remove_zeroes}{a boolean determining whether interactions with weight 
+equal to 0 should be removed from the output}
 }
 \value{
 A \code{data.frame} where each row represents the interaction between
-two objects and an optional third column indicating the weight of the interaction.
+two nodes and an optional third column indicating the weight of the interaction.
 }
 \description{
 This function creates a two- or three-columns \code{data.frame} where
-each row represents the interaction between two objects (site and species for example)
+each row represents the interaction between two nodes (site and species for example)
 and an optional third column indicating the weight of the interaction (if \code{weight = TRUE})
 from a contingency table (sites as rows and species as columns for example).
 }
@@ -35,7 +35,7 @@ net <- mat_to_net(mat, weight = TRUE)
 \link{net_to_mat}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

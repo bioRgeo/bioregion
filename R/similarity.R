@@ -20,7 +20,7 @@
 #'
 #' \mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 #'
-#' \mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}\insertCite{Baselga2012}{bioRgeo}
+#' \mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioRgeo}
 #'
 #' \mjeqn{Sorensen = 1 - (b + c) / (2a + b + c)}{Sorensen = 1 - (b + c) / (2a + b + c)}
 #'
@@ -52,8 +52,8 @@
 #' are stored in three columns (one for each letter).
 #' @seealso \link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}), 
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1 / 1:1001), 5, 10)
@@ -144,7 +144,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       # Create a data.frame from the matrix with mat_to_net (little trick to deal with 0s)
       abcp[abcp == 0] <- -1
       abcp[lower.tri(abcp, diag = TRUE)] <- 0
-      abcp <- mat_to_net(abcp, weight = TRUE, remove_absent_objects = TRUE)
+      abcp <- mat_to_net(abcp, weight = TRUE, remove_zeroes = TRUE)
       colnames(abcp) <- c("Site1", "Site2", "a")
       abcp[abcp[, 3] == -1, 3] <- 0
 
@@ -231,7 +231,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     colnames(eucl) <- siteid
     eucl[eucl == 0] <- -1
     eucl[lower.tri(eucl, diag = TRUE)] <- 0
-    eucl <- mat_to_net(eucl, weight = TRUE, remove_absent_objects = TRUE)
+    eucl <- mat_to_net(eucl, weight = TRUE, remove_zeroes = TRUE)
     colnames(eucl) <- c("Site1", "Site2", "Euclidean")
     eucl[eucl[, 3] == -1, 3] <- 0
 
