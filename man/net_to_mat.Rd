@@ -15,7 +15,7 @@ net_to_mat(
 \arguments{
 \item{net}{a two- or three-columns \code{data.frame} where
 each row represents the interaction between two nodes 
-(site and species for example)
+(site and species for example).
 and an optional third column indicating the weight of the interaction.}
 
 \item{weight}{a \code{boolean} indicating if the weight should be considered}
