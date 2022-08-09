@@ -1,38 +1,161 @@
 controls = function(args=NULL, data=NULL, type="input_net"){
   
-  # Input network
+  # Input similarity ###########################################################
+  if(type == "input_similarity"){
+    if(inherits(data, "bioRgeo.pairwise.metric")){
+      if(attr(data, "type") == "dissimilarity"){
+        stop(paste0(deparse(substitute(data)), " seems to be a dissimilarity 
+             object. This function should be applied on similarities, not 
+             dissimilarities. Use dissimilarity_to_similarity() before 
+             using this function."), call. = FALSE)
+      }
+    } else{
+       message(paste0(deparse(substitute(data)), " is not a bioRgeo.pairwise.metric
+               object. This is not a problem but note that some functions 
+               required dissimilarity metrics (hclu_ & nhclu) and others 
+               similarity metrics (netclu_). Please carefully check your data 
+               before using the clustering functions."), call. = FALSE)
+    }
+  }
+  
+  # Input dissimilarity ###########################################################
+  if(type == "input_dissimilarity"){
+    if(inherits(data, "bioRgeo.pairwise.metric")){
+      if(attr(data, "type") == "similarity"){
+        stop(paste0(deparse(substitute(data)), " seems to be a similarity object.
+             This function should be applied on dissimilarities, not similarities.
+             Use similarity_to_dissimilarity() before using this function."), 
+             call. = FALSE)
+      }
+    } else{
+      message(paste0(deparse(substitute(data)), " is not a bioRgeo.pairwise.metric
+               object. This is not a problem but note that some functions 
+               required dissimilarity metrics (hclu_ & nhclu) and others 
+               similarity metrics (netclu_). Please carefully check your data 
+               before using the clustering functions."))
+    }
+  }
+  
+  # Input network ##############################################################
   if(type=="input_net"){
+    pairs1=paste0(data[,1],"_",data[,2])
     if (!is.data.frame(data)) {
-      stop("net must be a data.frame")
+      stop(paste0(deparse(substitute(data)), "must be a data.frame."), call. = FALSE)
     }
     if (dim(data)[2] < 2) {
-      stop("net must be a data.frame with at least two columns")
+      stop(paste0(deparse(substitute(data)), " must be a data.frame with 
+           at least two columns."), call. = FALSE)
+    }
+    if(sum(duplicated(pairs1))>0){
+      stop(paste0("The first two columns of ", deparse(substitute(data)),
+           " contain duplicated pairs of nodes!"), call. = FALSE)
     }
     nbna <- sum(is.na(data))
     if (nbna > 0) {
-      stop("NA(s) detected in the data.frame")
+      stop("NA(s) detected in the data.frame!", call. = FALSE)
     }
   }
   
-  # Input weight
-  if(type=="input_weight"){
+  # Input network directed #####################################################
+  if(type=="input_net_directed"){
     if (!is.logical(args)) {
-      stop(paste0(deparse(substitute(args)), " must be a boolean"))
+      stop(paste0(deparse(substitute(args)), " must be a boolean."), call. = FALSE)
+    }
+    pairs1=paste0(data[,1],"_",data[,2])
+    pairs2=paste0(data[,2],"_",data[,1])
+    if (!args) {
+      if(length(intersect(pairs1,pairs2))>0){
+        stop(paste0(deparse(substitute(data)), " should not be directed 
+                    if directed = FALSE."), call. = FALSE)
+      }
+    }
+  }
+  
+  # Input network weight #######################################################
+  if(type=="input_net_weight"){
+    if (!is.logical(args)) {
+      stop(paste0(deparse(substitute(args)), " must be a boolean."), call. = FALSE)
     }
     if (args & dim(data)[2] == 2) {
-      stop("net must be a data.frame with at least three columns if weight equal TRUE")
+      stop(paste0(deparse(substitute(args)), " must be a data.frame with at least
+      three columns if weight equal TRUE."), call. = FALSE)
     }
   }
 
-  # Input index
-  if(type=="input_index"){
-
+  # Input network index ########################################################
+  if(type=="input_net_index"){
+    if (is.character(args)) {
+      if (!(args %in% colnames(data)[-(1:2)])) {
+        stop(paste0("If ",deparse(substitute(args)), " is a character, it should 
+        be a column name (and not the first or second column)."), call. = FALSE)
+      }
+    } else if (is.factor(args)){
+        args=as.character(args)
+        if (!(args %in% colnames(data)[-(1:2)])) {
+          stop(paste0("If ",deparse(substitute(args)), " is a character, it 
+          should be a column name (and not the first or second column)."), 
+               call. = FALSE)
+        }
+    } else if (is.numeric(args)) {
+        if ((args <= 2) & (args %% 1 != 0)) {
+          stop(paste0("If ",deparse(substitute(args)), " is numeric, it should 
+          be an integer stricltly higher than 2."), call. = FALSE)
+        } 
+    }else {
+        stop(paste0(deparse(substitute(args)), " should be numeric or 
+             character."), call. = FALSE)
+    }
   }
   
-  # Character
+  # Input network index value ##################################################  
+  if (type=="input_net_index_value") {
+    if (!is.numeric(data[,3])) {
+      stop("The (dis)similarity metric must be numeric.", call. = FALSE)
+    } else {
+      minet <- min(data[,3])
+      if (minet < 0) {
+        stop("The (dis)similarity metric should contain only positive reals: 
+             negative value(s) detected!", call. = FALSE)
+      }
+    }
+  }
+  
+  # Input network bip ######################################################
+  if(type=="input_net_bip"){
+    if (length(intersect(data[,1], data[,2])) > 0) {
+      stop("The network is not bipartite!", call. = FALSE)
+    }
+  }
+
+  # Input network bip_col ######################################################
+  if(type=="input_net_bip_col"){
+    if (is.character(args)) {
+      if (!(args %in% colnames(data)[1:2])) {
+        stop(paste0("If ",deparse(substitute(args)), " is a character, it should 
+        be the first or second column name."), call. = FALSE)
+      }
+    } else if (is.factor(args)){
+      args=as.character(args)
+      if (!(args %in% colnames(data)[1:2])) {
+        stop(paste0("If ",deparse(substitute(args)), " is a character, it should 
+        be the first or second column name."), call. = FALSE)
+      }
+    } else if (is.numeric(args)) {
+      if ((args != 1) | (args != 2)) {
+        stop(paste0("If ",deparse(substitute(args)), " is numeric, it should be
+          equal to 1 or 2."), call. = FALSE)
+      } 
+    }else {
+      stop(paste0(deparse(substitute(args)), " should be numeric or
+           character."), call. = FALSE)
+    }
+  }
+  
+  # Character ##################################################################
   if(type=="character"){
     if (!is.character(args)) {
-      stop(paste0(deparse(substitute(args)), " must be a character"))
+      stop(paste0(deparse(substitute(args)), " must be a character."), 
+           call. = FALSE)
     }
     if(is.factor(args)){
       args=as.character(args)
@@ -40,47 +163,139 @@ controls = function(args=NULL, data=NULL, type="input_net"){
     return(args)
   }
   
-  # Boolean
+  # Boolean ####################################################################
   if(type=="boolean"){
     if (!is.logical(args)) {
-      stop(paste0(deparse(substitute(args)), " must be a boolean"))
+      stop(paste0(deparse(substitute(args)), " must be a boolean"), 
+           call. = FALSE)
     }
   }
   
-
+  # Numeric ####################################################################
+  if(type=="numeric"){
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."), 
+           call. = FALSE)
+    }
+  }
+  
+  # Positive numeric ###########################################################
+  if(type=="positive_numeric"){
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."), call. = FALSE)
+    }else {
+      if (args < 0) {
+        stop(paste0(deparse(substitute(args)), " must be higher than 0."), 
+             call. = FALSE)
+      }
+    }
+  }
+  
+  # Strict positive numeric ####################################################
+  if(type=="strict_positive_numeric"){
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."), call. = FALSE)
+    }else {
+      if (args <= 0) {
+        stop(paste0(deparse(substitute(args)), " must be strictly 
+             higher than 0."), call. = FALSE)
+      }
+    }
+  }
+  
+  # Integer ####################################################################
+  if(type=="integer"){
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."), call. = FALSE)
+    }else{
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."), 
+             call. = FALSE)
+      }
+    }
+  }
+  
+  # Positive Integer ###########################################################
+  if(type=="positive_integer"){
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."), call. = FALSE)
+    }else{
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."), 
+             call. = FALSE)
+      }else{
+        if (args < 0) {
+          stop(paste0(deparse(substitute(args)), " must be higher than 0."), 
+               call. = FALSE)
+        }
+      }
+    }
+  }
+  
+  # Strict positive integer ####################################################
+  if(type=="strict_positive_integer"){
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."), call. = FALSE)
+    }else{
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."), 
+             call. = FALSE)
+      }else{
+        if (args <= 0) {
+          stop(paste0(deparse(substitute(args)), " must be strictly 
+               higher than 0."), call. = FALSE)
+        }
+      }
+    }
+  }
   
   
 }
 
 
-reformat_hierarchy <- function(input, integerize = FALSE){
+reformat_hierarchy <- function(input, algo="infomap", integerize = FALSE){
   
+  # Input
   input=as.character(as.vector(as.matrix(input)))
   
-  print(input)
+  # Algo
+  if(algo=="infomap"){
+    sep=":"
+  }
+  if(algo=="optics"){
+    sep="."
+  }
   
-  nblev <- max(lengths(regmatches(input, gregexpr("\\.", input)))) + 1
+  # Nb levels
+  nblev <- max(lengths(regmatches(input, gregexpr(paste0("\\",sep), input)))) + 1
   
-  print(nblev)
-  
-  output <- tidyr::separate(data = data.frame(input),
+  # From input to table
+  table <- tidyr::separate(data = data.frame(input),
                             col = input,
                             remove = FALSE,
                             into = paste0("lvl", 1:nblev),
-                            sep = "\\.",
+                            sep = paste0("\\",sep),
                             fill = "right")
 
-  output[which(is.na(output), arr.ind = TRUE)] <- 0
+  # Replace NA by O
+  table[which(is.na(table), arr.ind = TRUE)] <- 0
   
-  for(lvl in grep("lvl", colnames(output))[2:nblev]) {
-    output[, lvl] <- paste(output[, lvl - 1], output[, lvl],sep = ".")
+  # Replace last number by 0 for infomap
+  if(algo=="infomap"){
+    for (k in 3:(nblev+1)) { 
+      table[table[, k] == 0, (k-1)] <- 0
+    }
+    table[, (nblev+1)] <- 0
   }
   
-  print(output)
-  
+  # Output
+  output=table
+  for(lvl in grep("lvl", colnames(output))[2:nblev]) {
+    output[, lvl] <- paste(output[, lvl - 1], output[, lvl], sep = ".")
+  }
   output[grep("lvl", colnames(output))] <- lapply(output[grep("lvl", colnames(output))],
                                                   function(x) gsub("\\.0", "", x))
-
+  # Integerize
   if(integerize){
     for(k in 2:(nblev+1)){
       output[,k]=as.numeric(as.factor(output[,k]))
@@ -124,7 +339,8 @@ knbclu <- function(partitions, method = "length",
 
   # Rename duplicates
   if (rename_duplicates) {
-    colnames(partitions)[2:(nb + 1)] <- make.unique.2(colnames(partitions)[2:(nb + 1)], sep = "_")
+    colnames(partitions)[2:(nb + 1)] <- make.unique.2(
+      colnames(partitions)[2:(nb + 1)], sep = "_")
   }
 
   # Convert in character
