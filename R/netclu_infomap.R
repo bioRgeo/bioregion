@@ -1,54 +1,102 @@
 #' Infomap community finding
 #'
-#' This function finds communities in a (un)weighted (un)directed network based on the Infomap algorithm
-#' (\url{https://github.com/mapequation/infomap}, version 1.6.0).
+#' This function finds communities in a (un)weighted (un)directed network based 
+#' on the Infomap algorithm(\url{https://github.com/mapequation/infomap}, 
+#' version 2.1.0).
 #'
-#' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
-#' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param index a \code{character} string providing the name of the dissimilarity
-#' index to use, corresponding to the column
-#' name in \code{dissimilarity}. By default, the third column name of
-#'  \code{net} is used.
-#' @param nbmod penalize solutions the more they differ from this number (0 by default for no preferred number of modules)
-#' @param markovtime scales link flow to change the cost of moving between modules, higher values results
-#' in fewer modules (default is 1)
-#' @param seed for the random number generator
-#' @param numtrials for the number of trials before picking up the best solution
-#' @param twolevel a boolean indicating if the algorithm should optimize a two-level partition of the network
-#' (default is multi-level)
-#' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
-#' @param bipartite a boolean indicating if the network is bipartite (see Details)
-#' @param bipartite_version a boolean indicating if the bipartite version of Infomap should be used (see Details)
-#' @param primary_col name or number for the column of primary nodes (i.e. site)
-#' @param feature_col name or number for the column of feature nodes (i.e. species)
-#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
-#' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
-#' @param path_temp a string indicating the path to the temporary folder (see Details)
-#' @param binpath a string indicating the path to the bin folder (see \link{install_binaries} and Details)
+#' @param net the output object from \code{\link{similarity}} or
+#' \code{\link{dissimilarity_to_similarity}}. 
+#' If a \code{data.frame} is used, the first two columns represent pairs of 
+#' sites (or any pair of nodes), and the next column(s) are the similarity 
+#' indices. 
+#' @param weight a boolean indicating if the weights should be considered if 
+#' there more than two columns.
+#' @param index name or number of the dissimilarity column to use. By default, 
+#' the third column name of \code{similarity} is used.
+#' @param nbmod penalize solutions the more they differ from this number (0 by 
+#' default for no preferred number of modules).
+#' @param markovtime scales link flow to change the cost of moving between 
+#' modules, higher values results in fewer modules (default is 1).
+#' @param seed for the random number generator (0 for random by default).
+#' @param numtrials for the number of trials before picking up the best solution.
+#' @param twolevel a boolean indicating if the algorithm should optimize a 
+#' two-level partition of the network (default is multi-level).
+#' @param show_hierarchy a boolean specifying if the hierarchy of
+#' community should be identifiable in the outputs (FALSE by default).
+#' @param directed a boolean indicating if the network is directed (from column 
+#' 1 to column 2).
+#' @param bipartite a boolean indicating if the network is bipartite 
+#' (see Details).
+#' @param bipartite_version a boolean indicating if the bipartite version of 
+#' Infomap should be used (see Details).
+#' @param site_col name or number for the column of site nodes 
+#' (i.e. primary nodes).
+#' @param species_col name or number for the column of species nodes 
+#' (i.e. feature nodes)
+#' @param return_node_type a character indicating what types of nodes ("sites" 
+#' , "species" or "both") should be returned in the output 
+#' (\code{keep_nodes_type="both"} by default).
+#' @param delete_temp a boolean indicating if the temporary folder should be 
+#' removed (see Details).
+#' @param path_temp a string indicating the path to the temporary folder 
+#' (see Details).
+#' @param binpath a string indicating the path to the bin folder 
+#' (see \link{install_binaries} and Details).
 #' @export
 #' @details
-#' Infomap is a network clustering algorithm based on the Map equation proposed in
-#' \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
-#' Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
-#' as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}).
-#' The second possibility is to set the \code{bipartite_version} argument to TRUE in order to
-#' approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
+#' Infomap is a network clustering algorithm based on the Map equation proposed 
+#' in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted 
+#' and (un)directed networks.
+#' 
+#' This function is based on the 2.1.0 C++ version of Infomap 
+#' (\url{https://github.com/mapequation/infomap/releases}).
+#' This function needs executable files to run. They can be installed with 
+#' \link{install_binaries}. If you set the path to the folder that will host 
+#' the bin folder manually while running \link{install_binaries} please make 
+#' sure to set \code{binpath} accordingly.
 #'
-#' This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
-#' This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-#' the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
-#' accordingly.
+#' The C++ version of Infomap generates temporary folders and/or files that are 
+#' stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
+#' located in the working directory by default). This temporary folder is 
+#' removed by default (\code{delete_temp = TRUE}).
+#' 
+#' @note
+#' Infomap has been designed to deal with bipartite networks. To use this
+#' functionality set the \code{bipartite_version} argument to TRUE in order to 
+#' approximate a two-step random walker (see 
+#' \url{https://www.mapequation.org/infomap/} for more information). Note that
+#' a bipartite network can also be considered as unipartite network 
+#' (\code{bipartite = TRUE}). 
+#' 
+#' In both cases do not forget to indicate which of the first two columns is 
+#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e. 
+#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' The type of nodes returned in the output can be chosen with the argument
+#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes, 
+#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to 
+#' preserve only the species nodes.
+#' 
+#' @return
+#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' \enumerate{
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
+#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
+#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#'  clustering procedure, such as original cluster objects}
+#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
 #'
-#' The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
-#' (folder "infomap_temp" in the working directory by default). This temporary folder is removed by default
-#' (\code{delete_temp = TRUE}).
+#' In the \code{algorithm} slot, users can find the following elements:
 #'
-#' @return A \code{data.frame} providing one partition by hierarchical level.
+#' \itemize{
+#' \item{\code{cmd}: the command line use to run Infomap}
+#' \item{\code{version}: the Infomap version}
+#' \item{\code{web}: Infomap's GitHub repository}
+#' }
 #'
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{netclu_louvain}, \link{netclu_oslom}
 #' @examples
@@ -64,14 +112,26 @@
 netclu_infomap <- function(net, 
                            weight = TRUE,
                            index = names(net)[3],
-                           nbmod = 0, markovtime = 1, seed = 1, numtrials = 1, twolevel = FALSE, directed = FALSE,
-                           bipartite_version = FALSE, bipartite = FALSE, primary_col = 1, feature_col = 2,
-                           remove_feature = TRUE, delete_temp = TRUE, path_temp = "infomap_temp", binpath = NULL) {
+                           nbmod = 0, 
+                           markovtime = 1, 
+                           seed = 0, 
+                           numtrials = 1, 
+                           twolevel = FALSE,
+                           show_hierarchy = FALSE,
+                           directed = FALSE,
+                           bipartite_version = FALSE, 
+                           bipartite = FALSE, 
+                           site_col = 1, 
+                           species_col = 2,
+                           return_node_type = "both", 
+                           delete_temp = TRUE, 
+                           path_temp = "infomap_temp", 
+                           binpath = NULL) {
 
   # Remove warning for tidyr
   defaultW <- getOption("warn")
   options(warn = -1)
-
+  
   # Set binpath
   if (is.null(binpath)) {
     # Identify bioRgeo directory on your computer
@@ -90,170 +150,110 @@ netclu_infomap <- function(net,
 
   # Check if INFOMAP has successfully been installed
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/check.txt"))) {
-    stop("Infomap is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+    stop("Infomap is not installed... Please have a look at 
+         https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
   }
 
-  # Controls input net
+  # Control input net
+  controls(args=NULL, data=net, type="input_bioRgeo.pairwise.metric")
   controls(args=NULL, data=net, type="input_net")
   
-  # Controls input weight & index
-  controls(args=weight, data=net, type="input_weight")
+  # Control input weight & index
+  controls(args=weight, data=net, type="input_net_weight")
   if(weight){
-    controls(args=index, data=net, type="input_index")
+    controls(args=index, data=net, type="input_net_index")
+    net[,3]=net[,index]
+    net=net[,1:3]
+    controls(args=NULL, data=net, type="input_net_index_value")
   }
 
-  # Control parameters
-
-  if (weight & dim(net)[2] == 3) {
-    if (!is.numeric(net[, 3])) {
-      stop("The third column of net must be numeric")
-    } else {
-      minet <- min(net[, 3])
-      if (minet < 0) {
-        stop("The third column of net should contains only positive real: negative value detected!")
-      }
+  # Control input bipartite
+  controls(args=bipartite_version, data=NULL, type="boolean")
+  controls(args=bipartite, data=NULL, type="boolean")
+  isbip=(bipartite | bipartite_version)
+  if(isbip){
+    controls(args=NULL, data=net, type="input_net_bip")
+    controls(args=site_col, data=net, type="input_net_bip_col")
+    controls(args=species_col, data=net, type="input_net_bip_col")
+    if(!(return_node_type %in% c("both", "sites", "species"))){
+      stop("Please chose return_node_type among the followings values:
+            both, sites and species")
     }
   }
-
-  if (!is.numeric(nbmod)) {
-    stop("nbmod must be numeric")
-  } else {
-    if (nbmod < 0) {
-      stop("nbmod must be positive")
-    } else {
-      if (nbmod %% 1 != 0) {
-        stop("nbmod must be an integer")
-      }
+  
+  # Control input directed
+  if(!isbip){
+    controls(args=directed, data=net, type="input_net_directed")
+  }else{
+    if(directed){
+      stop("directed cannot be set to TRUE if the network is bipartite!")
     }
   }
+  
+  
+  # Control parameters INFOMAP
+  controls(args=nbmod, data=NULL, type="positive_integer")
+  controls(args=markovtime, data=NULL, type="strict_positive_numeric")
+  controls(args=seed, data=NULL, type="positive_integer")
+  if(seed == 0){
+    seed=round(as.numeric(as.POSIXct(Sys.time())))
+  }
+  controls(args=numtrials, data=NULL, type="strict_positive_integer")
+  controls(args=twolevel, data=NULL, type="boolean")
+  
+  controls(args=show_hierarchy, data=NULL, type="boolean")
+  
 
-  if (!is.numeric(markovtime)) {
-    stop("markovtime must be numeric")
-  } else {
-    if (markovtime <= 0) {
-      stop("markovtime must be strictly higher than 0")
+  # Control temp folder + create temp folder
+  path_temp=controls(args=path_temp, data=NULL, type="character")
+  controls(args=delete_temp, data=NULL, type="boolean")
+  if(path_temp == "infomap_temp"){
+    path_temp=paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
+  }else{
+    if (file.exists(path_temp)) {
+      stop(paste0(path_temp, " already exists. Please rename it or remove it."))
     }
   }
-
-  if (!is.numeric(seed)) {
-    stop("seed must be numeric")
-  } else {
-    if (seed <= 0) {
-      stop("seed must be strictly higher than 0")
-    } else {
-      if (seed %% 1 != 0) {
-        stop("nbmod must be an integer")
-      }
-    }
-  }
-
-  if (!is.numeric(numtrials)) {
-    stop("numtrials must be numeric")
-  } else {
-    if (numtrials <= 0) {
-      stop("numtrials must be strictly higher than 0")
-    } else {
-      if (numtrials %% 1 != 0) {
-        stop("nbmod must be an integer")
-      }
-    }
-  }
-
-  if (!is.logical(twolevel)) {
-    stop("twolevel must be a boolean")
-  }
-
-  if (!is.logical(directed)) {
-    stop("directed must be a boolean")
-  }
-
-  if (!is.logical(delete_temp)) {
-    stop("delete_temp must be a boolean")
-  }
-
-  if (!is.character(path_temp)) {
-    stop("path_temp must be a string")
-  }
-
-  # Controls bipartite arguments
-  if (!is.logical(bipartite)) {
-    stop("bipartite must be a boolean")
-  }
-
-  if (!is.logical(bipartite_version)) {
-    stop("bipartite_version must be a boolean")
-  }
-
-  if (is.character(primary_col)) {
-    if (!(primary_col %in% colnames(net))) {
-      stop("primary_col should be a column name")
-    }
-  } else if (is.numeric(primary_col)) {
-    if (primary_col <= 0) {
-      stop("primary_col must be strictly positive")
-    } else {
-      if (primary_col %% 1 != 0) {
-        stop("primary_col must be an integer")
-      }
-    }
-  } else {
-    stop("primary_col should be numeric or character")
-  }
-
-  if (is.character(feature_col)) {
-    if (!(feature_col %in% colnames(net))) {
-      stop("feature_col should be a column name")
-    }
-  } else if (is.numeric(feature_col)) {
-    if (feature_col <= 0) {
-      stop("feature_col must be strictly positive")
-    } else {
-      if (feature_col %% 1 != 0) {
-        stop("feature_col must be an integer")
-      }
-    }
-  } else {
-    stop("feature_col should be numeric or character")
-  }
-
-  if (!is.logical(remove_feature)) {
-    stop("remove_feature must be a boolean")
-  }
-
-  # Create temp folder
   dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
   if (!file.exists(path_temp)) {
     stop(paste0("Impossible to create directory ", path_temp))
   }
 
   # Prepare input for INFOMAP
-  if (bipartite | bipartite_version) {
-    idprim <- as.character(net[, primary_col])
+  if (isbip) {
+    idprim <- as.character(net[, site_col])
     idprim <- idprim[!duplicated(idprim)]
-    idfeat <- as.character(net[, feature_col])
+    nbsites=length(idprim)
+    idfeat <- as.character(net[, species_col])
     idfeat <- idfeat[!duplicated(idfeat)]
-    # Control bipartite
-    if (length(intersect(idprim, idfeat)) > 0) {
-      stop("If bipartite = TRUE or bipartite_version = TRUE primary and feature nodes should be different.")
-    }
-    idprim <- data.frame(ID = 1:length(idprim), ID_NODE = idprim, Type = 1) # Primary nodes
-    idfeat <- data.frame(ID = ((dim(idprim)[1] + 1):(dim(idprim)[1] + length(idfeat))), ID_NODE = idfeat, Type = 2) # Feature nodes
+
+    idprim <- data.frame(ID = 1:length(idprim), # Primary nodes
+                         ID_NODE = idprim, 
+                         Type = 1) 
+    idfeat <- data.frame(ID = ((dim(idprim)[1] + 1):(dim(idprim)[1] # Feature nodes
+                                                     + length(idfeat))), 
+                         ID_NODE = idfeat, Type = 2) 
     N <- dim(idprim)[1] + 1 # First node id of the feature node type
     idnode <- rbind(idprim, idfeat)
     if (!bipartite_version) {
       idnode <- idnode[, 1:2]
     }
-    netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
+    netemp <- data.frame(node1 = idnode[match(net[, site_col], idnode[, 2]), 1], 
+                         node2 = idnode[match(net[, species_col], idnode[, 2]), 1])
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
-    if (length(intersect(idnode1, idnode2)) == 0) {
-      stop("The network is bipartite! The bipartite or bipartite_version argument should be set to TRUE.")
+    if(isbip) {
+      message("The network seems to be bipartite! 
+              The bipartite or bipartite_version argument 
+              should probably be set to TRUE.")
     }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
+    nbsites=length(idnode)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], node2 = idnode[match(net[, 2], idnode[, 2]), 1])
+    netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], 
+                         node2 = idnode[match(net[, 2], idnode[, 2]), 1])
   }
 
   if (weight) {
@@ -261,30 +261,32 @@ netclu_infomap <- function(net,
     netemp <- netemp[netemp[, 3] > 0, ]
   }
   
-  
   # Class preparation
   outputs <- list(name = "infomap")
   
-  outputs$args <- list(weight = weight, nbmod = nbmod, markovtime = markovtime, 
+  outputs$args <- list(weight = weight, 
+                       index = index,
+                       nbmod = nbmod, 
+                       markovtime = markovtime, 
                        seed = seed,
-                       numtrials = numtrials, twolevel = twolevel, 
+                       numtrials = numtrials, 
+                       twolevel = twolevel, 
                        directed = directed,
                        bipartite_version = bipartite_version, 
                        bipartite = bipartite, 
-                       primary_col = primary_col, feature_col = feature_col,
-                       remove_feature = remove_feature, 
+                       site_col = site_col, 
+                       species_col = species_col,
+                       return_node_type = return_node_type, 
                        delete_temp = delete_temp,
                        path_temp = path_temp, binpath = binpath
   )
   
-  outputs$inputs <- list(bipartite = bipartite|bipartite_version,
+  outputs$inputs <- list(bipartite = isbip,
                          weight = weight,
-                         pairwise = ifelse(bipartite|bipartite_version,
-                                           FALSE, TRUE),
-                         pairwise_metric = ifelse(bipartite|bipartite_version,
-                                                  NA, index),
+                         pairwise = ifelse(isbip, FALSE, TRUE),
+                         pairwise_metric = ifelse(isbip,NA, index),
                          dissimilarity = FALSE,
-                         nb_sites = NA) # Compléter
+                         nb_sites = nbsites) 
   
   outputs$algorithm <- list()
   
@@ -292,13 +294,18 @@ netclu_infomap <- function(net,
   # Export input in INFOMAP folder
   if (bipartite_version) { # Add tag if bipartite
     cat(paste0("*Bipartite ", N), "\n", file = paste0(path_temp, "/net.txt"))
-    utils::write.table(netemp, paste0(path_temp, "/net.txt"), append = TRUE, row.names = FALSE, col.names = FALSE, sep = " ")
+    utils::write.table(netemp, paste0(path_temp, "/net.txt"), append = TRUE, 
+                       row.names = FALSE, col.names = FALSE, sep = " ")
   } else {
-    utils::write.table(netemp, paste0(path_temp, "/net.txt"), row.names = FALSE, col.names = FALSE, sep = " ")
+    utils::write.table(netemp, paste0(path_temp, "/net.txt"), row.names = FALSE, 
+                       col.names = FALSE, sep = " ")
   }
 
   # Prepare command to run INFOMAP
-  cmd <- paste0("--silent --seed ", seed, "--num-trials", numtrials, " --preferred-number-of-modules ", nbmod, " --markov-time ", markovtime)
+  cmd <- paste0("--silent --seed ", seed, 
+                "--num-trials", numtrials, 
+                " --preferred-number-of-modules ", nbmod, 
+                " --markov-time ", markovtime)
   if (twolevel) {
     cmd <- paste0(cmd, " --two-level")
   }
@@ -309,7 +316,6 @@ netclu_infomap <- function(net,
   }
 
   cmd <- paste0(cmd, " ", path_temp, "/net.txt ", path_temp)
-
 
   if (os == "Linux") {
     cmd <- paste0(binpath, "/bin/INFOMAP/infomap_lin ", cmd)
@@ -322,7 +328,8 @@ netclu_infomap <- function(net,
   }
   
   outputs$algorithm$cmd <- cmd
-  # Ajouter version + site web
+  outputs$algorithm$version = "2.1.0"
+  outputs$algorithm$web = "https://github.com/mapequation/infomap"
   
   # Run INFOMAP
   system(command = cmd)
@@ -334,66 +341,43 @@ netclu_infomap <- function(net,
 
   # Retrieve output from net.tree
   tree <- utils::read.table(paste0(path_temp, "/net.tree"))
+  
+  # Import tree
+  idinf <- as.numeric(tree[,4]) # INFOMAP node ids
+  tree <- as.character(tree[,1]) # INFOMAP tree column
+  
+  # Extract community from tree
+  cominf=reformat_hierarchy(tree, algo="infomap", integerize = !show_hierarchy) 
 
-  # Reformat tree [TO COMMENT]
-  idinf <- as.numeric(tree[, 4]) # INFOMAP node ids
-
-  # require(tidyr) # Extract the modules from tree
-  df <- data.frame(x = as.character(tree[, 1]))
-  cominf <- tidyr::separate(df, "x", as.character(1:100), sep = ":") # Max 100 levels
-  cominf[is.na(cominf)] <- 0
-  for (k in 1:dim(cominf)[2]) { # Transform in numeric
-    cominf[, k] <- as.numeric(as.character(cominf[, k]))
-  }
-  cominf <- cominf[, apply(cominf, 2, sum) > 0] # Data frame with information contains in the first column of tree (0 when no info)
-  nblev <- dim(cominf)[2] # The number of columns of cominf correspond to the number of levels + one dummy column
-
-  for (k in 2:nblev) { # Set a value 0 for the dummy column
-    cominf[cominf[, k] == 0, (k - 1)] <- 0
-  }
-  cominf[cominf[, nblev] > 0, nblev] <- 0
-
-  for (k in 2:nblev) { # Extract a real partition for lower levels
-    cominf[, k] <- as.numeric(factor(paste0(cominf[, k - 1], "_", cominf[, k])))
-  }
-
+  cominf=cominf[,-1]
+  nblev=dim(cominf)[2]
   cominf <- cominf[, nblev:1] # Reverse column order
 
   com <- data.frame(ID = idnode[, 2], dum = 0) # Dummy level
   com[match(idinf, idnode[, 1]), 2] <- cominf[, 1]
-
-  if (nblev >= 2) {
-    com$Com <- 0
-    com[match(idinf, idnode[, 1]), 3] <- cominf[, 2]
-  }
-  if (nblev >= 3) {
-    com$HCom <- 0
-    com[match(idinf, idnode[, 1]), 4] <- cominf[, 3]
-  }
-  if (nblev >= 4) {
-    com$HHCom <- 0
-    com[match(idinf, idnode[, 1]), 5] <- cominf[, 4]
-  }
-  if (nblev >= 5) {
-    com$HHHCom <- 0
-    com[match(idinf, idnode[, 1]), 6] <- cominf[, 5]
-  }
-  if (nblev >= 6) {
-    com$HHHHCom <- 0
-    com[match(idinf, idnode[, 1]), 7] <- cominf[, 6]
+  
+  for(knblev in 2:nblev){
+      com$temp <- 0
+      com[match(idinf, idnode[, 1]), (knblev+1)] <- cominf[, knblev]
+      colnames(com)[(knblev+1)]=paste0("V",(knblev+1))
   }
 
-  com <- com[, -2] # Remove dum
+  com <- com[, -2] # Remove dummy level
 
-  # Remove temporary
+  # Remove temp folder
   if (delete_temp) {
     unlink(paste0(path_temp), recursive = TRUE)
   }
 
   # Remove feature nodes
-  if ((bipartite | bipartite_version) & remove_feature) {
-    com <- com[match(idprim$ID_NODE, com[, 1]), ]
-  }
+  if (isbip){
+    if(return_node_type == "site") {
+      com <- com[match(idprim$ID_NODE, com[, 1]), ]
+    }
+    if(return_node_type == "species") {
+      com <- com[match(idfeat$ID_NODE, com[, 1]), ]
+    }
+  } 
 
   # Rename and reorder columns
   com <- knbclu(com)

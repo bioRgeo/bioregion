@@ -10,84 +10,133 @@ netclu_infomap(
   index = names(net)[3],
   nbmod = 0,
   markovtime = 1,
-  seed = 1,
+  seed = 0,
   numtrials = 1,
   twolevel = FALSE,
+  show_hierarchy = FALSE,
   directed = FALSE,
   bipartite_version = FALSE,
   bipartite = FALSE,
-  primary_col = 1,
-  feature_col = 2,
-  remove_feature = TRUE,
+  site_col = 1,
+  species_col = 2,
+  return_node_type = "both",
   delete_temp = TRUE,
   path_temp = "infomap_temp",
   binpath = NULL
 )
 }
 \arguments{
-\item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
-as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
+\item{net}{the output object from \code{\link{similarity}} or
+\code{\link{dissimilarity_to_similarity}}. 
+If a \code{data.frame} is used, the first two columns represent pairs of 
+sites (or any pair of nodes), and the next column(s) are the similarity 
+indices.}
 
-\item{weight}{a boolean indicating if the weights should be considered if there is a third column}
+\item{weight}{a boolean indicating if the weights should be considered if 
+there more than two columns.}
 
-\item{index}{a \code{character} string providing the name of the dissimilarity
-index to use, corresponding to the column
-name in \code{dissimilarity}. By default, the third column name of
- \code{net} is used.}
+\item{index}{name or number of the dissimilarity column to use. By default, 
+the third column name of \code{similarity} is used.}
 
-\item{nbmod}{penalize solutions the more they differ from this number (0 by default for no preferred number of modules)}
+\item{nbmod}{penalize solutions the more they differ from this number (0 by 
+default for no preferred number of modules).}
 
-\item{markovtime}{scales link flow to change the cost of moving between modules, higher values results
-in fewer modules (default is 1)}
+\item{markovtime}{scales link flow to change the cost of moving between 
+modules, higher values results in fewer modules (default is 1).}
 
-\item{seed}{for the random number generator}
+\item{seed}{for the random number generator (0 for random by default).}
 
-\item{numtrials}{for the number of trials before picking up the best solution}
+\item{numtrials}{for the number of trials before picking up the best solution.}
 
-\item{twolevel}{a boolean indicating if the algorithm should optimize a two-level partition of the network
-(default is multi-level)}
+\item{twolevel}{a boolean indicating if the algorithm should optimize a 
+two-level partition of the network (default is multi-level).}
 
-\item{directed}{a boolean indicating if the network is directed (from column 1 to column 2)}
+\item{show_hierarchy}{a boolean specifying if the hierarchy of
+community should be identifiable in the outputs (FALSE by default).}
 
-\item{bipartite_version}{a boolean indicating if the bipartite version of Infomap should be used (see Details)}
+\item{directed}{a boolean indicating if the network is directed (from column 
+1 to column 2).}
 
-\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+\item{bipartite_version}{a boolean indicating if the bipartite version of 
+Infomap should be used (see Details).}
 
-\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+\item{bipartite}{a boolean indicating if the network is bipartite 
+(see Details).}
 
-\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+\item{site_col}{name or number for the column of site nodes 
+(i.e. primary nodes).}
 
-\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
+\item{species_col}{name or number for the column of species nodes 
+(i.e. feature nodes)}
 
-\item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
+\item{return_node_type}{a character indicating what types of nodes ("sites" 
+, "species" or "both") should be returned in the output 
+(\code{keep_nodes_type="both"} by default).}
 
-\item{path_temp}{a string indicating the path to the temporary folder (see Details)}
+\item{delete_temp}{a boolean indicating if the temporary folder should be 
+removed (see Details).}
 
-\item{binpath}{a string indicating the path to the bin folder (see \link{install_binaries} and Details)}
+\item{path_temp}{a string indicating the path to the temporary folder 
+(see Details).}
+
+\item{binpath}{a string indicating the path to the bin folder 
+(see \link{install_binaries} and Details).}
 }
 \value{
-A \code{data.frame} providing one partition by hierarchical level.
+A \code{list} of class \code{bioRgeo.clusters} with five slots:
+\enumerate{
+\item{\bold{name}: \code{character string} containing the name of the algorithm}
+\item{\bold{args}: \code{list} of input arguments as provided by the user}
+\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+\item{\bold{algorithm}: \code{list} of all objects associated with the
+ clustering procedure, such as original cluster objects}
+\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, users can find the following elements:
+
+\itemize{
+\item{\code{cmd}: the command line use to run Infomap}
+\item{\code{version}: the Infomap version}
+\item{\code{web}: Infomap's GitHub repository}
+}
 }
 \description{
-This function finds communities in a (un)weighted (un)directed network based on the Infomap algorithm
-(\url{https://github.com/mapequation/infomap}, version 1.6.0).
+This function finds communities in a (un)weighted (un)directed network based 
+on the Infomap algorithm(\url{https://github.com/mapequation/infomap}, 
+version 2.1.0).
 }
 \details{
-Infomap is a network clustering algorithm based on the Map equation proposed in
-\insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted and (un)directed networks.
-Infomap has two ways to deal with bipartite networks. The first possibility is to consider the bipartite network
-as unipartite network (arguments \code{bipartite}, \code{primary_col}, \code{feature_col} and \code{remove_feature}).
-The second possibility is to set the \code{bipartite_version} argument to TRUE in order to
-approximate a two-step random walker (see \url{https://www.mapequation.org/infomap/} for more information).
+Infomap is a network clustering algorithm based on the Map equation proposed 
+in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted 
+and (un)directed networks.
 
-This function is based on the 2.1.0 C++ version of Infomap (\url{https://github.com/mapequation/infomap/releases}).
-This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
-accordingly.
+This function is based on the 2.1.0 C++ version of Infomap 
+(\url{https://github.com/mapequation/infomap/releases}).
+This function needs executable files to run. They can be installed with 
+\link{install_binaries}. If you set the path to the folder that will host 
+the bin folder manually while running \link{install_binaries} please make 
+sure to set \code{binpath} accordingly.
 
-The C++ version of Infomap generates temporary folders and/or files that are stored in the \code{path_temp} folder
-(folder "infomap_temp" in the working directory by default). This temporary folder is removed by default
-(\code{delete_temp = TRUE}).
+The C++ version of Infomap generates temporary folders and/or files that are 
+stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
+located in the working directory by default). This temporary folder is 
+removed by default (\code{delete_temp = TRUE}).
+}
+\note{
+Infomap has been designed to deal with bipartite networks. To use this
+functionality set the \code{bipartite_version} argument to TRUE in order to 
+approximate a two-step random walker (see 
+\url{https://www.mapequation.org/infomap/} for more information). Note that
+a bipartite network can also be considered as unipartite network 
+(\code{bipartite = TRUE}). 
+
+In both cases do not forget to indicate which of the first two columns is 
+dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e. 
+feature nodes) using the arguments \code{site_col} and \code{species_col}.
+The type of nodes returned in the output can be chosen with the argument
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes, 
+\code{"sites"} to preserve only the sites nodes and \code{"species"} to 
+preserve only the species nodes.
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
@@ -104,7 +153,7 @@ net <- similarity(comat, metric = "Simpson")
 \link{netclu_louvain}, \link{netclu_oslom}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }
