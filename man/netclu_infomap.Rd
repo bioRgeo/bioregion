@@ -32,8 +32,8 @@ If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity 
 indices.}
 
-\item{weight}{a boolean indicating if the weights should be considered if 
-there more than two columns.}
+\item{weight}{a \code{boolean} indicating if the weights should be considered 
+if there more than two columns.}
 
 \item{index}{name or number of the dissimilarity column to use. By default, 
 the third column name of \code{similarity} is used.}
@@ -48,20 +48,20 @@ modules, higher values results in fewer modules (default is 1).}
 
 \item{numtrials}{for the number of trials before picking up the best solution.}
 
-\item{twolevel}{a boolean indicating if the algorithm should optimize a 
+\item{twolevel}{a \code{boolean} indicating if the algorithm should optimize a 
 two-level partition of the network (default is multi-level).}
 
-\item{show_hierarchy}{a boolean specifying if the hierarchy of
+\item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
 community should be identifiable in the outputs (FALSE by default).}
 
-\item{directed}{a boolean indicating if the network is directed (from column 
-1 to column 2).}
+\item{directed}{a \code{boolean} indicating if the network is directed (from 
+column 1 to column 2).}
 
-\item{bipartite_version}{a boolean indicating if the bipartite version of 
-Infomap should be used (see Details).}
+\item{bipartite_version}{a \code{boolean} indicating if the bipartite version 
+of Infomap should be used (see Note).}
 
-\item{bipartite}{a boolean indicating if the network is bipartite 
-(see Details).}
+\item{bipartite}{a \code{boolean} indicating if the network is bipartite 
+(see Note).}
 
 \item{site_col}{name or number for the column of site nodes 
 (i.e. primary nodes).}
@@ -69,17 +69,17 @@ Infomap should be used (see Details).}
 \item{species_col}{name or number for the column of species nodes 
 (i.e. feature nodes)}
 
-\item{return_node_type}{a character indicating what types of nodes ("sites" 
-, "species" or "both") should be returned in the output 
+\item{return_node_type}{a \code{character} indicating what types of nodes 
+("sites", "species" or "both") should be returned in the output 
 (\code{keep_nodes_type="both"} by default).}
 
-\item{delete_temp}{a boolean indicating if the temporary folder should be 
-removed (see Details).}
+\item{delete_temp}{a \code{boolean} indicating if the temporary folder should 
+be removed (see Details).}
 
-\item{path_temp}{a string indicating the path to the temporary folder 
-(see Details).}
+\item{path_temp}{a \code{character} indicating the path to the temporary 
+folder (see Details).}
 
-\item{binpath}{a string indicating the path to the bin folder 
+\item{binpath}{a \code{character} indicating the path to the bin folder 
 (see \link{install_binaries} and Details).}
 }
 \value{
@@ -112,7 +112,7 @@ and (un)directed networks.
 
 This function is based on the 2.1.0 C++ version of Infomap 
 (\url{https://github.com/mapequation/infomap/releases}).
-This function needs executable files to run. They can be installed with 
+This function needs binary executable files to run. They can be installed with 
 \link{install_binaries}. If you set the path to the folder that will host 
 the bin folder manually while running \link{install_binaries} please make 
 sure to set \code{binpath} accordingly.

@@ -9,8 +9,8 @@
 #' If a \code{data.frame} is used, the first two columns represent pairs of 
 #' sites (or any pair of nodes), and the next column(s) are the similarity 
 #' indices. 
-#' @param weight a boolean indicating if the weights should be considered if 
-#' there more than two columns.
+#' @param weight a \code{boolean} indicating if the weights should be considered 
+#' if there more than two columns.
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of \code{similarity} is used.
 #' @param nbmod penalize solutions the more they differ from this number (0 by 
@@ -19,28 +19,28 @@
 #' modules, higher values results in fewer modules (default is 1).
 #' @param seed for the random number generator (0 for random by default).
 #' @param numtrials for the number of trials before picking up the best solution.
-#' @param twolevel a boolean indicating if the algorithm should optimize a 
+#' @param twolevel a \code{boolean} indicating if the algorithm should optimize a 
 #' two-level partition of the network (default is multi-level).
-#' @param show_hierarchy a boolean specifying if the hierarchy of
+#' @param show_hierarchy a \code{boolean} specifying if the hierarchy of
 #' community should be identifiable in the outputs (FALSE by default).
-#' @param directed a boolean indicating if the network is directed (from column 
-#' 1 to column 2).
-#' @param bipartite a boolean indicating if the network is bipartite 
-#' (see Details).
-#' @param bipartite_version a boolean indicating if the bipartite version of 
-#' Infomap should be used (see Details).
+#' @param directed a \code{boolean} indicating if the network is directed (from 
+#' column 1 to column 2).
+#' @param bipartite a \code{boolean} indicating if the network is bipartite 
+#' (see Note).
+#' @param bipartite_version a \code{boolean} indicating if the bipartite version 
+#' of Infomap should be used (see Note).
 #' @param site_col name or number for the column of site nodes 
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes 
 #' (i.e. feature nodes)
-#' @param return_node_type a character indicating what types of nodes ("sites" 
-#' , "species" or "both") should be returned in the output 
+#' @param return_node_type a \code{character} indicating what types of nodes 
+#' ("sites", "species" or "both") should be returned in the output 
 #' (\code{keep_nodes_type="both"} by default).
-#' @param delete_temp a boolean indicating if the temporary folder should be 
-#' removed (see Details).
-#' @param path_temp a string indicating the path to the temporary folder 
-#' (see Details).
-#' @param binpath a string indicating the path to the bin folder 
+#' @param delete_temp a \code{boolean} indicating if the temporary folder should 
+#' be removed (see Details).
+#' @param path_temp a \code{character} indicating the path to the temporary 
+#' folder (see Details).
+#' @param binpath a \code{character} indicating the path to the bin folder 
 #' (see \link{install_binaries} and Details).
 #' @export
 #' @details
@@ -50,7 +50,7 @@
 #' 
 #' This function is based on the 2.1.0 C++ version of Infomap 
 #' (\url{https://github.com/mapequation/infomap/releases}).
-#' This function needs executable files to run. They can be installed with 
+#' This function needs binary executable files to run. They can be installed with 
 #' \link{install_binaries}. If you set the path to the folder that will host 
 #' the bin folder manually while running \link{install_binaries} please make 
 #' sure to set \code{binpath} accordingly.
@@ -141,7 +141,7 @@ netclu_infomap <- function(net,
     # Control
     controls(args=binpath, data=NULL, type="character")
     if (!file.exists(binpath)) {
-      stop(paste0("Impossible to access ", binpath))
+      stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
 
@@ -150,8 +150,9 @@ netclu_infomap <- function(net,
 
   # Check if INFOMAP has successfully been installed
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/check.txt"))) {
-    stop("Infomap is not installed... Please have a look at 
-         https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+    stop("Infomap is not installed...
+Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details."
+         , call. = FALSE)
   }
 
   # Control input net
@@ -177,7 +178,7 @@ netclu_infomap <- function(net,
     controls(args=species_col, data=net, type="input_net_bip_col")
     if(!(return_node_type %in% c("both", "sites", "species"))){
       stop("Please chose return_node_type among the followings values:
-            both, sites and species")
+both, sites and species", call. = FALSE)
     }
   }
   
@@ -186,7 +187,7 @@ netclu_infomap <- function(net,
     controls(args=directed, data=net, type="input_net_directed")
   }else{
     if(directed){
-      stop("directed cannot be set to TRUE if the network is bipartite!")
+      stop("directed cannot be set to TRUE if the network is bipartite!", call. = FALSE)
     }
   }
   
@@ -211,12 +212,12 @@ netclu_infomap <- function(net,
     path_temp=paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
   }else{
     if (file.exists(path_temp)) {
-      stop(paste0(path_temp, " already exists. Please rename it or remove it."))
+      stop(paste0(path_temp, " already exists. Please rename it or remove it."), call. = FALSE)
     }
   }
   dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
   if (!file.exists(path_temp)) {
-    stop(paste0("Impossible to create directory ", path_temp))
+    stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
   }
 
   # Prepare input for INFOMAP
@@ -245,8 +246,8 @@ netclu_infomap <- function(net,
     idnode2 <- as.character(net[, 2])
     if(isbip) {
       message("The network seems to be bipartite! 
-              The bipartite or bipartite_version argument 
-              should probably be set to TRUE.")
+The bipartite or bipartite_version argument should probably be set to TRUE.", 
+              call. = FALSE)
     }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
@@ -324,7 +325,7 @@ netclu_infomap <- function(net,
   } else if (os == "Darwin") {
     cmd <- paste0(binpath, "/bin/INFOMAP/infomap_mac ", cmd)
   } else {
-    stop("Linux, Windows or Mac distributions only.")
+    stop("Linux, Windows or Mac distributions only.", call. = FALSE)
   }
   
   outputs$algorithm$cmd <- cmd
@@ -336,7 +337,7 @@ netclu_infomap <- function(net,
 
   # Control: if the command line did not work
   if (!("net.tree" %in% list.files(paste0(path_temp)))) {
-    stop("Command line was wrongly implemented. Infomap did not run.")
+    stop("Command line was wrongly implemented. Infomap did not run.", call. = FALSE)
   }
 
   # Retrieve output from net.tree
@@ -369,18 +370,20 @@ netclu_infomap <- function(net,
     unlink(paste0(path_temp), recursive = TRUE)
   }
 
-  # Remove feature nodes
-  if (isbip){
-    if(return_node_type == "site") {
-      com <- com[match(idprim$ID_NODE, com[, 1]), ]
-    }
-    if(return_node_type == "species") {
-      com <- com[match(idfeat$ID_NODE, com[, 1]), ]
-    }
-  } 
-
   # Rename and reorder columns
   com <- knbclu(com)
+  
+  # Add attributes and return_node_type
+  if (isbip){
+    attr(com, "node_type")=rep("site", dim(com)[1])
+    attributes(com)$node_type[!is.na(match(com[, 1],idfeat$ID_NODE))]="species"
+    if(return_node_type == "site") {
+      com <- com[attributes(com)$node_type=="site", ]
+    }
+    if(return_node_type == "species") {
+      com <- com[attributes(com)$node_type=="species", ]
+    }
+  } 
 
   # Put the warning back
   options(warn = defaultW)

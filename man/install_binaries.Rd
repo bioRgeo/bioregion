@@ -2,14 +2,15 @@
 % Please edit documentation in R/install_binaries.R
 \name{install_binaries}
 \alias{install_binaries}
-\title{Download, unzip, check permission and test the bioRgeo's binary files}
+\title{Download, unzip, check permission and test the bioRgeo's binary executable files}
 \usage{
 install_binaries(binpath = NULL)
 }
 \arguments{
-\item{binpath}{a string indicating the path to the folder that will host the bin folder (bioRgeo's package by default,
-if you use a different folder please be sure to update the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain}
-and \link{netclu_oslom})}
+\item{binpath}{a \code{character} indicating the path to the folder that will 
+host the bin folder (bioRgeo's package by default, if you use a different 
+folder please be sure to update the \code{binpath} in \link{netclu_infomap}, 
+\link{netclu_louvain} and \link{netclu_oslom}).}
 }
 \description{
 This function downloads and unzips the bin folder needed to run some bioRgeo's 

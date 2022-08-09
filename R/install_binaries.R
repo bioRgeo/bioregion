@@ -1,12 +1,13 @@
-#' Download, unzip, check permission and test the bioRgeo's binary files
+#' Download, unzip, check permission and test the bioRgeo's binary executable files
 #'
 #' This function downloads and unzips the bin folder needed to run some bioRgeo's 
 #' functions. It also checks if the files have the permissions to be executed as 
 #' programs. It finally tests if the binary files are running properly.
 #'
-#' @param binpath a string indicating the path to the folder that will host the bin folder (bioRgeo's package by default,
-#' if you use a different folder please be sure to update the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain}
-#' and \link{netclu_oslom})
+#' @param binpath a \code{character} indicating the path to the folder that will 
+#' host the bin folder (bioRgeo's package by default, if you use a different 
+#' folder please be sure to update the \code{binpath} in \link{netclu_infomap}, 
+#' \link{netclu_louvain} and \link{netclu_oslom}).
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Boris Leroy (\email{leroy.boris@gmail.com}) and
@@ -21,11 +22,9 @@ install_binaries <- function(binpath = NULL) {
     binpath <- biodir[grep("bioRgeo", biodir)]
   } else {
     # Control
-    if (!is.character(binpath)) {
-      stop("path must be a string")
-    }
+    controls(args=binpath, data=NULL, type="character")
     if (!file.exists(binpath)) {
-      stop(paste0("Impossible to access ", binpath))
+      stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
 
@@ -40,7 +39,9 @@ install_binaries <- function(binpath = NULL) {
   # Download bin.zip
   message(" ")
   message("1. Download bin.zip")
-  utils::download.file("https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download", paste0(binpath, "/bin.zip"), mode = "wb")
+  utils::download.file(
+    "https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download", 
+    paste0(binpath, "/bin.zip"), mode = "wb")
 
   # Unzip folder
   message(" ")
@@ -56,7 +57,8 @@ install_binaries <- function(binpath = NULL) {
   nblouvain <- length(list.files(paste0(binpath, "/bin/LOUVAIN")))
 
   if (nboslom == 8 & nbinfomap == 8 & nblouvain == 8) {
-    message(paste0("The folder has been successfully downloaded and dezipped in ", binpath))
+    message(paste0("The folder has been successfully downloaded and dezipped in "
+                   , binpath))
   } else {
     unlink(paste0(binpath, "/bin"), recursive = TRUE)
     stop(paste0("An error occurred, download and/or dezip failed"), call. = FALSE)
@@ -76,9 +78,12 @@ install_binaries <- function(binpath = NULL) {
 
   # List files
   files <- c(
-    paste0(binpath, "/bin/INFOMAP/infomap_omp_", osid), paste0(binpath, "/bin/INFOMAP/infomap_noomp_", osid),
-    paste0(binpath, "/bin/LOUVAIN/convert_", osid), paste0(binpath, "/bin/LOUVAIN/louvain_", osid),
-    paste0(binpath, "/bin/OSLOM/oslom_dir_", osid), paste0(binpath, "/bin/OSLOM/oslom_undir_", osid)
+    paste0(binpath, "/bin/INFOMAP/infomap_omp_", osid), 
+    paste0(binpath, "/bin/INFOMAP/infomap_noomp_", osid),
+    paste0(binpath, "/bin/LOUVAIN/convert_", osid), 
+    paste0(binpath, "/bin/LOUVAIN/louvain_", osid),
+    paste0(binpath, "/bin/OSLOM/oslom_dir_", osid), 
+    paste0(binpath, "/bin/OSLOM/oslom_undir_", osid)
   )
   if (osid == "win") {
     files <- paste0(files, ".exe")
@@ -95,10 +100,12 @@ install_binaries <- function(binpath = NULL) {
     file <- files[f]
     perm[f] <- file.access(file, mode = 1)
     if (perm[f] == -1) {
-      message(paste0("Permission to execute ", file, " as program: denied"))
+      message(paste0("Permission to execute ", file, " as program: denied"), 
+              call. = FALSE)
     } else {
       perm[f] == 10
-      message(paste0("Permission to execute ", file, " as program: granted"))
+      message(paste0("Permission to execute ", file, " as program: granted"), 
+              call. = FALSE)
     }
   }
 
@@ -124,7 +131,8 @@ install_binaries <- function(binpath = NULL) {
           message(paste0("Automatic change of permission of ", file, " failed"))
         } else {
           perm[f] == 10
-          message(paste0("Automatic change of permission succeed, ", file, " can now be executed as progam"))
+          message(paste0("Automatic change of permission succeed, ", file, 
+                         " can now be executed as progam"))
         }
       }
     }
@@ -188,18 +196,21 @@ install_binaries <- function(binpath = NULL) {
   version <- substr(version, 9, nchar(version))
   files <- c(paste0("infomap_omp_", osid), paste0("infomap_noomp_", osid))
   if (osid == "lin") {
-    cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", 
+                  path, "example.txt ", path)
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "mac") {
-    cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", 
+                  path, "example.txt ", path)
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "win") {
     files <- paste0(files, ".exe")
-    cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", 
+                  path, "example.txt ", path)
     system(cmd, show.output.on.console = FALSE)
   }
   testopm <- TRUE
@@ -211,17 +222,20 @@ install_binaries <- function(binpath = NULL) {
   }
 
   if (osid == "lin") {
-    cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", 
+                  path, "example.txt ", path)
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "mac") {
-    cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", 
+                  path, "example.txt ", path)
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "win") {
-    cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", path, "example.txt ", path)
+    cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", 
+                  path, "example.txt ", path)
     system(cmd, show.output.on.console = FALSE)
   }
   testnoopm <- TRUE
@@ -235,18 +249,24 @@ install_binaries <- function(binpath = NULL) {
   if (!(testopm | testnoopm)) {
     message(" ")
     message("Infomap is not installed...")
-    message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+    message("Please have a look at 
+            https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
     if (testopm) {
-      message("Congratulation, you successfully install the ", version, " OpenMP version of Infomap!")
-      file.copy(paste0(path, files[1]), paste0(path, "infomap_", substr(files[1], 13, nchar(file[1]))))
+      message("Congratulation, you successfully install the ", 
+              version, " OpenMP version of Infomap!")
+      file.copy(paste0(path, files[1]), 
+                paste0(path, "infomap_", substr(files[1], 13, nchar(file[1]))))
     } else {
       message(" ")
-      message("Congratulation, you successfully install the ", version, " no OpenMP version of Infomap!")
-      file.copy(paste0(path, files[2]), paste0(path, "infomap_", substr(files[1], 13, nchar(file[1]))))
+      message("Congratulation, you successfully install the ", 
+              version, " no OpenMP version of Infomap!")
+      file.copy(paste0(path, files[2]), 
+                paste0(path, "infomap_", substr(files[1], 13, nchar(file[1]))))
       message(" ")
       message("A library is probably missing to install the OpenMP version...")
-      message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+      message("Please have a look at 
+              https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
     }
     utils::write.table(1, paste0(path, "check.txt"))
   }
@@ -261,18 +281,21 @@ install_binaries <- function(binpath = NULL) {
   version <- substr(version, 9, nchar(version))
   files <- c(paste0("convert_", osid), paste0("louvain_", osid))
   if (osid == "lin") {
-    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
+    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, 
+                  "example.bin")
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "mac") {
-    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
+    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, 
+                  "example.bin")
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "win") {
     files <- paste0(files, ".exe")
-    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, "example.bin")
+    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, 
+                  "example.bin")
     system(cmd, show.output.on.console = FALSE)
   }
   testconvert <- TRUE
@@ -296,9 +319,11 @@ install_binaries <- function(binpath = NULL) {
   if (!testlouvain) {
     message(" ")
     message("Louvain is not installed...")
-    message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+    message("Please have a look at 
+            https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
-    message("Congratulation, you successfully install the version ", version, " of Louvain!")
+    message("Congratulation, you successfully install the version ", 
+            version, " of Louvain!")
     utils::write.table(1, paste0(path, "check.txt"))
   }
 
@@ -325,7 +350,8 @@ install_binaries <- function(binpath = NULL) {
   if (osid == "win") {
     files <- paste0(files, ".exe")
     cmd <- paste0(path, files[1], " -f ", path, "example.txt -uw")
-    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, 
+               recursive = TRUE)
     system(cmd, show.output.on.console = FALSE)
   }
 
@@ -362,7 +388,8 @@ install_binaries <- function(binpath = NULL) {
   }
   if (osid == "win") {
     cmd <- paste0(path, files[2], " -f ", path, "example.txt -uw")
-    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, 
+               recursive = TRUE)
     system(cmd, show.output.on.console = FALSE)
   }
   testdir <- TRUE
@@ -388,13 +415,16 @@ install_binaries <- function(binpath = NULL) {
   if (!testundir) {
     message(" ")
     message("OSLOM is not installed...")
-    message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+    message("Please have a look at 
+            https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
-    message("Congratulation, you successfully install the version ", version, " of OSLOM!")
+    message("Congratulation, you successfully install the version ", version, 
+            " of OSLOM!")
     utils::write.table(1, paste0(path, "check.txt"))
     if (!testdir) {
       message("Warning: only the undirected version of OSLOM has been install...")
-      message("Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+      message("Please have a look at 
+              https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
     }else{
       utils::write.table(1, paste0(path, "checkdir.txt"))
     }

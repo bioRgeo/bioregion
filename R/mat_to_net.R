@@ -1,14 +1,15 @@
 #' Create a data.frame from a contingency table
 #'
 #' This function creates a two- or three-columns \code{data.frame} where
-#' each row represents the interaction between two nodes (site and species for example)
-#' and an optional third column indicating the weight of the interaction (if \code{weight = TRUE})
-#' from a contingency table (sites as rows and species as columns for example).
+#' each row represents the interaction between two nodes (site and species for 
+#' example) and an optional third column indicating the weight of the interaction 
+#' (if \code{weight = TRUE}) from a contingency table (sites as rows and species 
+#' as columns for example).
 #'
-#' @param mat a contingency table (i.e. \code{matrix})
-#' @param weight a boolean indicating if the value are weights
-#' @param remove_zeroes a boolean determining whether interactions with weight 
-#' equal to 0 should be removed from the output
+#' @param mat a contingency table (i.e. \code{matrix}).
+#' @param weight a \code{boolean} indicating if the value are weights.
+#' @param remove_zeroes a \code{boolean} determining whether interactions with 
+#' weight equal to 0 should be removed from the output.
 #' @export
 #' @return A \code{data.frame} where each row represents the interaction between
 #' two nodes and an optional third column indicating the weight of the interaction.
@@ -27,23 +28,12 @@
 #' @export
 mat_to_net <- function(mat, weight = FALSE, remove_zeroes = TRUE) {
 
-  # Controls
-  if (!is.matrix(mat)) {
-    stop("Contingency table should be a matrix")
-  }
-
-  sco <- sum(is.na(mat))
-  if (sco > 0) {
-    stop("NA(s) detected in the contingency table")
-  }
-
-  if (!is.logical(weight)) {
-    stop("weight must be a boolean")
-  }
-
-  if (!is.logical(remove_zeroes)) {
-    stop("remove_zeroes must be a boolean")
-  }
+  # Control input mat
+  controls(args=NULL, data=mat, type="input_matrix")
+  
+  # Control parameters
+  controls(args=weight, data=NULL, type="boolean")
+  controls(args=remove_zeroes, data=NULL, type="boolean")
 
   # Conversion as data.frame
   net <- reshape2::melt(mat)

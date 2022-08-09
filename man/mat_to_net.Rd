@@ -7,12 +7,12 @@
 mat_to_net(mat, weight = FALSE, remove_zeroes = TRUE)
 }
 \arguments{
-\item{mat}{a contingency table (i.e. \code{matrix})}
+\item{mat}{a contingency table (i.e. \code{matrix}).}
 
-\item{weight}{a boolean indicating if the value are weights}
+\item{weight}{a \code{boolean} indicating if the value are weights.}
 
-\item{remove_zeroes}{a boolean determining whether interactions with weight 
-equal to 0 should be removed from the output}
+\item{remove_zeroes}{a \code{boolean} determining whether interactions with 
+weight equal to 0 should be removed from the output.}
 }
 \value{
 A \code{data.frame} where each row represents the interaction between
@@ -20,9 +20,10 @@ two nodes and an optional third column indicating the weight of the interaction.
 }
 \description{
 This function creates a two- or three-columns \code{data.frame} where
-each row represents the interaction between two nodes (site and species for example)
-and an optional third column indicating the weight of the interaction (if \code{weight = TRUE})
-from a contingency table (sites as rows and species as columns for example).
+each row represents the interaction between two nodes (site and species for 
+example) and an optional third column indicating the weight of the interaction 
+(if \code{weight = TRUE}) from a contingency table (sites as rows and species 
+as columns for example).
 }
 \examples{
 mat <- matrix(sample(1000, 50), 5, 10)
