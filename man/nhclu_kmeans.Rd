@@ -64,22 +64,22 @@ This method partitions the data into k groups
  should be prefered (\code{\link{nhclu_pam}})
 }
 \examples{
-dissimilarity <- dissimilarity(simil, metric = "all")
-
-clust1 <- nhclu_kmeans(dissimilarity,
-    n_clust = 2:10,
-    index = "Simpson")
-clust2 <- nhclu_kmeans(dissimilarity,
-    n_clust = 2:25,
-    index = "Simpson")
-partition_metrics(clust2,
-                  dissimilarity = dissimilarity,
-                  eval_metric = "pc_distance",
-                  partition_optimisation = TRUE)
-partition_metrics(clust2,
-                  sp_site_table = vegemat,
-                  eval_metric = "avg_endemism",
-                  partition_optimisation = TRUE)
+#dissimilarity <- dissimilarity(simil, metric = "all")
+#
+#clust1 <- nhclu_kmeans(dissimilarity,
+#     n_clust = 2:10,
+#     index = "Simpson")
+#clust2 <- nhclu_kmeans(dissimilarity,
+#     n_clust = 2:25,
+#     index = "Simpson")
+#partition_metrics(clust2,
+#                   dissimilarity = dissimilarity,
+#                   eval_metric = "pc_distance",
+#                   partition_optimisation = TRUE)
+#partition_metrics(clust2,
+#                   sp_site_table = vegemat,
+#                   eval_metric = "avg_endemism",
+#                   partition_optimisation = TRUE)
 }
 \seealso{
 \link{nhclu_pam}

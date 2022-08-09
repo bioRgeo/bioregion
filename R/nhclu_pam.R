@@ -53,22 +53,22 @@
 #' @export
 #'
 #' @examples
-#' dissimilarity <- dissimilarity(simil, metric = "all")
-#' 
-#' clust1 <- nhclu_pam(dissimilarity,
-#'     n_clust = 2:10,
-#'     index = "Simpson")
-#' clust2 <- nhclu_pam(dissimilarity,
-#'     n_clust = 2:25,
-#'     index = "Simpson")
-#' partition_metrics(clust2,
-#'                   dissimilarity = dissimilarity,
-#'                   eval_metric = "pc_distance",
-#'                   partition_optimisation = TRUE)
-#' partition_metrics(clust2,
-#'                   sp_site_table = vegemat,
-#'                   eval_metric = "avg_endemism",
-#'                   partition_optimisation = TRUE)
+#' #dissimilarity <- dissimilarity(simil, metric = "all")
+#' #
+#' #clust1 <- nhclu_pam(dissimilarity,
+#' #     n_clust = 2:10,
+#' #     index = "Simpson")
+#' #clust2 <- nhclu_pam(dissimilarity,
+#' #     n_clust = 2:25,
+#' #     index = "Simpson")
+#' #partition_metrics(clust2,
+#' #                   dissimilarity = dissimilarity,
+#' #                   eval_metric = "pc_distance",
+#' #                   partition_optimisation = TRUE)
+#' #partition_metrics(clust2,
+#' #                   sp_site_table = vegemat,
+#' #                   eval_metric = "avg_endemism",
+#' #                   partition_optimisation = TRUE)
 nhclu_pam <- function(dissimilarity,
                       index = names(dissimilarity)[3],
                       n_clust = NULL,

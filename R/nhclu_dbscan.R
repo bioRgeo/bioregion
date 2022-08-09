@@ -81,23 +81,23 @@
 #' @export
 #'
 #' @examples
-#' dissimilarity <- dissimilarity(simil, metric = "all")
-#'
-#' clust1 <- nhclu_dbscan(dissimilarity,
-#'     index = "Simpson")
-#' clust2 <- nhclu_dbscan(dissimilarity,
-#'     index = "Simpson",
-#'     eps = 0.2)
-#' clust3 <- nhclu_dbscan(dissimilarity,
-#'     index = "Simpson",
-#'     minPts = c(5, 10, 15, 20),
-#'     eps = c(.1, .15, .2, .25, .3))
-#' partition_metrics(clust2,
-#'                   dissimilarity = dissimilarity,
-#'                   eval_metric = "pc_distance")
-#' partition_metrics(clust2,
-#'                   sp_site_table = vegemat,
-#'                   eval_metric = "avg_endemism")
+#' #dissimilarity <- dissimilarity(simil, metric = "all")
+#' #
+#' #clust1 <- nhclu_dbscan(dissimilarity,
+#' #     index = "Simpson")
+#' #clust2 <- nhclu_dbscan(dissimilarity,
+#' #     index = "Simpson",
+#' #     eps = 0.2)
+#' #clust3 <- nhclu_dbscan(dissimilarity,
+#' #     index = "Simpson",
+#' #     minPts = c(5, 10, 15, 20),
+#' #     eps = c(.1, .15, .2, .25, .3))
+#' #partition_metrics(clust2,
+#' #                   dissimilarity = dissimilarity,
+#' #                   eval_metric = "pc_distance")
+#' #partition_metrics(clust2,
+#' #                   sp_site_table = vegemat,
+#' #                   eval_metric = "avg_endemism")
 nhclu_dbscan <- function(dissimilarity,
                       index = names(dissimilarity)[3],
                       minPts = NULL,
