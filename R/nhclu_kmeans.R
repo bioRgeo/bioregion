@@ -53,22 +53,24 @@
 #' 
 #' @seealso \link{cut_tree} 
 #' @examples
-#' #dissimilarity <- dissimilarity(simil, metric = "all")
-#' #
-#' #clust1 <- nhclu_kmeans(dissimilarity,
-#' #     n_clust = 2:10,
-#' #     index = "Simpson")
-#' #clust2 <- nhclu_kmeans(dissimilarity,
-#' #     n_clust = 2:25,
-#' #     index = "Simpson")
-#' #partition_metrics(clust2,
-#' #                   dissimilarity = dissimilarity,
-#' #                   eval_metric = "pc_distance",
-#' #                   partition_optimisation = TRUE)
-#' #partition_metrics(clust2,
-#' #                   sp_site_table = vegemat,
-#' #                   eval_metric = "avg_endemism",
-#' #                   partition_optimisation = TRUE)
+#' dissim <- dissimilarity(vegemat, metric = "all")
+#' 
+#' clust1 <- nhclu_kmeans(dissim,
+#'      n_clust = 2:10,
+#'      index = "Simpson")
+#' clust2 <- nhclu_kmeans(dissim,
+#'      n_clust = 2:25,
+#'      index = "Simpson")
+#' partition_metrics(clust2,
+#'                    dissimilarity = dissim,
+#'                    eval_metric = "pc_distance",
+#'                    partition_optimisation = TRUE)
+#' \donttest{
+#' partition_metrics(clust2,
+#'                    sp_site_table = vegemat,
+#'                    eval_metric = "avg_endemism",
+#'                    partition_optimisation = TRUE)
+#'                    }
 nhclu_kmeans <- function(dissimilarity,
                          index = names(dissimilarity)[3],
                          n_clust = NULL,

@@ -80,31 +80,31 @@
 #' 
 #' @seealso \link{nhclu_dbscan} 
 #' @examples
-#' #dissimilarity <- dissimilarity(simil, metric = "all")
-#' #  
-#' #clust1 <- hclu_optics(dissimilarity,
-#' #     index = "Simpson")
-#' #clust1
-#' #head(clust1$clusters)
-#' #
+#' dissim <- dissimilarity(vegemat, metric = "all")
+#'   
+#' clust1 <- hclu_optics(dissim,
+#'      index = "Simpson")
+#' clust1
+#' head(clust1$clusters)
+#' 
 #' # Visualise the optics plot (the hierarchy of clusters is illustrated at the bottom)
-#' #plot(clust1$algorithm$optics)
+#' plot(clust1$algorithm$optics)
 #'
 #' # Extract the hierarchy of clusters
-#' #clust1 <- hclu_optics(dissimilarity,
-#' #     index = "Simpson",
-#' #     show_hierarchy = TRUE)
-#' #clust1
-#' #head(clust1$clusters)
+#' clust1 <- hclu_optics(dissim,
+#'      index = "Simpson",
+#'      show_hierarchy = TRUE)
+#' clust1
+#' head(clust1$clusters)
 hclu_optics <- function(dissimilarity,
-                         index = names(dissimilarity)[3],
-                         minPts = NULL,
-                         eps = NULL,
-                         xi = 0.05,
-                         minimum = FALSE,
-                         # rename_clusters = TRUE, # to implement?
-                         show_hierarchy = FALSE,
-                         ...
+                        index = names(dissimilarity)[3],
+                        minPts = NULL,
+                        eps = NULL,
+                        xi = 0.05,
+                        minimum = FALSE,
+                        # rename_clusters = TRUE, # to implement?
+                        show_hierarchy = FALSE,
+                        ...
 )
 {
   if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
