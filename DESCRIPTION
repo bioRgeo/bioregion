@@ -37,10 +37,11 @@ Imports:
     fastcluster,
     ggplot2,
     igraph,
-    Matrix,
     mathjaxr,
+    Matrix,
     Rdpack,
     reshape2,
+    rmarkdown,
     stats,
     tidyr,
     utils
