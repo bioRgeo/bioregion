@@ -138,14 +138,17 @@ plot.bioRgeo.clusters <- function(x, ...)
 
     do.call(plot,
             args)
-    if(!is.null(x$output_cut_height))
+    if(!is.null(x$algorithm$output_cut_height))
     {
       # abline(h = x$output_cut_height, lty = 3, col = "#756bb1")
 
-      if(length(x$output_cut_height) > 1)
+      if(length(x$algorithm$output_cut_height) > 1)
       {
-        message("Multiple cut detected, plotting only the first three levels")
-
+        if(length(x$algorithm$output_cut_height) > 3)
+        {
+          message("Multiple cuts detected, plotting only the first three levels")
+        }
+        
         cols <- c("#253494", "#2c7fb8", "#41b6c4")
 
         for(i in 1:min(3, length(x$algorithm$output_cut_height)))

@@ -117,9 +117,10 @@
 #'                                  cut_height = c(.05, .15, .25))
 #' tree3
 #' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+#' plot(tree3)
 #' 
 #' # Recut the tree afterwards
-#' tree3 <- cut_tree(tree3,
+#' tree3.1 <- cut_tree(tree3,
 #'                  n = 5)
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
