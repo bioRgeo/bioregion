@@ -8,6 +8,7 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' @useDynLib bioRgeo, .registration=TRUE
+#' @import mathjaxr Rdpack
 #' @name bioRgeo
 #' @noRd
 NULL

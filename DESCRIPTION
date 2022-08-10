@@ -36,20 +36,17 @@ Imports:
     earth,
     fastcluster,
     ggplot2,
-    igraph, 
-    MASS,
-    mathjaxr,
+    igraph,
     Matrix,
-    mclust,
-    Rcpp,
+    mathjaxr,
     Rdpack,
     reshape2,
-    rmarkdown,
     stats,
     tidyr,
     utils
-RdMacros: mathjaxr,
-          Rdpack
+RdMacros: 
+    mathjaxr,
+    Rdpack
 LinkingTo: Rcpp
 Suggests:
     knitr
