@@ -76,7 +76,7 @@ partition_metrics(clust2,
                    dissimilarity = dissim,
                    eval_metric = "pc_distance",
                    partition_optimisation = TRUE)
-\dontrun{
+\donttest{
 partition_metrics(clust2,
                    sp_site_table = vegemat,
                    eval_metric = "avg_endemism",

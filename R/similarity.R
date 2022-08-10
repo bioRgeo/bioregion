@@ -46,9 +46,12 @@
 #'
 #' Where dij is the Euclidean distance between site i and site j in terms of species composition.
 #'
-#' @return A \code{data.frame} providing one or several similarity
-#' metric(s) between each pair of sites. The two first columns represents each pair of sites.
-#' One column per similarity metric provided in \code{metric} and \code{formula} except for the metric \emph{abc} and \emph{ABC} that
+#' @return A \code{data.frame} with additional class 
+#' \code{bioRgeo.pairwise.metric}, providing one or several similarity
+#' metric(s) between each pair of sites. The two first columns represent each 
+#' pair of sites.
+#' One column per similarity metric provided in \code{metric} and \code{formula}
+#' except for the metric \emph{abc} and \emph{ABC} that
 #' are stored in three columns (one for each letter).
 #' @seealso \link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 #' @author

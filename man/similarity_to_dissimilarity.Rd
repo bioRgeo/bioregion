@@ -12,7 +12,11 @@ similarity_to_dissimilarity(similarity)
 other columns being the similarity metrics.}
 }
 \value{
-A \code{data.frame} with additional class \code{bioRgeo.pairwise.metric}
+A \code{data.frame} with additional class 
+\code{bioRgeo.pairwise.metric}, providing one or several similarity
+metric(s) between each pair of sites. The two first columns represent each 
+pair of sites, and the other column represent similarity metrics. Columns
+with names "a", "b", "c", "A", "B" and "C"  are not altered.
 }
 \description{
 This function converts a data.frame of similarity metrics between sites to
@@ -49,7 +53,7 @@ dissimilarity
 \link{dissimilarity_to_similarity}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Boris Leroy (\email{leroy.boris@gmail.com}),
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-Boris Leroy (\email{leroy.boris@gmail.com})
+Pierre Denelle (\email{pierre.denelle@gmail.com})
 }
