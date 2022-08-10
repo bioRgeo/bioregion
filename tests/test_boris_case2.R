@@ -21,23 +21,48 @@ fish_dist <- bioRgeo::dissimilarity(fish_comat)
 
 
 ##### INFOMAP #####
-cl_infomap <- netclu_infomap(fish,
+cl_infomap_bip <- netclu_infomap(fish,
                              weight = FALSE,
-                             numtrials = 10,
+                             numtrials = 100,
                              twolevel = FALSE,
                              direct = FALSE,
+                             show_hierarchy = TRUE,
+                             bipartite_version = TRUE,
                              bipartite = TRUE,
-                             primary_col = "X1.Basin.Name",
-                             feature_col = "X6.Fishbase.Valid.Species.Name",
-                             remove_feature = FALSE)
+                             site_col = "X1.Basin.Name",
+                             species_col = "X6.Fishbase.Valid.Species.Name")
 
-basins$cl_infomap <- cl_infomap[match(basins$BasinName,
-                                      cl_infomap$ID), 3]
-basins$cl_infomap <- as.factor(basins$cl_infomap)
+cl_infomap_not_bip <- netclu_infomap(fish,
+                                 weight = FALSE,
+                                 numtrials = 100,
+                                 twolevel = FALSE,
+                                 direct = FALSE,
+                                 show_hierarchy = TRUE,
+                                 bipartite_version = FALSE,
+                                 bipartite = TRUE,
+                                 site_col = "X1.Basin.Name",
+                                 species_col = "X6.Fishbase.Valid.Species.Name")
+
+
+
+basins$cl_infomap_bip <- cl_infomap_bip$clusters[match(basins$BasinName,
+                                         cl_infomap_bip$clusters$ID), 3]
+basins$cl_infomap_bip <- as.factor(basins$cl_infomap_bip)
+
+basins$cl_infomap_not_bip <- cl_infomap_not_bip$clusters[match(basins$BasinName,
+                                                      cl_infomap_not_bip$clusters$ID), 3]
+basins$cl_infomap_not_bip <- as.factor(basins$cl_infomap_not_bip)
+
+
 
 ggplot() +
   geom_sf(data = basins,
-          aes(fill = cl_infomap)) +
+          aes(fill = cl_infomap_bip)) +
+  scale_fill_discrete()
+
+ggplot() +
+  geom_sf(data = basins,
+          aes(fill = cl_infomap_not_bip)) +
   scale_fill_discrete()
 
 partition_metrics(cl_infomap,

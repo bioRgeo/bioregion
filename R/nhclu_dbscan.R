@@ -92,12 +92,6 @@
 #'      index = "Simpson",
 #'      minPts = c(5, 10, 15, 20),
 #'      eps = c(.1, .15, .2, .25, .3))
-#' partition_metrics(clust2,
-#'                    dissimilarity = dissim,
-#'                    eval_metric = "pc_distance")
-#' partition_metrics(clust2,
-#'                    sp_site_table = vegemat,
-#'                    eval_metric = "avg_endemism")
 nhclu_dbscan <- function(dissimilarity,
                       index = names(dissimilarity)[3],
                       minPts = NULL,
@@ -191,6 +185,8 @@ nhclu_dbscan <- function(dissimilarity,
            /")
   }
 
+  cluster_arg_order <- data.frame()
+  
   for(minPtsi in minPts)
   {
     knnp <- dbscan::kNNdist(dist.obj,
@@ -224,8 +220,12 @@ nhclu_dbscan <- function(dissimilarity,
         dbscan::dbscan(dist.obj,
                        minPts = minPtsi,
                        eps = epsi)
+      cluster_arg_order <- rbind(cluster_arg_order, 
+                                 data.frame(minPts = minPtsi,
+                                            eps = epsi))
     }
   }
+  
 
 
   # NOTE: values of 0 mean "noise / no cluster" with dbscan
@@ -234,7 +234,14 @@ nhclu_dbscan <- function(dissimilarity,
                                                    function(x)
                                                      outputs$algorithm$dbscan[[x]]$cluster)))
 
-  outputs$clusters <- knbclu(outputs$clusters)
+  outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
+  
+  
+  outputs$cluster_info <- data.frame(partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
+                                     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+                                                 2, function(x) length(unique(x))),
+                                     cluster_arg_order)
+  
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
   return(outputs)

@@ -335,6 +335,8 @@ cut_tree <- function(tree,
   clusters <- knbclu(clusters,
                      reorder = FALSE,
                      method = "length")
+  
+
 
   if(inherits(tree, "bioRgeo.clusters"))
   {
@@ -342,6 +344,19 @@ cut_tree <- function(tree,
     tree$clusters <- clusters
     tree$algorithm$output_n_clust <- output_n_clust
     tree$algorithm$output_cut_height <- output_cut_height
+    
+    tree$cluster_info <- data.frame(partition_name = names(tree$clusters)[2:length(tree$clusters), drop = FALSE],
+                                    n_clust = output_n_clust)
+
+    if(!is.null(n_clust)) {
+      tree$cluster_info$requested_n_clust <- n_clust
+      if(find_h) {
+        tree$cluster_info$output_cut_height = output_cut_height
+      }
+    } else if(!is.null(cut_height)) {
+      tree$cluster_info$requested_cut_height <- cut_height
+    }
+    
     return(tree)
   } else if (inherits(tree, "hclust"))
   {

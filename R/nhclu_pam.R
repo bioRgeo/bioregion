@@ -116,6 +116,7 @@ nhclu_pam <- function(dissimilarity,
       {
         stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
+      # Add test to see if n_clust is lower than the number of sites
     } else
     {
       stop("n_clust must an integer or a vector of integers determining the number of clusters.")
@@ -177,7 +178,12 @@ nhclu_pam <- function(dissimilarity,
                                  data.frame(lapply(names(outputs$algorithm$pam),
                                                    function(x)
                                                      outputs$algorithm$pam[[x]]$clustering)))
-  outputs$clusters <- knbclu(outputs$clusters)
+  outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
+  
+  outputs$cluster_info <- data.frame(partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
+                                     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+                                                     2, function(x) length(unique(x))))
+  
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
   return(outputs)

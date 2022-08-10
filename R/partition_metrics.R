@@ -1,11 +1,9 @@
-#' Find an optimal number of clusters in a hierachical tree based on dissimilarity
-#' or beta-diversity indices.
+#' Calculate metrics for one or several partitions 
 #'
-#' This function aims at finding an optimal number of clusters in a hierarchical
-#' tree on the basis of the investigation of how an evaluation metric changes as
-#' a function of the number of clusters, and a criterion to find optimal
-#' number(s) of clusters upon this relationship between evaluation metric &
-#' number of clusters.
+#' This function aims at calculating metrics for one or several partitions, 
+#' usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_} 
+#' functions. Metrics may require the users to provide either a similarity or
+#' dissimilarity matrix, or to provide the initial species-site table.
 #'
 #' @param cluster_object tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
 #' @param eval_metric character string or vector of character strings indicating

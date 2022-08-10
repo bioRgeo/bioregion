@@ -111,17 +111,24 @@
 #'                                  cut_height = .05)
 #' tree2
 #' tree2$clusters
-#' #
+#' 
 #' # Multiple heights
 #' tree3 <- hclu_hierarclust(dissim,
 #'                                  cut_height = c(.05, .15, .25))
 #' tree3
 #' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
+#' # Info on each partition can be found in table cluster_info
+#' tree3$cluster_info
 #' plot(tree3)
 #' 
 #' # Recut the tree afterwards
 #' tree3.1 <- cut_tree(tree3,
 #'                  n = 5)
+#'                  
+#' 
+#' tree4 <- hclu_hierarclust(dissim,
+#'                           n_clust = 1:19)
+#'                                  
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
                              method = "average",
@@ -302,6 +309,7 @@ hclu_hierarclust <- function(dissimilarity,
                         h_min = h_min)
   } else{
     outputs$clusters <- NA
+    outputs$cluster_info <- NA
   }
 
   if(!keep_trials)

@@ -115,6 +115,7 @@ nhclu_kmeans <- function(dissimilarity,
       {
         stop("n_clust must an integer or a vector of integers determining the number of clusters.")
       }
+      # Add test to see if n_clust is lower than the number of sites
     } else
     {
       stop("n_clust must an integer or a vector of integers determining the number of clusters.")
@@ -179,7 +180,13 @@ nhclu_kmeans <- function(dissimilarity,
                                  data.frame(lapply(names(outputs$algorithm$kmeans),
                                                    function(x)
                                                      outputs$algorithm$kmeans[[x]]$cluster)))
-  outputs$clusters <- knbclu(outputs$clusters)
+  outputs$clusters <- knbclu(outputs$clusters,
+                             reorder = FALSE)
+  
+  outputs$cluster_info <- data.frame(partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
+                                     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+                                                     2, function(x) length(unique(x))))
+  
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
 
   return(outputs)

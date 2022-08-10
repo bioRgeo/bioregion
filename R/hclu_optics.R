@@ -197,9 +197,6 @@ hclu_optics <- function(dissimilarity,
                       xi = xi,
                       minimum = minimum)
 
-  # The output cluster numbers do not reflect the hierarchy of clusters
-  # >> Find a way to extract the hierarchy of clusters?
-  # see outputs$algorithm$optics$clusters_xi
   if(!show_hierarchy) {
     outputs$clusters$optics <-
       outputs$algorithm$optics$cluster
@@ -264,6 +261,15 @@ hclu_optics <- function(dissimilarity,
   outputs$clusters <- knbclu(outputs$clusters,
                              method = "length",
                              reorder = FALSE)
+  
+  outputs$cluster_info <- data.frame(partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
+                                     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+                                                     2, function(x) length(unique(x))))
+  if(show_hierarchy)
+  {
+    outputs$cluster_info$hierarchical_level <- 1:max.col
+  }
+  
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
   return(outputs)
 }

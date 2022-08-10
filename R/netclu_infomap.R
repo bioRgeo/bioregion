@@ -391,7 +391,16 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
   # Return output
   outputs$clusters <- com
   
+  outputs$cluster_info <- data.frame(partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
+                                     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+                                                     2, function(x) length(unique(x))))
+  
+  if(!twolevel & show_hierarchy) {
+    outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
+  }
+  
   class(outputs) <-  append("bioRgeo.clusters", class(outputs))
   
   return(outputs)
 }
+
