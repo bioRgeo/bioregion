@@ -209,29 +209,29 @@ print.bioRgeo.partition.metrics <- function(x, ...)
                  c(min(x), mean(x), max(x))}),
              row.names = c("Min", "Mean", "Max")))
 
-  if(x$args$partition_optimisation){
-    cat("\nPotential optimal partition(s):\n")
-    if(length(x$args$eval_metric) > 1)
-    {
-      cat(" - Metric used for optimisation: ", x$args$eval_metric[1], "\n")
-    }
-    cat(" - Criterion chosen to optimise the number of clusters: ",
-        x$args$criterion, "\n")
-    if(x$args$criterion == "step")
-    {
-      cat("   (step quantile chosen: ", x$args$step_quantile,
-          " (i.e., only the top", (1 -  x$args$step_quantile) * 100,
-          "% increase in ", x$args$eval_metric[1],
-          " are used as break points for the number of clusters)\n")
-    } else if(x$args$criterion == "cutoff")
-    {
-      cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
-    }
-    cat(" - Optimal partition(s) of clusters:\n")
-    cat("\n", x$evaluation_df$K[x$evaluation_df$optimal_nclust], "\n\n")
-    cat(" - Respective optimal number(s) of clusters:\n")
-    cat("\n", x$optimal_nb_clusters, "\n")
-  }
+  # if(x$args$partition_optimisation){
+  #   cat("\nPotential optimal partition(s):\n")
+  #   if(length(x$args$eval_metric) > 1)
+  #   {
+  #     cat(" - Metric used for optimisation: ", x$args$eval_metric[1], "\n")
+  #   }
+  #   cat(" - Criterion chosen to optimise the number of clusters: ",
+  #       x$args$criterion, "\n")
+  #   if(x$args$criterion == "step")
+  #   {
+  #     cat("   (step quantile chosen: ", x$args$step_quantile,
+  #         " (i.e., only the top", (1 -  x$args$step_quantile) * 100,
+  #         "% increase in ", x$args$eval_metric[1],
+  #         " are used as break points for the number of clusters)\n")
+  #   } else if(x$args$criterion == "cutoff")
+  #   {
+  #     cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
+  #   }
+  #   cat(" - Optimal partition(s) of clusters:\n")
+  #   cat("\n", x$evaluation_df$K[x$evaluation_df$optimal_nclust], "\n\n")
+  #   cat(" - Respective optimal number(s) of clusters:\n")
+  #   cat("\n", x$optimal_nb_clusters, "\n")
+  # }
 
   cat("Access the data.frame of metrics with your_object$evaluation_df\n")
 }

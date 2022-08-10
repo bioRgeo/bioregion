@@ -8,17 +8,8 @@ partition_metrics(
   cluster_object,
   dissimilarity = NULL,
   dissimilarity_index = names(dissimilarity)[3],
-  eval_metric = "pc_distance",
-  tree_k_min = 2,
-  tree_k_max = "number of sites",
-  tree_force_repartitioning = FALSE,
-  partition_optimisation = FALSE,
-  criterion = "elbow",
-  step_quantile = 0.99,
-  step_levels = NULL,
-  metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
   sp_site_table = NULL,
-  plot = TRUE,
+  eval_metric = "pc_distance",
   disable_progress = FALSE
 )
 }
@@ -34,50 +25,15 @@ includes \code{pc_distance} and \code{tree} is not a
 index to be used in case \code{dist} is a \code{data.frame} with multiple
 dissimilarity indices}
 
+\item{sp_site_table}{a \code{matrix} with sites in row and species in
+columns. Should be provided if \code{eval_metric} includes
+\code{"avg_endemism"} or \code{"tot_endemism"}}
+
 \item{eval_metric}{character string or vector of character strings indicating
  metric(s) to be calculated to
 investigate the effect of different number of clusters. Available options:
 \code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
 \code{"tot_endemism"}}
-
-\item{tree_k_min}{an integer indicating the minimum number of clusters to be
-explored. Only useful if
-\code{cluster_object} is based on \code{\link{hclu_hierarclust}}.}
-
-\item{tree_k_max}{an integer indicating the maximum number of clusters to be
-explored, or "number of sites" to use the number of sites as the maximum.
-Only useful if
-\code{cluster_object} is based on \code{\link{hclu_hierarclust}}.}
-
-\item{tree_force_repartitioning}{a boolean indicating if the function should
-re-partition clusters based on \code{tree_k_min} and \code{tree_k_max}. Only useful if
-\code{cluster_object} is based on \code{\link{hclu_hierarclust}}.}
-
-\item{partition_optimisation}{a boolean specifying if the function should
-find an optimal number of clusters, based on the chosen \code{criterion}}
-
-\item{criterion}{character string indicating the criterion to be used to
-identify optimal number(s) of clusters. Available methods currently include
-\code{"step"}, \code{"cutoff"}, \code{"elbow"}, \code{"mars"}, \code{"min"} or
-\code{"max"}.}
-
-\item{step_quantile}{if \code{criterion = "step"}, specify here the quantile
-of differences between two consecutive k to be used as the cutoff to identify
-the most important steps in \code{eval_metric}}
-
-\item{step_levels}{if \code{criterion = "step"}, specify here the number of
-steps to keep as cutoffs.}
-
-\item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the
-cutoffs of \code{eval_metric} at which the number of clusters should be
-extracted}
-
-\item{sp_site_table}{a \code{matrix} with sites in row and species in
-columns. Should be provided if \code{eval_metric} includes
-\code{"avg_endemism"} or \code{"tot_endemism"}}
-
-\item{plot}{a boolean indicating if a plot of the first \code{eval_metric}
-should be drawn with the identified optimal numbers of cutoffs}
 
 \item{disable_progress}{a boolean to enable or disable the progress bar for
 the exploration of clusters}
@@ -90,10 +46,7 @@ a \code{list} of class \code{bioRgeo.partition.metrics} with three elements:
 \item{\code{evaluation_df}: the data.frame containing \code{eval_metric}
 for all explored numbers of clusters
 }
-\item{\code{optimal_nb_clusters}: a vector containing the optimal number(s)
-of cluster(s) according to the first computed \code{eval_metric} and the
-chosen \code{criterion}
-}}
+}
 }
 \description{
 This function aims at calculating metrics for one or several partitions, 
@@ -103,20 +56,6 @@ dissimilarity matrix, or to provide the initial species-site table.
 }
 \details{
 \loadmathjax
-
-This function proceeds in three steps. First, the range of clusterisations
-between \code{tree_k_min} and \code{tree_k_max} number of clusters are explored on
-the input object  \code{tree} by cutting the tree for each number of groups
-\code{k} between
-\code{tree_k_min} and \code{tree_k_max}. Second, for each clusterisation, the function
-calculates one or several evaluation metric(s) and stores it. Third, the
-relation ship evaluation metric ~ number of clusters is explored by the
-function, and a criterion is applied on the first
-evaluation metric to return an optimal number of clusters.
-
-Note that multiple evaluation metrics can be requested (e.g., for inspection),
-but only the first one will be used to apply the criterion for optimal
-number of clusters.
 
 \bold{Evaluation metrics:}
 \itemize{
@@ -165,153 +104,24 @@ where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
 only one cluster) and \mjeqn{C}{C} is number of non-endemics.
 }
 }
-
-\bold{Please read the note section about the following criteria.}
-
-Here we implemented a set of criteria commonly found in the literature or
-recommended in the bioregionalisation literature. We advocate to move
-beyond the "Search one optimal number of clusters" paradigm, and consider
-investigating "multiple optimal numbers of clusters". Using only one cut on
-a complex tree can overly simplify its information, and ignores the
-hierarchical nature of the tree. Using multiple cuts likely avoids this
-oversimplification bias and conveys more information about the hierarchical
-nature of the tree. See, for example, the reanalysis of Holt et al. (2013)
-by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
-and shallow cuts. Following this rationale, several of the criteria
-implemented here can/will return multiple "optimal" cuts.
-
-\bold{Criteria to find optimal number(s) of clusters}
-\itemize{
-\item{\code{increasing_step} or \code{decreasing_step}:
-This method consists in identifying clusters at the most important
-changes, or steps, in the evaluation metric. The objective can be to either
-look for largest increases (\code{increasing_step}) or largest decreases
-\code{decreasing_step}. Steps are calculated based on the pairwise
-differences between partitions.
-Therefore, this is relative
-to the distribution of changes in the evaluation metric over the tested
-\code{k}. Specify \code{step_quantile} as the quantile cutoff above which
-steps will be selected as most important (by default, 0.99, i.e. the
-largest 1\% steps will be selected).Alternatively, you can also choose to
-specify the number of top steps to keep, e.g. to keep the largest three
-steps, specify \code{step_level = 3}
-Basically this method will emphasize the
-most important changes in the evaluation metric as a first approximation of
-where important cuts can be chosen.
-}
-\item{\code{cutoffs}:
-This method consists in specifying the cutoff value(s) in the evaluation
-metric from which the number(s) of clusters should be derived. This is the
-method used by \insertCite{Holt2013}{bioRgeo}. Note, however, that the
-cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only relevant
-at very large spatial scales, and lower cut-offs should be considered at
-finer spatial scales.
-}
-\item{\code{elbow}:
-This method consists in finding one elbow in the evaluation metric curve, as
-is commonly done in clustering analyses. The idea is to approximate the
-number of clusters at which the evaluation metric no longer increments.
-It is based on a fast method finding the maximum distance between the curve
-and a straight line linking the minimum and maximum number of points.
-The code we use here is based on code written by Esben Eickhardt available
-here \url{https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075}.
-The code has been modified to work on both increasing and decreasing
-evaluation metrics.}
-\item{\code{mars}:
-This method consists in fitting a mars model on the evaluation curve, and
-using it to identify all cutoffs at which there is no more increase in the
-evaluation metric. In other words, this method will find cutoffs with the two
-following conditions: (1) the evaluation metric was increasing before the
-cutoff and (2) there is no more increase or the increase is slower after the
-cutoff. This method uses \link[earth:earth]{earth::earth()}.}
-
-\item{\code{min} & \code{max}:
-Picks the optimal partition(s) respectively at the minimum or maximum value
-of the evaluation metric.}
-}
-}
-\note{
-Please note that finding the optimal number of clusters is a procedure
-which normally requires decisions from the users, and as such can hardly be
-fully automatized. Users are strongly advised to read the references
-indicated below to look for guidance on how to choose their optimal number(s)
-of clusters. Consider the "optimal" numbers of clusters returned by this
-function as first approximation of the best numbers for your problematic.
 }
 \examples{
-simil <- similarity(vegemat, metric = "all")
-dissimilarity <- similarity_to_dissimilarity(simil)
+dissim <- dissimilarity(vegemat, metric = "all")
 
 # User-defined number of clusters
-#tree1 <- hclu_hierarclust(dissimilarity,
-#                                  n_clust = 5,
-#                                  index = "Simpson")
-#tree1
+tree1 <- hclu_hierarclust(dissim,
+                          n_clust = 2:20,
+                          index = "Simpson")
+tree1
 
-#a <- partition_metrics(tree1,
-#                   dissimilarity = dissimilarity,
-#                   eval_metric = c("tot_endemism",
-#                                   "avg_endemism",
-#                                   "pc_distance",
-#                                   "anosim"))
-#
-#a <- partition_metrics(tree1, tree_k_max = 50,
-#                   tree_force_repartitioning = TRUE,
-#                   dissimilarity = dissimilarity,
-#                   step_levels = 5)
-#  a <- partition_metrics(tree1, tree_k_max = 50,
-#                   eval_metric = c("tot_endemism",
-#                                   "avg_endemism",
-#                                   "pc_distance",
-#                                   "anosim"),
-#                   tree_force_repartitioning = TRUE,
-#                   dissimilarity = dissimilarity,
-#                   sp_site_table = vegemat)
+a <- partition_metrics(tree1,
+                  dissimilarity = dissim,
+                  sp_site_table = vegemat,
+                  eval_metric = c("tot_endemism",
+                                  "avg_endemism",
+                                  "pc_distance",
+                                  "anosim"))
 
-#a <- partition_metrics(tree1,
- #                 eval_metric = c("tot_endemism",
- #                                 "avg_endemism",
- #                                 "pc_distance",
-  #                                "anosim"),
- #                 tree_k_max = 25,
- #                 tree_force_repartitioning = TRUE,
- #                 partition_optimisation = TRUE,
- #                 dissimilarity = dissimilarity,
- #                 sp_site_table = vegemat,
- #                 criterion = "decreasing_step",
- #                 step_levels = 5)
-
-#partition_metrics(tree1,
-#                  dissimilarity = dissimilarity,
-#                  eval_metric = "pc_distance",
-#                 tree_k_max = 50,
- #                tree_force_repartitioning = TRUE,
- #                partition_optimisation = TRUE,
- #                criterion = "elbow")
-
-# partition_metrics(tree1,
- #                dissimilarity = dissimilarity,
- #                eval_metric = "pc_distance",
- #                tree_k_max = 50,
- #                tree_force_repartitioning = TRUE,
- #                partition_optimisation = TRUE,
- #                criterion = "increasing_step")
-
-#partition_metrics(tree1,
-#                  dissimilarity = dissimilarity,
- #                eval_metric = "pc_distance",
- #                tree_k_max = 50,
- #                tree_force_repartitioning = TRUE,
- #                partition_optimisation = TRUE,
- #                criterion = "mars")
-
-#partition_metrics(tree1,
- #                sp_site_table = vegemat,
- #                eval_metric = "tot_endemism",
- #                tree_k_max = 50,
- #                tree_force_repartitioning = TRUE,
- #                partition_optimisation = TRUE,
- #                criterion = "max")
 }
 \references{
 \insertRef{Castro-Insua2018}{bioRgeo}

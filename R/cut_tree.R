@@ -269,7 +269,9 @@ cut_tree <- function(tree,
         h0 <- h_min
         h <- h0 + (h1 - h0) / 2
         # Algorithm to quickly find the height of cut corresponding to the requested number of clusters
-        while(k != cur_n & nchar(h) < 50 & h1 != h0)
+        iter = 0
+        max_iter = 500
+        while(k != cur_n &  h1 != h0 & iter < max_iter)
         {
           h <- h0 + (h1 - h0) / 2
           cls <- dendextend::cutree(cur.tree, h = h)
@@ -281,6 +283,7 @@ cut_tree <- function(tree,
           {
             h0 <- h
           }
+          iter = iter + 1
         }
         message(paste0("--> ", h))
 

@@ -63,13 +63,11 @@
 #'      index = "Simpson")
 #' partition_metrics(clust2,
 #'                    dissimilarity = dissim,
-#'                    eval_metric = "pc_distance",
-#'                    partition_optimisation = TRUE)
+#'                    eval_metric = "pc_distance")
 #' \donttest{
 #' partition_metrics(clust2,
 #'                    sp_site_table = vegemat,
-#'                    eval_metric = "avg_endemism",
-#'                    partition_optimisation = TRUE)
+#'                    eval_metric = "avg_endemism")
 #'                    }
 nhclu_kmeans <- function(dissimilarity,
                          index = names(dissimilarity)[3],
