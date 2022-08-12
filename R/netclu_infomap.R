@@ -35,6 +35,8 @@
 #' @param return_node_type a \code{character} indicating what types of nodes 
 #' ("sites", "species" or "both") should be returned in the output 
 #' (\code{keep_nodes_type="both"} by default).
+#' @param version a \code{character} indicating the Infomap 
+#' version to use.
 #' @param delete_temp a \code{boolean} indicating if the temporary folder should 
 #' be removed (see Details).
 #' @param path_temp a \code{character} indicating the path to the temporary 
@@ -47,7 +49,7 @@
 #' in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted 
 #' and (un)directed networks.
 #' 
-#' This function is based on the 2.1.0 C++ version of Infomap 
+#' This function is based on the C++ version of Infomap 
 #' (\url{https://github.com/mapequation/infomap/releases}).
 #' This function needs binary executable files to run. They can be installed with 
 #' \link{install_binaries}. If you set the path to the folder that will host 
@@ -123,6 +125,7 @@ netclu_infomap <- function(net,
                            site_col = 1, 
                            species_col = 2,
                            return_node_type = "both", 
+                           version = "2.1.0",
                            delete_temp = TRUE, 
                            path_temp = "infomap_temp", 
                            binpath = NULL) {
@@ -143,14 +146,22 @@ netclu_infomap <- function(net,
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
+  
+  # Control version
+  controls(args=version,data=NULL,type="character")
+  versiondispo <- list.files(paste0(binpath, "/bin/INFOMAP/"))
+  if(!(version %in% versiondispo)){
+    stop(paste0("Please choose a version of Infomap already installed:", 
+                versiondispo), call. = FALSE)
+  }
 
   # Check OS
   os <- Sys.info()[["sysname"]]
 
   # Check if INFOMAP has successfully been installed
-  if (!file.exists(paste0(binpath, "/bin/INFOMAP/check.txt"))) {
-    stop("Infomap is not installed...
-Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details."
+  if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version,"/check.txt"))) {
+    stop(paste0("Infomap ", version," is not installed...
+Please have a look at https//biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html for more details.")
          , call. = FALSE)
   }
 
@@ -176,7 +187,7 @@ Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for mor
     controls(args=site_col, data=net, type="input_net_bip_col")
     controls(args=species_col, data=net, type="input_net_bip_col")
     if(!(return_node_type %in% c("both", "sites", "species"))){
-      stop("Please chose return_node_type among the followings values:
+      stop("Please choose return_node_type among the followings values:
 both, sites and species", call. = FALSE)
     }
   }
@@ -277,6 +288,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
                        site_col = site_col, 
                        species_col = species_col,
                        return_node_type = return_node_type, 
+                       version = version,
                        delete_temp = delete_temp,
                        path_temp = path_temp, binpath = binpath
   )
@@ -318,21 +330,17 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
   cmd <- paste0(cmd, " ", path_temp, "/net.txt ", path_temp)
 
   if (os == "Linux") {
-    cmd <- paste0(binpath, "/bin/INFOMAP/infomap_lin ", cmd)
+    cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_lin ", cmd)
   } else if (os == "Windows") {
-    cmd <- paste0(binpath, "/bin/INFOMAP/infomap_win.exe ", cmd)
+    cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", cmd)
   } else if (os == "Darwin") {
-    cmd <- paste0(binpath, "/bin/INFOMAP/infomap_mac ", cmd)
+    cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", cmd)
   } else {
     stop("Linux, Windows or Mac distributions only.", call. = FALSE)
   }
   
-  infomap_version <- list.files(paste0(binpath, "/bin/INFOMAP/"))[
-    substr(list.files(paste0(binpath, "/bin/INFOMAP/")), 1, 7) == "version"]
-  infomap_version <- substr(infomap_version, 9, nchar(infomap_version))
-  
   outputs$algorithm$cmd <- cmd
-  outputs$algorithm$version = infomap_version
+  outputs$algorithm$version = version
   outputs$algorithm$web = "https://github.com/mapequation/infomap"
   
   # Run INFOMAP

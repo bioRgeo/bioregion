@@ -32,12 +32,13 @@ properly.
 ## Run install_binaries()
 
 
-
 ```{r install_binaries, eval=FALSE}
-install_binaries(binpath = NULL)
+install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
 ```
 
 The only par
+
+The installation of the executable binary files is divided into six steps.
 
 <p>&nbsp;</p>
 <center>

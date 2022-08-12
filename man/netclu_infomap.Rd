@@ -20,6 +20,7 @@ netclu_infomap(
   site_col = 1,
   species_col = 2,
   return_node_type = "both",
+  version = "2.1.0",
   delete_temp = TRUE,
   path_temp = "infomap_temp",
   binpath = NULL
@@ -73,6 +74,9 @@ of Infomap should be used (see Note).}
 ("sites", "species" or "both") should be returned in the output 
 (\code{keep_nodes_type="both"} by default).}
 
+\item{version}{a \code{character} indicating the Infomap 
+version to use.}
+
 \item{delete_temp}{a \code{boolean} indicating if the temporary folder should 
 be removed (see Details).}
 
@@ -109,7 +113,7 @@ Infomap is a network clustering algorithm based on the Map equation proposed
 in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted 
 and (un)directed networks.
 
-This function is based on the 2.1.0 C++ version of Infomap 
+This function is based on the C++ version of Infomap 
 (\url{https://github.com/mapequation/infomap/releases}).
 This function needs binary executable files to run. They can be installed with 
 \link{install_binaries}. If you set the path to the folder that will host 
