@@ -1,12 +1,12 @@
 ---
-title: "Perforances in similarity/dissimilarity metrics computation"
+title: "Perforances in beta diversity computation"
 author: "Pierre Denelle, Maxime Lenormand and Boris Leroy"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Perforances in similarity/dissimilarity metrics computation}
+  %\VignetteIndexEntry{Perforances in beta diversity computation}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
