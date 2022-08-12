@@ -1,13 +1,14 @@
-#' Download, unzip, check permission and test the bioRgeo's binary executable files
+#' Download, unzip, check permission and test the bioRgeo's executable binary files
 #'
-#' This function downloads and unzips the bin folder needed to run some bioRgeo's 
+#' This function downloads and unzips the 'bin' folder needed to run some bioRgeo's 
 #' functions. It also checks if the files have the permissions to be executed as 
-#' programs. It finally tests if the binary files are running properly.
+#' programs. It finally tests if the executable binary files are running properly.
 #'
 #' @param binpath a \code{character} indicating the path to the folder that will 
-#' host the bin folder (bioRgeo's package by default, if you use a different 
-#' folder please be sure to update the \code{binpath} in \link{netclu_infomap}, 
-#' \link{netclu_louvain} and \link{netclu_oslom}).
+#' host the 'bin' folder containing the executable binary files (bioRgeo's 
+#' package by default, if you use a different folder please be sure to update 
+#' the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and 
+#' \link{netclu_oslom}).
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Boris Leroy (\email{leroy.boris@gmail.com}) and
@@ -100,12 +101,10 @@ install_binaries <- function(binpath = NULL) {
     file <- files[f]
     perm[f] <- file.access(file, mode = 1)
     if (perm[f] == -1) {
-      message(paste0("Permission to execute ", file, " as program: denied"), 
-              call. = FALSE)
+      message(paste0("Permission to execute ", file, " as program: denied"))
     } else {
       perm[f] == 10
-      message(paste0("Permission to execute ", file, " as program: granted"), 
-              call. = FALSE)
+      message(paste0("Permission to execute ", file, " as program: granted"))
     }
   }
 
