@@ -64,7 +64,10 @@ The `bioRgeo`'s package takes as input site-species information stored in a bipa
 
 ### Install binaries
 
-Some functions or at least part of them (listed below) require binary files to run. Please check this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/bin.html) to get instructions regarding the installation of binary files.
+Some functions or at least part of them (listed below) require executable binary
+files to run. Please check this 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/bin.html) to get 
+instructions regarding the installation of the executable binary files.
 
 * [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
 * [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
