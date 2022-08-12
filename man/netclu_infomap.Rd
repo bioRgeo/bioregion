@@ -102,8 +102,7 @@ In the \code{algorithm} slot, users can find the following elements:
 }
 \description{
 This function finds communities in a (un)weighted (un)directed network based 
-on the Infomap algorithm(\url{https://github.com/mapequation/infomap}, 
-version 2.1.0).
+on the Infomap algorithm (\url{https://github.com/mapequation/infomap}).
 }
 \details{
 Infomap is a network clustering algorithm based on the Map equation proposed 

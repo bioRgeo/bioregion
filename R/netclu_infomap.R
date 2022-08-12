@@ -1,8 +1,7 @@
 #' Infomap community finding
 #'
 #' This function finds communities in a (un)weighted (un)directed network based 
-#' on the Infomap algorithm(\url{https://github.com/mapequation/infomap}, 
-#' version 2.1.0).
+#' on the Infomap algorithm (\url{https://github.com/mapequation/infomap}).
 #'
 #' @param net the output object from \code{\link{similarity}} or
 #' \code{\link{dissimilarity_to_similarity}}. 
@@ -304,7 +303,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
 
   # Prepare command to run INFOMAP
   cmd <- paste0("--silent --seed ", seed, 
-                "--num-trials", numtrials, 
+                " --num-trials ", numtrials, 
                 " --preferred-number-of-modules ", nbmod, 
                 " --markov-time ", markovtime)
   if (twolevel) {
@@ -328,8 +327,12 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
     stop("Linux, Windows or Mac distributions only.", call. = FALSE)
   }
   
+  infomap_version <- list.files(paste0(binpath, "/bin/INFOMAP/"))[
+    substr(list.files(paste0(binpath, "/bin/INFOMAP/")), 1, 7) == "version"]
+  infomap_version <- substr(infomap_version, 9, nchar(infomap_version))
+  
   outputs$algorithm$cmd <- cmd
-  outputs$algorithm$version = "2.1.0"
+  outputs$algorithm$version = infomap_version
   outputs$algorithm$web = "https://github.com/mapequation/infomap"
   
   # Run INFOMAP
