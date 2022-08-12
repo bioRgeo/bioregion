@@ -2,8 +2,7 @@
 unlink("/home/maxime/Applications/R/bioRgeo", recursive=TRUE)
 
 # bioRgeo
-devtools::install_github("bioRgeo/bioRgeo", build_vignettes = FALSE)
-#vignette("bioRgeo", package = "bioRgeo")
+devtools::install_github("bioRgeo/bioRgeo")
 
 # Import packages
 library(sf)
@@ -23,7 +22,7 @@ G=vegesp
 
 # install_binaries
 #source("bioRgeo/R/install_binaries.R")
-install_binaries()
+install_binaries(binpath = NULL, infomap_version = c("2.1.0","2.6.0"))
 
 ############################################################################################
 
@@ -31,6 +30,17 @@ install_binaries()
 
 
 
+
+# infomap
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/netclu_infomap.R")
+
+net=similarity(mat,metric=c("Jaccard"))
+
+com=netclu_infomap(net[net[,3]>0.5,], weight=FALSE, index=3, version="2.1.0")
+com$clusters[1:10,]
+
+com=netclu_infomap(tab[1:1000,], bipartite=TRUE, index=3)
 
 
 
@@ -63,17 +73,6 @@ sp=cbind(sp,como[,2],comi[,2],coml[,2])
 plot(sp)
 
 
-
-
-# infomap
-source("bioRgeo/R/utils.R")
-source("bioRgeo/R/netclu_infomap.R")
-
-
-net=similarity(mat,metric=c("Jaccard"))
-
-com=netclu_infomap(net[net[,3]>0.5,])
-#com[1:10,]
 
 
 

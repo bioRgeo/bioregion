@@ -40,12 +40,12 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
   }
   infomap_version=infomap_version[!duplicated(infomap_version)]
   if(length(infomap_version) > length(infomap_versiondispo)){
-    stop("Please choose versions of Infomap in the list below:
-2.1.0, 2.6.0", call. = FALSE)
+    stop(paste0("Please choose versions of Infomap in the list: ",
+paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   }
-  if(length(setdiff(infomap_versiondispo, infomap_version))>0){
-    stop("Please choose a version of Infomap in the list below:
-2.1.0, 2.6.0", call. = FALSE)
+  if(length(setdiff(infomap_version, infomap_versiondispo))>0){
+    stop(paste0("Please choose versions of Infomap in the list: ",
+paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   }
   nbversion=length(infomap_version)
   
@@ -459,7 +459,8 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
   }
 
   # Remove unnecessary files in INFOMAP
-  for(vinf in 1:nbversion){
+  for(vinf in 1:length(infomap_versiondispo)){
+    version = infomap_versiondispo[vinf]
     if (file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_mac"))
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_omp_mac"))
@@ -471,6 +472,9 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
     } else {
       unlink(paste0(binpath, "/bin/INFOMAP/", version), recursive = TRUE)
     }
+  }
+  if(length(list.files(paste0(binpath, "/bin/INFOMAP/")))==0){
+    unlink(paste0(binpath, "/bin/INFOMAP"), recursive = TRUE)
   }
 
   # Remove unnecessary files in LOUVAIN

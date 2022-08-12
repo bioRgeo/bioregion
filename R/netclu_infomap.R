@@ -151,8 +151,8 @@ netclu_infomap <- function(net,
   controls(args=version,data=NULL,type="character")
   versiondispo <- list.files(paste0(binpath, "/bin/INFOMAP/"))
   if(!(version %in% versiondispo)){
-    stop(paste0("Please choose a version of Infomap already installed:", 
-                versiondispo), call. = FALSE)
+    stop(paste0("Please choose a version of Infomap already installed: ", 
+paste(versiondispo, collapse = " ")), call. = FALSE)
   }
 
   # Check OS
