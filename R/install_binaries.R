@@ -1,17 +1,17 @@
 #' Download, unzip, check permission and test the bioRgeo's executable binary files
 #'
-#' This function downloads and unzips the 'bin' folder needed to run some bioRgeo's 
-#' functions. It also checks if the files have the permissions to be executed as 
+#' This function downloads and unzips the 'bin' folder needed to run some bioRgeo's
+#' functions. It also checks if the files have the permissions to be executed as
 #' programs. It finally tests if the executable binary files are running properly.
 #'
-#' @param binpath a \code{character} indicating the path to the folder that will 
-#' host the 'bin' folder containing the executable binary files (bioRgeo's 
-#' package by default, if you use a different folder please be sure to update 
-#' the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and 
+#' @param binpath a \code{character} indicating the path to the folder that will
+#' host the 'bin' folder containing the executable binary files (bioRgeo's
+#' package by default, if you use a different folder please be sure to update
+#' the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and
 #' \link{netclu_oslom}).
-#' @param infomap_version a \code{character} vector indicating the Infomap 
+#' @param infomap_version a \code{character} vector indicating the Infomap
 #' version(s) to install.
-#' @note 
+#' @note
 #' Only the Infomap version 2.1.0 and 2.6.0 are available for now.
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
@@ -27,28 +27,32 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
     binpath <- biodir[grep("bioRgeo", biodir)]
   } else {
     # Control
-    controls(args=binpath, data=NULL, type="character")
+    controls(args = binpath, data = NULL, type = "character")
     if (!file.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
 
   # Control infomap_version
-  infomap_versiondispo = c("2.1.0", "2.6.0")
-  if(!is.character(infomap_version)){
+  infomap_versiondispo <- c("2.1.0", "2.6.0")
+  if (!is.character(infomap_version)) {
     stop("infomap_version must be a character", call. = FALSE)
   }
-  infomap_version=infomap_version[!duplicated(infomap_version)]
-  if(length(infomap_version) > length(infomap_versiondispo)){
-    stop(paste0("Please choose versions of Infomap in the list: ",
-paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
+  infomap_version <- infomap_version[!duplicated(infomap_version)]
+  if (length(infomap_version) > length(infomap_versiondispo)) {
+    stop(paste0(
+      "Please choose versions of Infomap in the list: ",
+      paste(infomap_versiondispo, collapse = " ")
+    ), call. = FALSE)
   }
-  if(length(setdiff(infomap_version, infomap_versiondispo))>0){
-    stop(paste0("Please choose versions of Infomap in the list: ",
-paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
+  if (length(setdiff(infomap_version, infomap_versiondispo)) > 0) {
+    stop(paste0(
+      "Please choose versions of Infomap in the list: ",
+      paste(infomap_versiondispo, collapse = " ")
+    ), call. = FALSE)
   }
-  nbversion=length(infomap_version)
-  
+  nbversion <- length(infomap_version)
+
   # Check if bin.zip and bin already exists and remove them
   if (file.exists(paste0(binpath, "/bin.zip"))) {
     unlink(paste0(binpath, "/bin.zip"))
@@ -61,8 +65,10 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   message(" ")
   message("1. Download bin.zip")
   utils::download.file(
-    "https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download", 
-    paste0(binpath, "/bin.zip"), mode = "wb")
+    "https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download",
+    paste0(binpath, "/bin.zip"),
+    mode = "wb"
+  )
 
   # Unzip folder
   message(" ")
@@ -75,14 +81,16 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   # Check presence files
   nboslom <- length(list.files(paste0(binpath, "/bin/OSLOM")))
   nbinfomap <- 0
-  for(vinf in 1:nbversion){
-    nbinfomap = nbinfomap + length(list.files(paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf])))
+  for (vinf in 1:nbversion) {
+    nbinfomap <- nbinfomap + length(list.files(paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf])))
   }
   nblouvain <- length(list.files(paste0(binpath, "/bin/LOUVAIN")))
 
-  if (nboslom == 8 & (nbinfomap == 8*nbversion) & nblouvain == 8) {
-    message(paste0("The folder has been successfully downloaded and dezipped in "
-                   , binpath))
+  if (nboslom == 8 & (nbinfomap == 8 * nbversion) & nblouvain == 8) {
+    message(paste0(
+      "The folder has been successfully downloaded and dezipped in ",
+      binpath
+    ))
   } else {
     unlink(paste0(binpath, "/bin"), recursive = TRUE)
     stop(paste0("An error occurred, download and/or dezip failed"), call. = FALSE)
@@ -101,17 +109,19 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   }
 
   # List files
-  files = NULL
-  for(vinf in 1:nbversion){
-    files <- c(files,
-      paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf], "/infomap_omp_", osid), 
+  files <- NULL
+  for (vinf in 1:nbversion) {
+    files <- c(
+      files,
+      paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf], "/infomap_omp_", osid),
       paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf], "/infomap_noomp_", osid)
-    )  
+    )
   }
-  files <- c(files,
-    paste0(binpath, "/bin/LOUVAIN/convert_", osid), 
+  files <- c(
+    files,
+    paste0(binpath, "/bin/LOUVAIN/convert_", osid),
     paste0(binpath, "/bin/LOUVAIN/louvain_", osid),
-    paste0(binpath, "/bin/OSLOM/oslom_dir_", osid), 
+    paste0(binpath, "/bin/OSLOM/oslom_dir_", osid),
     paste0(binpath, "/bin/OSLOM/oslom_undir_", osid)
   )
   if (osid == "win") {
@@ -158,8 +168,10 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
           message(paste0("Automatic change of permission of ", file, " failed"))
         } else {
           perm[f] == 10
-          message(paste0("Automatic change of permission succeed, ", file, 
-                         " can now be executed as progam"))
+          message(paste0(
+            "Automatic change of permission succeed, ", file,
+            " can now be executed as progam"
+          ))
         }
       }
     }
@@ -217,27 +229,33 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   message(" ")
   message("4. Test Infomap")
   message(" ")
-  
-  for(vinf in 1:nbversion){
-    version = infomap_version[vinf]
+
+  for (vinf in 1:nbversion) {
+    version <- infomap_version[vinf]
     path <- paste0(binpath, "/bin/INFOMAP/", version, "/")
     files <- c(paste0("infomap_omp_", osid), paste0("infomap_noomp_", osid))
     if (osid == "lin") {
-      cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", 
-                    path, "example.txt ", path)
+      cmd <- paste0(
+        path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ",
+        path, "example.txt ", path
+      )
       cmd <- paste0(cmd, " >/dev/null 2>&1")
       system(cmd)
     }
     if (osid == "mac") {
-      cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", 
-                    path, "example.txt ", path)
+      cmd <- paste0(
+        path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ",
+        path, "example.txt ", path
+      )
       cmd <- paste0(cmd, " >/dev/null 2>&1")
       system(cmd)
     }
     if (osid == "win") {
       files <- paste0(files, ".exe")
-      cmd <- paste0(path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ", 
-                    path, "example.txt ", path)
+      cmd <- paste0(
+        path, files[1], " -N 10 --two-level --tree --markov-time 0.5 ",
+        path, "example.txt ", path
+      )
       system(cmd, show.output.on.console = FALSE)
     }
     testopm <- TRUE
@@ -247,22 +265,28 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
     if (file.exists(paste0(path, "/example.tree"))) {
       unlink(paste0(path, "/example.tree"))
     }
-    
+
     if (osid == "lin") {
-      cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", 
-                    path, "example.txt ", path)
+      cmd <- paste0(
+        path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ",
+        path, "example.txt ", path
+      )
       cmd <- paste0(cmd, " >/dev/null 2>&1")
       system(cmd)
     }
     if (osid == "mac") {
-      cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", 
-                    path, "example.txt ", path)
+      cmd <- paste0(
+        path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ",
+        path, "example.txt ", path
+      )
       cmd <- paste0(cmd, " >/dev/null 2>&1")
       system(cmd)
     }
     if (osid == "win") {
-      cmd <- paste0(path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ", 
-                    path, "example.txt ", path)
+      cmd <- paste0(
+        path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ",
+        path, "example.txt ", path
+      )
       system(cmd, show.output.on.console = FALSE)
     }
     testnoopm <- TRUE
@@ -272,7 +296,7 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
     if (file.exists(paste0(path, "/example.tree"))) {
       unlink(paste0(path, "/example.tree"))
     }
-    
+
     if (!(testopm | testnoopm)) {
       message(" ")
       message("Infomap is not installed...")
@@ -280,16 +304,24 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
             https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
     } else {
       if (testopm) {
-        message("Congratulation, you successfully install the ", 
-                version, " OpenMP version of Infomap!")
-        file.copy(paste0(path, files[1]), 
-                  paste0(path, "infomap_", substr(files[1], 13, nchar(file[1]))))
+        message(
+          "Congratulation, you successfully install the ",
+          version, " OpenMP version of Infomap!"
+        )
+        file.copy(
+          paste0(path, files[1]),
+          paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
+        )
       } else {
         message(" ")
-        message("Congratulation, you successfully install the ", 
-                version, " no OpenMP version of Infomap!")
-        file.copy(paste0(path, files[2]), 
-                  paste0(path, "infomap_", substr(files[1], 13, nchar(file[1]))))
+        message(
+          "Congratulation, you successfully install the ",
+          version, " no OpenMP version of Infomap!"
+        )
+        file.copy(
+          paste0(path, files[2]),
+          paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
+        )
         message(" ")
         message("A library is probably missing to install the OpenMP version...")
         message("Please have a look at 
@@ -309,21 +341,27 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   version <- substr(version, 9, nchar(version))
   files <- c(paste0("convert_", osid), paste0("louvain_", osid))
   if (osid == "lin") {
-    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, 
-                  "example.bin")
+    cmd <- paste0(
+      path, files[1], " -i ", path, "example.txt -o ", path,
+      "example.bin"
+    )
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "mac") {
-    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, 
-                  "example.bin")
+    cmd <- paste0(
+      path, files[1], " -i ", path, "example.txt -o ", path,
+      "example.bin"
+    )
     cmd <- paste0(cmd, " >/dev/null 2>&1")
     system(cmd)
   }
   if (osid == "win") {
     files <- paste0(files, ".exe")
-    cmd <- paste0(path, files[1], " -i ", path, "example.txt -o ", path, 
-                  "example.bin")
+    cmd <- paste0(
+      path, files[1], " -i ", path, "example.txt -o ", path,
+      "example.bin"
+    )
     system(cmd, show.output.on.console = FALSE)
   }
   testconvert <- TRUE
@@ -350,8 +388,10 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
     message("Please have a look at 
             https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
-    message("Congratulation, you successfully install the version ", 
-            version, " of Louvain!")
+    message(
+      "Congratulation, you successfully install the version ",
+      version, " of Louvain!"
+    )
     utils::write.table(1, paste0(path, "check.txt"))
   }
 
@@ -378,8 +418,10 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   if (osid == "win") {
     files <- paste0(files, ".exe")
     cmd <- paste0(path, files[1], " -f ", path, "example.txt -uw")
-    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, 
-               recursive = TRUE)
+    dir.create(paste0(path, "example.txt_oslo_files"),
+      showWarnings = FALSE,
+      recursive = TRUE
+    )
     system(cmd, show.output.on.console = FALSE)
   }
 
@@ -416,8 +458,10 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
   }
   if (osid == "win") {
     cmd <- paste0(path, files[2], " -f ", path, "example.txt -uw")
-    dir.create(paste0(path, "example.txt_oslo_files"), showWarnings = FALSE, 
-               recursive = TRUE)
+    dir.create(paste0(path, "example.txt_oslo_files"),
+      showWarnings = FALSE,
+      recursive = TRUE
+    )
     system(cmd, show.output.on.console = FALSE)
   }
   testdir <- TRUE
@@ -446,21 +490,23 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
     message("Please have a look at 
             https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
   } else {
-    message("Congratulation, you successfully install the version ", version, 
-            " of OSLOM!")
+    message(
+      "Congratulation, you successfully install the version ", version,
+      " of OSLOM!"
+    )
     utils::write.table(1, paste0(path, "check.txt"))
     if (!testdir) {
       message("Warning: only the undirected version of OSLOM has been install...")
       message("Please have a look at 
               https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
-    }else{
+    } else {
       utils::write.table(1, paste0(path, "checkdir.txt"))
     }
   }
 
   # Remove unnecessary files in INFOMAP
-  for(vinf in 1:length(infomap_versiondispo)){
-    version = infomap_versiondispo[vinf]
+  for (vinf in 1:length(infomap_versiondispo)) {
+    version <- infomap_versiondispo[vinf]
     if (file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_mac"))
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_omp_mac"))
@@ -473,7 +519,7 @@ paste(infomap_versiondispo, collapse = " ")), call. = FALSE)
       unlink(paste0(binpath, "/bin/INFOMAP/", version), recursive = TRUE)
     }
   }
-  if(length(list.files(paste0(binpath, "/bin/INFOMAP/")))==0){
+  if (length(list.files(paste0(binpath, "/bin/INFOMAP/"))) == 0) {
     unlink(paste0(binpath, "/bin/INFOMAP"), recursive = TRUE)
   }
 

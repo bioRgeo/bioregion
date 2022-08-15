@@ -62,7 +62,7 @@ The `bioRgeo`'s package takes as input site-species information stored in a bipa
 
 ## Clustering algorithms
 
-### Install binaries
+### Install executable binary files
 
 Some functions or at least part of them (listed below) require executable binary
 files to run. Please check this 
