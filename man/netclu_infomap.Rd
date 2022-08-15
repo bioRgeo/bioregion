@@ -20,7 +20,7 @@ netclu_infomap(
   site_col = 1,
   species_col = 2,
   return_node_type = "both",
-  version = "2.1.0",
+  version = "2.6.0",
   delete_temp = TRUE,
   path_temp = "infomap_temp",
   binpath = NULL
@@ -124,6 +124,9 @@ The C++ version of Infomap generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
 located in the working directory by default). This temporary folder is 
 removed by default (\code{delete_temp = TRUE}).
+
+Several version of Infomap are available in the package. See 
+\link{install_binaries} for more details.
 }
 \note{
 Infomap has been designed to deal with bipartite networks. To use this
@@ -153,7 +156,7 @@ net <- similarity(comat, metric = "Simpson")
 \insertRef{Rosvall2008}{bioRgeo}
 }
 \seealso{
-\link{netclu_louvain}, \link{netclu_oslom}
+\link{install_binaries}, \link{netclu_louvain}, \link{netclu_oslom}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
