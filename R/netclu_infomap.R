@@ -203,7 +203,8 @@ both, sites and species", call. = FALSE)
     controls(args = directed, data = net, type = "input_net_directed")
   } else {
     if (directed) {
-      stop("directed cannot be set to TRUE if the network is bipartite!", call. = FALSE)
+      stop("directed cannot be set to TRUE if the network is bipartite!", 
+           call. = FALSE)
     }
   }
 
@@ -228,7 +229,8 @@ both, sites and species", call. = FALSE)
     path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
   } else {
     if (file.exists(path_temp)) {
-      stop(paste0(path_temp, " already exists. Please rename it or remove it."), call. = FALSE)
+      stop(paste0(path_temp, " already exists. Please rename it or remove it."), 
+           call. = FALSE)
     }
   }
   dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
@@ -374,7 +376,8 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
 
   # Control: if the command line did not work
   if (!("net.tree" %in% list.files(paste0(path_temp)))) {
-    stop("Command line was wrongly implemented. Infomap did not run.", call. = FALSE)
+    stop("Command line was wrongly implemented. Infomap did not run.", 
+         call. = FALSE)
   }
 
   # Retrieve output from net.tree
@@ -429,7 +432,8 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
   outputs$clusters <- com
 
   outputs$cluster_info <- data.frame(
-    partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters), 
+                                             drop = FALSE],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
       2, function(x) length(unique(x))

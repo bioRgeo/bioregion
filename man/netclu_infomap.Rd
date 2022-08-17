@@ -28,62 +28,62 @@ netclu_infomap(
 }
 \arguments{
 \item{net}{the output object from \code{\link{similarity}} or
-\code{\link{dissimilarity_to_similarity}}. 
-If a \code{data.frame} is used, the first two columns represent pairs of 
-sites (or any pair of nodes), and the next column(s) are the similarity 
+\code{\link{dissimilarity_to_similarity}}.
+If a \code{data.frame} is used, the first two columns represent pairs of
+sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
 
-\item{weight}{a \code{boolean} indicating if the weights should be considered 
+\item{weight}{a \code{boolean} indicating if the weights should be considered
 if there more than two columns.}
 
-\item{index}{name or number of the dissimilarity column to use. By default, 
+\item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{similarity} is used.}
 
-\item{nbmod}{penalize solutions the more they differ from this number (0 by 
+\item{nbmod}{penalize solutions the more they differ from this number (0 by
 default for no preferred number of modules).}
 
-\item{markovtime}{scales link flow to change the cost of moving between 
+\item{markovtime}{scales link flow to change the cost of moving between
 modules, higher values results in fewer modules (default is 1).}
 
 \item{seed}{for the random number generator (0 for random by default).}
 
 \item{numtrials}{for the number of trials before picking up the best solution.}
 
-\item{twolevel}{a \code{boolean} indicating if the algorithm should optimize a 
+\item{twolevel}{a \code{boolean} indicating if the algorithm should optimize a
 two-level partition of the network (default is multi-level).}
 
 \item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
 community should be identifiable in the outputs (FALSE by default).}
 
-\item{directed}{a \code{boolean} indicating if the network is directed (from 
+\item{directed}{a \code{boolean} indicating if the network is directed (from
 column 1 to column 2).}
 
-\item{bipartite_version}{a \code{boolean} indicating if the bipartite version 
+\item{bipartite_version}{a \code{boolean} indicating if the bipartite version
 of Infomap should be used (see Note).}
 
-\item{bipartite}{a \code{boolean} indicating if the network is bipartite 
+\item{bipartite}{a \code{boolean} indicating if the network is bipartite
 (see Note).}
 
-\item{site_col}{name or number for the column of site nodes 
+\item{site_col}{name or number for the column of site nodes
 (i.e. primary nodes).}
 
-\item{species_col}{name or number for the column of species nodes 
+\item{species_col}{name or number for the column of species nodes
 (i.e. feature nodes)}
 
-\item{return_node_type}{a \code{character} indicating what types of nodes 
-("sites", "species" or "both") should be returned in the output 
+\item{return_node_type}{a \code{character} indicating what types of nodes
+("sites", "species" or "both") should be returned in the output
 (\code{keep_nodes_type="both"} by default).}
 
-\item{version}{a \code{character} indicating the Infomap 
+\item{version}{a \code{character} indicating the Infomap
 version to use.}
 
-\item{delete_temp}{a \code{boolean} indicating if the temporary folder should 
+\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
 be removed (see Details).}
 
-\item{path_temp}{a \code{character} indicating the path to the temporary 
+\item{path_temp}{a \code{character} indicating the path to the temporary
 folder (see Details).}
 
-\item{binpath}{a \code{character} indicating the path to the bin folder 
+\item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
 }
 \value{
@@ -105,43 +105,43 @@ In the \code{algorithm} slot, users can find the following elements:
 }
 }
 \description{
-This function finds communities in a (un)weighted (un)directed network based 
+This function finds communities in a (un)weighted (un)directed network based
 on the Infomap algorithm (\url{https://github.com/mapequation/infomap}).
 }
 \details{
-Infomap is a network clustering algorithm based on the Map equation proposed 
-in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted 
+Infomap is a network clustering algorithm based on the Map equation proposed
+in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted
 and (un)directed networks.
 
-This function is based on the C++ version of Infomap 
+This function is based on the C++ version of Infomap
 (\url{https://github.com/mapequation/infomap/releases}).
-This function needs binary executable files to run. They can be installed with 
-\link{install_binaries}. If you set the path to the folder that will host 
-the bin folder manually while running \link{install_binaries} please make 
+This function needs binary executable files to run. They can be installed with
+\link{install_binaries}. If you set the path to the folder that will host
+the bin folder manually while running \link{install_binaries} please make
 sure to set \code{binpath} accordingly.
 
-The C++ version of Infomap generates temporary folders and/or files that are 
+The C++ version of Infomap generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
-located in the working directory by default). This temporary folder is 
+located in the working directory by default). This temporary folder is
 removed by default (\code{delete_temp = TRUE}).
 
-Several version of Infomap are available in the package. See 
+Several version of Infomap are available in the package. See
 \link{install_binaries} for more details.
 }
 \note{
 Infomap has been designed to deal with bipartite networks. To use this
-functionality set the \code{bipartite_version} argument to TRUE in order to 
-approximate a two-step random walker (see 
+functionality set the \code{bipartite_version} argument to TRUE in order to
+approximate a two-step random walker (see
 \url{https://www.mapequation.org/infomap/} for more information). Note that
-a bipartite network can also be considered as unipartite network 
-(\code{bipartite = TRUE}). 
+a bipartite network can also be considered as unipartite network
+(\code{bipartite = TRUE}).
 
-In both cases do not forget to indicate which of the first two columns is 
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e. 
+In both cases do not forget to indicate which of the first two columns is
+dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 feature nodes) using the arguments \code{site_col} and \code{species_col}.
 The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{"both"} to keep both types of nodes, 
-\code{"sites"} to preserve only the sites nodes and \code{"species"} to 
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+\code{"sites"} to preserve only the sites nodes and \code{"species"} to
 preserve only the species nodes.
 }
 \examples{

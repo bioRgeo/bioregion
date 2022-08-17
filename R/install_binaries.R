@@ -64,6 +64,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
   # Download bin.zip
   message(" ")
   message("1. Download bin.zip")
+  message(" ")
   utils::download.file(
     "https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download",
     paste0(binpath, "/bin.zip"),
@@ -73,6 +74,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
   # Unzip folder
   message(" ")
   message("2. Unzip folder")
+  message(" ")
   utils::unzip(zipfile = paste0(binpath, "/bin.zip"), exdir = binpath)
 
   # Delete bin.zip

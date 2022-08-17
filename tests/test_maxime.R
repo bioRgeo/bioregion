@@ -37,7 +37,7 @@ install_binaries(binpath = NULL, infomap_version = c("2.1.0","2.6.0"))
 
 net=similarity(mat,metric=c("Jaccard"))
 
-com=netclu_infomap(net[net[,3]>0.5,], weight=FALSE, index=3, version="2.1.0")
+com=netclu_infomap(net[net[,3]>0.5,], weight=FALSE, index=3, version="2.6.0")
 com$clusters[1:10,]
 
 com=netclu_infomap(tab[1:1000,], bipartite=TRUE, index=3)

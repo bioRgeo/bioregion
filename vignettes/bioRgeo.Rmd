@@ -34,7 +34,12 @@ options(tinytex.verbose = TRUE)
 
 ## Brief introduction
 
-This tutorial aims at describing the different features of the R package `bioRgeo`. The main purpose of the `bioRgeo`'s package is to propose a transparent methodological framework to compare bioregionalization methods. Below is the typical flow chart of bioregions' identification based on a site-species bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflow can be divided into four main steps:
+This tutorial aims at describing the different features of the R package `bioRgeo`. 
+The main purpose of the `bioRgeo`'s package is to propose a transparent 
+methodological framework to compare bioregionalization methods. Below is the 
+typical flow chart of bioregions' identification based on a site-species 
+bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflow 
+can be divided into four main steps:
 
 1. Preprocess the data (matrix or network formats)
 2. Compute similarity/distance metrics between sites based on species composition
@@ -53,7 +58,9 @@ This tutorial aims at describing the different features of the R package `bioRge
 
 ## Matrix or Network formats
 
-The `bioRgeo`'s package takes as input site-species information stored in a bipartite network or a co-occurence matrix. It handles both the matrix and network formats throughout the workflow. 
+The `bioRgeo`'s package takes as input site-species information stored in a 
+bipartite network or a co-occurence matrix. It handles both the matrix and 
+network formats throughout the workflow. 
 
 
 ## Pairwise similarity and distance metrics
@@ -66,8 +73,8 @@ The `bioRgeo`'s package takes as input site-species information stored in a bipa
 
 Some functions or at least part of them (listed below) require executable binary
 files to run. Please check this 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/bin.html) to get 
-instructions regarding the installation of the executable binary files.
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html) 
+to get instructions regarding the installation of the executable binary files.
 
 * [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
 * [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
