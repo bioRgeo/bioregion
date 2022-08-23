@@ -1,28 +1,65 @@
-#' Community structure detection in weighted bipartite network via modularity optimisation
+#' Community structure detection in weighted bipartite network via modularity
+#' optimisation
 #'
-#' This function takes a bipartite weighted graph and computes modules by applying Newman’s modularity
-#' measure in a bipartite weighted version to it.
+#' This function takes a bipartite weighted graph and computes modules by applying
+#' Newman’s modularity measure in a bipartite weighted version to it.
 #'
-#' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as undirected links between pair of nodes and an optional third column indicating the weight of the link
-#' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param forceLPA a boolean indicating if the even faster pure LPA-algorithm of Beckett should be used? DIRT-
-#' LPA, the default, is less likely to get trapped in a local minimum, but is slightly
-#' slower. Defaults to FALSE.
-#' @param primary_col name or number for the column of primary nodes (i.e. site)
-#' @param feature_col name or number for the column of feature nodes (i.e. species)
-#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
+#' @param net a \code{data.frame} representing a bipartite network with the two
+#' first columns as undirected links between pair of nodes and
+#' and the next column(s) are the weight of the links.
+#' @param weight a \code{boolean} indicating if the weights should be considered
+#' if there more than two columns (see Note).
+#' @param index name or number of the column to use as weight. By default,
+#' the third column name of \code{net} is used.
+#' @param site_col name or number for the column of site nodes
+#' (i.e. primary nodes).
+#' @param species_col name or number for the column of species nodes
+#' (i.e. feature nodes).
+#' @param return_node_type a \code{character} indicating what types of nodes
+#' ("sites", "species" or "both") should be returned in the output
+#' (\code{keep_nodes_type="both"} by default).
+#' @param forceLPA a \code{boolean} indicating if the even faster pure
+#' LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
+#' likely to get trapped in a local minimum, but is slightly slower. Defaults to
+#' FALSE.
+#' @param algorithm_in_output a \code{boolean} indicating if the original output
+#' of \code{computeModules} should be returned in the output (see Value).
+#' Defaults to TRUE.
 #' @export
 #' @details
-#' This function is based on the modularity optimization algorithm provided by Stephen Beckett \insertCite{Beckett2016}{bioRgeo}
-#' as implemented in the \href{https://cran.r-project.org/web/packages/bipartite/index.html}{bipartite} package
-#' (\link[bipartite]{computeModules}).
+#' This function is based on the modularity optimization algorithm provided by
+#' Stephen Beckett \insertCite{Beckett2016}{bioRgeo} as implemented in the
+#' \href{https://cran.r-project.org/web/packages/bipartite/index.html}{bipartite}
+#' package (\link[bipartite]{computeModules}).
 #'
-#' @return A \code{data.frame} providing one community by node.
+#' @note
+#' Beckett has been designed to deal with weighted bipartite networks. Note that
+#' if \code{weight = FALSE}, a weight of 1 will be assigned to each pair of nodes.
+#' Do not forget to indicate which of the first two columns is
+#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' The type of nodes returned in the output can be chosen with the argument
+#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to
+#' preserve only the species nodes.
+#'
+#' @return
+#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' \enumerate{
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
+#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
+#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  \code{algorithm_in_output = TRUE})}
+#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#'
+#' In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+#' find an object of class "moduleWeb", output of \link[bipartite]{computeModules}.
 #'
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @seealso \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
@@ -36,118 +73,136 @@
 #' @references
 #' \insertRef{Beckett2016}{bioRgeo}
 #' @export
-netclu_beckett <- function(net, weight = TRUE, forceLPA = FALSE,
-                           primary_col = 1, feature_col = 2, remove_feature = FALSE) {
+netclu_beckett <- function(net,
+                           weight = TRUE,
+                           index = names(net)[3],
+                           site_col = 1,
+                           species_col = 2,
+                           return_node_type = "both",
+                           forceLPA = FALSE,
+                           algorithm_in_output = TRUE) {
 
-  # Controls input net
-  if (!is.data.frame(net)) {
-    stop("net must be a two- or three-columns data.frame")
+  # Control input net
+  controls(args = NULL, data = net, type = "input_net")
+
+  # Control input weight & index
+  controls(args = weight, data = net, type = "input_net_weight")
+  if (weight) {
+    controls(args = index, data = net, type = "input_net_index")
+    net[, 3] <- net[, index]
+    net <- net[, 1:3]
+    controls(args = NULL, data = net, type = "input_net_index_value")
   }
 
-  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
-    stop("net must be a two- or three-columns data.frame")
+  # Control input bipartite
+  controls(args = NULL, data = net, type = "input_net_bip")
+  controls(args = site_col, data = net, type = "input_net_bip_col")
+  controls(args = species_col, data = net, type = "input_net_bip_col")
+  if (!(return_node_type %in% c("both", "sites", "species"))) {
+    stop("Please choose return_node_type among the followings values:
+both, sites and species", call. = FALSE)
   }
 
-  sco <- sum(is.na(net))
-  if (sco > 0) {
-    stop("NA(s) detected in the data.frame")
-  }
 
-  # Controls parameters
-  if (weight & dim(net)[2] == 2) {
-    stop("net must be a three-columns data.frame if weight equal TRUE")
-  }
+  # Controls parameters BECKETT
+  controls(args = forceLPA, data = NULL, type = "boolean")
+  controls(args = algorithm_in_output, data = NULL, type = "boolean")
 
-  if (weight & dim(net)[2] == 3) {
-    if (!is.numeric(net[, 3])) {
-      stop("The third column of net must be numeric")
-    }
-  }
-
-  if (!is.logical(weight)) {
-    stop("weight must be a boolean")
-  }
-
-  if (!is.logical(forceLPA)) {
-    stop("forceLPA must be a boolean")
-  }
-
-  # Controls bipartite arguments
-  if (is.character(primary_col)) {
-    if (!(primary_col %in% colnames(net))) {
-      stop("primary_col should be a column name")
-    }
-  } else if (is.numeric(primary_col)) {
-    if (primary_col <= 0) {
-      stop("primary_col must be strictly positive")
-    } else {
-      if (primary_col %% 1 != 0) {
-        stop("primary_col must be an integer")
-      }
-    }
-  } else {
-    stop("primary_col should be numeric or character")
-  }
-
-  if (is.character(feature_col)) {
-    if (!(feature_col %in% colnames(net))) {
-      stop("feature_col should be a column name")
-    }
-  } else if (is.numeric(feature_col)) {
-    if (feature_col <= 0) {
-      stop("feature_col must be strictly positive")
-    } else {
-      if (feature_col %% 1 != 0) {
-        stop("feature_col must be an integer")
-      }
-    }
-  } else {
-    stop("feature_col should be numeric or character")
-  }
-
-  if (!is.logical(remove_feature)) {
-    stop("remove_feature must be a boolean")
-  }
 
   # Prepare input
-  idprim <- as.character(net[, primary_col])
+  idprim <- as.character(net[, site_col])
   idprim <- idprim[!duplicated(idprim)]
-  idfeat <- as.character(net[, feature_col])
+  nbsites <- length(idprim)
+  idfeat <- as.character(net[, species_col])
   idfeat <- idfeat[!duplicated(idfeat)]
-
-  if (length(intersect(idprim, idfeat)) > 0) { # Control bipartite
-    stop("The network should be bipartite!")
-  }
 
   idnode <- c(idprim, idfeat)
   idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
 
-  netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
+  netemp <- data.frame(
+    node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
+    node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
+  )
+
   if (weight) {
     netemp <- cbind(netemp, net[, 3])
     netemp <- netemp[netemp[, 3] > 0, ]
     colnames(netemp)[3] <- "weight"
+  } else {
+    netemp$weight <- 1
   }
+
+  # Class preparation
+  outputs <- list(name = "infomap")
+
+  outputs$args <- list(
+    weight = weight,
+    index = index,
+    site_col = site_col,
+    species_col = species_col,
+    return_node_type = return_node_type,
+    forceLPA = forceLPA
+  )
+
+  outputs$inputs <- list(
+    bipartite = TRUE,
+    weight = weight,
+    pairwise = FALSE,
+    pairwise_metric = NA,
+    dissimilarity = FALSE,
+    nb_sites = nbsites
+  )
+
+  outputs$algorithm <- list()
 
   # Transform netemp into a contingency table
   comat <- net_to_mat(netemp, weight = weight)
 
   # Run algo
-  comtemp <- bipartite::computeModules(comat, forceLPA = forceLPA)@modules[-1, -c(1, 2)]
-  comtemp <- cbind(c(as.numeric(rownames(comat)), as.numeric(colnames(comat))), apply(comtemp, 2, function(x) which(x > 0)))
+  outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
+  comtemp <- outalg@modules[-1, -c(1, 2)]
+  comtemp <- cbind(
+    c(
+      as.numeric(rownames(comat)),
+      as.numeric(colnames(comat))
+    ),
+    apply(comtemp, 2, function(x) which(x > 0))
+  )
 
   com <- data.frame(ID = idnode[, 2], Com = 0)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
 
-  # Remove feature nodes
-  if (remove_feature) {
-    com <- com[match(idprim, com[, 1]), ]
-  }
-
   # Rename and reorder columns
-  com[, 1] <- as.character(com[, 1])
   com <- knbclu(com)
 
-  # Return output
-  return(com)
+  # Add attributes and return_node_type
+  attr(com, "node_type") <- rep("site", dim(com)[1])
+  attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
+  if (return_node_type == "sites") {
+    com <- com[attributes(com)$node_type == "site", ]
+  }
+  if (return_node_type == "species") {
+    com <- com[attributes(com)$node_type == "species", ]
+  }
+
+  # Return outputs
+  if (!algorithm_in_output) {
+    outalg <- NA
+  }
+  outputs$algorithm <- outalg
+
+  outputs$clusters <- com
+  outputs$cluster_info <- data.frame(
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+      drop = FALSE
+    ],
+    n_clust = apply(
+      outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+      2, function(x) length(unique(x))
+    )
+  )
+
+  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+
+  return(outputs)
 }
