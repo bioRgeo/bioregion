@@ -30,6 +30,7 @@ Imports:
     ape,
     bipartite,  
     cluster,
+    data.table,
     dbscan,
     dendextend,
     dynamicTreeCut,

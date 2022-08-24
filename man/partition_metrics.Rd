@@ -8,9 +8,10 @@ partition_metrics(
   cluster_object,
   dissimilarity = NULL,
   dissimilarity_index = names(dissimilarity)[3],
-  sp_site_table = NULL,
-  eval_metric = "pc_distance",
-  disable_progress = FALSE
+  net = NULL,
+  site_col = 1,
+  species_col = 2,
+  eval_metric = c("pc_distance", "anosim", "avg_endemism", "tot_endemism")
 )
 }
 \arguments{
@@ -25,8 +26,18 @@ includes \code{pc_distance} and \code{tree} is not a
 index to be used in case \code{dist} is a \code{data.frame} with multiple
 dissimilarity indices}
 
-\item{sp_site_table}{a \code{matrix} with sites in row and species in
-columns. Should be provided if \code{eval_metric} includes
+\item{net}{the species-site network (i.e., bipartite network). 
+Should be provided if \code{eval_metric} includes
+\code{"avg_endemism"} or \code{"tot_endemism"}}
+
+\item{site_col}{name or number for the column of site nodes
+(i.e. primary nodes). 
+Should be provided if \code{eval_metric} includes
+\code{"avg_endemism"} or \code{"tot_endemism"}}
+
+\item{species_col}{name or number for the column of species nodes
+(i.e. feature nodes). 
+Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}}
 
 \item{eval_metric}{character string or vector of character strings indicating
@@ -34,9 +45,6 @@ columns. Should be provided if \code{eval_metric} includes
 investigate the effect of different number of clusters. Available options:
 \code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
 \code{"tot_endemism"}}
-
-\item{disable_progress}{a boolean to enable or disable the progress bar for
-the exploration of clusters}
 }
 \value{
 a \code{list} of class \code{bioRgeo.partition.metrics} with three elements:
@@ -116,7 +124,9 @@ tree1
 
 a <- partition_metrics(tree1,
                   dissimilarity = dissim,
-                  sp_site_table = vegemat,
+                  net = vegedf,
+                  site_col = "Site",
+                  species_col = "Species",
                   eval_metric = c("tot_endemism",
                                   "avg_endemism",
                                   "pc_distance",
@@ -138,7 +148,7 @@ a <- partition_metrics(tree1,
 \link{hclu_hierarclust}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Boris Leroy (\email{leroy.boris@gmail.com}),
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-Boris Leroy (\email{leroy.boris@gmail.com})
+Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

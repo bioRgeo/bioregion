@@ -64,11 +64,13 @@
 #' partition_metrics(clust2,
 #'                    dissimilarity = dissim,
 #'                    eval_metric = "pc_distance")
-#' \donttest{
+#' 
 #' partition_metrics(clust2,
-#'                    sp_site_table = vegemat,
+#'                    net = vegedf,
+#'                    species_col = "Species",
+#'                    site_col = "Site",
 #'                    eval_metric = "avg_endemism")
-#'                    }
+#'                    
 nhclu_kmeans <- function(dissimilarity,
                          index = names(dissimilarity)[3],
                          n_clust = NULL,

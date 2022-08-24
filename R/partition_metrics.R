@@ -18,11 +18,17 @@
 #' @param dissimilarity_index a character string indicating the dissimilarity (beta-diversity)
 #' index to be used in case \code{dist} is a \code{data.frame} with multiple
 #' dissimilarity indices
-#' @param sp_site_table a \code{matrix} with sites in row and species in
-#' columns. Should be provided if \code{eval_metric} includes
+#' @param net the species-site network (i.e., bipartite network). 
+#' Should be provided if \code{eval_metric} includes
 #' \code{"avg_endemism"} or \code{"tot_endemism"}
-#' @param disable_progress a boolean to enable or disable the progress bar for
-#' the exploration of clusters
+#' @param site_col name or number for the column of site nodes
+#' (i.e. primary nodes). 
+#' Should be provided if \code{eval_metric} includes
+#' \code{"avg_endemism"} or \code{"tot_endemism"}
+#' @param species_col name or number for the column of species nodes
+#' (i.e. feature nodes). 
+#' Should be provided if \code{eval_metric} includes
+#' \code{"avg_endemism"} or \code{"tot_endemism"}
 #'
 #' @details
 #' \loadmathjax
@@ -84,6 +90,7 @@
 #' for all explored numbers of clusters
 #' }
 #' }
+#' @import data.table 
 #' @export
 #' @references
 #' \insertRef{Castro-Insua2018}{bioRgeo}
@@ -96,9 +103,9 @@
 #'
 #' \insertRef{Langfelder2008}{bioRgeo}
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
+#' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-#' Boris Leroy (\email{leroy.boris@gmail.com})
+#' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' @seealso \link{hclu_hierarclust}
 #' @examples
 #' dissim <- dissimilarity(vegemat, metric = "all")
@@ -111,27 +118,32 @@
 #'
 #' a <- partition_metrics(tree1,
 #'                   dissimilarity = dissim,
-#'                   sp_site_table = vegemat,
+#'                   net = vegedf,
+#'                   site_col = "Site",
+#'                   species_col = "Species",
 #'                   eval_metric = c("tot_endemism",
 #'                                   "avg_endemism",
 #'                                   "pc_distance",
 #'                                   "anosim"))
 #'
-
 partition_metrics <- function(
-  cluster_object,
-  dissimilarity = NULL,
-  dissimilarity_index = names(dissimilarity)[3],
-  sp_site_table = NULL,
-  eval_metric = "pc_distance",
-  disable_progress = FALSE
+    cluster_object,
+    dissimilarity = NULL,
+    dissimilarity_index = names(dissimilarity)[3],
+    net = NULL,
+    site_col = 1,
+    species_col = 2,
+    eval_metric = c("pc_distance",
+                    "anosim",
+                    "avg_endemism",
+                    "tot_endemism")
 )
 {
   dissimilarity_based_metrics <- c("pc_distance",
                                    "anosim")
   compo_based_metrics <- c("avg_endemism",
                            "tot_endemism")
-
+  
   # 1. Does input object contains partitions? ---------------
   if (inherits(cluster_object, "bioRgeo.clusters")) {
     if (inherits(cluster_object$clusters, "data.frame")) {
@@ -147,8 +159,8 @@ partition_metrics <- function(
   } else if (!inherits(cluster_object, "hclust")) {
     stop("This function is designed to work either on bioRgeo.clusters objects (outputs from clustering functions)")
   } 
-
-
+  
+  
   if (is.null(dissimilarity)) {
     has.dissimilarity <- FALSE
     if(any(eval_metric %in% dissimilarity_based_metrics))
@@ -172,12 +184,12 @@ partition_metrics <- function(
   } else if (!inherits(dissimilarity, "dist")) {
     stop("dissimilarity must be an object containing dissimilarity indices from dissimilarity() or similarity_to_dissimilarity(), or an object of class dist")
   }
-
-  if (is.null(sp_site_table)) {
+  
+  if (is.null(net)) {
     has.contin <- FALSE
     if(any(eval_metric %in% compo_based_metrics))
     {
-      warning(paste0("No species-site table provided, so metrics ",
+      warning(paste0("No species-site network provided, so metrics ",
                      paste(eval_metric[which(eval_metric %in% compo_based_metrics)],
                            collapse = ", "),
                      " will not be computed"))
@@ -186,27 +198,28 @@ partition_metrics <- function(
   } else {
     if(has.clusters)
     {
-      if(any(!rownames(sp_site_table) %in% cluster_object$clusters$ID))
-      {
-        stop("sp_site_table should be a matrix with sites in rows, species in columns.\nRow names should be site names, and should be identical to site names in the cluster object")
+      if(any(!(cluster_object$clusters$ID %in% c(net[, site_col], net[, species_col])))) {
+        stop("Some elements of the cluster table (column ID) cannot be found in the network")
       }
     } 
+    # Next line is to use fast match with data.table, it needs characters
+    net[, c(site_col, species_col)] <- lapply(net[, c(site_col, species_col)], as.character)
     has.contin <- TRUE
   }
-
+  
   if(!length(eval_metric))
   {
     stop("No evaluation metric can be computed because of missing arguments. Check arguments dissimilarity and sp_site_table")
   }
-
+  
   nb_sites <- cluster_object$inputs$nb_sites
-
+  
   # 2. Calculate metrics ---------------------
-
+  
   if(has.dissimilarity) {
     dist_mat <- as.matrix(dist_object)
     dist_sum_total <- sum(dist_mat) # Calculation for metric "pc_distance"
-
+    
     # Create a vector of positions in the dissimilarity matrix indicating to what
     # row/column each element corresponds
     # Will be used to distinguish within vs. between clusters
@@ -219,8 +232,8 @@ partition_metrics <- function(
                             stats::as.dist(col(matrix(nrow = nb_sites,
                                                       ncol = nb_sites))))]
   }
-
-
+  
+  
   # Prepare evaluation data.frame
   evaluation_df <- data.frame(matrix(nrow = ncol(cluster_object$clusters) - 1,
                                      ncol = 2 + length(eval_metric),
@@ -230,100 +243,126 @@ partition_metrics <- function(
   evaluation_df$n_clusters <- apply(cluster_object$clusters[, 2:(ncol(cluster_object$clusters)), drop = FALSE],
                                     2,
                                     function (x) length(unique(x)))
-
+  
   evaluation_df <- evaluation_df[order(evaluation_df$n_clusters), ]
+  
+  
+  ### Check correspondence 
+  
+  # net_long <- data.frame(ID = c(unique(net[, site_col]),
+  #                                   unique(net[, species_col])),
+  #                            nodetype = c(rep("site", length(unique(net[, site_col]))),
+  #                                         rep("species", length(unique(net[, species_col])))))
+  # net_long <- data.frame(net_long,
+  #                            cluster_object$clusters[match(net_long$ID,
+  #                                                          cluster_object$clusters$ID), -1])
 
-
-
-
-  cur_col <- 2 # Start at the second column and proceed through all columns
-  message("Exploring metrics for all partitions, this may take a while...")
-  for(cls_col in 2:ncol(cluster_object$clusters))
-  {
-
-    # cur_clusters <- clusters[, cur_col]
-
-    if(has.dissimilarity){
-      # The next line will create, for each element of the dissimilarity matrix, a
-      # vector indicating whether if each dissimilarity is within or between clusters
-      within_clusters <- cluster_object$clusters[rownames_dist,
-                                  cls_col] == cluster_object$clusters[colnames_dist,
-                                                       cls_col]
-
-      if("pc_distance" %in% eval_metric)
-      {
-        # Compute total dissimilarity for current number of clusters
-        # Create a dissimilarity matrix with only dissimilarity between clusters - not within
-        # clusters
-        cur_dist_object <- dist_object
-        # dissimilarity between sites of current cluster are set to 0
-        cur_dist_object[within_clusters] <- 0
-
-        # Calculate sum for the current cluster number
-        evaluation_df$pc_distance[cls_col - 1] <- sum(cur_dist_object) / sum(dist_object)
-      }
-
-      if("anosim" %in% eval_metric)
-      {
-        dist_ranks <- rank(dist_object)
-
-        denom <- nb_sites * (nb_sites - 1) / 4
-
-        wb_average_rank <- tapply(dist_ranks, within_clusters, mean)
-
-        # Analysis of similarities, formula from the vegan package
-        evaluation_df$anosim[cls_col - 1] <- -diff(wb_average_rank) / denom
-      }
-    }
-
-
-    if(has.contin)
+  if(has.dissimilarity & any(c("pc_distance", "anosim") %in% eval_metric)){
+    # The next line will create, for each element of the dissimilarity matrix, a
+    # vector indicating whether if each dissimilarity is within or between clusters
+    dissimilarity <- data.frame(dissimilarity,
+                            cluster_object$clusters[data.table::chmatch(dissimilarity$Site1,
+                                                          cluster_object$clusters$ID), 
+                                                    cluster_object$cluster_info$partition_name],
+                            cluster_object$clusters[data.table::chmatch(dissimilarity$Site2,
+                                                          cluster_object$clusters$ID), 
+                                                    cluster_object$cluster_info$partition_name])
+    dissimilarity[, cluster_object$cluster_info$partition_name] <- 
+      dissimilarity[, cluster_object$cluster_info$partition_name] ==
+      dissimilarity[, paste0(cluster_object$cluster_info$partition_name, ".1")]
+    
+    dissimilarity <- dissimilarity[, -which(colnames(dissimilarity) %in%
+                                      paste0(cluster_object$cluster_info$partition_name, ".1"))]
+    
+    if("pc_distance" %in% eval_metric)
     {
-      cur_contin <- as.data.frame(sp_site_table)
-      cur_contin$cluster <- cluster_object$clusters[match(rownames(cur_contin), cluster_object$clusters$ID), cls_col]
-      cluster_contin <- stats::aggregate(. ~ cluster, cur_contin, sum)
-      rownames(cluster_contin) <- cluster_contin[, 1]
-      cluster_contin <- cluster_contin[, -1]
-      cluster_contin[cluster_contin > 0] <- 1
-      occ <- colSums(cluster_contin)
-      cluster_contin_end <- cluster_contin[, which(occ == 1)]
-
-      richness <- rowSums(cluster_contin)
-      richness_end <- rowSums(cluster_contin_end)
-
-
-
-      pc_endemism_per_cluster <- richness_end / richness
-
-      # Average endemism per cluster
-      if("avg_endemism" %in% eval_metric)
-      {
-        evaluation_df$avg_endemism[cls_col - 1] <- mean(pc_endemism_per_cluster)
-      }
-      # Total endemism
-      if("tot_endemism" %in% eval_metric)
-      {
-        evaluation_df$tot_endemism[cls_col - 1] <- length(which(occ == 1)) / length(which(occ != 1))
-      }
+      evaluation_df$pc_distance <- sapply(cluster_object$cluster_info$partition_name,
+                                          function(x, dist., index.) {
+                                            sum(dist.[!dist.[, x], index.]) / sum(dist.[, index.])
+                                          }, dist. = dissimilarity, index. = dissimilarity_index)
     }
-
-    if(!disable_progress)
+    
+    if("anosim" %in% eval_metric)
     {
-      cat(".")
-      if(cls_col == ncol(cluster_object$clusters))
-      {
-        cat("Complete\n")
-      } else if((cls_col - 1) %% 50 == 0)
-      {
-        cat(paste0("k = ", cls_col - 1, " ~ ", round(100 * (cls_col - 1) / ncol(cluster_object$clusters), 2), "% complete\n"))
-      }
+      dissimilarity$ranks <- rank(dissimilarity[, dissimilarity_index])
+      denom <- nb_sites * (nb_sites - 1) / 4
+      
+      # Fast calculation of the anosim for all clusters
+      evaluation_df$anosim <- sapply(cluster_object$cluster_info$partition_name,
+                                     function(x, dist., denom.) {
+                                       -diff(tapply(dist.$ranks,
+                                                    dist.[, x],
+                                                    mean)) / denom.
+                                     }, dist. = dissimilarity, denom. = denom)
+    }
+    
+  }
+  
+  if(has.contin & any(c("avg_endemism", "tot_endemism") %in% eval_metric)){
+    net <- data.frame(net, 
+                      cluster_object$clusters[data.table::chmatch(net[, site_col],
+                                                    cluster_object$clusters$ID), -1])
+    
+    N <- endemism <- end_richness <- pc_endemism <- NULL # To avoid CRAN notes
+    
+    # Fast calculation of endemism per cluster
+    endemism_results <- lapply(
+      cluster_object$cluster_info$partition_name,
+      function(x, network., species_col.) {
+        # Create species per cluster network in data.table format for faster calculations
+        species_cluster <- data.table::as.data.table(unique(network.[, c(species_col., x)]))
+        rich_clusters <- species_cluster[, .N, by = x] # Calculate richness per cluster
+        occ_sp <- species_cluster[, .N, by = species_col.] # Calculate species occurrence across clusters
+        occ_sp[, "endemism" := N == 1] # Add new column with endemism status
+        # Then add endemism status to species_cluster table
+        species_cluster$endemism <- occ_sp$endemism[data.table::chmatch(species_cluster[[species_col.]],
+                                                                        occ_sp[[species_col.]])] 
+        # Calculate richness of endemics per cluster
+        end_clusters <- species_cluster[endemism == TRUE, .N, by = x]
+        # Merge total & endemism richness tables
+        rich_clusters[, end_richness := end_clusters[
+          data.table::chmatch(rich_clusters[[x]],
+                              end_clusters[[x]]),
+          N]
+        ]
+        rich_clusters[is.na(rich_clusters)] <- 0 # Replace NAs (i.e. no endemics) by zeros
+        rich_clusters[, pc_endemism := end_richness/N] # Calculate percentage of endemism
+        return(rich_clusters)
+      }, network. = net, species_col. = species_col
+    )
+    names(endemism_results) <- cluster_object$cluster_info$partition_name
+    
+    # Average endemism per cluster
+    if("avg_endemism" %in% eval_metric)
+    {
+      evaluation_df$avg_endemism <- sapply(
+        cluster_object$cluster_info$partition_name,
+        function(x, end_list) {
+          mean(end_list[[x]]$pc_endemism)
+        },
+        end_list = endemism_results
+      )
+    }
+    # Total endemism
+    if("tot_endemism" %in% eval_metric)
+    {
+      nb_sp <- length(unique(net[, species_col])) 
+      evaluation_df$tot_endemism <- sapply(
+        cluster_object$cluster_info$partition_name,
+        function(x, end_list) {
+          sum(end_list[[x]]$end_richness)
+        },
+        end_list = endemism_results
+      ) / nb_sp
     }
   }
-
-
+  
+  
+  
+  
   outputs <- list(args = list(eval_metric = eval_metric),
                   evaluation_df = evaluation_df)
-
+  
   class(outputs) <- append("bioRgeo.partition.metrics", class(outputs))
   return(outputs)
 }

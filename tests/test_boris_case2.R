@@ -32,6 +32,16 @@ cl_infomap_bip <- netclu_infomap(fish,
                              site_col = "X1.Basin.Name",
                              species_col = "X6.Fishbase.Valid.Species.Name")
 
+
+system.time(b <- partition_metrics(cl_infomap_bip,
+                                   dissimilarity = fish_dist,
+                                   net = fish,
+                                   site_col = "X1.Basin.Name",
+                                   species_col = "X6.Fishbase.Valid.Species.Name",
+                                   eval_metric = c("pc_distance",
+                                                   "anosim","avg_endemism",
+                                                   "tot_endemism")))
+
 cl_infomap_not_bip <- netclu_infomap(fish,
                                  weight = FALSE,
                                  numtrials = 100,

@@ -75,11 +75,13 @@ clust2 <- nhclu_kmeans(dissim,
 partition_metrics(clust2,
                    dissimilarity = dissim,
                    eval_metric = "pc_distance")
-\donttest{
+
 partition_metrics(clust2,
-                   sp_site_table = vegemat,
+                   net = vegedf,
+                   species_col = "Species",
+                   site_col = "Site",
                    eval_metric = "avg_endemism")
-                   }
+                   
 }
 \seealso{
 \link{nhclu_pam}
