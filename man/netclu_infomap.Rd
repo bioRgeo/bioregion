@@ -36,8 +36,8 @@ indices.}
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there more than two columns.}
 
-\item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of \code{similarity} is used.}
+\item{index}{name or number of the column to use as weight. By default,
+the third column name of \code{net} is used.}
 
 \item{nbmod}{penalize solutions the more they differ from this number (0 by
 default for no preferred number of modules).}
@@ -68,7 +68,7 @@ of Infomap should be used (see Note).}
 (i.e. primary nodes).}
 
 \item{species_col}{name or number for the column of species nodes
-(i.e. feature nodes)}
+(i.e. feature nodes).}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output

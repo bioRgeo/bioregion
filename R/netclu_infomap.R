@@ -10,8 +10,8 @@
 #' indices.
 #' @param weight a \code{boolean} indicating if the weights should be considered
 #' if there more than two columns.
-#' @param index name or number of the dissimilarity column to use. By default,
-#' the third column name of \code{similarity} is used.
+#' @param index name or number of the column to use as weight. By default,
+#' the third column name of \code{net} is used.
 #' @param nbmod penalize solutions the more they differ from this number (0 by
 #' default for no preferred number of modules).
 #' @param markovtime scales link flow to change the cost of moving between
@@ -31,7 +31,7 @@
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes
-#' (i.e. feature nodes)
+#' (i.e. feature nodes).
 #' @param return_node_type a \code{character} indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
 #' (\code{keep_nodes_type="both"} by default).
@@ -203,8 +203,9 @@ both, sites and species", call. = FALSE)
     controls(args = directed, data = net, type = "input_net_directed")
   } else {
     if (directed) {
-      stop("directed cannot be set to TRUE if the network is bipartite!", 
-           call. = FALSE)
+      stop("directed cannot be set to TRUE if the network is bipartite!",
+        call. = FALSE
+      )
     }
   }
 
@@ -229,8 +230,9 @@ both, sites and species", call. = FALSE)
     path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
   } else {
     if (file.exists(path_temp)) {
-      stop(paste0(path_temp, " already exists. Please rename it or remove it."), 
-           call. = FALSE)
+      stop(paste0(path_temp, " already exists. Please rename it or remove it."),
+        call. = FALSE
+      )
     }
   }
   dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
@@ -308,7 +310,8 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
     return_node_type = return_node_type,
     version = version,
     delete_temp = delete_temp,
-    path_temp = path_temp, binpath = binpath
+    path_temp = path_temp,
+    binpath = binpath
   )
 
   outputs$inputs <- list(
@@ -367,17 +370,14 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
     stop("Linux, Windows or Mac distributions only.", call. = FALSE)
   }
 
-  outputs$algorithm$cmd <- cmd
-  outputs$algorithm$version <- version
-  outputs$algorithm$web <- "https://github.com/mapequation/infomap"
-
   # Run INFOMAP
   system(command = cmd)
 
   # Control: if the command line did not work
   if (!("net.tree" %in% list.files(paste0(path_temp)))) {
-    stop("Command line was wrongly implemented. Infomap did not run.", 
-         call. = FALSE)
+    stop("Command line was wrongly implemented. Infomap did not run.",
+      call. = FALSE
+    )
   }
 
   # Retrieve output from net.tree
@@ -417,7 +417,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
   if (isbip) {
     attr(com, "node_type") <- rep("site", dim(com)[1])
     attributes(com)$node_type[!is.na(match(com[, 1], idfeat$ID_NODE))] <- "species"
-    if (return_node_type == "site") {
+    if (return_node_type == "sites") {
       com <- com[attributes(com)$node_type == "site", ]
     }
     if (return_node_type == "species") {
@@ -428,18 +428,21 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
   # Put the warning back
   options(warn = defaultW)
 
-  # Return output
-  outputs$clusters <- com
+  # Return outputs
+  outputs$algorithm$cmd <- cmd
+  outputs$algorithm$version <- version
+  outputs$algorithm$web <- "https://github.com/mapequation/infomap"
 
+  outputs$clusters <- com
   outputs$cluster_info <- data.frame(
-    partition_name = names(outputs$clusters)[2:length(outputs$clusters), 
-                                             drop = FALSE],
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+      drop = FALSE
+    ],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
       2, function(x) length(unique(x))
     )
   )
-
   if (!twolevel & show_hierarchy) {
     outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
   }
