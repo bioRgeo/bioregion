@@ -8,7 +8,7 @@
 #' first columns as undirected links between pair of nodes and
 #' and the next column(s) are the weight of the links.
 #' @param weight a \code{boolean} indicating if the weights should be considered
-#' if there more than two columns (see Note).
+#' if there are more than two columns (see Note).
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of \code{net} is used.
 #' @param site_col name or number for the column of site nodes
@@ -24,7 +24,7 @@
 #' FALSE.
 #' @param algorithm_in_output a \code{boolean} indicating if the original output
 #' of \code{computeModules} should be returned in the output (see Value).
-#' Defaults to TRUE.
+#' Default to TRUE.
 #' @export
 #' @details
 #' This function is based on the modularity optimization algorithm provided by
@@ -133,7 +133,7 @@ both, sites and species", call. = FALSE)
   }
 
   # Class preparation
-  outputs <- list(name = "infomap")
+  outputs <- list(name = "beckett")
 
   outputs$args <- list(
     weight = weight,
@@ -141,7 +141,8 @@ both, sites and species", call. = FALSE)
     site_col = site_col,
     species_col = species_col,
     return_node_type = return_node_type,
-    forceLPA = forceLPA
+    forceLPA = forceLPA,
+    algorithm_in_output = algorithm_in_output
   )
 
   outputs$inputs <- list(
@@ -185,12 +186,13 @@ both, sites and species", call. = FALSE)
     com <- com[attributes(com)$node_type == "species", ]
   }
 
-  # Return outputs
+  # Set algorithm in outputs
   if (!algorithm_in_output) {
     outalg <- NA
   }
   outputs$algorithm <- outalg
 
+  # Set clusters and cluster_info in output
   outputs$clusters <- com
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
@@ -202,7 +204,7 @@ both, sites and species", call. = FALSE)
     )
   )
 
+  # Return outputs
   class(outputs) <- append("bioRgeo.clusters", class(outputs))
-
   return(outputs)
 }
