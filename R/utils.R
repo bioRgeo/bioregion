@@ -65,6 +65,14 @@ Please carefully check your data before using the clustering functions."))
       }
     }
   }
+  if (type == "input_net_isdirected") {
+    pairs1 <- paste0(data[, 1], "_", data[, 2])
+    pairs2 <- paste0(data[, 2], "_", data[, 1])
+    if (length(intersect(pairs1, pairs2)) > 0) {
+        message(paste0("It seems that the network is directed!
+                        This function is designed for undirected networks!"))
+    }
+  }
 
   # Input network weight #######################################################
   if (type == "input_net_weight") {
@@ -231,7 +239,7 @@ Please carefully check your data before using the clustering functions."))
     }
   }
 
-  # Positive Integer ###########################################################
+  # Positive integer ###########################################################
   if (type == "positive_integer") {
     if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."), call. = FALSE)
