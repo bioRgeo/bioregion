@@ -7,76 +7,138 @@
 netclu_louvain(
   net,
   weight = TRUE,
+  index = names(net)[3],
   lang = "Cpp",
   q = 0,
   c = 0.5,
   k = 1,
   bipartite = FALSE,
-  primary_col = 1,
-  feature_col = 2,
-  remove_feature = TRUE,
+  site_col = 1,
+  species_col = 2,
+  return_node_type = "both",
   delete_temp = TRUE,
   path_temp = "louvain_temp",
-  binpath = NULL
+  binpath = NULL,
+  algorithm_in_output = TRUE
 )
 }
 \arguments{
-\item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
-as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
+\item{net}{the output object from \code{\link{similarity}} or
+\code{\link{dissimilarity_to_similarity}}.
+If a \code{data.frame} is used, the first two columns represent pairs of
+sites (or any pair of nodes), and the next column(s) are the similarity
+indices.}
 
-\item{weight}{a boolean indicating if the weights should be considered if there is a third column}
+\item{weight}{a \code{boolean} indicating if the weights should be considered
+if there are more than two columns.}
 
-\item{lang}{a string indicating what version of Louvain should be used (igraph or Cpp, see Details)}
+\item{index}{name or number of the column to use as weight. By default,
+the third column name of \code{net} is used.}
 
-\item{q}{the quality function used to compute partition of the graph (modularity is chosen by default, see Details)}
+\item{lang}{a string indicating what version of Louvain should be used
+(igraph or Cpp, see Details).}
 
-\item{c}{the parameter for the Owsinski-Zadrozny quality function (between 0 and 1, 0.5 is chosen by default)}
+\item{q}{the quality function used to compute partition of the graph
+(modularity is chosen by default, see Details).}
 
-\item{k}{the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)}
+\item{c}{the parameter for the Owsinski-Zadrozny quality function
+(between 0 and 1, 0.5 is chosen by default).}
 
-\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+\item{k}{the kappa_min value for the Shi-Malik quality function
+(it must be > 0, 1 is chosen by default).}
 
-\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+\item{bipartite}{a boolean indicating if the network is bipartite
+(see Details).}
 
-\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+\item{site_col}{name or number for the column of site nodes
+(i.e. primary nodes).}
 
-\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
+\item{species_col}{name or number for the column of species nodes
+(i.e. feature nodes).}
 
-\item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
+\item{return_node_type}{a \code{character} indicating what types of nodes
+("sites", "species" or "both") should be returned in the output
+(\code{keep_nodes_type="both"} by default).}
 
-\item{path_temp}{a string indicating the path to the temporary folder (see Details)}
+\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
+be removed (see Details).}
 
-\item{binpath}{a string indicating the path to the bin folder (see \link{install_binaries} and Details)}
+\item{path_temp}{a \code{character} indicating the path to the temporary
+folder (see Details).}
+
+\item{binpath}{a \code{character} indicating the path to the bin folder
+(see \link{install_binaries} and Details).}
+
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \code{...} should be returned in the output (see Value).
+Default to TRUE.}
 }
 \value{
-A \code{data.frame} providing one community by node.
+A \code{list} of class \code{bioRgeo.clusters} with five slots:
+\enumerate{
+\item{\bold{name}: \code{character string} containing the name of the algorithm}
+\item{\bold{args}: \code{list} of input arguments as provided by the user}
+\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+\item{\bold{algorithm}: \code{list} of all objects associated with the
+ clustering procedure, such as original cluster objects (only if
+ \code{algorithm_in_output = TRUE})}
+\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find an "communities" object, output of \link[igraph]{cluster_louvain}
+if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
+
+\itemize{
+\item{\code{cmd}: the command line use to run Louvain}
+}.
 }
 \description{
-This function finds communities in a (un)weighted undirected network based on the Louvain algorithm.
+This function finds communities in a (un)weighted undirected network based on
+the Louvain algorithm.
 }
 \details{
-Louvain is a network community detection algorithm proposed in \insertCite{Blondel2008}{bioRgeo}. This function
-proposed two implementations of the function (parameter \code{lang}): the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} implementation
-(\link[igraph]{cluster_louvain}) and the C++ implementation (\url{https://sourceforge.net/projects/louvain/}, version 0.3).
-The latest offers the possibility to choose among several quality functions, \code{q = 0} for the classical
-Newman-Girvan criterion (also called "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for
-the Owsinski-Zadrozny criterion (you should specify the value of the parameter with option -c), 3	for the Goldberg
-Density criterion, 4	for the A-weighted Condorcet criterion, 5 for the Deviation to Indetermination criterion, 6
-for the Deviation to Uniformity criterion, 7 for the Profile Difference criterion, 8	for the Shi-Malik criterion
-(you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
+Louvain is a network community detection algorithm proposed in
+\insertCite{Blondel2008}{bioRgeo}. This function proposed two implementations
+of the function (parameter \code{lang}):
+the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+implementation (\link[igraph]{cluster_louvain}) and the C++ implementation
+(\url{https://sourceforge.net/projects/louvain/}, version 0.3). The latest
+offers the possibility to choose among several quality functions,
+\code{q = 0} for the classical Newman-Girvan criterion (also called
+"Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the Owsinski-Zadrozny
+criterion (you should specify the value of the parameter with the \code{c} 
+argument),
+3	for the Goldberg Density criterion, 4	for the A-weighted Condorcet criterion,
+5 for the Deviation to Indetermination criterion, 6 for the Deviation to
+Uniformity criterion, 7 for the Profile Difference criterion, 8	for the
+Shi-Malik criterion (you should specify the value of kappa_min with \code{k}
+ argument)
+and 9	for the Balanced Modularity criterion.
 
-Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
-the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-\code{feature_col} and \code{remove_feature}.
+The C++ version of Louvain is based on the version 0.3
+(\url{https://sourceforge.net/projects/louvain/}). This function needs
+executable binary files to run. They can be installed with
+\link{install_binaries}. If you set the path to the folder that will host the
+bin folder manually while running \link{install_binaries} please make sure to
+set \code{binpath} accordingly.
 
-The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
-This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
-accordingly.
+The C++ version of Louvain generates temporary folders and/or files that are
+stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp
+located in the working directory by default). This temporary folder is removed
+by default (\code{delete_temp = TRUE}).
+}
+\note{
+Although this algorithm was not primarily designed to deal with bipartite
+network, it is possible to consider the bipartite network as unipartite
+network (\code{bipartite = TRUE}).
 
-The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
-(folder "louvain_temp" in the working directory by default). This temporary folder is removed by default
-(\code{delete_temp = TRUE}).
+Do not forget to indicate which of the first two columns is
+dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+feature nodes) using the arguments \code{site_col} and \code{species_col}.
+The type of nodes returned in the output can be chosen with the argument
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+\code{"sites"} to preserve only the sites nodes and \code{"species"} to
+preserve only the species nodes.
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
@@ -90,10 +152,10 @@ com <- netclu_louvain(net, lang = "igraph")
 \insertRef{Blondel2008}{bioRgeo}
 }
 \seealso{
-\link{netclu_infomap}, \link{netclu_oslom}
+\link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

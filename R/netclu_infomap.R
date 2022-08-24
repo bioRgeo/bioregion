@@ -9,7 +9,7 @@
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
 #' @param weight a \code{boolean} indicating if the weights should be considered
-#' if there more than two columns.
+#' if there are more than two columns.
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of \code{net} is used.
 #' @param nbmod penalize solutions the more they differ from this number (0 by
@@ -51,7 +51,7 @@
 #'
 #' This function is based on the C++ version of Infomap
 #' (\url{https://github.com/mapequation/infomap/releases}).
-#' This function needs binary executable files to run. They can be installed with
+#' This function needs executable  binary files to run. They can be installed with
 #' \link{install_binaries}. If you set the path to the folder that will host
 #' the bin folder manually while running \link{install_binaries} please make
 #' sure to set \code{binpath} accordingly.
@@ -109,7 +109,7 @@
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' # com=netclu_infomap(net) # run install_binaries() to use this function
+#' # com <- netclu_infomap(net) # run install_binaries() to use this function
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
@@ -219,7 +219,6 @@ both, sites and species", call. = FALSE)
   }
   controls(args = numtrials, data = NULL, type = "strict_positive_integer")
   controls(args = twolevel, data = NULL, type = "boolean")
-
   controls(args = show_hierarchy, data = NULL, type = "boolean")
 
 
@@ -272,9 +271,7 @@ both, sites and species", call. = FALSE)
     idnode2 <- as.character(net[, 2])
     if (isbip) {
       message("The network seems to be bipartite! 
-The bipartite or bipartite_version argument should probably be set to TRUE.",
-        call. = FALSE
-      )
+The bipartite or bipartite_version argument should probably be set to TRUE.")
     }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
@@ -428,11 +425,12 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
   # Put the warning back
   options(warn = defaultW)
 
-  # Return outputs
+  # Set algorithm in outputs
   outputs$algorithm$cmd <- cmd
   outputs$algorithm$version <- version
   outputs$algorithm$web <- "https://github.com/mapequation/infomap"
 
+  # Set clusters and cluster_info in output
   outputs$clusters <- com
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
@@ -447,7 +445,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.",
     outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
   }
 
+  # Return outputs
   class(outputs) <- append("bioRgeo.clusters", class(outputs))
-
   return(outputs)
 }
