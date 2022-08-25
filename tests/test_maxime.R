@@ -31,16 +31,10 @@ install_binaries(binpath = NULL, infomap_version = c("2.1.0","2.6.0"))
 
 
 
-# infomap
-#source("bioRgeo/R/utils.R")
-#source("bioRgeo/R/netclu_infomap.R")
 
-net=similarity(mat,metric=c("Jaccard"))
 
-com=netclu_infomap(net[net[,3]>0.5,], weight=FALSE, index=3, version="2.6.0")
-com$clusters[1:10,]
 
-com=netclu_infomap(tab[1:1000,], bipartite=TRUE, index=3)
+
 
 
 
@@ -85,11 +79,27 @@ plot(sp)
 
 net=similarity(mat,metric=c("Simpson"))
 
-com=netclu_walktrap(net, weight=TRUE)
-com[1:10,]
+com=netclu_walktrap(net,
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  steps =4,
+                  bipartite = FALSE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "both",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
-com=netclu_walktrap(tab[1:1000,], bipartite = TRUE)
-com[1:10,]
+com=netclu_walktrap(tab[1:1000,],                  
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  steps = 4,
+                  bipartite = TRUE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "sites",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
 # leadingeigen
 #source("bioRgeo/R/utils.R")
@@ -97,11 +107,26 @@ com[1:10,]
 
 net=similarity(mat,metric=c("Simpson"))
 
-com=netclu_leadingeigen(net, weight=TRUE)
-com[1:10,]
+com=netclu_leadingeigen(net,
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  bipartite = FALSE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "both",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
-com=netclu_leadingeigen(tab[1:1000,], bipartite = TRUE)
-com[1:10,]
+com=netclu_leadingeigen(tab[1:1000,],                  
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  bipartite = TRUE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "sites",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
+
 
 # labelprop
 #source("bioRgeo/R/utils.R")
@@ -109,11 +134,25 @@ com[1:10,]
 
 net=similarity(mat,metric=c("Simpson"))
 
-com=netclu_labelprop(net, weight=TRUE)
-com[1:10,]
+com=netclu_labelprop(net,
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  bipartite = FALSE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "both",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
-com=netclu_labelprop(tab[1:1000,], bipartite = TRUE)
-com[1:10,]
+com=netclu_labelprop(tab[1:1000,],                  
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  bipartite = TRUE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "sites",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
 # greedy
 #source("bioRgeo/R/utils.R")
@@ -121,11 +160,25 @@ com[1:10,]
 
 net=similarity(mat,metric=c("Simpson"))
 
-com=netclu_greedy(net, weight=TRUE)
-com[1:10,]
+com=netclu_greedy(net,
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  bipartite = FALSE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "both",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
-com=netclu_greedy(tab[1:1000,], bipartite = TRUE)
-com[1:10,]
+com=netclu_greedy(tab[1:1000,],                  
+                  weight = TRUE,
+                  #index = names(net)[3],
+                  bipartite = TRUE,
+                  site_col = 1,
+                  species_col = 2,
+                  return_node_type = "sites",
+                  algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
 # oslom
 #source("bioRgeo/R/utils.R")
@@ -133,11 +186,43 @@ com[1:10,]
 
 net=similarity(mat,metric=c("Jaccard"))
 
-com=netclu_oslom(net[net[,3]>0.5,], r=1, reassign="simil")
-com[1:10,]
+com=netclu_oslom(net[net[,3]>0.5,], 
+                 weight = TRUE,
+                 #index = names(net)[3],
+                 reassign = "no",
+                 r = 1,
+                 hr = 50,
+                 seed = 0,
+                 t = 0.1,
+                 cp = 0.5,
+                 directed = FALSE,
+                 bipartite = FALSE,
+                 site_col = 1,
+                 species_col = 2,
+                 return_node_type = "both",
+                 delete_temp = TRUE,
+                 path_temp = "oslom_temp",
+                 binpath = NULL)
+com$clusters[1:10,]
 
-com=netclu_oslom(tab[1:1000,], r=1, reassign="simil")
-com[1:10,]
+com=netclu_oslom(tab[1:1000,],
+                 weight = TRUE,
+                 #index = names(net)[3],
+                 reassign = "simil",
+                 r = 1,
+                 hr = 50,
+                 seed = 0,
+                 t = 0.1,
+                 cp = 0.5,
+                 directed = FALSE,
+                 bipartite = TRUE,
+                 site_col = 1,
+                 species_col = 2,
+                 return_node_type = "both",
+                 delete_temp = TRUE,
+                 path_temp = "oslom_temp",
+                 binpath = NULL)
+com$clusters[1:10,]
 
 # louvain
 #source("bioRgeo/R/utils.R")
@@ -145,11 +230,39 @@ com[1:10,]
 
 net=similarity(mat,metric=c("Jaccard"))
 
-com=netclu_louvain(net[net[,3]>0.5,])
-com[1:10,]
+com=netclu_louvain(net = net[net[,3]>0.5,],
+                   weight = TRUE,
+                   index = names(net)[3],
+                   lang = "igraph",
+                   q = 0,
+                   c = 0.5,
+                   k = 1,
+                   bipartite = FALSE,
+                   site_col = 1,
+                   species_col = 2,
+                   return_node_type = "both",
+                   delete_temp = TRUE,
+                   path_temp = "louvain_temp",
+                   binpath = NULL,
+                   algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
-com=netclu_louvain(tab[1:1000,], bipartite = TRUE)
-com[1:10,]
+com=netclu_louvain(net = tab[1:1000,], 
+                   weight = TRUE,
+                   #index = names(net)[3],
+                   lang = "Cpp",
+                   q = 0,
+                   c = 0.5,
+                   k = 1,
+                   bipartite = TRUE,
+                   site_col = 1,
+                   species_col = 2,
+                   return_node_type = "both",
+                   delete_temp = TRUE,
+                   path_temp = "louvain_temp",
+                   binpath = NULL,
+                   algorithm_in_output = TRUE)
+com$clusters[1:10,]
 
 # infomap
 #source("bioRgeo/R/utils.R")
@@ -157,18 +270,61 @@ com[1:10,]
 
 net=similarity(mat,metric=c("Jaccard"))
 
-com=netclu_infomap(net[net[,3]>0.5,])
-com[1:10,]
+com=netclu_infomap(net = net[net[,3]>0.5,],
+                   weight = TRUE,
+                   index = names(net)[3],
+                   nbmod = 0,
+                   markovtime = 1,
+                   seed = 0,
+                   numtrials = 1,
+                   twolevel = FALSE,
+                   show_hierarchy = FALSE,
+                   directed = FALSE,
+                   bipartite_version = FALSE,
+                   bipartite = FALSE,
+                   site_col = 1,
+                   species_col = 2,
+                   return_node_type = "both",
+                   version = "2.6.0",
+                   delete_temp = TRUE,
+                   path_temp = "infomap_temp",
+                   binpath = NULL)
+com$clusters[1:10,]
 
-com=netclu_infomap(tab[1:1000,], bipartite = TRUE)
-com[1:10,]
+com=netclu_infomap(net = tab[1:1000,],                   
+                   weight = TRUE,
+                   #index = names(net)[3],
+                   nbmod = 0,
+                   markovtime = 1,
+                   seed = 0,
+                   numtrials = 1,
+                   twolevel = FALSE,
+                   show_hierarchy = FALSE,
+                   directed = FALSE,
+                   bipartite_version = FALSE,
+                   bipartite = TRUE,
+                   site_col = 1,
+                   species_col = 2,
+                   return_node_type = "both",
+                   version = "2.6.0",
+                   delete_temp = TRUE,
+                   path_temp = "infomap_temp",
+                   binpath = NULL)
+com$clusters[1:10,]
 
 # beckett
 #source("bioRgeo/R/utils.R")
 #source("bioRgeo/R/netclu_beckett.R")
 
-com=netclu_beckett(tab[1:1000,], weight=TRUE, forceLPA=FALSE)
-com[1:10,]
+com=netclu_beckett(net = tab[1:1000,], 
+                   weight = TRUE,
+                   index = "Abundance",
+                   site_col = 1,
+                   species_col = 2,
+                   return_node_type = "species",
+                   forceLPA = FALSE,
+                   algorithm_in_output = TRUE)
+com$clusters[1:10,]
 ############################################################################################
 
 

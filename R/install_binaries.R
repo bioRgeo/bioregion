@@ -303,7 +303,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
       message(" ")
       message("Infomap is not installed...")
       message("Please have a look at 
-            https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
     } else {
       if (testopm) {
         message(
@@ -327,7 +327,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
         message(" ")
         message("A library is probably missing to install the OpenMP version...")
         message("Please have a look at 
-              https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
       }
       utils::write.table(1, paste0(path, "check.txt"))
     }
@@ -388,7 +388,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
     message(" ")
     message("Louvain is not installed...")
     message("Please have a look at 
-            https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
   } else {
     message(
       "Congratulation, you successfully install the version ",
@@ -490,7 +490,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
     message(" ")
     message("OSLOM is not installed...")
     message("Please have a look at 
-            https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
   } else {
     message(
       "Congratulation, you successfully install the version ", version,
@@ -500,7 +500,7 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
     if (!testdir) {
       message("Warning: only the undirected version of OSLOM has been install...")
       message("Please have a look at 
-              https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
     } else {
       utils::write.table(1, paste0(path, "checkdir.txt"))
     }

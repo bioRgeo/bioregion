@@ -7,41 +7,79 @@
 netclu_leadingeigen(
   net,
   weight = TRUE,
+  index = names(net)[3],
   bipartite = FALSE,
-  primary_col = 1,
-  feature_col = 2,
-  remove_feature = TRUE
+  site_col = 1,
+  species_col = 2,
+  return_node_type = "both",
+  algorithm_in_output = TRUE
 )
 }
 \arguments{
-\item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
-as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
+\item{net}{the output object from \code{\link{similarity}} or
+\code{\link{dissimilarity_to_similarity}}.
+If a \code{data.frame} is used, the first two columns represent pairs of
+sites (or any pair of nodes), and the next column(s) are the similarity
+indices.}
 
-\item{weight}{a boolean indicating if the weights should be considered if there is a third column}
+\item{weight}{a \code{boolean} indicating if the weights should be considered
+if there are more than two columns.}
 
-\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+\item{index}{name or number of the column to use as weight. By default,
+the third column name of \code{net} is used.}
 
-\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+\item{bipartite}{a \code{boolean} indicating if the network is bipartite
+(see Details).}
 
-\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+\item{site_col}{name or number for the column of site nodes
+(i.e. primary nodes).}
 
-\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
+\item{species_col}{name or number for the column of species nodes
+(i.e. feature nodes).}
+
+\item{return_node_type}{a \code{character} indicating what types of nodes
+("sites", "species" or "both") should be returned in the output
+(\code{keep_nodes_type="both"} by default).}
+
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \code{communities} should be returned in the output (see Value).}
 }
 \value{
-A \code{data.frame} providing one community by node.
+A \code{list} of class \code{bioRgeo.clusters} with five slots:
+\enumerate{
+\item{\bold{name}: \code{character string} containing the name of the algorithm}
+\item{\bold{args}: \code{list} of input arguments as provided by the user}
+\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+\item{\bold{algorithm}: \code{list} of all objects associated with the
+ clustering procedure, such as original cluster objects (only if
+ \code{algorithm_in_output = TRUE})}
+\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find an "communities" object, output of \link[igraph]{cluster_leading_eigen}.
 }
 \description{
-This function finds communities in a (un)weighted undirected network based on leading eigenvector
-of the community matrix.
+This function finds communities in a (un)weighted undirected network based on
+leading eigenvector of the community matrix.
 }
 \details{
-This function is based on leading eigenvector of the community matrix \insertCite{Newman2006}{bioRgeo}
-as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
-(\link[igraph]{cluster_leading_eigen}).
+This function is based on leading eigenvector of the community matrix
+\insertCite{Newman2006}{bioRgeo} as implemented in the
+\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+package (\link[igraph]{cluster_leading_eigen}).
+}
+\note{
+Although this algorithm was not primarily designed to deal with bipartite
+network, it is possible to consider the bipartite network as unipartite
+network (\code{bipartite = TRUE}).
 
-Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
-the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-\code{feature_col} and \code{remove_feature}.
+Do not forget to indicate which of the first two columns is
+dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+feature nodes) using the arguments \code{site_col} and \code{species_col}.
+The type of nodes returned in the output can be chosen with the argument
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+\code{"sites"} to preserve only the sites nodes and \code{"species"} to
+preserve only the species nodes.
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
@@ -54,11 +92,8 @@ com <- netclu_leadingeigen(net)
 \references{
 \insertRef{Newman2006}{bioRgeo}
 }
-\seealso{
-\link{netclu_infomap}, \link{netclu_oslom}
-}
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

@@ -1,53 +1,114 @@
 #' Louvain community finding
 #'
-#' This function finds communities in a (un)weighted undirected network based on the Louvain algorithm.
+#' This function finds communities in a (un)weighted undirected network based on
+#' the Louvain algorithm.
 #'
-#' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
-#' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param lang a string indicating what version of Louvain should be used (igraph or Cpp, see Details)
-#' @param q the quality function used to compute partition of the graph (modularity is chosen by default, see Details)
-#' @param c the parameter for the Owsinski-Zadrozny quality function (between 0 and 1, 0.5 is chosen by default)
-#' @param k the kappa_min value for the Shi-Malik quality function (it must be > 0, 1 is chosen by default)
-#' @param bipartite a boolean indicating if the network is bipartite (see Details)
-#' @param primary_col name or number for the column of primary nodes (i.e. site)
-#' @param feature_col name or number for the column of feature nodes (i.e. species)
-#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
-#' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
-#' @param path_temp a string indicating the path to the temporary folder (see Details)
-#' @param binpath a string indicating the path to the bin folder (see \link{install_binaries} and Details)
+#' @param net the output object from \code{\link{similarity}} or
+#' \code{\link{dissimilarity_to_similarity}}.
+#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' sites (or any pair of nodes), and the next column(s) are the similarity
+#' indices.
+#' @param weight a \code{boolean} indicating if the weights should be considered
+#' if there are more than two columns.
+#' @param index name or number of the column to use as weight. By default,
+#' the third column name of \code{net} is used.
+#' @param lang a string indicating what version of Louvain should be used
+#' (igraph or Cpp, see Details).
+#' @param q the quality function used to compute partition of the graph
+#' (modularity is chosen by default, see Details).
+#' @param c the parameter for the Owsinski-Zadrozny quality function
+#' (between 0 and 1, 0.5 is chosen by default).
+#' @param k the kappa_min value for the Shi-Malik quality function
+#' (it must be > 0, 1 is chosen by default).
+#' @param bipartite a boolean indicating if the network is bipartite
+#' (see Details).
+#' @param site_col name or number for the column of site nodes
+#' (i.e. primary nodes).
+#' @param species_col name or number for the column of species nodes
+#' (i.e. feature nodes).
+#' @param return_node_type a \code{character} indicating what types of nodes
+#' ("sites", "species" or "both") should be returned in the output
+#' (\code{keep_nodes_type="both"} by default).
+#' @param delete_temp a \code{boolean} indicating if the temporary folder should
+#' be removed (see Details).
+#' @param path_temp a \code{character} indicating the path to the temporary
+#' folder (see Details).
+#' @param binpath a \code{character} indicating the path to the bin folder
+#' (see \link{install_binaries} and Details).
+#' @param algorithm_in_output a \code{boolean} indicating if the original output
+#' of \code{communities} should be returned in the output (see Value).
+#' Default to TRUE.
 #' @export
 #' @details
-#' Louvain is a network community detection algorithm proposed in \insertCite{Blondel2008}{bioRgeo}. This function
-#' proposed two implementations of the function (parameter \code{lang}): the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} implementation
-#' (\link[igraph]{cluster_louvain}) and the C++ implementation (\url{https://sourceforge.net/projects/louvain/}, version 0.3).
-#' The latest offers the possibility to choose among several quality functions, \code{q = 0} for the classical
-#' Newman-Girvan criterion (also called "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for
-#' the Owsinski-Zadrozny criterion (you should specify the value of the parameter with option -c), 3	for the Goldberg
-#' Density criterion, 4	for the A-weighted Condorcet criterion, 5 for the Deviation to Indetermination criterion, 6
-#' for the Deviation to Uniformity criterion, 7 for the Profile Difference criterion, 8	for the Shi-Malik criterion
-#' (you should specify the value of kappa_min with option -k) and 9	for the Balanced Modularity criterion.
+#' Louvain is a network community detection algorithm proposed in
+#' \insertCite{Blondel2008}{bioRgeo}. This function proposed two implementations
+#' of the function (parameter \code{lang}):
+#' the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+#' implementation (\link[igraph]{cluster_louvain}) and the C++ implementation
+#' (\url{https://sourceforge.net/projects/louvain/}, version 0.3). The latest
+#' offers the possibility to choose among several quality functions,
+#' \code{q = 0} for the classical Newman-Girvan criterion (also called
+#' "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the Owsinski-Zadrozny
+#' criterion (you should specify the value of the parameter with the \code{c} 
+#' argument),
+#' 3	for the Goldberg Density criterion, 4	for the A-weighted Condorcet criterion,
+#' 5 for the Deviation to Indetermination criterion, 6 for the Deviation to
+#' Uniformity criterion, 7 for the Profile Difference criterion, 8	for the
+#' Shi-Malik criterion (you should specify the value of kappa_min with \code{k}
+#'  argument)
+#' and 9	for the Balanced Modularity criterion.
 #'
-#' Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
-#' the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-#' \code{feature_col} and \code{remove_feature}.
+#' The C++ version of Louvain is based on the version 0.3
+#' (\url{https://sourceforge.net/projects/louvain/}). This function needs
+#' executable binary files to run. They can be installed with
+#' \link{install_binaries}. If you set the path to the folder that will host the
+#' bin folder manually while running \link{install_binaries} please make sure to
+#' set \code{binpath} accordingly.
 #'
-#' The C++ version of Louvain is based on the version 0.3 (\url{https://sourceforge.net/projects/louvain/}).
-#' This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-#' the folder that will host the bin folder manually while running \link{install_binaries} please make sure to set \code{binpath}
-#' accordingly.
+#' The C++ version of Louvain generates temporary folders and/or files that are
+#' stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp
+#' located in the working directory by default). This temporary folder is removed
+#' by default (\code{delete_temp = TRUE}).
 #'
-#' The C++ version of Louvain generates temporary folders and/or files that are stored in the \code{path_temp} folder
-#' (folder "louvain_temp" in the working directory by default). This temporary folder is removed by default
-#' (\code{delete_temp = TRUE}).
+#' @note
+#' Although this algorithm was not primarily designed to deal with bipartite
+#' network, it is possible to consider the bipartite network as unipartite
+#' network (\code{bipartite = TRUE}).
 #'
-#' @return A \code{data.frame} providing one community by node.
+#' Do not forget to indicate which of the first two columns is
+#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' The type of nodes returned in the output can be chosen with the argument
+#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to
+#' preserve only the species nodes.
+#'
+#' @return
+#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' \enumerate{
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
+#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
+#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  \code{algorithm_in_output = TRUE})}
+#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#'
+#' In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+#' find an "communities" object, output of \link[igraph]{cluster_louvain}
+#' if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
+#'
+#' \itemize{
+#' \item{\code{cmd}: the command line use to run Louvain}
+#' \item{\code{version}: the Louvain version}
+#' \item{\code{web}: Louvain's website}
+#' }.
 #'
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{netclu_infomap}, \link{netclu_oslom}
+#' @seealso \link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
@@ -58,114 +119,93 @@
 #' @references
 #' \insertRef{Blondel2008}{bioRgeo}
 #' @export
-netclu_louvain <- function(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k = 1,
-                           bipartite = FALSE, primary_col = 1, feature_col = 2, remove_feature = TRUE,
-                           delete_temp = TRUE, path_temp = "louvain_temp", binpath = NULL) {
+netclu_louvain <- function(net,
+                           weight = TRUE,
+                           index = names(net)[3],
+                           lang = "Cpp",
+                           q = 0,
+                           c = 0.5,
+                           k = 1,
+                           bipartite = FALSE,
+                           site_col = 1,
+                           species_col = 2,
+                           return_node_type = "both",
+                           delete_temp = TRUE,
+                           path_temp = "louvain_temp",
+                           binpath = NULL,
+                           algorithm_in_output = TRUE) {
 
   # Control input net
-  if (!is.data.frame(net)) {
-    stop("net must be a two- or three-columns data.frame")
+  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_net")
+
+  # Control input weight & index
+  controls(args = weight, data = net, type = "input_net_weight")
+  if (weight) {
+    controls(args = index, data = net, type = "input_net_index")
+    net[, 3] <- net[, index]
+    net <- net[, 1:3]
+    controls(args = NULL, data = net, type = "input_net_index_value")
   }
 
-  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  nbna <- sum(is.na(net))
-  if (nbna > 0) {
-    stop("NA(s) detected in the data.frame")
-  }
-
-  # Control parameters
-  if (!is.logical(weight)) {
-    stop("weight must be a boolean")
-  }
-
-  if (weight & dim(net)[2] == 2) {
-    stop("net must be a three-columns data.frame if weight equal TRUE")
-  }
-
-  if (weight & dim(net)[2] == 3) {
-    if (!is.numeric(net[, 3])) {
-      stop("The third column of net must be numeric")
-    } else {
-      minet <- min(net[, 3])
-      if (minet < 0) {
-        stop("The third column of net should contains only positive real: negative value detected!")
-      }
+  # Control input bipartite
+  controls(args = bipartite, data = NULL, type = "boolean")
+  isbip <- bipartite
+  if (isbip) {
+    controls(args = NULL, data = net, type = "input_net_bip")
+    controls(args = site_col, data = net, type = "input_net_bip_col")
+    controls(args = species_col, data = net, type = "input_net_bip_col")
+    if (!(return_node_type %in% c("both", "sites", "species"))) {
+      stop("Please choose return_node_type among the followings values:
+both, sites and species", call. = FALSE)
     }
   }
 
-  if (!(lang %in% c("Cpp", "igraph", "all"))) {
-    stop("The Louvain version is not available.
-     Please chose among the followings:
-         Cpp, igraph, all")
-  }
+  # Control input directed
+  controls(args = NULL, data = net, type = "input_net_isdirected")
 
-  # Controls bipartite arguments
-  if (!is.logical(bipartite)) {
-    stop("bipartite must be a boolean")
+  # Control parameters LOUVAIN
+  if (!(lang %in% c("Cpp", "igraph"))) {
+    stop("Please choose lang among the following values:
+Cpp, igraph", call. = FALSE)
   }
-
-  if (is.character(primary_col)) {
-    if (!(primary_col %in% colnames(net))) {
-      stop("primary_col should be a column name")
-    }
-  } else if (is.numeric(primary_col)) {
-    if (primary_col <= 0) {
-      stop("primary_col must be strictly positive")
-    } else {
-      if (primary_col %% 1 != 0) {
-        stop("primary_col must be an integer")
-      }
-    }
-  } else {
-    stop("primary_col should be numeric or character")
+  controls(args = q, data = NULL, type = "positive_integer")
+  controls(args = c, data = NULL, type = "strict_positive_numeric")
+  if (c > 1) {
+    stop("c must be in the interval (0,1)!", call. = FALSE)
   }
-
-  if (is.character(feature_col)) {
-    if (!(feature_col %in% colnames(net))) {
-      stop("feature_col should be a column name")
-    }
-  } else if (is.numeric(feature_col)) {
-    if (feature_col <= 0) {
-      stop("feature_col must be strictly positive")
-    } else {
-      if (feature_col %% 1 != 0) {
-        stop("feature_col must be an integer")
-      }
-    }
-  } else {
-    stop("feature_col should be numeric or character")
-  }
-
-  if (!is.logical(remove_feature)) {
-    stop("remove_feature must be a boolean")
-  }
+  controls(args = k, data = NULL, type = "strict_positive_numeric")
+  controls(args = algorithm_in_output, data = NULL, type = "boolean")
 
   # Prepare input for LOUVAIN
-  if (bipartite) {
-    idprim <- as.character(net[, primary_col])
+  if (isbip) {
+    idprim <- as.character(net[, site_col])
     idprim <- idprim[!duplicated(idprim)]
-    idfeat <- as.character(net[, feature_col])
+    nbsites <- length(idprim)
+    idfeat <- as.character(net[, species_col])
     idfeat <- idfeat[!duplicated(idfeat)]
-    # Control bipartite
-    if (length(intersect(idprim, idfeat)) > 0) {
-      stop("If bipartite = TRUE primary and feature nodes should be different.")
-    }
+
     idnode <- c(idprim, idfeat)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
+    netemp <- data.frame(
+      node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
+      node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
+    )
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
-    if (length(intersect(idnode1, idnode2)) == 0) {
-      stop("The network is bipartite! The bipartite argument should be set to TRUE.")
+    if (isbip) {
+      message("The network seems to be bipartite! 
+The bipartite argument should probably be set to TRUE.")
     }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
+    nbsites <- length(idnode)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], node2 = idnode[match(net[, 2], idnode[, 2]), 1])
+    netemp <- data.frame(
+      node1 = idnode[match(net[, 1], idnode[, 2]), 1],
+      node2 = idnode[match(net[, 2], idnode[, 2]), 1]
+    )
   }
 
   if (weight) {
@@ -174,18 +214,57 @@ netclu_louvain <- function(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k =
     colnames(netemp)[3] <- "weight"
   }
 
-  if (lang == "igraph" | lang == "all") {
+  # Class preparation
+  outputs <- list(name = "netclu_louvain")
+
+  outputs$args <- list(
+    weight = weight,
+    index = index,
+    lang = lang,
+    q = q,
+    c = c,
+    k = k,
+    bipartite = bipartite,
+    site_col = site_col,
+    species_col = species_col,
+    return_node_type = return_node_type,
+    delete_temp = delete_temp,
+    path_temp = path_temp,
+    binpath = binpath,
+    algorithm_in_output = algorithm_in_output
+  )
+
+  outputs$inputs <- list(
+    bipartite = isbip,
+    weight = weight,
+    pairwise = ifelse(isbip, FALSE, TRUE),
+    pairwise_metric = ifelse(isbip, NA, index),
+    dissimilarity = FALSE,
+    nb_sites = nbsites
+  )
+
+  outputs$algorithm <- list()
+
+  # igraph
+  if (lang == "igraph") {
+
+    # Run algo
     net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-    comtemp <- igraph::cluster_louvain(net)
-    comtemp <- cbind(as.numeric(comtemp$names), as.numeric(comtemp$membership))
+    outalg <- igraph::cluster_louvain(net)
+    comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
 
     com <- data.frame(ID = idnode[, 2], Com = 0)
     com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
 
-    comr <- com
+    # Set algorithm in outputs
+    if (!algorithm_in_output) {
+      outalg <- NA
+    }
+    outputs$algorithm <- outalg
   }
 
-  if (lang == "Cpp" | lang == "all") {
+  # Cpp
+  if (lang == "Cpp") {
 
     # Set binpath
     if (is.null(binpath)) {
@@ -194,11 +273,9 @@ netclu_louvain <- function(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k =
       binpath <- biodir[grep("bioRgeo", biodir)]
     } else {
       # Control
-      if (!is.character(binpath)) {
-        stop("path must be a string")
-      }
+      controls(args = binpath, data = NULL, type = "character")
       if (!file.exists(binpath)) {
-        stop(paste0("Impossible to access ", binpath))
+        stop(paste0("Impossible to access ", binpath), call. = FALSE)
       }
     }
 
@@ -207,58 +284,39 @@ netclu_louvain <- function(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k =
 
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
-      stop("Louvain is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+      stop("Louvain is not installed... 
+Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
     }
 
-    # Create temp folder
+    # Control temp folder + create temp folder
+    path_temp <- controls(args = path_temp, data = NULL, type = "character")
+    controls(args = delete_temp, data = NULL, type = "boolean")
+    if (path_temp == "louvain_temp") {
+      path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
+    } else {
+      if (file.exists(path_temp)) {
+        stop(paste0(path_temp, " already exists. Please rename it or remove it."),
+          call. = FALSE
+        )
+      }
+    }
     dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
     if (!file.exists(path_temp)) {
-      stop(paste0("Impossible to create directory ", path_temp))
-    }
-
-    # Control parameters
-    if (!is.numeric(q)) {
-      stop("q must be numeric")
-    } else {
-      if (q < 0) {
-        stop("q must be positive")
-      }
-      if ((q - floor(q)) > 0) {
-        stop("q must be an integer higher or equal to 0")
-      }
-    }
-
-    if (!is.numeric(c)) {
-      stop("c must be numeric")
-    } else {
-      if (c < 0 | c > 1) {
-        stop("c must be in the interval (0,1)")
-      }
-    }
-
-    if (!is.numeric(k)) {
-      stop("k must be numeric")
-    } else {
-      if (k < 0) {
-        stop("k must be positive")
-      }
-    }
-
-    if (!is.logical(delete_temp)) {
-      stop("delete_temp must be a boolean")
-    }
-
-    if (!is.character(path_temp)) {
-      stop("path_temp must be a string")
+      stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
     }
 
     # Export input in LOUVAIN folder
-    utils::write.table(netemp, paste0(path_temp, "/net.txt"), row.names = FALSE, col.names = FALSE, sep = " ")
+    utils::write.table(netemp, paste0(path_temp, "/net.txt"),
+      row.names = FALSE, col.names = FALSE, sep = " "
+    )
 
     # Prepare command to run LOUVAIN
     # Convert net.txt with LOUVAIN
     if (weight) {
-      cmd <- paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ", path_temp, "/net.weights")
+      cmd <- paste0(
+        "-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ",
+        path_temp, "/net.weights"
+      )
     } else {
       cmd <- paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin")
     }
@@ -277,20 +335,32 @@ netclu_louvain <- function(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k =
 
     # Run LOUVAIN
     if (weight) {
-      cmd <- paste0(path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k, " -w ", path_temp, "/net.weights")
+      cmd <- paste0(
+        path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k,
+        " -w ", path_temp, "/net.weights"
+      )
     } else {
       cmd <- paste0(path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k)
     }
 
     if (os == "Linux") {
-      cmd <- paste0(binpath, "/bin/LOUVAIN/louvain_lin ", cmd, " > ", path_temp, "/net.tree")
+      cmd <- paste0(
+        binpath, "/bin/LOUVAIN/louvain_lin ", cmd, " > ",
+        path_temp, "/net.tree"
+      )
       system(command = cmd)
     } else if (os == "Windows") {
       cmd <- paste0(binpath, "/bin/LOUVAIN/louvain_win.exe ", cmd)
       tree <- system(command = cmd, intern = TRUE)
-      cat(tree[1:(length(tree) - 1)], file = paste0(path_temp, "/net.tree"), sep = "\n")
+      cat(tree[1:(length(tree) - 1)],
+        file = paste0(path_temp, "/net.tree"),
+        sep = "\n"
+      )
     } else if (os == "Darwin") {
-      cmd <- paste0(binpath, "/bin/LOUVAIN/louvain_mac ", cmd, " > ", path_temp, "/net.tree")
+      cmd <- paste0(
+        binpath, "/bin/LOUVAIN/louvain_mac ", cmd, " > ",
+        path_temp, "/net.tree"
+      )
       system(command = cmd)
     } else {
       stop("Linux, Windows or Mac distributions only.")
@@ -310,27 +380,46 @@ netclu_louvain <- function(net, weight = TRUE, lang = "Cpp", q = 0, c = 0.5, k =
     com <- data.frame(ID = idnode[, 2], Com = 0)
     com[match(tree[, 1], idnode[, 1]), 2] <- tree[, 2]
 
-    comc <- com
-
     # Remove temporary file
     if (delete_temp) {
       unlink(paste0(path_temp), recursive = TRUE)
     }
-  }
 
-  if (lang == "all") {
-    com <- cbind(comr, comc[, -1])
-  }
-
-  # Remove feature nodes
-  if (bipartite & remove_feature) {
-    com <- com[match(idprim, com[, 1]), ]
+    # Set algorithm in outputs
+    outputs$algorithm$cmd <- cmd
+    outputs$algorithm$version <- "0.3"
+    outputs$algorithm$web <- "https://sourceforge.net/projects/louvain/"
+    
   }
 
   # Rename and reorder columns
-  com[, 1] <- as.character(com[, 1])
   com <- knbclu(com)
 
-  # Return output
-  return(com)
+  # Add attributes and return_node_type
+  if (isbip) {
+    attr(com, "node_type") <- rep("site", dim(com)[1])
+    attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
+    if (return_node_type == "sites") {
+      com <- com[attributes(com)$node_type == "site", ]
+    }
+    if (return_node_type == "species") {
+      com <- com[attributes(com)$node_type == "species", ]
+    }
+  }
+
+  # Set clusters and cluster_info in output
+  outputs$clusters <- com
+  outputs$cluster_info <- data.frame(
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+      drop = FALSE
+    ],
+    n_clust = apply(
+      outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+      2, function(x) length(unique(x))
+    )
+  )
+
+  # Return outputs
+  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  return(outputs)
 }

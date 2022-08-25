@@ -7,80 +7,104 @@
 netclu_oslom(
   net,
   weight = TRUE,
+  index = names(net)[3],
   reassign = "no",
   r = 10,
   hr = 50,
-  seed = 1,
+  seed = 0,
   t = 0.1,
   cp = 0.5,
   directed = FALSE,
   bipartite = FALSE,
-  primary_col = 1,
-  feature_col = 2,
-  remove_feature = TRUE,
+  site_col = 1,
+  species_col = 2,
+  return_node_type = "both",
   delete_temp = TRUE,
   path_temp = "oslom_temp",
   binpath = NULL
 )
 }
 \arguments{
-\item{net}{a two- or three-column \code{data.frame} representing a network with the two first columns
-as (un)directed links between pair of nodes and an optional third column indicating the weight of the link}
+\item{net}{the output object from \code{\link{similarity}} or
+\code{\link{dissimilarity_to_similarity}}.
+If a \code{data.frame} is used, the first two columns represent pairs of
+sites (or any pair of nodes), and the next column(s) are the similarity
+indices.}
 
-\item{weight}{a boolean indicating if the weights should be considered if there is a third column}
+\item{weight}{a \code{boolean} indicating if the weights should be considered
+if there are more than two columns.}
 
-\item{reassign}{a string indicating if the nodes belonging to several community should be reassign
-and what method should be used (see Details)}
+\item{index}{name or number of the column to use as weight. By default,
+the third column name of \code{net} is used.}
 
-\item{r}{the number of runs for the first hierarchical level (10 by default)}
+\item{reassign}{a string indicating if the nodes belonging to several
+community should be reassign and what method should be used (see Note).}
 
-\item{hr}{the number of runs for the higher hierarchical level (50 by default, 0 if you are not interested
-in hierarchies)}
+\item{r}{the number of runs for the first hierarchical level (10 by default).}
 
-\item{seed}{for the random number generator}
+\item{hr}{the number of runs for the higher hierarchical level (50 by default
+, 0 if you are not interested in hierarchies).}
 
-\item{t}{the p−value, the default value is 0.10, increase this value you to get more modules}
+\item{seed}{for the random number generator (0 for random by default).}
 
-\item{cp}{kind of resolution parameter used to decide between taking some modules or their union (default value is
-0.5, bigger value leads to bigger clusters)}
+\item{t}{the p−value, the default value is 0.10, increase this value you to
+get more modules.}
 
-\item{directed}{a boolean indicating if the network is directed (from column 1 to column 2)}
+\item{cp}{kind of resolution parameter used to decide between taking some
+modules or their union (default value is 0.5, bigger value leads to bigger
+clusters).}
 
-\item{bipartite}{a boolean indicating if the network is bipartite (see Details)}
+\item{directed}{a \code{boolean} indicating if the network is directed (from
+column 1 to column 2).}
 
-\item{primary_col}{name or number for the column of primary nodes (i.e. site)}
+\item{bipartite}{a \code{boolean} indicating if the network is bipartite
+(see Details).}
 
-\item{feature_col}{name or number for the column of feature nodes (i.e. species)}
+\item{site_col}{name or number for the column of site nodes
+(i.e. primary nodes).}
 
-\item{remove_feature}{a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)}
+\item{species_col}{name or number for the column of species nodes
+(i.e. feature nodes).}
 
-\item{delete_temp}{a boolean indicating if the temporary folder should be removed (see Details)}
+\item{return_node_type}{a \code{character} indicating what types of nodes
+("sites", "species" or "both") should be returned in the output
+(\code{keep_nodes_type="both"} by default).}
 
-\item{path_temp}{a string indicating the path to the temporary folder (see Details)}
+\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
+be removed (see Details).}
 
-\item{binpath}{a string indicating the path to the bin folder (see \link{install_binaries} and Details)}
+\item{path_temp}{a \code{character} indicating the path to the temporary
+folder (see Details).}
+
+\item{binpath}{a \code{character} indicating the path to the bin folder
+(see \link{install_binaries} and Details).}
 }
 \value{
-A \code{data.frame} providing one or several modules (according to the chosen option(s)) for each node. If
-\code{reassign = simil} or \code{reassign = random} only one column by hierarchical level will be provided. If
-\code{reassign = no} the number of columns will depend on the number of overlapping modules (up to three). A value of 0
-indicates that no module were found (i.e. non-overlapping nodes).
+A \code{list} of class \code{bioRgeo.clusters} with five slots:
+\enumerate{
+\item{\bold{name}: \code{character string} containing the name of the algorithm}
+\item{\bold{args}: \code{list} of input arguments as provided by the user}
+\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+\item{\bold{algorithm}: \code{list} of all objects associated with the
+ clustering procedure, such as original cluster objects}
+\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, users can find the following elements:
+
+\itemize{
+\item{\code{cmd}: the command line use to run OSLOM}
+\item{\code{version}: the OSLOM version}
+\item{\code{web}: the OSLOM's web site}
+}
 }
 \description{
-This function finds communities in a (un)weighted (un)directed network based on the OSLOM algorithm
-(\url{http://oslom.org/}, version 2.4).
+This function finds communities in a (un)weighted (un)directed network based
+on the OSLOM algorithm (\url{http://oslom.org/}, version 2.4).
 }
 \details{
-OSLOM is a network community detection algorithm proposed in \insertCite{Lancichinetti2011}{bioRgeo} that
-finds statistically significant (overlapping) communities in (un)weighted and (un)directed networks. Since a node
-may belong to several communities we propose two methods to reassign the 'overlapping' nodes randomly
-\code{reassign = 'random'} or based on the closest candidate community \code{reassign = 'simil'}
-(only for weighted networks, in this case the closest candidate community is determined with the average similarity).
-By default \code{reassign = 'no'} and all the information is provided.
-
-Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
-the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-\code{feature_col} and \code{remove_feature}.
+OSLOM is a network community detection algorithm proposed in
+\insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
+(overlapping) communities in (un)weighted and (un)directed networks.
 
 This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
 This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
@@ -91,22 +115,45 @@ The C++ version of OSLOM generates temporary folders and/or files that are store
 (folder "oslom_temp" in the working directory by default). This temporary folder is removed by default
 (\code{delete_temp = TRUE}).
 }
+\note{
+Although this algorithm was not primarily designed to deal with bipartite
+network, it is possible to consider the bipartite network as unipartite
+network (\code{bipartite = TRUE}). Do not forget to indicate which of the
+first two columns is dedicated to the site nodes (i.e. primary nodes) and
+species nodes (i.e.feature nodes) using the arguments \code{site_col} and
+\code{species_col}. The type of nodes returned in the output can be chosen
+with the argument \code{return_node_type} equal to \code{"both"} to keep both
+types of nodes, \code{"sites"} to preserve only the sites nodes and
+\code{"species"} to preserve only the species nodes.
+
+Since OSLOM potentially returns overlapping communities we propose two methods
+to reassign the 'overlapping' nodes randomly \code{reassign = 'random'} or
+based on the closest candidate community \code{reassign = 'simil'}
+(only for weighted networks, in this case the closest candidate community is
+determined with the average similarity). By default \code{reassign = 'no'}
+and all the information will be provided. The number of partitions will depend
+on the number of overlapping modules (up to three). The suffix '_semel',
+'_bis' and '_ter' are added to the column names. The first partition ('_semel')
+assign a module for each node. A value of 0 in the second ('_bis') and third
+('_ter') columns indicates that no overlapping module were found for this node
+(i.e. non-overlapping nodes).
+}
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
-# com=netclu_oslom(net) # run install_binaries() to use this function
+# com <- netclu_oslom(net) # run install_binaries() to use this function
 }
 \references{
 \insertRef{Lancichinetti2011}{bioRgeo}
 }
 \seealso{
-\link{netclu_infomap}, \link{netclu_louvain}
+\link{install_binaries}, \link{netclu_infomap}, \link{netclu_louvain}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

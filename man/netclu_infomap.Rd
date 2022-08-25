@@ -34,7 +34,7 @@ sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
 
 \item{weight}{a \code{boolean} indicating if the weights should be considered
-if there more than two columns.}
+if there are more than two columns.}
 
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
@@ -115,7 +115,7 @@ and (un)directed networks.
 
 This function is based on the C++ version of Infomap
 (\url{https://github.com/mapequation/infomap/releases}).
-This function needs binary executable files to run. They can be installed with
+This function needs executable  binary files to run. They can be installed with
 \link{install_binaries}. If you set the path to the folder that will host
 the bin folder manually while running \link{install_binaries} please make
 sure to set \code{binpath} accordingly.
@@ -150,7 +150,7 @@ rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
-# com=netclu_infomap(net) # run install_binaries() to use this function
+# com <- netclu_infomap(net) # run install_binaries() to use this function
 }
 \references{
 \insertRef{Rosvall2008}{bioRgeo}
