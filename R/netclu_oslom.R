@@ -1,40 +1,50 @@
 #' OSLOM community finding
 #'
-#' This function finds communities in a (un)weighted (un)directed network based on the OSLOM algorithm
-#' (\url{http://oslom.org/}, version 2.4).
+#' This function finds communities in a (un)weighted (un)directed network based
+#' on the OSLOM algorithm (\url{http://oslom.org/}, version 2.4).
 #'
-#' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
-#' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param reassign a string indicating if the nodes belonging to several community should be reassign
-#' and what method should be used (see Details)
-#' @param r the number of runs for the first hierarchical level (10 by default)
-#' @param hr the number of runs for the higher hierarchical level (50 by default, 0 if you are not interested
-#' in hierarchies)
-#' @param seed for the random number generator
-#' @param t the p−value, the default value is 0.10, increase this value you to get more modules
-#' @param cp kind of resolution parameter used to decide between taking some modules or their union (default value is
-#' 0.5, bigger value leads to bigger clusters)
-#' @param directed a boolean indicating if the network is directed (from column 1 to column 2)
-#' @param bipartite a boolean indicating if the network is bipartite (see Details)
-#' @param primary_col name or number for the column of primary nodes (i.e. site)
-#' @param feature_col name or number for the column of feature nodes (i.e. species)
-#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
-#' @param delete_temp a boolean indicating if the temporary folder should be removed (see Details)
-#' @param path_temp a string indicating the path to the temporary folder (see Details)
-#' @param binpath a string indicating the path to the bin folder (see \link{install_binaries} and Details)
+#' @param net the output object from \code{\link{similarity}} or
+#' \code{\link{dissimilarity_to_similarity}}.
+#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' sites (or any pair of nodes), and the next column(s) are the similarity
+#' indices.
+#' @param weight a \code{boolean} indicating if the weights should be considered
+#' if there are more than two columns.
+#' @param index name or number of the column to use as weight. By default,
+#' the third column name of \code{net} is used.
+#' @param reassign a string indicating if the nodes belonging to several
+#' community should be reassign and what method should be used (see Note).
+#' @param r the number of runs for the first hierarchical level (10 by default).
+#' @param hr the number of runs for the higher hierarchical level (50 by default
+#' , 0 if you are not interested in hierarchies).
+#' @param seed for the random number generator (0 for random by default).
+#' @param t the p−value, the default value is 0.10, increase this value you to
+#' get more modules.
+#' @param cp kind of resolution parameter used to decide between taking some
+#' modules or their union (default value is 0.5, bigger value leads to bigger
+#' clusters).
+#' @param directed a \code{boolean} indicating if the network is directed (from
+#' column 1 to column 2).
+#' @param bipartite a \code{boolean} indicating if the network is bipartite
+#' (see Details).
+#' @param site_col name or number for the column of site nodes
+#' (i.e. primary nodes).
+#' @param species_col name or number for the column of species nodes
+#' (i.e. feature nodes).
+#' @param return_node_type a \code{character} indicating what types of nodes
+#' ("sites", "species" or "both") should be returned in the output
+#' (\code{keep_nodes_type="both"} by default).
+#' @param delete_temp a \code{boolean} indicating if the temporary folder should
+#' be removed (see Details).
+#' @param path_temp a \code{character} indicating the path to the temporary
+#' folder (see Details).
+#' @param binpath a \code{character} indicating the path to the bin folder
+#' (see \link{install_binaries} and Details).
 #' @export
 #' @details
-#' OSLOM is a network community detection algorithm proposed in \insertCite{Lancichinetti2011}{bioRgeo} that
-#' finds statistically significant (overlapping) communities in (un)weighted and (un)directed networks. Since a node
-#' may belong to several communities we propose two methods to reassign the 'overlapping' nodes randomly
-#' \code{reassign = 'random'} or based on the closest candidate community \code{reassign = 'simil'}
-#' (only for weighted networks, in this case the closest candidate community is determined with the average similarity).
-#' By default \code{reassign = 'no'} and all the information is provided.
-#'
-#' Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
-#' the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-#' \code{feature_col} and \code{remove_feature}.
+#' OSLOM is a network community detection algorithm proposed in
+#' \insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
+#' (overlapping) communities in (un)weighted and (un)directed networks.
 #'
 #' This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
 #' This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
@@ -45,30 +55,79 @@
 #' (folder "oslom_temp" in the working directory by default). This temporary folder is removed by default
 #' (\code{delete_temp = TRUE}).
 #'
-#' @return A \code{data.frame} providing one or several modules (according to the chosen option(s)) for each node. If
-#' \code{reassign = simil} or \code{reassign = random} only one column by hierarchical level will be provided. If
-#' \code{reassign = no} the number of columns will depend on the number of overlapping modules (up to three). A value of 0
-#' indicates that no module were found (i.e. non-overlapping nodes).
+#' @note
+#' Although this algorithm was not primarily designed to deal with bipartite
+#' network, it is possible to consider the bipartite network as unipartite
+#' network (\code{bipartite = TRUE}). Do not forget to indicate which of the
+#' first two columns is dedicated to the site nodes (i.e. primary nodes) and
+#' species nodes (i.e.feature nodes) using the arguments \code{site_col} and
+#' \code{species_col}. The type of nodes returned in the output can be chosen
+#' with the argument \code{return_node_type} equal to \code{"both"} to keep both
+#' types of nodes, \code{"sites"} to preserve only the sites nodes and
+#' \code{"species"} to preserve only the species nodes.
+#'
+#' Since OSLOM potentially returns overlapping communities we propose two methods
+#' to reassign the 'overlapping' nodes randomly \code{reassign = 'random'} or
+#' based on the closest candidate community \code{reassign = 'simil'}
+#' (only for weighted networks, in this case the closest candidate community is
+#' determined with the average similarity). By default \code{reassign = 'no'}
+#' and all the information will be provided. The number of partitions will depend
+#' on the number of overlapping modules (up to three). The suffix '_semel',
+#' '_bis' and '_ter' are added to the column names. The first partition ('_semel')
+#' assign a module for each node. A value of 0 in the second ('_bis') and third
+#' ('_ter') columns indicates that no overlapping module were found for this node
+#' (i.e. non-overlapping nodes).
+#'
+#' @return
+#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' \enumerate{
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
+#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
+#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#'  clustering procedure, such as original cluster objects}
+#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#'
+#' In the \code{algorithm} slot, users can find the following elements:
+#'
+#' \itemize{
+#' \item{\code{cmd}: the command line use to run OSLOM}
+#' \item{\code{version}: the OSLOM version}
+#' \item{\code{web}: the OSLOM's web site}
+#' }
 #'
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{netclu_infomap}, \link{netclu_louvain}
+#' @seealso \link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' # com=netclu_oslom(net) # run install_binaries() to use this function
+#' # com <- netclu_oslom(net) # run install_binaries() to use this function
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
-netclu_oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
-                         seed = 1, t = 0.1, cp = 0.5, directed = FALSE,
-                         bipartite = FALSE, primary_col = 1, feature_col = 2, remove_feature = TRUE,
-                         delete_temp = TRUE, path_temp = "oslom_temp", binpath = NULL) {
+netclu_oslom <- function(net,
+                         weight = TRUE,
+                         index = names(net)[3],
+                         reassign = "no",
+                         r = 10,
+                         hr = 50,
+                         seed = 0,
+                         t = 0.1,
+                         cp = 0.5,
+                         directed = FALSE,
+                         bipartite = FALSE,
+                         site_col = 1,
+                         species_col = 2,
+                         return_node_type = "both",
+                         delete_temp = TRUE,
+                         path_temp = "oslom_temp",
+                         binpath = NULL) {
 
   # Set binpath
   if (is.null(binpath)) {
@@ -77,11 +136,9 @@ netclu_oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
     binpath <- biodir[grep("bioRgeo", biodir)]
   } else {
     # Control
-    if (!is.character(binpath)) {
-      stop("path must be a string")
-    }
+    controls(args = binpath, data = NULL, type = "character")
     if (!file.exists(binpath)) {
-      stop(paste0("Impossible to access ", binpath))
+      stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
 
@@ -91,193 +148,130 @@ netclu_oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
   # Check if OSLOM has successfully been installed
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
-      stop("OSLOM is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+      stop("OSLOM is not installed... 
+Please have a look at https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html for more details.")
     }
   } else {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
-      stop("OSLOM is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+      stop("OSLOM is not installed... 
+Please have a look at https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html for more details.")
     } else {
       if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir"))) {
-        stop("The directed version of OSLOM is not installed... Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details")
+        stop("The directed version of OSLOM is not installed... 
+Please have a look at https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html for more details")
       }
     }
   }
 
   # Control input net
-  if (!is.data.frame(net)) {
-    stop("net must be a two- or three-columns data.frame")
+  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_net")
+
+  # Control input weight & index
+  controls(args = weight, data = net, type = "input_net_weight")
+  if (weight) {
+    controls(args = index, data = net, type = "input_net_index")
+    net[, 3] <- net[, index]
+    net <- net[, 1:3]
+    controls(args = NULL, data = net, type = "input_net_index_value")
   }
 
-  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  nbna <- sum(is.na(net))
-  if (nbna > 0) {
-    stop("NA(s) detected in the data.frame")
-  }
-
-  # Control parameters
-  if (!is.logical(weight)) {
-    stop("weight must be a boolean")
-  }
-
-  if (weight & dim(net)[2] == 2) {
-    stop("net must be a three-columns data.frame if weight equal TRUE")
-  }
-
-  if (weight & dim(net)[2] == 3) {
-    if (!is.numeric(net[, 3])) {
-      stop("The third column of net must be numeric")
-    } else {
-      minet <- min(net[, 3])
-      if (minet < 0) {
-        stop("The third column of net should contains only positive real: negative value detected!")
-      }
+  # Control input bipartite
+  controls(args = bipartite, data = NULL, type = "boolean")
+  isbip <- bipartite
+  if (isbip) {
+    controls(args = NULL, data = net, type = "input_net_bip")
+    controls(args = site_col, data = net, type = "input_net_bip_col")
+    controls(args = species_col, data = net, type = "input_net_bip_col")
+    if (!(return_node_type %in% c("both", "sites", "species"))) {
+      stop("Please choose return_node_type among the followings values:
+both, sites and species", call. = FALSE)
     }
   }
 
-  if (!(reassign %in% c("no", "random", "simil"))) {
-    stop("The reassign method is not available.
-     Please chose among the followings:
-         no, random, simil")
+  # Control input directed
+  if (!isbip) {
+    controls(args = directed, data = net, type = "input_net_directed")
+  } else {
+    if (directed) {
+      stop("directed cannot be set to TRUE if the network is bipartite!",
+        call. = FALSE
+      )
+    }
   }
 
+
+  # Control parameters OSLOM
+  if (!(reassign %in% c("no", "random", "simil"))) {
+    stop("Please choose reassign among the following values:
+no, random, simil")
+  }
   if (reassign == "simil" & !weight) {
     stop("A reassignement based on similarity should not be use when weight equal FALSE")
   }
+  controls(args = r, data = NULL, type = "strict_positive_integer")
+  controls(args = hr, data = NULL, type = "positive_integer")
+  controls(args = seed, data = NULL, type = "positive_integer")
+  if (seed == 0) {
+    seed <- round(as.numeric(as.POSIXct(Sys.time())))
+  }
+  controls(args = t, data = NULL, type = "strict_positive_numeric")
+  if (t > 1) {
+    stop("t must be in the interval (0,1)!", call. = FALSE)
+  }
+  controls(args = cp, data = NULL, type = "strict_positive_numeric")
+  if (cp > 1) {
+    stop("cp must be in the interval (0,1)!", call. = FALSE)
+  }
 
-  if (!is.numeric(r)) {
-    stop("r must be numeric")
+
+  # Control temp folder + create temp folder
+  path_temp <- controls(args = path_temp, data = NULL, type = "character")
+  controls(args = delete_temp, data = NULL, type = "boolean")
+  if (path_temp == "oslom_temp") {
+    path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
   } else {
-    if (r <= 0) {
-      stop("r must be strictly higher than 0")
-    }
-    if ((r - floor(r)) > 0) {
-      stop("r must be an integer strictly higher than 0")
-    }
-  }
-
-  if (!is.numeric(hr)) {
-    stop("hr must be numeric")
-  } else {
-    if (hr < 0) {
-      stop("hr must be positive")
-    }
-    if ((hr - floor(hr)) > 0) {
-      stop("hr must be an integer higher or equal to 0")
+    if (file.exists(path_temp)) {
+      stop(paste0(path_temp, " already exists. Please rename it or remove it."),
+        call. = FALSE
+      )
     }
   }
-
-  if (!is.numeric(seed)) {
-    stop("seed must be numeric")
-  } else {
-    if (seed <= 0) {
-      stop("seed must be strictly higher than 0")
-    }
-    if ((seed - floor(seed)) > 0) {
-      stop("seed must be an integer higher or equal to 0")
-    }
-  }
-
-  if (!is.numeric(t)) {
-    stop("t must be numeric")
-  } else {
-    if (t < 0 | t > 1) {
-      stop("t must be in the interval (0,1)")
-    }
-  }
-
-  if (!is.numeric(cp)) {
-    stop("cp must be numeric")
-  } else {
-    if (cp < 0 | cp > 1) {
-      stop("cp must be in the interval (0,1)")
-    }
-  }
-
-  if (!is.logical(directed)) {
-    stop("directed must be a boolean")
-  }
-
-  if (!is.logical(delete_temp)) {
-    stop("delete_temp must be a boolean")
-  }
-
-  if (!is.character(path_temp)) {
-    stop("path_temp must be a string")
-  }
-
-  # Controls bipartite arguments
-  if (!is.logical(bipartite)) {
-    stop("bipartite must be a boolean")
-  }
-
-  if (is.character(primary_col)) {
-    if (!(primary_col %in% colnames(net))) {
-      stop("primary_col should be a column name")
-    }
-  } else if (is.numeric(primary_col)) {
-    if (primary_col <= 0) {
-      stop("primary_col must be strictly positive")
-    } else {
-      if (primary_col %% 1 != 0) {
-        stop("primary_col must be an integer")
-      }
-    }
-  } else {
-    stop("primary_col should be numeric or character")
-  }
-
-  if (is.character(feature_col)) {
-    if (!(feature_col %in% colnames(net))) {
-      stop("feature_col should be a column name")
-    }
-  } else if (is.numeric(feature_col)) {
-    if (feature_col <= 0) {
-      stop("feature_col must be strictly positive")
-    } else {
-      if (feature_col %% 1 != 0) {
-        stop("feature_col must be an integer")
-      }
-    }
-  } else {
-    stop("feature_col should be numeric or character")
-  }
-
-  if (!is.logical(remove_feature)) {
-    stop("remove_feature must be a boolean")
-  }
-
-  # Create temp folder
   dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
   if (!file.exists(path_temp)) {
-    stop(paste0("Impossible to create directory ", path_temp))
+    stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
   }
 
+
   # Prepare input for OSLOM
-  if (bipartite) {
-    idprim <- as.character(net[, primary_col])
+  if (isbip) {
+    idprim <- as.character(net[, site_col])
     idprim <- idprim[!duplicated(idprim)]
-    idfeat <- as.character(net[, feature_col])
+    nbsites <- length(idprim)
+    idfeat <- as.character(net[, species_col])
     idfeat <- idfeat[!duplicated(idfeat)]
-    # Control bipartite
-    if (length(intersect(idprim, idfeat)) > 0) {
-      stop("If bipartite = TRUE primary and feature nodes should be different.")
-    }
+
     idnode <- c(idprim, idfeat)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
+    netemp <- data.frame(
+      node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
+      node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
+    )
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
-    if (length(intersect(idnode1, idnode2)) == 0) {
-      stop("The network is bipartite! The bipartite argument should be set to TRUE.")
+    if (isbip) {
+      message("The network seems to be bipartite! 
+The bipartite argument should probably be set to TRUE.")
     }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
+    nbsites <- length(idnode)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], node2 = idnode[match(net[, 2], idnode[, 2]), 1])
+    netemp <- data.frame(
+      node1 = idnode[match(net[, 1], idnode[, 2]), 1],
+      node2 = idnode[match(net[, 2], idnode[, 2]), 1]
+    )
   }
 
   if (weight) {
@@ -285,8 +279,45 @@ netclu_oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
     netemp <- netemp[netemp[, 3] > 0, ]
   }
 
-  # Export input in OSLOM folder in WD
-  utils::write.table(netemp, paste0(path_temp, "/net.txt"), row.names = FALSE, col.names = FALSE, sep = " ")
+  # Class preparation
+  outputs <- list(name = "infomap")
+
+  outputs$args <- list(
+    weight = weight,
+    index = index,
+    reassign = reassign,
+    r = r,
+    hr = hr,
+    seed = seed,
+    t = t,
+    cp = cp,
+    directed = directed,
+    bipartite = bipartite,
+    site_col = site_col,
+    species_col = species_col,
+    return_node_type = return_node_type,
+    delete_temp = delete_temp,
+    path_temp = path_temp,
+    binpath = binpath
+  )
+
+  outputs$inputs <- list(
+    bipartite = isbip,
+    weight = weight,
+    pairwise = ifelse(isbip, FALSE, TRUE),
+    pairwise_metric = ifelse(isbip, NA, index),
+    dissimilarity = FALSE,
+    nb_sites = nbsites
+  )
+
+  outputs$algorithm <- list()
+
+
+  # Export input for OSLOM
+  utils::write.table(netemp, paste0(path_temp, "/net.txt"),
+    row.names = FALSE,
+    col.names = FALSE, sep = " "
+  )
 
   # Prepare command to run OSLOM
   cmd <- paste0("-r ", r, " -hr ", hr, " -seed ", seed, " -t ", t, " -cp ", cp)
@@ -910,12 +941,39 @@ netclu_oslom <- function(net, weight = TRUE, reassign = "no", r = 10, hr = 50,
     com[, k] <- as.numeric(as.character(com[, k]))
   }
 
-  # Remove feature nodes
-  if (bipartite & remove_feature) {
-    com <- com[match(idprim, com[, 1]), ]
+  com[, 1] <- as.character(com[, 1])
+
+  # Add attributes and return_node_type
+  if (isbip) {
+    attr(com, "node_type") <- rep("site", dim(com)[1])
+    attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
+    if (return_node_type == "sites") {
+      com <- com[attributes(com)$node_type == "site", ]
+    }
+    if (return_node_type == "species") {
+      com <- com[attributes(com)$node_type == "species", ]
+    }
   }
 
-  # Return output
-  com[, 1] <- as.character(com[, 1])
-  return(com)
+  # Set algorithm in outputs
+  outputs$algorithm$cmd <- cmd
+  outputs$algorithm$version <- "2.4"
+  outputs$algorithm$web <- "http://oslom.org/"
+
+  # Set clusters and cluster_info in output
+  outputs$clusters <- com
+  outputs$cluster_info <- data.frame(
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+      drop = FALSE
+    ],
+    n_clust = apply(
+      outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+      2, function(x) length(unique(x))
+    )
+  )
+
+
+  # Return outputs
+  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  return(outputs)
 }

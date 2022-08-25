@@ -90,6 +90,8 @@ if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
 
 \itemize{
 \item{\code{cmd}: the command line use to run Louvain}
+\item{\code{version}: the Louvain version}
+\item{\code{web}: Louvain's website}
 }.
 }
 \description{

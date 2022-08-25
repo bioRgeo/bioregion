@@ -100,6 +100,8 @@
 #'
 #' \itemize{
 #' \item{\code{cmd}: the command line use to run Louvain}
+#' \item{\code{version}: the Louvain version}
+#' \item{\code{web}: Louvain's website}
 #' }.
 #'
 #' @author
@@ -283,7 +285,7 @@ The bipartite argument should probably be set to TRUE.")
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       stop("Louvain is not installed... 
-Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for more details.")
+Please have a look at https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html for more details.")
     }
 
     # Control temp folder + create temp folder
@@ -385,6 +387,9 @@ Please have a look at https//biorgeo.github.io/bioRgeo/articles/bin.html for mor
 
     # Set algorithm in outputs
     outputs$algorithm$cmd <- cmd
+    outputs$algorithm$version <- "0.3"
+    outputs$algorithm$web <- "https://sourceforge.net/projects/louvain/"
+    
   }
 
   # Rename and reorder columns
