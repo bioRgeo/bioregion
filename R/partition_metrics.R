@@ -258,6 +258,7 @@ partition_metrics <- function(
   #                                                          cluster_object$clusters$ID), -1])
 
   if(has.dissimilarity & any(c("pc_distance", "anosim") %in% eval_metric)){
+    message("Computing similarity-based metrics...")
     # The next line will create, for each element of the dissimilarity matrix, a
     # vector indicating whether if each dissimilarity is within or between clusters
     dissimilarity <- data.frame(dissimilarity,
@@ -280,6 +281,8 @@ partition_metrics <- function(
                                           function(x, dist., index.) {
                                             sum(dist.[!dist.[, x], index.]) / sum(dist.[, index.])
                                           }, dist. = dissimilarity, index. = dissimilarity_index)
+      
+      message("  - pc_distance OK")
     }
     
     if("anosim" %in% eval_metric)
@@ -294,11 +297,13 @@ partition_metrics <- function(
                                                     dist.[, x],
                                                     mean)) / denom.
                                      }, dist. = dissimilarity, denom. = denom)
+      message("  - anosim OK")
     }
     
   }
   
   if(has.contin & any(c("avg_endemism", "tot_endemism") %in% eval_metric)){
+    message("Computing composition-based metrics...")
     net <- data.frame(net, 
                       cluster_object$clusters[data.table::chmatch(net[, site_col],
                                                     cluster_object$clusters$ID), -1])
@@ -342,6 +347,7 @@ partition_metrics <- function(
         },
         end_list = endemism_results
       )
+      message("  - avg_endemism OK")
     }
     # Total endemism
     if("tot_endemism" %in% eval_metric)
@@ -354,6 +360,7 @@ partition_metrics <- function(
         },
         end_list = endemism_results
       ) / nb_sp
+      message("  - tot_endemism OK")
     }
   }
   

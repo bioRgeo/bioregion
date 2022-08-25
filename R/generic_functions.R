@@ -209,41 +209,50 @@ print.bioRgeo.partition.metrics <- function(x, ...)
                  c(min(x), mean(x), max(x))}),
              row.names = c("Min", "Mean", "Max")))
 
-  # if(x$args$partition_optimisation){
-  #   cat("\nPotential optimal partition(s):\n")
-  #   if(length(x$args$eval_metric) > 1)
-  #   {
-  #     cat(" - Metric used for optimisation: ", x$args$eval_metric[1], "\n")
-  #   }
-  #   cat(" - Criterion chosen to optimise the number of clusters: ",
-  #       x$args$criterion, "\n")
-  #   if(x$args$criterion == "step")
-  #   {
-  #     cat("   (step quantile chosen: ", x$args$step_quantile,
-  #         " (i.e., only the top", (1 -  x$args$step_quantile) * 100,
-  #         "% increase in ", x$args$eval_metric[1],
-  #         " are used as break points for the number of clusters)\n")
-  #   } else if(x$args$criterion == "cutoff")
-  #   {
-  #     cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
-  #   }
-  #   cat(" - Optimal partition(s) of clusters:\n")
-  #   cat("\n", x$evaluation_df$K[x$evaluation_df$optimal_nclust], "\n\n")
-  #   cat(" - Respective optimal number(s) of clusters:\n")
-  #   cat("\n", x$optimal_nb_clusters, "\n")
-  # }
-
   cat("Access the data.frame of metrics with your_object$evaluation_df\n")
 }
 
 #' @export
-#' @method str bioRgeo.hierar.tree
-str.bioRgeo.hierar.tree <- function(object, ...)
+#' @method print bioRgeo.optimal.n
+print.bioRgeo.optimal.n <- function(x, ...)
+{
+  cat("Search for an optimal number of clusters:\n")
+  cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
+  cat(" - Range of clusters explored: from ", min(x$evaluation_df$n_clusters), " to ",
+      max(x$evaluation_df$n_clusters), "\n")
+  cat(" - Evaluated metric(s): ", x$args$metrics_to_use, "\n")
+  
+  cat("\nPotential optimal partition(s):\n")
+  cat(" - Criterion chosen to optimise the number of clusters: ",
+      x$args$criterion, "\n")
+  if(x$args$criterion %in% c("increasing_step", "decreasing_step")) ##
+  {
+    cat("   (step quantile chosen: ", x$args$step_quantile,
+        " (i.e., only the top", (1 -  x$args$step_quantile) * 100,
+        "% ",
+        ifelse(increasing_step, "increase", "decrease"),
+        " in evaluation metrics",
+        " are used as break points for the number of clusters)\n")
+  } else if(x$args$criterion == "cutoff")
+  {
+    cat("   --> cutoff(s) chosen: ", x$args$metric_cutoffs, "\n" )
+  }
+  cat(" - Optimal partition(s) of clusters for each metric:\n")
+  
+  cat(paste(paste(names(x$optimal_nb_clusters),
+                  sapply(x$optimal_nb_clusters,
+                         paste, collapse = " "), sep = " - "), collapse = "\n"))
+  cat("\n")
+}
+
+#' @export
+#' @method str bioRgeo.optimal.n
+str.bioRgeo.optimal.n <- function(object, ...)
 {
   args <- list(...)
   if(is.null(args$max.level))
   {
-    args$max.level <- 1
+    args$max.level <- 2
   }
   NextMethod("str", object = object, max.level = args$max.level)
 }

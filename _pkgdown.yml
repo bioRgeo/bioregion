@@ -53,6 +53,7 @@ reference:
   desc: >
   contents:
   - partition_metrics
+  - find_optimal_n
 
 - title: Data
   desc: >
