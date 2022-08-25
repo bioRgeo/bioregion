@@ -285,7 +285,7 @@ The bipartite argument should probably be set to TRUE.")
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       stop("Louvain is not installed... 
-Please have a look at https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html for more details.")
+Please have a look at https://biorgeo.github.io/bioRgeo/articles/3_1_install_executable_binary_files.html for more details.")
     }
 
     # Control temp folder + create temp folder

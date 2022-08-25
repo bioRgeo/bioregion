@@ -1,6 +1,6 @@
 ---
 title: "Tutorial for bioRgeo"
-author: "Pierre Denelle, Maxime Lenormand and Boris Leroy"
+author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
@@ -32,7 +32,7 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-## Brief introduction
+## 0. Brief introduction
 
 This tutorial aims at describing the different features of the R package `bioRgeo`. 
 The main purpose of the `bioRgeo`'s package is to propose a transparent 
@@ -42,51 +42,54 @@ bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflo
 can be divided into four main steps:
 
 1. Preprocess the data (matrix or network formats)
-2. Compute similarity/distance metrics between sites based on species composition
+2. Compute similarity/dissimilarity metrics between sites based on species composition
 3. Run the different algorithms to identify different set of bioregions
 4. Evaluate and visualize the results
 
-<p>&nbsp;</p>
+<br>
 <center>
   <img align="bottom" width="100%" height="100%" src="../man/figures/Workflow.png">
 </center> 
-<p>&nbsp;</p>
+<br>
 <center>
   <b>Figure 1: Workflow of the bioRgeo's package.</b>
 </center> 
-<p>&nbsp;</p>
+<br>
 
-## Matrix or Network formats
+## 1. Matrix or Network formats
 
 The `bioRgeo`'s package takes as input site-species information stored in a 
 bipartite network or a co-occurence matrix. It handles both the matrix and 
 network formats throughout the workflow. 
 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/1_matrix_and_network_formats.html) 
 
-## Pairwise similarity and distance metrics
+## 2. Pairwise similarity/dissimilarity metrics
 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/2_pairwise_metrics.html) 
 
+## 3. Clustering algorithms
 
-## Clustering algorithms
-
-### Install executable binary files
+### 3.1 Install executable binary files
 
 Some functions or at least part of them (listed below) require executable binary
-files to run. Please check this 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/install_executable_binary_files.html) 
-to get instructions regarding the installation of the executable binary files.
+files to run. 
 
 * [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
+* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) (Cpp version)
 * [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
 
-### Hierarchical clustering
+Please check this 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/3_1_install_executable_binary_files.html) 
+to get instructions regarding the installation of the executable binary files.
 
-### Non-hierarchical clustering
+### 3.2 Hierarchical clustering
 
-### Network clustering
+### 3.3 Non-hierarchical clustering
 
-## Visualization and evaluation of the results
+### 3.4 Network clustering
+
+## 4. Visualization and evaluation of the results
 
 
 
