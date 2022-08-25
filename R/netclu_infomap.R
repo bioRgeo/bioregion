@@ -166,7 +166,7 @@ netclu_infomap <- function(net,
   # Check if INFOMAP has successfully been installed
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     stop(paste0("Infomap ", version, " is not installed...
-Please have a look at https//biorgeo.github.io/bioRgeo/articles/3_1_install_executable_binary_files.html for more details."),
+Please have a look at https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details."),
       call. = FALSE
     )
   }

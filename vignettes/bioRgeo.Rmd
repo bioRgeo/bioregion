@@ -62,11 +62,11 @@ The `bioRgeo`'s package takes as input site-species information stored in a
 bipartite network or a co-occurence matrix. It handles both the matrix and 
 network formats throughout the workflow. 
 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/1_matrix_and_network_formats.html) 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_matrix_and_network_formats.html) 
 
 ## 2. Pairwise similarity/dissimilarity metrics
 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/2_pairwise_metrics.html) 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a2_pairwise_metrics.html) 
 
 ## 3. Clustering algorithms
 
@@ -80,7 +80,7 @@ files to run.
 * [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
 
 Please check this 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/3_1_install_executable_binary_files.html) 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html) 
 to get instructions regarding the installation of the executable binary files.
 
 ### 3.2 Hierarchical clustering
