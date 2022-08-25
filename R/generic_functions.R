@@ -230,7 +230,7 @@ print.bioRgeo.optimal.n <- function(x, ...)
     cat("   (step quantile chosen: ", x$args$step_quantile,
         " (i.e., only the top", (1 -  x$args$step_quantile) * 100,
         "% ",
-        ifelse(increasing_step, "increase", "decrease"),
+        ifelse(x$args$criterion == "increasing_step", "increase", "decrease"),
         " in evaluation metrics",
         " are used as break points for the number of clusters)\n")
   } else if(x$args$criterion == "cutoff")
