@@ -36,7 +36,7 @@
 #' @param binpath a \code{character} indicating the path to the bin folder
 #' (see \link{install_binaries} and Details).
 #' @param algorithm_in_output a \code{boolean} indicating if the original output
-#' of \code{...} should be returned in the output (see Value).
+#' of \code{communities} should be returned in the output (see Value).
 #' Default to TRUE.
 #' @export
 #' @details
@@ -215,7 +215,7 @@ The bipartite argument should probably be set to TRUE.")
   }
 
   # Class preparation
-  outputs <- list(name = "louvain")
+  outputs <- list(name = "netclu_louvain")
 
   outputs$args <- list(
     weight = weight,

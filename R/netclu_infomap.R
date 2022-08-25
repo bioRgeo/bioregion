@@ -289,7 +289,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.")
   }
 
   # Class preparation
-  outputs <- list(name = "infomap")
+  outputs <- list(name = "netclu_infomap")
 
   outputs$args <- list(
     weight = weight,

@@ -150,7 +150,7 @@ net <- similarity(comat, metric = "Simpson")
 \insertRef{Lancichinetti2011}{bioRgeo}
 }
 \seealso{
-\link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
+\link{install_binaries}, \link{netclu_infomap}, \link{netclu_louvain}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

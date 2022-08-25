@@ -1,32 +1,66 @@
 #' Finding communities based on propagating labels
 #'
-#' This function finds communities in a (un)weighted undirected network based on propagating labels.
+#' This function finds communities in a (un)weighted undirected network based on
+#' propagating labels.
 #'
-#' @param net a two- or three-column \code{data.frame} representing a network with the two first columns
-#' as (un)directed links between pair of nodes and an optional third column indicating the weight of the link
-#' @param weight a boolean indicating if the weights should be considered if there is a third column
-#' @param bipartite a boolean indicating if the network is bipartite (see Details)
-#' @param primary_col name or number for the column of primary nodes (i.e. site)
-#' @param feature_col name or number for the column of feature nodes (i.e. species)
-#' @param remove_feature a boolean indicating if the feature nodes should be removed from the outputs (TRUE by default)
+#' @param net the output object from \code{\link{similarity}} or
+#' \code{\link{dissimilarity_to_similarity}}.
+#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' sites (or any pair of nodes), and the next column(s) are the similarity
+#' indices.
+#' @param weight a \code{boolean} indicating if the weights should be considered
+#' if there are more than two columns.
+#' @param index name or number of the column to use as weight. By default,
+#' the third column name of \code{net} is used.
+#' @param bipartite a \code{boolean} indicating if the network is bipartite
+#' (see Details).
+#' @param site_col name or number for the column of site nodes
+#' (i.e. primary nodes).
+#' @param species_col name or number for the column of species nodes
+#' (i.e. feature nodes).
+#' @param return_node_type a \code{character} indicating what types of nodes
+#' ("sites", "species" or "both") should be returned in the output
+#' (\code{keep_nodes_type="both"} by default).
+#' @param algorithm_in_output a \code{boolean} indicating if the original output
+#' of \code{communities} should be returned in the output (see Value).
 #'
 #' @export
 #' @details
 #' This function is based on propagating labels \insertCite{Raghavan2007}{bioRgeo}
-#' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph} package
-#' (\link[igraph]{cluster_label_prop}).
+#' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+#' package (\link[igraph]{cluster_label_prop}).
 #'
-#' Although this algorithm was not primarily designed to deal with bipartite network, it is possible to consider
-#' the bipartite network as unipartite network by using the arguments \code{bipartite}, \code{primary_col},
-#' \code{feature_col} and \code{remove_feature}.
+#' @note
+#' Although this algorithm was not primarily designed to deal with bipartite
+#' network, it is possible to consider the bipartite network as unipartite
+#' network (\code{bipartite = TRUE}).
 #'
-#' @return A \code{data.frame} providing one community by node.
+#' Do not forget to indicate which of the first two columns is
+#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' The type of nodes returned in the output can be chosen with the argument
+#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to
+#' preserve only the species nodes.
+#'
+#' @return
+#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' \enumerate{
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
+#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
+#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
+#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  \code{algorithm_in_output = TRUE})}
+#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#'
+#' In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+#' find an "communities" object, output of \link[igraph]{cluster_label_prop}.
 #'
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{netclu_infomap}, \link{netclu_oslom}
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
@@ -37,102 +71,76 @@
 #' @references
 #' \insertRef{Raghavan2007}{bioRgeo}
 #' @export
-netclu_labelprop <- function(net, weight = TRUE,
-                             bipartite = FALSE, primary_col = 1, feature_col = 2, remove_feature = TRUE) {
+netclu_labelprop <- function(net,
+                             weight = TRUE,
+                             index = names(net)[3],
+                             bipartite = FALSE,
+                             site_col = 1,
+                             species_col = 2,
+                             return_node_type = "both",
+                             algorithm_in_output = TRUE) {
 
-  # Controls input net
-  if (!is.data.frame(net)) {
-    stop("net must be a two- or three-columns data.frame")
+  # Control input net
+  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_net")
+
+  # Control input weight & index
+  controls(args = weight, data = net, type = "input_net_weight")
+  if (weight) {
+    controls(args = index, data = net, type = "input_net_index")
+    net[, 3] <- net[, index]
+    net <- net[, 1:3]
+    controls(args = NULL, data = net, type = "input_net_index_value")
   }
 
-  if (dim(net)[2] != 2 & dim(net)[2] != 3) {
-    stop("net must be a two- or three-columns data.frame")
-  }
-
-  sco <- sum(is.na(net))
-  if (sco > 0) {
-    stop("NA(s) detected in the data.frame")
-  }
-
-  # Controls parameters
-  if (weight & dim(net)[2] == 2) {
-    stop("net must be a three-columns data.frame if weight equal TRUE")
-  }
-
-  if (weight & dim(net)[2] == 3) {
-    if (!is.numeric(net[, 3])) {
-      stop("The third column of net must be numeric")
+  # Control input bipartite
+  controls(args = bipartite, data = NULL, type = "boolean")
+  isbip <- bipartite
+  if (isbip) {
+    controls(args = NULL, data = net, type = "input_net_bip")
+    controls(args = site_col, data = net, type = "input_net_bip_col")
+    controls(args = species_col, data = net, type = "input_net_bip_col")
+    if (!(return_node_type %in% c("both", "sites", "species"))) {
+      stop("Please choose return_node_type among the followings values:
+both, sites and species", call. = FALSE)
     }
   }
 
-  if (!is.logical(weight)) {
-    stop("weight must be a boolean")
-  }
+  # Control input directed
+  controls(args = NULL, data = net, type = "input_net_isdirected")
 
-  # Controls bipartite arguments
-  if (!is.logical(bipartite)) {
-    stop("bipartite must be a boolean")
-  }
-
-  if (is.character(primary_col)) {
-    if (!(primary_col %in% colnames(net))) {
-      stop("primary_col should be a column name")
-    }
-  } else if (is.numeric(primary_col)) {
-    if (primary_col <= 0) {
-      stop("primary_col must be strictly positive")
-    } else {
-      if (primary_col %% 1 != 0) {
-        stop("primary_col must be an integer")
-      }
-    }
-  } else {
-    stop("primary_col should be numeric or character")
-  }
-
-  if (is.character(feature_col)) {
-    if (!(feature_col %in% colnames(net))) {
-      stop("feature_col should be a column name")
-    }
-  } else if (is.numeric(feature_col)) {
-    if (feature_col <= 0) {
-      stop("feature_col must be strictly positive")
-    } else {
-      if (feature_col %% 1 != 0) {
-        stop("feature_col must be an integer")
-      }
-    }
-  } else {
-    stop("feature_col should be numeric or character")
-  }
-
-  if (!is.logical(remove_feature)) {
-    stop("remove_feature must be a boolean")
-  }
+  # Control algorithm_in_output
+  controls(args = algorithm_in_output, data = NULL, type = "boolean")
 
   # Prepare input
-  if (bipartite) {
-    idprim <- as.character(net[, primary_col])
+  if (isbip) {
+    idprim <- as.character(net[, site_col])
     idprim <- idprim[!duplicated(idprim)]
-    idfeat <- as.character(net[, feature_col])
+    nbsites <- length(idprim)
+    idfeat <- as.character(net[, species_col])
     idfeat <- idfeat[!duplicated(idfeat)]
-    # Control bipartite
-    if (length(intersect(idprim, idfeat)) > 0) {
-      stop("If bipartite = TRUE primary and feature nodes should be different.")
-    }
+
     idnode <- c(idprim, idfeat)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, primary_col], idnode[, 2]), 1], node2 = idnode[match(net[, feature_col], idnode[, 2]), 1])
+    netemp <- data.frame(
+      node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
+      node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
+    )
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
-    if (length(intersect(idnode1, idnode2)) == 0) {
-      stop("The network is bipartite! The bipartite argument should be set to TRUE.")
+    if (isbip) {
+      message("The network seems to be bipartite! 
+The bipartite argument should probably be set to TRUE.")
     }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
+    nbsites <- length(idnode)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(node1 = idnode[match(net[, 1], idnode[, 2]), 1], node2 = idnode[match(net[, 2], idnode[, 2]), 1])
+    netemp <- data.frame(
+      node1 = idnode[match(net[, 1], idnode[, 2]), 1],
+      node2 = idnode[match(net[, 2], idnode[, 2]), 1]
+    )
   }
 
   if (weight) {
@@ -141,24 +149,72 @@ netclu_labelprop <- function(net, weight = TRUE,
     colnames(netemp)[3] <- "weight"
   }
 
+  # Class preparation
+  outputs <- list(name = "netclu_labelprop")
+
+  outputs$args <- list(
+    weight = weight,
+    index = index,
+    bipartite = bipartite,
+    site_col = site_col,
+    species_col = species_col,
+    return_node_type = return_node_type,
+    algorithm_in_output = algorithm_in_output
+  )
+
+  outputs$inputs <- list(
+    bipartite = isbip,
+    weight = weight,
+    pairwise = ifelse(isbip, FALSE, TRUE),
+    pairwise_metric = ifelse(isbip, NA, index),
+    dissimilarity = FALSE,
+    nb_sites = nbsites
+  )
+
+  outputs$algorithm <- list()
+
   # Run algo
   net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-  comtemp <- igraph::cluster_label_prop(net)
-  comtemp <- cbind(as.numeric(comtemp$names), as.numeric(comtemp$membership))
+  outalg <- igraph::cluster_label_prop(net)
+  comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
 
   com <- data.frame(ID = idnode[, 2], Com = 0)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
 
-  # Remove feature nodes
-  if (bipartite & remove_feature) {
-    com <- com[match(idprim, com[, 1]), ]
-  }
-
   # Rename and reorder columns
-  com[, 1] <- as.character(com[, 1])
   com <- knbclu(com)
 
-  # Return output
-  return(com)
-  
+  # Add attributes and return_node_type
+  if (isbip) {
+    attr(com, "node_type") <- rep("site", dim(com)[1])
+    attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
+    if (return_node_type == "sites") {
+      com <- com[attributes(com)$node_type == "site", ]
+    }
+    if (return_node_type == "species") {
+      com <- com[attributes(com)$node_type == "species", ]
+    }
+  }
+
+  # Set algorithm in outputs
+  if (!algorithm_in_output) {
+    outalg <- NA
+  }
+  outputs$algorithm <- outalg
+
+  # Set clusters and cluster_info in output
+  outputs$clusters <- com
+  outputs$cluster_info <- data.frame(
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+      drop = FALSE
+    ],
+    n_clust = apply(
+      outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+      2, function(x) length(unique(x))
+    )
+  )
+
+  # Return outputs
+  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  return(outputs)
 }

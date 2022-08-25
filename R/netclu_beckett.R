@@ -133,7 +133,7 @@ both, sites and species", call. = FALSE)
   }
 
   # Class preparation
-  outputs <- list(name = "beckett")
+  outputs <- list(name = "netclu_beckett")
 
   outputs$args <- list(
     weight = weight,

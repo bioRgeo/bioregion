@@ -100,7 +100,7 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
+#' @seealso \link{install_binaries}, \link{netclu_infomap}, \link{netclu_louvain}
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
@@ -280,7 +280,7 @@ The bipartite argument should probably be set to TRUE.")
   }
 
   # Class preparation
-  outputs <- list(name = "infomap")
+  outputs <- list(name = "netclu_oslom")
 
   outputs$args <- list(
     weight = weight,
