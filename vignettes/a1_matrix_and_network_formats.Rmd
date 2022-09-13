@@ -26,29 +26,118 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-test
+## Load data
 
-Some functions (listed below) or at least part of them require binary files to run. 
+The `bioRgeo`'s package contains as example dataset the spatial distribution of 
+Mediterrean vegetation. This dataset has been analyzed in [this article](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718) and contains
+the abundance of 3,697 species in 715 sites. This dataset is composed of three 
+files, [vegedf](https://biorgeo.github.io/bioRgeo/reference/vegedf.html) a 
+`data.frame` with 460,878 rows and 3 columns (Site, Species and Abundance), 
 
-* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
-* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
-
-The function \code{install_binaries} downloads and unzips the bin folder needed to run these functions. It also checks if the files have the permissions to be executed as programs. It finally tests if the executable are running properly.
-
-``` {r install_binaries}
-#install_binaries()
-```
-
-https://brew.sh
-
-brew install libomp
-
-```{r loading_virtual_data}
+```{r loading_vegedf}
 data(vegedf)
 head(vegedf)
+dim(vegedf)
+sum(!duplicated(vegedf[,1]))
+sum(!duplicated(vegedf[,2]))
 ```
 
+[vegemat](https://biorgeo.github.io/bioRgeo/reference/vegemat.html) 
+a co-occurence `matrix` containing the same information gathered in a `matrix`
+with 715 rows and 3,697 columns,
 
+```{r loading_vegemat}
+data(vegemat)
+vegemat[1:10,1:10]
+dim(vegemat)
+```
 
+and [vegesp](https://biorgeo.github.io/bioRgeo/reference/vegesp.html) a spatial
+object containing the geometry of the 715 sites. 
 
+## From matrix to network
+
+The function [mat_to_net](https://biorgeo.github.io/bioRgeo/reference/mat_to_net.html) 
+transforms a co-occurence `matrix` such as `vegemat` into a network represented 
+by a `data.frame` (such as `vegedf` in this case). If `weight = TRUE` a third 
+column is added with the values contained in the `matrix`.  
+
+``` {r mat_to_net_1}
+net <- mat_to_net(vegemat, weight = TRUE, remove_zeroes = FALSE)
+```
+
+In line with the network format, the two first columns are named `Node1` and 
+`Node2` by default.
+
+```{r print_net_1}
+head(net)
+dim(net)
+```
+
+If `remove_zeroes = TRUE` the pairs of nodes with a weight equal to 0 will 
+be removed from the output.
+
+``` {r mat_to_net_2}
+net <- mat_to_net(vegemat, weight = TRUE, remove_zeroes = TRUE)
+```
+
+```{r print_net_2}
+head(net)
+dim(net)
+```
+
+## From network to matrix
+
+The function [net_to_mat](https://biorgeo.github.io/bioRgeo/reference/net_to_mat.html)
+does the opposite. It transforms a network represented by a two- or a three-columns
+`data.frame` (such as `vegedf`) into a co-occurence `matrix` (such as `vegemat` 
+in this case). 
+
+``` {r net_to_mat_1}
+mat <- net_to_mat(vegedf, weight = TRUE, squared = FALSE, symmetrical = FALSE, missing_value = 0)
+```
+
+```{r print_mat_1}
+mat[1:5,1:5]
+dim(mat)
+```
+
+If `squared = TRUE` a squared matrix will be generated, the rownames and colnames 
+will correspond to the concatenation without duplicates of the two first 
+columns of the `data.frame`. 
+
+``` {r net_to_mat_2}
+mat <- net_to_mat(vegedf, weight = TRUE, squared = TRUE, symmetrical = FALSE, missing_value = 0)
+```
+
+```{r print_mat_2}
+mat[1:5,1:5]
+dim(mat)
+```
+
+The argument `missing_value` defines the value to assign to the pairs of nodes 
+not present in the input network. The default value is 0 but any other numeric
+value can be used.
+
+``` {r net_to_mat_3}
+temp <- data.frame(Site=c("35","36","36","38","39"), Species=c("36","35","37","37","39"), Abundance=c(1,2,3,4,0))
+net <- rbind(temp,vegedf)
+mat <- net_to_mat(net, weight = TRUE, squared = TRUE, symmetrical = FALSE, missing_value = -1)
+```
+
+```{r print_mat_3}
+mat[1:5,1:5]
+```
+
+Finally, if `squared = TRUE` it is possible to get a symmetrical matrix as output
+(`symmetrical = TRUE`). In this case the resulting squared matrix will be 
+symmetrical, except for the symmetrical pairs of nodes already present in the
+input network (35 <-> 36) in the example below.
+
+``` {r net_to_mat_4}
+mat <- net_to_mat(net, weight = TRUE, squared = TRUE, symmetrical = TRUE, missing_value = 0)
+```
+
+```{r print_mat_4}
+mat[1:5,1:5]
+```

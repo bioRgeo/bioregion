@@ -59,10 +59,12 @@ can be divided into four main steps:
 ## 1. Matrix or Network formats
 
 The `bioRgeo`'s package takes as input site-species information stored in a 
-bipartite network or a co-occurence matrix. It handles both the matrix and 
-network formats throughout the workflow. 
+bipartite network or a co-occurence matrix. Relying on the function  [mat_to_net](https://biorgeo.github.io/bioRgeo/reference/mat_to_net.html)
+and [net_to_mat](https://biorgeo.github.io/bioRgeo/reference/net_to_mat.html)
+, it handles both the matrix and network formats throughout the workflow. 
 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_matrix_and_network_formats.html) 
+Please have a look at this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_matrix_and_network_formats.html) 
+to better understand how these two function work.
 
 ## 2. Pairwise similarity/dissimilarity metrics
 
