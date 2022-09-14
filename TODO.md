@@ -6,17 +6,16 @@
 
 ### 1.1 Améliorations générales
 
+* A harmoniser
+    -> stop( , call. = FALSE)
+    -> \code{} pour le code dans les docs et `...` dans les vignettes
+    -> mettre un point "." à la fin des phrases dans la documentation (?)
+    
 * glossaire
 
 * faire la vignette
 
-* écrire article blog sur binaires
-
-* écrire article blog sur format matrix/network
-
 * Bien vérifier les packages importés (il y en aura à supprimer...)
-
-* plant CBNmed ask permission 
 
 * Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
 
