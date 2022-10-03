@@ -105,11 +105,11 @@ map_clusters <- function(clusters, geometry, write_clusters = FALSE, plot = TRUE
         plot(plotsp)
       }else{
         for(k in 1:mod4q){
-          dev.new()
+          grDevices::dev.new()
           plot(plotsp[((k-1)*4+1):((k-1)*4+4)])
         }
         if(mod4r>0){
-          dev.new()
+          grDevices::dev.new()
           plot(plotsp[((mod4q)*4+1):((mod4q)*4+mod4r)], key.pos=NULL)
         }
         

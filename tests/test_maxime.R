@@ -29,8 +29,8 @@ install_binaries(binpath = NULL, infomap_version = c("2.1.0","2.6.0"))
 
 
 # map_clusters
-source("bioRgeo/R/utils.R")
-source("bioRgeo/R/map_clusters.R")
+#source("bioRgeo/R/utils.R")
+#source("bioRgeo/R/map_clusters.R")
 
 net=similarity(mat,metric=c("Simpson"))
 coml=netclu_louvain(net[net[,3]>0.5,], weight=TRUE, q=0, lang="Cpp")

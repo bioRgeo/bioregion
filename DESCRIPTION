@@ -37,6 +37,7 @@ Imports:
     earth,
     fastcluster,
     ggplot2,
+    grDevices,
     igraph,
     mathjaxr,
     Matrix,

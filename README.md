@@ -20,7 +20,7 @@ A tutorial vignette is available [here](https://biorgeo.github.io/bioRgeo/articl
 
 ## 3 Dependencies
 
-`bioRgeo` depends on `ape`, `bipartite`, `cluster`, `data.table`, `dbscan`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `reshape2`, `rmarkdown`, `sf`, `stats`, `tidyr` and `utils`.
+`bioRgeo` depends on `ape`, `bipartite`, `cluster`, `data.table`, `dbscan`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `reshape2`, `rmarkdown`, `sf`, `stats`, `tidyr` and `utils`.
 
 ## 4  Citation
 
