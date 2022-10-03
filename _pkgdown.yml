@@ -54,6 +54,11 @@ reference:
   contents:
   - partition_metrics
   - find_optimal_n
+  
+- title: Visualisation
+  desc: >
+  contents:
+  - map_clusters
 
 - title: Data
   desc: >

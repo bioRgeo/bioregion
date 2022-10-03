@@ -28,47 +28,26 @@ install_binaries(binpath = NULL, infomap_version = c("2.1.0","2.6.0"))
 
 
 
+# map_clusters
+source("bioRgeo/R/utils.R")
+source("bioRgeo/R/map_clusters.R")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# check results
 net=similarity(mat,metric=c("Simpson"))
+coml=netclu_louvain(net[net[,3]>0.5,], weight=TRUE, q=0, lang="Cpp")
+comi=netclu_infomap(net[net[,3]>0.5,], weight=TRUE, markovtime=1)
+como=netclu_oslom(net[net[,3]>0.5,], r=1, reassign="simil")
+com=cbind(coml$clusters,comi$clusters[,-1],como$clusters[,-1])
 
-coml=louvain(net[net[,3]>0.5,], weight=TRUE, q=0, lang="Cpp")
-comi=infomap(net[net[,3]>0.5,], weight=TRUE, markovtime=1)
-como=oslom(net[net[,3]>0.5,], r=1, reassign="simil")
+map1=map_clusters(coml, vegesp, write_clusters=TRUE, plot=TRUE)
 
-coml[1:10,]
-comi[1:10,]
-como[1:10,]
-
-dim(coml)
-dim(comi)
-dim(como)
-
-table(coml[,2])
-table(comi[,2])
-table(como[,2])
-
-sp=G[match(coml[,1],G$ID),]
-sp=cbind(sp,como[,2],comi[,2],coml[,2])
-
-plot(sp)
+x11()
+source("bioRgeo/R/utils.R")
+source("bioRgeo/R/map_clusters.R")
+map2=map_clusters(com, vegesp, write_clusters=TRUE, plot=TRUE)
 
 
-
-
+x11()
+map3=map_clusters(cbind(com,com[,-1],com[,2],com[,2]), vegesp, write_clusters=TRUE, plot=TRUE)
 
 
 

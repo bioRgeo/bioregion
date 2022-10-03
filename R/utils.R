@@ -1,5 +1,5 @@
 controls <- function(args = NULL, data = NULL, type = "input_net") {
-
+  
   # Input similarity ###########################################################
   if (type == "input_similarity") {
     if (inherits(data, "bioRgeo.pairwise.metric")) {
