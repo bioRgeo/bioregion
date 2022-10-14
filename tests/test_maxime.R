@@ -40,13 +40,10 @@ com=cbind(coml$clusters,comi$clusters[,-1],como$clusters[,-1])
 
 map1=map_clusters(coml, vegesp, write_clusters=TRUE, plot=TRUE)
 
-x11()
-source("bioRgeo/R/utils.R")
-source("bioRgeo/R/map_clusters.R")
+
 map2=map_clusters(com, vegesp, write_clusters=TRUE, plot=TRUE)
 
 
-x11()
 map3=map_clusters(cbind(com,com[,-1],com[,2],com[,2]), vegesp, write_clusters=TRUE, plot=TRUE)
 
 

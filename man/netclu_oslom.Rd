@@ -144,7 +144,7 @@ rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
-# com <- netclu_oslom(net) # run install_binaries() to use this function
+com <- netclu_oslom(net) 
 }
 \references{
 \insertRef{Lancichinetti2011}{bioRgeo}

@@ -150,7 +150,7 @@ rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
-# com <- netclu_infomap(net) # run install_binaries() to use this function
+com <- netclu_infomap(net) 
 }
 \references{
 \insertRef{Rosvall2008}{bioRgeo}

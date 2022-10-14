@@ -109,7 +109,7 @@
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' # com <- netclu_infomap(net) # run install_binaries() to use this function
+#' com <- netclu_infomap(net) 
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
@@ -142,6 +142,14 @@ netclu_infomap <- function(net,
     # Identify bioRgeo directory on your computer
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
+    if(length(binpath)>1){
+      message("Several bioRgeo directories have been detected in your default 
+              package/library folder(s). 
+              The first one will be used by default.
+              Please use the binpath argument to manually set the path to the
+              bin folder.")
+      binpath <- binpath[1]
+    }
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
@@ -165,10 +173,8 @@ netclu_infomap <- function(net,
 
   # Check if INFOMAP has successfully been installed
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
-    stop(paste0("Infomap ", version, " is not installed...
-Please have a look at https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details."),
-      call. = FALSE
-    )
+    message(paste0("Infomap ", version, " is not installed...
+Please have a look at https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details."))
   }
 
   # Control input net

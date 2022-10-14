@@ -271,6 +271,14 @@ The bipartite argument should probably be set to TRUE.")
       # Identify bioRgeo directory on your computer
       biodir <- list.dirs(.libPaths(), recursive = FALSE)
       binpath <- biodir[grep("bioRgeo", biodir)]
+      if(length(binpath)>1){
+        message("Several bioRgeo directories have been detected in your default 
+              package/library folder(s). 
+              The first one will be used by default.
+              Please use the binpath argument to manually set the path to the
+              bin folder.")
+        binpath <- binpath[1]
+      }
     } else {
       # Control
       controls(args = binpath, data = NULL, type = "character")
@@ -284,7 +292,7 @@ The bipartite argument should probably be set to TRUE.")
 
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
-      stop("Louvain is not installed... 
+      message("Louvain is not installed... 
 Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
     }
 

@@ -27,5 +27,5 @@ Only the Infomap version 2.1.0 and 2.6.0 are available for now.
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 Boris Leroy (\email{leroy.boris@gmail.com}) and
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
+Pierre Denelle (\email{pierre.denelle@gmail.com})
 }
