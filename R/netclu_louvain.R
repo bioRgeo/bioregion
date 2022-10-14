@@ -49,7 +49,7 @@
 #' offers the possibility to choose among several quality functions,
 #' \code{q = 0} for the classical Newman-Girvan criterion (also called
 #' "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the Owsinski-Zadrozny
-#' criterion (you should specify the value of the parameter with the \code{c} 
+#' criterion (you should specify the value of the parameter with the \code{c}
 #' argument),
 #' 3	for the Goldberg Density criterion, 4	for the A-weighted Condorcet criterion,
 #' 5 for the Deviation to Indetermination criterion, 6 for the Deviation to
@@ -271,12 +271,10 @@ The bipartite argument should probably be set to TRUE.")
       # Identify bioRgeo directory on your computer
       biodir <- list.dirs(.libPaths(), recursive = FALSE)
       binpath <- biodir[grep("bioRgeo", biodir)]
-      if(length(binpath)>1){
-        message("Several bioRgeo directories have been detected in your default 
-              package/library folder(s). 
-              The first one will be used by default.
-              Please use the binpath argument to manually set the path to the
-              bin folder.")
+      if (length(binpath) > 1) {
+        message("Several bioRgeo directories have been detected in your default package/library folder(s). 
+The first one will be used by default.
+Please use the binpath argument to manually set the path to the bin folder.")
         binpath <- binpath[1]
       }
     } else {
@@ -294,110 +292,110 @@ The bipartite argument should probably be set to TRUE.")
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       message("Louvain is not installed... 
 Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
-    }
-
-    # Control temp folder + create temp folder
-    path_temp <- controls(args = path_temp, data = NULL, type = "character")
-    controls(args = delete_temp, data = NULL, type = "boolean")
-    if (path_temp == "louvain_temp") {
-      path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
     } else {
-      if (file.exists(path_temp)) {
-        stop(paste0(path_temp, " already exists. Please rename it or remove it."),
-          call. = FALSE
-        )
+
+      # Control temp folder + create temp folder
+      path_temp <- controls(args = path_temp, data = NULL, type = "character")
+      controls(args = delete_temp, data = NULL, type = "boolean")
+      if (path_temp == "louvain_temp") {
+        path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
+      } else {
+        if (file.exists(path_temp)) {
+          stop(paste0(path_temp, " already exists. Please rename it or remove it."),
+            call. = FALSE
+          )
+        }
       }
-    }
-    dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-    if (!file.exists(path_temp)) {
-      stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
-    }
+      dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+      if (!file.exists(path_temp)) {
+        stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
+      }
 
-    # Export input in LOUVAIN folder
-    utils::write.table(netemp, paste0(path_temp, "/net.txt"),
-      row.names = FALSE, col.names = FALSE, sep = " "
-    )
-
-    # Prepare command to run LOUVAIN
-    # Convert net.txt with LOUVAIN
-    if (weight) {
-      cmd <- paste0(
-        "-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ",
-        path_temp, "/net.weights"
+      # Export input in LOUVAIN folder
+      utils::write.table(netemp, paste0(path_temp, "/net.txt"),
+        row.names = FALSE, col.names = FALSE, sep = " "
       )
-    } else {
-      cmd <- paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin")
+
+      # Prepare command to run LOUVAIN
+      # Convert net.txt with LOUVAIN
+      if (weight) {
+        cmd <- paste0(
+          "-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin -w ",
+          path_temp, "/net.weights"
+        )
+      } else {
+        cmd <- paste0("-i ", path_temp, "/net.txt -o ", path_temp, "/net.bin")
+      }
+
+      if (os == "Linux") {
+        cmd <- paste0(binpath, "/bin/LOUVAIN/convert_lin ", cmd)
+      } else if (os == "Windows") {
+        cmd <- paste0(binpath, "/bin/LOUVAIN/convert_win.exe ", cmd)
+      } else if (os == "Darwin") {
+        cmd <- paste0(binpath, "/bin/LOUVAIN/convert_mac ", cmd)
+      } else {
+        stop("Linux, Windows or Mac distributions only.")
+      }
+
+      tree <- system(command = cmd)
+
+      # Run LOUVAIN
+      if (weight) {
+        cmd <- paste0(
+          path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k,
+          " -w ", path_temp, "/net.weights"
+        )
+      } else {
+        cmd <- paste0(path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k)
+      }
+
+      if (os == "Linux") {
+        cmd <- paste0(
+          binpath, "/bin/LOUVAIN/louvain_lin ", cmd, " > ",
+          path_temp, "/net.tree"
+        )
+        system(command = cmd)
+      } else if (os == "Windows") {
+        cmd <- paste0(binpath, "/bin/LOUVAIN/louvain_win.exe ", cmd)
+        tree <- system(command = cmd, intern = TRUE)
+        cat(tree[1:(length(tree) - 1)],
+          file = paste0(path_temp, "/net.tree"),
+          sep = "\n"
+        )
+      } else if (os == "Darwin") {
+        cmd <- paste0(
+          binpath, "/bin/LOUVAIN/louvain_mac ", cmd, " > ",
+          path_temp, "/net.tree"
+        )
+        system(command = cmd)
+      } else {
+        stop("Linux, Windows or Mac distributions only.")
+      }
+
+      # Control: if the command line did not work
+      if (!("net.tree" %in% list.files(paste0(path_temp)))) {
+        stop("Command line was wrongly implemented. Louvain did not run.")
+      }
+
+      # Retrieve output from net.tree
+      tree <- utils::read.table(paste0(path_temp, "/net.tree"))
+
+      id0 <- which(tree[, 1] == 0)
+      tree <- tree[(id0[1] + 1):(id0[2] - 1), ]
+
+      com <- data.frame(ID = idnode[, 2], Com = 0)
+      com[match(tree[, 1], idnode[, 1]), 2] <- tree[, 2]
+
+      # Remove temporary file
+      if (delete_temp) {
+        unlink(paste0(path_temp), recursive = TRUE)
+      }
+
+      # Set algorithm in outputs
+      outputs$algorithm$cmd <- cmd
+      outputs$algorithm$version <- "0.3"
+      outputs$algorithm$web <- "https://sourceforge.net/projects/louvain/"
     }
-
-    if (os == "Linux") {
-      cmd <- paste0(binpath, "/bin/LOUVAIN/convert_lin ", cmd)
-    } else if (os == "Windows") {
-      cmd <- paste0(binpath, "/bin/LOUVAIN/convert_win.exe ", cmd)
-    } else if (os == "Darwin") {
-      cmd <- paste0(binpath, "/bin/LOUVAIN/convert_mac ", cmd)
-    } else {
-      stop("Linux, Windows or Mac distributions only.")
-    }
-
-    tree <- system(command = cmd)
-
-    # Run LOUVAIN
-    if (weight) {
-      cmd <- paste0(
-        path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k,
-        " -w ", path_temp, "/net.weights"
-      )
-    } else {
-      cmd <- paste0(path_temp, "/net.bin -l -1 -q ", q, " -c ", c, " -k ", k)
-    }
-
-    if (os == "Linux") {
-      cmd <- paste0(
-        binpath, "/bin/LOUVAIN/louvain_lin ", cmd, " > ",
-        path_temp, "/net.tree"
-      )
-      system(command = cmd)
-    } else if (os == "Windows") {
-      cmd <- paste0(binpath, "/bin/LOUVAIN/louvain_win.exe ", cmd)
-      tree <- system(command = cmd, intern = TRUE)
-      cat(tree[1:(length(tree) - 1)],
-        file = paste0(path_temp, "/net.tree"),
-        sep = "\n"
-      )
-    } else if (os == "Darwin") {
-      cmd <- paste0(
-        binpath, "/bin/LOUVAIN/louvain_mac ", cmd, " > ",
-        path_temp, "/net.tree"
-      )
-      system(command = cmd)
-    } else {
-      stop("Linux, Windows or Mac distributions only.")
-    }
-
-    # Control: if the command line did not work
-    if (!("net.tree" %in% list.files(paste0(path_temp)))) {
-      stop("Command line was wrongly implemented. Louvain did not run.")
-    }
-
-    # Retrieve output from net.tree
-    tree <- utils::read.table(paste0(path_temp, "/net.tree"))
-
-    id0 <- which(tree[, 1] == 0)
-    tree <- tree[(id0[1] + 1):(id0[2] - 1), ]
-
-    com <- data.frame(ID = idnode[, 2], Com = 0)
-    com[match(tree[, 1], idnode[, 1]), 2] <- tree[, 2]
-
-    # Remove temporary file
-    if (delete_temp) {
-      unlink(paste0(path_temp), recursive = TRUE)
-    }
-
-    # Set algorithm in outputs
-    outputs$algorithm$cmd <- cmd
-    outputs$algorithm$version <- "0.3"
-    outputs$algorithm$web <- "https://sourceforge.net/projects/louvain/"
-    
   }
 
   # Rename and reorder columns

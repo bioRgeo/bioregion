@@ -26,11 +26,9 @@ install_binaries <- function(binpath = NULL, infomap_version = c("2.1.0", "2.6.0
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
     if(length(binpath)>1){
-      message("Several bioRgeo directories have been detected in your default 
-              package/library folder(s). 
-              The first one will be used by default.
-              Please use the binpath argument to manually set the path to the
-              bin folder.")
+      message("Several bioRgeo directories have been detected in your default package/library folder(s). 
+The first one will be used by default.
+Please use the binpath argument to manually set the path to the bin folder.")
       binpath <- binpath[1]
     }
   } else {

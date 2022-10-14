@@ -108,7 +108,7 @@ implementation (\link[igraph]{cluster_louvain}) and the C++ implementation
 offers the possibility to choose among several quality functions,
 \code{q = 0} for the classical Newman-Girvan criterion (also called
 "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the Owsinski-Zadrozny
-criterion (you should specify the value of the parameter with the \code{c} 
+criterion (you should specify the value of the parameter with the \code{c}
 argument),
 3	for the Goldberg Density criterion, 4	for the A-weighted Condorcet criterion,
 5 for the Deviation to Indetermination criterion, 6 for the Deviation to

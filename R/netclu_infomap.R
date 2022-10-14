@@ -109,7 +109,7 @@
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' com <- netclu_infomap(net) 
+#' com <- netclu_infomap(net)
 #' @references
 #' \insertRef{Rosvall2008}{bioRgeo}
 #' @export
@@ -142,12 +142,10 @@ netclu_infomap <- function(net,
     # Identify bioRgeo directory on your computer
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
-    if(length(binpath)>1){
-      message("Several bioRgeo directories have been detected in your default 
-              package/library folder(s). 
-              The first one will be used by default.
-              Please use the binpath argument to manually set the path to the
-              bin folder.")
+    if (length(binpath) > 1) {
+      message("Several bioRgeo directories have been detected in your default package/library folder(s). 
+The first one will be used by default.
+Please use the binpath argument to manually set the path to the bin folder.")
       binpath <- binpath[1]
     }
   } else {
@@ -160,13 +158,13 @@ netclu_infomap <- function(net,
 
   # Control version
   controls(args = version, data = NULL, type = "character")
-  versiondispo <- list.files(paste0(binpath, "/bin/INFOMAP/"))
-  if (!(version %in% versiondispo)) {
-    stop(paste0(
-      "Please choose a version of Infomap already installed: ",
-      paste(versiondispo, collapse = " ")
-    ), call. = FALSE)
-  }
+  # versiondispo <- list.files(paste0(binpath, "/bin/INFOMAP/"))
+  # if (!(version %in% versiondispo)) {
+  #  stop(paste0(
+  #    "Please choose a version of Infomap already installed: ",
+  #    paste(versiondispo, collapse = " ")
+  #  ), call. = FALSE)
+  # }
 
   # Check OS
   os <- Sys.info()[["sysname"]]
@@ -175,283 +173,284 @@ netclu_infomap <- function(net,
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     message(paste0("Infomap ", version, " is not installed...
 Please have a look at https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details."))
-  }
-
-  # Control input net
-  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
-  controls(args = NULL, data = net, type = "input_net")
-
-  # Control input weight & index
-  controls(args = weight, data = net, type = "input_net_weight")
-  if (weight) {
-    controls(args = index, data = net, type = "input_net_index")
-    net[, 3] <- net[, index]
-    net <- net[, 1:3]
-    controls(args = NULL, data = net, type = "input_net_index_value")
-  }
-
-  # Control input bipartite
-  controls(args = bipartite_version, data = NULL, type = "boolean")
-  controls(args = bipartite, data = NULL, type = "boolean")
-  isbip <- (bipartite | bipartite_version)
-  if (isbip) {
-    controls(args = NULL, data = net, type = "input_net_bip")
-    controls(args = site_col, data = net, type = "input_net_bip_col")
-    controls(args = species_col, data = net, type = "input_net_bip_col")
-    if (!(return_node_type %in% c("both", "sites", "species"))) {
-      stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)
-    }
-  }
-
-  # Control input directed
-  if (!isbip) {
-    controls(args = directed, data = net, type = "input_net_directed")
   } else {
-    if (directed) {
-      stop("directed cannot be set to TRUE if the network is bipartite!",
-        call. = FALSE
-      )
+
+    # Control input net
+    controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+    controls(args = NULL, data = net, type = "input_net")
+
+    # Control input weight & index
+    controls(args = weight, data = net, type = "input_net_weight")
+    if (weight) {
+      controls(args = index, data = net, type = "input_net_index")
+      net[, 3] <- net[, index]
+      net <- net[, 1:3]
+      controls(args = NULL, data = net, type = "input_net_index_value")
     }
-  }
 
-
-  # Control parameters INFOMAP
-  controls(args = nbmod, data = NULL, type = "positive_integer")
-  controls(args = markovtime, data = NULL, type = "strict_positive_numeric")
-  controls(args = seed, data = NULL, type = "positive_integer")
-  if (seed == 0) {
-    seed <- round(as.numeric(as.POSIXct(Sys.time())))
-  }
-  controls(args = numtrials, data = NULL, type = "strict_positive_integer")
-  controls(args = twolevel, data = NULL, type = "boolean")
-  controls(args = show_hierarchy, data = NULL, type = "boolean")
-
-
-  # Control temp folder + create temp folder
-  path_temp <- controls(args = path_temp, data = NULL, type = "character")
-  controls(args = delete_temp, data = NULL, type = "boolean")
-  if (path_temp == "infomap_temp") {
-    path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
-  } else {
-    if (file.exists(path_temp)) {
-      stop(paste0(path_temp, " already exists. Please rename it or remove it."),
-        call. = FALSE
-      )
-    }
-  }
-  dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-  if (!file.exists(path_temp)) {
-    stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
-  }
-
-  # Prepare input for INFOMAP
-  if (isbip) {
-    idprim <- as.character(net[, site_col])
-    idprim <- idprim[!duplicated(idprim)]
-    nbsites <- length(idprim)
-    idfeat <- as.character(net[, species_col])
-    idfeat <- idfeat[!duplicated(idfeat)]
-
-    idprim <- data.frame(
-      ID = 1:length(idprim), # Primary nodes
-      ID_NODE = idprim,
-      Type = 1
-    )
-    idfeat <- data.frame(
-      ID = ((dim(idprim)[1] + 1):(dim(idprim)[1] # Feature nodes
-      + length(idfeat))),
-      ID_NODE = idfeat, Type = 2
-    )
-    N <- dim(idprim)[1] + 1 # First node id of the feature node type
-    idnode <- rbind(idprim, idfeat)
-    if (!bipartite_version) {
-      idnode <- idnode[, 1:2]
-    }
-    netemp <- data.frame(
-      node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
-      node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
-    )
-  } else {
-    idnode1 <- as.character(net[, 1])
-    idnode2 <- as.character(net[, 2])
+    # Control input bipartite
+    controls(args = bipartite_version, data = NULL, type = "boolean")
+    controls(args = bipartite, data = NULL, type = "boolean")
+    isbip <- (bipartite | bipartite_version)
     if (isbip) {
-      message("The network seems to be bipartite! 
+      controls(args = NULL, data = net, type = "input_net_bip")
+      controls(args = site_col, data = net, type = "input_net_bip_col")
+      controls(args = species_col, data = net, type = "input_net_bip_col")
+      if (!(return_node_type %in% c("both", "sites", "species"))) {
+        stop("Please choose return_node_type among the followings values:
+both, sites and species", call. = FALSE)
+      }
+    }
+
+    # Control input directed
+    if (!isbip) {
+      controls(args = directed, data = net, type = "input_net_directed")
+    } else {
+      if (directed) {
+        stop("directed cannot be set to TRUE if the network is bipartite!",
+          call. = FALSE
+        )
+      }
+    }
+
+
+    # Control parameters INFOMAP
+    controls(args = nbmod, data = NULL, type = "positive_integer")
+    controls(args = markovtime, data = NULL, type = "strict_positive_numeric")
+    controls(args = seed, data = NULL, type = "positive_integer")
+    if (seed == 0) {
+      seed <- round(as.numeric(as.POSIXct(Sys.time())))
+    }
+    controls(args = numtrials, data = NULL, type = "strict_positive_integer")
+    controls(args = twolevel, data = NULL, type = "boolean")
+    controls(args = show_hierarchy, data = NULL, type = "boolean")
+
+
+    # Control temp folder + create temp folder
+    path_temp <- controls(args = path_temp, data = NULL, type = "character")
+    controls(args = delete_temp, data = NULL, type = "boolean")
+    if (path_temp == "infomap_temp") {
+      path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
+    } else {
+      if (file.exists(path_temp)) {
+        stop(paste0(path_temp, " already exists. Please rename it or remove it."),
+          call. = FALSE
+        )
+      }
+    }
+    dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+    if (!file.exists(path_temp)) {
+      stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
+    }
+
+    # Prepare input for INFOMAP
+    if (isbip) {
+      idprim <- as.character(net[, site_col])
+      idprim <- idprim[!duplicated(idprim)]
+      nbsites <- length(idprim)
+      idfeat <- as.character(net[, species_col])
+      idfeat <- idfeat[!duplicated(idfeat)]
+
+      idprim <- data.frame(
+        ID = 1:length(idprim), # Primary nodes
+        ID_NODE = idprim,
+        Type = 1
+      )
+      idfeat <- data.frame(
+        ID = ((dim(idprim)[1] + 1):(dim(idprim)[1] # Feature nodes
+        + length(idfeat))),
+        ID_NODE = idfeat, Type = 2
+      )
+      N <- dim(idprim)[1] + 1 # First node id of the feature node type
+      idnode <- rbind(idprim, idfeat)
+      if (!bipartite_version) {
+        idnode <- idnode[, 1:2]
+      }
+      netemp <- data.frame(
+        node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
+        node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
+      )
+    } else {
+      idnode1 <- as.character(net[, 1])
+      idnode2 <- as.character(net[, 2])
+      if (isbip) {
+        message("The network seems to be bipartite! 
 The bipartite or bipartite_version argument should probably be set to TRUE.")
+      }
+      idnode <- c(idnode1, idnode2)
+      idnode <- idnode[!duplicated(idnode)]
+      nbsites <- length(idnode)
+      idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
+      netemp <- data.frame(
+        node1 = idnode[match(net[, 1], idnode[, 2]), 1],
+        node2 = idnode[match(net[, 2], idnode[, 2]), 1]
+      )
     }
-    idnode <- c(idnode1, idnode2)
-    idnode <- idnode[!duplicated(idnode)]
-    nbsites <- length(idnode)
-    idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(
-      node1 = idnode[match(net[, 1], idnode[, 2]), 1],
-      node2 = idnode[match(net[, 2], idnode[, 2]), 1]
-    )
-  }
 
-  if (weight) {
-    netemp <- cbind(netemp, net[, 3])
-    netemp <- netemp[netemp[, 3] > 0, ]
-  }
-
-  # Class preparation
-  outputs <- list(name = "netclu_infomap")
-
-  outputs$args <- list(
-    weight = weight,
-    index = index,
-    nbmod = nbmod,
-    markovtime = markovtime,
-    seed = seed,
-    numtrials = numtrials,
-    twolevel = twolevel,
-    directed = directed,
-    bipartite_version = bipartite_version,
-    bipartite = bipartite,
-    site_col = site_col,
-    species_col = species_col,
-    return_node_type = return_node_type,
-    version = version,
-    delete_temp = delete_temp,
-    path_temp = path_temp,
-    binpath = binpath
-  )
-
-  outputs$inputs <- list(
-    bipartite = isbip,
-    weight = weight,
-    pairwise = ifelse(isbip, FALSE, TRUE),
-    pairwise_metric = ifelse(isbip, NA, index),
-    dissimilarity = FALSE,
-    nb_sites = nbsites
-  )
-
-  outputs$algorithm <- list()
-
-
-  # Export input in INFOMAP folder
-  if (bipartite_version) { # Add tag if bipartite
-    cat(paste0("*Bipartite ", N), "\n", file = paste0(path_temp, "/net.txt"))
-    utils::write.table(netemp, paste0(path_temp, "/net.txt"),
-      append = TRUE,
-      row.names = FALSE, col.names = FALSE, sep = " "
-    )
-  } else {
-    utils::write.table(netemp, paste0(path_temp, "/net.txt"),
-      row.names = FALSE,
-      col.names = FALSE, sep = " "
-    )
-  }
-
-  # Prepare command to run INFOMAP
-  cmd <- paste0(
-    "--silent --seed ", seed,
-    " --num-trials ", numtrials,
-    " --markov-time ", markovtime
-  )
-  if (nbmod > 0) {
-    cmd <- paste0(cmd, " --preferred-number-of-modules ", nbmod)
-  }
-  if (twolevel) {
-    cmd <- paste0(cmd, " --two-level")
-  }
-  if (directed) {
-    cmd <- paste0(cmd, " --flow-model directed")
-  } else {
-    cmd <- paste0(cmd, " --flow-model undirected")
-  }
-
-  cmd <- paste0(cmd, " ", path_temp, "/net.txt ", path_temp)
-
-  if (os == "Linux") {
-    cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_lin ", cmd)
-  } else if (os == "Windows") {
-    cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", cmd)
-  } else if (os == "Darwin") {
-    cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", cmd)
-  } else {
-    stop("Linux, Windows or Mac distributions only.", call. = FALSE)
-  }
-
-  # Run INFOMAP
-  system(command = cmd)
-
-  # Control: if the command line did not work
-  if (!("net.tree" %in% list.files(paste0(path_temp)))) {
-    stop("Command line was wrongly implemented. Infomap did not run.",
-      call. = FALSE
-    )
-  }
-
-  # Retrieve output from net.tree
-  tree <- utils::read.table(paste0(path_temp, "/net.tree"))
-
-  # Import tree
-  idinf <- as.numeric(tree[, 4]) # INFOMAP node ids
-  tree <- as.character(tree[, 1]) # INFOMAP tree column
-
-  # Extract community from tree
-  cominf <- reformat_hierarchy(tree, algo = "infomap", integerize = !show_hierarchy)
-
-  cominf <- cominf[, -1]
-  nblev <- dim(cominf)[2]
-  cominf <- cominf[, nblev:1] # Reverse column order
-
-  com <- data.frame(ID = idnode[, 2], dum = 0) # Dummy level
-  com[match(idinf, idnode[, 1]), 2] <- cominf[, 1]
-
-  for (knblev in 2:nblev) {
-    com$temp <- 0
-    com[match(idinf, idnode[, 1]), (knblev + 1)] <- cominf[, knblev]
-    colnames(com)[(knblev + 1)] <- paste0("V", (knblev + 1))
-  }
-
-  com <- com[, -2] # Remove dummy level
-
-  # Remove temp folder
-  if (delete_temp) {
-    unlink(paste0(path_temp), recursive = TRUE)
-  }
-
-  # Rename and reorder columns
-  com <- knbclu(com)
-
-  # Add attributes and return_node_type
-  if (isbip) {
-    attr(com, "node_type") <- rep("site", dim(com)[1])
-    attributes(com)$node_type[!is.na(match(com[, 1], idfeat$ID_NODE))] <- "species"
-    if (return_node_type == "sites") {
-      com <- com[attributes(com)$node_type == "site", ]
+    if (weight) {
+      netemp <- cbind(netemp, net[, 3])
+      netemp <- netemp[netemp[, 3] > 0, ]
     }
-    if (return_node_type == "species") {
-      com <- com[attributes(com)$node_type == "species", ]
-    }
-  }
 
-  # Put the warning back
-  options(warn = defaultW)
+    # Class preparation
+    outputs <- list(name = "netclu_infomap")
 
-  # Set algorithm in outputs
-  outputs$algorithm$cmd <- cmd
-  outputs$algorithm$version <- version
-  outputs$algorithm$web <- "https://github.com/mapequation/infomap"
-
-  # Set clusters and cluster_info in output
-  outputs$clusters <- com
-  outputs$cluster_info <- data.frame(
-    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
-      drop = FALSE
-    ],
-    n_clust = apply(
-      outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))
+    outputs$args <- list(
+      weight = weight,
+      index = index,
+      nbmod = nbmod,
+      markovtime = markovtime,
+      seed = seed,
+      numtrials = numtrials,
+      twolevel = twolevel,
+      directed = directed,
+      bipartite_version = bipartite_version,
+      bipartite = bipartite,
+      site_col = site_col,
+      species_col = species_col,
+      return_node_type = return_node_type,
+      version = version,
+      delete_temp = delete_temp,
+      path_temp = path_temp,
+      binpath = binpath
     )
-  )
-  if (!twolevel & show_hierarchy) {
-    outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
-  }
 
-  # Return outputs
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
-  return(outputs)
+    outputs$inputs <- list(
+      bipartite = isbip,
+      weight = weight,
+      pairwise = ifelse(isbip, FALSE, TRUE),
+      pairwise_metric = ifelse(isbip, NA, index),
+      dissimilarity = FALSE,
+      nb_sites = nbsites
+    )
+
+    outputs$algorithm <- list()
+
+
+    # Export input in INFOMAP folder
+    if (bipartite_version) { # Add tag if bipartite
+      cat(paste0("*Bipartite ", N), "\n", file = paste0(path_temp, "/net.txt"))
+      utils::write.table(netemp, paste0(path_temp, "/net.txt"),
+        append = TRUE,
+        row.names = FALSE, col.names = FALSE, sep = " "
+      )
+    } else {
+      utils::write.table(netemp, paste0(path_temp, "/net.txt"),
+        row.names = FALSE,
+        col.names = FALSE, sep = " "
+      )
+    }
+
+    # Prepare command to run INFOMAP
+    cmd <- paste0(
+      "--silent --seed ", seed,
+      " --num-trials ", numtrials,
+      " --markov-time ", markovtime
+    )
+    if (nbmod > 0) {
+      cmd <- paste0(cmd, " --preferred-number-of-modules ", nbmod)
+    }
+    if (twolevel) {
+      cmd <- paste0(cmd, " --two-level")
+    }
+    if (directed) {
+      cmd <- paste0(cmd, " --flow-model directed")
+    } else {
+      cmd <- paste0(cmd, " --flow-model undirected")
+    }
+
+    cmd <- paste0(cmd, " ", path_temp, "/net.txt ", path_temp)
+
+    if (os == "Linux") {
+      cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_lin ", cmd)
+    } else if (os == "Windows") {
+      cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", cmd)
+    } else if (os == "Darwin") {
+      cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", cmd)
+    } else {
+      stop("Linux, Windows or Mac distributions only.", call. = FALSE)
+    }
+
+    # Run INFOMAP
+    system(command = cmd)
+
+    # Control: if the command line did not work
+    if (!("net.tree" %in% list.files(paste0(path_temp)))) {
+      stop("Command line was wrongly implemented. Infomap did not run.",
+        call. = FALSE
+      )
+    }
+
+    # Retrieve output from net.tree
+    tree <- utils::read.table(paste0(path_temp, "/net.tree"))
+
+    # Import tree
+    idinf <- as.numeric(tree[, 4]) # INFOMAP node ids
+    tree <- as.character(tree[, 1]) # INFOMAP tree column
+
+    # Extract community from tree
+    cominf <- reformat_hierarchy(tree, algo = "infomap", integerize = !show_hierarchy)
+
+    cominf <- cominf[, -1]
+    nblev <- dim(cominf)[2]
+    cominf <- cominf[, nblev:1] # Reverse column order
+
+    com <- data.frame(ID = idnode[, 2], dum = 0) # Dummy level
+    com[match(idinf, idnode[, 1]), 2] <- cominf[, 1]
+
+    for (knblev in 2:nblev) {
+      com$temp <- 0
+      com[match(idinf, idnode[, 1]), (knblev + 1)] <- cominf[, knblev]
+      colnames(com)[(knblev + 1)] <- paste0("V", (knblev + 1))
+    }
+
+    com <- com[, -2] # Remove dummy level
+
+    # Remove temp folder
+    if (delete_temp) {
+      unlink(paste0(path_temp), recursive = TRUE)
+    }
+
+    # Rename and reorder columns
+    com <- knbclu(com)
+
+    # Add attributes and return_node_type
+    if (isbip) {
+      attr(com, "node_type") <- rep("site", dim(com)[1])
+      attributes(com)$node_type[!is.na(match(com[, 1], idfeat$ID_NODE))] <- "species"
+      if (return_node_type == "sites") {
+        com <- com[attributes(com)$node_type == "site", ]
+      }
+      if (return_node_type == "species") {
+        com <- com[attributes(com)$node_type == "species", ]
+      }
+    }
+
+    # Put the warning back
+    options(warn = defaultW)
+
+    # Set algorithm in outputs
+    outputs$algorithm$cmd <- cmd
+    outputs$algorithm$version <- version
+    outputs$algorithm$web <- "https://github.com/mapequation/infomap"
+
+    # Set clusters and cluster_info in output
+    outputs$clusters <- com
+    outputs$cluster_info <- data.frame(
+      partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+        drop = FALSE
+      ],
+      n_clust = apply(
+        outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+        2, function(x) length(unique(x))
+      )
+    )
+    if (!twolevel & show_hierarchy) {
+      outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
+    }
+
+    # Return outputs
+    class(outputs) <- append("bioRgeo.clusters", class(outputs))
+    return(outputs)
+  }
 }

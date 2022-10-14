@@ -107,7 +107,7 @@
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
-#' com <- netclu_oslom(net) 
+#' com <- netclu_oslom(net)
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
 #' @export
@@ -134,12 +134,10 @@ netclu_oslom <- function(net,
     # Identify bioRgeo directory on your computer
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
-    if(length(binpath)>1){
-      message("Several bioRgeo directories have been detected in your default 
-              package/library folder(s). 
-              The first one will be used by default.
-              Please use the binpath argument to manually set the path to the
-              bin folder.")
+    if (length(binpath) > 1) {
+      message("Several bioRgeo directories have been detected in your default package/library folder(s). 
+The first one will be used by default.
+Please use the binpath argument to manually set the path to the bin folder.")
       binpath <- binpath[1]
     }
   } else {
@@ -154,834 +152,842 @@ netclu_oslom <- function(net,
   os <- Sys.info()[["sysname"]]
 
   # Check if OSLOM has successfully been installed
+  check <- FALSE
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... 
 Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
+    } else {
+      check <- TRUE
     }
   } else {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... 
 Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
     } else {
-      if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir"))) {
+      if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir.txt"))) {
         message("The directed version of OSLOM is not installed... 
 Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
+      } else {
+        check <- TRUE
       }
     }
   }
 
-  # Control input net
-  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
-  controls(args = NULL, data = net, type = "input_net")
+  if (check) {
 
-  # Control input weight & index
-  controls(args = weight, data = net, type = "input_net_weight")
-  if (weight) {
-    controls(args = index, data = net, type = "input_net_index")
-    net[, 3] <- net[, index]
-    net <- net[, 1:3]
-    controls(args = NULL, data = net, type = "input_net_index_value")
-  }
+    # Control input net
+    controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+    controls(args = NULL, data = net, type = "input_net")
 
-  # Control input bipartite
-  controls(args = bipartite, data = NULL, type = "boolean")
-  isbip <- bipartite
-  if (isbip) {
-    controls(args = NULL, data = net, type = "input_net_bip")
-    controls(args = site_col, data = net, type = "input_net_bip_col")
-    controls(args = species_col, data = net, type = "input_net_bip_col")
-    if (!(return_node_type %in% c("both", "sites", "species"))) {
-      stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)
+    # Control input weight & index
+    controls(args = weight, data = net, type = "input_net_weight")
+    if (weight) {
+      controls(args = index, data = net, type = "input_net_index")
+      net[, 3] <- net[, index]
+      net <- net[, 1:3]
+      controls(args = NULL, data = net, type = "input_net_index_value")
     }
-  }
 
-  # Control input directed
-  if (!isbip) {
-    controls(args = directed, data = net, type = "input_net_directed")
-  } else {
-    if (directed) {
-      stop("directed cannot be set to TRUE if the network is bipartite!",
-        call. = FALSE
-      )
-    }
-  }
-
-
-  # Control parameters OSLOM
-  if (!(reassign %in% c("no", "random", "simil"))) {
-    stop("Please choose reassign among the following values:
-no, random, simil")
-  }
-  if (reassign == "simil" & !weight) {
-    stop("A reassignement based on similarity should not be use when weight equal FALSE")
-  }
-  controls(args = r, data = NULL, type = "strict_positive_integer")
-  controls(args = hr, data = NULL, type = "positive_integer")
-  controls(args = seed, data = NULL, type = "positive_integer")
-  if (seed == 0) {
-    seed <- round(as.numeric(as.POSIXct(Sys.time())))
-  }
-  controls(args = t, data = NULL, type = "strict_positive_numeric")
-  if (t > 1) {
-    stop("t must be in the interval (0,1)!", call. = FALSE)
-  }
-  controls(args = cp, data = NULL, type = "strict_positive_numeric")
-  if (cp > 1) {
-    stop("cp must be in the interval (0,1)!", call. = FALSE)
-  }
-
-
-  # Control temp folder + create temp folder
-  path_temp <- controls(args = path_temp, data = NULL, type = "character")
-  controls(args = delete_temp, data = NULL, type = "boolean")
-  if (path_temp == "oslom_temp") {
-    path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
-  } else {
-    if (file.exists(path_temp)) {
-      stop(paste0(path_temp, " already exists. Please rename it or remove it."),
-        call. = FALSE
-      )
-    }
-  }
-  dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-  if (!file.exists(path_temp)) {
-    stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
-  }
-
-
-  # Prepare input for OSLOM
-  if (isbip) {
-    idprim <- as.character(net[, site_col])
-    idprim <- idprim[!duplicated(idprim)]
-    nbsites <- length(idprim)
-    idfeat <- as.character(net[, species_col])
-    idfeat <- idfeat[!duplicated(idfeat)]
-
-    idnode <- c(idprim, idfeat)
-    idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(
-      node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
-      node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
-    )
-  } else {
-    idnode1 <- as.character(net[, 1])
-    idnode2 <- as.character(net[, 2])
+    # Control input bipartite
+    controls(args = bipartite, data = NULL, type = "boolean")
+    isbip <- bipartite
     if (isbip) {
-      message("The network seems to be bipartite! 
+      controls(args = NULL, data = net, type = "input_net_bip")
+      controls(args = site_col, data = net, type = "input_net_bip_col")
+      controls(args = species_col, data = net, type = "input_net_bip_col")
+      if (!(return_node_type %in% c("both", "sites", "species"))) {
+        stop("Please choose return_node_type among the followings values:
+both, sites and species", call. = FALSE)
+      }
+    }
+
+    # Control input directed
+    if (!isbip) {
+      controls(args = directed, data = net, type = "input_net_directed")
+    } else {
+      if (directed) {
+        stop("directed cannot be set to TRUE if the network is bipartite!",
+          call. = FALSE
+        )
+      }
+    }
+
+
+    # Control parameters OSLOM
+    if (!(reassign %in% c("no", "random", "simil"))) {
+      stop("Please choose reassign among the following values:
+no, random, simil")
+    }
+    if (reassign == "simil" & !weight) {
+      stop("A reassignement based on similarity should not be use when weight equal FALSE")
+    }
+    controls(args = r, data = NULL, type = "strict_positive_integer")
+    controls(args = hr, data = NULL, type = "positive_integer")
+    controls(args = seed, data = NULL, type = "positive_integer")
+    if (seed == 0) {
+      seed <- round(as.numeric(as.POSIXct(Sys.time())))
+    }
+    controls(args = t, data = NULL, type = "strict_positive_numeric")
+    if (t > 1) {
+      stop("t must be in the interval (0,1)!", call. = FALSE)
+    }
+    controls(args = cp, data = NULL, type = "strict_positive_numeric")
+    if (cp > 1) {
+      stop("cp must be in the interval (0,1)!", call. = FALSE)
+    }
+
+
+    # Control temp folder + create temp folder
+    path_temp <- controls(args = path_temp, data = NULL, type = "character")
+    controls(args = delete_temp, data = NULL, type = "boolean")
+    if (path_temp == "oslom_temp") {
+      path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
+    } else {
+      if (file.exists(path_temp)) {
+        stop(paste0(path_temp, " already exists. Please rename it or remove it."),
+          call. = FALSE
+        )
+      }
+    }
+    dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
+    if (!file.exists(path_temp)) {
+      stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
+    }
+
+
+    # Prepare input for OSLOM
+    if (isbip) {
+      idprim <- as.character(net[, site_col])
+      idprim <- idprim[!duplicated(idprim)]
+      nbsites <- length(idprim)
+      idfeat <- as.character(net[, species_col])
+      idfeat <- idfeat[!duplicated(idfeat)]
+
+      idnode <- c(idprim, idfeat)
+      idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
+      netemp <- data.frame(
+        node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
+        node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
+      )
+    } else {
+      idnode1 <- as.character(net[, 1])
+      idnode2 <- as.character(net[, 2])
+      if (isbip) {
+        message("The network seems to be bipartite! 
 The bipartite argument should probably be set to TRUE.")
+      }
+      idnode <- c(idnode1, idnode2)
+      idnode <- idnode[!duplicated(idnode)]
+      nbsites <- length(idnode)
+      idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
+      netemp <- data.frame(
+        node1 = idnode[match(net[, 1], idnode[, 2]), 1],
+        node2 = idnode[match(net[, 2], idnode[, 2]), 1]
+      )
     }
-    idnode <- c(idnode1, idnode2)
-    idnode <- idnode[!duplicated(idnode)]
-    nbsites <- length(idnode)
-    idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-    netemp <- data.frame(
-      node1 = idnode[match(net[, 1], idnode[, 2]), 1],
-      node2 = idnode[match(net[, 2], idnode[, 2]), 1]
+
+    if (weight) {
+      netemp <- cbind(netemp, net[, 3])
+      netemp <- netemp[netemp[, 3] > 0, ]
+    }
+
+    # Class preparation
+    outputs <- list(name = "netclu_oslom")
+
+    outputs$args <- list(
+      weight = weight,
+      index = index,
+      reassign = reassign,
+      r = r,
+      hr = hr,
+      seed = seed,
+      t = t,
+      cp = cp,
+      directed = directed,
+      bipartite = bipartite,
+      site_col = site_col,
+      species_col = species_col,
+      return_node_type = return_node_type,
+      delete_temp = delete_temp,
+      path_temp = path_temp,
+      binpath = binpath
     )
-  }
 
-  if (weight) {
-    netemp <- cbind(netemp, net[, 3])
-    netemp <- netemp[netemp[, 3] > 0, ]
-  }
-
-  # Class preparation
-  outputs <- list(name = "netclu_oslom")
-
-  outputs$args <- list(
-    weight = weight,
-    index = index,
-    reassign = reassign,
-    r = r,
-    hr = hr,
-    seed = seed,
-    t = t,
-    cp = cp,
-    directed = directed,
-    bipartite = bipartite,
-    site_col = site_col,
-    species_col = species_col,
-    return_node_type = return_node_type,
-    delete_temp = delete_temp,
-    path_temp = path_temp,
-    binpath = binpath
-  )
-
-  outputs$inputs <- list(
-    bipartite = isbip,
-    weight = weight,
-    pairwise = ifelse(isbip, FALSE, TRUE),
-    pairwise_metric = ifelse(isbip, NA, index),
-    dissimilarity = FALSE,
-    nb_sites = nbsites
-  )
-
-  outputs$algorithm <- list()
-
-
-  # Export input for OSLOM
-  utils::write.table(netemp, paste0(path_temp, "/net.txt"),
-    row.names = FALSE,
-    col.names = FALSE, sep = " "
-  )
-
-  # Prepare command to run OSLOM
-  cmd <- paste0("-r ", r, " -hr ", hr, " -seed ", seed, " -t ", t, " -cp ", cp)
-  if (weight) {
-    cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
-  } else {
-    cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
-  }
-
-  # Run OSLOM
-  if (os == "Linux") {
-    if (directed) {
-      cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd, " > /dev/null 2>&1")
-    } else {
-      cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd, " > /dev/null 2>&1")
-    }
-    system(command = cmd)
-  } else if (os == "Windows") {
-    if (directed) {
-      cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
-    } else {
-      cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
-    }
-    dir.create(paste0(path_temp, "/net.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
-    system(command = cmd, show.output.on.console = FALSE)
-  } else if (os == "Darwin") {
-    if (directed) {
-      cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd, " > /dev/null 2>&1")
-    } else {
-      cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd, " > /dev/null 2>&1")
-    }
-    system(command = cmd)
-  } else {
-    stop("Linux, Windows or Mac distributions only.")
-  }
-
-  # Control: if the command line did not work
-  if (!("tp" %in% list.files(paste0(path_temp, "/net.txt_oslo_files")))) {
-    stop("Command line was wrongly implemented. OSLOM did not run.")
-  }
-
-  # Number of levels
-  nblev <- 1
-
-  # Retrieve output from tp [TO COMMENT]
-  com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp"))
-  cl <- list()
-  length(cl) <- length(com) / 2
-  for (k in 1:length(com)) {
-    if ((k / 2 - trunc(k / 2)) == 0) {
-      cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
-    }
-  }
-
-  tab <- unlist(cl)
-  tab <- sort(tab[!duplicated(tab)])
-  tab <- cbind(tab, 0, 0, 0)
-  n <- nrow(tab)
-
-  dupl <- rep(0, n)
-  for (i in 1:length(cl)) {
-    temp <- rep(0, n)
-    temp[match(cl[[i]], tab[, 1])] <- i
-    dupl <- dupl + 1 * (temp > 0)
-    tab[match(cl[[i]], tab[, 1]), 2] <- i
-  }
-
-  for (i in 1:n) {
-    if (dupl[i] > 1) {
-      overcom <- NULL
-      for (j in 1:length(cl)) {
-        if (sum(cl[[j]] == tab[i, 1]) == 1) {
-          overcom <- c(overcom, j)
-        }
-      }
-      if (reassign == "random") {
-        overcom <- overcom[sample(length(overcom), length(overcom))]
-      }
-      tab[i, 2] <- overcom[1]
-      tab[i, 3] <- overcom[2]
-      if (dupl[i] == 3) {
-        tab[i, 4] <- overcom[3]
-      }
-    }
-  }
-
-  # Reassign tp [TO COMMENT]
-  if (reassign == "simil") {
-    dat <- netemp
-    for (i in 1:n) {
-      if (tab[i, 3] > 0) {
-        test1 <- sum(dat[, 1] == tab[i, 1])
-        if (test1 == 0) {
-          dati1 <- matrix(0, nrow = 2, ncol = 2)
-        } else if (test1 == 1) {
-          dati1 <- matrix(0, nrow = 2, ncol = 2)
-          dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
-        } else {
-          dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
-        }
-        colnames(dati1) <- c("ID", "SIM")
-
-        test2 <- sum(dat[, 2] == tab[i, 1])
-        if (test2 == 0) {
-          dati2 <- matrix(0, nrow = 2, ncol = 2)
-        } else if (test2 == 1) {
-          dati2 <- matrix(0, nrow = 2, ncol = 2)
-          dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
-        } else {
-          dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
-        }
-        colnames(dati2) <- c("ID", "SIM")
-
-        dati <- rbind(dati1, dati2)
-
-        check <- match(cl[[tab[i, 2]]], dati[, 1])
-        check <- check[!is.na(check)]
-        sim1 <- mean(dati[check, 2])
-
-        check <- match(cl[[tab[i, 3]]], dati[, 1])
-        check <- check[!is.na(check)]
-        sim2 <- mean(dati[check, 2])
-
-        if (sim2 > sim1) {
-          tab[i, 2] <- tab[i, 3]
-          sim1 <- sim2
-        }
-
-        if (tab[i, 4] > 0) {
-          check <- match(cl[[tab[i, 4]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim2 <- mean(dati[check, 2])
-          if (sim2 > sim1) {
-            tab[i, 2] <- tab[i, 4]
-          }
-        }
-      }
-    }
-    tabtp <- tab[, 1:2]
-  } else if (reassign == "random") {
-    tabtp <- tab[, 1:2]
-  } else {
-    tabtp <- tab
-  }
-
-  # Reshape tabtp
-  comtp <- data.frame(ID = idnode[, 2], Com1 = 0)
-  comtp[match(tabtp[, 1], idnode[, 1]), 2] <- tabtp[, 2]
-  if (dim(tabtp)[2] > 2) {
-    if (sum(tabtp[, 3]) > 0) {
-      comtp$Com2 <- 0
-      comtp[match(tabtp[, 1], idnode[, 1]), 3] <- tabtp[, 3]
-    }
-    if (sum(tabtp[, 4]) > 0) {
-      comtp$Com3 <- 0
-      comtp[match(tabtp[, 1], idnode[, 1]), 4] <- tabtp[, 4]
-    }
-  }
-  com <- comtp
-
-  # If tp1 exists (i.e. hierarchical level)
-  if ("tp1" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))) {
-
-    # Number of levels
-    nblev <- 2
-
-    # Retrieve output from tp1 [TO COMMENT]
-    com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp1"))
-    cl <- list()
-    length(cl) <- length(com) / 2
-    for (k in 1:length(com)) {
-      if ((k / 2 - trunc(k / 2)) == 0) {
-        cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
-      }
-    }
-
-    tab <- unlist(cl)
-    tab <- sort(tab[!duplicated(tab)])
-    tab <- cbind(tab, 0, 0, 0)
-    n <- nrow(tab)
-
-    dupl <- rep(0, n)
-    for (i in 1:length(cl)) {
-      temp <- rep(0, n)
-      temp[match(cl[[i]], tab[, 1])] <- i
-      dupl <- dupl + 1 * (temp > 0)
-      tab[match(cl[[i]], tab[, 1]), 2] <- i
-    }
-
-    for (i in 1:n) {
-      if (dupl[i] > 1) {
-        overcom <- NULL
-        for (j in 1:length(cl)) {
-          if (sum(cl[[j]] == tab[i, 1]) == 1) {
-            overcom <- c(overcom, j)
-          }
-        }
-        if (reassign == "random") {
-          overcom <- overcom[sample(length(overcom), length(overcom))]
-        }
-        tab[i, 2] <- overcom[1]
-        tab[i, 3] <- overcom[2]
-        if (dupl[i] == 3) {
-          tab[i, 4] <- overcom[3]
-        }
-      }
-    }
-
-    # Reassign tp1 [TO COMMENT]
-    if (reassign == "simil") {
-      dat <- netemp
-      for (i in 1:n) {
-        if (tab[i, 3] > 0) {
-          test1 <- sum(dat[, 1] == tab[i, 1])
-          if (test1 == 0) {
-            dati1 <- matrix(0, nrow = 2, ncol = 2)
-          } else if (test1 == 1) {
-            dati1 <- matrix(0, nrow = 2, ncol = 2)
-            dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
-          } else {
-            dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
-          }
-          colnames(dati1) <- c("ID", "SIM")
-
-          test2 <- sum(dat[, 2] == tab[i, 1])
-          if (test2 == 0) {
-            dati2 <- matrix(0, nrow = 2, ncol = 2)
-          } else if (test2 == 1) {
-            dati2 <- matrix(0, nrow = 2, ncol = 2)
-            dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
-          } else {
-            dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
-          }
-          colnames(dati2) <- c("ID", "SIM")
-
-          dati <- rbind(dati1, dati2)
-
-          check <- match(cl[[tab[i, 2]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim1 <- mean(dati[check, 2])
-
-          check <- match(cl[[tab[i, 3]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim2 <- mean(dati[check, 2])
-
-          if (sim2 > sim1) {
-            tab[i, 2] <- tab[i, 3]
-            sim1 <- sim2
-          }
-
-          if (tab[i, 4] > 0) {
-            check <- match(cl[[tab[i, 4]]], dati[, 1])
-            check <- check[!is.na(check)]
-            sim2 <- mean(dati[check, 2])
-            if (sim2 > sim1) {
-              tab[i, 2] <- tab[i, 4]
-            }
-          }
-        }
-      }
-      tabtph <- tab[, 1:2]
-    } else if (reassign == "random") {
-      tabtph <- tab[, 1:2]
-    } else {
-      tabtph <- tab
-    }
-
-    # Reshape tabtp1
-    comtph <- data.frame(ID = idnode[, 2], HCom1 = 0)
-    comtph[match(tabtph[, 1], idnode[, 1]), 2] <- tabtph[, 2]
-    if (dim(tabtph)[2] > 2) {
-      if (sum(tabtph[, 3]) > 0) {
-        comtph$HCom2 <- 0
-        comtph[match(tabtph[, 1], idnode[, 1]), 3] <- tabtph[, 3]
-      }
-      if (sum(tabtph[, 4]) > 0) {
-        comtph$HCom3 <- 0
-        comtph[match(tabtph[, 1], idnode[, 1]), 4] <- tabtph[, 4]
-      }
-    }
-
-    com <- cbind(comtp, comtph)
-    com <- com[, -(dim(comtp)[2] + 1)]
-  }
-
-  # If tp2 exists (i.e. hierarchical level)
-  if ("tp2" %in% list.files(paste0(path_temp, "/oslomnet.txt_oslo_files"))) {
-
-    # Number of levels
-    nblev <- 3
-
-    # Retrieve output from tp2 [TO COMMENT]
-    com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp2"))
-    cl <- list()
-    length(cl) <- length(com) / 2
-    for (k in 1:length(com)) {
-      if ((k / 2 - trunc(k / 2)) == 0) {
-        cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
-      }
-    }
-
-    tab <- unlist(cl)
-    tab <- sort(tab[!duplicated(tab)])
-    tab <- cbind(tab, 0, 0, 0)
-    n <- nrow(tab)
-
-    dupl <- rep(0, n)
-    for (i in 1:length(cl)) {
-      temp <- rep(0, n)
-      temp[match(cl[[i]], tab[, 1])] <- i
-      dupl <- dupl + 1 * (temp > 0)
-      tab[match(cl[[i]], tab[, 1]), 2] <- i
-    }
-
-    for (i in 1:n) {
-      if (dupl[i] > 1) {
-        overcom <- NULL
-        for (j in 1:length(cl)) {
-          if (sum(cl[[j]] == tab[i, 1]) == 1) {
-            overcom <- c(overcom, j)
-          }
-        }
-        if (reassign == "random") {
-          overcom <- overcom[sample(length(overcom), length(overcom))]
-        }
-        tab[i, 2] <- overcom[1]
-        tab[i, 3] <- overcom[2]
-        if (dupl[i] == 3) {
-          tab[i, 4] <- overcom[3]
-        }
-      }
-    }
-
-    # Reassign tp2 [TO COMMENT]
-    if (reassign == "simil") {
-      dat <- netemp
-      for (i in 1:n) {
-        if (tab[i, 3] > 0) {
-          test1 <- sum(dat[, 1] == tab[i, 1])
-          if (test1 == 0) {
-            dati1 <- matrix(0, nrow = 2, ncol = 2)
-          } else if (test1 == 1) {
-            dati1 <- matrix(0, nrow = 2, ncol = 2)
-            dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
-          } else {
-            dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
-          }
-          colnames(dati1) <- c("ID", "SIM")
-
-          test2 <- sum(dat[, 2] == tab[i, 1])
-          if (test2 == 0) {
-            dati2 <- matrix(0, nrow = 2, ncol = 2)
-          } else if (test2 == 1) {
-            dati2 <- matrix(0, nrow = 2, ncol = 2)
-            dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
-          } else {
-            dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
-          }
-          colnames(dati2) <- c("ID", "SIM")
-
-          dati <- rbind(dati1, dati2)
-
-          check <- match(cl[[tab[i, 2]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim1 <- mean(dati[check, 2])
-
-          check <- match(cl[[tab[i, 3]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim2 <- mean(dati[check, 2])
-
-          if (sim2 > sim1) {
-            tab[i, 2] <- tab[i, 3]
-            sim1 <- sim2
-          }
-
-          if (tab[i, 4] > 0) {
-            check <- match(cl[[tab[i, 4]]], dati[, 1])
-            check <- check[!is.na(check)]
-            sim2 <- mean(dati[check, 2])
-            if (sim2 > sim1) {
-              tab[i, 2] <- tab[i, 4]
-            }
-          }
-        }
-      }
-      tabtphh <- tab[, 1:2]
-    } else if (reassign == "random") {
-      tabtphh <- tab[, 1:2]
-    } else {
-      tabtphh <- tab
-    }
-
-    # Reshape tabtp2
-    comtphh <- data.frame(ID = idnode[, 2], HHCom1 = 0)
-    comtphh[match(tabtphh[, 1], idnode[, 1]), 2] <- tabtphh[, 2]
-    if (dim(tabtphh)[2] > 2) {
-      if (sum(tabtphh[, 3]) > 0) {
-        comtphh$HHCom2 <- 0
-        comtphh[match(tabtphh[, 1], idnode[, 1]), 3] <- tabtphh[, 3]
-      }
-      if (sum(tabtphh[, 4]) > 0) {
-        comtphh$HHCom3 <- 0
-        comtphh[match(tabtphh[, 1], idnode[, 1]), 4] <- tabtphh[, 4]
-      }
-    }
-
-    com <- cbind(comtp, comtph, comtphh)
-    com <- com[, -c((dim(comtp)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + 1))]
-  }
-
-  # If tp3 exists (i.e. hierarchical level)
-  if ("tp3" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))) {
-
-    # Number of levels
-    nblev <- 4
-
-    # Retrieve output from tp3 [TO COMMENT]
-    com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp3"))
-    cl <- list()
-    length(cl) <- length(com) / 2
-    for (k in 1:length(com)) {
-      if ((k / 2 - trunc(k / 2)) == 0) {
-        cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
-      }
-    }
-
-    tab <- unlist(cl)
-    tab <- sort(tab[!duplicated(tab)])
-    tab <- cbind(tab, 0, 0, 0)
-    n <- nrow(tab)
-
-    dupl <- rep(0, n)
-    for (i in 1:length(cl)) {
-      temp <- rep(0, n)
-      temp[match(cl[[i]], tab[, 1])] <- i
-      dupl <- dupl + 1 * (temp > 0)
-      tab[match(cl[[i]], tab[, 1]), 2] <- i
-    }
-
-    for (i in 1:n) {
-      if (dupl[i] > 1) {
-        overcom <- NULL
-        for (j in 1:length(cl)) {
-          if (sum(cl[[j]] == tab[i, 1]) == 1) {
-            overcom <- c(overcom, j)
-          }
-        }
-        if (reassign == "random") {
-          overcom <- overcom[sample(length(overcom), length(overcom))]
-        }
-        tab[i, 2] <- overcom[1]
-        tab[i, 3] <- overcom[2]
-        if (dupl[i] == 3) {
-          tab[i, 4] <- overcom[3]
-        }
-      }
-    }
-
-    # Reassign tp3 [TO COMMENT]
-    if (reassign == "simil") {
-      dat <- netemp
-      for (i in 1:n) {
-        if (tab[i, 3] > 0) {
-          test1 <- sum(dat[, 1] == tab[i, 1])
-          if (test1 == 0) {
-            dati1 <- matrix(0, nrow = 2, ncol = 2)
-          } else if (test1 == 1) {
-            dati1 <- matrix(0, nrow = 2, ncol = 2)
-            dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
-          } else {
-            dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
-          }
-          colnames(dati1) <- c("ID", "SIM")
-
-          test2 <- sum(dat[, 2] == tab[i, 1])
-          if (test2 == 0) {
-            dati2 <- matrix(0, nrow = 2, ncol = 2)
-          } else if (test2 == 1) {
-            dati2 <- matrix(0, nrow = 2, ncol = 2)
-            dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
-          } else {
-            dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
-          }
-          colnames(dati2) <- c("ID", "SIM")
-
-          dati <- rbind(dati1, dati2)
-
-          check <- match(cl[[tab[i, 2]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim1 <- mean(dati[check, 2])
-
-          check <- match(cl[[tab[i, 3]]], dati[, 1])
-          check <- check[!is.na(check)]
-          sim2 <- mean(dati[check, 2])
-
-          if (sim2 > sim1) {
-            tab[i, 2] <- tab[i, 3]
-            sim1 <- sim2
-          }
-
-          if (tab[i, 4] > 0) {
-            check <- match(cl[[tab[i, 4]]], dati[, 1])
-            check <- check[!is.na(check)]
-            sim2 <- mean(dati[check, 2])
-            if (sim2 > sim1) {
-              tab[i, 2] <- tab[i, 4]
-            }
-          }
-        }
-      }
-      tabtphhh <- tab[, 1:2]
-    } else if (reassign == "random") {
-      tabtphhh <- tab[, 1:2]
-    } else {
-      tabtphhh <- tab
-    }
-
-    # Reshape tabtp3
-    comtphhh <- data.frame(ID = idnode[, 2], HHHCom1 = 0)
-    comtphhh[match(tabtphhh[, 1], idnode[, 1]), 2] <- tabtphhh[, 2]
-    if (dim(tabtphhh)[2] > 2) {
-      if (sum(tabtphhh[, 3]) > 0) {
-        comtphhh$HHHCom2 <- 0
-        comtphhh[match(tabtphhh[, 1], idnode[, 1]), 3] <- tabtphhh[, 3]
-      }
-      if (sum(tabtphhh[, 4]) > 0) {
-        comtphhh$HHHCom3 <- 0
-        comtphhh[match(tabtphhh[, 1], idnode[, 1]), 4] <- tabtphhh[, 4]
-      }
-    }
-
-    com <- cbind(comtp, comtph, comtphh, comtphhh)
-    com <- com[, -c((dim(comtp)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + dim(comtphh) + 1))]
-  }
-
-  # Remove temporary files
-  if (delete_temp) {
-    unlink(paste0(path_temp), recursive = TRUE)
-  }
-  unlink("tp")
-  unlink("time_seed.dat")
-
-  # Rename and reorder columns
-  com <- as.character(comtp[, 1])
-  tempnblev <- 1
-  if (nblev >= 4) {
-    nov <- dim(comtphhh)[2] - 1
-    if (nov == 1) {
-      colnames(comtphhh)[2] <- paste0("K_", max(comtphhh[, 2]))
-      com <- cbind(com, comtphhh[, 2])
-      colnames(com)[dim(com)[2]] <- paste0("K_", max(comtphhh))
-    } else {
-      colnames(comtphhh)[2] <- paste0("K_", max(comtphhh[, 2]), "_semel")
-      if (nov >= 2) {
-        colnames(comtphhh)[3] <- paste0("K_", max(comtphhh[, 2]), "_bis")
-      }
-      if (nov == 3) {
-        colnames(comtphhh)[4] <- paste0("K_", max(comtphhh[, 2]), "_ter")
-      }
-      com <- cbind(com, comtphhh[, -1])
-    }
-    tempnblev <- tempnblev + 1
-  }
-  if (nblev >= 3) {
-    nov <- dim(comtphh)[2] - 1
-    if (nov == 1) {
-      colnames(comtphh)[2] <- paste0("K_", max(comtphh[, 2]))
-      com <- cbind(com, comtphh[, 2])
-      colnames(com)[dim(com)[2]] <- paste0("K_", max(comtphh[, 2]))
-    } else {
-      colnames(comtphh)[2] <- paste0("K_", max(comtphh[, 2]), "_semel")
-      if (nov >= 2) {
-        colnames(comtphh)[3] <- paste0("K_", max(comtphh[, 2]), "_bis")
-      }
-      if (nov == 3) {
-        colnames(comtphh)[4] <- paste0("K_", max(comtphh[, 2]), "_ter")
-      }
-      com <- cbind(com, comtphh[, -1])
-    }
-    tempnblev <- tempnblev + 1
-  }
-  if (nblev >= 2) {
-    nov <- dim(comtph)[2] - 1
-    if (nov == 1) {
-      colnames(comtph)[2] <- paste0("K_", max(comtph[, 2]))
-      com <- cbind(com, comtph[, 2])
-      colnames(com)[dim(com)[2]] <- paste0("K_", max(comtph[, 2]))
-    } else {
-      colnames(comtph)[2] <- paste0("K_", max(comtph[, 2]), "_semel")
-      if (nov >= 2) {
-        colnames(comtph)[3] <- paste0("K_", max(comtph[, 2]), "_bis")
-      }
-      if (nov == 3) {
-        colnames(comtph)[4] <- paste0("K_", max(comtph[, 2]), "_ter")
-      }
-      com <- cbind(com, comtph[, -1])
-    }
-    tempnblev <- tempnblev + 1
-  }
-  if (nblev >= 1) {
-    nov <- dim(comtp)[2] - 1
-    if (nov == 1) {
-      colnames(comtp)[2] <- paste0("K_", max(comtp[, 2]))
-      com <- cbind(com, comtp[, 2])
-      colnames(com)[dim(com)[2]] <- paste0("K_", max(comtp[, 2]))
-    } else {
-      colnames(comtp)[2] <- paste0("K_", max(comtp[, 2]), "_semel")
-      if (nov >= 2) {
-        colnames(comtp)[3] <- paste0("K_", max(comtp[, 2]), "_bis")
-      }
-      if (nov == 3) {
-        colnames(comtp)[4] <- paste0("K_", max(comtp[, 2]), "_ter")
-      }
-      com <- cbind(com, comtp[, -1])
-    }
-    tempnblev <- tempnblev + 1
-  }
-  colnames(com)[1] <- "ID"
-  com <- data.frame(com)
-  for (k in 2:dim(com)[2]) {
-    com[, k] <- as.numeric(as.character(com[, k]))
-  }
-
-  com[, 1] <- as.character(com[, 1])
-
-  # Add attributes and return_node_type
-  if (isbip) {
-    attr(com, "node_type") <- rep("site", dim(com)[1])
-    attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
-    if (return_node_type == "sites") {
-      com <- com[attributes(com)$node_type == "site", ]
-    }
-    if (return_node_type == "species") {
-      com <- com[attributes(com)$node_type == "species", ]
-    }
-  }
-
-  # Set algorithm in outputs
-  outputs$algorithm$cmd <- cmd
-  outputs$algorithm$version <- "2.4"
-  outputs$algorithm$web <- "http://oslom.org/"
-
-  # Set clusters and cluster_info in output
-  outputs$clusters <- com
-  outputs$cluster_info <- data.frame(
-    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
-      drop = FALSE
-    ],
-    n_clust = apply(
-      outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))
+    outputs$inputs <- list(
+      bipartite = isbip,
+      weight = weight,
+      pairwise = ifelse(isbip, FALSE, TRUE),
+      pairwise_metric = ifelse(isbip, NA, index),
+      dissimilarity = FALSE,
+      nb_sites = nbsites
     )
-  )
+
+    outputs$algorithm <- list()
 
 
-  # Return outputs
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
-  return(outputs)
+    # Export input for OSLOM
+    utils::write.table(netemp, paste0(path_temp, "/net.txt"),
+      row.names = FALSE,
+      col.names = FALSE, sep = " "
+    )
+
+    # Prepare command to run OSLOM
+    cmd <- paste0("-r ", r, " -hr ", hr, " -seed ", seed, " -t ", t, " -cp ", cp)
+    if (weight) {
+      cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
+    } else {
+      cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
+    }
+
+    # Run OSLOM
+    if (os == "Linux") {
+      if (directed) {
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd, " > /dev/null 2>&1")
+      } else {
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd, " > /dev/null 2>&1")
+      }
+      system(command = cmd)
+    } else if (os == "Windows") {
+      if (directed) {
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
+      } else {
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
+      }
+      dir.create(paste0(path_temp, "/net.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+      system(command = cmd, show.output.on.console = FALSE)
+    } else if (os == "Darwin") {
+      if (directed) {
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd, " > /dev/null 2>&1")
+      } else {
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd, " > /dev/null 2>&1")
+      }
+      system(command = cmd)
+    } else {
+      stop("Linux, Windows or Mac distributions only.")
+    }
+
+    # Control: if the command line did not work
+    if (!("tp" %in% list.files(paste0(path_temp, "/net.txt_oslo_files")))) {
+      stop("Command line was wrongly implemented. OSLOM did not run.")
+    }
+
+    # Number of levels
+    nblev <- 1
+
+    # Retrieve output from tp [TO COMMENT]
+    com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp"))
+    cl <- list()
+    length(cl) <- length(com) / 2
+    for (k in 1:length(com)) {
+      if ((k / 2 - trunc(k / 2)) == 0) {
+        cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+      }
+    }
+
+    tab <- unlist(cl)
+    tab <- sort(tab[!duplicated(tab)])
+    tab <- cbind(tab, 0, 0, 0)
+    n <- nrow(tab)
+
+    dupl <- rep(0, n)
+    for (i in 1:length(cl)) {
+      temp <- rep(0, n)
+      temp[match(cl[[i]], tab[, 1])] <- i
+      dupl <- dupl + 1 * (temp > 0)
+      tab[match(cl[[i]], tab[, 1]), 2] <- i
+    }
+
+    for (i in 1:n) {
+      if (dupl[i] > 1) {
+        overcom <- NULL
+        for (j in 1:length(cl)) {
+          if (sum(cl[[j]] == tab[i, 1]) == 1) {
+            overcom <- c(overcom, j)
+          }
+        }
+        if (reassign == "random") {
+          overcom <- overcom[sample(length(overcom), length(overcom))]
+        }
+        tab[i, 2] <- overcom[1]
+        tab[i, 3] <- overcom[2]
+        if (dupl[i] == 3) {
+          tab[i, 4] <- overcom[3]
+        }
+      }
+    }
+
+    # Reassign tp [TO COMMENT]
+    if (reassign == "simil") {
+      dat <- netemp
+      for (i in 1:n) {
+        if (tab[i, 3] > 0) {
+          test1 <- sum(dat[, 1] == tab[i, 1])
+          if (test1 == 0) {
+            dati1 <- matrix(0, nrow = 2, ncol = 2)
+          } else if (test1 == 1) {
+            dati1 <- matrix(0, nrow = 2, ncol = 2)
+            dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
+          } else {
+            dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
+          }
+          colnames(dati1) <- c("ID", "SIM")
+
+          test2 <- sum(dat[, 2] == tab[i, 1])
+          if (test2 == 0) {
+            dati2 <- matrix(0, nrow = 2, ncol = 2)
+          } else if (test2 == 1) {
+            dati2 <- matrix(0, nrow = 2, ncol = 2)
+            dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
+          } else {
+            dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
+          }
+          colnames(dati2) <- c("ID", "SIM")
+
+          dati <- rbind(dati1, dati2)
+
+          check <- match(cl[[tab[i, 2]]], dati[, 1])
+          check <- check[!is.na(check)]
+          sim1 <- mean(dati[check, 2])
+
+          check <- match(cl[[tab[i, 3]]], dati[, 1])
+          check <- check[!is.na(check)]
+          sim2 <- mean(dati[check, 2])
+
+          if (sim2 > sim1) {
+            tab[i, 2] <- tab[i, 3]
+            sim1 <- sim2
+          }
+
+          if (tab[i, 4] > 0) {
+            check <- match(cl[[tab[i, 4]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim2 <- mean(dati[check, 2])
+            if (sim2 > sim1) {
+              tab[i, 2] <- tab[i, 4]
+            }
+          }
+        }
+      }
+      tabtp <- tab[, 1:2]
+    } else if (reassign == "random") {
+      tabtp <- tab[, 1:2]
+    } else {
+      tabtp <- tab
+    }
+
+    # Reshape tabtp
+    comtp <- data.frame(ID = idnode[, 2], Com1 = 0)
+    comtp[match(tabtp[, 1], idnode[, 1]), 2] <- tabtp[, 2]
+    if (dim(tabtp)[2] > 2) {
+      if (sum(tabtp[, 3]) > 0) {
+        comtp$Com2 <- 0
+        comtp[match(tabtp[, 1], idnode[, 1]), 3] <- tabtp[, 3]
+      }
+      if (sum(tabtp[, 4]) > 0) {
+        comtp$Com3 <- 0
+        comtp[match(tabtp[, 1], idnode[, 1]), 4] <- tabtp[, 4]
+      }
+    }
+    com <- comtp
+
+    # If tp1 exists (i.e. hierarchical level)
+    if ("tp1" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))) {
+
+      # Number of levels
+      nblev <- 2
+
+      # Retrieve output from tp1 [TO COMMENT]
+      com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp1"))
+      cl <- list()
+      length(cl) <- length(com) / 2
+      for (k in 1:length(com)) {
+        if ((k / 2 - trunc(k / 2)) == 0) {
+          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+        }
+      }
+
+      tab <- unlist(cl)
+      tab <- sort(tab[!duplicated(tab)])
+      tab <- cbind(tab, 0, 0, 0)
+      n <- nrow(tab)
+
+      dupl <- rep(0, n)
+      for (i in 1:length(cl)) {
+        temp <- rep(0, n)
+        temp[match(cl[[i]], tab[, 1])] <- i
+        dupl <- dupl + 1 * (temp > 0)
+        tab[match(cl[[i]], tab[, 1]), 2] <- i
+      }
+
+      for (i in 1:n) {
+        if (dupl[i] > 1) {
+          overcom <- NULL
+          for (j in 1:length(cl)) {
+            if (sum(cl[[j]] == tab[i, 1]) == 1) {
+              overcom <- c(overcom, j)
+            }
+          }
+          if (reassign == "random") {
+            overcom <- overcom[sample(length(overcom), length(overcom))]
+          }
+          tab[i, 2] <- overcom[1]
+          tab[i, 3] <- overcom[2]
+          if (dupl[i] == 3) {
+            tab[i, 4] <- overcom[3]
+          }
+        }
+      }
+
+      # Reassign tp1 [TO COMMENT]
+      if (reassign == "simil") {
+        dat <- netemp
+        for (i in 1:n) {
+          if (tab[i, 3] > 0) {
+            test1 <- sum(dat[, 1] == tab[i, 1])
+            if (test1 == 0) {
+              dati1 <- matrix(0, nrow = 2, ncol = 2)
+            } else if (test1 == 1) {
+              dati1 <- matrix(0, nrow = 2, ncol = 2)
+              dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
+            } else {
+              dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
+            }
+            colnames(dati1) <- c("ID", "SIM")
+
+            test2 <- sum(dat[, 2] == tab[i, 1])
+            if (test2 == 0) {
+              dati2 <- matrix(0, nrow = 2, ncol = 2)
+            } else if (test2 == 1) {
+              dati2 <- matrix(0, nrow = 2, ncol = 2)
+              dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
+            } else {
+              dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
+            }
+            colnames(dati2) <- c("ID", "SIM")
+
+            dati <- rbind(dati1, dati2)
+
+            check <- match(cl[[tab[i, 2]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim1 <- mean(dati[check, 2])
+
+            check <- match(cl[[tab[i, 3]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim2 <- mean(dati[check, 2])
+
+            if (sim2 > sim1) {
+              tab[i, 2] <- tab[i, 3]
+              sim1 <- sim2
+            }
+
+            if (tab[i, 4] > 0) {
+              check <- match(cl[[tab[i, 4]]], dati[, 1])
+              check <- check[!is.na(check)]
+              sim2 <- mean(dati[check, 2])
+              if (sim2 > sim1) {
+                tab[i, 2] <- tab[i, 4]
+              }
+            }
+          }
+        }
+        tabtph <- tab[, 1:2]
+      } else if (reassign == "random") {
+        tabtph <- tab[, 1:2]
+      } else {
+        tabtph <- tab
+      }
+
+      # Reshape tabtp1
+      comtph <- data.frame(ID = idnode[, 2], HCom1 = 0)
+      comtph[match(tabtph[, 1], idnode[, 1]), 2] <- tabtph[, 2]
+      if (dim(tabtph)[2] > 2) {
+        if (sum(tabtph[, 3]) > 0) {
+          comtph$HCom2 <- 0
+          comtph[match(tabtph[, 1], idnode[, 1]), 3] <- tabtph[, 3]
+        }
+        if (sum(tabtph[, 4]) > 0) {
+          comtph$HCom3 <- 0
+          comtph[match(tabtph[, 1], idnode[, 1]), 4] <- tabtph[, 4]
+        }
+      }
+
+      com <- cbind(comtp, comtph)
+      com <- com[, -(dim(comtp)[2] + 1)]
+    }
+
+    # If tp2 exists (i.e. hierarchical level)
+    if ("tp2" %in% list.files(paste0(path_temp, "/oslomnet.txt_oslo_files"))) {
+
+      # Number of levels
+      nblev <- 3
+
+      # Retrieve output from tp2 [TO COMMENT]
+      com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp2"))
+      cl <- list()
+      length(cl) <- length(com) / 2
+      for (k in 1:length(com)) {
+        if ((k / 2 - trunc(k / 2)) == 0) {
+          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+        }
+      }
+
+      tab <- unlist(cl)
+      tab <- sort(tab[!duplicated(tab)])
+      tab <- cbind(tab, 0, 0, 0)
+      n <- nrow(tab)
+
+      dupl <- rep(0, n)
+      for (i in 1:length(cl)) {
+        temp <- rep(0, n)
+        temp[match(cl[[i]], tab[, 1])] <- i
+        dupl <- dupl + 1 * (temp > 0)
+        tab[match(cl[[i]], tab[, 1]), 2] <- i
+      }
+
+      for (i in 1:n) {
+        if (dupl[i] > 1) {
+          overcom <- NULL
+          for (j in 1:length(cl)) {
+            if (sum(cl[[j]] == tab[i, 1]) == 1) {
+              overcom <- c(overcom, j)
+            }
+          }
+          if (reassign == "random") {
+            overcom <- overcom[sample(length(overcom), length(overcom))]
+          }
+          tab[i, 2] <- overcom[1]
+          tab[i, 3] <- overcom[2]
+          if (dupl[i] == 3) {
+            tab[i, 4] <- overcom[3]
+          }
+        }
+      }
+
+      # Reassign tp2 [TO COMMENT]
+      if (reassign == "simil") {
+        dat <- netemp
+        for (i in 1:n) {
+          if (tab[i, 3] > 0) {
+            test1 <- sum(dat[, 1] == tab[i, 1])
+            if (test1 == 0) {
+              dati1 <- matrix(0, nrow = 2, ncol = 2)
+            } else if (test1 == 1) {
+              dati1 <- matrix(0, nrow = 2, ncol = 2)
+              dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
+            } else {
+              dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
+            }
+            colnames(dati1) <- c("ID", "SIM")
+
+            test2 <- sum(dat[, 2] == tab[i, 1])
+            if (test2 == 0) {
+              dati2 <- matrix(0, nrow = 2, ncol = 2)
+            } else if (test2 == 1) {
+              dati2 <- matrix(0, nrow = 2, ncol = 2)
+              dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
+            } else {
+              dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
+            }
+            colnames(dati2) <- c("ID", "SIM")
+
+            dati <- rbind(dati1, dati2)
+
+            check <- match(cl[[tab[i, 2]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim1 <- mean(dati[check, 2])
+
+            check <- match(cl[[tab[i, 3]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim2 <- mean(dati[check, 2])
+
+            if (sim2 > sim1) {
+              tab[i, 2] <- tab[i, 3]
+              sim1 <- sim2
+            }
+
+            if (tab[i, 4] > 0) {
+              check <- match(cl[[tab[i, 4]]], dati[, 1])
+              check <- check[!is.na(check)]
+              sim2 <- mean(dati[check, 2])
+              if (sim2 > sim1) {
+                tab[i, 2] <- tab[i, 4]
+              }
+            }
+          }
+        }
+        tabtphh <- tab[, 1:2]
+      } else if (reassign == "random") {
+        tabtphh <- tab[, 1:2]
+      } else {
+        tabtphh <- tab
+      }
+
+      # Reshape tabtp2
+      comtphh <- data.frame(ID = idnode[, 2], HHCom1 = 0)
+      comtphh[match(tabtphh[, 1], idnode[, 1]), 2] <- tabtphh[, 2]
+      if (dim(tabtphh)[2] > 2) {
+        if (sum(tabtphh[, 3]) > 0) {
+          comtphh$HHCom2 <- 0
+          comtphh[match(tabtphh[, 1], idnode[, 1]), 3] <- tabtphh[, 3]
+        }
+        if (sum(tabtphh[, 4]) > 0) {
+          comtphh$HHCom3 <- 0
+          comtphh[match(tabtphh[, 1], idnode[, 1]), 4] <- tabtphh[, 4]
+        }
+      }
+
+      com <- cbind(comtp, comtph, comtphh)
+      com <- com[, -c((dim(comtp)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + 1))]
+    }
+
+    # If tp3 exists (i.e. hierarchical level)
+    if ("tp3" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))) {
+
+      # Number of levels
+      nblev <- 4
+
+      # Retrieve output from tp3 [TO COMMENT]
+      com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp3"))
+      cl <- list()
+      length(cl) <- length(com) / 2
+      for (k in 1:length(com)) {
+        if ((k / 2 - trunc(k / 2)) == 0) {
+          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+        }
+      }
+
+      tab <- unlist(cl)
+      tab <- sort(tab[!duplicated(tab)])
+      tab <- cbind(tab, 0, 0, 0)
+      n <- nrow(tab)
+
+      dupl <- rep(0, n)
+      for (i in 1:length(cl)) {
+        temp <- rep(0, n)
+        temp[match(cl[[i]], tab[, 1])] <- i
+        dupl <- dupl + 1 * (temp > 0)
+        tab[match(cl[[i]], tab[, 1]), 2] <- i
+      }
+
+      for (i in 1:n) {
+        if (dupl[i] > 1) {
+          overcom <- NULL
+          for (j in 1:length(cl)) {
+            if (sum(cl[[j]] == tab[i, 1]) == 1) {
+              overcom <- c(overcom, j)
+            }
+          }
+          if (reassign == "random") {
+            overcom <- overcom[sample(length(overcom), length(overcom))]
+          }
+          tab[i, 2] <- overcom[1]
+          tab[i, 3] <- overcom[2]
+          if (dupl[i] == 3) {
+            tab[i, 4] <- overcom[3]
+          }
+        }
+      }
+
+      # Reassign tp3 [TO COMMENT]
+      if (reassign == "simil") {
+        dat <- netemp
+        for (i in 1:n) {
+          if (tab[i, 3] > 0) {
+            test1 <- sum(dat[, 1] == tab[i, 1])
+            if (test1 == 0) {
+              dati1 <- matrix(0, nrow = 2, ncol = 2)
+            } else if (test1 == 1) {
+              dati1 <- matrix(0, nrow = 2, ncol = 2)
+              dati1[1, ] <- as.numeric(dat[dat[, 1] == tab[i, 1], c(2, 3)])
+            } else {
+              dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
+            }
+            colnames(dati1) <- c("ID", "SIM")
+
+            test2 <- sum(dat[, 2] == tab[i, 1])
+            if (test2 == 0) {
+              dati2 <- matrix(0, nrow = 2, ncol = 2)
+            } else if (test2 == 1) {
+              dati2 <- matrix(0, nrow = 2, ncol = 2)
+              dati2[1, ] <- as.numeric(dat[dat[, 2] == tab[i, 1], c(1, 3)])
+            } else {
+              dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
+            }
+            colnames(dati2) <- c("ID", "SIM")
+
+            dati <- rbind(dati1, dati2)
+
+            check <- match(cl[[tab[i, 2]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim1 <- mean(dati[check, 2])
+
+            check <- match(cl[[tab[i, 3]]], dati[, 1])
+            check <- check[!is.na(check)]
+            sim2 <- mean(dati[check, 2])
+
+            if (sim2 > sim1) {
+              tab[i, 2] <- tab[i, 3]
+              sim1 <- sim2
+            }
+
+            if (tab[i, 4] > 0) {
+              check <- match(cl[[tab[i, 4]]], dati[, 1])
+              check <- check[!is.na(check)]
+              sim2 <- mean(dati[check, 2])
+              if (sim2 > sim1) {
+                tab[i, 2] <- tab[i, 4]
+              }
+            }
+          }
+        }
+        tabtphhh <- tab[, 1:2]
+      } else if (reassign == "random") {
+        tabtphhh <- tab[, 1:2]
+      } else {
+        tabtphhh <- tab
+      }
+
+      # Reshape tabtp3
+      comtphhh <- data.frame(ID = idnode[, 2], HHHCom1 = 0)
+      comtphhh[match(tabtphhh[, 1], idnode[, 1]), 2] <- tabtphhh[, 2]
+      if (dim(tabtphhh)[2] > 2) {
+        if (sum(tabtphhh[, 3]) > 0) {
+          comtphhh$HHHCom2 <- 0
+          comtphhh[match(tabtphhh[, 1], idnode[, 1]), 3] <- tabtphhh[, 3]
+        }
+        if (sum(tabtphhh[, 4]) > 0) {
+          comtphhh$HHHCom3 <- 0
+          comtphhh[match(tabtphhh[, 1], idnode[, 1]), 4] <- tabtphhh[, 4]
+        }
+      }
+
+      com <- cbind(comtp, comtph, comtphh, comtphhh)
+      com <- com[, -c((dim(comtp)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + dim(comtphh) + 1))]
+    }
+
+    # Remove temporary files
+    if (delete_temp) {
+      unlink(paste0(path_temp), recursive = TRUE)
+    }
+    unlink("tp")
+    unlink("time_seed.dat")
+
+    # Rename and reorder columns
+    com <- as.character(comtp[, 1])
+    tempnblev <- 1
+    if (nblev >= 4) {
+      nov <- dim(comtphhh)[2] - 1
+      if (nov == 1) {
+        colnames(comtphhh)[2] <- paste0("K_", max(comtphhh[, 2]))
+        com <- cbind(com, comtphhh[, 2])
+        colnames(com)[dim(com)[2]] <- paste0("K_", max(comtphhh))
+      } else {
+        colnames(comtphhh)[2] <- paste0("K_", max(comtphhh[, 2]), "_semel")
+        if (nov >= 2) {
+          colnames(comtphhh)[3] <- paste0("K_", max(comtphhh[, 2]), "_bis")
+        }
+        if (nov == 3) {
+          colnames(comtphhh)[4] <- paste0("K_", max(comtphhh[, 2]), "_ter")
+        }
+        com <- cbind(com, comtphhh[, -1])
+      }
+      tempnblev <- tempnblev + 1
+    }
+    if (nblev >= 3) {
+      nov <- dim(comtphh)[2] - 1
+      if (nov == 1) {
+        colnames(comtphh)[2] <- paste0("K_", max(comtphh[, 2]))
+        com <- cbind(com, comtphh[, 2])
+        colnames(com)[dim(com)[2]] <- paste0("K_", max(comtphh[, 2]))
+      } else {
+        colnames(comtphh)[2] <- paste0("K_", max(comtphh[, 2]), "_semel")
+        if (nov >= 2) {
+          colnames(comtphh)[3] <- paste0("K_", max(comtphh[, 2]), "_bis")
+        }
+        if (nov == 3) {
+          colnames(comtphh)[4] <- paste0("K_", max(comtphh[, 2]), "_ter")
+        }
+        com <- cbind(com, comtphh[, -1])
+      }
+      tempnblev <- tempnblev + 1
+    }
+    if (nblev >= 2) {
+      nov <- dim(comtph)[2] - 1
+      if (nov == 1) {
+        colnames(comtph)[2] <- paste0("K_", max(comtph[, 2]))
+        com <- cbind(com, comtph[, 2])
+        colnames(com)[dim(com)[2]] <- paste0("K_", max(comtph[, 2]))
+      } else {
+        colnames(comtph)[2] <- paste0("K_", max(comtph[, 2]), "_semel")
+        if (nov >= 2) {
+          colnames(comtph)[3] <- paste0("K_", max(comtph[, 2]), "_bis")
+        }
+        if (nov == 3) {
+          colnames(comtph)[4] <- paste0("K_", max(comtph[, 2]), "_ter")
+        }
+        com <- cbind(com, comtph[, -1])
+      }
+      tempnblev <- tempnblev + 1
+    }
+    if (nblev >= 1) {
+      nov <- dim(comtp)[2] - 1
+      if (nov == 1) {
+        colnames(comtp)[2] <- paste0("K_", max(comtp[, 2]))
+        com <- cbind(com, comtp[, 2])
+        colnames(com)[dim(com)[2]] <- paste0("K_", max(comtp[, 2]))
+      } else {
+        colnames(comtp)[2] <- paste0("K_", max(comtp[, 2]), "_semel")
+        if (nov >= 2) {
+          colnames(comtp)[3] <- paste0("K_", max(comtp[, 2]), "_bis")
+        }
+        if (nov == 3) {
+          colnames(comtp)[4] <- paste0("K_", max(comtp[, 2]), "_ter")
+        }
+        com <- cbind(com, comtp[, -1])
+      }
+      tempnblev <- tempnblev + 1
+    }
+    colnames(com)[1] <- "ID"
+    com <- data.frame(com)
+    for (k in 2:dim(com)[2]) {
+      com[, k] <- as.numeric(as.character(com[, k]))
+    }
+
+    com[, 1] <- as.character(com[, 1])
+
+    # Add attributes and return_node_type
+    if (isbip) {
+      attr(com, "node_type") <- rep("site", dim(com)[1])
+      attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
+      if (return_node_type == "sites") {
+        com <- com[attributes(com)$node_type == "site", ]
+      }
+      if (return_node_type == "species") {
+        com <- com[attributes(com)$node_type == "species", ]
+      }
+    }
+
+    # Set algorithm in outputs
+    outputs$algorithm$cmd <- cmd
+    outputs$algorithm$version <- "2.4"
+    outputs$algorithm$web <- "http://oslom.org/"
+
+    # Set clusters and cluster_info in output
+    outputs$clusters <- com
+    outputs$cluster_info <- data.frame(
+      partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+        drop = FALSE
+      ],
+      n_clust = apply(
+        outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
+        2, function(x) length(unique(x))
+      )
+    )
+
+
+    # Return outputs
+    class(outputs) <- append("bioRgeo.clusters", class(outputs))
+    return(outputs)
+  }
 }
