@@ -64,12 +64,24 @@ and [net_to_mat](https://biorgeo.github.io/bioRgeo/reference/net_to_mat.html)
 , it handles both the matrix and network formats throughout the workflow. 
 
 Please have a look at this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_matrix_and_network_formats.html) 
-to better understand how these two function work.
+to better understand how these two functions work.
 
 ## 2. Pairwise similarity/dissimilarity metrics
 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a2_pairwise_metrics.html) 
+The functions [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+and [dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity.html)
+compute respectively pairwise similarity and dissimilarity metrics based on a 
+(site-species) co-occurence matrix. The resulting `data.frame` is stored in a 
+`bioRgeo.pairwise.metric` object containing all requested metrics between each 
+pair of sites.
 
+The functions [dissimilarity_to_similarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity_to_similarity.html)
+can be used to transform a similarity object into a dissimilarity object 
+and vice versa.
+
+Please have a look at this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a2_pairwise_metrics.html) 
+to better understand how these functions work.
+ 
 ## 3. Clustering algorithms
 
 ### 3.1 Install executable binary files
@@ -85,11 +97,15 @@ Please check this
 [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html) 
 to get instructions regarding the installation of the executable binary files.
 
-### 3.2 Hierarchical clustering
+### 3.2 The bioRgeo.clusters class
 
-### 3.3 Non-hierarchical clustering
+`bioRgeo.clusters` 
 
-### 3.4 Network clustering
+### 3.3 Hierarchical clustering
+
+### 3.4 Non-hierarchical clustering
+
+### 3.5 Network clustering
 
 ## 4. Visualization and evaluation of the results
 

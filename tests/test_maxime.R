@@ -1,3 +1,4 @@
+############################################################################################
 # Remove bioRgeo
 unlink("/home/maxime/Applications/R/bioRgeo", recursive=TRUE)
 
@@ -5,7 +6,7 @@ unlink("/home/maxime/Applications/R/bioRgeo", recursive=TRUE)
 devtools::install_github("bioRgeo/bioRgeo")
 
 # Import packages
-library(sf)
+#library(sf)
 library(bioRgeo)
 
 # Working directory

@@ -26,29 +26,69 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-test
-
-Some functions (listed below) or at least part of them require binary files to run. 
-
-* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
-* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
-
-The function \code{install_binaries} downloads and unzips the bin folder needed to run these functions. It also checks if the files have the permissions to be executed as programs. It finally tests if the executable are running properly.
-
-``` {r install_binaries}
-#install_binaries()
+```{r loading_vegemat, include=FALSE}
+data(vegemat)
 ```
 
-https://brew.sh
+The function [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+compute well-known and customized pairwise similarity metrics based on a 
+co-occurence `matrix` such as `vegemat`. In the example below the Simpson similarity
+index is computed between each pair of sites.
 
-brew install libomp
-
-```{r loading_virtual_data}
-data(vegedf)
-head(vegedf)
+``` {r similarity_1}
+sim <- similarity(vegemat, metric = "Simpson", formula = NULL, method = "prodmat")
+sim[1:10,]
 ```
 
+The resulting `data.frame` is stored in a 
+`bioRgeo.pairwise.metric` object containing Simpson similarity metric between each 
+pair of sites. The function [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+can handle three types of metrics: the metrics based on `abc`, the metrics based 
+on `ABC` and one metric based on the Euclidean distance. 
 
+The first kind of metrics such as Jaccard, the turnover component of Jaccard, 
+Simpson or Sorensen are based on presence data with `a` the number of species 
+shared by a pair of 
+sites, `b` species only present in the first site and `c` species only present 
+in the second site. Two methods can be used to compute the `abc` based metrics. 
+The first method is based on a matrix product (performed with the [tcrossprod](https://www.rdocumentation.org/packages/Matrix/versions/1.5-1/topics/matrix-products) 
+function from the R package [Matrix](https://www.rdocumentation.org/packages/Matrix/versions/1.5-1)). 
+The method is fast but is greedy in memory... The second method is 
+based on a [three loops function](https://github.com/bioRgeo/bioRgeo/blob/master/src/abc.cpp) 
+coded in C++ and largely inspired by the [bcdist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9/topics/bcdist) 
+function from the R package [ecodist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9) 
+(version 2.0.7). It is less efficient than the matrix product but allows to handle 
+co-occurence matrix with a large number of sites and/or species.
+
+The second kind of metrics such as Bray-Curtis and the turnover component of 
+Bray-Curtis are based on abundance data with `A` the sum of the lesser values for 
+common species shared by a pair of sites. `B` and `C` are the total number of 
+specimens counted at both sites minus `A`. Only three loops function is 
+available for the `ABC` based metrics. 
+
+The main advantage of the [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+function is to compute and return several metrics, to allow the computation of
+customized metric with the `formula` argument and to include the possibility of
+returning `a`, `b` and `c` and/or `A`, `B` and `C`. This feature is particularly 
+interesting to compute similarity metrics on large co-occurence matrix. 
+
+``` {r similarity_2}
+sim <- similarity(vegemat, metric = c("abc","ABC","Simpson","Bray"), formula =c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)"))
+sim[1:10,]
+```
+
+The [dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity.html) 
+function is very similar, with the sole exception that it computes the 
+dissimilarity version of the available metrics. The functions [dissimilarity_to_similarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity_to_similarity.html)
+can be used to switch between similarity and dissimilarity metrics.
+
+``` {r dissimilarity}
+sim <- similarity(vegemat, metric = c("abc","Simpson"), formula = "(b + c) / (a + b + c)")
+sim[1:10,]
+dissim1 <- dissimilarity(vegemat, metric = c("abc","Simpson"), formula = "(b + c) / (a + b + c)")
+dissim1[1:10,]
+dissim2 <- similarity_to_dissimilarity(sim)
+dissim2[1:10,]
+```
 
 
