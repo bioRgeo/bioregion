@@ -3,7 +3,7 @@
 \docType{data}
 \name{vegedf}
 \alias{vegedf}
-\title{Spatial distribution of Mediterrean vegetation (data.frame)}
+\title{Spatial distribution of Mediterranean vegetation (data.frame)}
 \format{
 A \code{data.frame} with 460,878 rows and 3 columns:
 \describe{

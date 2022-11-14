@@ -10,7 +10,7 @@
 #' 
 #' @param partitions a \code{bioRgeo.partition.metrics} object (output from 
 #' \code{\link{partition_metrics}} or a \code{data.frame} with the first two 
-#' columnts named "K" (partition name) and "n_clusters" (number of clusters) and
+#' columns named "K" (partition name) and "n_clusters" (number of clusters) and
 #' the following columns containing evaluation metrics (numeric values)
 #' @param metrics_to_use character string or vector of character strings
 #' indicating upon which metric(s) in \code{partitions} the optimal number of
@@ -150,7 +150,7 @@
 #' \item{\code{plot}: if requested, the plot will be stored in this slot}}
 #' @note Please note that finding the optimal number of clusters is a procedure
 #' which normally requires decisions from the users, and as such can hardly be
-#' fully automatised. Users are strongly advised to read the references
+#' fully automatized. Users are strongly advised to read the references
 #' indicated below to look for guidance on how to choose their optimal number(s)
 #' of clusters. Consider the "optimal" numbers of clusters returned by this
 #' function as first approximation of the best numbers for your 

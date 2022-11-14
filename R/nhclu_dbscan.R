@@ -33,7 +33,7 @@
 #'  applications with noise) clustering algorithm clusters points on the basis
 #'  of the density of neighbours around each data points. It necessitates two
 #'  main arguments, minPts, which stands for the minimum number of points to
-#'  identify a core, and eps, which is the radius to find neighbours.
+#'  identify a core, and eps, which is the radius to find neighbors.
 #'  minPts and eps should be defined by the user, which is not straightforward.
 #'  We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
 #'  to learn how to set these arguments, as well as the paper
@@ -64,7 +64,7 @@
 #' @return
 #' A \code{list} of class \code{bioRgeo.clusters} with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorihtm}
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
 #' \item{\bold{args}: \code{list} of input arguments as provided by the user}
 #' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
 #' \item{\bold{algorithm}: \code{list} of all objects associated with the

@@ -38,7 +38,7 @@ This tutorial aims at describing the different features of the R package `bioRge
 The main purpose of the `bioRgeo`'s package is to propose a transparent 
 methodological framework to compare bioregionalization methods. Below is the 
 typical flow chart of bioregions' identification based on a site-species 
-bipartite network or co-occurence matrix with `bioRgeo` (Figure 1). This workflow 
+bipartite network or co-occurrence matrix with `bioRgeo` (Figure 1). This workflow 
 can be divided into four main steps:
 
 1. Preprocess the data (matrix or network formats)
@@ -59,7 +59,7 @@ can be divided into four main steps:
 ## 1. Matrix or Network formats
 
 The `bioRgeo`'s package takes as input site-species information stored in a 
-bipartite network or a co-occurence matrix. Relying on the function  [mat_to_net](https://biorgeo.github.io/bioRgeo/reference/mat_to_net.html)
+bipartite network or a co-occurrence matrix. Relying on the function  [mat_to_net](https://biorgeo.github.io/bioRgeo/reference/mat_to_net.html)
 and [net_to_mat](https://biorgeo.github.io/bioRgeo/reference/net_to_mat.html)
 , it handles both the matrix and network formats throughout the workflow. 
 

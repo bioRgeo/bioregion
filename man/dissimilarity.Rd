@@ -7,7 +7,7 @@
 dissimilarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 }
 \arguments{
-\item{comat}{a co-occurence \code{matrix} with sites as rows and species as columns.}
+\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as columns.}
 
 \item{metric}{a vector of string(s) indicating which metrics
 metric(s) to chose (see Details). If \code{"all"} is specified, then all
@@ -31,7 +31,7 @@ are stored in three columns (one for each letter).
 }
 \description{
 This function creates a \code{data.frame} where each row provides one or several dissimilarity
-metric(s) between each pair of sites from a co-occurence \code{matrix} with sites as rows and species as columns.
+metric(s) between each pair of sites from a co-occurrence \code{matrix} with sites as rows and species as columns.
 }
 \details{
 \loadmathjax

@@ -42,7 +42,7 @@
 #' the entire tree at the same height (either specified by \code{cut_height} or
 #' automatically defined for the chosen \code{n_clust}). Second, it can use
 #' the dynamic tree cut method \insertRef{Langfelder2008}{bioRgeo}, in which
-#' case clusters are detected with an adapative method based on the shape of
+#' case clusters are detected with an adaptive method based on the shape of
 #' branches in the tree (thus cuts happen at multiple heights depending on
 #' cluster positions in the tree).
 #'

@@ -37,7 +37,7 @@
 #' @return
 #' A \code{list} of class \code{bioRgeo.clusters} with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorihtm}
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
 #' \item{\bold{args}: \code{list} of input arguments as provided by the user}
 #' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
 #' \item{\bold{algorithm}: \code{list} of all objects associated with the
