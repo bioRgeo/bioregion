@@ -3,7 +3,7 @@
 \docType{data}
 \name{vegesp}
 \alias{vegesp}
-\title{Spatial distribution of Mediterrean vegetation (spatial grid)}
+\title{Spatial distribution of Mediterranean vegetation (spatial grid)}
 \format{
 A
 \describe{

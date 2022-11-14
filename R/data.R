@@ -1,4 +1,4 @@
-#' Spatial distribution of Mediterrean vegetation (data.frame)
+#' Spatial distribution of Mediterranean vegetation (data.frame)
 #'
 #' A dataset containing the abundance of 3,697 species in 715 sites.
 #'
@@ -11,16 +11,16 @@
 #' @source \url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 "vegedf"
 
-#' Spatial distribution of Mediterrean vegetation (co-occurence matrix)
+#' Spatial distribution of Mediterranean vegetation (co-occurrence matrix)
 #'
 #' A dataset containing the abundance of each of the 3,697 species in each of the 715 sites.
 #'
-#' @format A co-occurence \code{matrix} with sites as rows and species as columns. Each element of the matrix
+#' @format A co-occurrence \code{matrix} with sites as rows and species as columns. Each element of the matrix
 #' represents the abundance of the species in the site.
 #' @source \url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
 "vegemat"
 
-#' Spatial distribution of Mediterrean vegetation (spatial grid)
+#' Spatial distribution of Mediterranean vegetation (spatial grid)
 #'
 #' A dataset containing the geometry of the 715 sites.
 #'

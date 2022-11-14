@@ -36,7 +36,7 @@ natural logarithm of the number of sites in \code{dissimilarity}.}
 of \link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
 of the epsilon neighborhood. Limiting the neighborhood size improves
 performance and has no or very little impact on the ordering as long as it
-is not set too low. If not specified (default behaviour), the largest
+is not set too low. If not specified (default behavior), the largest
 minPts-distance in the
 data set is used which gives the same result as infinity.}
 
@@ -51,7 +51,7 @@ If \code{TRUE}, then argument \code{show_hierarchy} should be \code{FALSE}}
 
 \item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
 clusters should be included in the output. By default, the hierarchy is not
-visible in the clusters obtained from OPTICS - it can only be visualised by
+visible in the clusters obtained from OPTICS - it can only be visualized by
 visualising the plot of the OPTICS object. If \code{show_hierarchy = TRUE},
 then the output cluster \code{data.frame} will contain additional columns
 showing the hierarchy of clusters.}
@@ -62,7 +62,7 @@ showing the hierarchy of clusters.}
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorihtm}
+\item{\bold{name}: \code{character string} containing the name of the algorithm}
 \item{\bold{args}: \code{list} of input arguments as provided by the user}
 \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
 \item{\bold{algorithm}: \code{list} of all objects associated with the

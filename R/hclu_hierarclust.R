@@ -63,7 +63,7 @@
 #' @return
 #' A \code{list} of class \code{bioRgeo.clusters} with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorihtm}
+#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
 #' \item{\bold{args}: \code{list} of input arguments as provided by the user}
 #' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
 #' \item{\bold{algorithm}: \code{list} of all objects associated with the
@@ -74,8 +74,8 @@
 #'
 #' \itemize{
 #' \item{\code{trials}: a list containing all randomization trials. Each trial
-#' containes the dissimilarity matrix, with site order randomized, the associated
-#' tree and the cophenetic correlation coefficient (spearman) for that tree}
+#' contains the dissimilarity matrix, with site order randomized, the associated
+#' tree and the cophenetic correlation coefficient (Spearman) for that tree}
 #' \item{\code{final.tree}: a \code{hclust} object containing the final
 #' hierarchical tree to be used}
 #' \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient

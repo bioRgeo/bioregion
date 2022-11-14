@@ -1,9 +1,9 @@
 #' Compute dissimilarity metrics (beta-diversity) between sites based on species composition
 #'
 #' This function creates a \code{data.frame} where each row provides one or several dissimilarity
-#' metric(s) between each pair of sites from a co-occurence \code{matrix} with sites as rows and species as columns.
+#' metric(s) between each pair of sites from a co-occurrence \code{matrix} with sites as rows and species as columns.
 #'
-#' @param comat a co-occurence \code{matrix} with sites as rows and species as columns.
+#' @param comat a co-occurrence \code{matrix} with sites as rows and species as columns.
 #' @param metric a vector of string(s) indicating which metrics
 #' metric(s) to chose (see Details). If \code{"all"} is specified, then all
 #' metrics will be calculated. Can be set to \code{NULL} if \code{formula} is used.

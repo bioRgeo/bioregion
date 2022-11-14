@@ -24,7 +24,7 @@ This function converts a data.frame of similarity metrics between sites to
 }
 \note{
 \loadmathjax
-The behaviour of this function changes depending on column names. Columns
+The behavior of this function changes depending on column names. Columns
 "Site1" and "Site2" are copied identically. If there are columns called
 "a", "b", "c", "A", "B", "C", they will also be copied identically.
 

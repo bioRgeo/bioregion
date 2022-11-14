@@ -43,7 +43,7 @@ sum(!duplicated(vegedf[,2]))
 ```
 
 [vegemat](https://biorgeo.github.io/bioRgeo/reference/vegemat.html) 
-a co-occurence `matrix` containing the same information gathered in a `matrix`
+a co-occurrence `matrix` containing the same information gathered in a `matrix`
 with 715 rows and 3,697 columns,
 
 ```{r loading_vegemat}
@@ -58,7 +58,7 @@ object containing the geometry of the 715 sites.
 ## From matrix to network
 
 The function [mat_to_net](https://biorgeo.github.io/bioRgeo/reference/mat_to_net.html) 
-transforms a co-occurence `matrix` such as `vegemat` into a network represented 
+transforms a co-occurrence `matrix` such as `vegemat` into a network represented 
 by a `data.frame` (such as `vegedf` in this case). If `weight = TRUE` a third 
 column is added with the values contained in the `matrix`.  
 
@@ -90,7 +90,7 @@ dim(net)
 
 The function [net_to_mat](https://biorgeo.github.io/bioRgeo/reference/net_to_mat.html)
 does the opposite. It transforms a network represented by a two- or a three-columns
-`data.frame` (such as `vegedf`) into a co-occurence `matrix` (such as `vegemat` 
+`data.frame` (such as `vegedf`) into a co-occurrence `matrix` (such as `vegemat` 
 in this case). 
 
 ``` {r net_to_mat_1}

@@ -3,9 +3,9 @@
 \docType{data}
 \name{vegemat}
 \alias{vegemat}
-\title{Spatial distribution of Mediterrean vegetation (co-occurence matrix)}
+\title{Spatial distribution of Mediterranean vegetation (co-occurrence matrix)}
 \format{
-A co-occurence \code{matrix} with sites as rows and species as columns. Each element of the matrix
+A co-occurrence \code{matrix} with sites as rows and species as columns. Each element of the matrix
 represents the abundance of the species in the site.
 }
 \source{
