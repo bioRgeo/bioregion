@@ -107,6 +107,21 @@ to get instructions regarding the installation of the executable binary files.
 
 ### 3.5 Network clustering
 
+The `bioRgeo`'s package contains 8 network clustering functions: 
+
+* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
+* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
+* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) 
+* [netclu_greedy](https://biorgeo.github.io/bioRgeo/reference/netclu_greedy.html)
+* [netclu_labelprop](https://biorgeo.github.io/bioRgeo/reference/netclu_labelprop.html)
+* [netclu_leadingeigen](https://biorgeo.github.io/bioRgeo/reference/netclu_leadingeigen.html)
+* [netclu_walktrap](https://biorgeo.github.io/bioRgeo/reference/netclu_walktrap.html) 
+* [netclu_beckett](https://biorgeo.github.io/bioRgeo/reference/netclu_beckett.html) 
+
+Please check this 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a3_5_network_clustering.html) 
+to get more information regarding the network clustering functions.
+
 ## 4. Visualization and evaluation of the results
 
 
