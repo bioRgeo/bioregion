@@ -61,7 +61,7 @@ print.bioRgeo.clusters <- function(x, ...)
                    paste0(paste(round(x$args$cut_height, 3)[1:10], collapse = " "),
                           " ... (with ",
                           length(x$args$cut_height) - 10, " more values)"),
-                   round(x$args$cut_height, 3)), "\n")
+                   paste(round(x$args$cut_height, 3), collapse = " ")), "\n")
       }
       if(x$args$dynamic_tree_cut)
       {
@@ -94,7 +94,7 @@ print.bioRgeo.clusters <- function(x, ...)
                    paste0(paste(round(x$algorithm$output_cut_height, 3)[1:10], collapse = " "),
                           " ... (with ",
                           length(x$algorithm$output_cut_height) - 10, " more values)"),
-                   round(x$algorithm$output_cut_height, 3)), "\n")
+                   paste(round(x$algorithm$output_cut_height, 3), collapse = " ")), "\n")
       } else
       {
         cat(" - Height of cut not searched for.", "\n")

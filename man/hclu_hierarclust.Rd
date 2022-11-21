@@ -122,7 +122,7 @@ dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissim,
-                                 n_clust = 5)
+                          n_clust = 5)
 tree1
 plot(tree1)
 str(tree1)
@@ -131,13 +131,13 @@ tree1$clusters
 # User-defined height cut
 # Only one height
 tree2 <- hclu_hierarclust(dissim,
-                                 cut_height = .05)
+                          cut_height = .05)
 tree2
 tree2$clusters
 
 # Multiple heights
 tree3 <- hclu_hierarclust(dissim,
-                                 cut_height = c(.05, .15, .25))
+                          cut_height = c(.05, .15, .25))
 tree3
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
 # Info on each partition can be found in table cluster_info
@@ -146,7 +146,7 @@ plot(tree3)
 
 # Recut the tree afterwards
 tree3.1 <- cut_tree(tree3,
-                 n = 5)
+                    n = 5)
                  
 
 tree4 <- hclu_hierarclust(dissim,

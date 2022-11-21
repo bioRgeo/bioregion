@@ -1,0 +1,214 @@
+---
+title: "3.2 Hierarchical clustering"
+author: "Boris Leroy, Maxime Lenormand and Pierre Denelle"
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    number_sections: false
+  html_document:
+    toc: true
+    toc_float:
+    collapsed: false
+    smooth_scroll: false
+    toc_depth: 2
+bibliography: REFERENCES.bib  
+csl: journal-of-biogeography.csl
+vignette: >
+  %\VignetteIndexEntry{3.2 Hierarchical clustering}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+Hierarchical clustering consists in creating a hierarchical tree from a 
+matrix of distances (or beta-diversities). From this hierarchical tree, clusters
+can be obtained by cutting the tree. 
+
+Although these methods are conceptually simple, their implementation can be 
+complex and requires important choices by the user. In the following, we provide
+a step-by-step guide on how to do hierarchical clustering analyses with bioRgeo,
+along with comments on the philosophy on how we designed the functions.
+
+# Input data
+
+To initiate the hierarchical clustering procedure, you need to provide pairwise 
+distances between sites. These pairwise distances between sites can be obtained
+by running dissimilarity() on a species-site matrix, such as a presence-absence
+or an abundance matrix. 
+
+In the example below, we use the vegetation dataset from the package to 
+compute distance metrics.
+
+```{r}
+library(bioRgeo)
+
+# Work with the vegetation dataset we include in the package
+data(vegemat)
+
+# This is an abundance matrix where sites are in rows and species in columns
+vegemat[1:10, 1:10]
+
+```
+
+
+We are going to compute the $\beta_{sim}$ diversity metric, which is a 
+presence-absence dissimilarity index. The formula is as follows:
+$\beta_{sim} = min(b, c) / (a+min(b, c))$
+
+Where *a* is the number of species shared by both sites; *b* is the number of 
+species occurring only in the first site; and *c* is the number of species 
+only occurring only in the second site.
+
+We typically choose this metric for 
+bioregionalisation, because it is the **turnover** component of the Sorensen 
+index [@Baselga2012] (in a nutshell, it tells us how sites are different
+because they have distinct species), and because it has less dependence on 
+species richness than the Jaccard turnover [@Leprieur2014]. Alternatively,
+given that we have abundance data here, we could also use the Bray-Curtis 
+turnover index [@Baselga2013]. The choice of the distance metric is very 
+important for the outcome of the clustering procedure, so we recommend that
+you choose carefully depending on your research question.
+
+```{r}
+dissim <- dissimilarity(vegemat)
+
+head(dissim)
+```
+
+By default, only the Simpson index is computed, but other options are available
+in the `metric` argument of dissimilarity(). Furthermore, users can also write
+down their own formula to compute any index they wish for in the argument 
+`formula`, see ?dissimilarity().
+
+We are now ready to start the hierarchical clustering procedure with the object
+`dissim` we have just created. Alternatively, you can also use other types of
+objects in hclu_hierarclust(), such as a distance matrix object (class `dist`)
+or a `data.frame` of your own crafting (make sure to read the required format
+carefully in ?hclu_hierarclust).
+
+# Hierarchical clustering with basic parameters
+
+## Basic usage
+
+The basic usage of the function is as follows:
+
+```{r}
+tree1 <- hclu_hierarclust(dissim)
+```
+
+The functions gives us some information as it proceeds. Notably, it talks about
+a randomization of the dissimilarity matrix - this is a very important feature
+because hierarchical clustering is heavily influenced by the order of sites in
+the distance matrix. Therefore, by default, the function
+performs a randomization of the order of sites in the distance
+matrix with 30 trials
+([more information in the randomization section](#randomization)). It also
+tells us that among all trials it has selected the tree with the highest 
+cophenetic correlation coefficient, at a value of 
+`r round(tree1$algorithm$final.tree.coph.cor, 2)`. 
+
+
+We can see type the name of the object in the console to see more information:
+
+```{r}
+tree1
+```
+
+The last line tells us that the the clustering procedure is incomplete: the
+tree has been built, but it has not been cut yet - hence there are no clusters
+yet in the object.
+
+To cut the tree, we can use the function cut_tree():
+
+```{r}
+# Ask for 4 clusters
+tree1 <- cut_tree(tree1,
+                  n_clust = 4)
+```
+
+Here, we asked for 4 clusters, and the algorithm automatically finds the height
+at which 4 clusters are found (h = `r round(tree1$algorithm$output_cut_height, 3)`).
+
+
+```{r}
+tree1
+```
+
+When we type again the name of the object in the console, it gives us the 
+results of the clustering: we have
+
+ * **1 partition**: a partition is a clustering result. We only cut the tree once, 
+ so we only have 1 partition at the moment
+ * **4 clusters**: this is the number of clusters in the partition. We asked for
+ 4, and we obtained 4, which is good. Sometimes, however, we cannot get the
+ number of clusters we asked for - in which case the outcome will be indicated.
+ * **a heigh of cut at `r round(tree1$algorithm$output_cut_height, 3)`: this
+ is the height of cut at which we can obtain 4 clusters in our tree.
+
+We can make a quick plot of our partitioned tree with
+ 
+```{r, fig.width=12, fig.height=8}
+# We reduced the size of text labels with cex = .2, because there are too many sites
+plot(tree1, cex = .2)
+```
+
+ 
+Now, this is a hierarchical tree, and cutting it only once (= only 1 partition)
+oversimplifies the result of the tree. Why not cut it multiple times? For 
+example, we could make deep, intermediate, and shallow cuts to the tree, 
+likewise to @Ficetola2017, which would allow us to see broad- to fine-scale 
+relationships among sites in our tree.
+
+We can specify, e.g. 4, 10 and 20 clusters:
+
+```{r, fig.width=12, fig.height=8}
+# Ask for 4, 10 and 20 clusters
+tree1 <- cut_tree(tree1,
+                  n_clust = c(4, 10, 20))
+
+plot(tree1, cex = .2)
+```
+However, it may be more useful to choose the heights of cut, rather than the
+number of clusters. We could, for example, cut the tree at heights 0.4 (shallow
+cut), 0.5 (intermediate cut) and 0.6 (deep cut):
+
+```{r, fig.width=12, fig.height=8}
+tree1 <- cut_tree(tree1,
+                  cut_height = c(.4, .5, .6))
+
+plot(tree1, cex = .2)
+```
+
+The plot is not easy to read because of the large number of sites. We can rather
+extract the information directly from the object:
+
+```{r}
+tree1
+```
+
+From the result, we can read that for the deep cut partition (h = 0.6) we have 
+`r tree1$tree1$algorithm$output_n_clust[1]` clusters, for the intermediate cut
+partition (h = 0.5) we have `r tree1$algorithm$output_n_clust[2]` clusters and 
+for the shallow cut partition (h = 0.4) we have 
+`r tree1$algorithm$output_n_clust[3]` clusters.
+
+In the next section we will see what are the default settings and why we chose
+them, and then we will see how to find optimal numbers of clusters.
+
+## Explanation of the default settings and how to change them
+
+### Randomization of the distance matrix {#randomization}
+
+
+# How to find an optimal number of clusters? {#optimaln}
+
+## Holt et al. method
+
+## Other methods
+
+
+# Other hierarchical clustering methods
+## OPTICS
+
+# References
+
