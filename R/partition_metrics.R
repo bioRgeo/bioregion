@@ -168,7 +168,7 @@ partition_metrics <- function(
       warning(paste0("No dissimilarity matrix provided, so metrics ",
                      paste(eval_metric[which(eval_metric %in% dissimilarity_based_metrics)],
                            collapse = ", "),
-                     " will not be computed"))
+                     " will not be computed\n"))
       eval_metric <- eval_metric[-which(eval_metric %in% dissimilarity_based_metrics)]
     }
   } else if (inherits(dissimilarity, "bioRgeo.pairwise.metric")) {
@@ -181,8 +181,21 @@ partition_metrics <- function(
     {
       stop("dissimilarity must be an object containing dissimilarity indices from dissimilarity() or similarity_to_dissimilarity(), or an object of class dist")
     }
-  } else if (!inherits(dissimilarity, "dist")) {
-    stop("dissimilarity must be an object containing dissimilarity indices from dissimilarity() or similarity_to_dissimilarity(), or an object of class dist")
+  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
+  {
+    if(is.numeric(dissimilarity_index))
+    {
+      dissimilarity_index <- names(dissimilarity)[dissimilarity_index]
+    }
+    dist_object <- stats::as.dist(
+      net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2], dissimilarity_index)],
+                 weight = TRUE, squared = TRUE, symmetrical = TRUE))
+    has.dissimilarity <- TRUE
+    
+    if(!(dissimilarity_index %in% colnames(dissimilarity)))
+    {
+      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
+    }
   }
   
   if (is.null(net)) {
@@ -192,7 +205,7 @@ partition_metrics <- function(
       warning(paste0("No species-site network provided, so metrics ",
                      paste(eval_metric[which(eval_metric %in% compo_based_metrics)],
                            collapse = ", "),
-                     " will not be computed"))
+                     " will not be computed\n"))
       eval_metric <- eval_metric[-which(eval_metric %in% compo_based_metrics)]
     }
   } else {

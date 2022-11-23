@@ -19,7 +19,7 @@
 #' the third column name of
 #'  \code{dissimilarity} is used.
 #' @param method name of the hierarchical classification method, as in
-#' \link[stats:hclust]{stats::hclust()}. Should be one of This should be one of
+#' \link[stats:hclust]{stats::hclust()}. Should be one of 
 #' \code{"ward.D"},
 #' \code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
 #' (= UPGMA), \code{"mcquitty"} (= WPGMA),
@@ -165,7 +165,7 @@ hclu_hierarclust <- function(dissimilarity,
     if(is.numeric(index))
     {
       index <- names(dissimilarity)[index]
-    }
+    } 
     if(!(index %in% colnames(dissimilarity)))
     {
       stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
@@ -215,6 +215,8 @@ hclu_hierarclust <- function(dissimilarity,
     dist.obj <- dissimilarity
   }
 
+  # Adding dynamic_tree_cut = FALSE for compatibility with generic functions
+  dynamic_tree_cut = FALSE
   outputs$args <- list(index = index,
                        method = method,
                        randomize = randomize,
@@ -224,7 +226,8 @@ hclu_hierarclust <- function(dissimilarity,
                        cut_height = cut_height,
                        find_h = find_h,
                        h_max = h_max,
-                       h_min = h_min
+                       h_min = h_min,
+                       dynamic_tree_cut = dynamic_tree_cut
   )
 
   outputs$inputs <- list(bipartite = FALSE,
@@ -306,7 +309,8 @@ hclu_hierarclust <- function(dissimilarity,
                         cut_height = cut_height,
                         find_h = find_h,
                         h_max = h_max,
-                        h_min = h_min)
+                        h_min = h_min,
+                        dynamic_tree_cut = dynamic_tree_cut)
   } else{
     outputs$clusters <- NA
     outputs$cluster_info <- NA

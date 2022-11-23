@@ -195,12 +195,167 @@ for the shallow cut partition (h = 0.4) we have
 In the next section we will see what are the default settings and why we chose
 them, and then we will see how to find optimal numbers of clusters.
 
+## Exploring the outputs
+
+To explore the object, you can use `str()` to see the object structure:
+
+```{r}
+str(tree1)
+```
+
+It show you the different slots in the object, and how you can access them. 
+For example, if I want to access the `clusters` slot, I have to type
+`tree1$clusters`. 
+
+* **name**: the name of the method we are using
+* **args**: the arguments you have selected for your tree
+* **inputs**: this is mostly for internal use in the package, it provides some
+info about the nature of input data and methods
+* **algorithm**: this slot contains detailed information about the hierarchical
+clustering. For example, you can have access to the raw tree here, in 
+`hclust` format. To access it, I can type `tree1$algorithm$final.tree`
+* **clusters**: this is a `data.frame` containing your partitions. The first
+column is your sites, and all the other columns are the partitions.
+* **cluster_info**: this is a small `data.frame` which will help you link your 
+requests with the `clusters` `data.frame`. Its content varies depending on 
+your choices; for example, in my case, it looks like this:
+
+```{r}
+tree1$cluster_info
+```
+
+It shows the name of the partition (corresponding to column names in 
+`tree1$clusters`), the number of clusters in each partition, and the
+cut height I initially requested.
+
 ## Explanation of the default settings and how to change them
 
 ### Randomization of the distance matrix {#randomization}
 
+The order of sites in the distance matrix influences the outcome of the 
+hierarchical tree. Let's see that with an example: 
+
+```{r, fig.height = 5, fig.width = 7}
+tree2 <- hclu_hierarclust(dissim,
+                          randomize = FALSE)
+plot(tree2, cex = .1)
+```
+This is how the tree looks like when the matrix is not randomized. Now let's
+randomize it and regenerate the tree:
+
+```{r, fig.height = 5, fig.width = 7}
+dissim_random <- dissim[sample(1:nrow(dissim)), ]
+tree3 <- hclu_hierarclust(dissim_random,
+                          randomize = FALSE)
+plot(tree3, cex = .1)
+```
+See how the tree looks different? This is problematic because it means that the
+outcome is heavily influenced by the order of sites in the distance matrix.
+
+To address this issue, we randomize the distance matrix multiple times (30,
+by default, but you can probably increase the number to 100 or more) and 
+generate all the associated trees. For each individual tree, the function 
+calculates the **cophenetic correlation coefficient**, which is the *correlation
+between the initial distance $\beta_{sim}$ among sites* and *the cophenetic 
+distance*, which is the distance at which sites are connected in the tree. 
+It tells us how
+representative is the tree of the initial distance matrix.
+
+The next question is what to do with all the individual trees? By default, in
+the package we select the tree that best represents the distance matrix; i.e.,
+the one that has the highest cophenetic correlation coefficient 
+(argument `optimal_tree_method = "best"`)
+
+Let's see an example with a higher number of runs (`n_runs = 100`). We can also
+ask the function to keep all individual trees for further exploration 
+(`keep_trials = TRUE`).
+
+```{r}
+tree1 <- hclu_hierarclust(dissim_random,
+                          randomize = TRUE,
+                          n_runs = 100,
+                          keep_trials = TRUE)
+```
+
+
+Another approach could be to build a consensus tree from all the individual 
+trees, and use this tree, as is done for example in 
+[the package recluster](https://github.com/leondap/recluster), but this is not
+yet available in bioRgeo. 
+
+### Tree construction algorithm
+
+By default, the function uses the UPGMA method (Unweighted Pair Group Method
+with Arithmetic Mean) because it has been recommended in bioregionalisation for
+its better performance over other approaches [@Kreft2010]. You can change this
+method by changing the argument `method`; all methods implemented in 
+`stats::hclust()` are available. 
+
+### Cutting the tree
+
+There are two ways of cutting the tree:
+
+1. **Specify the expected number of clusters**: you can request a specific 
+number of clusters (`n_clust = 5` for example). You can also request multiple
+partitions, each with their own number of clusters (`n_clust = c(5, 10, 15)`)
+for example. 
+
+**Note:** When you specify the number of clusters, the function will 
+search for the associated height of cut automatically; you can disable this 
+parameter with `find_h = FALSE`. It will search for this *h* value between
+`h_max` (default 1) and `h_min` (default 0). These arguments can be adjusted
+if you are working with indices whose values do not range between 0 and 1.
+
+2. **Specify the height of cut**: you can request the height at which you 
+want to cut the tree (e.g., `cut_height = 0.5`). You can also request multiple
+partitions, each with their own cut height (`cut_height = c(0.4, 0.5, 0.6)`)
+for example. 
+
+
+
 
 # How to find an optimal number of clusters? {#optimaln}
+
+```{r, echo = FALSE, fig.height = 3, fig.width=3, message=FALSE}
+# Code I used to generate the diagram
+# a <- read.csv("data/example_distance_matrix.csv", sep = ";")
+# 
+# 
+# b <- hclu_hierarclust(a)
+# par(oma = c(0, 0, 0, 0),
+#     mar = c(2, 0.1, 0, 1.5))
+# plot(as.dendrogram(b$algorithm$final.tree), horiz = TRUE,
+#      cex = 10)
+# 
+# plot(as.dendrogram(b$algorithm$final.tree), horiz = TRUE,
+#      cex = 10)
+# 
+# abline(v = seq(0.02, 0.78, by = 0.05),
+#        lty = 3, col = "red")
+# 
+# b <- cut_tree(b, 
+#               cut_height = seq(0.02, 0.78, by = 0.05))
+# 
+# d <- partition_metrics(b,
+#                   dissimilarity = a)
+# d$evaluation_df
+# write.csv(d$evaluation_df, "./test.csv")
+# 
+# test <- data.frame(x = 1:6,
+#                    y = c(0.5, 0.9, 0.95, 0.97, 0.98, 0.99))
+# 
+# ggplot(test, aes(x = x, y = y)) +
+#   geom_line() +
+#   geom_vline(xintercept = 2, linetype = 2) +
+#   theme_bw()  +
+#   xlab("Number of clusters") + ylab("Metric") +
+#   theme(axis.text = element_text(size = 15),
+#         axis.title = element_text(size = 15))
+#   
+```
+![Procedure to find an optimal number of clusters](figures/find_optimal_n.png)
+
+
 
 ## Holt et al. method
 

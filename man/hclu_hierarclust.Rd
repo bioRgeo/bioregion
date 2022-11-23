@@ -31,7 +31,7 @@ the third column name of
  \code{dissimilarity} is used.}
 
 \item{method}{name of the hierarchical classification method, as in
-\link[stats:hclust]{stats::hclust()}. Should be one of This should be one of
+\link[stats:hclust]{stats::hclust()}. Should be one of 
 \code{"ward.D"},
 \code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
 (= UPGMA), \code{"mcquitty"} (= WPGMA),

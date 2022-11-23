@@ -260,67 +260,6 @@ str.bioRgeo.optimal.n <- function(object, ...)
 
 
 #' @export
-#' @method print bioRgeo.hierar.tree
-print.bioRgeo.hierar.tree <- function(x, ...)
-{
-  cat("Hierarchical tree based on dissimilarity between sites\n")
-  cat(" - Number of sites: ", attr(x$dist.matrix, "Size"), "\n")
-  cat(" - Tree construction method: ", x$args$method, "\n")
-  cat(" - Name of dissimilarity column used: ", x$args$index, "\n")
-  cat(" - Randomization of the dissimilarity matrix: ",
-      ifelse(x$args$randomize, paste0("yes, number of trials ",
-                                      x$args$n_runs), "no"), "\n")
-  cat(" - Cophenetic correlation coefficient: ",
-      round(x$final.tree.coph.cor, 3), "\n")
-
-
-  if(!is.null(x$clusters))
-  {
-    cat("Clusters obtained from this tree:\n")
-    if(!is.null(x$args$n_clust))
-    {
-      cat(" - Number of clusters requested by the user: ",
-          x$args$n_clust, "\n")
-      cat(" - Number of clusters in output: ",
-          paste(x$output_n_clust, sep = ", "), "\n")
-
-      if(x$args$find_h)
-      {
-        cat(" - Height of cut of the hierarchical tree:",
-            round(x$output_cut_height, 3), "\n")
-      } else
-      {
-        cat(" - Height of cut not searched for.", "\n")
-      }
-    } else if(!is.null(x$args$cut_height))
-    {
-      if(length(x$args$cut_height) == 1)
-      {
-        cat(" - Height of cut requested by the user: ",
-            round(x$args$cut_height, 3), "\n")
-        cat(" - Number of clusters in output: ", x$output_n_clust, "\n")
-      } else
-      {
-        cat(" - Heights of cut requested by the user: ",
-            round(x$args$cut_height, 3), "\n")
-        cat(" - Number of clusters in output: \n")
-        for(cuts in x$args$cut_height)
-        {
-          cat("   > ", cuts, ": ", x$output_n_clust[paste0("h_", cuts)], "\n")
-        }
-      }
-    } else if(x$args$dynamic_tree_cut)
-    {
-      cat(paste0(" - Dynamic tree cut method chosen: '", x$args$dynamic_method,
-          "', with minimum cluster size ", x$args$dynamic_minClusterSize, "\n"))
-      cat(" - Number of clusters in output: ", x$output_n_clust, "\n")
-    }
-
-  }
-}
-
-
-#' @export
 #' @method print bioRgeo.pairwise.metric
 print.bioRgeo.pairwise.metric <- function(x, ...)
 {
