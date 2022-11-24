@@ -71,18 +71,18 @@
 #' \mjeqn{S_i}{Si} is the number of
 #' species in cluster i, and K the maximum number of clusters.
 #' }
-#' \item{\code{tot_endemism}: this metric is the total endemism in the
-#' endemism in each cluster as
+#' \item{\code{tot_endemism}: this metric is the total 
+#' endemism across all clusters, as
 #' recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 #' \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
 #'
 #' where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
-#' only one cluster) and \mjeqn{C}{C} is number of non-endemics.
+#' only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
 #' }
 #' }
 #'
 #' @return
-#' a \code{list} of class \code{bioRgeo.partition.metrics} with three elements:
+#' a \code{list} of class \code{bioRgeo.partition.metrics} with two elements:
 #' \itemize{
 #' \item{\code{args}: input arguments
 #' }
@@ -215,6 +215,15 @@ partition_metrics <- function(
         stop("Some elements of the cluster table (column ID) cannot be found in the network")
       }
     } 
+    if(is.numeric(site_col))
+    {
+      site_col <- names(net)[site_col]
+    } 
+    if(is.numeric(species_col))
+    {
+      species_col <- names(net)[species_col]
+    } 
+    
     # Next line is to use fast match with data.table, it needs characters
     net[, c(site_col, species_col)] <- lapply(net[, c(site_col, species_col)], as.character)
     has.contin <- TRUE

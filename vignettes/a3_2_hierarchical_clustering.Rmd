@@ -235,20 +235,26 @@ cut height I initially requested.
 The order of sites in the distance matrix influences the outcome of the 
 hierarchical tree. Let's see that with an example: 
 
-```{r, fig.height = 5, fig.width = 7}
+```{r, fig.height = 5, fig.width = 8}
+# Compute the tree without randomizing the distance matrix
 tree2 <- hclu_hierarclust(dissim,
                           randomize = FALSE)
 plot(tree2, cex = .1)
 ```
+
 This is how the tree looks like when the matrix is not randomized. Now let's
 randomize it and regenerate the tree:
 
-```{r, fig.height = 5, fig.width = 7}
+```{r, fig.height = 5, fig.width = 8}
+# This line randomizes the order of rows in the distance matrix
 dissim_random <- dissim[sample(1:nrow(dissim)), ]
+
+# Recompute the tree
 tree3 <- hclu_hierarclust(dissim_random,
                           randomize = FALSE)
 plot(tree3, cex = .1)
 ```
+
 See how the tree looks different? This is problematic because it means that the
 outcome is heavily influenced by the order of sites in the distance matrix.
 
@@ -353,13 +359,120 @@ for example.
 #         axis.title = element_text(size = 15))
 #   
 ```
-![Procedure to find an optimal number of clusters](figures/find_optimal_n.png)
+![](figures/find_optimal_n.png)
+
+1. Step 1. **Build a tree** with `hclu_hierarclust()`
+
+2. Step 2. **Explore a range of partitions**, from a minimum (e.g., 
+starting at 2 clusters) up to a maximum (e.g. $n-1$ clusters where $n$ is the 
+number of sites).
+
+3. Step 3. **Calculate one or several metrics for each partition**, to be used
+as the basis for evaluation plots. 
+
+4. Step 4. **Search for one or several optimal number(s) of clusters using
+evaluation plots**. Different criteria can be applied to identify the optimal
+number(s) of clusters.
+
+5. Step 5. **Export the optimal partitions from your cluster object.**
+
+## A practical example
+
+In this example we will compute the evaluation metric used by Holt et al.
+(2013), which compares the total dissimilarity of the distance matrix (sum of
+all distances) with the inter-cluster dissimilarity (sum of distances between
+clusters). Then we will choose the optimal number of clusters as the elbow of 
+the evaluation plot.
+
+```{r}
+data(vegemat)
+
+# Calculate dissimilarities
+dissim <- dissimilarity(vegemat)
+
+# Step 1 & 2. Compute the tree and cut it into many different partitions
+tree4 <- hclu_hierarclust(dissim,
+                          n_clust = 2:100)
+
+# Step 3. Calculate the same evaluation metric as Holt et al. 2013
+eval_tree4 <- partition_metrics(tree4, 
+                                dissimilarity = dissim, # Provide distances to compute the metrics
+                                eval_metric = "pc_distance")
+
+# Step 4. Find the optimal number of clusters
+opti_n_tree4 <- find_optimal_n(eval_tree4)
+opti_n_tree4
+
+# Step 5. Extract the optimal number of clusters
+# We get the name of the correct partition in the next line
+K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_distance]
+# Look at the site-cluster table
+head(tree4$clusters[, c("ID", K_name)])
+
+# Make a map of the clusters
+data(vegesp)
+library(sf)
+map_clusters(tree4$clusters[, c("ID", K_name)],
+             vegesp)
+```
 
 
+## Evaluation metrics
 
-## Holt et al. method
+Currently, there are four evaluation metrics available in the package:
 
-## Other methods
+1. `pc_distance`: $\sum{between-cluster\beta_{sim }} / \sum{\beta_{sim}}$
+This metric is the metric computed in @Holt2013.
+
+2. `anosim`: this the statistic used in Analysis of Similarities, 
+as suggested in @Castro-Insua2018. It 
+compares the between-cluster dissimilarities to the within-cluster 
+dissimilarities. It is based based on the difference of mean ranks between 
+groups and within groups with the following formula: 
+$R=(r_B-r_W)/(N(N-1)/4)$ where $r_B$ and $r_W$ are the average ranks between and 
+within clusters respectively, and $N$ is the total number of sites.
+
+3. `avg_endemism`: it is the average percentage of endemism in clusters 
+[@Kreft2010]. It is calculated as follows: 
+$End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}$
+where $E_i$ is the number of endemic species in cluster $i$,
+$S_i$ is the number of
+species in cluster $i$, and $K$ the maximum number of clusters.
+
+4. `tot_endemism`: it is the total endemism across all clusters 
+[@Kreft2010]. It is calculated as follows: 
+$End_{tot} = E / C$ where $E$ is the total number of endemic species 
+(i.e., species occurring in only one cluster) and $C$ is the number of non-
+endemic species.
+
+**Important note**
+
+To be able to calculate `pc_distance` and `anosim`, you need to provide
+your dissimilarity object to the argument `dissimilarity`. In addition, to be
+able to calculate `avg_endemism` and `tot_endemism`, you need to provide your
+species-site network to the argument `net`. Let's see that in practice. 
+Depending on the size of your dataset, computing endemism-based metrics can 
+take a while.
+
+```{r, cache = TRUE}
+# Calculate pc_distance and anosim
+partition_metrics(tree4, 
+                  dissimilarity = dissim, 
+                  eval_metric = c("pc_distance", "anosim"))
+
+# Calculate avg_endemism and tot_endemism
+# I have an abundance matrix, I need to convert it into network format first:
+vegenet <- mat_to_net(vegemat)
+
+partition_metrics(tree4, 
+                  net = vegenet, 
+                  eval_metric = c("avg_endemism", "tot_endemism"))
+```
+
+
+## Criteria to choose an optimal number of clusters
+
+
 
 
 # Other hierarchical clustering methods

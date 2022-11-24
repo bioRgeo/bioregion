@@ -263,7 +263,10 @@ cut_tree <- function(tree,
       clusters$name <- cur.tree$labels
       for(cur_n in n_clust)
       {
-        message("Determining the cut height to reach ", cur_n, " groups...")
+        if(length(n_clust) < 10)
+        {
+          message("Determining the cut height to reach ", cur_n, " groups...")
+        }
         k <- 0
         h1 <- h_max
         h0 <- h_min
@@ -285,8 +288,10 @@ cut_tree <- function(tree,
           }
           iter = iter + 1
         }
-        message(paste0("--> ", h))
-
+        if(length(n_clust) < 10)
+        {
+          message(paste0("--> ", h))
+        }
         if(k != cur_n)
         {
           warning(paste0("The requested number of cluster could not be found for k = ", cur_n, ". Closest number found: ", k))

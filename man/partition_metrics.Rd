@@ -47,7 +47,7 @@ investigate the effect of different number of clusters. Available options:
 \code{"tot_endemism"}}
 }
 \value{
-a \code{list} of class \code{bioRgeo.partition.metrics} with three elements:
+a \code{list} of class \code{bioRgeo.partition.metrics} with two elements:
 \itemize{
 \item{\code{args}: input arguments
 }
@@ -103,13 +103,13 @@ recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 \mjeqn{S_i}{Si} is the number of
 species in cluster i, and K the maximum number of clusters.
 }
-\item{\code{tot_endemism}: this metric is the total endemism in the
-endemism in each cluster as
+\item{\code{tot_endemism}: this metric is the total 
+endemism across all clusters, as
 recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
 
 where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
-only one cluster) and \mjeqn{C}{C} is number of non-endemics.
+only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
 }
 }
 }
