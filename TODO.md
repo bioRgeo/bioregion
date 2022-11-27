@@ -40,6 +40,8 @@
 
 * Implémenter la parallélisation de la recherche de clusters 
 
+* Ajouter d'autres métriques, basées par exemple sur l'abondance
+
 ### 1.3 Amélioration des classes
 
 ### 1.4 Fonctions génériques

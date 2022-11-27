@@ -206,7 +206,9 @@ print.bioRgeo.partition.metrics <- function(x, ...)
 
   print(data.frame(sapply(x$evaluation_df[x$args$eval_metric],
                function(x) {
-                 c(min(x), mean(x), max(x))}),
+                 c(min(x, na.rm = TRUE), 
+                   mean(x, na.rm = TRUE), 
+                   max(x, na.rm = TRUE))}),
              row.names = c("Min", "Mean", "Max")))
 
   cat("Access the data.frame of metrics with your_object$evaluation_df\n")

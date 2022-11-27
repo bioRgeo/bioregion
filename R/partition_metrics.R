@@ -311,13 +311,24 @@ partition_metrics <- function(
     {
       dissimilarity$ranks <- rank(dissimilarity[, dissimilarity_index])
       denom <- nb_sites * (nb_sites - 1) / 4
-      
+      a <- sapply(cluster_object$cluster_info$partition_name,
+                  function(x, dist., denom.) {
+                    -diff(tapply(dist.$ranks,
+                                 dist.[, x],
+                                 mean)) / denom.
+                  }, dist. = dissimilarity, denom. = denom)
       # Fast calculation of the anosim for all clusters
       evaluation_df$anosim <- sapply(cluster_object$cluster_info$partition_name,
                                      function(x, dist., denom.) {
-                                       -diff(tapply(dist.$ranks,
-                                                    dist.[, x],
-                                                    mean)) / denom.
+                                       # Testing if there is only one cluster
+                                       if(all(dist.[, x]))
+                                       {
+                                         NA # If only one cluster we cannot calculate anosim
+                                       } else {
+                                         -diff(tapply(dist.$ranks,
+                                                      dist.[, x],
+                                                      mean)) / denom.
+                                       }
                                      }, dist. = dissimilarity, denom. = denom)
       message("  - anosim OK")
     }

@@ -43,6 +43,7 @@ Imports:
     Matrix,
     Rdpack,
     reshape2,
+    rlang,
     rmarkdown,
     sf,
     stats,

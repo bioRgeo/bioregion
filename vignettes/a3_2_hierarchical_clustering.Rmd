@@ -416,6 +416,8 @@ map_clusters(tree4$clusters[, c("ID", K_name)],
              vegesp)
 ```
 
+Or if you are allergic to lines of code, you could also simply recut your tree 
+at the identified optimal number of cut-offs with `cut_tree()`.
 
 ## Evaluation metrics
 
@@ -469,14 +471,209 @@ partition_metrics(tree4,
                   eval_metric = c("avg_endemism", "tot_endemism"))
 ```
 
-
 ## Criteria to choose an optimal number of clusters
 
+Choosing the optimal number of clusters is a long-standing issue in the 
+literature and there is no absolute and objective answer to this question. 
+A plethora of methods have been proposed over the years, and the best approach
+to tackle this issue is probably to compare the results of multiple approaches
+to make an informed decision.
+
+In the bioRgeo package, we have implemented several methods which are suitable
+for bioregionalisation analyses specifically.
+
+For example, a standard criterion used to identify the optimal number of
+clusters is the **elbow method**, which is the default criterion in 
+`find_optimal_n()`. However, we recommend moving beyond the paradigm of a single
+optimal number of clusters, which is likely an oversimplification of the 
+hierarchy of the tree. We recommend considering multiple cuts of the tree, and
+we provide several methods to do that: 
+**identifying large steps in the curve** or **using multiple cutoffs**.
+Additionally, we implement other approaches such as using the maximum or 
+minimum value of metrics, or, experimentally, using a MARS model (multiple 
+adaptive regression splines) to identify cutoff points in the curve.
 
 
+Before we head into these different methods, we will compute all evaluation 
+metrics and store them into `eval_tree4`:
 
-# Other hierarchical clustering methods
-## OPTICS
+```{r, cache = TRUE}
+vegenet <- mat_to_net(vegemat)
+eval_tree4 <- partition_metrics(tree4, 
+                                dissimilarity = dissim, 
+                                net = vegenet, 
+                                eval_metric = c("pc_distance", "anosim",
+                                                "avg_endemism", "tot_endemism"))
+
+```
+
+### Elbow method
+
+The elbow method consists in find the 'elbow' in the form of the metric-cluster
+relationship. This method will typically work for metrics which have an 
+L-shaped form (typically, pc_distance and endemism metrics), but not for other
+metrics (e.g. the form of anosim does not necessarily follow a L-shape).
+
+*The rationale behind the elbow method is to find a cut-off above which the
+metric values stop to increase significantly, such that adding new clusters
+does not provide much significant improvement in the metric.*
+
+The elbow method is the default method in `find_optimal_n()`. There are no
+parameters to adjust it. When the curve is not elbow-shaped, it may give 
+spurious results.
+
+```{r}
+find_optimal_n(eval_tree4)
+```
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+a <- find_optimal_n(eval_tree4)
+```
+
+In our example above, the optimal number of clusters varies depending in the 
+metric, from a minimum of `r min(unlist(a$optimal_nb_clusters))` to a maximum of
+`r max(unlist(a$optimal_nb_clusters))`. The final choice depends on your 
+preferences with respect to metrics, and your objectives with the clustering.
+Alternatively, two cut-offs could be used, a deep cut-off based on endemism
+metrics at e.g. a value of `r a$optimal_nb_clusters$avg_endemism`, and a shallow
+cutoff based on `pc_distance`, at `r a$optimal_nb_clusters$pc_distance`.
+
+### Step method
+
+The step method consists in identifying the largest "steps" in metrics, i.e.,
+largest increases or decreases in the value of the metric. 
+
+To do this, the 
+function will compute all the consecutive differences in metrics between 
+partitions. It will then keep only the largest positive differences 
+(`increasing_step`) or negative differences (`decreasing_step`). 
+`increasing_step` is for increasing metrics (`pc_distance`) and 
+`decreasing_step` is for decreasing metrics (`avg_endemism` and 
+`tot_endemism`). `anosim` values can either increase or decrease depending on
+your dataset, so you would have to explore both ways.
+
+By default, the function will select the top 1% steps:
+
+```{r}
+find_optimal_n(eval_tree4,
+               metrics_to_use = c("anosim", "pc_distance"),
+               criterion = "increasing_step")
+
+find_optimal_n(eval_tree4,
+               metrics_to_use = c("avg_endemism", "tot_endemism"),
+               criterion = "decreasing_step")
+```
+
+However, you can adjust it in two different ways. First, choose a number of 
+steps to select, e.g. to select the largest 3 steps, use `step_levels = 3`:
+
+```{r}
+find_optimal_n(eval_tree4,
+               metrics_to_use = c("anosim", "pc_distance"),
+               criterion = "increasing_step",
+               step_levels = 3)
+```
+
+
+Second, you can set a quantile of steps to select, e.g. to select the 5% 
+largest steps set the quantile to 0.90 (`step_quantile = 0.95`):
+
+```{r}
+find_optimal_n(eval_tree4,
+               metrics_to_use = c("anosim", "pc_distance"),
+               criterion = "increasing_step",
+               step_quantile = 0.95)
+```
+
+
+Finally, one question that may arise is which cluster number to select when
+a large step happens. For example, if the largest step occurs between partitions
+with 4 and 5 clusters, should we keep the partition with 4 clusters, or the
+partition with 5 clusters?
+
+By default, the function will keep the partition $N + 1$ (5 clusters in our 
+example above). You can change that by setting `step_round_above = FALSE`:
+
+```{r}
+find_optimal_n(eval_tree4,
+               metrics_to_use = c("avg_endemism", "tot_endemism"),
+               criterion = "decreasing_step",
+               step_round_above = FALSE)
+```
+### Cutting at different cut-off values
+
+The idea of this method is to select specific metric values at which the number
+of clusters should be used. For example, in their study, Holt et al. (2013) 
+used different cutoffs on `pc_distance` to find the global biogeographical 
+regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more \beta-diversity
+is explained but also the more clusters there are. Therefore, the choice is a 
+trade-off between the total \beta-diversity explained and the number of 
+clusters. 
+ 
+Eventually, the choice of these values depends
+on different factors: 
+
+1. The geographical scale of your study. Global scale study can use
+large cutoffs like Holt et al. (2013) and end up with a reasonable amount of 
+clusters, whereas in regional to local-scale 
+studies with less endemism and more taxa shared among clusters, these values are
+too high, and other cutoffs should be explored, such as 0.5 and 0.75. 
+
+2. The characteristics of your study which will increase or decrease the
+degree of endemism among clusters: dispersal capacities of your taxonomic
+group, the connectivity/barriers in your study area, etc. Use lower cutoffs 
+when you have a large number of widespread species, use higher cutoffs when
+you have high degrees of endemism.
+
+3. The use of abundance or phylogenetic data to compute \beta-diversity metrics
+may give a better distinction of clusters, which in turn will allow you to use
+higher cutoffs. 
+
+In our case, a regional scale study on vegetation, we can for example use three
+cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff) and 0.9 (shallow
+cutoff).
+
+```{r}
+find_optimal_n(eval_tree4,
+               metrics_to_use = "pc_distance",
+               criterion = "cutoff",
+               metric_cutoffs = c(.6, .8, .9))
+```
+
+### Cutting at the maximum or minimum metric value
+
+This criterion will find the maximum (`criterion = "max"`) or minimum
+(`criterion = "min"`) value of the metric in the list
+of partitions and select the associated partition. Such a criterion can be
+interesting in the case of `anosim`, but is probably much less useful for the
+other metrics implemented in the package.
+
+### Finding break points with a MARS model (experimental)
+
+This is an explotarory method which may not give adequate results.
+
+This criterion consists in applying a MARS model with the formula 
+evaluation metric ~ number of clusters. The main issue with such a model is that
+it may require a larger number of points to find an appropriate number of 
+clusters. In our example here, we make 100 cuts in the tree to have enough
+values.
+
+```{r, cache = TRUE}
+tree5 <- cut_tree(tree4,
+                  cut_height = seq(0, 0.67, # We cut the tree 1000 times from 0 to 0.67 
+                                   length = 100)) # (0.67 is the maximum height of my tree here)
+
+eval_tree5 <- partition_metrics(tree5, 
+                                dissimilarity = dissim, 
+                                net = vegenet, 
+                                eval_metric = c("pc_distance", "anosim",
+                                                "avg_endemism", "tot_endemism"))
+
+find_optimal_n(eval_tree5,
+               criterion = "mars")
+
+```
+We can see that for anosim, the break point could be meaningful, whereas for the
+other metrics, the mars break points seem to lag behind the actual break points.
 
 # References
 

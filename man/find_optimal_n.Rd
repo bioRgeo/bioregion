@@ -49,7 +49,7 @@ step will correspond to a sudden increase or decrease between partition X &
 partition X+1: should the optimal partition be X+1 
 (\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}? 
 Defaults to 
-\code{FALSE}}
+\code{TRUE}}
 
 \item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the
 cutoffs of \code{eval_metric} at which the number of clusters should be
