@@ -74,42 +74,43 @@
 #' \insertRef{Baselga2013}{bioRgeo}
 #' @export
 similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat") {
-
+  
   # list of metrics based on abc
   lsmetricabc <- c("abc", "Jaccard", "Jaccardturn", "Sorensen", "Simpson")
-
+  
   # list of metrics based on ABC
   lsmetricABC <- c("ABC", "Bray", "Brayturn")
-
+  
   # list of metrics based on other features
   lsmetrico <- c("Euclidean")
-
+  
   if ("all" %in% metric) {
     metric <- c(lsmetricabc, lsmetricABC, lsmetrico)
   }
-
+  
   # Controls
   if (is.null(metric) & is.null(formula)) {
     stop("metric or formula should be used")
   }
-
+  
   if (length(intersect(c(lsmetricabc, lsmetricABC, lsmetrico), metric)) != length(metric) & is.null(formula)) {
     stop("One or several similarity metric(s) chosen is not available.
      Please chose among the followings:
-         abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, Bray, Brayturn or Euclidean")
+         abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, Bray, Brayturn or
+         Euclidean.")
   }
-
+  
   if (!is.null(formula) & !is.character(formula)) {
     stop("formula should be a vector of characters if not NULL")
   } else { # Check if abc and ABC in formula
     abcinformula <- (sum(c(grepl("a", formula), grepl("b", formula), grepl("c", formula))) > 0)
     ABCinformula <- (sum(c(grepl("A", formula), grepl("B", formula), grepl("C", formula))) > 0)
   }
-
+  
   if (!is.matrix(comat)) {
     stop("Co-occurrence matrix should be a matrix")
   }
-
+  
   sco <- sum(is.na(comat))
   minco <- min(comat)
   if (sco > 0) {
@@ -118,19 +119,19 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
   if (minco < 0) {
     stop("Co-occurrence matrix should contains only positive real: negative value detected!")
   }
-
+  
   if (!(method %in% c("prodmat", "loops"))) {
     stop("The method is not available.
      Please chose among the followings:
          prodmat, loops")
   }
-
+  
   # Extract site id
   siteid <- rownames(comat)
-
+  
   # Initialize output
   res <- NULL
-
+  
   # abcp: compute abc for presence data
   testabc <- ((length(intersect(lsmetricabc, metric)) > 0) | abcinformula) # check if abc should be computed
   if (testabc) {
@@ -143,14 +144,14 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       abcp <- Matrix::tcrossprod(comatp)
       rownames(abcp) <- siteid
       colnames(abcp) <- siteid
-
+      
       # Create a data.frame from the matrix with mat_to_net (little trick to deal with 0s)
       abcp[abcp == 0] <- -1
       abcp[lower.tri(abcp, diag = TRUE)] <- 0
       abcp <- mat_to_net(abcp, weight = TRUE, remove_zeroes = TRUE)
       colnames(abcp) <- c("Site1", "Site2", "a")
       abcp[abcp[, 3] == -1, 3] <- 0
-
+      
       # Compute b and c
       abcp$b <- 0
       abcp$c <- 0
@@ -162,12 +163,12 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       abcp <- abc(comatp)
       abcp <- data.frame(Site1 = siteid[abcp[, 1]], Site2 = siteid[abcp[, 2]], a = abcp[, 3], b = abcp[, 4], c = abcp[, 5])
     }
-
+    
     # Update res if NULL
     if (is.null(res)) {
       res <- abcp[, 1:2]
     }
-
+    
     # Compute metrics based on abc
     if ("Jaccard" %in% metric) {
       res$Jaccard <- 1 - (abcp$b + abcp$c) / (abcp$a + abcp$b + abcp$c)
@@ -181,7 +182,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     if ("Simpson" %in% metric) {
       res$Simpson <- 1 - pmin(abcp$b, abcp$c) / (abcp$a + pmin(abcp$b, abcp$c))
     }
-
+    
     # Attach abcp if abc in formula
     if (abcinformula) {
       a <- abcp$a
@@ -189,20 +190,20 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       c <- abcp$c
     }
   }
-
+  
   # abca: compute ABC for abundance data
   testABC <- ((length(intersect(lsmetricABC, metric)) > 0) | ABCinformula) # check if ABC should be computed
   if (testABC) {
-
+    
     # Use abc Rcpp function in src (three loops)
     abca <- abc(comat)
     abca <- data.frame(Site1 = siteid[abca[, 1]], Site2 = siteid[abca[, 2]], A = abca[, 3], B = abca[, 4], C = abca[, 5])
-
+    
     # Update res if NULL
     if (is.null(res)) {
       res <- abca[, 1:2]
     }
-
+    
     # Compute metrics based on ABC
     if ("Bray" %in% metric) {
       res$Bray <- 1 - (abca$B + abca$C) / (2 * abca$A + abca$B + abca$C)
@@ -210,7 +211,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     if ("Brayturn" %in% metric) {
       res$Brayturn <- 1 - pmin(abca$B, abca$C) / (abca$A + pmin(abca$B, abca$C))
     }
-
+    
     # Attach abca if ABC in formula
     if (ABCinformula) {
       A <- abca$A
@@ -218,7 +219,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       C <- abca$C
     }
   }
-
+  
   # Compute equation in formula
   if (!is.null(formula)) {
     for (k in 1:length(formula)) {
@@ -226,7 +227,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       colnames(res)[dim(res)[2]] <- formula[k]
     }
   }
-
+  
   # Compute Euclidean similarity between site using dist()
   if ("Euclidean" %in% metric) {
     eucl <- as.matrix(stats::dist(comat))
@@ -237,35 +238,35 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     eucl <- mat_to_net(eucl, weight = TRUE, remove_zeroes = TRUE)
     colnames(eucl) <- c("Site1", "Site2", "Euclidean")
     eucl[eucl[, 3] == -1, 3] <- 0
-
+    
     # Update res if NULL
     if (is.null(res)) {
       res <- eucl[, 1:2]
     }
-
+    
     res$Euclidean <- 1 / (1 + eucl$Euclidean)
   }
-
+  
   # Compute metrics based on abc
   if ("abc" %in% metric) {
     res$a <- abcp$a
     res$b <- abcp$b
     res$c <- abcp$c
   }
-
+  
   if ("ABC" %in% metric) {
     res$A <- abca$A
     res$B <- abca$B
     res$C <- abca$C
   }
-
-
+  
+  
   # Create output class
   class(res) <- append("bioRgeo.pairwise.metric", class(res))
-
+  
   # Inform nature of the output
   attr(res, "type") <- "similarity"
-
+  
   # Return the output
   return(res)
 }

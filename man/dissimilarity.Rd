@@ -2,36 +2,45 @@
 % Please edit documentation in R/dissimilarity.R
 \name{dissimilarity}
 \alias{dissimilarity}
-\title{Compute dissimilarity metrics (beta-diversity) between sites based on species composition}
+\title{Compute dissimilarity metrics (beta-diversity) between sites based on
+species composition}
 \usage{
 dissimilarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 }
 \arguments{
-\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as columns.}
+\item{comat}{a co-occurrence \code{matrix} with sites as rows and species
+as columns.}
 
-\item{metric}{a vector of string(s) indicating which metrics
-metric(s) to chose (see Details). If \code{"all"} is specified, then all
-metrics will be calculated. Can be set to \code{NULL} if \code{formula} is used.}
+\item{metric}{a vector of string(s) indicating which metrics to chose
+(see Details). Available options are \emph{abc}, \emph{ABC}, \emph{Jaccard},
+\emph{Jaccardturn}, \emph{Sorensen}, \emph{Simpson},  \emph{Bray},
+\emph{Brayturn} or \emph{Euclidean}.\cr
+If \code{"all"} is specified, then all metrics will be
+calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
-\item{formula}{a vector of string(s) with your own formula based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
-and \code{C} quantities (see Details). \code{formula} is set to \code{NULL} by default.}
+\item{formula}{a vector of string(s) with your own formula based on the
+\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
+(see Details). \code{formula} is set to \code{NULL} by default.}
 
-\item{method}{a string indicating what method should be used to compute \code{abc} (see Details).
-\code{method = "prodmat"} by default is more efficient but can be greedy in memory and \code{method="loops"} is less efficient
-but less greedy in memory.}
+\item{method}{a string indicating what method should be used to compute
+\code{abc} (see Details).
+\code{method = "prodmat"} by default is more efficient but can be greedy
+in memory and \code{method="loops"} is less efficient but less greedy in
+memory.}
 }
 \value{
 A \code{data.frame} with additional class \code{bioRgeo.pairwise.metric},
- providing one or several dissimilarity
+providing one or several dissimilarity
 metric(s) between each pair of sites. The two first columns represent each
- pair of sites.
+pair of sites.
 One column per dissimilarity metric provided in \code{metric} and 
 \code{formula} except for the metric \emph{abc} and \emph{ABC} that
 are stored in three columns (one for each letter).
 }
 \description{
-This function creates a \code{data.frame} where each row provides one or several dissimilarity
-metric(s) between each pair of sites from a co-occurrence \code{matrix} with sites as rows and species as columns.
+This function creates a \code{data.frame} where each row provides one or
+several dissimilarity metric(s) between each pair of sites from a
+co-occurrence \code{matrix} with sites as rows and species as columns.
 }
 \details{
 \loadmathjax
@@ -53,25 +62,30 @@ following equation:
 
 \mjeqn{Brayturn = min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
 
-with A the sum of the lesser values for common species shared by a pair of sites.
-B and C are the total number of specimens counted at both sites minus A.
+with A the sum of the lesser values for common species shared by a pair of
+sites. B and C are the total number of specimens counted at both sites minus
+A.
 
-\code{formula} can be used to compute customized metrics with the terms \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
-and \code{C}. For example \code{formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")} will
+\code{formula} can be used to compute customized metrics with the terms
+\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}.
+For example
+\code{formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")} will
 compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.
 
 Euclidean computes the Euclidean distance between each pair of sites.
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1 / 1:1001), 5, 10)
+\dontrun{
+comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
+prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
-dist <- dissimilarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
-dist
+dissim <- dissimilarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 
-simil <- dissimilarity(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
-dist
+simil <- dissimilarity(comat, metric = "all",
+formula = "1 - (b + c) / (a + b + c)")
+}
 }
 \references{
 \insertRef{Baselga2012}{bioRgeo}
@@ -79,7 +93,7 @@ dist
 \insertRef{Baselga2013}{bioRgeo}
 }
 \seealso{
-\link{similarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
+[bioRgeo::similarity()] \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),
