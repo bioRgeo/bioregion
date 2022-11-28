@@ -100,46 +100,29 @@ The argument \code{find_h} is ignored if \code{dynamic_tree_cut = TRUE},
 because heights of cut cannot be estimated in this case.
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
-rownames(comat) <- paste0("Site",1:20)
-colnames(comat) <- paste0("Species",1:25)
+\dontrun{
+comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
+20, 25)
+rownames(comat) <- paste0("Site", 1:20)
+colnames(comat) <- paste0("Species", 1:25)
 
 simil <- similarity(comat, metric = "all")
 dissimilarity <- similarity_to_dissimilarity(simil)
 
 # User-defined number of clusters
-#tree1 <- hclu_hierarclust(dissimilarity,
-#                                  n_clust = 5)
-#tree1
-#str(tree1)
+tree1 <- hclu_hierarclust(dissimilarity, n_clust = 5)
+tree2 <- cut_tree(tree1, cut_height = .05)
+tree3 <- cut_tree(tree1, n_clust = c(3, 5, 10))
+tree4 <- cut_tree(tree1, cut_height = c(.05, .1, .15, .2, .25))
+tree5 <- cut_tree(tree1, n_clust = c(3, 5, 10), find_h = FALSE)
 
-#tree2 <- cut_tree(tree1,
-#                   cut_height = .05)
-#tree2
-#tree2$clusters
+hclust_tree <- tree2$algorithm$final.tree
+clusters_2 <- cut_tree(hclust_tree, n_clust = 10)
 
-#tree3 <- cut_tree(tree1,
-#                   n_clust = c(3, 5, 10))
-#tree3
-#tree3$clusters
+cluster_dynamic <- cut_tree(tree1, dynamic_tree_cut = TRUE,
+                            dissimilarity = dissimilarity)
+}
 
-#tree4 <- cut_tree(tree1,
-#                   cut_height = c(.05, .1, .15, .2, .25))
-#tree4
-#
-#tree5 <- cut_tree(tree1,
-#                   n_clust = c(3, 5, 10),
-#                   find_h = FALSE)
-#tree5
-
-
-#hclust_tree <- tree2$algorithm$final.tree
-#clusters_2 <- cut_tree(hclust_tree,
-#                        n_clust = 10)
-
-#cluster_dynamic <- cut_tree(tree1,
-#                             dynamic_tree_cut = TRUE,
-#                             dissimilarity = dissimilarity)
 }
 \seealso{
 \link{hclu_hierarclust}
