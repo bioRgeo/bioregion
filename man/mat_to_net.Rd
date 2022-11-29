@@ -15,22 +15,26 @@ mat_to_net(mat, weight = FALSE, remove_zeroes = TRUE)
 weight equal to 0 should be removed from the output.}
 }
 \value{
-A \code{data.frame} where each row represents the interaction between
-two nodes and an optional third column indicating the weight of the interaction.
+A \code{data.frame} where each row represents the interaction
+between two nodes and an optional third column indicating the weight of the
+interaction.
 }
 \description{
 This function creates a two- or three-columns \code{data.frame} where
 each row represents the interaction between two nodes (site and species for 
-example) and an optional third column indicating the weight of the interaction 
-(if \code{weight = TRUE}) from a contingency table (sites as rows and species 
-as columns for example).
+example) and an optional third column indicating the weight of the
+interaction (if \code{weight = TRUE}) from a contingency table (sites as
+rows and species as columns for example).
 }
 \examples{
+\dontrun{
 mat <- matrix(sample(1000, 50), 5, 10)
 rownames(mat) <- paste0("Site", 1:5)
 colnames(mat) <- paste0("Species", 1:10)
 
 net <- mat_to_net(mat, weight = TRUE)
+}
+
 }
 \seealso{
 \link{net_to_mat}
