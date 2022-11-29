@@ -48,8 +48,7 @@ clusters should be picked above or below the identified steps. Indeed, each
 step will correspond to a sudden increase or decrease between partition X &
 partition X+1: should the optimal partition be X+1 
 (\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}? 
-Defaults to 
-\code{TRUE}}
+Defaults to \code{TRUE}}
 
 \item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the
 cutoffs of \code{eval_metric} at which the number of clusters should be
@@ -80,7 +79,7 @@ the chosen \code{criterion}
 \item{\code{plot}: if requested, the plot will be stored in this slot}}
 }
 \description{
-This function aims at optimising one or several criteria on a set of 
+This function aims at optimizing one or several criteria on a set of 
 ordered partitions. It is usually applied to find one (or several) optimal
 number(s) of clusters on, for example, a hierarchical tree to cut, or a 
 range of partitions obtained from k-means or PAM. Users are advised to be 
@@ -216,7 +215,7 @@ find_optimal_n(a, criterion = "decreasing_step",
 find_optimal_n(a, criterion = "decreasing_step",
                step_levels = 3)                 
 b <- find_optimal_n(a, criterion = "mars")             
-               
+
 }
 \references{
 \insertRef{Castro-Insua2018}{bioRgeo}

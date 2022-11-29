@@ -1,22 +1,31 @@
 #' Compute similarity metrics between sites based on species composition
 #'
-#' This function creates a \code{data.frame} where each row provides one or several similarity
-#' metric(s) between each pair of sites from a co-occurrence \code{matrix} with sites as rows and species as columns.
+#' This function creates a \code{data.frame} where each row provides one or
+#' several similarity metric(s) between each pair of sites from a co-occurrence
+#' \code{matrix} with sites as rows and species as columns.
 #'
-#' @param comat a co-occurrence \code{matrix} with sites as rows and species as columns.
-#' @param metric a vector of string(s) indicating which similarity
-#' metric(s) to chose (see Details). If \code{"all"} is specified, then all
-#' metrics will be calculated. Can be set to \code{NULL} if \code{formula} is used.
-#' @param formula a vector of string(s) with your own formula based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
-#' and \code{C} quantities (see Details). \code{formula} is set to \code{NULL} by default.
-#' @param method a string indicating what method should be used to compute \code{abc} (see Details).
-#' \code{method = "prodmat"} by default is more efficient but can be greedy in memory and \code{method="loops"} is less efficient
-#' but less greedy in memory.
-#' @export
+#' @param comat a co-occurrence \code{matrix} with sites as rows and species as
+#' columns.
+#' 
+#' @param metric a vector of string(s) indicating which similarity metric(s) to
+#' chose (see Details). If \code{"all"} is specified, then all metrics will be
+#' calculated. Can be set to \code{NULL} if \code{formula} is used.
+#' 
+#' @param formula a vector of string(s) with your own formula based on the
+#' \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
+#' (see Details). \code{formula} is set to \code{NULL} by default.
+#' 
+#' @param method a string indicating what method should be used to compute
+#' \code{abc} (see Details).
+#' \code{method = "prodmat"} by default is more efficient but can be greedy in
+#' memory and \code{method="loops"} is less efficient but less greedy in
+#' memory.
+#' 
 #' @details
 #' \loadmathjax
-#' With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
-#' and \code{c} species only present in the second site.
+#' With \code{a} the number of species shared by a pair of sites, \code{b}
+#' species only present in the first site and \code{c} species only present in
+#' the second site.
 #'
 #' \mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 #'
@@ -26,54 +35,69 @@
 #'
 #' \mjeqn{Simpson = 1 - min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
 #'
-#' If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
-#' following equation:
+#' If abundances data are available, Bray-Curtis and its turnover component can
+#' also be computed with the following equation:
 #'
 #' \mjeqn{Bray = 1 - (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
 #'
 #' \mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
 #'
-#' with A the sum of the lesser values for common species shared by a pair of sites.
+#' with A the sum of the lesser values for common species shared by a pair of
+#' sites.
 #' B and C are the total number of specimens counted at both sites minus A.
 #'
-#' \code{formula} can be used to compute customized metrics with the terms \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
-#' and \code{C}. For example \code{formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")} will
-#' compute the Jaccard and Bray-Curtis similarity metrics, respectively.
+#' \code{formula} can be used to compute customized metrics with the terms
+#' \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}. For example
+#' \code{formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")}
+#' will compute the Jaccard and Bray-Curtis similarity metrics, respectively.
 #'
-#' Euclidean computes the Euclidean similarity between each pair of site following this equation:
+#' Euclidean computes the Euclidean similarity between each pair of site
+#' following this equation:
 #'
 #' \mjeqn{Euclidean = 1 / (1 + dij)}{Euclidean = 1 / (1 + dij)}
 #'
-#' Where dij is the Euclidean distance between site i and site j in terms of species composition.
+#' Where dij is the Euclidean distance between site i and site j in terms of
+#' species composition.
 #'
 #' @return A \code{data.frame} with additional class 
 #' \code{bioRgeo.pairwise.metric}, providing one or several similarity
 #' metric(s) between each pair of sites. The two first columns represent each 
 #' pair of sites.
-#' One column per similarity metric provided in \code{metric} and \code{formula}
-#' except for the metric \emph{abc} and \emph{ABC} that
-#' are stored in three columns (one for each letter).
+#' One column per similarity metric provided in \code{metric} and
+#' \code{formula} except for the metric \emph{abc} and \emph{ABC} that are
+#' stored in three columns (one for each letter).
+#' 
 #' @seealso \link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
+#' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}), 
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
+#' 
 #' @examples
-#' comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1 / 1:1001), 5, 10)
+#' \dontrun{
+#' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
+#' prob = 1 / 1:1001), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
-#' simil
 #'
-#' simil <- similarity(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
-#' simil
+#' simil <- similarity(comat, metric = "all",
+#' formula = "1 - (b + c) / (a + b + c)")
+#' }
 #' @references
 #' \insertRef{Baselga2012}{bioRgeo}
 #' 
 #' \insertRef{Baselga2013}{bioRgeo}
+#' 
+#' @importFrom Matrix tcrossprod
+#' @importFrom stats dist
+#' 
 #' @export
-similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prodmat") {
+
+similarity <- function(comat, metric = "Simpson", formula = NULL,
+                       method = "prodmat"){
   
   # list of metrics based on abc
   lsmetricabc <- c("abc", "Jaccard", "Jaccardturn", "Sorensen", "Simpson")
@@ -93,7 +117,8 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     stop("metric or formula should be used")
   }
   
-  if (length(intersect(c(lsmetricabc, lsmetricABC, lsmetrico), metric)) != length(metric) & is.null(formula)) {
+  if (length(intersect(c(lsmetricabc, lsmetricABC, lsmetrico), metric)) !=
+      length(metric) & is.null(formula)) {
     stop("One or several similarity metric(s) chosen is not available.
      Please chose among the followings:
          abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, Bray, Brayturn or
@@ -103,8 +128,10 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
   if (!is.null(formula) & !is.character(formula)) {
     stop("formula should be a vector of characters if not NULL")
   } else { # Check if abc and ABC in formula
-    abcinformula <- (sum(c(grepl("a", formula), grepl("b", formula), grepl("c", formula))) > 0)
-    ABCinformula <- (sum(c(grepl("A", formula), grepl("B", formula), grepl("C", formula))) > 0)
+    abcinformula <- (sum(c(grepl("a", formula), grepl("b", formula),
+                           grepl("c", formula))) > 0)
+    ABCinformula <- (sum(c(grepl("A", formula), grepl("B", formula),
+                           grepl("C", formula))) > 0)
   }
   
   if (!is.matrix(comat)) {
@@ -114,16 +141,17 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
   sco <- sum(is.na(comat))
   minco <- min(comat)
   if (sco > 0) {
-    stop("Co-occurrence matrix should contains only positive real: NA(s) detected!")
+    stop("Co-occurrence matrix should contains only positive real: NA(s)
+         detected!")
   }
   if (minco < 0) {
-    stop("Co-occurrence matrix should contains only positive real: negative value detected!")
+    stop("Co-occurrence matrix should contains only positive real: negative
+         value detected!")
   }
   
   if (!(method %in% c("prodmat", "loops"))) {
     stop("The method is not available.
-     Please chose among the followings:
-         prodmat, loops")
+     Please chose among the followings: prodmat, loops")
   }
   
   # Extract site id
@@ -133,19 +161,22 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
   res <- NULL
   
   # abcp: compute abc for presence data
-  testabc <- ((length(intersect(lsmetricabc, metric)) > 0) | abcinformula) # check if abc should be computed
+  testabc <- ((length(intersect(lsmetricabc, metric)) > 0) |
+                abcinformula) # check if abc should be computed
   if (testabc) {
     comatp <- comat
     comatp[comatp != 0] <- 1
     if (method == "prodmat") {
-      # Compute the number of species in common "a" with matricial product comatp%*%t(comatp)
+      # Compute the number of species in common "a" with matrix multiplication 
+      # comatp%*%t(comatp)
       sumrow <- apply(comatp, 1, sum)
-      # abcp=prodmat(comatp,t(comatp))
+      # abcp <- prodmat(comatp,t(comatp))
       abcp <- Matrix::tcrossprod(comatp)
       rownames(abcp) <- siteid
       colnames(abcp) <- siteid
       
-      # Create a data.frame from the matrix with mat_to_net (little trick to deal with 0s)
+      # Create a data.frame from the matrix with mat_to_net (little trick to
+      # deal with 0s)
       abcp[abcp == 0] <- -1
       abcp[lower.tri(abcp, diag = TRUE)] <- 0
       abcp <- mat_to_net(abcp, weight = TRUE, remove_zeroes = TRUE)
@@ -161,7 +192,8 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     if (method == "loops") {
       # Use abc Rcpp function in src (three loops)
       abcp <- abc(comatp)
-      abcp <- data.frame(Site1 = siteid[abcp[, 1]], Site2 = siteid[abcp[, 2]], a = abcp[, 3], b = abcp[, 4], c = abcp[, 5])
+      abcp <- data.frame(Site1 = siteid[abcp[, 1]], Site2 = siteid[abcp[, 2]],
+                         a = abcp[, 3], b = abcp[, 4], c = abcp[, 5])
     }
     
     # Update res if NULL
@@ -174,7 +206,8 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       res$Jaccard <- 1 - (abcp$b + abcp$c) / (abcp$a + abcp$b + abcp$c)
     }
     if ("Jaccardturn" %in% metric) {
-      res$Jaccardturn <- 1 - 2 * pmin(abcp$b, abcp$c) / (abcp$a + 2 * pmin(abcp$b, abcp$c))
+      res$Jaccardturn <- 1 - 2 * pmin(abcp$b, abcp$c) /
+        (abcp$a + 2 * pmin(abcp$b, abcp$c))
     }
     if ("Sorensen" %in% metric) {
       res$Sorensen <- 1 - (abcp$b + abcp$c) / (2 * abcp$a + abcp$b + abcp$c)
@@ -192,12 +225,13 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
   }
   
   # abca: compute ABC for abundance data
-  testABC <- ((length(intersect(lsmetricABC, metric)) > 0) | ABCinformula) # check if ABC should be computed
+  testABC <- ((length(intersect(lsmetricABC, metric)) > 0) |
+                ABCinformula) # check if ABC should be computed
   if (testABC) {
-    
     # Use abc Rcpp function in src (three loops)
     abca <- abc(comat)
-    abca <- data.frame(Site1 = siteid[abca[, 1]], Site2 = siteid[abca[, 2]], A = abca[, 3], B = abca[, 4], C = abca[, 5])
+    abca <- data.frame(Site1 = siteid[abca[, 1]], Site2 = siteid[abca[, 2]],
+                       A = abca[, 3], B = abca[, 4], C = abca[, 5])
     
     # Update res if NULL
     if (is.null(res)) {
@@ -209,7 +243,8 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
       res$Bray <- 1 - (abca$B + abca$C) / (2 * abca$A + abca$B + abca$C)
     }
     if ("Brayturn" %in% metric) {
-      res$Brayturn <- 1 - pmin(abca$B, abca$C) / (abca$A + pmin(abca$B, abca$C))
+      res$Brayturn <- 1 - pmin(abca$B, abca$C) /
+        (abca$A + pmin(abca$B, abca$C))
     }
     
     # Attach abca if ABC in formula
@@ -259,8 +294,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL, method = "prod
     res$B <- abca$B
     res$C <- abca$C
   }
-  
-  
+
   # Create output class
   class(res) <- append("bioRgeo.pairwise.metric", class(res))
   

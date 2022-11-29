@@ -7,36 +7,42 @@
 similarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 }
 \arguments{
-\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as columns.}
+\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
+columns.}
 
-\item{metric}{a vector of string(s) indicating which similarity
-metric(s) to chose (see Details). If \code{"all"} is specified, then all
-metrics will be calculated. Can be set to \code{NULL} if \code{formula} is used.}
+\item{metric}{a vector of string(s) indicating which similarity metric(s) to
+chose (see Details). If \code{"all"} is specified, then all metrics will be
+calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
-\item{formula}{a vector of string(s) with your own formula based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
-and \code{C} quantities (see Details). \code{formula} is set to \code{NULL} by default.}
+\item{formula}{a vector of string(s) with your own formula based on the
+\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
+(see Details). \code{formula} is set to \code{NULL} by default.}
 
-\item{method}{a string indicating what method should be used to compute \code{abc} (see Details).
-\code{method = "prodmat"} by default is more efficient but can be greedy in memory and \code{method="loops"} is less efficient
-but less greedy in memory.}
+\item{method}{a string indicating what method should be used to compute
+\code{abc} (see Details).
+\code{method = "prodmat"} by default is more efficient but can be greedy in
+memory and \code{method="loops"} is less efficient but less greedy in
+memory.}
 }
 \value{
 A \code{data.frame} with additional class 
 \code{bioRgeo.pairwise.metric}, providing one or several similarity
 metric(s) between each pair of sites. The two first columns represent each 
 pair of sites.
-One column per similarity metric provided in \code{metric} and \code{formula}
-except for the metric \emph{abc} and \emph{ABC} that
-are stored in three columns (one for each letter).
+One column per similarity metric provided in \code{metric} and
+\code{formula} except for the metric \emph{abc} and \emph{ABC} that are
+stored in three columns (one for each letter).
 }
 \description{
-This function creates a \code{data.frame} where each row provides one or several similarity
-metric(s) between each pair of sites from a co-occurrence \code{matrix} with sites as rows and species as columns.
+This function creates a \code{data.frame} where each row provides one or
+several similarity metric(s) between each pair of sites from a co-occurrence
+\code{matrix} with sites as rows and species as columns.
 }
 \details{
 \loadmathjax
-With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
-and \code{c} species only present in the second site.
+With \code{a} the number of species shared by a pair of sites, \code{b}
+species only present in the first site and \code{c} species only present in
+the second site.
 
 \mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 
@@ -46,36 +52,42 @@ and \code{c} species only present in the second site.
 
 \mjeqn{Simpson = 1 - min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
 
-If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
-following equation:
+If abundances data are available, Bray-Curtis and its turnover component can
+also be computed with the following equation:
 
 \mjeqn{Bray = 1 - (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
 
 \mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
 
-with A the sum of the lesser values for common species shared by a pair of sites.
+with A the sum of the lesser values for common species shared by a pair of
+sites.
 B and C are the total number of specimens counted at both sites minus A.
 
-\code{formula} can be used to compute customized metrics with the terms \code{a}, \code{b}, \code{c}, \code{A}, \code{B},
-and \code{C}. For example \code{formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")} will
-compute the Jaccard and Bray-Curtis similarity metrics, respectively.
+\code{formula} can be used to compute customized metrics with the terms
+\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}. For example
+\code{formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")}
+will compute the Jaccard and Bray-Curtis similarity metrics, respectively.
 
-Euclidean computes the Euclidean similarity between each pair of site following this equation:
+Euclidean computes the Euclidean similarity between each pair of site
+following this equation:
 
 \mjeqn{Euclidean = 1 / (1 + dij)}{Euclidean = 1 / (1 + dij)}
 
-Where dij is the Euclidean distance between site i and site j in terms of species composition.
+Where dij is the Euclidean distance between site i and site j in terms of
+species composition.
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 50, replace = TRUE, prob = 1 / 1:1001), 5, 10)
+\dontrun{
+comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
+prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
-simil
 
-simil <- similarity(comat, metric = "all", formula = "1 - (b + c) / (a + b + c)")
-simil
+simil <- similarity(comat, metric = "all",
+formula = "1 - (b + c) / (a + b + c)")
+}
 }
 \references{
 \insertRef{Baselga2012}{bioRgeo}
