@@ -27,15 +27,13 @@ columns represent pairs of sites (or any pair of nodes), and the next column(s)
 are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default, 
-the third column name of
- \code{dissimilarity} is used.}
+the third column name of \code{dissimilarity} is used.}
 
 \item{method}{name of the hierarchical classification method, as in
-\link[stats:hclust]{stats::hclust()}. Should be one of 
-\code{"ward.D"},
+\link[stats:hclust]{stats::hclust()}. Should be one of \code{"ward.D"},
 \code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
-(= UPGMA), \code{"mcquitty"} (= WPGMA),
-\code{"median"} (= WPGMC) or \code{"centroid"} (= UPGMC).}
+(= UPGMA), \code{"mcquitty"} (= WPGMA), \code{"median"} (= WPGMC) or
+\code{"centroid"} (= UPGMC).}
 
 \item{randomize}{a boolean indicating if the dissimilarity matrix should be
 randomized, to account for the order of sites in the dissimilarity matrix.}
@@ -82,8 +80,9 @@ In the \code{algorithm} slot, users can find the following elements:
 
 \itemize{
 \item{\code{trials}: a list containing all randomization trials. Each trial
-contains the dissimilarity matrix, with site order randomized, the associated
-tree and the cophenetic correlation coefficient (Spearman) for that tree}
+contains the dissimilarity matrix, with site order randomized, the
+associated tree and the cophenetic correlation coefficient (Spearman) for
+that tree}
 \item{\code{final.tree}: a \code{hclust} object containing the final
 hierarchical tree to be used}
 \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient
@@ -92,14 +91,14 @@ between the initial dissimilarity matrix and \code{final.tree}}
 }
 \description{
 This function generates a hierarchical tree from a dissimilarity (beta-diversity)
- \code{data.frame},
-calculates the cophenetic correlation coefficient,
-and can get clusters from the tree if requested by the user. The function
-implements randomization of the dissimilarity matrix to generate the tree, with
-a selection method based on the optimal cophenetic correlation coefficient.
-Typically, the dissimilarity \code{data.frame} is a \code{bioRgeo.pairwise.metric} object
-obtained by running \code{similarity} or \code{similarity} and then 
-\code{similarity_to_dissimilarity}.
+\code{data.frame}, calculates the cophenetic correlation coefficient, and
+can get clusters from the tree if requested by the user. The function
+implements randomization of the dissimilarity matrix to generate the tree,
+with a selection method based on the optimal cophenetic correlation
+coefficient.
+Typically, the dissimilarity \code{data.frame} is a
+\code{bioRgeo.pairwise.metric} object obtained by running \code{similarity}
+or \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
 \details{
 The default method for the hierarchical tree is \code{"average"}, i.e.
@@ -114,6 +113,7 @@ Clusters can be obtained by two methods:
 To find an optimal number of clusters, see \code{\link{partition_metrics}}
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)
 rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
@@ -121,8 +121,7 @@ colnames(comat) <- paste0("Species",1:25)
 dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
-tree1 <- hclu_hierarclust(dissim,
-                          n_clust = 5)
+tree1 <- hclu_hierarclust(dissim, n_clust = 5)
 tree1
 plot(tree1)
 str(tree1)
@@ -130,28 +129,24 @@ tree1$clusters
 
 # User-defined height cut
 # Only one height
-tree2 <- hclu_hierarclust(dissim,
-                          cut_height = .05)
+tree2 <- hclu_hierarclust(dissim, cut_height = .05)
 tree2
 tree2$clusters
 
 # Multiple heights
-tree3 <- hclu_hierarclust(dissim,
-                          cut_height = c(.05, .15, .25))
-tree3
+tree3 <- hclu_hierarclust(dissim, cut_height = c(.05, .15, .25))
+
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
 # Info on each partition can be found in table cluster_info
 tree3$cluster_info
 plot(tree3)
 
 # Recut the tree afterwards
-tree3.1 <- cut_tree(tree3,
-                    n = 5)
-                 
+tree3.1 <- cut_tree(tree3, n = 5)
 
-tree4 <- hclu_hierarclust(dissim,
-                          n_clust = 1:19)
-                                 
+tree4 <- hclu_hierarclust(dissim, n_clust = 1:19)
+}
+
 }
 \references{
 \insertRef{Kreft2010}{bioRgeo}
