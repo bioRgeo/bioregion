@@ -17,28 +17,26 @@ hclu_optics(
 }
 \arguments{
 \item{dissimilarity}{the output object from \code{\link{dissimilarity}} or
- \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
- If a \code{data.frame} is used, the first two 
-columns represent pairs of sites (or any pair of nodes), and the next column(s)
-are the dissimilarity indices.}
+\code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+If a \code{data.frame} is used, the first two columns represent pairs of
+sites (or any pair of nodes), and the next column(s) are the dissimilarity
+indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default, 
-the third column name of
- \code{dissimilarity} is used.}
+the third column name of \code{dissimilarity} is used.}
 
-\item{minPts}{a \code{numeric} value specifying the minPts argument
-of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
-points to form a dense region.
-By default, it is set to the
-natural logarithm of the number of sites in \code{dissimilarity}.}
+\item{minPts}{a \code{numeric} value specifying the minPts argument of
+\link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
+points to form a dense region. By default, it is set to the natural
+logarithm of the number of sites in \code{dissimilarity}.}
 
-\item{eps}{a \code{numeric} value specifying the eps argument
-of \link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
+\item{eps}{a \code{numeric} value specifying the eps argument of
+\link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
 of the epsilon neighborhood. Limiting the neighborhood size improves
 performance and has no or very little impact on the ordering as long as it
 is not set too low. If not specified (default behavior), the largest
-minPts-distance in the
-data set is used which gives the same result as infinity.}
+minPts-distance in the data set is used which gives the same result as
+infinity.}
 
 \item{xi}{a \code{numeric} value specifying the steepness threshold to
 identify clusters hierarchically using the Xi method
@@ -75,40 +73,39 @@ clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
 Points To Identify the Clustering Structure)
 }
 \details{
-The optics (Ordering points to identify the clustering
- structure) is a semi-hierarchical clustering algorithm which orders the
- points in the dataset such that points which are closest become neighbours,
- and calculates a reachability distance for each point. Then, clusters
- can be extracted in a hierarchical manner from this reachability distance,
- by identifying clusters depending on changes in the relative cluster
- density. The reachability plot should be explored to understand
- the clusters and their hierarchical nature, by running plot on the output
- of the function: \code{plot(object$algorithm$optics)}.
- We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
- algorithm, how it works, and what the clusters mean.
+The optics (Ordering points to identify the clustering structure) is a
+semi-hierarchical clustering algorithm which orders the points in the
+dataset such that points which are closest become neighbors, and calculates
+a reachability distance for each point. Then, clusters can be extracted in a
+hierarchical manner from this reachability distance, by identifying clusters
+depending on changes in the relative cluster density. The reachability plot
+should be explored to understand the clusters and their hierarchical nature,
+by running plot on the output of the function:
+\code{plot(object$algorithm$optics)}.
+We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
+algorithm, how it works, and what the clusters mean.
 
- To extract the clusters, we use the
- \link[dbscan:extractXi]{dbscan::extractXi()} function which is based on
- the steepness of the reachability plot
- (see \link[dbscan:optics]{dbscan::optics()})
+To extract the clusters, we use the
+\link[dbscan:extractXi]{dbscan::extractXi()} function which is based on the
+steepness of the reachability plot (see
+\link[dbscan:optics]{dbscan::optics()})
 }
 \examples{
+\dontrun{
 dissim <- dissimilarity(vegemat, metric = "all")
   
-clust1 <- hclu_optics(dissim,
-     index = "Simpson")
+clust1 <- hclu_optics(dissim, index = "Simpson")
 clust1
-head(clust1$clusters)
 
-# Visualise the optics plot (the hierarchy of clusters is illustrated at the bottom)
+# Visualize the optics plot (the hierarchy of clusters is illustrated at the
+# bottom)
 plot(clust1$algorithm$optics)
 
 # Extract the hierarchy of clusters
-clust1 <- hclu_optics(dissim,
-     index = "Simpson",
-     show_hierarchy = TRUE)
+clust1 <- hclu_optics(dissim, index = "Simpson", show_hierarchy = TRUE)
 clust1
-head(clust1$clusters)
+}
+
 }
 \references{
 \insertRef{Hahsler2019}{bioRgeo}
