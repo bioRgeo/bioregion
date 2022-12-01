@@ -3,26 +3,26 @@
 #' This function performs non hierarchical
 #' clustering on the basis of dissimilarity with partitioning around medoids.
 #'
-#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
-#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
-#'  If a \code{data.frame} is used, the first two 
+#' @param dissimilarity the output object from [dissimilarity()] or
+#'  [similarity_to_dissimilarity()], or a `dist` object. 
+#'  If a `data.frame` is used, the first two 
 #' columns represent pairs of sites (or any pair of nodes), and the next column(s)
 #' are the dissimilarity indices. 
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of
-#'  \code{dissimilarity} is used.
-#' @param n_clust an \code{integer} or a \code{vector} of \code{integers}
+#'  `dissimilarity` is used.
+#' @param n_clust an `integer` or a `vector` of `integers`
 #' specifying the requested number(s) of clusters
-#' @param variant a \code{character} string specifying the variant of pam
-#' to use, by default "faster". See \link[cluster:pam]{cluster::pam()} for
+#' @param variant a `character` string specifying the variant of pam
+#' to use, by default "faster". See [cluster::pam()][cluster::pam] for
 #' more details
-#' @param nstart an \code{integer} specifying the number of random “starts”
-#' for the pam algorithm. By default, 1 (for the \code{"faster"} variant)
-#' @param cluster_only a \code{boolean} specifying if only the clustering
-#' should be returned from the \link[cluster:pam]{cluster::pam()} function
+#' @param nstart an `integer` specifying the number of random “starts”
+#' for the pam algorithm. By default, 1 (for the `"faster"` variant)
+#' @param cluster_only a `boolean` specifying if only the clustering
+#' should be returned from the [cluster::pam()][cluster::pam] function
 #' (more efficient)
-#' @param ... you can add here further arguments to be passed to \code{pam()}
-#' (see \link[cluster:pam]{cluster::pam()})
+#' @param ... you can add here further arguments to be passed to `pam()`
+#' (see [cluster::pam()][cluster::pam])
 #'
 #' @details
 #' This method partitions data into
@@ -35,21 +35,21 @@
 #'
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso \link{nhclu_kmeans} 
+#' @seealso [nhclu_kmeans] 
 #' @export
 #'
 #' @examples

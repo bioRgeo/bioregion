@@ -1,29 +1,29 @@
 #' Hierarchical clustering based on dissimilarity or beta-diversity
 #'
 #' This function generates a hierarchical tree from a dissimilarity (beta-diversity)
-#' \code{data.frame}, calculates the cophenetic correlation coefficient, and
+#' `data.frame`, calculates the cophenetic correlation coefficient, and
 #' can get clusters from the tree if requested by the user. The function
 #' implements randomization of the dissimilarity matrix to generate the tree,
 #' with a selection method based on the optimal cophenetic correlation
 #' coefficient.
-#' Typically, the dissimilarity \code{data.frame} is a
-#' \code{bioRgeo.pairwise.metric} object obtained by running \code{similarity}
-#' or \code{similarity} and then \code{similarity_to_dissimilarity}.
+#' Typically, the dissimilarity `data.frame` is a
+#' `bioRgeo.pairwise.metric` object obtained by running `similarity`
+#' or `similarity` and then `similarity_to_dissimilarity`.
 #'
-#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
-#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
-#'  If a \code{data.frame} is used, the first two 
+#' @param dissimilarity the output object from [dissimilarity()] or
+#'  [similarity_to_dissimilarity()], or a `dist` object. 
+#'  If a `data.frame` is used, the first two 
 #' columns represent pairs of sites (or any pair of nodes), and the next column(s)
 #' are the dissimilarity indices.
 #' 
 #' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of \code{dissimilarity} is used.
+#' the third column name of `dissimilarity` is used.
 #'  
 #' @param method name of the hierarchical classification method, as in
-#' \link[stats:hclust]{stats::hclust()}. Should be one of \code{"ward.D"},
-#' \code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
-#' (= UPGMA), \code{"mcquitty"} (= WPGMA), \code{"median"} (= WPGMC) or
-#' \code{"centroid"} (= UPGMC).
+#' [stats::hclust()][stats::hclust]. Should be one of `"ward.D"`,
+#' `"ward.D2"`, `"single"`, `"complete"`, `"average"`
+#' (= UPGMA), `"mcquitty"` (= WPGMA), `"median"` (= WPGMC) or
+#' `"centroid"` (= UPGMC).
 #' 
 #' @param randomize a boolean indicating if the dissimilarity matrix should be
 #' randomized, to account for the order of sites in the dissimilarity matrix.
@@ -31,63 +31,63 @@
 #' 
 #' @param keep_trials a boolean indicating if all random trial results.
 #' should be stored in the output object (set to FALSE to save space if your
-#' \code{dissimilarity} object is large).
+#' `dissimilarity` object is large).
 #' 
 #' @param optimal_tree_method a character vector indicating how the final tree
 #' should be obtained from all trials. The only option currently is
-#' \code{"best"}, which means the tree with the best cophenetic correlation
+#' `"best"`, which means the tree with the best cophenetic correlation
 #' coefficient will be chosen.
 #' 
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' \link{partition_metrics}. Should not be used at the same time as
-#' \code{cut_height}.
+#' [partition_metrics]. Should not be used at the same time as
+#' `cut_height`.
 #' 
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
-#' should be cut. Should not be used at the same time as \code{n_clust}.
+#' should be cut. Should not be used at the same time as `n_clust`.
 #' 
 #' @param find_h a boolean indicating if the height of cut should be found for
-#' the requested \code{n_clust}.
+#' the requested `n_clust`.
 #' 
 #' @param h_max a numeric indicating the maximum possible tree height for
-#' the chosen \code{index}.
+#' the chosen `index`.
 #' 
 #' @param h_min a numeric indicating the minimum possible height in the tree for
-#' the chosen \code{index}.
+#' the chosen `index`.
 #' 
 #' @details
-#' The default method for the hierarchical tree is \code{"average"}, i.e.
+#' The default method for the hierarchical tree is `"average"`, i.e.
 #' UPGMA as it has been recommended as the best method to generate a tree
 #' from beta diversity dissimilarity \insertCite{Kreft2010}{bioRgeo}
 #'
 #' Clusters can be obtained by two methods:
 #' \itemize{
-#' \item{Specifying a desired number of clusters in \code{n_clust}}
-#' \item{Specifying one or several heights of cut in \code{cut_height}}}
+#' \item{Specifying a desired number of clusters in `n_clust`}
+#' \item{Specifying one or several heights of cut in `cut_height`}}
 #'
-#' To find an optimal number of clusters, see \code{\link{partition_metrics}}
+#' To find an optimal number of clusters, see [partition_metrics()]
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the \code{algorithm} slot, users can find the following elements:
+#' In the `algorithm` slot, users can find the following elements:
 #'
 #' \itemize{
-#' \item{\code{trials}: a list containing all randomization trials. Each trial
+#' \item{`trials`: a list containing all randomization trials. Each trial
 #' contains the dissimilarity matrix, with site order randomized, the
 #' associated tree and the cophenetic correlation coefficient (Spearman) for
 #' that tree}
-#' \item{\code{final.tree}: a \code{hclust} object containing the final
+#' \item{`final.tree`: a `hclust` object containing the final
 #' hierarchical tree to be used}
-#' \item{\code{final.tree.coph.cor}: the cophenetic correlation coefficient
-#' between the initial dissimilarity matrix and \code{final.tree}}
+#' \item{`final.tree.coph.cor`: the cophenetic correlation coefficient
+#' between the initial dissimilarity matrix and `final.tree`}
 #' }
 #'
 #' @references
@@ -97,7 +97,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso \link{cut_tree} 
+#' @seealso [cut_tree] 
 #' @examples
 #' \dontrun{
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001), 20, 25)

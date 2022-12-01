@@ -27,8 +27,8 @@ netclu_infomap(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link{similarity}} or
-\code{\link{dissimilarity_to_similarity}}.
+\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
@@ -89,12 +89,12 @@ folder (see Details).}
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, users can find the following elements:
 

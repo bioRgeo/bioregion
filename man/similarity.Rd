@@ -25,9 +25,9 @@ memory and \code{method="loops"} is less efficient but less greedy in
 memory.}
 }
 \value{
-A \code{data.frame} with additional class 
+A \code{data.frame} with additional class
 \code{bioRgeo.pairwise.metric}, providing one or several similarity
-metric(s) between each pair of sites. The two first columns represent each 
+metric(s) between each pair of sites. The two first columns represent each
 pair of sites.
 One column per similarity metric provided in \code{metric} and
 \code{formula} except for the metric \emph{abc} and \emph{ABC} that are
@@ -98,7 +98,7 @@ formula = "1 - (b + c) / (a + b + c)")
 \link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}), 
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

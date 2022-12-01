@@ -17,20 +17,20 @@ find_optimal_n(
 )
 }
 \arguments{
-\item{partitions}{a \code{bioRgeo.partition.metrics} object (output from 
-\code{\link{partition_metrics}} or a \code{data.frame} with the first two 
+\item{partitions}{a \code{bioRgeo.partition.metrics} object (output from
+\code{\link[=partition_metrics]{partition_metrics()}} or a \code{data.frame} with the first two
 columns named "K" (partition name) and "n_clusters" (number of clusters) and
 the following columns containing evaluation metrics (numeric values)}
 
 \item{metrics_to_use}{character string or vector of character strings
 indicating upon which metric(s) in \code{partitions} the optimal number of
-clusters should be calculated. Defaults to \code{"all"} which means all 
+clusters should be calculated. Defaults to \code{"all"} which means all
 metrics available in \code{partitions} will be used}
 
 \item{criterion}{character string indicating the criterion to be used to
 identify optimal number(s) of clusters. Available methods currently include
 \code{"elbow"},
-\code{"step_increasing"}, \code{"step_decreasing"}, \code{"cutoff"}, 
+\code{"step_increasing"}, \code{"step_decreasing"}, \code{"cutoff"},
 \code{"mars"}, \code{"min"} or
 \code{"max"}. Default is \code{"elbow"}. See details.}
 
@@ -43,22 +43,22 @@ the most important steps in \code{eval_metric}}
 specify here the number of largest
 steps to keep as cutoffs.}
 
-\item{step_round_above}{a \code{boolean} indicating if the optimal number of 
+\item{step_round_above}{a \code{boolean} indicating if the optimal number of
 clusters should be picked above or below the identified steps. Indeed, each
 step will correspond to a sudden increase or decrease between partition X &
-partition X+1: should the optimal partition be X+1 
-(\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}? 
+partition X+1: should the optimal partition be X+1
+(\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}?
 Defaults to \code{TRUE}}
 
 \item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the
 cutoffs of \code{eval_metric} at which the number of clusters should be
 extracted}
 
-\item{mars_breakpoints}{\code{"all"}, "\code{increasing"} or
- \code{"decreasing"}. If 
-\code{criterion = "mars"}, specify here if you want to extract all break 
-points identified by the mars model (\code{"all"}), or only the breakpoints 
-corresponding to increases (\code{increasing"}) or decreases
+\item{mars_breakpoints}{\code{"all"}, "\verb{increasing"} or
+\code{"decreasing"}. If
+\code{criterion = "mars"}, specify here if you want to extract all break
+points identified by the mars model (\code{"all"}), or only the breakpoints
+corresponding to increases (\verb{increasing"}) or decreases
 \code{"decreasing"}. Defaults to \code{"all"}}
 
 \item{plot}{a boolean indicating if a plot of the first \code{eval_metric}
@@ -79,11 +79,11 @@ the chosen \code{criterion}
 \item{\code{plot}: if requested, the plot will be stored in this slot}}
 }
 \description{
-This function aims at optimizing one or several criteria on a set of 
+This function aims at optimizing one or several criteria on a set of
 ordered partitions. It is usually applied to find one (or several) optimal
-number(s) of clusters on, for example, a hierarchical tree to cut, or a 
-range of partitions obtained from k-means or PAM. Users are advised to be 
-careful if applied in other cases (e.g., partitions which are not ordered in 
+number(s) of clusters on, for example, a hierarchical tree to cut, or a
+range of partitions obtained from k-means or PAM. Users are advised to be
+careful if applied in other cases (e.g., partitions which are not ordered in
 an increasing or decreasing sequence, or partitions which are not related
 to each other).
 }
@@ -91,31 +91,31 @@ to each other).
 \loadmathjax
 
 This function explores the
-relationship evaluation metric ~ number of clusters, and a criterion is 
+relationship evaluation metric ~ number of clusters, and a criterion is
 applied to search an optimal number of clusters.
 
-\bold{Please read the note section about the following criteria.}
+\strong{Please read the note section about the following criteria.}
 
-Foreword: 
+Foreword:
 
 Here we implemented a set of criteria commonly found in the literature or
 recommended in the bioregionalisation literature. Nevertheless, we also
 advocate to move
 beyond the "Search one optimal number of clusters" paradigm, and consider
 investigating "multiple optimal numbers of clusters". Indeed, using only one
-optimal number of clusters may simplify the natural complexity of biological 
-datasets, and, for example, ignore the often hierarchical / nested nature of 
+optimal number of clusters may simplify the natural complexity of biological
+datasets, and, for example, ignore the often hierarchical / nested nature of
 bioregionalisations. Using multiple partitions likely avoids this
 oversimplification bias and may convey more information.
 See, for example, the reanalysis of Holt et al. (2013)
 by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
-and shallow cuts. 
+and shallow cuts.
 
 Following this rationale, several of the criteria
-implemented here can/will return multiple "optimal" numbers of clusters, 
+implemented here can/will return multiple "optimal" numbers of clusters,
 depending on user choices.
 
-\bold{Criteria to find optimal number(s) of clusters}
+\strong{Criteria to find optimal number(s) of clusters}
 \itemize{
 \item{\code{elbow}:
 This method consists in finding one elbow in the evaluation metric curve, as
@@ -137,20 +137,20 @@ Therefore, this is relative
 to the distribution of differences in the evaluation metric over the tested
 partitions. Specify \code{step_quantile} as the quantile cutoff above which
 steps will be selected as most important (by default, 0.99, i.e. the
-largest 1\% steps will be selected).Alternatively, you can also choose to
+largest 1\\% steps will be selected).Alternatively, you can also choose to
 specify the number of top steps to keep, e.g. to keep the largest three
 steps, specify \code{step_level = 3}
 Basically this method will emphasize the
 most important changes in the evaluation metric as a first approximation of
 where important cuts can be chosen.
 
-\bold{Please note that you should choose between \code{increasing_step} and
+**Please note that you should choose between \code{increasing_step} and
 \code{decreasing_step} depending on the nature of your evaluation metrics.
 For example, for metrics that are monotonously decreasing (e.g., endemism metrics
-\code{"avg_endemism" & "tot_endemism"}) with the number of clusters should 
-n_clusters, you should choose \code{decreasing_step}. On the contrary, for 
+\code{"avg_endemism" & "tot_endemism"}) with the number of clusters should
+n_clusters, you should choose \code{decreasing_step}. On the contrary, for
 metrics that are monotonously increasing with the number of clusters (e.g.,
-\code{"pc_distance"}), you should choose \code{increasing_step}. }
+\code{"pc_distance"}), you should choose \code{increasing_step}. **
 }
 \item{\code{cutoffs}:
 This method consists in specifying the cutoff value(s) in the evaluation
@@ -181,7 +181,7 @@ which normally requires decisions from the users, and as such can hardly be
 fully automatized. Users are strongly advised to read the references
 indicated below to look for guidance on how to choose their optimal number(s)
 of clusters. Consider the "optimal" numbers of clusters returned by this
-function as first approximation of the best numbers for your 
+function as first approximation of the best numbers for your
 bioregionalisation.
 }
 \examples{

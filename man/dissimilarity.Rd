@@ -33,7 +33,7 @@ A \code{data.frame} with additional class \code{bioRgeo.pairwise.metric},
 providing one or several dissimilarity
 metric(s) between each pair of sites. The two first columns represent each
 pair of sites.
-One column per dissimilarity metric provided in \code{metric} and 
+One column per dissimilarity metric provided in \code{metric} and
 \code{formula} except for the metric \emph{abc} and \emph{ABC} that
 are stored in three columns (one for each letter).
 }
@@ -93,7 +93,7 @@ formula = "1 - (b + c) / (a + b + c)")
 \insertRef{Baselga2013}{bioRgeo}
 }
 \seealso{
-[bioRgeo::similarity()] \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
+\code{\link[=similarity]{similarity()}} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

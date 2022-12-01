@@ -19,7 +19,7 @@ and an optional third column indicating the weight of the interaction.}
 
 \item{weight}{a \code{boolean} indicating if the weight should be considered}
 
-\item{squared}{a \code{boolean} indicating if the output matrix should but 
+\item{squared}{a \code{boolean} indicating if the output matrix should but
 squared (same nodes in rows and columns).}
 
 \item{symmetrical}{a \code{boolean} indicating if the resulting matrix
@@ -31,7 +31,7 @@ present in net will be preserved.}
 in net (0 by default).}
 }
 \value{
-A \code{matrix} with the first nodes (first column of \code{net}) as 
+A \code{matrix} with the first nodes (first column of \code{net}) as
 rows and the second nodes (second column of \code{net}) as columns. Note
 that if \code{squared = TRUE} the rows and columns have the same number of
 elements corresponding to the concatenation of unique objects in
@@ -40,7 +40,7 @@ can be forced to be symmetrical based on the upper triangular part of the
 matrix.
 }
 \description{
-This function creates a contingency table from a two- or three-columns 
+This function creates a contingency table from a two- or three-columns
 \code{data.frame} where each row represents the interaction between two
 nodes (site and species for example) and an optional third column indicating
 the weight of the interaction (if \code{weight = TRUE}).

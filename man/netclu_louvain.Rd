@@ -23,8 +23,8 @@ netclu_louvain(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link{similarity}} or
-\code{\link{dissimilarity_to_similarity}}.
+\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
@@ -76,16 +76,16 @@ Default to TRUE.}
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects (only if
- \code{algorithm_in_output = TRUE})}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE})}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of \link[igraph]{cluster_louvain}
+find an "communities" object, output of \link[igraph:cluster_louvain]{cluster_louvain}
 if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
 
 \itemize{
@@ -103,7 +103,7 @@ Louvain is a network community detection algorithm proposed in
 \insertCite{Blondel2008}{bioRgeo}. This function proposed two implementations
 of the function (parameter \code{lang}):
 the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
-implementation (\link[igraph]{cluster_louvain}) and the C++ implementation
+implementation (\link[igraph:cluster_louvain]{cluster_louvain}) and the C++ implementation
 (\url{https://sourceforge.net/projects/louvain/}, version 0.3). The latest
 offers the possibility to choose among several quality functions,
 \code{q = 0} for the classical Newman-Girvan criterion (also called
@@ -114,7 +114,7 @@ argument),
 5 for the Deviation to Indetermination criterion, 6 for the Deviation to
 Uniformity criterion, 7 for the Profile Difference criterion, 8	for the
 Shi-Malik criterion (you should specify the value of kappa_min with \code{k}
- argument)
+argument)
 and 9	for the Balanced Modularity criterion.
 
 The C++ version of Louvain is based on the version 0.3

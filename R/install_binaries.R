@@ -4,12 +4,12 @@
 #' functions. It also checks if the files have the permissions to be executed as
 #' programs. It finally tests if the executable binary files are running properly.
 #'
-#' @param binpath a \code{character} indicating the path to the folder that will
+#' @param binpath a `character` indicating the path to the folder that will
 #' host the 'bin' folder containing the executable binary files (bioRgeo's
 #' package by default, if you use a different folder please be sure to update
-#' the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and
-#' \link{netclu_oslom}).
-#' @param infomap_version a \code{character} vector indicating the Infomap
+#' the `binpath` in [netclu_infomap], [netclu_louvain] and
+#' [netclu_oslom]).
+#' @param infomap_version a `character` vector indicating the Infomap
 #' version(s) to install.
 #' @note
 #' Only the Infomap version 2.1.0 and 2.6.0 are available for now.

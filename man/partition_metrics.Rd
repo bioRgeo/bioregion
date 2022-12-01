@@ -18,7 +18,7 @@ partition_metrics(
 \item{cluster_object}{tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object}
 
 \item{dissimilarity}{a \code{dist} object or a \code{bioRgeo.pairwise.metric} object (output
-from \code{\link{similarity_to_dissimilarity}}). Necessary if \code{eval_metric}
+from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if \code{eval_metric}
 includes \code{pc_distance} and \code{tree} is not a
 \code{bioRgeo.hierar.tree} object}
 
@@ -26,22 +26,22 @@ includes \code{pc_distance} and \code{tree} is not a
 index to be used in case \code{dist} is a \code{data.frame} with multiple
 dissimilarity indices}
 
-\item{net}{the species-site network (i.e., bipartite network). 
+\item{net}{the species-site network (i.e., bipartite network).
 Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}}
 
 \item{site_col}{name or number for the column of site nodes
-(i.e. primary nodes). 
+(i.e. primary nodes).
 Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}}
 
 \item{species_col}{name or number for the column of species nodes
-(i.e. feature nodes). 
+(i.e. feature nodes).
 Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}}
 
 \item{eval_metric}{character string or vector of character strings indicating
- metric(s) to be calculated to
+metric(s) to be calculated to
 investigate the effect of different number of clusters. Available options:
 \code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
 \code{"tot_endemism"}}
@@ -57,15 +57,15 @@ for all explored numbers of clusters
 }
 }
 \description{
-This function aims at calculating metrics for one or several partitions, 
-usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_} 
+This function aims at calculating metrics for one or several partitions,
+usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_}
 functions. Metrics may require the users to provide either a similarity or
 dissimilarity matrix, or to provide the initial species-site table.
 }
 \details{
 \loadmathjax
 
-\bold{Evaluation metrics:}
+\strong{Evaluation metrics:}
 \itemize{
 \item{\code{pc_distance}: this metric is the method used by
 \insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of dissimilarity
@@ -90,7 +90,7 @@ groups and within groups with the following formula:
 \mjeqn{R = (r_B - r_W)/(N (N-1) / 4)}{R = (r_B - r_W)/(N (N-1) / 4)},
 where \mjeqn{r_B}{r_B} and \mjeqn{r_W}{r_W} are the average ranks
 between and within clusters respectively, and \mjeqn{N}{N} is the total
- number of sites.
+number of sites.
 Note that the function does not estimate the significance here, it only
 computes the statistic - for significance testing see
 \link[vegan:anosim]{vegan::anosim()}}.
@@ -99,11 +99,11 @@ endemism in clusters as
 recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 \mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
 
- where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
+where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
 \mjeqn{S_i}{Si} is the number of
 species in cluster i, and K the maximum number of clusters.
 }
-\item{\code{tot_endemism}: this metric is the total 
+\item{\code{tot_endemism}: this metric is the total
 endemism across all clusters, as
 recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}

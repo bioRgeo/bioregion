@@ -16,8 +16,8 @@ netclu_leadingeigen(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link{similarity}} or
-\code{\link{dissimilarity_to_similarity}}.
+\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
@@ -47,16 +47,16 @@ of \code{communities} should be returned in the output (see Value).}
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects (only if
- \code{algorithm_in_output = TRUE})}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE})}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of \link[igraph]{cluster_leading_eigen}.
+find an "communities" object, output of \link[igraph:cluster_leading_eigen]{cluster_leading_eigen}.
 }
 \description{
 This function finds communities in a (un)weighted undirected network based on
@@ -66,7 +66,7 @@ leading eigenvector of the community matrix.
 This function is based on leading eigenvector of the community matrix
 \insertCite{Newman2006}{bioRgeo} as implemented in the
 \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
-package (\link[igraph]{cluster_leading_eigen}).
+package (\link[igraph:cluster_leading_eigen]{cluster_leading_eigen}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite

@@ -3,23 +3,23 @@
 #' This function performs non hierarchical
 #' clustering on the basis of dissimilarity with a k-means analysis.
 #'
-#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
-#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
-#'  If a \code{data.frame} is used, the first two 
+#' @param dissimilarity the output object from [dissimilarity()] or
+#'  [similarity_to_dissimilarity()], or a `dist` object. 
+#'  If a `data.frame` is used, the first two 
 #' columns represent pairs of sites (or any pair of nodes), and the next column(s)
 #' are the dissimilarity indices. 
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of
-#'  \code{dissimilarity} is used.
-#' @param n_clust an \code{integer} or a \code{vector} of \code{integers}
+#'  `dissimilarity` is used.
+#' @param n_clust an `integer` or a `vector` of `integers`
 #' specifying the requested number(s) of clusters
-#' @param iter_max an \code{integer} specifying the maximum number of
-#' iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})
-#' @param nstart an \code{integer} specifying how many random sets of
-#' \code{n_clust} should be selected as starting points for the kmeans analysis
-#' (see \link[stats:kmeans]{stats::kmeans()})
-#' @param algorithm a \code{character string} specifying the algorithm to use for
-#' kmean (see \link[stats:kmeans]{stats::kmeans()})
+#' @param iter_max an `integer` specifying the maximum number of
+#' iterations for the kmeans method (see [stats::kmeans()][stats::kmeans])
+#' @param nstart an `integer` specifying how many random sets of
+#' `n_clust` should be selected as starting points for the kmeans analysis
+#' (see [stats::kmeans()][stats::kmeans])
+#' @param algorithm a `character string` specifying the algorithm to use for
+#' kmean (see [stats::kmeans()][stats::kmeans])
 #'
 #' @details
 #' This method partitions the data into k groups
@@ -28,22 +28,22 @@
 #'  on dissimilarity/beta-diversity metrics, because these distances are not
 #'  euclidean. Therefore, it requires first to transform the dissimilarity matrix
 #'  with a Principal Coordinate Analysis (using the function
-#'  \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
+#'  [ape::pcoa()][ape::pcoa]), and then applying k-means on the coordinates
 #'  of points in the PCoA. Because this makes an additional transformation of
 #'  the initial matrix of dissimilarity, the partitioning around medoids method
-#'  should be preferred (\code{\link{nhclu_pam}})
+#'  should be preferred ([nhclu_pam()])
 #'
-#' @seealso \link{nhclu_pam} 
+#' @seealso [nhclu_pam] 
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' @export
 #' @author
@@ -51,7 +51,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso \link{cut_tree} 
+#' @seealso [cut_tree] 
 #' @examples
 #' dissim <- dissimilarity(vegemat, metric = "all")
 #' 

@@ -3,15 +3,15 @@
 #' This function finds communities in a (un)weighted undirected network based on
 #' the Louvain algorithm.
 #'
-#' @param net the output object from \code{\link{similarity}} or
-#' \code{\link{dissimilarity_to_similarity}}.
-#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' @param net the output object from [similarity()] or
+#' [dissimilarity_to_similarity()].
+#' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
-#' @param weight a \code{boolean} indicating if the weights should be considered
+#' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' @param index name or number of the column to use as weight. By default,
-#' the third column name of \code{net} is used.
+#' the third column name of `net` is used.
 #' @param lang a string indicating what version of Louvain should be used
 #' (igraph or Cpp, see Details).
 #' @param q the quality function used to compute partition of the graph
@@ -26,89 +26,89 @@
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
-#' @param return_node_type a \code{character} indicating what types of nodes
+#' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (\code{keep_nodes_type="both"} by default).
-#' @param delete_temp a \code{boolean} indicating if the temporary folder should
+#' (`keep_nodes_type="both"` by default).
+#' @param delete_temp a `boolean` indicating if the temporary folder should
 #' be removed (see Details).
-#' @param path_temp a \code{character} indicating the path to the temporary
+#' @param path_temp a `character` indicating the path to the temporary
 #' folder (see Details).
-#' @param binpath a \code{character} indicating the path to the bin folder
-#' (see \link{install_binaries} and Details).
-#' @param algorithm_in_output a \code{boolean} indicating if the original output
-#' of \code{communities} should be returned in the output (see Value).
+#' @param binpath a `character` indicating the path to the bin folder
+#' (see [install_binaries] and Details).
+#' @param algorithm_in_output a `boolean` indicating if the original output
+#' of `communities` should be returned in the output (see Value).
 #' Default to TRUE.
 #' @export
 #' @details
 #' Louvain is a network community detection algorithm proposed in
 #' \insertCite{Blondel2008}{bioRgeo}. This function proposed two implementations
-#' of the function (parameter \code{lang}):
-#' the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
-#' implementation (\link[igraph]{cluster_louvain}) and the C++ implementation
-#' (\url{https://sourceforge.net/projects/louvain/}, version 0.3). The latest
+#' of the function (parameter `lang`):
+#' the [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' implementation ([cluster_louvain][igraph::cluster_louvain]) and the C++ implementation
+#' (<https://sourceforge.net/projects/louvain/>, version 0.3). The latest
 #' offers the possibility to choose among several quality functions,
-#' \code{q = 0} for the classical Newman-Girvan criterion (also called
+#' `q = 0` for the classical Newman-Girvan criterion (also called
 #' "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the Owsinski-Zadrozny
-#' criterion (you should specify the value of the parameter with the \code{c}
+#' criterion (you should specify the value of the parameter with the `c`
 #' argument),
 #' 3	for the Goldberg Density criterion, 4	for the A-weighted Condorcet criterion,
 #' 5 for the Deviation to Indetermination criterion, 6 for the Deviation to
 #' Uniformity criterion, 7 for the Profile Difference criterion, 8	for the
-#' Shi-Malik criterion (you should specify the value of kappa_min with \code{k}
+#' Shi-Malik criterion (you should specify the value of kappa_min with `k`
 #'  argument)
 #' and 9	for the Balanced Modularity criterion.
 #'
 #' The C++ version of Louvain is based on the version 0.3
-#' (\url{https://sourceforge.net/projects/louvain/}). This function needs
+#' (<https://sourceforge.net/projects/louvain/>). This function needs
 #' executable binary files to run. They can be installed with
-#' \link{install_binaries}. If you set the path to the folder that will host the
-#' bin folder manually while running \link{install_binaries} please make sure to
-#' set \code{binpath} accordingly.
+#' [install_binaries]. If you set the path to the folder that will host the
+#' bin folder manually while running [install_binaries] please make sure to
+#' set `binpath` accordingly.
 #'
 #' The C++ version of Louvain generates temporary folders and/or files that are
-#' stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp
+#' stored in the `path_temp` folder ("louvain_temp" with an unique timestamp
 #' located in the working directory by default). This temporary folder is removed
-#' by default (\code{delete_temp = TRUE}).
+#' by default (`delete_temp = TRUE`).
 #'
 #' @note
 #' Although this algorithm was not primarily designed to deal with bipartite
 #' network, it is possible to consider the bipartite network as unipartite
-#' network (\code{bipartite = TRUE}).
+#' network (`bipartite = TRUE`).
 #'
 #' Do not forget to indicate which of the first two columns is
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
-#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to
+#' `return_node_type` equal to `"both"` to keep both types of nodes,
+#' `"sites"` to preserve only the sites nodes and `"species"` to
 #' preserve only the species nodes.
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects (only if
-#'  \code{algorithm_in_output = TRUE})}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#'  `algorithm_in_output = TRUE`)}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-#' find an "communities" object, output of \link[igraph]{cluster_louvain}
-#' if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
+#' find an "communities" object, output of [cluster_louvain][igraph::cluster_louvain]
+#' if `lang = "igraph"` and the following element if `lang = "Cpp"`:
 #'
 #' \itemize{
-#' \item{\code{cmd}: the command line use to run Louvain}
-#' \item{\code{version}: the Louvain version}
-#' \item{\code{web}: Louvain's website}
+#' \item{`cmd`: the command line use to run Louvain}
+#' \item{`version`: the Louvain version}
+#' \item{`web`: Louvain's website}
 #' }.
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
+#' @seealso [install_binaries], [netclu_infomap], [netclu_oslom]
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)

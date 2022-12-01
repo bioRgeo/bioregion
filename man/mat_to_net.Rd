@@ -11,7 +11,7 @@ mat_to_net(mat, weight = FALSE, remove_zeroes = TRUE)
 
 \item{weight}{a \code{boolean} indicating if the value are weights.}
 
-\item{remove_zeroes}{a \code{boolean} determining whether interactions with 
+\item{remove_zeroes}{a \code{boolean} determining whether interactions with
 weight equal to 0 should be removed from the output.}
 }
 \value{
@@ -21,7 +21,7 @@ interaction.
 }
 \description{
 This function creates a two- or three-columns \code{data.frame} where
-each row represents the interaction between two nodes (site and species for 
+each row represents the interaction between two nodes (site and species for
 example) and an optional third column indicating the weight of the
 interaction (if \code{weight = TRUE}) from a contingency table (sites as
 rows and species as columns for example).

@@ -1,32 +1,32 @@
 #' Create a contingency table from a data.frame
 #'
 #' This function creates a contingency table from a two- or three-columns 
-#' \code{data.frame} where each row represents the interaction between two
+#' `data.frame` where each row represents the interaction between two
 #' nodes (site and species for example) and an optional third column indicating
-#' the weight of the interaction (if \code{weight = TRUE}).
+#' the weight of the interaction (if `weight = TRUE`).
 #'
-#' @param net a two- or three-columns \code{data.frame} where each row
+#' @param net a two- or three-columns `data.frame` where each row
 #' represents the interaction between two nodes (site and species for example)
 #' and an optional third column indicating the weight of the interaction.
 #' 
-#' @param weight a \code{boolean} indicating if the weight should be considered
+#' @param weight a `boolean` indicating if the weight should be considered
 #' 
-#' @param squared a \code{boolean} indicating if the output matrix should but 
+#' @param squared a `boolean` indicating if the output matrix should but 
 #' squared (same nodes in rows and columns).
 #' 
-#' @param symmetrical a \code{boolean} indicating if the resulting matrix
-#' should be symmetrical (only if \code{squared = TRUE}).
+#' @param symmetrical a `boolean` indicating if the resulting matrix
+#' should be symmetrical (only if `squared = TRUE`).
 #' Note that different weights associated with two opposite pairs already
 #' present in net will be preserved.
 #' 
 #' @param missing_value the value to assign to the pairs of nodes not present
 #' in net (0 by default).
 #' 
-#' @return A \code{matrix} with the first nodes (first column of \code{net}) as 
-#' rows and the second nodes (second column of \code{net}) as columns. Note
-#' that if \code{squared = TRUE} the rows and columns have the same number of
+#' @return A `matrix` with the first nodes (first column of `net`) as 
+#' rows and the second nodes (second column of `net`) as columns. Note
+#' that if `squared = TRUE` the rows and columns have the same number of
 #' elements corresponding to the concatenation of unique objects in
-#' \code{net}'s first and second columns. If \code{squared = TRUE} the matrix
+#' `net`'s first and second columns. If `squared = TRUE` the matrix
 #' can be forced to be symmetrical based on the upper triangular part of the
 #' matrix.
 #' 
@@ -35,7 +35,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
-#' @seealso \link{mat_to_net}
+#' @seealso [mat_to_net]
 #' 
 #' @examples
 #' \dontrun{

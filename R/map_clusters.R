@@ -3,22 +3,22 @@
 #' This plot function can be used to visualise bioregions based on a 
 #' bioRgeo.clusters object combined with a geometry (sf objects). 
 #'
-#' @param clusters an object of class \code{bioRgeo.clusters} or a 
-#' \code{data.frame}. If a \code{data.frame} is used, the first column should
+#' @param clusters an object of class `bioRgeo.clusters` or a 
+#' `data.frame`. If a `data.frame` is used, the first column should
 #'  represent the sites' ID, and the next column(s) the clusters.
-#' @param geometry a spatial object that can be handled by the \code{sf}
+#' @param geometry a spatial object that can be handled by the `sf`
 #' package. The first attribute should correspond to the sites' ID (see Details).
-#' @param write_clusters a \code{boolean} indicating if the \code{clusters} 
-#' should be added in \code{geometry}.
-#' @param plot a \code{boolean} indicating if the plot should be drawn.
+#' @param write_clusters a `boolean` indicating if the `clusters` 
+#' should be added in `geometry`.
+#' @param plot a `boolean` indicating if the plot should be drawn.
 #' @export
 #' @details
-#' The \code{clusters} and \code{geometry} site IDs should correspond. They should
-#' have the same type (i.e. \code{character} is cluster is a 
-#' \code{bioRgeo.clusters} object) and the site of \code{clusters} should be 
-#' included in the sites of \code{geometry}. 
-#' @return  One or several maps of bioregions if \code{plot = TRUE} and the 
-#' geometry with additional clusters' attributes if \code{write_clusters = TRUE}. 
+#' The `clusters` and `geometry` site IDs should correspond. They should
+#' have the same type (i.e. `character` is cluster is a 
+#' `bioRgeo.clusters` object) and the site of `clusters` should be 
+#' included in the sites of `geometry`. 
+#' @return  One or several maps of bioregions if `plot = TRUE` and the 
+#' geometry with additional clusters' attributes if `write_clusters = TRUE`. 
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

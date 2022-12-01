@@ -49,16 +49,16 @@ Default to TRUE.}
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects (only if
- \code{algorithm_in_output = TRUE})}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE})}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an object of class "moduleWeb", output of \link[bipartite]{computeModules}.
+find an object of class "moduleWeb", output of \link[bipartite:computeModules]{computeModules}.
 }
 \description{
 This function takes a bipartite weighted graph and computes modules by applying
@@ -68,7 +68,7 @@ Newman’s modularity measure in a bipartite weighted version to it.
 This function is based on the modularity optimization algorithm provided by
 Stephen Beckett \insertCite{Beckett2016}{bioRgeo} as implemented in the
 \href{https://cran.r-project.org/web/packages/bipartite/index.html}{bipartite}
-package (\link[bipartite]{computeModules}).
+package (\link[bipartite:computeModules]{computeModules}).
 }
 \note{
 Beckett has been designed to deal with weighted bipartite networks. Note that

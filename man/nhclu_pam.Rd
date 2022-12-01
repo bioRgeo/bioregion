@@ -15,15 +15,15 @@ nhclu_pam(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link{dissimilarity}} or
- \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
- If a \code{data.frame} is used, the first two 
+\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
+If a \code{data.frame} is used, the first two
 columns represent pairs of sites (or any pair of nodes), and the next column(s)
 are the dissimilarity indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default, 
+\item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of
- \code{dissimilarity} is used.}
+\code{dissimilarity} is used.}
 
 \item{n_clust}{an \code{integer} or a \code{vector} of \code{integers}
 specifying the requested number(s) of clusters}
@@ -45,12 +45,12 @@ should be returned from the \link[cluster:pam]{cluster::pam()} function
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 }
 \description{
 This function performs non hierarchical
@@ -58,12 +58,12 @@ clustering on the basis of dissimilarity with partitioning around medoids.
 }
 \details{
 This method partitions data into
- the chosen number of cluster on the basis of the input dissimilarity matrix.
- It is more robust than k-means because it minimizes the sum of dissimilarity
- between cluster centres and points assigned to the cluster -
- whereas the k-means approach minimizes the sum of squared euclidean
- distances (thus k-means cannot be applied directly on the input dissimilarity
- matrix if the distances are not euclidean).
+the chosen number of cluster on the basis of the input dissimilarity matrix.
+It is more robust than k-means because it minimizes the sum of dissimilarity
+between cluster centres and points assigned to the cluster -
+whereas the k-means approach minimizes the sum of squared euclidean
+distances (thus k-means cannot be applied directly on the input dissimilarity
+matrix if the distances are not euclidean).
 }
 \examples{
 dissim <- dissimilarity(vegemat, metric = "all")

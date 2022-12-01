@@ -3,59 +3,59 @@
 #' This function finds communities in a (un)weighted undirected network based on
 #' propagating labels.
 #'
-#' @param net the output object from \code{\link{similarity}} or
-#' \code{\link{dissimilarity_to_similarity}}.
-#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' @param net the output object from [similarity()] or
+#' [dissimilarity_to_similarity()].
+#' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
-#' @param weight a \code{boolean} indicating if the weights should be considered
+#' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' @param index name or number of the column to use as weight. By default,
-#' the third column name of \code{net} is used.
-#' @param bipartite a \code{boolean} indicating if the network is bipartite
+#' the third column name of `net` is used.
+#' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Details).
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
-#' @param return_node_type a \code{character} indicating what types of nodes
+#' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (\code{keep_nodes_type="both"} by default).
-#' @param algorithm_in_output a \code{boolean} indicating if the original output
-#' of \code{communities} should be returned in the output (see Value).
+#' (`keep_nodes_type="both"` by default).
+#' @param algorithm_in_output a `boolean` indicating if the original output
+#' of `communities` should be returned in the output (see Value).
 #'
 #' @export
 #' @details
 #' This function is based on propagating labels \insertCite{Raghavan2007}{bioRgeo}
-#' as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
-#' package (\link[igraph]{cluster_label_prop}).
+#' as implemented in the [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' package ([cluster_label_prop][igraph::cluster_label_prop]).
 #'
 #' @note
 #' Although this algorithm was not primarily designed to deal with bipartite
 #' network, it is possible to consider the bipartite network as unipartite
-#' network (\code{bipartite = TRUE}).
+#' network (`bipartite = TRUE`).
 #'
 #' Do not forget to indicate which of the first two columns is
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
-#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to
+#' `return_node_type` equal to `"both"` to keep both types of nodes,
+#' `"sites"` to preserve only the sites nodes and `"species"` to
 #' preserve only the species nodes.
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects (only if
-#'  \code{algorithm_in_output = TRUE})}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#'  `algorithm_in_output = TRUE`)}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-#' find an "communities" object, output of \link[igraph]{cluster_label_prop}.
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
+#' find an "communities" object, output of [cluster_label_prop][igraph::cluster_label_prop].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

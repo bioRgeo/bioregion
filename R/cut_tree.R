@@ -3,44 +3,44 @@
 #' This functions is designed to work on a hierarchical tree and cut it 
 #' at user-selected 
 #' heights.
-#' It works on either outputs from \code{hclu_hierarclust} or \code{hclust}
+#' It works on either outputs from `hclu_hierarclust` or `hclust`
 #' objects. It cuts the tree for the chosen number(s)
 #' of clusters or selected height(s). It also includes a procedure to
 #' automatically return the height of cut for the chosen number(s) of clusters.
 #'
-#' @param tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
+#' @param tree a `bioRgeo.hierar.tree` or a `hclust` object
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' \code{\link{partition_metrics}}. Should not be used at the same time as
-#' \code{cut_height}
+#' [partition_metrics()]. Should not be used at the same time as
+#' `cut_height`
 #' @param cut_height a numeric vector indicating the height(s) at which the tree
-#' should be cut. Should not be used at the same time as \code{n_clust} or
-#' \code{optim_method}
+#' should be cut. Should not be used at the same time as `n_clust` or
+#' `optim_method`
 #' @param find_h a boolean indicating if the height of cut should be found for
-#' the requested \code{n_clust}
+#' the requested `n_clust`
 #' @param h_max a numeric indicating the maximum possible tree height for
-#' finding the height of cut when \code{find_h = TRUE}
+#' finding the height of cut when `find_h = TRUE`
 #' @param h_min a numeric indicating the minimum possible height in the tree for
-#' finding the height of cut when \code{find_h = TRUE}
+#' finding the height of cut when `find_h = TRUE`
 #' @param dynamic_tree_cut a boolean indicating if the dynamic tree cut method
-#' should be used, in which case \code{n_clust} & \code{cut_height} are ignored
+#' should be used, in which case `n_clust` & `cut_height` are ignored
 #' @param dynamic_method a character vector indicating the method to be used
-#' to dynamically cut the tree: either \code{"tree"} (clusters searched only
-#' in the tree) or \code{"hybrid"} (clusters searched on both tree and dissimilarity
+#' to dynamically cut the tree: either `"tree"` (clusters searched only
+#' in the tree) or `"hybrid"` (clusters searched on both tree and dissimilarity
 #' matrix)
 #' @param dynamic_minClusterSize an integer indicating the minimum cluster size
 #' to use in the dynamic tree cut method (see
-#' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()})
-#' @param dissimilarity only useful if \code{dynamic_method = "hybrid"}.
-#' Provide here the dissimilarity \code{data.frame} used to build the \code{tree}
+#' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic])
+#' @param dissimilarity only useful if `dynamic_method = "hybrid"`.
+#' Provide here the dissimilarity `data.frame` used to build the `tree`
 #' @param ... further arguments to be passed to
-#' \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to
+#' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic] to
 #' customize the dynamic tree cut method.
 #'
 #' @details
 #' The function can cut the tree with two main methods. First, it can cut
-#' the entire tree at the same height (either specified by \code{cut_height} or
-#' automatically defined for the chosen \code{n_clust}). Second, it can use
+#' the entire tree at the same height (either specified by `cut_height` or
+#' automatically defined for the chosen `n_clust`). Second, it can use
 #' the dynamic tree cut method \insertRef{Langfelder2008}{bioRgeo}, in which
 #' case clusters are detected with an adaptive method based on the shape of
 #' branches in the tree (thus cuts happen at multiple heights depending on
@@ -49,17 +49,17 @@
 #' The dynamic tree cut method has two variants.
 #' \itemize{
 #' \item{The tree-based only variant
-#' (\code{dynamic_method = "tree"}) is a top-down approach which relies only
+#' (`dynamic_method = "tree"`) is a top-down approach which relies only
 #' on the tree and follows the order of clustered objects on it}
 #' \item{The hybrid variant
-#' (\code{dynamic_method = "hybrid"}) is a bottom-up approach which relies on
+#' (`dynamic_method = "hybrid"`) is a bottom-up approach which relies on
 #' both the tree and the dissimilarity matrix to build clusters on the basis of
 #' dissimilarity information among sites. This method is useful to detect
 #' outlying members in each cluster.}
 #' }
 #'
 #' @note
-#' The argument \code{find_h} is ignored if \code{dynamic_tree_cut = TRUE},
+#' The argument `find_h` is ignored if `dynamic_tree_cut = TRUE`,
 #' because heights of cut cannot be estimated in this case.
 #'
 #' @author
@@ -67,12 +67,12 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
-#' @return If \code{tree} is an output from \code{\link{hclu_hierarclust}},
+#' @return If `tree` is an output from [hclu_hierarclust()],
 #' then the same object
-#' is returned with content updated (i.e., \code{args} and \code{clusters}). If
-#' \code{tree} is a \code{hclust} object, then a \code{data.frame} containing
+#' is returned with content updated (i.e., `args` and `clusters`). If
+#' `tree` is a `hclust` object, then a `data.frame` containing
 #' the clusters is returned.
-#' @seealso \link{hclu_hierarclust}
+#' @seealso [hclu_hierarclust]
 #' 
 #' @examples
 #' \dontrun{

@@ -7,8 +7,8 @@
 \format{
 A
 \describe{
-  \item{ID}{Unique site identifier.}
-  \item{geometry}{Geometry of the site.}
+\item{ID}{Unique site identifier.}
+\item{geometry}{Geometry of the site.}
 }
 }
 \source{

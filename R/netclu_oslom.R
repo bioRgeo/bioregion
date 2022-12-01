@@ -1,17 +1,17 @@
 #' OSLOM community finding
 #'
 #' This function finds communities in a (un)weighted (un)directed network based
-#' on the OSLOM algorithm (\url{http://oslom.org/}, version 2.4).
+#' on the OSLOM algorithm (<http://oslom.org/>, version 2.4).
 #'
-#' @param net the output object from \code{\link{similarity}} or
-#' \code{\link{dissimilarity_to_similarity}}.
-#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' @param net the output object from [similarity()] or
+#' [dissimilarity_to_similarity()].
+#' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
-#' @param weight a \code{boolean} indicating if the weights should be considered
+#' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' @param index name or number of the column to use as weight. By default,
-#' the third column name of \code{net} is used.
+#' the third column name of `net` is used.
 #' @param reassign a string indicating if the nodes belonging to several
 #' community should be reassign and what method should be used (see Note).
 #' @param r the number of runs for the first hierarchical level (10 by default).
@@ -23,54 +23,54 @@
 #' @param cp kind of resolution parameter used to decide between taking some
 #' modules or their union (default value is 0.5, bigger value leads to bigger
 #' clusters).
-#' @param directed a \code{boolean} indicating if the network is directed (from
+#' @param directed a `boolean` indicating if the network is directed (from
 #' column 1 to column 2).
-#' @param bipartite a \code{boolean} indicating if the network is bipartite
+#' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Details).
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
-#' @param return_node_type a \code{character} indicating what types of nodes
+#' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (\code{keep_nodes_type="both"} by default).
-#' @param delete_temp a \code{boolean} indicating if the temporary folder should
+#' (`keep_nodes_type="both"` by default).
+#' @param delete_temp a `boolean` indicating if the temporary folder should
 #' be removed (see Details).
-#' @param path_temp a \code{character} indicating the path to the temporary
+#' @param path_temp a `character` indicating the path to the temporary
 #' folder (see Details).
-#' @param binpath a \code{character} indicating the path to the bin folder
-#' (see \link{install_binaries} and Details).
+#' @param binpath a `character` indicating the path to the bin folder
+#' (see [install_binaries] and Details).
 #' @export
 #' @details
 #' OSLOM is a network community detection algorithm proposed in
 #' \insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
 #' (overlapping) communities in (un)weighted and (un)directed networks.
 #'
-#' This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
-#' This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-#' the folder that will host the bin folder  manually while running \link{install_binaries} please make sure to set \code{binpath}
+#' This function is based on the 2.4 C++ version of OSLOM (<http://www.oslom.org/software.htm>).
+#' This function needs executable files to run. They can be installed with [install_binaries]. If you set the path to
+#' the folder that will host the bin folder  manually while running [install_binaries] please make sure to set `binpath`
 #' accordingly.
 #'
-#' The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
+#' The C++ version of OSLOM generates temporary folders and/or files that are stored in the `path_temp` folder
 #' (folder "oslom_temp" in the working directory by default). This temporary folder is removed by default
-#' (\code{delete_temp = TRUE}).
+#' (`delete_temp = TRUE`).
 #'
 #' @note
 #' Although this algorithm was not primarily designed to deal with bipartite
 #' network, it is possible to consider the bipartite network as unipartite
-#' network (\code{bipartite = TRUE}). Do not forget to indicate which of the
+#' network (`bipartite = TRUE`). Do not forget to indicate which of the
 #' first two columns is dedicated to the site nodes (i.e. primary nodes) and
-#' species nodes (i.e.feature nodes) using the arguments \code{site_col} and
-#' \code{species_col}. The type of nodes returned in the output can be chosen
-#' with the argument \code{return_node_type} equal to \code{"both"} to keep both
-#' types of nodes, \code{"sites"} to preserve only the sites nodes and
-#' \code{"species"} to preserve only the species nodes.
+#' species nodes (i.e.feature nodes) using the arguments `site_col` and
+#' `species_col`. The type of nodes returned in the output can be chosen
+#' with the argument `return_node_type` equal to `"both"` to keep both
+#' types of nodes, `"sites"` to preserve only the sites nodes and
+#' `"species"` to preserve only the species nodes.
 #'
 #' Since OSLOM potentially returns overlapping communities we propose two methods
-#' to reassign the 'overlapping' nodes randomly \code{reassign = 'random'} or
-#' based on the closest candidate community \code{reassign = 'simil'}
+#' to reassign the 'overlapping' nodes randomly `reassign = 'random'` or
+#' based on the closest candidate community `reassign = 'simil'`
 #' (only for weighted networks, in this case the closest candidate community is
-#' determined with the average similarity). By default \code{reassign = 'no'}
+#' determined with the average similarity). By default `reassign = 'no'`
 #' and all the information will be provided. The number of partitions will depend
 #' on the number of overlapping modules (up to three). The suffix '_semel',
 #' '_bis' and '_ter' are added to the column names. The first partition ('_semel')
@@ -79,28 +79,28 @@
 #' (i.e. non-overlapping nodes).
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the \code{algorithm} slot, users can find the following elements:
+#' In the `algorithm` slot, users can find the following elements:
 #'
 #' \itemize{
-#' \item{\code{cmd}: the command line use to run OSLOM}
-#' \item{\code{version}: the OSLOM version}
-#' \item{\code{web}: the OSLOM's web site}
+#' \item{`cmd`: the command line use to run OSLOM}
+#' \item{`version`: the OSLOM version}
+#' \item{`web`: the OSLOM's web site}
 #' }
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{install_binaries}, \link{netclu_infomap}, \link{netclu_louvain}
+#' @seealso [install_binaries], [netclu_infomap], [netclu_louvain]
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)

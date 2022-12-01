@@ -4,29 +4,29 @@
 #' clustering on the basis of dissimilarity with Density-based Spatial Clustering of
 #'  Applications with Noise (DBSCAN)
 #'
-#' @param dissimilarity the output object from \code{\link{dissimilarity}} or
-#'  \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
-#'  If a \code{data.frame} is used, the first two 
+#' @param dissimilarity the output object from [dissimilarity()] or
+#'  [similarity_to_dissimilarity()], or a `dist` object. 
+#'  If a `data.frame` is used, the first two 
 #' columns represent pairs of sites (or any pair of nodes), and the next column(s)
 #' are the dissimilarity indices. 
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of
-#'  \code{dissimilarity} is used.
-#' @param minPts a \code{numeric} value or a vector of \code{numeric} values
+#'  `dissimilarity` is used.
+#' @param minPts a `numeric` value or a vector of `numeric` values
 #'  specifying the minPts argument
-#' of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
+#' of [dbscan::dbscan()][dbscan::dbscan]). minPts is the minimum number of
 #' points to form a dense region. By default, it is set to the
-#' natural logarithm of the number of sites in \code{dissimilarity}. See details
+#' natural logarithm of the number of sites in `dissimilarity`. See details
 #' for guidance on choosing this parameter.
-#' @param eps a \code{numeric} value or a vector of \code{numeric} values
+#' @param eps a `numeric` value or a vector of `numeric` values
 #' specifying the eps argument
-#' of \link[dbscan:dbscan]{dbscan::dbscan()}). eps specifies how similar points
+#' of [dbscan::dbscan()][dbscan::dbscan]). eps specifies how similar points
 #' should be to each other to be considered a part of a cluster. See details
 #' for guidance on choosing this parameter.
-#' @param plot a \code{boolean} indicating if the  k-nearest
+#' @param plot a `boolean` indicating if the  k-nearest
 #' neighbour distance plot should be plotted.
-#' @param ... you can add here further arguments to be passed to \code{dbscan()}
-#' (see \link[dbscan:dbscan]{dbscan::dbscan()})
+#' @param ... you can add here further arguments to be passed to `dbscan()`
+#' (see [dbscan::dbscan()][dbscan::dbscan])
 #'
 #' @details
 #' The dbscan (Density-based spatial clustering of
@@ -35,20 +35,20 @@
 #'  main arguments, minPts, which stands for the minimum number of points to
 #'  identify a core, and eps, which is the radius to find neighbors.
 #'  minPts and eps should be defined by the user, which is not straightforward.
-#'  We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
+#'  We recommend reading the help in [dbscan::dbscan()][dbscan::dbscan])
 #'  to learn how to set these arguments, as well as the paper
 #'  \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
 #'  are points which were deemed as noise by the algorithm.
 #'
-#'  By default the function will select values for \code{minPts} and
-#'  \code{eps}. However, these values can be inadequate and the users is advised
+#'  By default the function will select values for `minPts` and
+#'  `eps`. However, these values can be inadequate and the users is advised
 #'  to tune these values by running the function multiple times.
 #'
-#'  \bold{Choosing minPts:} how many points should be necessary to make a cluster?
+#'  **Choosing minPts:** how many points should be necessary to make a cluster?
 #'  i.e., what is the minimum number of sites you expect in a bioregion? Set a
 #'  value sufficiently large for your dataset and your expectations.
 #'
-#'  \bold{Choosing eps:} how similar should sites be in a cluster?  If eps is
+#'  **Choosing eps:** how similar should sites be in a cluster?  If eps is
 #'  too small, then a majority of points will be considered to distinct and will
 #'  not be clustered at all (i.e., considered as noise)? If the value is too high,
 #'  then clusters will merge together.
@@ -62,21 +62,21 @@
 #'  defining eps. Then, adjust depending on your clustering results.
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso \link{hclu_optics} 
+#' @seealso [hclu_optics] 
 #' 
 #' @export
 #'

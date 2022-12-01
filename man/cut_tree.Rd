@@ -23,7 +23,7 @@ cut_tree(
 
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\code{\link{partition_metrics}}. Should not be used at the same time as
+\code{\link[=partition_metrics]{partition_metrics()}}. Should not be used at the same time as
 \code{cut_height}}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the tree
@@ -59,15 +59,15 @@ Provide here the dissimilarity \code{data.frame} used to build the \code{tree}}
 customize the dynamic tree cut method.}
 }
 \value{
-If \code{tree} is an output from \code{\link{hclu_hierarclust}},
+If \code{tree} is an output from \code{\link[=hclu_hierarclust]{hclu_hierarclust()}},
 then the same object
 is returned with content updated (i.e., \code{args} and \code{clusters}). If
 \code{tree} is a \code{hclust} object, then a \code{data.frame} containing
 the clusters is returned.
 }
 \description{
-This functions is designed to work on a hierarchical tree and cut it 
-at user-selected 
+This functions is designed to work on a hierarchical tree and cut it
+at user-selected
 heights.
 It works on either outputs from \code{hclu_hierarclust} or \code{hclust}
 objects. It cuts the tree for the chosen number(s)

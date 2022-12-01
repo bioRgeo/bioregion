@@ -1,19 +1,19 @@
 #' Create a data.frame from a contingency table
 #'
-#' This function creates a two- or three-columns \code{data.frame} where
+#' This function creates a two- or three-columns `data.frame` where
 #' each row represents the interaction between two nodes (site and species for 
 #' example) and an optional third column indicating the weight of the
-#' interaction (if \code{weight = TRUE}) from a contingency table (sites as
+#' interaction (if `weight = TRUE`) from a contingency table (sites as
 #' rows and species as columns for example).
 #'
-#' @param mat a contingency table (i.e. \code{matrix}).
+#' @param mat a contingency table (i.e. `matrix`).
 #' 
-#' @param weight a \code{boolean} indicating if the value are weights.
+#' @param weight a `boolean` indicating if the value are weights.
 #' 
-#' @param remove_zeroes a \code{boolean} determining whether interactions with 
+#' @param remove_zeroes a `boolean` determining whether interactions with 
 #' weight equal to 0 should be removed from the output.
 #' 
-#' @return A \code{data.frame} where each row represents the interaction
+#' @return A `data.frame` where each row represents the interaction
 #' between two nodes and an optional third column indicating the weight of the
 #' interaction.
 #' 
@@ -21,7 +21,7 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{net_to_mat}
+#' @seealso [net_to_mat]
 #'
 #' @examples
 #' \dontrun{

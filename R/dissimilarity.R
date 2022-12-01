@@ -1,33 +1,33 @@
 #' Compute dissimilarity metrics (beta-diversity) between sites based on
 #' species composition
 #'
-#' This function creates a \code{data.frame} where each row provides one or
+#' This function creates a `data.frame` where each row provides one or
 #' several dissimilarity metric(s) between each pair of sites from a
-#' co-occurrence \code{matrix} with sites as rows and species as columns.
+#' co-occurrence `matrix` with sites as rows and species as columns.
 #'
-#' @param comat a co-occurrence \code{matrix} with sites as rows and species
+#' @param comat a co-occurrence `matrix` with sites as rows and species
 #' as columns.
 #' 
 #' @param metric a vector of string(s) indicating which metrics to chose
-#' (see Details). Available options are \emph{abc}, \emph{ABC}, \emph{Jaccard},
-#' \emph{Jaccardturn}, \emph{Sorensen}, \emph{Simpson},  \emph{Bray},
-#' \emph{Brayturn} or \emph{Euclidean}.\cr
-#' If \code{"all"} is specified, then all metrics will be
-#' calculated. Can be set to \code{NULL} if \code{formula} is used.
+#' (see Details). Available options are *abc*, *ABC*, *Jaccard*,
+#' *Jaccardturn*, *Sorensen*, *Simpson*,  *Bray*,
+#' *Brayturn* or *Euclidean*.\cr
+#' If `"all"` is specified, then all metrics will be
+#' calculated. Can be set to `NULL` if `formula` is used.
 #' 
 #' @param formula a vector of string(s) with your own formula based on the
-#' \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
-#' (see Details). \code{formula} is set to \code{NULL} by default.
+#' `a`, `b`, `c`, `A`, `B`, and `C` quantities
+#' (see Details). `formula` is set to `NULL` by default.
 #' @param method a string indicating what method should be used to compute
-#' \code{abc} (see Details).
-#' \code{method = "prodmat"} by default is more efficient but can be greedy
-#' in memory and \code{method="loops"} is less efficient but less greedy in
+#' `abc` (see Details).
+#' `method = "prodmat"` by default is more efficient but can be greedy
+#' in memory and `method="loops"` is less efficient but less greedy in
 #' memory.
 #' 
 #' @details
 #' \loadmathjax
-#' With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
-#' and \code{c} species only present in the second site.
+#' With `a` the number of species shared by a pair of sites, `b` species only present in the first site
+#' and `c` species only present in the second site.
 #'
 #' \mjeqn{Jaccard = (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 #'
@@ -48,25 +48,25 @@
 #' sites. B and C are the total number of specimens counted at both sites minus
 #' A.
 #'
-#' \code{formula} can be used to compute customized metrics with the terms
-#' \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}.
+#' `formula` can be used to compute customized metrics with the terms
+#' `a`, `b`, `c`, `A`, `B`, and `C`.
 #' For example
-#' \code{formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")} will
+#' `formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")` will
 #' compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.
 #'
 #' Euclidean computes the Euclidean distance between each pair of sites.
 #'
 #' @return 
 #' 
-#' A \code{data.frame} with additional class \code{bioRgeo.pairwise.metric},
+#' A `data.frame` with additional class `bioRgeo.pairwise.metric`,
 #' providing one or several dissimilarity
 #' metric(s) between each pair of sites. The two first columns represent each
 #' pair of sites.
-#' One column per dissimilarity metric provided in \code{metric} and 
-#' \code{formula} except for the metric \emph{abc} and \emph{ABC} that
+#' One column per dissimilarity metric provided in `metric` and 
+#' `formula` except for the metric *abc* and *ABC* that
 #' are stored in three columns (one for each letter).
 #' 
-#' @seealso [bioRgeo::similarity()] \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
+#' @seealso [bioRgeo::similarity()] [dissimilarity_to_similarity] [similarity_to_dissimilarity]
 #' 
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),

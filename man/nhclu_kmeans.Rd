@@ -14,15 +14,15 @@ nhclu_kmeans(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link{dissimilarity}} or
- \code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
- If a \code{data.frame} is used, the first two 
+\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
+If a \code{data.frame} is used, the first two
 columns represent pairs of sites (or any pair of nodes), and the next column(s)
 are the dissimilarity indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default, 
+\item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of
- \code{dissimilarity} is used.}
+\code{dissimilarity} is used.}
 
 \item{n_clust}{an \code{integer} or a \code{vector} of \code{integers}
 specifying the requested number(s) of clusters}
@@ -34,18 +34,18 @@ iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})}
 \code{n_clust} should be selected as starting points for the kmeans analysis
 (see \link[stats:kmeans]{stats::kmeans()})}
 
-\item{algorithm}{a \code{character string} specifying the algorithm to use for
+\item{algorithm}{a \verb{character string} specifying the algorithm to use for
 kmean (see \link[stats:kmeans]{stats::kmeans()})}
 }
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 }
 \description{
 This function performs non hierarchical
@@ -53,15 +53,15 @@ clustering on the basis of dissimilarity with a k-means analysis.
 }
 \details{
 This method partitions the data into k groups
- such that that the sum of squares of euclidean distances from points to the
- assigned cluster centres is minimized. k-means cannot be applied directly
- on dissimilarity/beta-diversity metrics, because these distances are not
- euclidean. Therefore, it requires first to transform the dissimilarity matrix
- with a Principal Coordinate Analysis (using the function
- \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
- of points in the PCoA. Because this makes an additional transformation of
- the initial matrix of dissimilarity, the partitioning around medoids method
- should be preferred (\code{\link{nhclu_pam}})
+such that that the sum of squares of euclidean distances from points to the
+assigned cluster centres is minimized. k-means cannot be applied directly
+on dissimilarity/beta-diversity metrics, because these distances are not
+euclidean. Therefore, it requires first to transform the dissimilarity matrix
+with a Principal Coordinate Analysis (using the function
+\link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
+of points in the PCoA. Because this makes an additional transformation of
+the initial matrix of dissimilarity, the partitioning around medoids method
+should be preferred (\code{\link[=nhclu_pam]{nhclu_pam()}})
 }
 \examples{
 dissim <- dissimilarity(vegemat, metric = "all")

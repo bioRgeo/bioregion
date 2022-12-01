@@ -1,57 +1,57 @@
 #' Calculate metrics for one or several partitions
 #' 
 #' This function aims at calculating metrics for one or several partitions, 
-#' usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_} 
+#' usually on outputs from `netclu_`, `hclu_` or `nhclu_` 
 #' functions. Metrics may require the users to provide either a similarity or
 #' dissimilarity matrix, or to provide the initial species-site table.
 #'
-#' @param cluster_object tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object
+#' @param cluster_object tree a `bioRgeo.hierar.tree` or a `hclust` object
 #' @param eval_metric character string or vector of character strings indicating
 #'  metric(s) to be calculated to
 #' investigate the effect of different number of clusters. Available options:
-#' \code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
-#' \code{"tot_endemism"}
-#' @param dissimilarity a \code{dist} object or a \code{bioRgeo.pairwise.metric} object (output
-#' from \code{\link{similarity_to_dissimilarity}}). Necessary if \code{eval_metric}
-#' includes \code{pc_distance} and \code{tree} is not a
-#' \code{bioRgeo.hierar.tree} object
+#' `"pc_distance"`, `"anosim"`, `"avg_endemism"`,
+#' `"tot_endemism"`
+#' @param dissimilarity a `dist` object or a `bioRgeo.pairwise.metric` object (output
+#' from [similarity_to_dissimilarity()]). Necessary if `eval_metric`
+#' includes `pc_distance` and `tree` is not a
+#' `bioRgeo.hierar.tree` object
 #' @param dissimilarity_index a character string indicating the dissimilarity (beta-diversity)
-#' index to be used in case \code{dist} is a \code{data.frame} with multiple
+#' index to be used in case `dist` is a `data.frame` with multiple
 #' dissimilarity indices
 #' @param net the species-site network (i.e., bipartite network). 
-#' Should be provided if \code{eval_metric} includes
-#' \code{"avg_endemism"} or \code{"tot_endemism"}
+#' Should be provided if `eval_metric` includes
+#' `"avg_endemism"` or `"tot_endemism"`
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes). 
-#' Should be provided if \code{eval_metric} includes
-#' \code{"avg_endemism"} or \code{"tot_endemism"}
+#' Should be provided if `eval_metric` includes
+#' `"avg_endemism"` or `"tot_endemism"`
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes). 
-#' Should be provided if \code{eval_metric} includes
-#' \code{"avg_endemism"} or \code{"tot_endemism"}
+#' Should be provided if `eval_metric` includes
+#' `"avg_endemism"` or `"tot_endemism"`
 #'
 #' @details
 #' \loadmathjax
 #'
-#' \bold{Evaluation metrics:}
+#' **Evaluation metrics:**
 #' \itemize{
-#' \item{\code{pc_distance}: this metric is the method used by
+#' \item{`pc_distance`: this metric is the method used by
 #' \insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of dissimilarity
 #' (beta-diversity)
 #' versus the total sum of dissimilarity (beta-diversity) for the full dissimilarity
 #' matrix. In
 #' other words, it is calculated on the basis of two elements. First, the total
 #' sum of dissimilarity is calculated by summing the entire dissimilarity matrix
-#' (\code{dist}). Second, the between-cluster sum of dissimilarity is calculated as
+#' (`dist`). Second, the between-cluster sum of dissimilarity is calculated as
 #' follows: for a given number of cluster, the dissimilarity is only
 #' summed between clusters, not within clusters. To do that efficiently, all
 #' pairs of sites within the same clusters have their dissimilarity set to zero in
 #' the dissimilarity matrix, and then the dissimilarity matrix is summed. The
-#' \code{pc_distance} ratio is obtained by dividing the between-cluster sum
+#' `pc_distance` ratio is obtained by dividing the between-cluster sum
 #' of dissimilarity by the total sum of dissimilarity.}
-#' \item{\code{anosim}: This metric is the statistic used in Analysis of
+#' \item{`anosim`: This metric is the statistic used in Analysis of
 #' Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
-#' \link[vegan:anosim]{vegan::anosim()}). It
+#' [vegan::anosim()][vegan::anosim]). It
 #' compares the between-cluster dissimilarities to the within-cluster
 #' dissimilarities. It is based based on the difference of mean ranks between
 #' groups and within groups with the following formula:
@@ -61,8 +61,8 @@
 #'  number of sites.
 #' Note that the function does not estimate the significance here, it only
 #' computes the statistic - for significance testing see
-#' \link[vegan:anosim]{vegan::anosim()}}.
-#' \item{\code{avg_endemism}: this metric is the average percentage of
+#' [vegan::anosim()][vegan::anosim]}.
+#' \item{`avg_endemism`: this metric is the average percentage of
 #' endemism in clusters as
 #' recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 #' \mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
@@ -71,7 +71,7 @@
 #' \mjeqn{S_i}{Si} is the number of
 #' species in cluster i, and K the maximum number of clusters.
 #' }
-#' \item{\code{tot_endemism}: this metric is the total 
+#' \item{`tot_endemism`: this metric is the total 
 #' endemism across all clusters, as
 #' recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 #' \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
@@ -82,11 +82,11 @@
 #' }
 #'
 #' @return
-#' a \code{list} of class \code{bioRgeo.partition.metrics} with two elements:
+#' a `list` of class `bioRgeo.partition.metrics` with two elements:
 #' \itemize{
-#' \item{\code{args}: input arguments
+#' \item{`args`: input arguments
 #' }
-#' \item{\code{evaluation_df}: the data.frame containing \code{eval_metric}
+#' \item{`evaluation_df`: the data.frame containing `eval_metric`
 #' for all explored numbers of clusters
 #' }
 #' }
@@ -106,7 +106,7 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
-#' @seealso \link{hclu_hierarclust}
+#' @seealso [hclu_hierarclust]
 #' @examples
 #' dissim <- dissimilarity(vegemat, metric = "all")
 #'

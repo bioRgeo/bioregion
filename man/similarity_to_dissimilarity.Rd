@@ -7,20 +7,20 @@
 similarity_to_dissimilarity(similarity)
 }
 \arguments{
-\item{similarity}{the output object from \code{\link{similarity}} or a
+\item{similarity}{the output object from \code{\link[=similarity]{similarity()}} or a
 \code{data.frame} with the first columns called "Site1" and "Site2", and the
 other columns being the similarity metrics.}
 }
 \value{
-A \code{data.frame} with additional class 
+A \code{data.frame} with additional class
 \code{bioRgeo.pairwise.metric}, providing one or several similarity
-metric(s) between each pair of sites. The two first columns represent each 
+metric(s) between each pair of sites. The two first columns represent each
 pair of sites, and the other column represent similarity metrics. Columns
 with names "a", "b", "c", "A", "B" and "C"  are not altered.
 }
 \description{
 This function converts a data.frame of similarity metrics between sites to
- dissimilarity metrics (= beta diversity).
+dissimilarity metrics (= beta diversity).
 }
 \note{
 \loadmathjax

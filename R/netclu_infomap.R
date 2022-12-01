@@ -1,48 +1,48 @@
 #' Infomap community finding
 #'
 #' This function finds communities in a (un)weighted (un)directed network based
-#' on the Infomap algorithm (\url{https://github.com/mapequation/infomap}).
+#' on the Infomap algorithm (<https://github.com/mapequation/infomap>).
 #'
-#' @param net the output object from \code{\link{similarity}} or
-#' \code{\link{dissimilarity_to_similarity}}.
-#' If a \code{data.frame} is used, the first two columns represent pairs of
+#' @param net the output object from [similarity()] or
+#' [dissimilarity_to_similarity()].
+#' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
-#' @param weight a \code{boolean} indicating if the weights should be considered
+#' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' @param index name or number of the column to use as weight. By default,
-#' the third column name of \code{net} is used.
+#' the third column name of `net` is used.
 #' @param nbmod penalize solutions the more they differ from this number (0 by
 #' default for no preferred number of modules).
 #' @param markovtime scales link flow to change the cost of moving between
 #' modules, higher values results in fewer modules (default is 1).
 #' @param seed for the random number generator (0 for random by default).
 #' @param numtrials for the number of trials before picking up the best solution.
-#' @param twolevel a \code{boolean} indicating if the algorithm should optimize a
+#' @param twolevel a `boolean` indicating if the algorithm should optimize a
 #' two-level partition of the network (default is multi-level).
-#' @param show_hierarchy a \code{boolean} specifying if the hierarchy of
+#' @param show_hierarchy a `boolean` specifying if the hierarchy of
 #' community should be identifiable in the outputs (FALSE by default).
-#' @param directed a \code{boolean} indicating if the network is directed (from
+#' @param directed a `boolean` indicating if the network is directed (from
 #' column 1 to column 2).
-#' @param bipartite a \code{boolean} indicating if the network is bipartite
+#' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Note).
-#' @param bipartite_version a \code{boolean} indicating if the bipartite version
+#' @param bipartite_version a `boolean` indicating if the bipartite version
 #' of Infomap should be used (see Note).
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
-#' @param return_node_type a \code{character} indicating what types of nodes
+#' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (\code{keep_nodes_type="both"} by default).
-#' @param version a \code{character} indicating the Infomap
+#' (`keep_nodes_type="both"` by default).
+#' @param version a `character` indicating the Infomap
 #' version to use.
-#' @param delete_temp a \code{boolean} indicating if the temporary folder should
+#' @param delete_temp a `boolean` indicating if the temporary folder should
 #' be removed (see Details).
-#' @param path_temp a \code{character} indicating the path to the temporary
+#' @param path_temp a `character` indicating the path to the temporary
 #' folder (see Details).
-#' @param binpath a \code{character} indicating the path to the bin folder
-#' (see \link{install_binaries} and Details).
+#' @param binpath a `character` indicating the path to the bin folder
+#' (see [install_binaries] and Details).
 #' @export
 #' @details
 #' Infomap is a network clustering algorithm based on the Map equation proposed
@@ -50,59 +50,59 @@
 #' and (un)directed networks.
 #'
 #' This function is based on the C++ version of Infomap
-#' (\url{https://github.com/mapequation/infomap/releases}).
+#' (<https://github.com/mapequation/infomap/releases>).
 #' This function needs executable  binary files to run. They can be installed with
-#' \link{install_binaries}. If you set the path to the folder that will host
-#' the bin folder manually while running \link{install_binaries} please make
-#' sure to set \code{binpath} accordingly.
+#' [install_binaries]. If you set the path to the folder that will host
+#' the bin folder manually while running [install_binaries] please make
+#' sure to set `binpath` accordingly.
 #'
 #' The C++ version of Infomap generates temporary folders and/or files that are
-#' stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
+#' stored in the `path_temp` folder ("infomap_temp" with an unique timestamp
 #' located in the working directory by default). This temporary folder is
-#' removed by default (\code{delete_temp = TRUE}).
+#' removed by default (`delete_temp = TRUE`).
 #'
 #' Several version of Infomap are available in the package. See
-#' \link{install_binaries} for more details.
+#' [install_binaries] for more details.
 #'
 #' @note
 #' Infomap has been designed to deal with bipartite networks. To use this
-#' functionality set the \code{bipartite_version} argument to TRUE in order to
+#' functionality set the `bipartite_version` argument to TRUE in order to
 #' approximate a two-step random walker (see
-#' \url{https://www.mapequation.org/infomap/} for more information). Note that
+#' <https://www.mapequation.org/infomap/> for more information). Note that
 #' a bipartite network can also be considered as unipartite network
-#' (\code{bipartite = TRUE}).
+#' (`bipartite = TRUE`).
 #'
 #' In both cases do not forget to indicate which of the first two columns is
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-#' feature nodes) using the arguments \code{site_col} and \code{species_col}.
+#' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
-#' \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-#' \code{"sites"} to preserve only the sites nodes and \code{"species"} to
+#' `return_node_type` equal to `"both"` to keep both types of nodes,
+#' `"sites"` to preserve only the sites nodes and `"species"` to
 #' preserve only the species nodes.
 #'
 #' @return
-#' A \code{list} of class \code{bioRgeo.clusters} with five slots:
+#' A `list` of class `bioRgeo.clusters` with five slots:
 #' \enumerate{
-#' \item{\bold{name}: \code{character string} containing the name of the algorithm}
-#' \item{\bold{args}: \code{list} of input arguments as provided by the user}
-#' \item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-#' \item{\bold{algorithm}: \code{list} of all objects associated with the
+#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
-#' \item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the \code{algorithm} slot, users can find the following elements:
+#' In the `algorithm` slot, users can find the following elements:
 #'
 #' \itemize{
-#' \item{\code{cmd}: the command line use to run Infomap}
-#' \item{\code{version}: the Infomap version}
-#' \item{\code{web}: Infomap's GitHub repository}
+#' \item{`cmd`: the command line use to run Infomap}
+#' \item{`version`: the Infomap version}
+#' \item{`web`: Infomap's GitHub repository}
 #' }
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso \link{install_binaries}, \link{netclu_louvain}, \link{netclu_oslom}
+#' @seealso [install_binaries], [netclu_louvain], [netclu_oslom]
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)

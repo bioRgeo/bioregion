@@ -16,13 +16,13 @@ hclu_optics(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link{dissimilarity}} or
-\code{\link{similarity_to_dissimilarity}}, or a \code{dist} object. 
+\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the dissimilarity
 indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default, 
+\item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
 \item{minPts}{a \code{numeric} value specifying the minPts argument of
@@ -60,12 +60,12 @@ showing the hierarchy of clusters.}
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
 \enumerate{
-\item{\bold{name}: \code{character string} containing the name of the algorithm}
-\item{\bold{args}: \code{list} of input arguments as provided by the user}
-\item{\bold{inputs}: \code{list} of characteristics of the input dataset}
-\item{\bold{algorithm}: \code{list} of all objects associated with the
- clustering procedure, such as original cluster objects}
-\item{\bold{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{args}: \code{list} of input arguments as provided by the user}
+\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{algorithm}: \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects}
+\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 }
 \description{
 This function performs semi-hierarchical
@@ -86,7 +86,7 @@ We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
 algorithm, how it works, and what the clusters mean.
 
 To extract the clusters, we use the
-\link[dbscan:extractXi]{dbscan::extractXi()} function which is based on the
+\link[dbscan:optics]{dbscan::extractXi()} function which is based on the
 steepness of the reachability plot (see
 \link[dbscan:optics]{dbscan::optics()})
 }
