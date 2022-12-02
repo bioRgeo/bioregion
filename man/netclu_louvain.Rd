@@ -25,9 +25,8 @@ netclu_louvain(
 \arguments{
 \item{net}{the output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
-If a \code{data.frame} is used, the first two columns represent pairs of
-sites (or any pair of nodes), and the next column(s) are the similarity
-indices.}
+If a \code{data.frame} is used, the first two columns represent pairs of sites
+(or any pair of nodes), and the next column(s) are the similarity indices.}
 
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
@@ -84,8 +83,8 @@ clustering procedure, such as original cluster objects (only if
 \code{algorithm_in_output = TRUE})}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of \link[igraph:cluster_louvain]{cluster_louvain}
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can find an
+"communities" object, output of \link[igraph:cluster_louvain]{cluster_louvain}
 if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
 
 \itemize{
@@ -95,54 +94,53 @@ if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
 }.
 }
 \description{
-This function finds communities in a (un)weighted undirected network based on
-the Louvain algorithm.
+This function finds communities in a (un)weighted undirected network based
+on the Louvain algorithm.
 }
 \details{
 Louvain is a network community detection algorithm proposed in
-\insertCite{Blondel2008}{bioRgeo}. This function proposed two implementations
-of the function (parameter \code{lang}):
-the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
-implementation (\link[igraph:cluster_louvain]{cluster_louvain}) and the C++ implementation
-(\url{https://sourceforge.net/projects/louvain/}, version 0.3). The latest
-offers the possibility to choose among several quality functions,
+\insertCite{Blondel2008}{bioRgeo}. This function proposed two
+implementations of the function (parameter \code{lang}): the
+\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+implementation (\link[igraph:cluster_louvain]{cluster_louvain}) and the C++
+implementation (\url{https://sourceforge.net/projects/louvain/}, version 0.3).
+The latest offers the possibility to choose among several quality functions,
 \code{q = 0} for the classical Newman-Girvan criterion (also called
-"Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the Owsinski-Zadrozny
-criterion (you should specify the value of the parameter with the \code{c}
-argument),
-3	for the Goldberg Density criterion, 4	for the A-weighted Condorcet criterion,
-5 for the Deviation to Indetermination criterion, 6 for the Deviation to
-Uniformity criterion, 7 for the Profile Difference criterion, 8	for the
-Shi-Malik criterion (you should specify the value of kappa_min with \code{k}
-argument)
-and 9	for the Balanced Modularity criterion.
+"Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
+Owsinski-Zadrozny criterion (you should specify the value of the parameter
+with the \code{c} argument), 3 for the Goldberg Density criterion, 4 for the
+A-weighted Condorcet criterion,5 for the Deviation to Indetermination
+criterion, 6 for the Deviation to Uniformity criterion, 7 for the Profile
+Difference criterion, 8	for the Shi-Malik criterion (you should specify the
+value of kappa_min with \code{k} argument) and 9 for the Balanced Modularity
+criterion.
 
 The C++ version of Louvain is based on the version 0.3
 (\url{https://sourceforge.net/projects/louvain/}). This function needs
 executable binary files to run. They can be installed with
-\link{install_binaries}. If you set the path to the folder that will host the
-bin folder manually while running \link{install_binaries} please make sure to
+\code{\link[=install_binaries]{install_binaries()}}. If you set the path to the folder that will host the
+bin folder manually while running \code{\link[=install_binaries]{install_binaries()}} please make sure to
 set \code{binpath} accordingly.
 
 The C++ version of Louvain generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp
-located in the working directory by default). This temporary folder is removed
-by default (\code{delete_temp = TRUE}).
+located in the working directory by default). This temporary folder is
+removed by default (\code{delete_temp = TRUE}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite
 network, it is possible to consider the bipartite network as unipartite
 network (\code{bipartite = TRUE}).
 
-Do not forget to indicate which of the first two columns is
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-feature nodes) using the arguments \code{site_col} and \code{species_col}.
-The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-\code{"sites"} to preserve only the sites nodes and \code{"species"} to
-preserve only the species nodes.
+Do not forget to indicate which of the first two columns is dedicated to the
+site nodes (i.e. primary nodes) and species nodes (i.e. feature nodes) using
+the arguments \code{site_col} and \code{species_col}. The type of nodes returned in
+the output can be chosen with the argument \code{return_node_type} equal to
+\code{"both"} to keep both types of nodes, \code{"sites"} to preserve only the sites
+nodes and \code{"species"} to preserve only the species nodes.
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
@@ -150,11 +148,13 @@ colnames(comat) <- paste0("Species", 1:10)
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_louvain(net, lang = "igraph")
 }
+
+}
 \references{
 \insertRef{Blondel2008}{bioRgeo}
 }
 \seealso{
-\link{install_binaries}, \link{netclu_infomap}, \link{netclu_oslom}
+\code{\link[=install_binaries]{install_binaries()}}, \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=netclu_oslom]{netclu_oslom()}}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

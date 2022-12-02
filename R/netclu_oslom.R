@@ -8,51 +8,70 @@
 #' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
+#' 
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
+#' 
 #' @param reassign a string indicating if the nodes belonging to several
 #' community should be reassign and what method should be used (see Note).
-#' @param r the number of runs for the first hierarchical level (10 by default).
-#' @param hr the number of runs for the higher hierarchical level (50 by default
-#' , 0 if you are not interested in hierarchies).
+#' @param r the number of runs for the first hierarchical level
+#' (10 by default).
+#' 
+#' @param hr the number of runs for the higher hierarchical level (50 by
+#' default, 0 if you are not interested in hierarchies).
+#' 
 #' @param seed for the random number generator (0 for random by default).
+#' 
 #' @param t the p−value, the default value is 0.10, increase this value you to
 #' get more modules.
+#' 
 #' @param cp kind of resolution parameter used to decide between taking some
 #' modules or their union (default value is 0.5, bigger value leads to bigger
 #' clusters).
+#' 
 #' @param directed a `boolean` indicating if the network is directed (from
 #' column 1 to column 2).
+#' 
 #' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Details).
+#' 
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
+#' 
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
+#' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
 #' (`keep_nodes_type="both"` by default).
+#' 
 #' @param delete_temp a `boolean` indicating if the temporary folder should
 #' be removed (see Details).
+#' 
 #' @param path_temp a `character` indicating the path to the temporary
 #' folder (see Details).
+#' 
 #' @param binpath a `character` indicating the path to the bin folder
-#' (see [install_binaries] and Details).
+#' (see [install_binaries()] and Details).
+#' 
 #' @export
 #' @details
 #' OSLOM is a network community detection algorithm proposed in
 #' \insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
 #' (overlapping) communities in (un)weighted and (un)directed networks.
 #'
-#' This function is based on the 2.4 C++ version of OSLOM (<http://www.oslom.org/software.htm>).
-#' This function needs executable files to run. They can be installed with [install_binaries]. If you set the path to
-#' the folder that will host the bin folder  manually while running [install_binaries] please make sure to set `binpath`
-#' accordingly.
+#' This function is based on the 2.4 C++ version of OSLOM
+#' (<http://www.oslom.org/software.htm>). This function needs executable files
+#' to run. They can be installed with [install_binaries()]. If you set the path
+#' to the folder that will host the bin folder  manually while running
+#' [install_binaries()] please make sure to set `binpath` accordingly.
 #'
-#' The C++ version of OSLOM generates temporary folders and/or files that are stored in the `path_temp` folder
-#' (folder "oslom_temp" in the working directory by default). This temporary folder is removed by default
+#' The C++ version of OSLOM generates temporary folders and/or files that are
+#' stored in the `path_temp` folder (folder "oslom_temp" in the working
+#' directory by default). This temporary folder is removed by default
 #' (`delete_temp = TRUE`).
 #'
 #' @note
@@ -66,17 +85,17 @@
 #' types of nodes, `"sites"` to preserve only the sites nodes and
 #' `"species"` to preserve only the species nodes.
 #'
-#' Since OSLOM potentially returns overlapping communities we propose two methods
-#' to reassign the 'overlapping' nodes randomly `reassign = 'random'` or
-#' based on the closest candidate community `reassign = 'simil'`
-#' (only for weighted networks, in this case the closest candidate community is
-#' determined with the average similarity). By default `reassign = 'no'`
-#' and all the information will be provided. The number of partitions will depend
+#' Since OSLOM potentially returns overlapping communities we propose two
+#' methods to reassign the 'overlapping' nodes randomly `reassign = 'random'`
+#' or based on the closest candidate community `reassign = 'simil'` (only for
+#' weighted networks, in this case the closest candidate community is
+#' determined with the average similarity). By default `reassign = 'no'` and
+#' all the information will be provided. The number of partitions will depend
 #' on the number of overlapping modules (up to three). The suffix '_semel',
-#' '_bis' and '_ter' are added to the column names. The first partition ('_semel')
-#' assign a module for each node. A value of 0 in the second ('_bis') and third
-#' ('_ter') columns indicates that no overlapping module were found for this node
-#' (i.e. non-overlapping nodes).
+#' '_bis' and '_ter' are added to the column names. The first partition
+#' ('_semel') assigns a module for each node. A value of 0 in the second
+#' ('_bis') and third ('_ter') columns indicates that no overlapping module
+#' were found for this node (i.e. non-overlapping nodes).
 #'
 #' @return
 #' A `list` of class `bioRgeo.clusters` with five slots:
@@ -100,16 +119,22 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' @seealso [install_binaries], [netclu_infomap], [netclu_louvain]
+#' 
+#' @seealso [install_binaries()], [netclu_infomap()], [netclu_louvain()]
+#' 
 #' @examples
+#' \dontrun{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_oslom(net)
+#' }
+#' 
 #' @references
 #' \insertRef{Lancichinetti2011}{bioRgeo}
+#' 
 #' @export
 netclu_oslom <- function(net,
                          weight = TRUE,
@@ -128,16 +153,17 @@ netclu_oslom <- function(net,
                          delete_temp = TRUE,
                          path_temp = "oslom_temp",
                          binpath = NULL) {
-
+  
   # Set binpath
   if (is.null(binpath)) {
     # Identify bioRgeo directory on your computer
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
     if (length(binpath) > 1) {
-      message("Several bioRgeo directories have been detected in your default package/library folder(s). 
-The first one will be used by default.
-Please use the binpath argument to manually set the path to the bin folder.")
+      message("Several bioRgeo directories have been detected in your default
+      package/library folder(s). The first one will be used by default. Please
+              use the binpath argument to manually set the path to the bin
+              folder.")
       binpath <- binpath[1]
     }
   } else {
@@ -147,39 +173,42 @@ Please use the binpath argument to manually set the path to the bin folder.")
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
-
+  
   # Check OS
   os <- Sys.info()[["sysname"]]
-
+  
   # Check if OSLOM has successfully been installed
   check <- FALSE
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
-      message("OSLOM is not installed... 
-Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
+      message("OSLOM is not installed... Please have a look at
+              https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+              for more details.")
     } else {
       check <- TRUE
     }
   } else {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
-      message("OSLOM is not installed... 
-Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details.")
+      message("OSLOM is not installed... Please have a look at
+              https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+              for more details.")
     } else {
       if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir.txt"))) {
-        message("The directed version of OSLOM is not installed... 
-Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html for more details")
+        message("The directed version of OSLOM is not installed... Please have
+                a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+                for more details")
       } else {
         check <- TRUE
       }
     }
   }
-
+  
   if (check) {
-
+    
     # Control input net
     controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
     controls(args = NULL, data = net, type = "input_net")
-
+    
     # Control input weight & index
     controls(args = weight, data = net, type = "input_net_weight")
     if (weight) {
@@ -188,7 +217,7 @@ Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_ex
       net <- net[, 1:3]
       controls(args = NULL, data = net, type = "input_net_index_value")
     }
-
+    
     # Control input bipartite
     controls(args = bipartite, data = NULL, type = "boolean")
     isbip <- bipartite
@@ -201,26 +230,26 @@ Please have a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_ex
 both, sites and species", call. = FALSE)
       }
     }
-
+    
     # Control input directed
     if (!isbip) {
       controls(args = directed, data = net, type = "input_net_directed")
     } else {
       if (directed) {
         stop("directed cannot be set to TRUE if the network is bipartite!",
-          call. = FALSE
+             call. = FALSE
         )
       }
     }
-
-
+    
     # Control parameters OSLOM
     if (!(reassign %in% c("no", "random", "simil"))) {
-      stop("Please choose reassign among the following values:
-no, random, simil")
+      stop("Please choose reassign among the following values: no, random,
+           simil")
     }
     if (reassign == "simil" & !weight) {
-      stop("A reassignement based on similarity should not be use when weight equal FALSE")
+      stop("A reassignement based on similarity should not be use when weight
+           equal FALSE")
     }
     controls(args = r, data = NULL, type = "strict_positive_integer")
     controls(args = hr, data = NULL, type = "positive_integer")
@@ -236,26 +265,26 @@ no, random, simil")
     if (cp > 1) {
       stop("cp must be in the interval (0,1)!", call. = FALSE)
     }
-
-
+    
     # Control temp folder + create temp folder
     path_temp <- controls(args = path_temp, data = NULL, type = "character")
     controls(args = delete_temp, data = NULL, type = "boolean")
     if (path_temp == "oslom_temp") {
-      path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
+      path_temp <- paste0(path_temp, "_",
+                          round(as.numeric(as.POSIXct(Sys.time()))))
     } else {
       if (file.exists(path_temp)) {
-        stop(paste0(path_temp, " already exists. Please rename it or remove it."),
-          call. = FALSE
-        )
+        stop(paste0(path_temp, " already exists. Please rename it or remove
+                    it."),
+             call. = FALSE)
       }
     }
     dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
     if (!file.exists(path_temp)) {
       stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
     }
-
-
+    
+    
     # Prepare input for OSLOM
     if (isbip) {
       idprim <- as.character(net[, site_col])
@@ -263,7 +292,7 @@ no, random, simil")
       nbsites <- length(idprim)
       idfeat <- as.character(net[, species_col])
       idfeat <- idfeat[!duplicated(idfeat)]
-
+      
       idnode <- c(idprim, idfeat)
       idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
       netemp <- data.frame(
@@ -274,8 +303,8 @@ no, random, simil")
       idnode1 <- as.character(net[, 1])
       idnode2 <- as.character(net[, 2])
       if (isbip) {
-        message("The network seems to be bipartite! 
-The bipartite argument should probably be set to TRUE.")
+        message("The network seems to be bipartite! The bipartite argument
+                should probably be set to TRUE.")
       }
       idnode <- c(idnode1, idnode2)
       idnode <- idnode[!duplicated(idnode)]
@@ -286,15 +315,15 @@ The bipartite argument should probably be set to TRUE.")
         node2 = idnode[match(net[, 2], idnode[, 2]), 1]
       )
     }
-
+    
     if (weight) {
       netemp <- cbind(netemp, net[, 3])
       netemp <- netemp[netemp[, 3] > 0, ]
     }
-
+    
     # Class preparation
     outputs <- list(name = "netclu_oslom")
-
+    
     outputs$args <- list(
       weight = weight,
       index = index,
@@ -313,7 +342,7 @@ The bipartite argument should probably be set to TRUE.")
       path_temp = path_temp,
       binpath = binpath
     )
-
+    
     outputs$inputs <- list(
       bipartite = isbip,
       weight = weight,
@@ -322,30 +351,31 @@ The bipartite argument should probably be set to TRUE.")
       dissimilarity = FALSE,
       nb_sites = nbsites
     )
-
+    
     outputs$algorithm <- list()
-
-
+    
     # Export input for OSLOM
     utils::write.table(netemp, paste0(path_temp, "/net.txt"),
-      row.names = FALSE,
-      col.names = FALSE, sep = " "
-    )
-
+                       row.names = FALSE,
+                       col.names = FALSE, sep = " ")
+    
     # Prepare command to run OSLOM
-    cmd <- paste0("-r ", r, " -hr ", hr, " -seed ", seed, " -t ", t, " -cp ", cp)
+    cmd <- paste0("-r ", r, " -hr ", hr, " -seed ", seed, " -t ", t, " -cp ",
+                  cp)
     if (weight) {
       cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
     } else {
       cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
     }
-
+    
     # Run OSLOM
     if (os == "Linux") {
       if (directed) {
-        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd, " > /dev/null 2>&1")
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_lin ", cmd,
+                      " > /dev/null 2>&1")
       } else {
-        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd, " > /dev/null 2>&1")
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_lin ", cmd,
+                      " > /dev/null 2>&1")
       }
       system(command = cmd)
     } else if (os == "Windows") {
@@ -354,42 +384,46 @@ The bipartite argument should probably be set to TRUE.")
       } else {
         cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_win.exe ", cmd)
       }
-      dir.create(paste0(path_temp, "/net.txt_oslo_files"), showWarnings = FALSE, recursive = TRUE)
+      dir.create(paste0(path_temp, "/net.txt_oslo_files"),
+                 showWarnings = FALSE, recursive = TRUE)
       system(command = cmd, show.output.on.console = FALSE)
     } else if (os == "Darwin") {
       if (directed) {
-        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd, " > /dev/null 2>&1")
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_mac ", cmd,
+                      " > /dev/null 2>&1")
       } else {
-        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd, " > /dev/null 2>&1")
+        cmd <- paste0(binpath, "/bin/OSLOM/oslom_undir_mac ", cmd,
+                      " > /dev/null 2>&1")
       }
       system(command = cmd)
     } else {
       stop("Linux, Windows or Mac distributions only.")
     }
-
+    
     # Control: if the command line did not work
     if (!("tp" %in% list.files(paste0(path_temp, "/net.txt_oslo_files")))) {
       stop("Command line was wrongly implemented. OSLOM did not run.")
     }
-
+    
     # Number of levels
     nblev <- 1
-
+    
     # Retrieve output from tp [TO COMMENT]
     com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp"))
     cl <- list()
     length(cl) <- length(com) / 2
     for (k in 1:length(com)) {
       if ((k / 2 - trunc(k / 2)) == 0) {
-        cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+        cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k],
+                                                       split = " ")[[1]]))
       }
     }
-
+    
     tab <- unlist(cl)
     tab <- sort(tab[!duplicated(tab)])
     tab <- cbind(tab, 0, 0, 0)
     n <- nrow(tab)
-
+    
     dupl <- rep(0, n)
     for (i in 1:length(cl)) {
       temp <- rep(0, n)
@@ -397,7 +431,7 @@ The bipartite argument should probably be set to TRUE.")
       dupl <- dupl + 1 * (temp > 0)
       tab[match(cl[[i]], tab[, 1]), 2] <- i
     }
-
+    
     for (i in 1:n) {
       if (dupl[i] > 1) {
         overcom <- NULL
@@ -416,7 +450,7 @@ The bipartite argument should probably be set to TRUE.")
         }
       }
     }
-
+    
     # Reassign tp [TO COMMENT]
     if (reassign == "simil") {
       dat <- netemp
@@ -432,7 +466,7 @@ The bipartite argument should probably be set to TRUE.")
             dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
           }
           colnames(dati1) <- c("ID", "SIM")
-
+          
           test2 <- sum(dat[, 2] == tab[i, 1])
           if (test2 == 0) {
             dati2 <- matrix(0, nrow = 2, ncol = 2)
@@ -443,22 +477,22 @@ The bipartite argument should probably be set to TRUE.")
             dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
           }
           colnames(dati2) <- c("ID", "SIM")
-
+          
           dati <- rbind(dati1, dati2)
-
+          
           check <- match(cl[[tab[i, 2]]], dati[, 1])
           check <- check[!is.na(check)]
           sim1 <- mean(dati[check, 2])
-
+          
           check <- match(cl[[tab[i, 3]]], dati[, 1])
           check <- check[!is.na(check)]
           sim2 <- mean(dati[check, 2])
-
+          
           if (sim2 > sim1) {
             tab[i, 2] <- tab[i, 3]
             sim1 <- sim2
           }
-
+          
           if (tab[i, 4] > 0) {
             check <- match(cl[[tab[i, 4]]], dati[, 1])
             check <- check[!is.na(check)]
@@ -475,7 +509,7 @@ The bipartite argument should probably be set to TRUE.")
     } else {
       tabtp <- tab
     }
-
+    
     # Reshape tabtp
     comtp <- data.frame(ID = idnode[, 2], Com1 = 0)
     comtp[match(tabtp[, 1], idnode[, 1]), 2] <- tabtp[, 2]
@@ -490,28 +524,29 @@ The bipartite argument should probably be set to TRUE.")
       }
     }
     com <- comtp
-
+    
     # If tp1 exists (i.e. hierarchical level)
     if ("tp1" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))) {
-
+      
       # Number of levels
       nblev <- 2
-
+      
       # Retrieve output from tp1 [TO COMMENT]
       com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp1"))
       cl <- list()
       length(cl) <- length(com) / 2
       for (k in 1:length(com)) {
         if ((k / 2 - trunc(k / 2)) == 0) {
-          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k],
+                                                         split = " ")[[1]]))
         }
       }
-
+      
       tab <- unlist(cl)
       tab <- sort(tab[!duplicated(tab)])
       tab <- cbind(tab, 0, 0, 0)
       n <- nrow(tab)
-
+      
       dupl <- rep(0, n)
       for (i in 1:length(cl)) {
         temp <- rep(0, n)
@@ -519,7 +554,7 @@ The bipartite argument should probably be set to TRUE.")
         dupl <- dupl + 1 * (temp > 0)
         tab[match(cl[[i]], tab[, 1]), 2] <- i
       }
-
+      
       for (i in 1:n) {
         if (dupl[i] > 1) {
           overcom <- NULL
@@ -538,7 +573,7 @@ The bipartite argument should probably be set to TRUE.")
           }
         }
       }
-
+      
       # Reassign tp1 [TO COMMENT]
       if (reassign == "simil") {
         dat <- netemp
@@ -554,7 +589,7 @@ The bipartite argument should probably be set to TRUE.")
               dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
             }
             colnames(dati1) <- c("ID", "SIM")
-
+            
             test2 <- sum(dat[, 2] == tab[i, 1])
             if (test2 == 0) {
               dati2 <- matrix(0, nrow = 2, ncol = 2)
@@ -565,22 +600,22 @@ The bipartite argument should probably be set to TRUE.")
               dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
             }
             colnames(dati2) <- c("ID", "SIM")
-
+            
             dati <- rbind(dati1, dati2)
-
+            
             check <- match(cl[[tab[i, 2]]], dati[, 1])
             check <- check[!is.na(check)]
             sim1 <- mean(dati[check, 2])
-
+            
             check <- match(cl[[tab[i, 3]]], dati[, 1])
             check <- check[!is.na(check)]
             sim2 <- mean(dati[check, 2])
-
+            
             if (sim2 > sim1) {
               tab[i, 2] <- tab[i, 3]
               sim1 <- sim2
             }
-
+            
             if (tab[i, 4] > 0) {
               check <- match(cl[[tab[i, 4]]], dati[, 1])
               check <- check[!is.na(check)]
@@ -597,7 +632,7 @@ The bipartite argument should probably be set to TRUE.")
       } else {
         tabtph <- tab
       }
-
+      
       # Reshape tabtp1
       comtph <- data.frame(ID = idnode[, 2], HCom1 = 0)
       comtph[match(tabtph[, 1], idnode[, 1]), 2] <- tabtph[, 2]
@@ -611,32 +646,33 @@ The bipartite argument should probably be set to TRUE.")
           comtph[match(tabtph[, 1], idnode[, 1]), 4] <- tabtph[, 4]
         }
       }
-
+      
       com <- cbind(comtp, comtph)
       com <- com[, -(dim(comtp)[2] + 1)]
     }
-
+    
     # If tp2 exists (i.e. hierarchical level)
     if ("tp2" %in% list.files(paste0(path_temp, "/oslomnet.txt_oslo_files"))) {
-
+      
       # Number of levels
       nblev <- 3
-
+      
       # Retrieve output from tp2 [TO COMMENT]
       com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp2"))
       cl <- list()
       length(cl) <- length(com) / 2
       for (k in 1:length(com)) {
         if ((k / 2 - trunc(k / 2)) == 0) {
-          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k],
+                                                         split = " ")[[1]]))
         }
       }
-
+      
       tab <- unlist(cl)
       tab <- sort(tab[!duplicated(tab)])
       tab <- cbind(tab, 0, 0, 0)
       n <- nrow(tab)
-
+      
       dupl <- rep(0, n)
       for (i in 1:length(cl)) {
         temp <- rep(0, n)
@@ -644,7 +680,7 @@ The bipartite argument should probably be set to TRUE.")
         dupl <- dupl + 1 * (temp > 0)
         tab[match(cl[[i]], tab[, 1]), 2] <- i
       }
-
+      
       for (i in 1:n) {
         if (dupl[i] > 1) {
           overcom <- NULL
@@ -663,7 +699,7 @@ The bipartite argument should probably be set to TRUE.")
           }
         }
       }
-
+      
       # Reassign tp2 [TO COMMENT]
       if (reassign == "simil") {
         dat <- netemp
@@ -679,7 +715,7 @@ The bipartite argument should probably be set to TRUE.")
               dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
             }
             colnames(dati1) <- c("ID", "SIM")
-
+            
             test2 <- sum(dat[, 2] == tab[i, 1])
             if (test2 == 0) {
               dati2 <- matrix(0, nrow = 2, ncol = 2)
@@ -690,22 +726,22 @@ The bipartite argument should probably be set to TRUE.")
               dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
             }
             colnames(dati2) <- c("ID", "SIM")
-
+            
             dati <- rbind(dati1, dati2)
-
+            
             check <- match(cl[[tab[i, 2]]], dati[, 1])
             check <- check[!is.na(check)]
             sim1 <- mean(dati[check, 2])
-
+            
             check <- match(cl[[tab[i, 3]]], dati[, 1])
             check <- check[!is.na(check)]
             sim2 <- mean(dati[check, 2])
-
+            
             if (sim2 > sim1) {
               tab[i, 2] <- tab[i, 3]
               sim1 <- sim2
             }
-
+            
             if (tab[i, 4] > 0) {
               check <- match(cl[[tab[i, 4]]], dati[, 1])
               check <- check[!is.na(check)]
@@ -722,7 +758,7 @@ The bipartite argument should probably be set to TRUE.")
       } else {
         tabtphh <- tab
       }
-
+      
       # Reshape tabtp2
       comtphh <- data.frame(ID = idnode[, 2], HHCom1 = 0)
       comtphh[match(tabtphh[, 1], idnode[, 1]), 2] <- tabtphh[, 2]
@@ -736,32 +772,34 @@ The bipartite argument should probably be set to TRUE.")
           comtphh[match(tabtphh[, 1], idnode[, 1]), 4] <- tabtphh[, 4]
         }
       }
-
+      
       com <- cbind(comtp, comtph, comtphh)
-      com <- com[, -c((dim(comtp)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + 1))]
+      com <- com[, -c((dim(comtp)[2] + 1),
+                      (dim(comtp)[2] + dim(comtph)[2] + 1))]
     }
-
+    
     # If tp3 exists (i.e. hierarchical level)
     if ("tp3" %in% list.files(paste0(path_temp, "/net.txt_oslo_files"))) {
-
+      
       # Number of levels
       nblev <- 4
-
+      
       # Retrieve output from tp3 [TO COMMENT]
       com <- readLines(paste0(path_temp, "/net.txt_oslo_files/tp3"))
       cl <- list()
       length(cl) <- length(com) / 2
       for (k in 1:length(com)) {
         if ((k / 2 - trunc(k / 2)) == 0) {
-          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k], split = " ")[[1]]))
+          cl[[(k / 2)]] <- as.numeric(as.matrix(strsplit(com[k],
+                                                         split = " ")[[1]]))
         }
       }
-
+      
       tab <- unlist(cl)
       tab <- sort(tab[!duplicated(tab)])
       tab <- cbind(tab, 0, 0, 0)
       n <- nrow(tab)
-
+      
       dupl <- rep(0, n)
       for (i in 1:length(cl)) {
         temp <- rep(0, n)
@@ -769,7 +807,7 @@ The bipartite argument should probably be set to TRUE.")
         dupl <- dupl + 1 * (temp > 0)
         tab[match(cl[[i]], tab[, 1]), 2] <- i
       }
-
+      
       for (i in 1:n) {
         if (dupl[i] > 1) {
           overcom <- NULL
@@ -788,7 +826,7 @@ The bipartite argument should probably be set to TRUE.")
           }
         }
       }
-
+      
       # Reassign tp3 [TO COMMENT]
       if (reassign == "simil") {
         dat <- netemp
@@ -804,7 +842,7 @@ The bipartite argument should probably be set to TRUE.")
               dati1 <- dat[dat[, 1] == tab[i, 1], c(2, 3)]
             }
             colnames(dati1) <- c("ID", "SIM")
-
+            
             test2 <- sum(dat[, 2] == tab[i, 1])
             if (test2 == 0) {
               dati2 <- matrix(0, nrow = 2, ncol = 2)
@@ -815,22 +853,22 @@ The bipartite argument should probably be set to TRUE.")
               dati2 <- dat[dat[, 2] == tab[i, 1], c(1, 3)]
             }
             colnames(dati2) <- c("ID", "SIM")
-
+            
             dati <- rbind(dati1, dati2)
-
+            
             check <- match(cl[[tab[i, 2]]], dati[, 1])
             check <- check[!is.na(check)]
             sim1 <- mean(dati[check, 2])
-
+            
             check <- match(cl[[tab[i, 3]]], dati[, 1])
             check <- check[!is.na(check)]
             sim2 <- mean(dati[check, 2])
-
+            
             if (sim2 > sim1) {
               tab[i, 2] <- tab[i, 3]
               sim1 <- sim2
             }
-
+            
             if (tab[i, 4] > 0) {
               check <- match(cl[[tab[i, 4]]], dati[, 1])
               check <- check[!is.na(check)]
@@ -847,7 +885,7 @@ The bipartite argument should probably be set to TRUE.")
       } else {
         tabtphhh <- tab
       }
-
+      
       # Reshape tabtp3
       comtphhh <- data.frame(ID = idnode[, 2], HHHCom1 = 0)
       comtphhh[match(tabtphhh[, 1], idnode[, 1]), 2] <- tabtphhh[, 2]
@@ -861,18 +899,20 @@ The bipartite argument should probably be set to TRUE.")
           comtphhh[match(tabtphhh[, 1], idnode[, 1]), 4] <- tabtphhh[, 4]
         }
       }
-
+      
       com <- cbind(comtp, comtph, comtphh, comtphhh)
-      com <- com[, -c((dim(comtp)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + 1), (dim(comtp)[2] + dim(comtph)[2] + dim(comtphh) + 1))]
+      com <- com[, -c((dim(comtp)[2] + 1),
+                      (dim(comtp)[2] + dim(comtph)[2] + 1),
+                      (dim(comtp)[2] + dim(comtph)[2] + dim(comtphh) + 1))]
     }
-
+    
     # Remove temporary files
     if (delete_temp) {
       unlink(paste0(path_temp), recursive = TRUE)
     }
     unlink("tp")
     unlink("time_seed.dat")
-
+    
     # Rename and reorder columns
     com <- as.character(comtp[, 1])
     tempnblev <- 1
@@ -953,9 +993,9 @@ The bipartite argument should probably be set to TRUE.")
     for (k in 2:dim(com)[2]) {
       com[, k] <- as.numeric(as.character(com[, k]))
     }
-
+    
     com[, 1] <- as.character(com[, 1])
-
+    
     # Add attributes and return_node_type
     if (isbip) {
       attr(com, "node_type") <- rep("site", dim(com)[1])
@@ -967,25 +1007,24 @@ The bipartite argument should probably be set to TRUE.")
         com <- com[attributes(com)$node_type == "species", ]
       }
     }
-
+    
     # Set algorithm in outputs
     outputs$algorithm$cmd <- cmd
     outputs$algorithm$version <- "2.4"
     outputs$algorithm$web <- "http://oslom.org/"
-
+    
     # Set clusters and cluster_info in output
     outputs$clusters <- com
     outputs$cluster_info <- data.frame(
       partition_name = names(outputs$clusters)[2:length(outputs$clusters),
-        drop = FALSE
+                                               drop = FALSE
       ],
       n_clust = apply(
         outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
         2, function(x) length(unique(x))
       )
     )
-
-
+    
     # Return outputs
     class(outputs) <- append("bioRgeo.clusters", class(outputs))
     return(outputs)

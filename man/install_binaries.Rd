@@ -2,7 +2,8 @@
 % Please edit documentation in R/install_binaries.R
 \name{install_binaries}
 \alias{install_binaries}
-\title{Download, unzip, check permission and test the bioRgeo's executable binary files}
+\title{Download, unzip, check permission and test the bioRgeo's executable binary
+files}
 \usage{
 install_binaries(binpath = NULL, infomap_version = c("2.1.0", "2.6.0"))
 }
@@ -10,16 +11,16 @@ install_binaries(binpath = NULL, infomap_version = c("2.1.0", "2.6.0"))
 \item{binpath}{a \code{character} indicating the path to the folder that will
 host the 'bin' folder containing the executable binary files (bioRgeo's
 package by default, if you use a different folder please be sure to update
-the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and
-\link{netclu_oslom}).}
+the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
 
 \item{infomap_version}{a \code{character} vector indicating the Infomap
 version(s) to install.}
 }
 \description{
-This function downloads and unzips the 'bin' folder needed to run some bioRgeo's
-functions. It also checks if the files have the permissions to be executed as
-programs. It finally tests if the executable binary files are running properly.
+This function downloads and unzips the 'bin' folder needed to run some
+functions of bioRgeo. It also checks if the files have the permissions to
+be executed as programs. It finally tests if the executable binary files
+are running properly.
 }
 \note{
 Only the Infomap version 2.1.0 and 2.6.0 are available for now.

@@ -40,10 +40,11 @@ the third column name of \code{net} is used.}
 \item{reassign}{a string indicating if the nodes belonging to several
 community should be reassign and what method should be used (see Note).}
 
-\item{r}{the number of runs for the first hierarchical level (10 by default).}
+\item{r}{the number of runs for the first hierarchical level
+(10 by default).}
 
-\item{hr}{the number of runs for the higher hierarchical level (50 by default
-, 0 if you are not interested in hierarchies).}
+\item{hr}{the number of runs for the higher hierarchical level (50 by
+default, 0 if you are not interested in hierarchies).}
 
 \item{seed}{for the random number generator (0 for random by default).}
 
@@ -77,7 +78,7 @@ be removed (see Details).}
 folder (see Details).}
 
 \item{binpath}{a \code{character} indicating the path to the bin folder
-(see \link{install_binaries} and Details).}
+(see \code{\link[=install_binaries]{install_binaries()}} and Details).}
 }
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
@@ -106,13 +107,15 @@ OSLOM is a network community detection algorithm proposed in
 \insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
 (overlapping) communities in (un)weighted and (un)directed networks.
 
-This function is based on the 2.4 C++ version of OSLOM (\url{http://www.oslom.org/software.htm}).
-This function needs executable files to run. They can be installed with \link{install_binaries}. If you set the path to
-the folder that will host the bin folder  manually while running \link{install_binaries} please make sure to set \code{binpath}
-accordingly.
+This function is based on the 2.4 C++ version of OSLOM
+(\url{http://www.oslom.org/software.htm}). This function needs executable files
+to run. They can be installed with \code{\link[=install_binaries]{install_binaries()}}. If you set the path
+to the folder that will host the bin folder  manually while running
+\code{\link[=install_binaries]{install_binaries()}} please make sure to set \code{binpath} accordingly.
 
-The C++ version of OSLOM generates temporary folders and/or files that are stored in the \code{path_temp} folder
-(folder "oslom_temp" in the working directory by default). This temporary folder is removed by default
+The C++ version of OSLOM generates temporary folders and/or files that are
+stored in the \code{path_temp} folder (folder "oslom_temp" in the working
+directory by default). This temporary folder is removed by default
 (\code{delete_temp = TRUE}).
 }
 \note{
@@ -126,19 +129,20 @@ with the argument \code{return_node_type} equal to \code{"both"} to keep both
 types of nodes, \code{"sites"} to preserve only the sites nodes and
 \code{"species"} to preserve only the species nodes.
 
-Since OSLOM potentially returns overlapping communities we propose two methods
-to reassign the 'overlapping' nodes randomly \code{reassign = 'random'} or
-based on the closest candidate community \code{reassign = 'simil'}
-(only for weighted networks, in this case the closest candidate community is
-determined with the average similarity). By default \code{reassign = 'no'}
-and all the information will be provided. The number of partitions will depend
+Since OSLOM potentially returns overlapping communities we propose two
+methods to reassign the 'overlapping' nodes randomly \code{reassign = 'random'}
+or based on the closest candidate community \code{reassign = 'simil'} (only for
+weighted networks, in this case the closest candidate community is
+determined with the average similarity). By default \code{reassign = 'no'} and
+all the information will be provided. The number of partitions will depend
 on the number of overlapping modules (up to three). The suffix '_semel',
-'_bis' and '_ter' are added to the column names. The first partition ('_semel')
-assign a module for each node. A value of 0 in the second ('_bis') and third
-('_ter') columns indicates that no overlapping module were found for this node
-(i.e. non-overlapping nodes).
+'_bis' and '_ter' are added to the column names. The first partition
+('_semel') assigns a module for each node. A value of 0 in the second
+('_bis') and third ('_ter') columns indicates that no overlapping module
+were found for this node (i.e. non-overlapping nodes).
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
@@ -146,11 +150,13 @@ colnames(comat) <- paste0("Species", 1:10)
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_oslom(net)
 }
+
+}
 \references{
 \insertRef{Lancichinetti2011}{bioRgeo}
 }
 \seealso{
-\link{install_binaries}, \link{netclu_infomap}, \link{netclu_louvain}
+\code{\link[=install_binaries]{install_binaries()}}, \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=netclu_louvain]{netclu_louvain()}}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

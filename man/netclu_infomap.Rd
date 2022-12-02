@@ -47,19 +47,20 @@ modules, higher values results in fewer modules (default is 1).}
 
 \item{seed}{for the random number generator (0 for random by default).}
 
-\item{numtrials}{for the number of trials before picking up the best solution.}
+\item{numtrials}{for the number of trials before picking up the best
+solution.}
 
 \item{twolevel}{a \code{boolean} indicating if the algorithm should optimize a
 two-level partition of the network (default is multi-level).}
 
-\item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
-community should be identifiable in the outputs (FALSE by default).}
+\item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of community
+should be identifiable in the outputs (FALSE by default).}
 
 \item{directed}{a \code{boolean} indicating if the network is directed (from
 column 1 to column 2).}
 
-\item{bipartite_version}{a \code{boolean} indicating if the bipartite version
-of Infomap should be used (see Note).}
+\item{bipartite_version}{a \code{boolean} indicating if the bipartite version of
+Infomap should be used (see Note).}
 
 \item{bipartite}{a \code{boolean} indicating if the network is bipartite
 (see Note).}
@@ -74,14 +75,13 @@ of Infomap should be used (see Note).}
 ("sites", "species" or "both") should be returned in the output
 (\code{keep_nodes_type="both"} by default).}
 
-\item{version}{a \code{character} indicating the Infomap
-version to use.}
+\item{version}{a \code{character} indicating the Infomap version to use.}
 
 \item{delete_temp}{a \code{boolean} indicating if the temporary folder should
 be removed (see Details).}
 
-\item{path_temp}{a \code{character} indicating the path to the temporary
-folder (see Details).}
+\item{path_temp}{a \code{character} indicating the path to the temporary folder
+(see Details).}
 
 \item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
@@ -115,18 +115,18 @@ and (un)directed networks.
 
 This function is based on the C++ version of Infomap
 (\url{https://github.com/mapequation/infomap/releases}).
-This function needs executable  binary files to run. They can be installed with
-\link{install_binaries}. If you set the path to the folder that will host
-the bin folder manually while running \link{install_binaries} please make
-sure to set \code{binpath} accordingly.
+This function needs executable  binary files to run. They can be installed
+with \code{\link[=install_binaries]{install_binaries()}}. If you set the path to the folder that will host
+the bin folder manually while running \link{install_binaries} please make sure to
+set \code{binpath} accordingly.
 
 The C++ version of Infomap generates temporary folders and/or files that are
-stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
+stored in the \code{path_temp} folder ("infomap_temp" with an unique time stamp
 located in the working directory by default). This temporary folder is
 removed by default (\code{delete_temp = TRUE}).
 
 Several version of Infomap are available in the package. See
-\link{install_binaries} for more details.
+\code{\link[=install_binaries]{install_binaries()}} for more details.
 }
 \note{
 Infomap has been designed to deal with bipartite networks. To use this
@@ -140,17 +140,20 @@ In both cases do not forget to indicate which of the first two columns is
 dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 feature nodes) using the arguments \code{site_col} and \code{species_col}.
 The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-\code{"sites"} to preserve only the sites nodes and \code{"species"} to
-preserve only the species nodes.
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes, \code{"sites"}
+to preserve only the sites nodes and \code{"species"} to preserve only the
+species nodes.
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_infomap(net)
+}
+
 }
 \references{
 \insertRef{Rosvall2008}{bioRgeo}
