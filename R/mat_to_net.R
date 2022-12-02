@@ -32,7 +32,7 @@
 #' net <- mat_to_net(mat, weight = TRUE)
 #' }
 #' 
-#' @importFrom reshape2 melt
+#' @importFrom tidyr pivot_longer
 #' 
 #' @export
 
@@ -46,8 +46,11 @@ mat_to_net <- function(mat, weight = FALSE, remove_zeroes = TRUE){
   controls(args = remove_zeroes, data = NULL, type = "boolean")
 
   # Conversion as data.frame
-  net <- reshape2::melt(mat)
-  colnames(net) <- c("Node1", "Node2", "Weight")
+  mat <- as.data.frame(mat)
+  mat$Node1 <- rownames(mat)
+  net <- as.data.frame(tidyr::pivot_longer(data = data.frame(mat),
+                                           cols = -Node1, names_to = "Node2",
+                                           values_to = "Weight"))
 
   # Remove interactions with weight equal 0
   if(remove_zeroes == TRUE){

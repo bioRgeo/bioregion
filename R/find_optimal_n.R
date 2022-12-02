@@ -179,6 +179,7 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) 
 #' @examples
+#' \dontrun{
 #' dissim <- dissimilarity(vegemat, metric = "all")
 #'
 #' # User-defined number of clusters
@@ -209,10 +210,11 @@
 #' find_optimal_n(a, criterion = "decreasing_step",
 #'                step_levels = 3)                 
 #' b <- find_optimal_n(a, criterion = "mars")             
+#' }
 #'
 #' @importFrom earth earth
 #' @importFrom stats predict quantile
-#' @importFrom reshape2 melt
+#' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes_string geom_line facet_wrap geom_vline
 #' @importFrom ggplot2 theme_bw
 #' 
@@ -563,10 +565,11 @@ find_optimal_n <- function(
     }
     
     
-    if(plot)
-    {
-      ggdf2 <- reshape2::melt(partitions$evaluation_df,
-                              measure.vars = grep("optimal_n_", colnames(partitions$evaluation_df)))
+    if(plot){
+      ggdf2 <- tidyr::pivot_longer(
+        data = as.data.frame(partitions$evaluation_df),
+        cols = grep("optimal_n_", colnames(partitions$evaluation_df)))
+      ggdf2 <- as.data.frame(ggdf2)
       ggdf2$variable <- gsub("optimal_n_", "", ggdf2$variable)
       ggdf2 <- ggdf2[ggdf2$value, ]
       ggdf <- reshape2::melt(partitions$evaluation_df,

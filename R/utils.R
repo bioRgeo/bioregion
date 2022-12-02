@@ -192,7 +192,7 @@ Please carefully check your data before using the clustering functions."))
   # Input matrix ##############################################################
   if (type == "input_matrix") {
     if (!is.matrix(data)) {
-      stop(paste0(deparse(substitute(data)), "must be a matrix."),
+      stop(paste0(deparse(substitute(data)), " must be a matrix."),
            call. = FALSE)
     }
     rowmat=rownames(data)

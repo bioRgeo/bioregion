@@ -185,6 +185,7 @@ function as first approximation of the best numbers for your
 bioregionalisation.
 }
 \examples{
+\dontrun{
 dissim <- dissimilarity(vegemat, metric = "all")
 
 # User-defined number of clusters
@@ -215,6 +216,7 @@ find_optimal_n(a, criterion = "decreasing_step",
 find_optimal_n(a, criterion = "decreasing_step",
                step_levels = 3)                 
 b <- find_optimal_n(a, criterion = "mars")             
+}
 
 }
 \references{
