@@ -48,7 +48,7 @@ mat_to_net <- function(mat, weight = FALSE, remove_zeroes = TRUE){
   # Conversion as data.frame
   mat <- as.data.frame(mat)
   mat$Node1 <- rownames(mat)
-  net <- as.data.frame(tidyr::pivot_longer(data = data.frame(mat),
+  net <- as.data.frame(tidyr::pivot_longer(data = as.data.frame(mat),
                                            cols = -Node1, names_to = "Node2",
                                            values_to = "Weight"))
 
