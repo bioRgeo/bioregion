@@ -21,18 +21,17 @@
 #' @param criterion character string indicating the criterion to be used to
 #' identify optimal number(s) of clusters. Available methods currently include
 #' `"elbow"`,
-#' `"step_increasing"`, `"step_decreasing"`, `"cutoff"`, 
+#' `"increasing_step"`, `"decreasing_step"`, `"cutoff"`, 
 #' `"mars"`, `"min"` or
 #' `"max"`. Default is `"elbow"`. See details.
 #' 
-#' @param step_quantile if `"step_increasing"` or `"step_decreasing"`,
+#' @param step_quantile if `"increasing_step"` or `"decreasing_step"`,
 #' specify here the quantile
-#' of differences between two consecutive k to be used as the cutoff to identify
-#' the most important steps in `eval_metric`
+#' of differences between two consecutive k to be used as the cutoff to
+#' identify the most important steps in `eval_metric`
 #' 
-#' @param step_levels if `"step_increasing"` or `"step_decreasing"`,
-#' specify here the number of largest
-#' steps to keep as cutoffs.
+#' @param step_levels if `"increasing_step"` or `"decreasing_step"`, specify
+#' here the number of largest steps to keep as cutoffs.
 #' 
 #' @param step_round_above a `boolean` indicating if the optimal number of 
 #' clusters should be picked above or below the identified steps. Indeed, each
@@ -41,16 +40,14 @@
 #' (`step_round_above = TRUE`) or X (`step_round_above = FALSE`? 
 #' Defaults to `TRUE` 
 #' 
-#' @param metric_cutoffs if `criterion = "cutoff"`, specify here the
-#' cutoffs of `eval_metric` at which the number of clusters should be
-#' extracted
+#' @param metric_cutoffs if `criterion = "cutoff"`, specify here the cutoffs
+#' of `eval_metric` at which the number of clusters should be extracted
 #' 
-#' @param mars_breakpoints `"all"`, "`increasing"` or
-#'  `"decreasing"`. If 
-#' `criterion = "mars"`, specify here if you want to extract all break 
-#' points identified by the mars model (`"all"`), or only the breakpoints 
-#' corresponding to increases (`increasing"`) or decreases
-#' `"decreasing"`. Defaults to `"all"` 
+#' @param mars_breakpoints `"all"`, "`increasing"` or `"decreasing"`. If 
+#' `criterion = "mars"`, specify here if you want to extract all break points
+#' identified by the mars model (`"all"`), or only the breakpoints 
+#' corresponding to increases (`increasing"`) or decreases `"decreasing"`.
+#' Defaults to `"all"` 
 #' 
 #' @param plot a boolean indicating if a plot of the first `eval_metric`
 #' should be drawn with the identified optimal numbers of cutoffs
@@ -58,9 +55,9 @@
 #' @details
 #' \loadmathjax
 #'
-#' This function explores the
-#' relationship evaluation metric ~ number of clusters, and a criterion is 
-#' applied to search an optimal number of clusters.
+#' This function explores the relationship evaluation metric ~ number of
+#' clusters, and a criterion is applied to search an optimal number of
+#' clusters.
 #'
 #' **Please read the note section about the following criteria.**
 #'
@@ -71,52 +68,49 @@
 #' advocate to move
 #' beyond the "Search one optimal number of clusters" paradigm, and consider
 #' investigating "multiple optimal numbers of clusters". Indeed, using only one
-#' optimal number of clusters may simplify the natural complexity of biological 
-#' datasets, and, for example, ignore the often hierarchical / nested nature of 
+#' optimal number of clusters may simplify the natural complexity of biological
+#' datasets, and, for example, ignore the often hierarchical / nested nature of
 #' bioregionalisations. Using multiple partitions likely avoids this
 #' oversimplification bias and may convey more information.
 #' See, for example, the reanalysis of Holt et al. (2013)
 #' by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
 #' and shallow cuts. 
 #' 
-#' Following this rationale, several of the criteria
-#' implemented here can/will return multiple "optimal" numbers of clusters, 
-#' depending on user choices.
+#' Following this rationale, several of the criteria implemented here can/will
+#' return multiple "optimal" numbers of clusters, depending on user choices.
 #'
 #' **Criteria to find optimal number(s) of clusters**
 #' \itemize{
 #' \item{`elbow`:
 #' This method consists in finding one elbow in the evaluation metric curve, as
 #' is commonly done in clustering analyses. The idea is to approximate the
-#' number of clusters at which the evaluation metric no longer increments.
-#' It is based on a fast method finding the maximum distance between the curve
-#' and a straight line linking the minimum and maximum number of points.
-#' The code we use here is based on code written by Esben Eickhardt available
-#' here <https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075>.
+#' number of clusters at which the evaluation metric no longer increments.It is
+#' based on a fast method finding the maximum distance between the curve and a
+#' straight line linking the minimum and maximum number of points. The code we
+#' use here is based on code written by Esben Eickhardt available here
+#' <https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075>.
 #' The code has been modified to work on both increasing and decreasing
 #' evaluation metrics.}
 #' \item{`increasing_step` or `decreasing_step`:
-#' This method consists in identifying clusters at the most important
-#' changes, or steps, in the evaluation metric. The objective can be to either
-#' look for largest increases (`increasing_step`) or largest decreases
-#' `decreasing_step`. Steps are calculated based on the pairwise
-#' differences between partitions.
-#' Therefore, this is relative
-#' to the distribution of differences in the evaluation metric over the tested
-#' partitions. Specify `step_quantile` as the quantile cutoff above which
-#' steps will be selected as most important (by default, 0.99, i.e. the
-#' largest 1\% steps will be selected).Alternatively, you can also choose to
-#' specify the number of top steps to keep, e.g. to keep the largest three
-#' steps, specify `step_level = 3`
-#' Basically this method will emphasize the
-#' most important changes in the evaluation metric as a first approximation of
-#' where important cuts can be chosen.
+#' This method consists in identifying clusters at the most important changes,
+#' or steps, in the evaluation metric. The objective can be to either look for
+#' largest increases (`increasing_step`) or largest decreases
+#' `decreasing_step`. Steps are calculated based on the pairwise differences
+#' between partitions. Therefore, this is relative to the distribution of
+#' differences in the evaluation metric over the tested partitions. Specify
+#' `step_quantile` as the quantile cutoff above which steps will be selected as
+#' most important (by default, 0.99, i.e. the largest 1\% steps will be
+#' selected).Alternatively, you can also choose to specify the number of top
+#' steps to keep, e.g. to keep the largest three steps, specify
+#' `step_level = 3`. Basically this method will emphasize the most important
+#' changes in the evaluation metric as a first approximation of where important
+#' cuts can be chosen.
 #' 
 #' **Please note that you should choose between `increasing_step` and
-#' `decreasing_step` depending on the nature of your evaluation metrics.
-#' For example, for metrics that are monotonously decreasing (e.g., endemism metrics
-#' `"avg_endemism" & "tot_endemism"`) with the number of clusters should 
-#' n_clusters, you should choose `decreasing_step`. On the contrary, for 
+#' `decreasing_step` depending on the nature of your evaluation metrics. For
+#' example, for metrics that are monotonously decreasing (e.g., endemism
+#' metrics `"avg_endemism" & "tot_endemism"`) with the number of clusters
+#' should n_clusters, you should choose `decreasing_step`. On the contrary, for
 #' metrics that are monotonously increasing with the number of clusters (e.g.,
 #' `"pc_distance"`), you should choose `increasing_step`. **
 #' }
@@ -124,17 +118,17 @@
 #' This method consists in specifying the cutoff value(s) in the evaluation
 #' metric from which the number(s) of clusters should be derived. This is the
 #' method used by \insertCite{Holt2013}{bioRgeo}. Note, however, that the
-#' cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only relevant
-#' at very large spatial scales, and lower cut-offs should be considered at
-#' finer spatial scales.
+#' cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
+#' relevant at very large spatial scales, and lower cut-offs should be
+#' considered at finer spatial scales.
 #' }
 #' \item{`mars`:
 #' This method consists in fitting a mars model on the evaluation curve, and
 #' using it to identify all cutoffs at which there is no more increase in the
-#' evaluation metric. In other words, this method will find cutoffs with the two
-#' following conditions: (1) the evaluation metric was increasing before the
-#' cutoff and (2) there is no more increase or the increase is slower after the
-#' cutoff. This method uses [earth::earth()][earth::earth]. This method
+#' evaluation metric. In other words, this method will find cutoffs with the
+#' two following conditions: (1) the evaluation metric was increasing before
+#' the cutoff and (2) there is no more increase or the increase is slower after
+#' the cutoff. This method uses [earth::earth()][earth::earth]. This method
 #' should probably not be applied if you have a low number of partitions (e.g.
 #' <= 20)}
 #'
@@ -158,10 +152,11 @@
 #' @note Please note that finding the optimal number of clusters is a procedure
 #' which normally requires decisions from the users, and as such can hardly be
 #' fully automatized. Users are strongly advised to read the references
-#' indicated below to look for guidance on how to choose their optimal number(s)
-#' of clusters. Consider the "optimal" numbers of clusters returned by this
-#' function as first approximation of the best numbers for your 
+#' indicated below to look for guidance on how to choose their optimal
+#' number(s) of clusters. Consider the "optimal" numbers of clusters returned
+#' by this function as first approximation of the best numbers for your 
 #' bioregionalisation.
+#' 
 #' @references
 #' \insertRef{Castro-Insua2018}{bioRgeo}
 #'
@@ -174,10 +169,12 @@
 #' \insertRef{Langfelder2008}{bioRgeo}
 #' 
 #' @importFrom rlang .data
+#' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) 
+#' Pierre Denelle (\email{pierre.denelle@gmail.com})
+#' 
 #' @examples
 #' \dontrun{
 #' dissim <- dissimilarity(vegemat, metric = "all")
@@ -240,19 +237,21 @@ find_optimal_n <- function(
          ncol(partitions) > 2) {
         if(all(sapply(partitions[, 3:ncol(partitions)],
                       is.numeric))) {
-          partitions <- list(args = list(eval_metric =
-                                           colnames(partitions) [3: ncol(partitions)]),
-                             evaluation_df = partitions)
+          partitions <- list(
+            args = list(eval_metric =
+                          colnames(partitions)[3: ncol(partitions)]),
+            evaluation_df = partitions)
         } else {
           stop("Your partition data.frame contains non numeric columns. ", 
                "Only numeric columns are expected after the first two columns")
         }
         
       } else {
-        stop("partitions should be the output object from partition_metrics() ",
-             "or a data.frame with the first two columns named as 'K' & ",
-             "'n_clusters' and the following columns being the evaluation ",
-             "metrics")
+        stop(
+          "partitions should be the output object from partition_metrics() ",
+          "or a data.frame with the first two columns named as 'K' & ",
+          "'n_clusters' and the following columns being the evaluation ",
+          "metrics")
       }
     }
   }
@@ -267,27 +266,54 @@ find_optimal_n <- function(
     stop("metrics_to_use should exist in the evaluation table")
   }
   print(metrics_to_use)
-  if(nrow(partitions$evaluation_df) <= 4)
-  {
+  if(nrow(partitions$evaluation_df) <= 4){
     stop("The number of partitions is too low (<=4) for this function to work
          properly")
-  } else
-  {
-    message(paste0("Number of partitions: ", nrow(partitions$evaluation_df), "\n"))
+  } else{
+    message(paste0("Number of partitions: ",
+                   nrow(partitions$evaluation_df), "\n"))
     
-    if(criterion %in% c("elbow",
-                        "increasing_step",
-                        "decreasing_step",
+    if(criterion %in% c("elbow", "increasing_step", "decreasing_step",
                         "mars")) {
       if(nrow(partitions$evaluation_df) <= 8) {
-        message(paste0("...Caveat: be cautious with the interpretation of metric analyses with such a low number of partitions"))
+        message(paste0(
+          "...Caveat: be cautious with the interpretation of metric analyses
+          with such a low number of partitions"))
       }
     } else if(!(criterion %in% c("min", "max", "cutoff"))) {
-      stop("criterion must be one of elbow, increasing_step, decreasing_step, min, max, cutoff or mars")
+      stop("criterion must be one of elbow, increasing_step, decreasing_step,
+           min, max, cutoff or mars")
     }
     
-    message(paste0("Searching for potential optimal number(s) of clusters based on the ",
-                   criterion, " method"))
+    if(criterion %in% c("increasing_step", "decreasing_step")){
+      if(!is.numeric(step_quantile) || step_quantile <= 0 ||
+         step_quantile >= 1){
+        stop("step_quantile must be a numeric in the ]0,1[ interval. See help of
+           the function.")
+      }
+    }
+    
+    if(criterion %in% c("increasing_step", "decreasing_step")){
+      if(!is.logical(step_round_above)){
+        stop("step_round_above must be a boolean. See help of the function.")
+      }
+    }
+    
+    if(criterion %in% c("increasing_step", "decreasing_step")){
+      if(!is.null(step_levels) && (!is.integer(step_levels) ||
+                                   step_levels >= 0)){
+        stop("step_levels must be a positive integer. See help of the
+             function.")
+      }
+    }
+    
+    if(!is.logical(plot)){
+      stop("plot should be a Boolean.")
+    }
+    
+    message(paste0(
+      "Searching for potential optimal number(s) of clusters based on the ",
+      criterion, " method"))
     
     partitions$evaluation_df <- data.frame(
       partitions$evaluation_df,
@@ -296,105 +322,110 @@ find_optimal_n <- function(
                     length(metrics_to_use)),
             dimnames = list(NULL,
                             paste0("optimal_n_", metrics_to_use))))
-    if(criterion == "mars")
-    {
+    if(criterion == "mars"){
       if(!(mars_breakpoints %in% c("all", "increasing", "decreasing"))) {
         stop("mars_breakpoints should be 'all' or 'increasing' or 'decreasing'")
       }
       
-      mars_res <- lapply(metrics_to_use, 
-                         function(x, eval_df, hing) {
-                           if(any(is.na(eval_df[, x])))
-                           {
-                             NA_vals <- eval_df[which(is.na(eval_df[, x])), ]
-                             eval_df <- eval_df[-which(is.na(eval_df[, x])), ]
-                           } else {
-                             NA_vals <- NULL
-                           }
-                           
-                           mars_model <- earth::earth(eval_df[, x] ~ eval_df$n_clusters)
-                           # fit <- lm(tot_endemism ~ n_clusters, data = eval_df)
-                           # fit_seg <- segmented(fit, seg.Z = ~n_clusters, psi = NA)
-                           # Consider using segmented here, instead of mars?
-                           mars_sum <- summary(mars_model)
-                           mars_preds <- data.frame(eval_df,
-                                                    preds = as.vector(stats::predict(mars_model,
-                                                                                     eval_df$n_clusters)))
-                           if(nrow(mars_sum$coefficients) > 1)
-                           {
-                             funs <- rownames(mars_sum$coefficients)[2:nrow(mars_sum$coefficients)]
-                             funs <- gsub(")", "", gsub("h(", "", funs, fixed = TRUE), fixed = TRUE)
-                             funs <- gsub(paste0("eval_df$n_clusters"), "", funs, fixed = TRUE)
-                             
-                             mars_hinges <- as.numeric(gsub("-", "", funs))
-                             
-                             mars_cutoffs <- data.frame(cutoff = unique(mars_hinges),
-                                                        before = NA, after = NA)
-                             mars_cutoffs <- mars_cutoffs[order(mars_cutoffs$cutoff), ]
-                             
-                             
-                             def_cut <- min(mars_preds$n_clusters)
-                             
-                             
-                             # Finding if the predictions are increasing or decreasing 
-                             # after the hinge
-                             for (cur_cut in mars_cutoffs$cutoff)
-                             {
-                               y2 <- unique(mars_preds[which(mars_preds$n_clusters == cur_cut), ncol(mars_preds)])
-                               y1 <- unique(mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)])
-                               
-                               mars_cutoffs$before[mars_cutoffs$cutoff == cur_cut] <-
-                                 (y2 - y1) / (cur_cut - def_cut)
-                               
-                               def_cut <- cur_cut
-                             }
-                             if(nrow(mars_cutoffs) > 1)
-                             {
-                               mars_cutoffs$after[1:(nrow(mars_cutoffs) - 1)] <- mars_cutoffs$before[2:nrow(mars_cutoffs)]
-                             }
-                             
-                             val_after <- unique(mars_preds[which(mars_preds$n_clusters == max(mars_preds$n_clusters)), ncol(mars_preds)])
-                             mars_cutoffs$after[nrow(mars_cutoffs)] <-
-                               (val_after -
-                                  mars_preds[which(mars_preds$n_clusters == def_cut), ncol(mars_preds)]) /
-                               (max(mars_preds$n_clusters) - def_cut)
-                             mars_cutoffs$change_slope <- mars_cutoffs$after - mars_cutoffs$before
-                             
-                             mars_cutoffs$breaks <- ifelse(mars_cutoffs$before > 0 & mars_cutoffs$change_slope < 0, TRUE, FALSE)
-                             
-                             
-                             if (hing == "all")
-                             {
-                               optim_cutoffs <- 
-                                 which(partitions$evaluation_df$n_clusters %in% mars_cutoffs$cutoff)
-                             } else if (hing == "increase") {
-                               optim_cutoffs <- 
-                                 which(partitions$evaluation_df$n_clusters %in% mars_cutoffs$cutoff[mars_cutoffs$breaks])
-                             } else if (hing == "decrease") {
-                               optim_cutoffs <- 
-                                 which(partitions$evaluation_df$n_clusters %in% mars_cutoffs$cutoff[!mars_cutoffs$breaks])
-                             }
-                           } else
-                           {
-                             optim_cutoffs <- integer(0)
-                           }
-                           
-                           if(length(NA_vals))
-                           {
-                             mars_preds <- rbind(data.frame(NA_vals, 
-                                                            preds = NA),
-                                                 mars_preds)
-                           }
-                           
-                           return(list(optim_cutoffs,
-                                       mars_preds))
-                         }, eval_df = partitions$evaluation_df, hing = mars_breakpoints)
+      mars_res <- lapply(
+        metrics_to_use, 
+        function(x, eval_df, hing) {
+          if(any(is.na(eval_df[, x]))){
+            NA_vals <- eval_df[which(is.na(eval_df[, x])), ]
+            eval_df <- eval_df[-which(is.na(eval_df[, x])), ]
+          } else {
+            NA_vals <- NULL
+          }
+          
+          mars_model <- earth::earth(eval_df[, x] ~ eval_df$n_clusters)
+          # fit <- lm(tot_endemism ~ n_clusters, data = eval_df)
+          # fit_seg <- segmented(fit, seg.Z = ~n_clusters, psi = NA)
+          # Consider using segmented here, instead of mars?
+          mars_sum <- summary(mars_model)
+          mars_preds <- data.frame(
+            eval_df,
+            preds = as.vector(stats::predict(mars_model,
+                                             eval_df$n_clusters)))
+          if(nrow(mars_sum$coefficients) > 1){
+            funs <-
+              rownames(mars_sum$coefficients)[2:nrow(mars_sum$coefficients)]
+            funs <- gsub(")", "", gsub("h(", "", funs, fixed = TRUE),
+                         fixed = TRUE)
+            funs <- gsub(paste0("eval_df$n_clusters"), "", funs, fixed = TRUE)
+            
+            mars_hinges <- as.numeric(gsub("-", "", funs))
+            
+            mars_cutoffs <- data.frame(cutoff = unique(mars_hinges),
+                                       before = NA, after = NA)
+            mars_cutoffs <- mars_cutoffs[order(mars_cutoffs$cutoff), ]
+            
+            def_cut <- min(mars_preds$n_clusters)
+            
+            # Finding if the predictions are increasing or decreasing 
+            # after the hinge
+            for (cur_cut in mars_cutoffs$cutoff){
+              y2 <- unique(mars_preds[which(mars_preds$n_clusters == cur_cut),
+                                      ncol(mars_preds)])
+              y1 <- unique(mars_preds[which(mars_preds$n_clusters == def_cut),
+                                      ncol(mars_preds)])
+              
+              mars_cutoffs$before[mars_cutoffs$cutoff == cur_cut] <-
+                (y2 - y1) / (cur_cut - def_cut)
+              
+              def_cut <- cur_cut
+            }
+            if(nrow(mars_cutoffs) > 1){
+              mars_cutoffs$after[1:(nrow(mars_cutoffs) - 1)] <-
+                mars_cutoffs$before[2:nrow(mars_cutoffs)]
+            }
+            
+            val_after <- unique(mars_preds[which(mars_preds$n_clusters ==
+                                                   max(mars_preds$n_clusters)),
+                                           ncol(mars_preds)])
+            mars_cutoffs$after[nrow(mars_cutoffs)] <-
+              (val_after -
+                 mars_preds[which(mars_preds$n_clusters == def_cut),
+                            ncol(mars_preds)]) /
+              (max(mars_preds$n_clusters) - def_cut)
+            mars_cutoffs$change_slope <- mars_cutoffs$after -
+              mars_cutoffs$before
+            
+            mars_cutoffs$breaks <- ifelse(mars_cutoffs$before > 0 &
+                                            mars_cutoffs$change_slope < 0,
+                                          TRUE, FALSE)
+            
+            if(hing == "all"){
+              optim_cutoffs <- 
+                which(partitions$evaluation_df$n_clusters %in%
+                        mars_cutoffs$cutoff)
+            } else if (hing == "increase") {
+              optim_cutoffs <- 
+                which(partitions$evaluation_df$n_clusters %in%
+                        mars_cutoffs$cutoff[mars_cutoffs$breaks])
+            } else if (hing == "decrease") {
+              optim_cutoffs <- 
+                which(partitions$evaluation_df$n_clusters %in%
+                        mars_cutoffs$cutoff[!mars_cutoffs$breaks])
+            }
+          } else{
+            optim_cutoffs <- integer(0)
+          }
+          
+          if(length(NA_vals)){
+            mars_preds <- rbind(data.frame(NA_vals, 
+                                           preds = NA),
+                                mars_preds)
+          }
+          
+          return(list(optim_cutoffs,
+                      mars_preds))
+        }, eval_df = partitions$evaluation_df, hing = mars_breakpoints)
       
-      optim_index <- lapply(mars_res,
-                            function(x) x[[1]])
+      optim_index <- lapply(mars_res, function(x) x[[1]])
       
-      optim_n <- lapply(optim_index,
-                        function(x) unique(partitions$evaluation_df$n_clusters[x]))
+      optim_n <- lapply(
+        optim_index,
+        function(x) unique(partitions$evaluation_df$n_clusters[x]))
       
       mars_preds <- unlist(sapply(mars_res,
                                   function(x) x[[2]][, ncol(x[[2]])],
@@ -403,14 +434,12 @@ find_optimal_n <- function(
       names(optim_n) <- metrics_to_use
       
       for(metric in names(optim_n)) {
-        partitions$evaluation_df[optim_index[[metric]], paste0("optimal_n_", metric)] <- 
-          TRUE
+        partitions$evaluation_df[optim_index[[metric]],
+                                 paste0("optimal_n_", metric)] <- TRUE
       }
-      
     }
     
-    if(criterion == "elbow")
-    {
+    if(criterion == "elbow"){
       optim_n <- lapply(metrics_to_use,
                         function(x, eval_df) {
                           .elbow_finder(eval_df$n_clusters,
@@ -419,7 +448,6 @@ find_optimal_n <- function(
                         }, eval_df = partitions$evaluation_df)
       names(optim_n) <- metrics_to_use
       
-      
       for(metric in names(optim_n)) {
         partitions$evaluation_df[which(partitions$evaluation_df$n_clusters == 
                                          optim_n[[metric]]), 
@@ -427,81 +455,81 @@ find_optimal_n <- function(
       }
       
       message(paste0("   * elbow found at:"))
-      message(paste(paste(names(optim_n), optim_n, sep = " "), collapse = "\n"))
+      message(paste(paste(names(optim_n), optim_n, sep = " "),
+                    collapse = "\n"))
       
-      if("anosim" %in% metrics_to_use)
-      {
-        warning(paste0("The elbow method is likely not suitable for the ANOSIM",
-                       " metric. You should rather look for leaps in the curve",
-                       " (see criterion = 'increasing_step' or ",
-                       "decreasing_step)"))
+      if("anosim" %in% metrics_to_use){
+        warning(paste0(
+          "The elbow method is likely not suitable for the ANOSIM",
+          " metric. You should rather look for leaps in the curve",
+          " (see criterion = 'increasing_step' or ",
+          "decreasing_step)"))
       }
     }
     
-    if(criterion %in% c("increasing_step",
-                        "decreasing_step"))
-    {
+    if(criterion %in% c("increasing_step", "decreasing_step")) {
       message(" - Step method")
       
       if(criterion == "increasing_step" & any(c("tot_endemism",
                                                 "avg_endemism") %in% 
                                               metrics_to_use)) {
-        warning(paste0("Criterion 'increasing_step' cannot work properly with ",
-                       "metric 'tot_endemism', because this metric is usually ",
-                       "monotonously decreasing. Consider using ",
-                       "criterion = 'decreasing_step' instead.\n"))
+        warning(paste0(
+          "Criterion 'increasing_step' cannot work properly with ",
+          "metric 'tot_endemism', because this metric is usually ",
+          "monotonously decreasing. Consider using ",
+          "criterion = 'decreasing_step' instead.\n"))
       } else if(criterion == "decreasing_step" & any(c("pc_distance") %in% 
                                                      metrics_to_use)) {
-        warning(paste0("Criterion 'decreasing_step' cannot work properly with",
-                       " metrics 'pc_distance' or 'avg_endemism', because these",
-                       " metrics are usually monotonously decreasing. Consider ",
-                       "using criterion = 'increasing_step' instead.\n"))
+        warning(paste0(
+          "Criterion 'decreasing_step' cannot work properly with",
+          " metrics 'pc_distance' or 'avg_endemism', because these",
+          " metrics are usually monotonously decreasing. Consider ",
+          "using criterion = 'increasing_step' instead.\n"))
       }
       
-      optim_index <- lapply(metrics_to_use,
-                            function (x, eval_df, crit, s_lvl, s_qt, cl) {
-                              # Compute difference between each consecutive nb of clusters
-                              diffs <- eval_df[2:nrow(eval_df), x] -
-                                eval_df[1:(nrow(eval_df) - 1), x]
-                              if(crit == "decreasing_step"){
-                                diffs <- - diffs
-                              }
-                              
-                              if(!is.null(s_lvl))
-                              {
-                                level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:s_lvl]
-                                optim_n <- which(diffs %in% level_diffs) + cl
-                                
-                                if(length(optim_n) >= s_lvl + 2) {
-                                  warning(paste0("The number of optimal N for method '",
-                                                 x, "' is suspiciously high, consider ",
-                                                 "switching between 'increasing_step'",
-                                                 " and 'decreasing_step'\n"))
-                                }
-                              } else if(!is.null(step_quantile))
-                              {
-                                qt <- stats::quantile(diffs,
-                                                      s_qt)
-                                optim_n <- which(diffs > qt) + cl
-                              }
-                              return(optim_n)
-                            }, eval_df = partitions$evaluation_df, crit = criterion,
-                            s_lvl = step_levels, s_qt = step_quantile, cl = step_round_above)
+      optim_index <- lapply(
+        metrics_to_use,
+        function (x, eval_df, crit, s_lvl, s_qt, cl) {
+          # Compute difference between each consecutive nb of clusters
+          diffs <- eval_df[2:nrow(eval_df), x] -
+            eval_df[1:(nrow(eval_df) - 1), x]
+          if(crit == "decreasing_step"){
+            diffs <- - diffs
+          }
+          
+          if(!is.null(s_lvl)){
+            level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:s_lvl]
+            optim_n <- which(diffs %in% level_diffs) + cl
+            
+            if(length(optim_n) >= s_lvl + 2) {
+              warning(paste0("The number of optimal N for method '",
+                             x, "' is suspiciously high, consider ",
+                             "switching between 'increasing_step'",
+                             " and 'decreasing_step'\n"))
+            }
+          } else if(!is.null(step_quantile)){
+            qt <- stats::quantile(diffs,
+                                  s_qt)
+            optim_n <- which(diffs > qt) + cl
+          }
+          return(optim_n)
+        }, eval_df = partitions$evaluation_df, crit = criterion,
+        s_lvl = step_levels, s_qt = step_quantile, cl = step_round_above)
       
       names(optim_index) <- metrics_to_use
       
-      optim_n <- lapply(optim_index,
-                        function(x) unique(partitions$evaluation_df$n_clusters[x]))
+      optim_n <- lapply(
+        optim_index,
+        function(x) unique(partitions$evaluation_df$n_clusters[x]))
       
       
       for(metric in names(optim_n)) {
-        partitions$evaluation_df[optim_index[[metric]], paste0("optimal_n_", metric)] <- 
-          TRUE
+        partitions$evaluation_df[optim_index[[metric]],
+                                 paste0("optimal_n_", metric)] <- TRUE
       }
       
     }
-    if(criterion == "cutoff")
-    {
+    if(criterion == "cutoff") {
       message(" - Cutoff method")
       
       if(length(metrics_to_use) > 1) {
@@ -526,8 +554,7 @@ find_optimal_n <- function(
       names(optim_n) <- metrics_to_use
     }
     
-    if(criterion == "max")
-    {
+    if(criterion == "max"){
       message(" - Max value method")
       
       optim_index <- lapply(metrics_to_use,
@@ -536,17 +563,17 @@ find_optimal_n <- function(
                             }, eval_df = partitions$evaluation_df)
       names(optim_index) <- metrics_to_use
       
-      optim_n <- lapply(optim_index,
-                        function(x) unique(partitions$evaluation_df$n_clusters[x]))
+      optim_n <- lapply(
+        optim_index,
+        function(x) unique(partitions$evaluation_df$n_clusters[x]))
       
       for(metric in names(optim_n)) {
-        partitions$evaluation_df[optim_index, paste0("optimal_n_", metric)] <- 
-          TRUE
+        partitions$evaluation_df[optim_index,
+                                 paste0("optimal_n_", metric)] <- TRUE
       }
     }
     
-    if(criterion == "min")
-    {
+    if(criterion == "min"){
       message(" - Min value method")
       
       optim_index <- lapply(metrics_to_use,
@@ -555,8 +582,9 @@ find_optimal_n <- function(
                             }, eval_df = partitions$evaluation_df)
       names(optim_index) <- metrics_to_use
       
-      optim_n <- lapply(optim_index,
-                        function(x) unique(partitions$evaluation_df$n_clusters[x]))
+      optim_n <- lapply(
+        optim_index,
+        function(x) unique(partitions$evaluation_df$n_clusters[x]))
       
       for(metric in names(optim_n)) {
         partitions$evaluation_df[optim_index, paste0("optimal_n_", metric)] <- 
@@ -564,48 +592,58 @@ find_optimal_n <- function(
       }
     }
     
-    
     if(plot){
       ggdf2 <- tidyr::pivot_longer(
         data = as.data.frame(partitions$evaluation_df),
-        cols = grep("optimal_n_", colnames(partitions$evaluation_df)))
+        cols = grep("optimal_n_", colnames(partitions$evaluation_df)),
+        names_to = "variable")
       ggdf2 <- as.data.frame(ggdf2)
       ggdf2$variable <- gsub("optimal_n_", "", ggdf2$variable)
       ggdf2 <- ggdf2[ggdf2$value, ]
-      ggdf <- reshape2::melt(partitions$evaluation_df,
-                             measure.vars = metrics_to_use)
+      ggdf <- as.data.frame(tidyr::pivot_longer(
+        data = partitions$evaluation_df, cols = metrics_to_use,
+        names_to = "variable"))
+      
       message("Plotting results...")
-      p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters", y = "value")) +
+      p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
+                                                     y = "value")) +
         ggplot2::geom_line(col = "darkgrey") +
         ggplot2::facet_wrap(~ variable, scales = "free_y") +
-        # ggplot2::geom_hline(yintercept = partitions$evaluation_df[partitions$evaluation_df$optimal_nclust, eval_metric[1]],
-        #                     linetype = 2) +
+        # ggplot2::geom_hline(
+        #   yintercept = partitions$evaluation_df[
+        #     partitions$evaluation_df$optimal_nclust, eval_metric[1]],
+        #   linetype = 2) +
         ggplot2::geom_vline(data = ggdf2,
                             ggplot2::aes_string(xintercept = "n_clusters"),
                             linetype = 2) +
         ggplot2::theme_bw()
-      if(criterion == "mars")
-      {
+      if(criterion == "mars"){
         
         ggdf$mars_preds <- mars_preds
         
         message("   (the red line is the prediction from MARS models)")
         
-        p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters", y = "value")) +
+        p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
+                                                       y = "value")) +
           ggplot2::geom_line(col = "darkgrey") +
           ggplot2::facet_wrap(~ variable, scales = "free_y") +
-          # ggplot2::geom_hline(yintercept = partitions$evaluation_df[partitions$evaluation_df$optimal_nclust, eval_metric[1]],
+          # ggplot2::geom_hline(yintercept = partitions$evaluation_df[
+          #   partitions$evaluation_df$optimal_nclust, eval_metric[1]],
           #                     linetype = 2) +
           ggplot2::geom_vline(data = ggdf2,
                               ggplot2::aes_string(xintercept = "n_clusters"),
                               linetype = 2) +
-          ggplot2::theme_bw() + ggplot2::geom_line(ggplot2::aes_string(x = "n_clusters", y = "mars_preds"),
-                                                   col = "red")
+          ggplot2::theme_bw() +
+          ggplot2::geom_line(ggplot2::aes_string(x = "n_clusters",
+                                                 y = "mars_preds"),
+                             col = "red")
       } else {
-        p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters", y = "value")) +
+        p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
+                                                       y = "value")) +
           ggplot2::geom_line(col = "darkgrey") +
           ggplot2::facet_wrap(~ variable, scales = "free_y") +
-          # ggplot2::geom_hline(yintercept = partitions$evaluation_df[partitions$evaluation_df$optimal_nclust, eval_metric[1]],
+          # ggplot2::geom_hline(yintercept = partitions$evaluation_df[
+          #   partitions$evaluation_df$optimal_nclust, eval_metric[1]],
           #                     linetype = 2) +
           ggplot2::geom_vline(data = ggdf2,
                               ggplot2::aes_string(xintercept = "n_clusters"),
@@ -634,4 +672,3 @@ find_optimal_n <- function(
   class(outputs) <- append("bioRgeo.optimal.n", class(outputs))
   return(outputs)
 }
-

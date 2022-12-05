@@ -30,18 +30,17 @@ metrics available in \code{partitions} will be used}
 \item{criterion}{character string indicating the criterion to be used to
 identify optimal number(s) of clusters. Available methods currently include
 \code{"elbow"},
-\code{"step_increasing"}, \code{"step_decreasing"}, \code{"cutoff"},
+\code{"increasing_step"}, \code{"decreasing_step"}, \code{"cutoff"},
 \code{"mars"}, \code{"min"} or
 \code{"max"}. Default is \code{"elbow"}. See details.}
 
-\item{step_quantile}{if \code{"step_increasing"} or \code{"step_decreasing"},
+\item{step_quantile}{if \code{"increasing_step"} or \code{"decreasing_step"},
 specify here the quantile
-of differences between two consecutive k to be used as the cutoff to identify
-the most important steps in \code{eval_metric}}
+of differences between two consecutive k to be used as the cutoff to
+identify the most important steps in \code{eval_metric}}
 
-\item{step_levels}{if \code{"step_increasing"} or \code{"step_decreasing"},
-specify here the number of largest
-steps to keep as cutoffs.}
+\item{step_levels}{if \code{"increasing_step"} or \code{"decreasing_step"}, specify
+here the number of largest steps to keep as cutoffs.}
 
 \item{step_round_above}{a \code{boolean} indicating if the optimal number of
 clusters should be picked above or below the identified steps. Indeed, each
@@ -50,16 +49,14 @@ partition X+1: should the optimal partition be X+1
 (\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}?
 Defaults to \code{TRUE}}
 
-\item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the
-cutoffs of \code{eval_metric} at which the number of clusters should be
-extracted}
+\item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the cutoffs
+of \code{eval_metric} at which the number of clusters should be extracted}
 
-\item{mars_breakpoints}{\code{"all"}, "\verb{increasing"} or
-\code{"decreasing"}. If
-\code{criterion = "mars"}, specify here if you want to extract all break
-points identified by the mars model (\code{"all"}), or only the breakpoints
-corresponding to increases (\verb{increasing"}) or decreases
-\code{"decreasing"}. Defaults to \code{"all"}}
+\item{mars_breakpoints}{\code{"all"}, "\verb{increasing"} or \code{"decreasing"}. If
+\code{criterion = "mars"}, specify here if you want to extract all break points
+identified by the mars model (\code{"all"}), or only the breakpoints
+corresponding to increases (\verb{increasing"}) or decreases \code{"decreasing"}.
+Defaults to \code{"all"}}
 
 \item{plot}{a boolean indicating if a plot of the first \code{eval_metric}
 should be drawn with the identified optimal numbers of cutoffs}
@@ -90,9 +87,9 @@ to each other).
 \details{
 \loadmathjax
 
-This function explores the
-relationship evaluation metric ~ number of clusters, and a criterion is
-applied to search an optimal number of clusters.
+This function explores the relationship evaluation metric ~ number of
+clusters, and a criterion is applied to search an optimal number of
+clusters.
 
 \strong{Please read the note section about the following criteria.}
 
@@ -111,44 +108,41 @@ See, for example, the reanalysis of Holt et al. (2013)
 by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
 and shallow cuts.
 
-Following this rationale, several of the criteria
-implemented here can/will return multiple "optimal" numbers of clusters,
-depending on user choices.
+Following this rationale, several of the criteria implemented here can/will
+return multiple "optimal" numbers of clusters, depending on user choices.
 
 \strong{Criteria to find optimal number(s) of clusters}
 \itemize{
 \item{\code{elbow}:
 This method consists in finding one elbow in the evaluation metric curve, as
 is commonly done in clustering analyses. The idea is to approximate the
-number of clusters at which the evaluation metric no longer increments.
-It is based on a fast method finding the maximum distance between the curve
-and a straight line linking the minimum and maximum number of points.
-The code we use here is based on code written by Esben Eickhardt available
-here \url{https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075}.
+number of clusters at which the evaluation metric no longer increments.It is
+based on a fast method finding the maximum distance between the curve and a
+straight line linking the minimum and maximum number of points. The code we
+use here is based on code written by Esben Eickhardt available here
+\url{https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075}.
 The code has been modified to work on both increasing and decreasing
 evaluation metrics.}
 \item{\code{increasing_step} or \code{decreasing_step}:
-This method consists in identifying clusters at the most important
-changes, or steps, in the evaluation metric. The objective can be to either
-look for largest increases (\code{increasing_step}) or largest decreases
-\code{decreasing_step}. Steps are calculated based on the pairwise
-differences between partitions.
-Therefore, this is relative
-to the distribution of differences in the evaluation metric over the tested
-partitions. Specify \code{step_quantile} as the quantile cutoff above which
-steps will be selected as most important (by default, 0.99, i.e. the
-largest 1\\% steps will be selected).Alternatively, you can also choose to
-specify the number of top steps to keep, e.g. to keep the largest three
-steps, specify \code{step_level = 3}
-Basically this method will emphasize the
-most important changes in the evaluation metric as a first approximation of
-where important cuts can be chosen.
+This method consists in identifying clusters at the most important changes,
+or steps, in the evaluation metric. The objective can be to either look for
+largest increases (\code{increasing_step}) or largest decreases
+\code{decreasing_step}. Steps are calculated based on the pairwise differences
+between partitions. Therefore, this is relative to the distribution of
+differences in the evaluation metric over the tested partitions. Specify
+\code{step_quantile} as the quantile cutoff above which steps will be selected as
+most important (by default, 0.99, i.e. the largest 1\\% steps will be
+selected).Alternatively, you can also choose to specify the number of top
+steps to keep, e.g. to keep the largest three steps, specify
+\code{step_level = 3}. Basically this method will emphasize the most important
+changes in the evaluation metric as a first approximation of where important
+cuts can be chosen.
 
 **Please note that you should choose between \code{increasing_step} and
-\code{decreasing_step} depending on the nature of your evaluation metrics.
-For example, for metrics that are monotonously decreasing (e.g., endemism metrics
-\code{"avg_endemism" & "tot_endemism"}) with the number of clusters should
-n_clusters, you should choose \code{decreasing_step}. On the contrary, for
+\code{decreasing_step} depending on the nature of your evaluation metrics. For
+example, for metrics that are monotonously decreasing (e.g., endemism
+metrics \code{"avg_endemism" & "tot_endemism"}) with the number of clusters
+should n_clusters, you should choose \code{decreasing_step}. On the contrary, for
 metrics that are monotonously increasing with the number of clusters (e.g.,
 \code{"pc_distance"}), you should choose \code{increasing_step}. **
 }
@@ -156,17 +150,17 @@ metrics that are monotonously increasing with the number of clusters (e.g.,
 This method consists in specifying the cutoff value(s) in the evaluation
 metric from which the number(s) of clusters should be derived. This is the
 method used by \insertCite{Holt2013}{bioRgeo}. Note, however, that the
-cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only relevant
-at very large spatial scales, and lower cut-offs should be considered at
-finer spatial scales.
+cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
+relevant at very large spatial scales, and lower cut-offs should be
+considered at finer spatial scales.
 }
 \item{\code{mars}:
 This method consists in fitting a mars model on the evaluation curve, and
 using it to identify all cutoffs at which there is no more increase in the
-evaluation metric. In other words, this method will find cutoffs with the two
-following conditions: (1) the evaluation metric was increasing before the
-cutoff and (2) there is no more increase or the increase is slower after the
-cutoff. This method uses \link[earth:earth]{earth::earth()}. This method
+evaluation metric. In other words, this method will find cutoffs with the
+two following conditions: (1) the evaluation metric was increasing before
+the cutoff and (2) there is no more increase or the increase is slower after
+the cutoff. This method uses \link[earth:earth]{earth::earth()}. This method
 should probably not be applied if you have a low number of partitions (e.g.
 <= 20)}
 
@@ -179,9 +173,9 @@ of the evaluation metric.}
 Please note that finding the optimal number of clusters is a procedure
 which normally requires decisions from the users, and as such can hardly be
 fully automatized. Users are strongly advised to read the references
-indicated below to look for guidance on how to choose their optimal number(s)
-of clusters. Consider the "optimal" numbers of clusters returned by this
-function as first approximation of the best numbers for your
+indicated below to look for guidance on how to choose their optimal
+number(s) of clusters. Consider the "optimal" numbers of clusters returned
+by this function as first approximation of the best numbers for your
 bioregionalisation.
 }
 \examples{
