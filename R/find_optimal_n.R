@@ -300,8 +300,8 @@ find_optimal_n <- function(
     }
     
     if(criterion %in% c("increasing_step", "decreasing_step")){
-      if(!is.null(step_levels) && (!is.integer(step_levels) ||
-                                   step_levels >= 0)){
+      if(!is.null(step_levels) && (!is.numeric(step_levels) ||
+                                   step_levels < 0)){
         stop("step_levels must be a positive integer. See help of the
              function.")
       }
