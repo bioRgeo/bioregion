@@ -15,17 +15,15 @@ nhclu_kmeans(
 }
 \arguments{
 \item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
-\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
-If a \code{data.frame} is used, the first two
-columns represent pairs of sites (or any pair of nodes), and the next column(s)
-are the dissimilarity indices.}
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
+used, the first two columns represent pairs of sites (or any pair of nodes),
+and the next column(s) are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of
-\code{dissimilarity} is used.}
+the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers}
-specifying the requested number(s) of clusters}
+\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers} specifying the
+requested number(s) of clusters}
 
 \item{iter_max}{an \code{integer} specifying the maximum number of
 iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})}
@@ -35,7 +33,8 @@ iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})}
 (see \link[stats:kmeans]{stats::kmeans()})}
 
 \item{algorithm}{a \verb{character string} specifying the algorithm to use for
-kmean (see \link[stats:kmeans]{stats::kmeans()})}
+kmean (see \link[stats:kmeans]{stats::kmeans()}). Available options are
+Hartigan-Wong, Lloyd, Forgy and MacQueen.}
 }
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
@@ -54,16 +53,17 @@ clustering on the basis of dissimilarity with a k-means analysis.
 \details{
 This method partitions the data into k groups
 such that that the sum of squares of euclidean distances from points to the
-assigned cluster centres is minimized. k-means cannot be applied directly
+assigned cluster centers is minimized. k-means cannot be applied directly
 on dissimilarity/beta-diversity metrics, because these distances are not
-euclidean. Therefore, it requires first to transform the dissimilarity matrix
-with a Principal Coordinate Analysis (using the function
+euclidean. Therefore, it requires first to transform the dissimilarity
+matrix with a Principal Coordinate Analysis (using the function
 \link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
 of points in the PCoA. Because this makes an additional transformation of
 the initial matrix of dissimilarity, the partitioning around medoids method
 should be preferred (\code{\link[=nhclu_pam]{nhclu_pam()}})
 }
 \examples{
+\dontrun{
 dissim <- dissimilarity(vegemat, metric = "all")
 
 clust1 <- nhclu_kmeans(dissim,
@@ -81,7 +81,8 @@ partition_metrics(clust2,
                    species_col = "Species",
                    site_col = "Site",
                    eval_metric = "avg_endemism")
-                   
+}     
+
 }
 \seealso{
 \link{nhclu_pam}
