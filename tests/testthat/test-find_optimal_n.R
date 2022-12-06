@@ -19,10 +19,10 @@ optim_a <- find_optimal_n(a, plot = FALSE)
 
 test_that("number of columns in output", {
   
-  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 6L)
-  expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 6L)
+  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 8L)
+  expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 8L)
   expect_equal(optim_a$optimal_nb_clusters$pc_distance, 14L)
-  expect_equal(optim_a$optimal_nb_clusters$anosim, 16L)
+  expect_equal(optim_a$optimal_nb_clusters$anosim, 17L)
   
 })
 
