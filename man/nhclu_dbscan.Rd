@@ -15,30 +15,26 @@ nhclu_dbscan(
 }
 \arguments{
 \item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
-\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
-If a \code{data.frame} is used, the first two
-columns represent pairs of sites (or any pair of nodes), and the next column(s)
-are the dissimilarity indices.}
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
+used, the first two columns represent pairs of sites (or any pair of nodes),
+and the next column(s) are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of
-\code{dissimilarity} is used.}
+the third column name of \code{dissimilarity} is used.}
 
 \item{minPts}{a \code{numeric} value or a vector of \code{numeric} values
-specifying the minPts argument
-of \link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
-points to form a dense region. By default, it is set to the
-natural logarithm of the number of sites in \code{dissimilarity}. See details
-for guidance on choosing this parameter.}
+specifying the minPts argument of \link[dbscan:dbscan]{dbscan::dbscan()}).
+minPts is the minimum number of points to form a dense region. By default,
+it is set to the natural logarithm of the number of sites in
+\code{dissimilarity}. See details for guidance on choosing this parameter.}
 
-\item{eps}{a \code{numeric} value or a vector of \code{numeric} values
-specifying the eps argument
-of \link[dbscan:dbscan]{dbscan::dbscan()}). eps specifies how similar points
-should be to each other to be considered a part of a cluster. See details
-for guidance on choosing this parameter.}
+\item{eps}{a \code{numeric} value or a vector of \code{numeric} values specifying the
+eps argument of \link[dbscan:dbscan]{dbscan::dbscan()}). eps specifies how
+similar points should be to each other to be considered a part of a cluster.
+See details for guidance on choosing this parameter.}
 
-\item{plot}{a \code{boolean} indicating if the  k-nearest
-neighbour distance plot should be plotted.}
+\item{plot}{a \code{boolean} indicating if the  k-nearest neighbor distance plot
+should be plotted.}
 
 \item{...}{you can add here further arguments to be passed to \code{dbscan()}
 (see \link[dbscan:dbscan]{dbscan::dbscan()})}
@@ -54,9 +50,9 @@ clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 }
 \description{
-This function performs non hierarchical
-clustering on the basis of dissimilarity with Density-based Spatial Clustering of
-Applications with Noise (DBSCAN)
+This function performs non hierarchical clustering on the basis of
+dissimilarity with Density-based Spatial Clustering of Applications with
+Noise (DBSCAN)
 }
 \details{
 The dbscan (Density-based spatial clustering of
@@ -70,9 +66,9 @@ to learn how to set these arguments, as well as the paper
 \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
 are points which were deemed as noise by the algorithm.
 
-By default the function will select values for \code{minPts} and
-\code{eps}. However, these values can be inadequate and the users is advised
-to tune these values by running the function multiple times.
+By default the function will select values for \code{minPts} and \code{eps}. However,
+these values can be inadequate and the users is advised to tune these values
+by running the function multiple times.
 
 \strong{Choosing minPts:} how many points should be necessary to make a cluster?
 i.e., what is the minimum number of sites you expect in a bioregion? Set a
@@ -80,10 +76,10 @@ value sufficiently large for your dataset and your expectations.
 
 \strong{Choosing eps:} how similar should sites be in a cluster?  If eps is
 too small, then a majority of points will be considered to distinct and will
-not be clustered at all (i.e., considered as noise)? If the value is too high,
-then clusters will merge together.
+not be clustered at all (i.e., considered as noise)? If the value is too
+high, then clusters will merge together.
 The value of eps depends on the minPts argument, and the literature
-recommends to choose eps by identifying a knee in the k-nearest neighbour
+recommends to choose eps by identifying a knee in the k-nearest neighbor
 distance plot. By default
 the function will try to automatically find a knee in that curve, but the
 result is uncertain, and so the user should inspect the graph and modify
@@ -92,17 +88,15 @@ recommendation by the function when you launch it a first time without
 defining eps. Then, adjust depending on your clustering results.
 }
 \examples{
+\dontrun{
 dissim <- dissimilarity(vegemat, metric = "all")
 
-clust1 <- nhclu_dbscan(dissim,
-     index = "Simpson")
-clust2 <- nhclu_dbscan(dissim,
-     index = "Simpson",
-     eps = 0.2)
-clust3 <- nhclu_dbscan(dissim,
-     index = "Simpson",
-     minPts = c(5, 10, 15, 20),
+clust1 <- nhclu_dbscan(dissim, index = "Simpson")
+clust2 <- nhclu_dbscan(dissim, index = "Simpson", eps = 0.2)
+clust3 <- nhclu_dbscan(dissim, index = "Simpson", minPts = c(5, 10, 15, 20),
      eps = c(.1, .15, .2, .25, .3))
+}
+
 }
 \seealso{
 \link{hclu_optics}
