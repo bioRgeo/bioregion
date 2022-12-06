@@ -1,38 +1,39 @@
 #' Non hierarchical clustering: partitioning around medoids
 #'
-#' This function performs non hierarchical
-#' clustering on the basis of dissimilarity with partitioning around medoids.
+#' This function performs non hierarchical clustering on the basis of
+#' dissimilarity with partitioning around medoids.
 #'
 #' @param dissimilarity the output object from [dissimilarity()] or
-#'  [similarity_to_dissimilarity()], or a `dist` object. 
-#'  If a `data.frame` is used, the first two 
-#' columns represent pairs of sites (or any pair of nodes), and the next column(s)
-#' are the dissimilarity indices. 
+#' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is
+#' used, the first two columns represent pairs of sites (or any pair of nodes),
+#' and the next column(s) are the dissimilarity indices.
+#' 
 #' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of
-#'  `dissimilarity` is used.
-#' @param n_clust an `integer` or a `vector` of `integers`
-#' specifying the requested number(s) of clusters
-#' @param variant a `character` string specifying the variant of pam
-#' to use, by default "faster". See [cluster::pam()][cluster::pam] for
-#' more details
-#' @param nstart an `integer` specifying the number of random “starts”
-#' for the pam algorithm. By default, 1 (for the `"faster"` variant)
-#' @param cluster_only a `boolean` specifying if only the clustering
-#' should be returned from the [cluster::pam()][cluster::pam] function
-#' (more efficient)
+#' the third column name of `dissimilarity` is used.
+#' 
+#' @param n_clust an `integer` or a `vector` of `integers` specifying the
+#' requested number(s) of clusters.
+#' 
+#' @param variant a `character` string specifying the variant of pam to use,
+#' by default "faster". Available options are original, o_1, o_2, f_3, f_4,
+#' f_5 or fasterSee [cluster::pam()][cluster::pam] for more details.
+#' 
+#' @param nstart an `integer` specifying the number of random “starts” for the
+#' pam algorithm. By default, 1 (for the `"faster"` variant).
+#' 
+#' @param cluster_only a `boolean` specifying if only the clustering should be
+#' returned from the [cluster::pam()][cluster::pam] function (more efficient).
+#' 
 #' @param ... you can add here further arguments to be passed to `pam()`
 #' (see [cluster::pam()][cluster::pam])
 #'
 #' @details
-#' This method partitions data into
-#'  the chosen number of cluster on the basis of the input dissimilarity matrix.
-#'  It is more robust than k-means because it minimizes the sum of dissimilarity
-#'  between cluster centres and points assigned to the cluster -
-#'  whereas the k-means approach minimizes the sum of squared euclidean
-#'  distances (thus k-means cannot be applied directly on the input dissimilarity
-#'  matrix if the distances are not euclidean).
-#'
+#' This method partitions data into the chosen number of cluster on the basis
+#' of the input dissimilarity matrix. It is more robust than k-means because it
+#' minimizes the sum of dissimilarity between cluster centres and points
+#' assigned to the cluster - whereas the k-means approach minimizes the sum of
+#' squared euclidean distances (thus k-means cannot be applied directly on the
+#' input dissimilarity matrix if the distances are not euclidean).
 #'
 #' @return
 #' A `list` of class `bioRgeo.clusters` with five slots:
@@ -50,9 +51,9 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [nhclu_kmeans] 
-#' @export
-#'
+#' 
 #' @examples
+#' \dontrun{
 #' dissim <- dissimilarity(vegemat, metric = "all")
 #' 
 #' clust1 <- nhclu_pam(dissim,
@@ -69,95 +70,111 @@
 #'                    species_col = "Species",
 #'                    site_col = "Site",
 #'                    eval_metric = "avg_endemism")
-nhclu_pam <- function(dissimilarity,
-                      index = names(dissimilarity)[3],
-                      n_clust = NULL,
-                      nstart = if(variant == "faster") 1 else NA,
-                      variant = "faster", # c("original", "o_1", "o_2", "f_3", "f_4", "f_5", "faster")
-                      cluster_only = FALSE,# To reduce computation time & memory, can be provided to cluster functions
-                      ... # Further arguments to be passed to cluster::pam
-)
-{
-  if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
-  {
-    if(attr(dissimilarity, "type") == "similarity")
-    {
+#' }
+#'    
+#' @importFrom stats as.dist
+#' @importFrom cluster pam    
+#'                    
+#' @export
+
+nhclu_pam <- function(
+    dissimilarity,
+    index = names(dissimilarity)[3],
+    n_clust = NULL,
+    nstart = if(variant == "faster") 1 else NA,
+    variant = "faster", # c("original","o_1","o_2","f_3","f_4","f_5","faster")
+    cluster_only = FALSE, # To reduce computation time & memory, can be
+    # provided to cluster functions
+    ...){ # Further arguments to be passed to cluster::pam
+  
+  # 1. Controls ---------------------------------------------------------------
+  if(inherits(dissimilarity, "bioRgeo.pairwise.metric")){
+    if(attr(dissimilarity, "type") == "similarity"){
       stop("dissimilarity seems to be a similarity object.
          nhclu_pam() should be applied on dissimilarity, not similarities.
          Use similarity_to_dissimilarity() before using nhclu_pam()")
     }
-    if(is.numeric(index))
-    {
+    if(is.numeric(index)){
       index <- names(dissimilarity)[index]
     }
-    if(!(index %in% colnames(dissimilarity)))
-    {
+    if(!(index %in% colnames(dissimilarity))){
       stop("Argument index should be one of the column names of dissimilarity")
     }
-
-  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
+  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+                 inherits(dissimilarity, "dist")))
   {
-    if(is.numeric(index))
-    {
+    if(is.numeric(index)) {
       index <- names(dissimilarity)[index]
     }
-    if(!(index %in% colnames(dissimilarity)))
-    {
-      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
+    if(is.null(index) || !(index %in% colnames(dissimilarity))) {
+      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a
+           dissimilarity matrix (class dist) or a data.frame with at least 3
+           columns (site1, site2, and your dissimilarity index)")
     }
   }
-
+  
   if(!is.null(n_clust)){
-    if(is.numeric(n_clust))
-    {
-      if(any(!(n_clust %% 1 == 0))) # integer testing ain't easy in R
-      {
-        stop("n_clust must an integer or a vector of integers determining the number of clusters.")
+    if(is.numeric(n_clust)) {
+      if(any(!(n_clust %% 1 == 0))) {
+        stop("n_clust must an integer or a vector of integers determining the
+             number of clusters.")
       }
       # Add test to see if n_clust is lower than the number of sites
-    } else
-    {
-      stop("n_clust must an integer or a vector of integers determining the number of clusters.")
+    } else {
+      stop("n_clust must an integer or a vector of integers determining the
+           number of clusters.")
     }
   }
-
-  if(!inherits(dissimilarity, "dist"))
-  {
+  
+  if(!inherits(dissimilarity, "dist")) {
     dist.obj <- stats::as.dist(
       net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2], index)],
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
-
+    
   } else {
     dist.obj <- dissimilarity
   }
-
-
-
+  
+  if(!is.character(variant) || length(variant) != 1 ||
+     !(all(variant %in% c("original", "o_1", "o_2", "f_3", "f_4", "f_5",
+                          "faster")))){
+    stop("variant is a character string indicating. Available options are
+         original, o_1, o_2, f_3, f_4, f_5 or faster.")
+  }
+  
+  if(!is.numeric(nstart) || nstart < 0){
+    stop("nstart must be a positive integer.")
+  }
+  
+  if(!is.logical(cluster_only)){
+    stop("cluster_only must be a Boolean.")
+  }
+  
+  # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "pam")
-
+  
   outputs$args <- list(index = index,
                        n_clust = n_clust,
                        nstart = nstart,
                        variant = variant,
                        cluster_only = cluster_only,
-                       ...
-  )
-
+                       ...)
+  
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise_metric = TRUE,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
-
+  
   outputs$algorithm <- list()
-
+  
   outputs$clusters <- data.frame(matrix(ncol = 1,
                                         nrow = length(labels(dist.obj)),
                                         dimnames = list(labels(dist.obj),
                                                         "name")))
-
+  
   outputs$clusters$name <- labels(dist.obj)
-
+  
   outputs$algorithm$pam <- lapply(n_clust,
                                   function(x)
                                     cluster::pam(dist.obj,
@@ -169,20 +186,24 @@ nhclu_pam <- function(dissimilarity,
                                                  variant = variant,
                                                  cluster.only = cluster_only,
                                                  ...))
-
+  
   names(outputs$algorithm$pam) <- paste0("K_", n_clust)
-
-  outputs$clusters <- data.frame(outputs$clusters,
-                                 data.frame(lapply(names(outputs$algorithm$pam),
-                                                   function(x)
-                                                     outputs$algorithm$pam[[x]]$clustering)))
+  
+  outputs$clusters <- data.frame(
+    outputs$clusters,
+    data.frame(lapply(names(outputs$algorithm$pam),
+                      function(x) outputs$algorithm$pam[[x]]$clustering)))
+  
   outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
   
-  outputs$cluster_info <- data.frame(partition_name = names(outputs$clusters)[2:length(outputs$clusters), drop = FALSE],
-                                     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-                                                     2, function(x) length(unique(x))))
+  outputs$cluster_info <- data.frame(
+    partition_name = names(outputs$clusters)[2:length(outputs$clusters),
+                                             drop = FALSE],
+    n_clust = apply(outputs$clusters[, 2:length(outputs$clusters),
+                                     drop = FALSE],
+                    2, function(x) length(unique(x))))
   
-  class(outputs) <-  append("bioRgeo.clusters", class(outputs))
-
+  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  
   return(outputs)
 }

@@ -16,28 +16,25 @@ nhclu_pam(
 }
 \arguments{
 \item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
-\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
-If a \code{data.frame} is used, the first two
-columns represent pairs of sites (or any pair of nodes), and the next column(s)
-are the dissimilarity indices.}
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
+used, the first two columns represent pairs of sites (or any pair of nodes),
+and the next column(s) are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of
-\code{dissimilarity} is used.}
+the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers}
-specifying the requested number(s) of clusters}
+\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers} specifying the
+requested number(s) of clusters.}
 
-\item{nstart}{an \code{integer} specifying the number of random “starts”
-for the pam algorithm. By default, 1 (for the \code{"faster"} variant)}
+\item{nstart}{an \code{integer} specifying the number of random “starts” for the
+pam algorithm. By default, 1 (for the \code{"faster"} variant).}
 
-\item{variant}{a \code{character} string specifying the variant of pam
-to use, by default "faster". See \link[cluster:pam]{cluster::pam()} for
-more details}
+\item{variant}{a \code{character} string specifying the variant of pam to use,
+by default "faster". Available options are original, o_1, o_2, f_3, f_4,
+f_5 or fasterSee \link[cluster:pam]{cluster::pam()} for more details.}
 
-\item{cluster_only}{a \code{boolean} specifying if only the clustering
-should be returned from the \link[cluster:pam]{cluster::pam()} function
-(more efficient)}
+\item{cluster_only}{a \code{boolean} specifying if only the clustering should be
+returned from the \link[cluster:pam]{cluster::pam()} function (more efficient).}
 
 \item{...}{you can add here further arguments to be passed to \code{pam()}
 (see \link[cluster:pam]{cluster::pam()})}
@@ -53,19 +50,19 @@ clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 }
 \description{
-This function performs non hierarchical
-clustering on the basis of dissimilarity with partitioning around medoids.
+This function performs non hierarchical clustering on the basis of
+dissimilarity with partitioning around medoids.
 }
 \details{
-This method partitions data into
-the chosen number of cluster on the basis of the input dissimilarity matrix.
-It is more robust than k-means because it minimizes the sum of dissimilarity
-between cluster centres and points assigned to the cluster -
-whereas the k-means approach minimizes the sum of squared euclidean
-distances (thus k-means cannot be applied directly on the input dissimilarity
-matrix if the distances are not euclidean).
+This method partitions data into the chosen number of cluster on the basis
+of the input dissimilarity matrix. It is more robust than k-means because it
+minimizes the sum of dissimilarity between cluster centres and points
+assigned to the cluster - whereas the k-means approach minimizes the sum of
+squared euclidean distances (thus k-means cannot be applied directly on the
+input dissimilarity matrix if the distances are not euclidean).
 }
 \examples{
+\dontrun{
 dissim <- dissimilarity(vegemat, metric = "all")
 
 clust1 <- nhclu_pam(dissim,
@@ -82,6 +79,8 @@ partition_metrics(clust2,
                    species_col = "Species",
                    site_col = "Site",
                    eval_metric = "avg_endemism")
+}
+   
 }
 \seealso{
 \link{nhclu_kmeans}

@@ -150,8 +150,7 @@ nhclu_kmeans <- function(dissimilarity,
     stop("algorithm is a character string indicating. Available options are
          Hartigan-Wong, Lloyd, Forgy and MacQueen.")
   }
-  # 
-  
+
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "kmeans")
   
