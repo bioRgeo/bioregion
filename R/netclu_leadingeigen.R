@@ -1,30 +1,34 @@
-#' Finding communities based on leading eigenvector of the community matrix
+#' Finding communities based on leading eigen vector of the community matrix
 #'
-#' This function finds communities in a (un)weighted undirected network based on
-#' leading eigenvector of the community matrix.
+#' This function finds communities in a (un)weighted undirected network based
+#' on leading eigen vector of the community matrix.
 #'
 #' @param net the output object from [similarity()] or
-#' [dissimilarity_to_similarity()].
-#' If a `data.frame` is used, the first two columns represent pairs of
-#' sites (or any pair of nodes), and the next column(s) are the similarity
-#' indices.
+#' [dissimilarity_to_similarity()]. If a `data.frame` is used, the first two
+#' columns represent pairs of sites (or any pair of nodes), and the next
+#' column(s) are the similarity indices.
+#' 
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
+#' 
 #' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Details).
+#' 
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
+#' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
 #' (`keep_nodes_type="both"` by default).
+#' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of `communities` should be returned in the output (see Value).
 #'
-#' @export
 #' @details
 #' This function is based on leading eigenvector of the community matrix
 #' \insertCite{Newman2006}{bioRgeo} as implemented in the
@@ -56,22 +60,34 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find an "communities" object, output of [cluster_leading_eigen][igraph::cluster_leading_eigen].
+#' find an "communities" object, output of
+#' [cluster_leading_eigen][igraph::cluster_leading_eigen].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
+#' 
 #' @examples
+#' \dontrun{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_leadingeigen(net)
+#' 
+#' net_bip <- mat_to_net(comat, weight = TRUE)
+#' clust2 <- netclu_leadingeigen(net_bip, bipartite = TRUE)
+#' }
+#' 
 #' @references
 #' \insertRef{Newman2006}{bioRgeo}
+#' 
+#' @importFrom igraph graph_from_data_frame cluster_leading_eigen
+#' 
 #' @export
+
 netclu_leadingeigen <- function(net,
                                 weight = TRUE,
                                 index = names(net)[3],
@@ -80,11 +96,11 @@ netclu_leadingeigen <- function(net,
                                 species_col = 2,
                                 return_node_type = "both",
                                 algorithm_in_output = TRUE) {
-
+  
   # Control input net
   controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
   controls(args = NULL, data = net, type = "input_net")
-
+  
   # Control input weight & index
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
@@ -93,7 +109,7 @@ netclu_leadingeigen <- function(net,
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
   }
-
+  
   # Control input bipartite
   controls(args = bipartite, data = NULL, type = "boolean")
   isbip <- bipartite
@@ -106,13 +122,13 @@ netclu_leadingeigen <- function(net,
 both, sites and species", call. = FALSE)
     }
   }
-
+  
   # Control input directed
   controls(args = NULL, data = net, type = "input_net_isdirected")
-
+  
   # Control algorithm_in_output
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
-
+  
   # Prepare input
   if (isbip) {
     idprim <- as.character(net[, site_col])
@@ -120,7 +136,7 @@ both, sites and species", call. = FALSE)
     nbsites <- length(idprim)
     idfeat <- as.character(net[, species_col])
     idfeat <- idfeat[!duplicated(idfeat)]
-
+    
     idnode <- c(idprim, idfeat)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
     netemp <- data.frame(
@@ -143,16 +159,16 @@ The bipartite argument should probably be set to TRUE.")
       node2 = idnode[match(net[, 2], idnode[, 2]), 1]
     )
   }
-
+  
   if (weight) {
     netemp <- cbind(netemp, net[, 3])
     netemp <- netemp[netemp[, 3] > 0, ]
     colnames(netemp)[3] <- "weight"
   }
-
+  
   # Class preparation
   outputs <- list(name = "netclu_leadingeigen")
-
+  
   outputs$args <- list(
     weight = weight,
     index = index,
@@ -162,7 +178,7 @@ The bipartite argument should probably be set to TRUE.")
     return_node_type = return_node_type,
     algorithm_in_output = algorithm_in_output
   )
-
+  
   outputs$inputs <- list(
     bipartite = isbip,
     weight = weight,
@@ -171,20 +187,21 @@ The bipartite argument should probably be set to TRUE.")
     dissimilarity = FALSE,
     nb_sites = nbsites
   )
-
+  
   outputs$algorithm <- list()
-
+  
   # Run algo
   net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-  outalg <- igraph::cluster_leading_eigen(net, options = list(maxiter = 1000000))
+  outalg <- igraph::cluster_leading_eigen(net,
+                                          options = list(maxiter = 1000000))
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
-
+  
   com <- data.frame(ID = idnode[, 2], Com = 0)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
-
+  
   # Rename and reorder columns
   com <- knbclu(com)
-
+  
   # Add attributes and return_node_type
   if (isbip) {
     attr(com, "node_type") <- rep("site", dim(com)[1])
@@ -196,25 +213,23 @@ The bipartite argument should probably be set to TRUE.")
       com <- com[attributes(com)$node_type == "species", ]
     }
   }
-
+  
   # Set algorithm in outputs
   if (!algorithm_in_output) {
     outalg <- NA
   }
   outputs$algorithm <- outalg
-
+  
   # Set clusters and cluster_info in output
   outputs$clusters <- com
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
-      drop = FALSE
+                                             drop = FALSE
     ],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))
-    )
-  )
-
+      2, function(x) length(unique(x))))
+  
   # Return outputs
   class(outputs) <- append("bioRgeo.clusters", class(outputs))
   return(outputs)

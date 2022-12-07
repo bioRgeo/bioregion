@@ -2,7 +2,7 @@
 % Please edit documentation in R/netclu_leadingeigen.R
 \name{netclu_leadingeigen}
 \alias{netclu_leadingeigen}
-\title{Finding communities based on leading eigenvector of the community matrix}
+\title{Finding communities based on leading eigen vector of the community matrix}
 \usage{
 netclu_leadingeigen(
   net,
@@ -17,10 +17,9 @@ netclu_leadingeigen(
 }
 \arguments{
 \item{net}{the output object from \code{\link[=similarity]{similarity()}} or
-\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
-If a \code{data.frame} is used, the first two columns represent pairs of
-sites (or any pair of nodes), and the next column(s) are the similarity
-indices.}
+\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}. If a \code{data.frame} is used, the first two
+columns represent pairs of sites (or any pair of nodes), and the next
+column(s) are the similarity indices.}
 
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
@@ -56,11 +55,12 @@ clustering procedure, such as original cluster objects (only if
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of \link[igraph:cluster_leading_eigen]{cluster_leading_eigen}.
+find an "communities" object, output of
+\link[igraph:cluster_leading_eigen]{cluster_leading_eigen}.
 }
 \description{
-This function finds communities in a (un)weighted undirected network based on
-leading eigenvector of the community matrix.
+This function finds communities in a (un)weighted undirected network based
+on leading eigen vector of the community matrix.
 }
 \details{
 This function is based on leading eigenvector of the community matrix
@@ -82,12 +82,18 @@ The type of nodes returned in the output can be chosen with the argument
 preserve only the species nodes.
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_leadingeigen(net)
+
+net_bip <- mat_to_net(comat, weight = TRUE)
+clust2 <- netclu_leadingeigen(net_bip, bipartite = TRUE)
+}
+
 }
 \references{
 \insertRef{Newman2006}{bioRgeo}
