@@ -56,7 +56,8 @@ clustering procedure, such as original cluster objects (only if
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of \link[igraph:cluster_fast_greedy]{cluster_fast_greedy}.
+find an "communities" object, output of
+\link[igraph:cluster_fast_greedy]{cluster_fast_greedy}.
 }
 \description{
 This function finds communities in a (un)weighted undirected network via
@@ -82,12 +83,18 @@ The type of nodes returned in the output can be chosen with the argument
 preserve only the species nodes.
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_greedy(net)
+
+net_bip <- mat_to_net(comat, weight = TRUE)
+clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
+}
+
 }
 \references{
 \insertRef{Clauset2004}{bioRgeo}

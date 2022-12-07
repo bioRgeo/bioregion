@@ -56,22 +56,34 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find an "communities" object, output of [cluster_fast_greedy][igraph::cluster_fast_greedy].
+#' find an "communities" object, output of
+#' [cluster_fast_greedy][igraph::cluster_fast_greedy].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
+#' 
 #' @examples
+#' \dontrun{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_greedy(net)
+#' 
+#' net_bip <- mat_to_net(comat, weight = TRUE)
+#' clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
+#' }
+#' 
 #' @references
 #' \insertRef{Clauset2004}{bioRgeo}
+#' 
+#' @importFrom igraph graph_from_data_frame cluster_fast_greedy
+#' 
 #' @export
+
 netclu_greedy <- function(net,
                           weight = TRUE,
                           index = names(net)[3],
@@ -160,8 +172,7 @@ The bipartite argument should probably be set to TRUE.")
     site_col = site_col,
     species_col = species_col,
     return_node_type = return_node_type,
-    algorithm_in_output = algorithm_in_output
-  )
+    algorithm_in_output = algorithm_in_output)
 
   outputs$inputs <- list(
     bipartite = isbip,
@@ -169,8 +180,7 @@ The bipartite argument should probably be set to TRUE.")
     pairwise = ifelse(isbip, FALSE, TRUE),
     pairwise_metric = ifelse(isbip, NA, index),
     dissimilarity = FALSE,
-    nb_sites = nbsites
-  )
+    nb_sites = nbsites)
 
   outputs$algorithm <- list()
 
@@ -211,9 +221,7 @@ The bipartite argument should probably be set to TRUE.")
     ],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))
-    )
-  )
+      2, function(x) length(unique(x))))
 
   # Return outputs
   class(outputs) <- append("bioRgeo.clusters", class(outputs))
