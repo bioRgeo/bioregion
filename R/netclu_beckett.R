@@ -1,31 +1,38 @@
 #' Community structure detection in weighted bipartite network via modularity
-#' optimisation
+#' optimization
 #'
-#' This function takes a bipartite weighted graph and computes modules by applying
-#' Newman’s modularity measure in a bipartite weighted version to it.
+#' This function takes a bipartite weighted graph and computes modules by
+#' applying Newman’s modularity measure in a bipartite weighted version to it.
 #'
 #' @param net a `data.frame` representing a bipartite network with the two
-#' first columns as undirected links between pair of nodes and
-#' and the next column(s) are the weight of the links.
+#' first columns as undirected links between pair of nodes and and the next
+#' column(s) are the weight of the links.
+#' 
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns (see Note).
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
-#' @param site_col name or number for the column of site nodes
-#' (i.e. primary nodes).
-#' @param species_col name or number for the column of species nodes
-#' (i.e. feature nodes).
+#' 
+#' @param site_col name or number for the column of site nodes (i.e. primary
+#' nodes).
+#' 
+#' @param species_col name or number for the column of species nodes (i.e.
+#' feature nodes).
+#' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
 #' (`keep_nodes_type="both"` by default).
+#' 
 #' @param forceLPA a `boolean` indicating if the even faster pure
 #' LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
-#' likely to get trapped in a local minimum, but is slightly slower. Defaults to
-#' FALSE.
+#' likely to get trapped in a local minimum, but is slightly slower. Defaults
+#' to FALSE.
+#' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of `computeModules` should be returned in the output (see Value).
 #' Default to TRUE.
-#' @export
+#' 
 #' @details
 #' This function is based on the modularity optimization algorithm provided by
 #' Stephen Beckett \insertCite{Beckett2016}{bioRgeo} as implemented in the
@@ -33,15 +40,15 @@
 #' package ([computeModules][bipartite::computeModules]).
 #'
 #' @note
-#' Beckett has been designed to deal with weighted bipartite networks. Note that
-#' if `weight = FALSE`, a weight of 1 will be assigned to each pair of nodes.
-#' Do not forget to indicate which of the first two columns is
+#' Beckett has been designed to deal with weighted bipartite networks. Note
+#' that if `weight = FALSE`, a weight of 1 will be assigned to each pair of
+#' nodes. Do not forget to indicate which of the first two columns is
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-#' feature nodes) using the arguments `site_col` and `species_col`.
-#' The type of nodes returned in the output can be chosen with the argument
-#' `return_node_type` equal to `"both"` to keep both types of nodes,
-#' `"sites"` to preserve only the sites nodes and `"species"` to
-#' preserve only the species nodes.
+#' feature nodes) using the arguments `site_col` and `species_col`. The type of
+#' nodes returned in the output can be chosen with the argument
+#' `return_node_type` equal to `"both"` to keep both types of nodes,`"sites"`
+#' to preserve only the sites nodes and `"species"` to preserve only the
+#' species nodes.
 #'
 #' @return
 #' A `list` of class `bioRgeo.clusters` with five slots:
@@ -54,24 +61,32 @@
 #'  `algorithm_in_output = TRUE`)}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find an object of class "moduleWeb", output of [computeModules][bipartite::computeModules].
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find an
+#' object of class "moduleWeb", output of
+#' [computeModules][bipartite::computeModules].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
+#' 
 #' @seealso [netclu_infomap], [netclu_oslom]
+#' 
 #' @examples
+#' \dontrun{
 #' net <- data.frame(
 #'   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
 #'   Species = c("a", "b", "a", "c", "d", "b", "d"),
-#'   Weight = c(10, 100, 1, 20, 50, 10, 20)
-#' )
+#'   Weight = c(10, 100, 1, 20, 50, 10, 20))
 #'
 #' com <- netclu_beckett(net)
+#' }
+#' 
 #' @references
 #' \insertRef{Beckett2016}{bioRgeo}
+#' 
+#' @importFrom bipartite computeModules
+#' 
 #' @export
 netclu_beckett <- function(net,
                            weight = TRUE,
@@ -80,11 +95,11 @@ netclu_beckett <- function(net,
                            species_col = 2,
                            return_node_type = "both",
                            forceLPA = FALSE,
-                           algorithm_in_output = TRUE) {
-
+                           algorithm_in_output = TRUE){
+  
   # Control input net
   controls(args = NULL, data = net, type = "input_net")
-
+  
   # Control input weight & index
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
@@ -93,89 +108,78 @@ netclu_beckett <- function(net,
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
   }
-
+  
   # Control input bipartite
   controls(args = NULL, data = net, type = "input_net_bip")
   controls(args = site_col, data = net, type = "input_net_bip_col")
   controls(args = species_col, data = net, type = "input_net_bip_col")
-  if (!(return_node_type %in% c("both", "sites", "species"))) {
+  if(!(return_node_type %in% c("both", "sites", "species"))) {
     stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)
-  }
-
-
+both, sites and species", call. = FALSE)}
+  
   # Controls parameters BECKETT
   controls(args = forceLPA, data = NULL, type = "boolean")
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
-
-
+  
   # Prepare input
   idprim <- as.character(net[, site_col])
   idprim <- idprim[!duplicated(idprim)]
   nbsites <- length(idprim)
   idfeat <- as.character(net[, species_col])
   idfeat <- idfeat[!duplicated(idfeat)]
-
+  
   idnode <- c(idprim, idfeat)
   idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
-
+  
   netemp <- data.frame(
     node1 = idnode[match(net[, site_col], idnode[, 2]), 1],
-    node2 = idnode[match(net[, species_col], idnode[, 2]), 1]
-  )
-
-  if (weight) {
+    node2 = idnode[match(net[, species_col], idnode[, 2]), 1])
+  
+  if(weight) {
     netemp <- cbind(netemp, net[, 3])
     netemp <- netemp[netemp[, 3] > 0, ]
     colnames(netemp)[3] <- "weight"
   } else {
     netemp$weight <- 1
   }
-
+  
   # Class preparation
   outputs <- list(name = "netclu_beckett")
-
-  outputs$args <- list(
-    weight = weight,
-    index = index,
-    site_col = site_col,
-    species_col = species_col,
-    return_node_type = return_node_type,
-    forceLPA = forceLPA,
-    algorithm_in_output = algorithm_in_output
-  )
-
+  
+  outputs$args <- list(weight = weight,
+                       index = index,
+                       site_col = site_col,
+                       species_col = species_col,
+                       return_node_type = return_node_type,
+                       forceLPA = forceLPA,
+                       algorithm_in_output = algorithm_in_output)
+  
   outputs$inputs <- list(
     bipartite = TRUE,
     weight = weight,
     pairwise = FALSE,
     pairwise_metric = NA,
     dissimilarity = FALSE,
-    nb_sites = nbsites
-  )
-
+    nb_sites = nbsites)
+  
   outputs$algorithm <- list()
-
+  
   # Transform netemp into a contingency table
   comat <- net_to_mat(netemp, weight = weight)
-
+  
   # Run algo
   outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
   comtemp <- outalg@modules[-1, -c(1, 2)]
-  comtemp <- cbind(
-    c(
-      as.numeric(rownames(comat)),
-      as.numeric(colnames(comat))
-    ),
-    apply(comtemp, 2, function(x) which(x > 0))
-  )
-
+  comtemp <- cbind(c(as.numeric(rownames(comat)),
+                     as.numeric(colnames(comat))),
+                   apply(comtemp, 2, function(x) which(x > 0)))
+  
   com <- data.frame(ID = idnode[, 2], Com = 0)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
-
+  
   # Rename and reorder columns
   com <- knbclu(com)
-
+  
   # Add attributes and return_node_type
   attr(com, "node_type") <- rep("site", dim(com)[1])
   attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
@@ -185,25 +189,22 @@ both, sites and species", call. = FALSE)
   if (return_node_type == "species") {
     com <- com[attributes(com)$node_type == "species", ]
   }
-
+  
   # Set algorithm in outputs
   if (!algorithm_in_output) {
     outalg <- NA
   }
   outputs$algorithm <- outalg
-
+  
   # Set clusters and cluster_info in output
   outputs$clusters <- com
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
-      drop = FALSE
-    ],
+                                             drop = FALSE],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))
-    )
-  )
-
+      2, function(x) length(unique(x))))
+  
   # Return outputs
   class(outputs) <- append("bioRgeo.clusters", class(outputs))
   return(outputs)

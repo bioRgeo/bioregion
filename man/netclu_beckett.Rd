@@ -3,7 +3,7 @@
 \name{netclu_beckett}
 \alias{netclu_beckett}
 \title{Community structure detection in weighted bipartite network via modularity
-optimisation}
+optimization}
 \usage{
 netclu_beckett(
   net,
@@ -18,8 +18,8 @@ netclu_beckett(
 }
 \arguments{
 \item{net}{a \code{data.frame} representing a bipartite network with the two
-first columns as undirected links between pair of nodes and
-and the next column(s) are the weight of the links.}
+first columns as undirected links between pair of nodes and and the next
+column(s) are the weight of the links.}
 
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns (see Note).}
@@ -27,11 +27,11 @@ if there are more than two columns (see Note).}
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{site_col}{name or number for the column of site nodes
-(i.e. primary nodes).}
+\item{site_col}{name or number for the column of site nodes (i.e. primary
+nodes).}
 
-\item{species_col}{name or number for the column of species nodes
-(i.e. feature nodes).}
+\item{species_col}{name or number for the column of species nodes (i.e.
+feature nodes).}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output
@@ -39,8 +39,8 @@ the third column name of \code{net} is used.}
 
 \item{forceLPA}{a \code{boolean} indicating if the even faster pure
 LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
-likely to get trapped in a local minimum, but is slightly slower. Defaults to
-FALSE.}
+likely to get trapped in a local minimum, but is slightly slower. Defaults
+to FALSE.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \code{computeModules} should be returned in the output (see Value).
@@ -57,12 +57,13 @@ clustering procedure, such as original cluster objects (only if
 \code{algorithm_in_output = TRUE})}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an object of class "moduleWeb", output of \link[bipartite:computeModules]{computeModules}.
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can find an
+object of class "moduleWeb", output of
+\link[bipartite:computeModules]{computeModules}.
 }
 \description{
-This function takes a bipartite weighted graph and computes modules by applying
-Newman’s modularity measure in a bipartite weighted version to it.
+This function takes a bipartite weighted graph and computes modules by
+applying Newman’s modularity measure in a bipartite weighted version to it.
 }
 \details{
 This function is based on the modularity optimization algorithm provided by
@@ -71,24 +72,26 @@ Stephen Beckett \insertCite{Beckett2016}{bioRgeo} as implemented in the
 package (\link[bipartite:computeModules]{computeModules}).
 }
 \note{
-Beckett has been designed to deal with weighted bipartite networks. Note that
-if \code{weight = FALSE}, a weight of 1 will be assigned to each pair of nodes.
-Do not forget to indicate which of the first two columns is
+Beckett has been designed to deal with weighted bipartite networks. Note
+that if \code{weight = FALSE}, a weight of 1 will be assigned to each pair of
+nodes. Do not forget to indicate which of the first two columns is
 dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-feature nodes) using the arguments \code{site_col} and \code{species_col}.
-The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-\code{"sites"} to preserve only the sites nodes and \code{"species"} to
-preserve only the species nodes.
+feature nodes) using the arguments \code{site_col} and \code{species_col}. The type of
+nodes returned in the output can be chosen with the argument
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes,\code{"sites"}
+to preserve only the sites nodes and \code{"species"} to preserve only the
+species nodes.
 }
 \examples{
+\dontrun{
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),
-  Weight = c(10, 100, 1, 20, 50, 10, 20)
-)
+  Weight = c(10, 100, 1, 20, 50, 10, 20))
 
 com <- netclu_beckett(net)
+}
+
 }
 \references{
 \insertRef{Beckett2016}{bioRgeo}
