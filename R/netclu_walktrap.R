@@ -4,28 +4,34 @@
 #' short random walks.
 #'
 #' @param net the output object from [similarity()] or
-#' [dissimilarity_to_similarity()].
-#' If a `data.frame` is used, the first two columns represent pairs of
-#' sites (or any pair of nodes), and the next column(s) are the similarity
-#' indices.
+#' [dissimilarity_to_similarity()]. If a `data.frame` is used, the first two
+#' columns represent pairs of sites (or any pair of nodes), and the next
+#' column(s) are the similarity indices.
+#' 
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
+#' 
 #' @param steps the length of the random walks to perform.
+#' 
 #' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Details).
+#' 
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
+#' 
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
+#' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
 #' (`keep_nodes_type="both"` by default).
+#' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of `communities` should be returned in the output (see Value).
 #'
-#' @export
 #' @details
 #' This function is based on random walks \insertCite{Pons2005}{bioRgeo}
 #' as implemented in the [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
@@ -56,21 +62,32 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find an "communities" object, output of [cluster_walktrap][igraph::cluster_walktrap].
+#' find an "communities" object, output of
+#' [cluster_walktrap][igraph::cluster_walktrap].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
+#' 
 #' @examples
+#' \dontrun{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_walktrap(net)
+#' 
+#' net_bip <- mat_to_net(comat, weight = TRUE)
+#' clust2 <- netclu_walktrap(net_bip, bipartite = TRUE)
+#' }
+#' 
 #' @references
 #' \insertRef{Pons2005}{bioRgeo}
+#' 
+#' @importFrom igraph graph_from_data_frame cluster_walktrap
+#' 
 #' @export
 netclu_walktrap <- function(net,
                             weight = TRUE,
@@ -81,11 +98,11 @@ netclu_walktrap <- function(net,
                             species_col = 2,
                             return_node_type = "both",
                             algorithm_in_output = TRUE) {
-
+  
   # Control input net
   controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
   controls(args = NULL, data = net, type = "input_net")
-
+  
   # Control input weight & index
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
@@ -94,7 +111,7 @@ netclu_walktrap <- function(net,
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
   }
-
+  
   # Control input bipartite
   controls(args = bipartite, data = NULL, type = "boolean")
   isbip <- bipartite
@@ -107,13 +124,13 @@ netclu_walktrap <- function(net,
 both, sites and species", call. = FALSE)
     }
   }
-
+  
   # Control input directed
   controls(args = NULL, data = net, type = "input_net_isdirected")
-
+  
   # Control algorithm_in_output
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
-
+  
   # Prepare input
   if (isbip) {
     idprim <- as.character(net[, site_col])
@@ -121,7 +138,7 @@ both, sites and species", call. = FALSE)
     nbsites <- length(idprim)
     idfeat <- as.character(net[, species_col])
     idfeat <- idfeat[!duplicated(idfeat)]
-
+    
     idnode <- c(idprim, idfeat)
     idnode <- data.frame(ID = 1:length(idnode), ID_NODE = idnode)
     netemp <- data.frame(
@@ -144,16 +161,16 @@ The bipartite argument should probably be set to TRUE.")
       node2 = idnode[match(net[, 2], idnode[, 2]), 1]
     )
   }
-
+  
   if (weight) {
     netemp <- cbind(netemp, net[, 3])
     netemp <- netemp[netemp[, 3] > 0, ]
     colnames(netemp)[3] <- "weight"
   }
-
+  
   # Class preparation
   outputs <- list(name = "netclu_walktrap")
-
+  
   outputs$args <- list(
     weight = weight,
     index = index,
@@ -162,31 +179,29 @@ The bipartite argument should probably be set to TRUE.")
     site_col = site_col,
     species_col = species_col,
     return_node_type = return_node_type,
-    algorithm_in_output = algorithm_in_output
-  )
-
+    algorithm_in_output = algorithm_in_output)
+  
   outputs$inputs <- list(
     bipartite = isbip,
     weight = weight,
     pairwise = ifelse(isbip, FALSE, TRUE),
     pairwise_metric = ifelse(isbip, NA, index),
     dissimilarity = FALSE,
-    nb_sites = nbsites
-  )
-
+    nb_sites = nbsites)
+  
   outputs$algorithm <- list()
-
+  
   # Run algo
   net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
   outalg <- igraph::cluster_walktrap(net, steps = steps)
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
-
+  
   com <- data.frame(ID = idnode[, 2], Com = 0)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
-
+  
   # Rename and reorder columns
   com <- knbclu(com)
-
+  
   # Add attributes and return_node_type
   if (isbip) {
     attr(com, "node_type") <- rep("site", dim(com)[1])
@@ -198,25 +213,23 @@ The bipartite argument should probably be set to TRUE.")
       com <- com[attributes(com)$node_type == "species", ]
     }
   }
-
+  
   # Set algorithm in outputs
   if (!algorithm_in_output) {
     outalg <- NA
   }
   outputs$algorithm <- outalg
-
+  
   # Set clusters and cluster_info in output
   outputs$clusters <- com
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
-      drop = FALSE
+                                             drop = FALSE
     ],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))
-    )
-  )
-
+      2, function(x) length(unique(x))))
+  
   # Return outputs
   class(outputs) <- append("bioRgeo.clusters", class(outputs))
   return(outputs)
