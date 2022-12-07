@@ -7,12 +7,12 @@
 map_clusters(clusters, geometry, write_clusters = FALSE, plot = TRUE)
 }
 \arguments{
-\item{clusters}{an object of class \code{bioRgeo.clusters} or a
-\code{data.frame}. If a \code{data.frame} is used, the first column should
-represent the sites' ID, and the next column(s) the clusters.}
+\item{clusters}{an object of class \code{bioRgeo.clusters} or a \code{data.frame}. If
+a \code{data.frame} is used, the first column should represent the sites' ID, and
+the next column(s) the clusters.}
 
-\item{geometry}{a spatial object that can be handled by the \code{sf}
-package. The first attribute should correspond to the sites' ID (see Details).}
+\item{geometry}{a spatial object that can be handled by the \code{sf} package.
+The first attribute should correspond to the sites' ID (see Details).}
 
 \item{write_clusters}{a \code{boolean} indicating if the \code{clusters}
 should be added in \code{geometry}.}
@@ -34,12 +34,14 @@ have the same type (i.e. \code{character} is cluster is a
 included in the sites of \code{geometry}.
 }
 \examples{
+\dontrun{
 data(vegemat)
 data(vegesp)
 
 net=similarity(vegemat,metric=c("Simpson"))
 clu=netclu_greedy(net)
 map <- map_clusters(clu, vegesp, write_clusters = TRUE, plot = FALSE)
+}
 
 }
 \author{

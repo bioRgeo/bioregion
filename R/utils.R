@@ -195,8 +195,8 @@ Please carefully check your data before using the clustering functions."))
       stop(paste0(deparse(substitute(data)), " must be a matrix."),
            call. = FALSE)
     }
-    rowmat=rownames(data)
-    colmat=colnames(data)
+    rowmat <- rownames(data)
+    colmat <- colnames(data)
     if (sum(duplicated(rowmat)) > 0) {
       message("Duplicated rownames detected!")
     }

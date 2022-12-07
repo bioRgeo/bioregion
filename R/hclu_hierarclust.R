@@ -263,7 +263,7 @@ hclu_hierarclust <- function(dissimilarity,
   }
   
   # Adding dynamic_tree_cut = FALSE for compatibility with generic functions
-  dynamic_tree_cut = FALSE
+  dynamic_tree_cut <- FALSE
   outputs$args <- list(index = index,
                        method = method,
                        randomize = randomize,
