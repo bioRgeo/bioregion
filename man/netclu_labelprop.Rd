@@ -17,10 +17,9 @@ netclu_labelprop(
 }
 \arguments{
 \item{net}{the output object from \code{\link[=similarity]{similarity()}} or
-\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
-If a \code{data.frame} is used, the first two columns represent pairs of
-sites (or any pair of nodes), and the next column(s) are the similarity
-indices.}
+\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}. If a \code{data.frame} is used, the first two
+columns represent pairs of sites (or any pair of nodes), and the next
+column(s) are the similarity indices.}
 
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
@@ -56,15 +55,17 @@ clustering procedure, such as original cluster objects (only if
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of \link[igraph:cluster_label_prop]{cluster_label_prop}.
+find an "communities" object, output of
+\link[igraph:cluster_label_prop]{cluster_label_prop}.
 }
 \description{
-This function finds communities in a (un)weighted undirected network based on
-propagating labels.
+This function finds communities in a (un)weighted undirected network based
+on propagating labels.
 }
 \details{
-This function is based on propagating labels \insertCite{Raghavan2007}{bioRgeo}
-as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+This function is based on propagating labels
+\insertCite{Raghavan2007}{bioRgeo} as implemented in the
+\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
 package (\link[igraph:cluster_label_prop]{cluster_label_prop}).
 }
 \note{
@@ -81,12 +82,18 @@ The type of nodes returned in the output can be chosen with the argument
 preserve only the species nodes.
 }
 \examples{
+\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_labelprop(net)
+
+net_bip <- mat_to_net(comat, weight = TRUE)
+clust2 <- netclu_labelprop(net_bip, bipartite = TRUE)
+}
+
 }
 \references{
 \insertRef{Raghavan2007}{bioRgeo}
