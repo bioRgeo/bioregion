@@ -23,11 +23,10 @@ cut_tree(
 
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\code{\link[=partition_metrics]{partition_metrics()}}. Should not be used at the same time as
-\code{cut_height}}
+\code{\link[=partition_metrics]{partition_metrics()}}. Should not be used at the same time as \code{cut_height}}
 
-\item{cut_height}{a numeric vector indicating the height(s) at which the tree
-should be cut. Should not be used at the same time as \code{n_clust} or
+\item{cut_height}{a numeric vector indicating the height(s) at which the
+tree should be cut. Should not be used at the same time as \code{n_clust} or
 \code{optim_method}}
 
 \item{find_h}{a boolean indicating if the height of cut should be found for
@@ -36,8 +35,8 @@ the requested \code{n_clust}}
 \item{h_max}{a numeric indicating the maximum possible tree height for
 finding the height of cut when \code{find_h = TRUE}}
 
-\item{h_min}{a numeric indicating the minimum possible height in the tree for
-finding the height of cut when \code{find_h = TRUE}}
+\item{h_min}{a numeric indicating the minimum possible height in the tree
+for finding the height of cut when \code{find_h = TRUE}}
 
 \item{dynamic_tree_cut}{a boolean indicating if the dynamic tree cut method
 should be used, in which case \code{n_clust} & \code{cut_height} are ignored}
@@ -59,19 +58,16 @@ Provide here the dissimilarity \code{data.frame} used to build the \code{tree}}
 customize the dynamic tree cut method.}
 }
 \value{
-If \code{tree} is an output from \code{\link[=hclu_hierarclust]{hclu_hierarclust()}},
-then the same object
-is returned with content updated (i.e., \code{args} and \code{clusters}). If
-\code{tree} is a \code{hclust} object, then a \code{data.frame} containing
-the clusters is returned.
+If \code{tree} is an output from \code{\link[=hclu_hierarclust]{hclu_hierarclust()}}, then the same
+object is returned with content updated (i.e., \code{args} and \code{clusters}). If
+\code{tree} is a \code{hclust} object, then a \code{data.frame} containing the clusters is
+returned.
 }
 \description{
 This functions is designed to work on a hierarchical tree and cut it
-at user-selected
-heights.
-It works on either outputs from \code{hclu_hierarclust} or \code{hclust}
-objects. It cuts the tree for the chosen number(s)
-of clusters or selected height(s). It also includes a procedure to
+at user-selected heights. It works on either outputs from
+\code{hclu_hierarclust} or \code{hclust} objects. It cuts the tree for the chosen
+number(s) of clusters or selected height(s). It also includes a procedure to
 automatically return the height of cut for the chosen number(s) of clusters.
 }
 \details{

@@ -1,38 +1,44 @@
 #' Cut a hierarchical tree
 #'
 #' This functions is designed to work on a hierarchical tree and cut it 
-#' at user-selected 
-#' heights.
-#' It works on either outputs from `hclu_hierarclust` or `hclust`
-#' objects. It cuts the tree for the chosen number(s)
-#' of clusters or selected height(s). It also includes a procedure to
+#' at user-selected heights. It works on either outputs from
+#' `hclu_hierarclust` or `hclust` objects. It cuts the tree for the chosen
+#' number(s) of clusters or selected height(s). It also includes a procedure to
 #' automatically return the height of cut for the chosen number(s) of clusters.
 #'
 #' @param tree a `bioRgeo.hierar.tree` or a `hclust` object
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' [partition_metrics()]. Should not be used at the same time as
-#' `cut_height`
-#' @param cut_height a numeric vector indicating the height(s) at which the tree
-#' should be cut. Should not be used at the same time as `n_clust` or
+#' [partition_metrics()]. Should not be used at the same time as `cut_height`
+#' 
+#' @param cut_height a numeric vector indicating the height(s) at which the
+#' tree should be cut. Should not be used at the same time as `n_clust` or
 #' `optim_method`
+#' 
 #' @param find_h a boolean indicating if the height of cut should be found for
 #' the requested `n_clust`
+#' 
 #' @param h_max a numeric indicating the maximum possible tree height for
 #' finding the height of cut when `find_h = TRUE`
-#' @param h_min a numeric indicating the minimum possible height in the tree for
-#' finding the height of cut when `find_h = TRUE`
+#' 
+#' @param h_min a numeric indicating the minimum possible height in the tree
+#' for finding the height of cut when `find_h = TRUE`
+#' 
 #' @param dynamic_tree_cut a boolean indicating if the dynamic tree cut method
 #' should be used, in which case `n_clust` & `cut_height` are ignored
+#' 
 #' @param dynamic_method a character vector indicating the method to be used
 #' to dynamically cut the tree: either `"tree"` (clusters searched only
 #' in the tree) or `"hybrid"` (clusters searched on both tree and dissimilarity
 #' matrix)
+#' 
 #' @param dynamic_minClusterSize an integer indicating the minimum cluster size
 #' to use in the dynamic tree cut method (see
 #' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic])
+#' 
 #' @param dissimilarity only useful if `dynamic_method = "hybrid"`.
 #' Provide here the dissimilarity `data.frame` used to build the `tree`
+#' 
 #' @param ... further arguments to be passed to
 #' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic] to
 #' customize the dynamic tree cut method.
@@ -67,11 +73,11 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
-#' @return If `tree` is an output from [hclu_hierarclust()],
-#' then the same object
-#' is returned with content updated (i.e., `args` and `clusters`). If
-#' `tree` is a `hclust` object, then a `data.frame` containing
-#' the clusters is returned.
+#' @return If `tree` is an output from [hclu_hierarclust()], then the same
+#' object is returned with content updated (i.e., `args` and `clusters`). If
+#' `tree` is a `hclust` object, then a `data.frame` containing the clusters is
+#' returned.
+#' 
 #' @seealso [hclu_hierarclust]
 #' 
 #' @examples
@@ -103,6 +109,7 @@
 #' @importFrom dendextend cutree
 #' 
 #'@export
+
 cut_tree <- function(tree,
                      n_clust = NULL,
                      cut_height = NULL,
@@ -113,8 +120,7 @@ cut_tree <- function(tree,
                      dynamic_method = "tree",
                      dynamic_minClusterSize = 5,
                      dissimilarity = NULL,
-                     ...)
-{
+                     ...){
   if(!is.null(n_clust)){
     if(is.numeric(n_clust)){
       if(any(!(n_clust %% 1 == 0))) {
@@ -142,14 +148,14 @@ cut_tree <- function(tree,
   
   if(dynamic_tree_cut)
   {
-    if(!is.null(n_clust))
-    {
-      message("The dynamic tree cut method was requested, argument n_clust will be ignored")
+    if(!is.null(n_clust)){
+      message("The dynamic tree cut method was requested, argument n_clust will
+              be ignored")
       n_clust <- NULL
     }
-    if(!is.null(cut_height))
-    {
-      message("The dynamic tree cut method was requested, argument cut_height will be ignored")
+    if(!is.null(cut_height)){
+      message("The dynamic tree cut method was requested, argument cut_height
+              will be ignored")
       cut_height <- NULL
     }
     
@@ -166,32 +172,33 @@ cut_tree <- function(tree,
         index <- colnames(dissimilarity)[3]
         
         dist_matrix <- stats::as.dist(
-          net_to_mat(dissimilarity[, c(1, 2,
-                                       which(colnames(dissimilarity) == index))],
-                     weight = TRUE, squared = TRUE, symmetrical = TRUE))
+          net_to_mat(
+            dissimilarity[, c(1, 2,
+                              which(colnames(dissimilarity) == index))],
+            weight = TRUE, squared = TRUE, symmetrical = TRUE))
         
         
-      } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"), inherits(dissimilarity, "dist")))
+      } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+                     inherits(dissimilarity, "dist")))
       {
-        if(ncol(dissimilarity) != 3)
-        {
-          stop("dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity matrix (class dist) or a data.frame with at least 3 columns (site1, site2, and your dissimilarity index)")
+        if(ncol(dissimilarity) != 3){
+          stop("dissimilarity is not a bioRgeo.pairwise.metric object, a 
+               dissimilarity matrix (class dist) or a data.frame with at least
+               3 columns (site1, site2, and your dissimilarity index)")
         }
         dist_matrix <- stats::as.dist(
           net_to_mat(dissimilarity[, c(1, 2,
                                        which(colnames(dissimilarity) == index))],
                      weight = TRUE, squared = TRUE, symmetrical = TRUE))
         
-      } else
-      {
+      } else{
         dist_matrix <- dissimilarity
       }
     }
   }
   
   arg_added <- list(...)
-  if(inherits(tree, "bioRgeo.clusters"))
-  {
+  if(inherits(tree, "bioRgeo.clusters")){
     if (tree$name == "hierarchical_clustering") {
       cur.tree <- tree$algorithm$final.tree
       # Update args
@@ -199,8 +206,7 @@ cut_tree <- function(tree,
                   "dynamic_tree_cut")] <-
         list(n_clust, cut_height, find_h, h_max, h_min, dynamic_tree_cut)
       
-      if(dynamic_tree_cut)
-      {
+      if(dynamic_tree_cut){
         tree$args[c("dynamic_method",
                     "dynamic_minClusterSize")] <-
           list(dynamic_method,  dynamic_minClusterSize)
@@ -213,16 +219,14 @@ cut_tree <- function(tree,
   } else if (inherits(tree, "hclust"))
   {
     cur.tree <- tree
-  } else
-  {
+  } else{
     stop("This function is designed to work either on outputs from
          hclu_hierarclust() or hclust objects.")
   }
   
   output_cut_height <- NULL
   output_n_clust <- NULL
-  if(dynamic_tree_cut)
-  {
+  if(dynamic_tree_cut){
     clusters <- data.frame(site = tree$algorithm$final.tree$labels,
                            cluster = dynamicTreeCut::cutreeDynamic(
                              tree$algorithm$final.tree,
@@ -232,8 +236,7 @@ cut_tree <- function(tree,
                              ...))
     
     # Set NAs for unassigned sites
-    if(any(clusters$cluster == 0))
-    {
+    if(any(clusters$cluster == 0)){
       message("Some sites were not assigned to any cluster. They will have a NA
               in the cluster data.frame.")
       clusters$cluster[which(clusters$cluster == 0)] <- NA
@@ -242,18 +245,15 @@ cut_tree <- function(tree,
   } else if(!is.null(n_clust))
   {
     n_clust <- n_clust[order(n_clust)]
-    if(find_h)
-    {
+    if(find_h){
       clusters <- data.frame(matrix(
         nrow = length(cur.tree$labels),
         ncol = length(n_clust) + 1,
         dimnames = list(cur.tree$labels,
                         c("name", paste0("k_", n_clust)))))
       clusters$name <- cur.tree$labels
-      for(cur_n in n_clust)
-      {
-        if(length(n_clust) < 10)
-        {
+      for(cur_n in n_clust){
+        if(length(n_clust) < 10){
           message("Determining the cut height to reach ", cur_n, " groups...")
         }
         k <- 0
@@ -264,26 +264,21 @@ cut_tree <- function(tree,
         # requested number of clusters
         iter <- 0
         max_iter <- 500
-        while(k != cur_n &  h1 != h0 & iter < max_iter)
-        {
+        while(k != cur_n &  h1 != h0 & iter < max_iter){
           h <- h0 + (h1 - h0) / 2
           cls <- dendextend::cutree(cur.tree, h = h)
           k <- max(cls)
-          if(k < cur_n)
-          {
+          if(k < cur_n) {
             h1 <- h
-          } else if (k > cur_n)
-          {
+          } else if (k > cur_n) {
             h0 <- h
           }
           iter = iter + 1
         }
-        if(length(n_clust) < 10)
-        {
+        if(length(n_clust) < 10){
           message(paste0("--> ", h))
         }
-        if(k != cur_n)
-        {
+        if(k != cur_n) {
           warning(paste0("The requested number of cluster could not be found
                          for k = ", cur_n, ". Closest number found: ", k))
         }
@@ -293,8 +288,7 @@ cut_tree <- function(tree,
         output_n_clust <- c(output_n_clust, k)
       }
       names(output_cut_height) <- paste0("k_", n_clust)
-    } else
-    {
+    } else {
       cls <- dendextend::cutree(cur.tree, k = n_clust)
       clusters <- data.frame(rownames(cls),
                              cluster = cls)
@@ -306,17 +300,14 @@ cut_tree <- function(tree,
                                }, cl = clusters)
     }
     
-  } else if(!is.null(cut_height))
-  {
+  } else if(!is.null(cut_height)) {
     cut_height <- cut_height[order(cut_height, decreasing = TRUE)]
     cls <- dendextend::cutree(cur.tree,
                               h = cut_height)
-    if(length(cut_height) == 1)
-    {
+    if(length(cut_height) == 1) {
       clusters <- data.frame(site = names(cls),
                              cluster = as.character(cls))
-    } else
-    {
+    } else {
       clusters <- data.frame(site = rownames(cls),
                              cluster = cls)
     }
@@ -329,12 +320,9 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
   
-  clusters <- knbclu(clusters,
-                     reorder = FALSE,
-                     method = "length")
+  clusters <- knbclu(clusters, reorder = FALSE, method = "length")
   
-  if(inherits(tree, "bioRgeo.clusters"))
-  {
+  if(inherits(tree, "bioRgeo.clusters")) {
     cur.tree$args$cut_height <- cut_height
     tree$clusters <- clusters
     tree$algorithm$output_n_clust <- output_n_clust
@@ -355,8 +343,7 @@ cut_tree <- function(tree,
     }
     
     return(tree)
-  } else if (inherits(tree, "hclust"))
-  {
+  } else if (inherits(tree, "hclust")){
     return(clusters)
   }
 }
