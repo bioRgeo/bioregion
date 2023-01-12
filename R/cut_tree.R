@@ -187,9 +187,10 @@ cut_tree <- function(tree,
                3 columns (site1, site2, and your dissimilarity index)")
         }
         dist_matrix <- stats::as.dist(
-          net_to_mat(dissimilarity[, c(1, 2,
-                                       which(colnames(dissimilarity) == index))],
-                     weight = TRUE, squared = TRUE, symmetrical = TRUE))
+          net_to_mat(
+            dissimilarity[, c(1, 2,
+                              which(colnames(dissimilarity) == index))],
+            weight = TRUE, squared = TRUE, symmetrical = TRUE))
         
       } else{
         dist_matrix <- dissimilarity
@@ -273,7 +274,7 @@ cut_tree <- function(tree,
           } else if (k > cur_n) {
             h0 <- h
           }
-          iter = iter + 1
+          iter <- iter + 1
         }
         if(length(n_clust) < 10){
           message(paste0("--> ", h))
@@ -336,7 +337,7 @@ cut_tree <- function(tree,
     if(!is.null(n_clust)) {
       tree$cluster_info$requested_n_clust <- n_clust
       if(find_h) {
-        tree$cluster_info$output_cut_height = output_cut_height
+        tree$cluster_info$output_cut_height <- output_cut_height
       }
     } else if(!is.null(cut_height)) {
       tree$cluster_info$requested_cut_height <- cut_height

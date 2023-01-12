@@ -91,7 +91,8 @@ Please carefully check your data before using the clustering functions."))
   # Input network weight ######################################################
   if (type == "input_net_weight") {
     if (!is.logical(args)) {
-      stop(paste0(deparse(substitute(args)), " must be a boolean."), call. = FALSE)
+      stop(paste0(deparse(substitute(args)), " must be a boolean."),
+           call. = FALSE)
     }
     if (args & dim(data)[2] == 2) {
       stop(paste0(
