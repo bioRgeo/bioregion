@@ -44,8 +44,8 @@ co-occurrence \code{matrix} with sites as rows and species as columns.
 }
 \details{
 \loadmathjax
-With \code{a} the number of species shared by a pair of sites, \code{b} species only present in the first site
-and \code{c} species only present in the second site.
+With \code{a} the number of species shared by a pair of sites, \code{b} species only
+present in the first site  and \code{c} species only present in the second site.
 
 \mjeqn{Jaccard = (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 
@@ -55,8 +55,8 @@ and \code{c} species only present in the second site.
 
 \mjeqn{Simpson = min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
 
-If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
-following equation:
+If abundances data are available, Bray-Curtis and its turnover component
+can also be computed with the following equation:
 
 \mjeqn{Bray = (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
 
@@ -81,7 +81,8 @@ prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
-dissim <- dissimilarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+dissim <- dissimilarity(comat,
+metric = c("abc", "ABC", "Simpson", "Brayturn"))
 
 simil <- dissimilarity(comat, metric = "all",
 formula = "1 - (b + c) / (a + b + c)")

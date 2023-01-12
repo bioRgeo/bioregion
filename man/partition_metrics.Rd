@@ -22,29 +22,25 @@ from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}).
 includes \code{pc_distance} and \code{tree} is not a
 \code{bioRgeo.hierar.tree} object}
 
-\item{dissimilarity_index}{a character string indicating the dissimilarity (beta-diversity)
-index to be used in case \code{dist} is a \code{data.frame} with multiple
-dissimilarity indices}
+\item{dissimilarity_index}{a character string indicating the dissimilarity
+(beta-diversity) index to be used in case \code{dist} is a \code{data.frame} with
+multiple dissimilarity indices}
 
-\item{net}{the species-site network (i.e., bipartite network).
-Should be provided if \code{eval_metric} includes
-\code{"avg_endemism"} or \code{"tot_endemism"}}
+\item{net}{the species-site network (i.e., bipartite network). Should be
+provided if \code{eval_metric} includes \code{"avg_endemism"} or \code{"tot_endemism"}}
 
-\item{site_col}{name or number for the column of site nodes
-(i.e. primary nodes).
-Should be provided if \code{eval_metric} includes
-\code{"avg_endemism"} or \code{"tot_endemism"}}
+\item{site_col}{name or number for the column of site nodes (i.e. primary
+nodes). Should be provided if \code{eval_metric} includes \code{"avg_endemism"} or
+\code{"tot_endemism"}}
 
-\item{species_col}{name or number for the column of species nodes
-(i.e. feature nodes).
-Should be provided if \code{eval_metric} includes
+\item{species_col}{name or number for the column of species nodes (i.e.
+feature nodes). Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}}
 
 \item{eval_metric}{character string or vector of character strings indicating
-metric(s) to be calculated to
-investigate the effect of different number of clusters. Available options:
-\code{"pc_distance"}, \code{"anosim"}, \code{"avg_endemism"},
-\code{"tot_endemism"}}
+metric(s) to be calculated to investigate the effect of different number
+of clusters. Available options: \code{"pc_distance"}, \code{"anosim"},
+\code{"avg_endemism"} and \code{"tot_endemism"}}
 }
 \value{
 a \code{list} of class \code{bioRgeo.partition.metrics} with two elements:
@@ -58,9 +54,9 @@ for all explored numbers of clusters
 }
 \description{
 This function aims at calculating metrics for one or several partitions,
-usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_}
-functions. Metrics may require the users to provide either a similarity or
-dissimilarity matrix, or to provide the initial species-site table.
+usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_} functions. Metrics
+may require the users to provide either a similarity or dissimilarity
+matrix, or to provide the initial species-site table.
 }
 \details{
 \loadmathjax
@@ -68,25 +64,25 @@ dissimilarity matrix, or to provide the initial species-site table.
 \strong{Evaluation metrics:}
 \itemize{
 \item{\code{pc_distance}: this metric is the method used by
-\insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of dissimilarity
-(beta-diversity)
-versus the total sum of dissimilarity (beta-diversity) for the full dissimilarity
-matrix. In
-other words, it is calculated on the basis of two elements. First, the total
-sum of dissimilarity is calculated by summing the entire dissimilarity matrix
+\insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of
+dissimilarity (beta-diversity) versus the total sum of dissimilarity
+(beta-diversity) for the full dissimilarity matrix. In other words, it is
+calculated on the basis of two elements. First, the total sum of
+dissimilarity is calculated by summing the entire dissimilarity matrix
 (\code{dist}). Second, the between-cluster sum of dissimilarity is calculated as
-follows: for a given number of cluster, the dissimilarity is only
-summed between clusters, not within clusters. To do that efficiently, all
-pairs of sites within the same clusters have their dissimilarity set to zero in
+follows: for a given number of cluster, the dissimilarity is only summed
+between clusters, not within clusters. To do that efficiently, all pairs of
+sites within the same clusters have their dissimilarity set to zero in
 the dissimilarity matrix, and then the dissimilarity matrix is summed. The
-\code{pc_distance} ratio is obtained by dividing the between-cluster sum
-of dissimilarity by the total sum of dissimilarity.}
+\code{pc_distance} ratio is obtained by dividing the between-cluster sum of
+dissimilarity by the total sum of dissimilarity.}
+
 \item{\code{anosim}: This metric is the statistic used in Analysis of
 Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
-\link[vegan:anosim]{vegan::anosim()}). It
-compares the between-cluster dissimilarities to the within-cluster
-dissimilarities. It is based based on the difference of mean ranks between
-groups and within groups with the following formula:
+\link[vegan:anosim]{vegan::anosim()}). It compares the between-cluster
+dissimilarities to the within-cluster dissimilarities. It is based based on
+the difference of mean ranks between groups and within groups with the
+following formula:
 \mjeqn{R = (r_B - r_W)/(N (N-1) / 4)}{R = (r_B - r_W)/(N (N-1) / 4)},
 where \mjeqn{r_B}{r_B} and \mjeqn{r_W}{r_W} are the average ranks
 between and within clusters respectively, and \mjeqn{N}{N} is the total
@@ -103,9 +99,9 @@ where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
 \mjeqn{S_i}{Si} is the number of
 species in cluster i, and K the maximum number of clusters.
 }
-\item{\code{tot_endemism}: this metric is the total
-endemism across all clusters, as
-recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+
+\item{\code{tot_endemism}: this metric is the total endemism across all clusters,
+as recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
 \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
 
 where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
@@ -114,6 +110,7 @@ only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
 }
 }
 \examples{
+\dontrun{
 dissim <- dissimilarity(vegemat, metric = "all")
 
 # User-defined number of clusters
@@ -131,6 +128,7 @@ a <- partition_metrics(tree1,
                                   "avg_endemism",
                                   "pc_distance",
                                   "anosim"))
+}
 
 }
 \references{
