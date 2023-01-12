@@ -92,6 +92,8 @@ We here assessing the time needed by each clustering algorithm on the three
 datasets loaded above.
 
 ```{r}
+install_binaries()
+
 mbm <- suppressMessages(
   microbenchmark(
     # aravo
