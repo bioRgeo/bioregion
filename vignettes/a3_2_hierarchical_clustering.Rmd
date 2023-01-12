@@ -649,7 +649,7 @@ other metrics implemented in the package.
 
 ### Finding break points with a MARS model (experimental)
 
-This is an explotarory method which may not give adequate results.
+This is an exploratory method which may not give adequate results.
 
 This criterion consists in applying a MARS model with the formula 
 evaluation metric ~ number of clusters. The main issue with such a model is that
