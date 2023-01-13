@@ -45,6 +45,9 @@ mat_to_net <- function(mat, weight = FALSE, remove_zeroes = TRUE){
   controls(args = weight, data = NULL, type = "boolean")
   controls(args = remove_zeroes, data = NULL, type = "boolean")
 
+  # Visible binding for global variable
+  Node1 <- NULL
+  
   # Conversion as data.frame
   mat <- as.data.frame(mat)
   mat$Node1 <- rownames(mat)
