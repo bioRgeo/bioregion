@@ -25,10 +25,12 @@
   # Distance from point to line
   distances <- c()
   for (i in 1:length(x_values)) {
-    distances <- c(distances, abs(stats::coef(fit)[2] * x_values[i] - y_values[i] +
-      stats::coef(fit)[1]) / sqrt(stats::coef(fit)[2]^2 + 1^2))
+    distances <- c(
+      distances,
+      abs(stats::coef(fit)[2] * x_values[i] - y_values[i] +
+            stats::coef(fit)[1]) / sqrt(stats::coef(fit)[2]^2 + 1^2))
   }
-
+  
   # Max distance point
   x_max_dist <- x_values[which.max(distances)]
   y_max_dist <- y_values[which.max(distances)]

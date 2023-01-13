@@ -26,8 +26,8 @@
 #' 
 #' @details
 #' \loadmathjax
-#' With `a` the number of species shared by a pair of sites, `b` species only present in the first site
-#' and `c` species only present in the second site.
+#' With `a` the number of species shared by a pair of sites, `b` species only
+#' present in the first site  and `c` species only present in the second site.
 #'
 #' \mjeqn{Jaccard = (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 #'
@@ -37,8 +37,8 @@
 #'
 #' \mjeqn{Simpson = min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
 #'
-#' If abundances data are available, Bray-Curtis and its turnover component can also be computed with the
-#' following equation:
+#' If abundances data are available, Bray-Curtis and its turnover component
+#' can also be computed with the following equation:
 #'
 #' \mjeqn{Bray = (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
 #'
@@ -79,7 +79,8 @@
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
-#' dissim <- dissimilarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+#' dissim <- dissimilarity(comat,
+#' metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #'
 #' simil <- dissimilarity(comat, metric = "all",
 #' formula = "1 - (b + c) / (a + b + c)")

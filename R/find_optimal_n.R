@@ -288,7 +288,8 @@ find_optimal_n <- function(
     if(criterion %in% c("increasing_step", "decreasing_step")){
       if(!is.numeric(step_quantile) || step_quantile <= 0 ||
          step_quantile >= 1){
-        stop("step_quantile must be a numeric in the ]0,1[ interval. See help of
+        stop(
+          "step_quantile must be a numeric in the ]0,1[ interval. See help of
            the function.")
       }
     }
@@ -324,7 +325,8 @@ find_optimal_n <- function(
                             paste0("optimal_n_", metrics_to_use))))
     if(criterion == "mars"){
       if(!(mars_breakpoints %in% c("all", "increasing", "decreasing"))) {
-        stop("mars_breakpoints should be 'all' or 'increasing' or 'decreasing'")
+        stop("mars_breakpoints should be 'all' or 'increasing' or 'decreasing'"
+        )
       }
       
       mars_res <- lapply(

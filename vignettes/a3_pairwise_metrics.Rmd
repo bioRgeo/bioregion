@@ -32,7 +32,7 @@ data(vegemat)
 
 The function [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
 compute well-known and customized pairwise similarity metrics based on a 
-co-occurence `matrix` such as `vegemat`. In the example below the Simpson similarity
+co-occurrence `matrix` such as `vegemat`. In the example below the Simpson similarity
 index is computed between each pair of sites.
 
 ``` {r similarity_1}
@@ -58,7 +58,7 @@ based on a [three loops function](https://github.com/bioRgeo/bioRgeo/blob/master
 coded in C++ and largely inspired by the [bcdist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9/topics/bcdist) 
 function from the R package [ecodist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9) 
 (version 2.0.7). It is less efficient than the matrix product but allows to handle 
-co-occurence matrix with a large number of sites and/or species.
+co-occurrence matrix with a large number of sites and/or species.
 
 The second kind of metrics such as Bray-Curtis and the turnover component of 
 Bray-Curtis are based on abundance data with `A` the sum of the lesser values for 
@@ -70,7 +70,7 @@ The main advantage of the [similarity](https://biorgeo.github.io/bioRgeo/referen
 function is to compute and return several metrics, to allow the computation of
 customized metric with the `formula` argument and to include the possibility of
 returning `a`, `b` and `c` and/or `A`, `B` and `C`. This feature is particularly 
-interesting to compute similarity metrics on large co-occurence matrix. 
+interesting to compute similarity metrics on large co-occurrence matrix. 
 
 ``` {r similarity_2}
 sim <- similarity(vegemat, metric = c("abc","ABC","Simpson","Bray"), formula =c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)"))

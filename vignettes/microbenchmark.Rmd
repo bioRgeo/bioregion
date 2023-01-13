@@ -1,0 +1,241 @@
+---
+title: "Microbenchmark"
+author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Microbenchmark}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+ chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 8)
+# Packages --------------------------------------------------------------------
+suppressPackageStartupMessages({
+  suppressWarnings({
+    library(bioRgeo)
+    library(ade4)
+    library(microbenchmark)
+    library(ggplot2)
+    library(tidyr)
+    library(dplyr)
+  })
+})
+
+options(tinytex.verbose = TRUE)
+
+```
+
+In this vignette, we aim at showing the differences in terms of computation
+time between the different algorithms available in `bioRgeo`. For this purpose,
+we use three datasets of varying size.
+<br>
+For each dataset, we use a site x species matrix as well as a dissimilarity
+matrix which we compute using `bioRgeo::dissimilarity()`.
+
+# 1. Datasets
+## 1.1. Vegemat
+The first dataset comes available with `bioRgeo` and was analyzed in
+[this article](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718).
+It contains the abundance of 3,697 plant species distributed in 715 sites in
+the French Mediterranean area. 
+From this dataset we use the two following files:
+[vegedf](https://biorgeo.github.io/bioRgeo/reference/vegedf.html) a 
+`data.frame` with 460,878 rows and 3 columns (Site, Species and Abundance) and
+[vegemat](https://biorgeo.github.io/bioRgeo/reference/vegemat.html) 
+a co-occurrence `matrix` containing the same information gathered in a `matrix`
+with 715 rows and 3,697 columns.
+
+```{r}
+data(vegedf)
+data(vegemat)
+
+vegemat_dissim <- dissimilarity(vegemat,  metric = c("abc", "Simpson"))
+vegemat_df <- mat_to_net(vegemat, weight = TRUE, remove_zeroes = TRUE)
+```
+
+## 1.2. Benthic invertebrates
+The second dataset also comes available with `bioRgeo` and contains
+distribution of 838 invertebrate species in the Bretagne region, France.
+
+```{r}
+contin <- t(as.matrix(readRDS("../data-raw/benthic_invertebrates.RDS")))
+
+contin_dissim <- dissimilarity(contin, metric = "all")
+contin_df <- mat_to_net(contin, weight = TRUE, remove_zeroes = TRUE)
+```
+
+## 1.3. Aravo
+The third dataset, called `aravo`, is retrieved from the package `ade4`. It
+contains the distribution of 82 alpine plants in 75 sites distributed in the
+French Alps.
+
+```{r}
+data("aravo")
+aravo <- as.matrix(aravo$spe)
+dim(aravo)
+
+ara_dissim <- dissimilarity(aravo, metric = "all")
+
+ara_df <- mat_to_net(aravo, weight = TRUE, remove_zeroes = TRUE)
+```
+
+# 2. Microbenchmark
+We here assessing the time needed by each clustering algorithm on the three
+datasets loaded above.
+
+```{r}
+install_binaries()
+
+mbm <- suppressMessages(
+  microbenchmark(
+    # aravo
+    ara_nhclu_dbscan = nhclu_dbscan(dissimilarity = ara_dissim,
+                                    index = "Simpson", plot = FALSE),
+    ara_nhclu_kmeans = nhclu_kmeans(ara_dissim, n_clust = 2:10,
+                                    index = "Simpson"),
+    ara_nhclu_pam = nhclu_pam(ara_dissim, n_clust = 2:10, index = "Simpson"),
+    ara_hclu_hierarclust = hclu_hierarclust(dissimilarity = ara_dissim,
+                                            n_clust = 5),
+    ara_hclu_optics = hclu_optics(ara_dissim, index = "Simpson"),
+    ara_netclu_beckett = netclu_beckett(ara_df),
+    ara_netclu_greedy = netclu_greedy(ara_df),
+    ara_netclu_labelprop = netclu_labelprop(ara_df),
+    ara_netclu_leadingeigen = netclu_leadingeigen(ara_df),
+    ara_netclu_oslom = netclu_oslom(ara_df),
+    ara_netclu_walktrap = netclu_walktrap(ara_df),
+    ara_netclu_infomap = netclu_infomap(ara_df),
+    ara_netclu_louvain = netclu_louvain(ara_df),
+    
+    # benthic vertebrates
+    benthic_nhclu_dbscan = nhclu_dbscan(dissimilarity = contin_dissim,
+                                        index = "Simpson", plot = FALSE),
+    benthic_nhclu_kmeans = nhclu_kmeans(contin_dissim, n_clust = 2:10,
+                                        index = "Simpson"),
+    benthic_nhclu_pam = nhclu_pam(contin_dissim, n_clust = 2:10, index = "Simpson"),
+    benthic_hclu_hierarclust = hclu_hierarclust(dissimilarity = contin_dissim,
+                                                n_clust = 5),
+    benthic_hclu_optics = hclu_optics(contin_dissim, index = "Simpson"),
+    benthic_netclu_beckett = netclu_beckett(contin_df),
+    benthic_netclu_greedy = netclu_greedy(contin_df),
+    benthic_netclu_labelprop = netclu_labelprop(contin_df),
+    benthic_netclu_leadingeigen = netclu_leadingeigen(contin_df),
+    benthic_netclu_oslom = netclu_oslom(contin_df),
+    benthic_netclu_walktrap = netclu_walktrap(contin_df),
+    benthic_netclu_infomap = netclu_infomap(contin_df),
+    benthic_netclu_louvain = netclu_louvain(contin_df),
+    
+    # vegetation
+    veg_nhclu_dbscan = nhclu_dbscan(dissimilarity = vegemat_dissim,
+                                    index = "Simpson", plot = FALSE),
+    veg_nhclu_kmeans = nhclu_kmeans(vegemat_dissim, n_clust = 2:10,
+                                    index = "Simpson"),
+    veg_nhclu_pam = nhclu_pam(vegemat_dissim, n_clust = 2:10,
+                              index = "Simpson"),
+    veg_hclu_hierarclust = hclu_hierarclust(dissimilarity = vegemat_dissim,
+                                            n_clust = 5),
+    veg_hclu_optics = hclu_optics(vegemat_dissim, index = "Simpson"),
+    # veg_netclu_beckett = netclu_beckett(vegemat_df),
+    veg_netclu_greedy = netclu_greedy(vegemat_df),
+    veg_netclu_labelprop = netclu_labelprop(vegemat_df),
+    veg_netclu_leadingeigen = netclu_leadingeigen(vegemat_df),
+    # veg_netclu_oslom = netclu_oslom(vegemat_df),
+    veg_netclu_walktrap = netclu_walktrap(vegemat_df),
+    veg_netclu_infomap = netclu_infomap(vegemat_df),
+    veg_netclu_louvain = netclu_louvain(vegemat_df),
+    
+    times = 2))
+
+mbm_plot <- data.frame(mbm)
+mbm_plot$expr <- as.character(mbm_plot$expr)
+mbm_plot$dataset <- ifelse(
+  grepl("ara_", mbm_plot$expr),
+  paste0("Aravo (", nrow(aravo) * ncol(aravo), " cells)"),
+  ifelse(grepl("benthic_", mbm_plot$expr),
+         paste0("Benthic (", nrow(contin) * ncol(contin), " cells)"),
+         paste0("Vegetation (", nrow(vegemat) * ncol(vegemat), " cells)")))
+
+mbm_plot$algorithm <- gsub( ".*_", "", mbm_plot$expr)
+
+# Time in minutes
+mbm_plot$time_min <- mbm_plot$time / 60e9
+# Time in seconds
+mbm_plot$time_sec <- mbm_plot$time / 1e9
+```
+
+Plotting the results.
+
+```{r, eval = FALSE, echo = FALSE}
+label_plot <- data.frame(
+  algorithm = rep(unique(mbm_plot$algorithm), length(unique(mbm_plot$dataset))),
+  dataset = rep(unique(mbm_plot$dataset), length(unique(mbm_plot$algorithm))))
+
+labeldat <- mbm_plot %>%
+  group_by(dataset, algorithm) %>%
+  summarize(ypos = max(time) + 0.25 ) %>%
+  inner_join(., label_plot) %>%
+  as.data.frame()
+
+ggplot(mbm_plot, aes(as.factor(dataset), time)) +
+  # geom_boxplot(aes(fill = reorder(algorithm, time)), show.legend = FALSE) +
+  geom_boxplot(aes(color = algorithm, fill = algorithm), show.legend = FALSE) +
+  geom_text(data = labeldat, aes(x = as.factor(dataset), y = ypos, label = algorithm,
+                                 color = algorithm), show.legend = FALSE) +
+  scale_color_viridis_d("Algorithm") +
+  scale_fill_viridis_d("Algorithm") +
+  labs(x = "Dataset", y = "Time (milliseconds)") +
+  theme_classic() +
+  theme(panel.border = element_rect(fill = NA))
+```
+
+
+```{r}
+ggplot(mbm_plot[which(mbm_plot$dataset == "Aravo (6150 cells)"), ],
+       aes(reorder(algorithm, time_sec), time_sec)) +
+  geom_boxplot(aes(color = reorder(algorithm, time_sec),
+                   fill = reorder(algorithm, time_sec)), show.legend = FALSE) +
+  scale_color_viridis_d("Algorithm") +
+  scale_fill_viridis_d("Algorithm") +
+  labs(title = "Aravo (6,510 cells)", x = "", y = "Time (seconds)") +
+  theme_classic() +
+  theme(panel.border = element_rect(fill = NA),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
+
+
+```{r}
+ggplot(mbm_plot[which(mbm_plot$dataset == "Benthic (135756 cells)"), ],
+       aes(reorder(algorithm, time_sec), time_sec)) +
+  geom_boxplot(aes(color = reorder(algorithm, time_sec),
+                   fill = reorder(algorithm, time_sec)), show.legend = FALSE) +
+  scale_color_viridis_d("Algorithm") +
+  scale_fill_viridis_d("Algorithm") +
+  labs(title = "Benthic invertebrates (135,756 cells)",
+       x = "", y = "Time (seconds)") +
+  theme_classic() +
+  theme(panel.border = element_rect(fill = NA),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
+
+OSLOM and Beckett too slow, not ran so far on the Vegetation data.
+
+```{r}
+ggplot(mbm_plot[which(mbm_plot$dataset == "Vegetation (2643355 cells)"), ],
+       aes(reorder(algorithm, time_min), time_min)) +
+  geom_boxplot(aes(color = reorder(algorithm, time_min),
+                   fill = reorder(algorithm, time_min)), show.legend = FALSE) +
+  scale_color_viridis_d("Algorithm") +
+  scale_fill_viridis_d("Algorithm") +
+  labs(title = "Vegetation (2,643,355 cells)", x = "", y = "Time (minutes)") +
+  theme_classic() +
+  theme(panel.border = element_rect(fill = NA),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+```

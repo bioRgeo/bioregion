@@ -21,16 +21,16 @@ print.bioRgeo.clusters <- function(x, ...)
   if(x$name == "hierarchical_clustering") {
     cat("\t(hierarchical clustering based on a dissimilarity matrix)\n")
   }
-
+  
   # dataset characteristics -----
   cat(" - Number of sites: ", x$inputs$nb_sites, "\n")
-
+  
   # methodological details -----
   if(x$name == "hierarchical_clustering") {
     cat(" - Name of dissimilarity metric: ",
         ifelse(is.null(x$args$index),
-                       "Undefined",
-                       x$args$index), "\n")
+               "Undefined",
+               x$args$index), "\n")
     cat(" - Tree construction method: ", x$args$method, "\n")
     cat(" - Randomization of the dissimilarity matrix: ",
         ifelse(x$args$randomize, paste0("yes, number of trials ",
@@ -38,11 +38,11 @@ print.bioRgeo.clusters <- function(x, ...)
     cat(" - Cophenetic correlation coefficient: ",
         round(x$algorithm$final.tree.coph.cor, 3), "\n")
   }
-
-
+  
+  
   # number of clusters -----
   if (inherits(x$clusters, "data.frame")) {
-
+    
     # Further methodological details if hclust
     if(x$name == "hierarchical_clustering") {
       if(!is.null(x$args$n_clust))
@@ -58,26 +58,29 @@ print.bioRgeo.clusters <- function(x, ...)
       {
         cat(" - Heights of cut requested by the user: ",
             ifelse(length(x$args$cut_height) > 10,
-                   paste0(paste(round(x$args$cut_height, 3)[1:10], collapse = " "),
+                   paste0(paste(round(x$args$cut_height, 3)[1:10],
+                                collapse = " "),
                           " ... (with ",
                           length(x$args$cut_height) - 10, " more values)"),
                    paste(round(x$args$cut_height, 3), collapse = " ")), "\n")
       }
       if(x$args$dynamic_tree_cut)
       {
-        cat(paste0(" - Dynamic tree cut method chosen: '", x$args$dynamic_method,
-                   "', with minimum cluster size ", x$args$dynamic_minClusterSize, "\n"))
+        cat(paste0(
+          " - Dynamic tree cut method chosen: '", x$args$dynamic_method,
+          "', with minimum cluster size ", x$args$dynamic_minClusterSize,
+          "\n"))
       }
-
+      
     }
-
+    
     cat("Clustering results:\n")
     cat(" - Number of partitions: ",
         ncol(x$clusters) - 1, "\n")
-
+    
     nclust <- apply(x$clusters[, 2:ncol(x$clusters), drop = FALSE],
                     2, function(y) length(unique(y)))
-
+    
     cat(" - Number of clusters: ",
         ifelse(length(nclust) > 10,
                paste0(paste(nclust[1:10], collapse = " "),
@@ -85,16 +88,19 @@ print.bioRgeo.clusters <- function(x, ...)
                       length(nclust) - 10, " more values)"),
                paste(nclust, collapse = " ")),
         "\n")
-
+    
     if(x$name == "hierarchical_clustering") {
       if(x$args$find_h)
       {
         cat(" - Height of cut of the hierarchical tree:",
             ifelse(length(x$algorithm$output_cut_height) > 10,
-                   paste0(paste(round(x$algorithm$output_cut_height, 3)[1:10], collapse = " "),
+                   paste0(paste(round(x$algorithm$output_cut_height, 3)[1:10],
+                                collapse = " "),
                           " ... (with ",
-                          length(x$algorithm$output_cut_height) - 10, " more values)"),
-                   paste(round(x$algorithm$output_cut_height, 3), collapse = " ")), "\n")
+                          length(x$algorithm$output_cut_height) - 10,
+                          " more values)"),
+                   paste(round(x$algorithm$output_cut_height, 3),
+                         collapse = " ")), "\n")
       } else
       {
         cat(" - Height of cut not searched for.", "\n")
@@ -135,29 +141,30 @@ plot.bioRgeo.clusters <- function(x, ...)
       args$hang <- -1
     }
     args$x <- x$algorithm$final.tree
-
+    
     do.call(plot,
             args)
     if(!is.null(x$algorithm$output_cut_height))
     {
       # abline(h = x$output_cut_height, lty = 3, col = "#756bb1")
-
+      
       if(length(x$algorithm$output_cut_height) > 1)
       {
         if(length(x$algorithm$output_cut_height) > 3)
         {
-          message("Multiple cuts detected, plotting only the first three levels")
+          message(
+            "Multiple cuts detected, plotting only the first three levels")
         }
         
         cols <- c("#253494", "#2c7fb8", "#41b6c4")
-
+        
         for(i in 1:min(3, length(x$algorithm$output_cut_height)))
         {
           stats::rect.hclust(x$algorithm$final.tree,
                              h = x$algorithm$output_cut_height[i],
                              border = cols[i])
         }
-
+        
       } else
       {
         stats::rect.hclust(x$algorithm$final.tree,
@@ -170,20 +177,20 @@ plot.bioRgeo.clusters <- function(x, ...)
       vect_clust <- x$clusters[, 2]
       names(vect_clust) <- x$clusters[, 1]
       tot_l <- x$algorithm$output_n_clust + length(which(is.na(vect_clust)))
-
+      
       vect_clust[is.na(vect_clust)] <- (x$algorithm$output_n_clust + 1):
         (x$algorithm$output_n_clust + length(which(is.na(vect_clust))))
-
+      
       order_rect <- unique(vect_clust[x$algorithm$final.tree$order])
-
+      
       true_cl <- which(order_rect %in% 1:x$algorithm$output_n_clust)
-
+      
       stats::rect.hclust(x$final.tree,
                          k = tot_l,
                          which = true_cl,
                          cluster = vect_clust,
-                         # to do: add border colours from a vector with a distinct colour for each
-                         # cluster
+                         # to do: add border colours from a vector with a
+                         # distinct colour for each cluster
                          border = "#377eb8")
     }
   } else
@@ -199,18 +206,19 @@ print.bioRgeo.partition.metrics <- function(x, ...)
 {
   cat("Partition metrics:\n")
   cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
-  cat(" - Range of clusters explored: from ", min(x$evaluation_df$n_clusters), " to ",
+  cat(" - Range of clusters explored: from ", min(x$evaluation_df$n_clusters),
+      " to ",
       max(x$evaluation_df$n_clusters), "\n")
   cat(" - Requested metric(s): ", x$args$eval_metric, "\n")
   cat(" - Metric summary:\n")
-
+  
   print(data.frame(sapply(x$evaluation_df[x$args$eval_metric],
-               function(x) {
-                 c(min(x, na.rm = TRUE), 
-                   mean(x, na.rm = TRUE), 
-                   max(x, na.rm = TRUE))}),
-             row.names = c("Min", "Mean", "Max")))
-
+                          function(x) {
+                            c(min(x, na.rm = TRUE), 
+                              mean(x, na.rm = TRUE), 
+                              max(x, na.rm = TRUE))}),
+                   row.names = c("Min", "Mean", "Max")))
+  
   cat("Access the data.frame of metrics with your_object$evaluation_df\n")
 }
 
@@ -220,7 +228,8 @@ print.bioRgeo.optimal.n <- function(x, ...)
 {
   cat("Search for an optimal number of clusters:\n")
   cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
-  cat(" - Range of clusters explored: from ", min(x$evaluation_df$n_clusters), " to ",
+  cat(" - Range of clusters explored: from ", min(x$evaluation_df$n_clusters),
+      " to ",
       max(x$evaluation_df$n_clusters), "\n")
   cat(" - Evaluated metric(s): ", x$args$metrics_to_use, "\n")
   
@@ -243,7 +252,8 @@ print.bioRgeo.optimal.n <- function(x, ...)
   
   cat(paste(paste(names(x$optimal_nb_clusters),
                   sapply(x$optimal_nb_clusters,
-                         paste, collapse = " "), sep = " - "), collapse = "\n"))
+                         paste, collapse = " "), sep = " - "),
+            collapse = "\n"))
   cat("\n")
 }
 
@@ -260,7 +270,6 @@ str.bioRgeo.optimal.n <- function(object, ...)
 }
 
 
-
 #' @export
 #' @method print bioRgeo.pairwise.metric
 print.bioRgeo.pairwise.metric <- function(x, ...)
@@ -272,16 +281,14 @@ print.bioRgeo.pairwise.metric <- function(x, ...)
              ifelse(attr(x, "type") == "similarity",
                     "similarity",
                     "dissimilarity"),
-                    " between sites\n"))
+             " between sites\n"))
   cat(" - Total number of sites: ", length(unique(c(x$Site1, x$Site2))), "\n")
   cat(" - Number of rows: ", nrow(x), "\n")
   # Warning, next line can be wrong if users alter the object
   cat(" - Number of", ifelse(attr(x, "type") == "similarity",
-                              "similarity",
-                              "dissimilarity"), "metrics: ",
+                             "similarity",
+                             "dissimilarity"), "metrics: ",
       length(metrics), "\n")
   cat("\n\n")
   print(as.data.frame(x))
 }
-
-

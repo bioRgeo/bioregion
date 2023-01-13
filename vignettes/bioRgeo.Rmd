@@ -71,7 +71,7 @@ to better understand how these two functions work.
 The functions [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
 and [dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity.html)
 compute respectively pairwise similarity and dissimilarity metrics based on a 
-(site-species) co-occurence matrix. The resulting `data.frame` is stored in a 
+(site-species) co-occurrence matrix. The resulting `data.frame` is stored in a 
 `bioRgeo.pairwise.metric` object containing all requested metrics between each 
 pair of sites.
 
