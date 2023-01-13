@@ -1,5 +1,5 @@
 ---
-title: "3.1 Tutorial for the executable binary files installation"
+title: "0. Installation of the executable binary files"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 

@@ -47,7 +47,7 @@
 #' The function can cut the tree with two main methods. First, it can cut
 #' the entire tree at the same height (either specified by `cut_height` or
 #' automatically defined for the chosen `n_clust`). Second, it can use
-#' the dynamic tree cut method \insertRef{Langfelder2008}{bioRgeo}, in which
+#' the dynamic tree cut method \insertCite{Langfelder2008}{bioRgeo}, in which
 #' case clusters are detected with an adaptive method based on the shape of
 #' branches in the tree (thus cuts happen at multiple heights depending on
 #' cluster positions in the tree).
@@ -77,6 +77,9 @@
 #' object is returned with content updated (i.e., `args` and `clusters`). If
 #' `tree` is a `hclust` object, then a `data.frame` containing the clusters is
 #' returned.
+#' 
+#' @references 
+#' \insertRef{Langfelder2008}{bioRgeo}
 #' 
 #' @seealso [hclu_hierarclust]
 #' 

@@ -27,13 +27,18 @@ can be obtained by cutting the tree.
 Although these methods are conceptually simple, their implementation can be 
 complex and requires important choices by the user. In the following, we provide
 a step-by-step guide on how to do hierarchical clustering analyses with bioRgeo,
-along with comments on the philosophy on how we designed the functions.
+along with comments on the philosophy on how we designed the functions. 
 
-# Input data
+Hierarchical clustering takes place on the right-hand size part of the bioRgeo
+conceptual diagram:
+
+![](figures/diagram_nonetwork.png)
+
+# 1. Compute dissimilarity indices from input data
 
 To initiate the hierarchical clustering procedure, you need to provide pairwise 
 distances between sites. These pairwise distances between sites can be obtained
-by running dissimilarity() on a species-site matrix, such as a presence-absence
+by running `dissimilarity()` on a species-site matrix, such as a presence-absence
 or an abundance matrix. 
 
 In the example below, we use the vegetation dataset from the package to 
@@ -86,9 +91,9 @@ objects in hclu_hierarclust(), such as a distance matrix object (class `dist`)
 or a `data.frame` of your own crafting (make sure to read the required format
 carefully in ?hclu_hierarclust).
 
-# Hierarchical clustering with basic parameters
+# 2. Hierarchical clustering with basic parameters
 
-## Basic usage
+## 2.1 Basic usage
 
 The basic usage of the function is as follows:
 
@@ -195,7 +200,7 @@ for the shallow cut partition (h = 0.4) we have
 In the next section we will see what are the default settings and why we chose
 them, and then we will see how to find optimal numbers of clusters.
 
-## Exploring the outputs
+## 2.2 Exploring the outputs
 
 To explore the object, you can use `str()` to see the object structure:
 
@@ -228,9 +233,9 @@ It shows the name of the partition (corresponding to column names in
 `tree1$clusters`), the number of clusters in each partition, and the
 cut height I initially requested.
 
-## Explanation of the default settings and how to change them
+## 2.3 Explanation of the default settings and how to change them
 
-### Randomization of the distance matrix {#randomization}
+### 2.3.1 Randomization of the distance matrix {#randomization}
 
 The order of sites in the distance matrix influences the outcome of the 
 hierarchical tree. Let's see that with an example: 
@@ -289,7 +294,7 @@ trees, and use this tree, as is done for example in
 [the package recluster](https://github.com/leondap/recluster), but this is not
 yet available in bioRgeo. 
 
-### Tree construction algorithm
+### 2.3.2 Tree construction algorithm
 
 By default, the function uses the UPGMA method (Unweighted Pair Group Method
 with Arithmetic Mean) because it has been recommended in bioregionalisation for
@@ -297,9 +302,9 @@ its better performance over other approaches [@Kreft2010]. You can change this
 method by changing the argument `method`; all methods implemented in 
 `stats::hclust()` are available. 
 
-### Cutting the tree
+### 2.3.3 Cutting the tree
 
-There are two ways of cutting the tree:
+There are three ways of cutting the tree:
 
 1. **Specify the expected number of clusters**: you can request a specific 
 number of clusters (`n_clust = 5` for example). You can also request multiple
@@ -317,10 +322,14 @@ want to cut the tree (e.g., `cut_height = 0.5`). You can also request multiple
 partitions, each with their own cut height (`cut_height = c(0.4, 0.5, 0.6)`)
 for example. 
 
+3. **Use a dynamic tree cut method**: Rather than cutting the entire tree at
+once, this alternative approach consists in cutting individual branches at
+different heights. This method can be requested by using 
+`dynamic_tree_cut = TRUE`, and is based on the dynamicTreeCut R package.
 
 
 
-# How to find an optimal number of clusters? {#optimaln}
+# 3. How to find an optimal number of clusters? {#optimaln}
 
 ```{r, echo = FALSE, fig.height = 3, fig.width=3, message=FALSE}
 # Code I used to generate the diagram
@@ -376,7 +385,7 @@ number(s) of clusters.
 
 5. Step 5. **Export the optimal partitions from your cluster object.**
 
-## A practical example
+## 3.1 A practical example
 
 In this example we will compute the evaluation metric used by Holt et al.
 (2013), which compares the total dissimilarity of the distance matrix (sum of
@@ -419,7 +428,7 @@ map_clusters(tree4$clusters[, c("ID", K_name)],
 Or if you are allergic to lines of code, you could also simply recut your tree 
 at the identified optimal number of cut-offs with `cut_tree()`.
 
-## Evaluation metrics
+## 3.2 Evaluation metrics
 
 Currently, there are four evaluation metrics available in the package:
 
@@ -471,7 +480,7 @@ partition_metrics(tree4,
                   eval_metric = c("avg_endemism", "tot_endemism"))
 ```
 
-## Criteria to choose an optimal number of clusters
+## 3.2 Criteria to choose an optimal number of clusters
 
 Choosing the optimal number of clusters is a long-standing issue in the 
 literature and there is no absolute and objective answer to this question. 
@@ -507,7 +516,7 @@ eval_tree4 <- partition_metrics(tree4,
 
 ```
 
-### Elbow method
+### 3.2.1 Elbow method
 
 The elbow method consists in find the 'elbow' in the form of the metric-cluster
 relationship. This method will typically work for metrics which have an 
@@ -537,7 +546,7 @@ Alternatively, two cut-offs could be used, a deep cut-off based on endemism
 metrics at e.g. a value of `r a$optimal_nb_clusters$avg_endemism`, and a shallow
 cutoff based on `pc_distance`, at `r a$optimal_nb_clusters$pc_distance`.
 
-### Step method
+### 3.2.2 Step method
 
 The step method consists in identifying the largest "steps" in metrics, i.e.,
 largest increases or decreases in the value of the metric. 
@@ -599,7 +608,7 @@ find_optimal_n(eval_tree4,
                criterion = "decreasing_step",
                step_round_above = FALSE)
 ```
-### Cutting at different cut-off values
+### 3.2.3 Cutting at different cut-off values
 
 The idea of this method is to select specific metric values at which the number
 of clusters should be used. For example, in their study, Holt et al. (2013) 
@@ -639,7 +648,7 @@ find_optimal_n(eval_tree4,
                metric_cutoffs = c(.6, .8, .9))
 ```
 
-### Cutting at the maximum or minimum metric value
+### 3.2.4 Cutting at the maximum or minimum metric value
 
 This criterion will find the maximum (`criterion = "max"`) or minimum
 (`criterion = "min"`) value of the metric in the list
@@ -647,7 +656,7 @@ of partitions and select the associated partition. Such a criterion can be
 interesting in the case of `anosim`, but is probably much less useful for the
 other metrics implemented in the package.
 
-### Finding break points with a MARS model (experimental)
+### 3.2.5 Finding break points with a MARS model (experimental)
 
 This is an explotarory method which may not give adequate results.
 
@@ -674,6 +683,31 @@ find_optimal_n(eval_tree5,
 ```
 We can see that for anosim, the break point could be meaningful, whereas for the
 other metrics, the mars break points seem to lag behind the actual break points.
+
+# 4. OPTICS as a semi-hierarchical clustering approach
+
+OPTICS (Ordering Points To Identify the Clustering Structure) is a semi-
+hierarchical clustering approach which orders points in the datasets such that
+points which are closest become neighbours, calculates a 'reachability' 
+distance between each point and then extract clusters from this reachability 
+distance in a hierarchical manner. However, the hierarchical nature of clusters 
+is not directly provided by the algorithm in a tree-like output. Hence, users 
+should explore the 'reachability plot' to understand the hierarchical nature of
+their OPTICS clusters, and read the associated publication to further grasp this
+method [@Hahsler2019].
+
+To run the optics algorithm, use the `hclu_optics()` function:
+
+```{r}
+data(vegemat)
+
+# Calculate dissimilarities
+dissim <- dissimilarity(vegemat)
+
+clust1 <- hclu_optics(dissim)
+
+clust1
+```
 
 # References
 
