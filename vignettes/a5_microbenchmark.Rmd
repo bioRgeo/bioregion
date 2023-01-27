@@ -1,12 +1,12 @@
 ---
-title: "Microbenchmark"
+title: "5. Microbenchmark"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Microbenchmark}
+  %\VignetteIndexEntry{5. Microbenchmark}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -66,10 +66,9 @@ The second dataset also comes available with `bioRgeo` and contains
 distribution of 838 invertebrate species in the Bretagne region, France.
 
 ```{r}
-contin <- t(as.matrix(readRDS("data-raw/benthic_invertebrates.RDS")))
-
-contin_dissim <- dissimilarity(contin, metric = "all")
-contin_df <- mat_to_net(contin, weight = TRUE, remove_zeroes = TRUE)
+data("benthicmat")
+benthicdissim <- dissimilarity(benthicmat, metric = "all")
+data("benthicdf")
 ```
 
 ## 1.3. Aravo
@@ -115,22 +114,22 @@ mbm <- suppressMessages(
     ara_netclu_louvain = netclu_louvain(ara_df),
     
     # benthic vertebrates
-    benthic_nhclu_dbscan = nhclu_dbscan(dissimilarity = contin_dissim,
+    benthic_nhclu_dbscan = nhclu_dbscan(dissimilarity = benthicdissim,
                                         index = "Simpson", plot = FALSE),
-    benthic_nhclu_kmeans = nhclu_kmeans(contin_dissim, n_clust = 2:10,
+    benthic_nhclu_kmeans = nhclu_kmeans(benthicdissim, n_clust = 2:10,
                                         index = "Simpson"),
-    benthic_nhclu_pam = nhclu_pam(contin_dissim, n_clust = 2:10, index = "Simpson"),
-    benthic_hclu_hierarclust = hclu_hierarclust(dissimilarity = contin_dissim,
+    benthic_nhclu_pam = nhclu_pam(benthicdissim, n_clust = 2:10, index = "Simpson"),
+    benthic_hclu_hierarclust = hclu_hierarclust(dissimilarity = benthicdissim,
                                                 n_clust = 5),
-    benthic_hclu_optics = hclu_optics(contin_dissim, index = "Simpson"),
-    benthic_netclu_beckett = netclu_beckett(contin_df),
-    benthic_netclu_greedy = netclu_greedy(contin_df),
-    benthic_netclu_labelprop = netclu_labelprop(contin_df),
-    benthic_netclu_leadingeigen = netclu_leadingeigen(contin_df),
-    benthic_netclu_oslom = netclu_oslom(contin_df),
-    benthic_netclu_walktrap = netclu_walktrap(contin_df),
-    benthic_netclu_infomap = netclu_infomap(contin_df),
-    benthic_netclu_louvain = netclu_louvain(contin_df),
+    benthic_hclu_optics = hclu_optics(benthicdissim, index = "Simpson"),
+    benthic_netclu_beckett = netclu_beckett(benthicdf),
+    benthic_netclu_greedy = netclu_greedy(benthicdf),
+    benthic_netclu_labelprop = netclu_labelprop(benthicdf),
+    benthic_netclu_leadingeigen = netclu_leadingeigen(benthicdf),
+    benthic_netclu_oslom = netclu_oslom(benthicdf),
+    benthic_netclu_walktrap = netclu_walktrap(benthicdf),
+    benthic_netclu_infomap = netclu_infomap(benthicdf),
+    benthic_netclu_louvain = netclu_louvain(benthicdf),
     
     # vegetation
     veg_nhclu_dbscan = nhclu_dbscan(dissimilarity = vegemat_dissim,
@@ -159,7 +158,7 @@ mbm_plot$dataset <- ifelse(
   grepl("ara_", mbm_plot$expr),
   paste0("Aravo (", nrow(aravo) * ncol(aravo), " cells)"),
   ifelse(grepl("benthic_", mbm_plot$expr),
-         paste0("Benthic (", nrow(contin) * ncol(contin), " cells)"),
+         paste0("Benthic (", nrow(benthicmat) * ncol(benthicmat), " cells)"),
          paste0("Vegetation (", nrow(vegemat) * ncol(vegemat), " cells)")))
 
 mbm_plot$algorithm <- gsub( ".*_", "", mbm_plot$expr)
