@@ -13,24 +13,219 @@ output:
     toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{3.5 Network clustering}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+ chunk_output_type: console
 ---
 
-### Functions based on executable binary files
+```{r setup, include=FALSE}
 
-* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
-* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) 
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 8)
+# Packages --------------------------------------------------------------------
+suppressPackageStartupMessages({
+  suppressWarnings({
+    library("bioRgeo")
+  })
+})
 
-### Functions based on the igraph package 
+options(tinytex.verbose = TRUE)
 
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) 
-* [netclu_greedy](https://biorgeo.github.io/bioRgeo/reference/netclu_greedy.html)
-* [netclu_labelprop](https://biorgeo.github.io/bioRgeo/reference/netclu_labelprop.html)
-* [netclu_leadingeigen](https://biorgeo.github.io/bioRgeo/reference/netclu_leadingeigen.html)
-* [netclu_walktrap](https://biorgeo.github.io/bioRgeo/reference/netclu_walktrap.html) 
+```
 
-### Function based on the bipartite package 
+Network theory offers plenty of algorithms to classify nodes that are more
+connected than expected randomly. Within the `bioRgeo` R package, we try to
+cover the main network algorithms.  
 
-* [netclu_beckett](https://biorgeo.github.io/bioRgeo/reference/netclu_beckett.html) 
+Network clustering takes place on the left-hand size part of the bioRgeo
+conceptual diagram:
+
+```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
+knitr::include_graphics("../man/figures/Workflow.png")
+```
+
+In total, we have 9 functions, which can be classified like this:  
+-  Functions based on executable binary files  
+* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)  
+* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)  
+* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)  
+
+<br>
+- Functions based on the igraph package  
+* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)  
+* [netclu_greedy](https://biorgeo.github.io/bioRgeo/reference/netclu_greedy.html)  
+* [netclu_labelprop](https://biorgeo.github.io/bioRgeo/reference/netclu_labelprop.html)  
+* [netclu_leadingeigen](https://biorgeo.github.io/bioRgeo/reference/netclu_leadingeigen.html)  
+* [netclu_walktrap](https://biorgeo.github.io/bioRgeo/reference/netclu_walktrap.html)  
+
+<br>
+- Function based on the bipartite package  
+* [netclu_beckett](https://biorgeo.github.io/bioRgeo/reference/netclu_beckett.html)  
+
+This vignette aims at briefly explaining how each algorithm and its associated
+`bioRgeo` function works.
+For this purpose, we use the benthic invertebrates datasets that come with
+`bioRgeo`.
+
+# Input data
+
+```{r}
+data("benthicmat")
+data("benthicdf")
+```
+
+# Executable binary files
+
+```{r}
+install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
+```
+
+## Infomap
+
+Edler et al. (2016)
+
+```{r}
+ex_infomap <- netclu_infomap(benthicdf,
+                             weight = TRUE,
+                             index = names(benthicdf)[3],
+                             nbmod = 0,
+                             markovtime = 1,
+                             seed = 0,
+                             numtrials = 1,
+                             twolevel = FALSE,
+                             show_hierarchy = FALSE,
+                             directed = FALSE,
+                             bipartite_version = FALSE,
+                             bipartite = FALSE,
+                             site_col = 1,
+                             species_col = 2,
+                             return_node_type = "both",
+                             version = "2.6.0",
+                             delete_temp = TRUE,
+                             path_temp = "infomap_temp",
+                             binpath = NULL)
+
+table(ex_infomap$clusters$K_1)
+```
+
+
+## OSLOM
+OSLOM stands for Order Statistics Local Optimization Method.
+
+[Lancichinetti et al. (2011)](doi:10.1371/journal.pone.0018961)
+
+```{r, eval = FALSE}
+ex_oslom <- netclu_oslom(benthicdf,
+                         weight = TRUE,
+                         index = names(benthicdf)[3],
+                         reassign = "no",
+                         r = 10,
+                         hr = 50,
+                         seed = 0,
+                         t = 0.1,
+                         cp = 0.5,
+                         directed = FALSE,
+                         bipartite = FALSE,
+                         site_col = 1,
+                         species_col = 2,
+                         return_node_type = "both",
+                         delete_temp = TRUE,
+                         path_temp = "oslom_temp",
+                         binpath = NULL)
+```
+
+## Louvain
+
+```{r}
+ex_louvain <- netclu_louvain(benthicdf,
+                             weight = TRUE,
+                             index = names(benthicdf)[3],
+                             lang = "Cpp",
+                             q = 0,
+                             c = 0.5,
+                             k = 1,
+                             bipartite = FALSE,
+                             site_col = 1,
+                             species_col = 2,
+                             return_node_type = "both",
+                             delete_temp = TRUE,
+                             path_temp = "louvain_temp",
+                             binpath = NULL,
+                             algorithm_in_output = TRUE)
+table(ex_louvain$clusters$K_5)
+```
+
+
+# Functions from the igraph package
+## Fastgreedy
+
+```{r}
+ex_greedy <- netclu_greedy(benthicdf,
+                           weight = TRUE,
+                           index = names(benthicdf)[3],
+                           bipartite = FALSE,
+                           site_col = 1,
+                           species_col = 2,
+                           return_node_type = "both",
+                           algorithm_in_output = TRUE)
+table(ex_greedy$clusters$K_3)
+```
+
+## Label propagation
+
+```{r}
+ex_labelprop <- netclu_labelprop(benthicdf,
+                                 weight = TRUE,
+                                 index = names(benthicdf)[3],
+                                 bipartite = FALSE,
+                                 site_col = 1,
+                                 species_col = 2,
+                                 return_node_type = "both",
+                                 algorithm_in_output = TRUE)
+table(ex_labelprop$clusters$K_1)
+```
+
+## Leading eigenvector
+
+```{r}
+ex_leadingeigen <- netclu_leadingeigen(benthicdf,
+                                       weight = TRUE,
+                                       index = names(benthicdf)[3],
+                                       bipartite = FALSE,
+                                       site_col = 1,
+                                       species_col = 2,
+                                       return_node_type = "both",
+                                       algorithm_in_output = TRUE)
+table(ex_leadingeigen$clusters$K_4)
+```
+
+## Walktrap
+
+```{r}
+ex_walktrap <- netclu_walktrap(benthicdf,
+                               weight = TRUE,
+                               index = names(benthicdf)[3],
+                               steps = 4,
+                               bipartite = FALSE,
+                               site_col = 1,
+                               species_col = 2,
+                               return_node_type = "both",
+                               algorithm_in_output = TRUE)
+table(ex_walktrap$clusters$K_1)
+```
+
+# Function from the bipartite package
+## Beckett
+
+```{r, eval = FALSE}
+ex_beckett <- netclu_beckett(benthicdf,
+                             weight = TRUE,
+                             index = names(benthicdf)[3],
+                             site_col = 1,
+                             species_col = 2,
+                             return_node_type = "both",
+                             forceLPA = FALSE,
+                             algorithm_in_output = TRUE)
+table(ex_beckett$clusters$K_1)
+```
