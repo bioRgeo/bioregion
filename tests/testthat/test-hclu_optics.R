@@ -1,13 +1,14 @@
 # Preamble code ----------------------------------------------------------------
-dissim <- dissimilarity(vegemat, metric = "all")
+dissim <- dissimilarity(benthicmat, metric = "all")
 
 # Tests for valid outputs -----------------------------------------------------
 test_that("number of columns in output", {
+  set.seed(1)
   tree1 <- hclu_optics(dissim, index = "Simpson")
   
-  expect_equal(nrow(tree1$clusters), 715L)
+  expect_equal(nrow(tree1$clusters), 162L)
   expect_equal(ncol(tree1$clusters), 2L)
-  expect_equal(length(unique(tree1$clusters)), 2L)
+  expect_equal(length(unique(tree1$clusters$K_5)), 5L)
 })
 
 # Tests for invalid inputs ----------------------------------------------------

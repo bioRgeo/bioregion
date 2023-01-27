@@ -1,5 +1,5 @@
 # Preamble code ----------------------------------------------------------------
-dissim <- dissimilarity(vegemat, metric = "all")
+dissim <- dissimilarity(benthicmat, metric = "all")
 
 # Tests for valid outputs -----------------------------------------------------
 test_that("number of columns in output", {
