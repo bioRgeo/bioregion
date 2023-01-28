@@ -68,12 +68,43 @@ This vignette aims at briefly explaining how each algorithm and its associated
 For this purpose, we use the benthic invertebrates datasets that come with
 `bioRgeo`.
 
-# Input data
+# Introduction
+## Input data
+
+All network algorithms work with the network format, i.e. a `data.frame` with
+3 columns: sites, species and the abundance of a given species in a given site.
+This type of object can be obtained from a site x species matrix through the
+use of `mat_to_net()`.
+
+In this vignette, we directly load the network format for the distribution of
+benthic invertebrates in Brittany.
 
 ```{r}
-data("benthicmat")
 data("benthicdf")
 ```
+
+## Main arguments
+Each of the algorithms presented here has some specific parameters that can
+be tweaked but some arguments are common for all the functions.  
+
+Among these common arguments are the following:  
+* `weight` a boolean indicating if the weights should be considered  
+* `index` name or number of the column to use as weight. By default, the third
+column name of the network data.frame is used  
+* `site_col` name or number for the column of site nodes (i.e. primary nodes).  
+* `species_col` = name or number for the column of species nodes (i.e. feature
+nodes)  
+* `return_node_type` a character indicating what types of nodes ("sites",
+"species" or "both") should be returned in the output (keep_nodes_type="both"
+by default).  
+* `algorithm_in_output` a boolean indicating if the original output of
+communities should be returned in the output (see Value).  
+
+For the three algorithms relying on executable binary files, the following
+arguments are needed:  
+* `delete_temp` a boolean indicating if the temporary folder should be removed  
+* `path_temp` a character indicating the path to the temporary folder  
+* `binpath`	a character indicating the path to the bin folder  
 
 # Executable binary files
 
@@ -84,6 +115,17 @@ install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
 ## Infomap
 
 Edler et al. (2016)
+
+* `nbmod` penalize solutions the more they differ from this number (0 by
+default for no preferred number of modules).  
+* `markovtime` scales link flow to change the cost of moving between modules,
+* higher values results in fewer modules (default is 1).  
+* `seed` for the random number generator (0 for random by default)  
+* `numtrials` the number of trials before picking up the best solution.  
+* `twolevel` a boolean indicating if the algorithm should optimize a two-level
+partition of the network (default is multi-level).  
+* `show_hierarchy` a boolean specifying if the hierarchy of community should be
+identifiable in the outputs (FALSE by default).  
 
 ```{r}
 ex_infomap <- netclu_infomap(benthicdf,
@@ -114,6 +156,17 @@ table(ex_infomap$clusters$K_1)
 OSLOM stands for Order Statistics Local Optimization Method.
 
 [Lancichinetti et al. (2011)](doi:10.1371/journal.pone.0018961)
+
+`reassign` a string indicating if the nodes belonging to several community
+should be reassign and what method should be used (see Note).  
+* `r` the number of runs for the first hierarchical level (10 by default).  
+* `hr` the number of runs for the higher hierarchical level (50 by default, 0
+if you are not interested in hierarchies).  
+* `seed` for the random number generator (0 for random by default).  
+* `t` the p−value, the default value is 0.10, increase this value you to get
+more modules.  
+* `cp` kind of resolution parameter used to decide between taking some modules
+or their union (default value is 0.5, bigger value leads to bigger clusters).  
 
 ```{r, eval = FALSE}
 ex_oslom <- netclu_oslom(benthicdf,
