@@ -7,7 +7,7 @@
 \format{
 A \code{data.frame} with 28,563 rows and 3 columns:
 \describe{
-\item{Site}{Unique site identifier (corresponding to the field ID of vegesp).}
+\item{Site}{Unique site identifier (corresponding to the field ID of benthicsp).}
 \item{Species}{Unique species identifier.}
 \item{Abundance}{Species abundance}
 }

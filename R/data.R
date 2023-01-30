@@ -40,7 +40,7 @@
 #'
 #' @format A `data.frame` with 28,563 rows and 3 columns:
 #' \describe{
-#'   \item{Site}{Unique site identifier (corresponding to the field ID of vegesp).}
+#'   \item{Site}{Unique site identifier (corresponding to the field ID of benthicsp).}
 #'   \item{Species}{Unique species identifier.}
 #'   \item{Abundance}{Species abundance}
 #' }
@@ -67,3 +67,36 @@
 #'   \item{geometry}{Geometry of the site.}
 #' }
 "benthicsp"
+
+#' Spatial distribution of fish in Europe (data.frame)
+#'
+#' A dataset containing the abundance of 195 species in 338 sites.
+#'
+#' @format A `data.frame` with 2,703 rows and 3 columns:
+#' \describe{
+#'   \item{Site}{Unique site identifier (corresponding to the field ID of fishsf).}
+#'   \item{Species}{Unique species identifier.}
+#'   \item{Abundance}{Species abundance}
+#' }
+"fishdf"
+
+#' Spatial distribution of fish in Europe (co-occurrence matrix)
+#'
+#' A dataset containing the abundance of each of the 195 species in each of
+#' the 338 sites.
+#'
+#' @format A co-occurrence `matrix` with sites as rows and species as
+#' columns. Each element of the matrix
+#' represents the abundance of the species in the site.
+"fishmat"
+
+#' Spatial distribution of fish in Europe
+#'
+#' A dataset containing the geometry of the 338 sites.
+#'
+#' @format A
+#' \describe{
+#'   \item{ID}{Unique site identifier.}
+#'   \item{geometry}{Geometry of the site.}
+#' }
+"fishsf"
