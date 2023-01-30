@@ -419,10 +419,10 @@ K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_d
 head(tree4$clusters[, c("ID", K_name)])
 
 # Make a map of the clusters
-data(vegesp)
+data(vegesf)
 library(sf)
 map_clusters(tree4$clusters[, c("ID", K_name)],
-             vegesp)
+             vegesf)
 ```
 
 Or if you are allergic to lines of code, you could also simply recut your tree 

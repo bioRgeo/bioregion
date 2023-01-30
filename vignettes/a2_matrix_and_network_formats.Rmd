@@ -52,7 +52,7 @@ vegemat[1:10,1:10]
 dim(vegemat)
 ```
 
-and [vegesp](https://biorgeo.github.io/bioRgeo/reference/vegesp.html) a spatial
+and [vegesf](https://biorgeo.github.io/bioRgeo/reference/vegesf.html) a spatial
 object containing the geometry of the 715 sites. 
 
 ## From matrix to network

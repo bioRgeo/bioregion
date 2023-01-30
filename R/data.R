@@ -32,7 +32,7 @@
 #'   \item{geometry}{Geometry of the site.}
 #' }
 #' @source <https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718>
-"vegesp"
+"vegesf"
 
 #' Spatial distribution of fish in Europe (data.frame)
 #'
