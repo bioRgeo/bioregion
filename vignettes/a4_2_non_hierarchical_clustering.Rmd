@@ -1,0 +1,22 @@
+---
+title: "4.2 Non-hierarchical clustering"
+author: "Boris Leroy, Maxime Lenormand and Pierre Denelle"
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    number_sections: false
+  html_document:
+    toc: true
+    toc_float:
+    collapsed: false
+    smooth_scroll: false
+    toc_depth: 2
+bibliography: REFERENCES.bib  
+csl: journal-of-biogeography.csl
+vignette: >
+  %\VignetteIndexEntry{4.2 Non-hierarchical clustering}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+

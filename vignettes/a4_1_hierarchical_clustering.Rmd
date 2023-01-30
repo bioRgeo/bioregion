@@ -1,5 +1,5 @@
 ---
-title: "3.2 Hierarchical clustering"
+title: "4.1 Hierarchical clustering"
 author: "Boris Leroy, Maxime Lenormand and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
@@ -14,7 +14,7 @@ output:
 bibliography: REFERENCES.bib  
 csl: journal-of-biogeography.csl
 vignette: >
-  %\VignetteIndexEntry{3.2 Hierarchical clustering}
+  %\VignetteIndexEntry{4.1 Hierarchical clustering}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

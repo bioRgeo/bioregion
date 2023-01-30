@@ -56,7 +56,21 @@ can be divided into four main steps:
 </center> 
 <br>
 
-## 1. Matrix or Network formats
+## 1. Install executable binary files
+
+Some functions or at least part of them (listed below) require executable binary
+files to run. 
+
+* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
+* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) (Cpp version)
+* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
+
+Please check this 
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html) 
+to get instructions regarding the installation of the executable binary files.
+
+
+## 2. Matrix or Network formats
 
 The `bioRgeo`'s package takes as input site-species information stored in a 
 bipartite network or a co-occurrence matrix. Relying on the function  [mat_to_net](https://biorgeo.github.io/bioRgeo/reference/mat_to_net.html)
@@ -66,7 +80,7 @@ and [net_to_mat](https://biorgeo.github.io/bioRgeo/reference/net_to_mat.html)
 Please have a look at this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_matrix_and_network_formats.html) 
 to better understand how these two functions work.
 
-## 2. Pairwise similarity/dissimilarity metrics
+## 3. Pairwise similarity/dissimilarity metrics
 
 The functions [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
 and [dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity.html)
@@ -82,30 +96,15 @@ and vice versa.
 Please have a look at this [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a2_pairwise_metrics.html) 
 to better understand how these functions work.
  
-## 3. Clustering algorithms
+## 4. Clustering algorithms
 
-### 3.1 Install executable binary files
+ bioRgeo.clusters class `bioRgeo.clusters` 
 
-Some functions or at least part of them (listed below) require executable binary
-files to run. 
+### 4.1 Hierarchical clustering
 
-* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) (Cpp version)
-* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
+### 4.2 Non-hierarchical clustering
 
-Please check this 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html) 
-to get instructions regarding the installation of the executable binary files.
-
-### 3.2 The bioRgeo.clusters class
-
-`bioRgeo.clusters` 
-
-### 3.3 Hierarchical clustering
-
-### 3.4 Non-hierarchical clustering
-
-### 3.5 Network clustering
+### 4.3 Network clustering
 
 The `bioRgeo`'s package contains 8 network clustering functions: 
 
@@ -122,7 +121,9 @@ Please check this
 [tutorial page](https://biorgeo.github.io/bioRgeo/articles/a3_5_network_clustering.html) 
 to get more information regarding the network clustering functions.
 
-## 4. Visualization and evaluation of the results
+### 4.4 Microbenchmark
+
+## 5. Visualization and evaluation of the results
 
 
 

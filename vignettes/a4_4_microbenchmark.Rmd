@@ -1,12 +1,12 @@
 ---
-title: "5. Microbenchmark"
+title: "4.4 Microbenchmark"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{5. Microbenchmark}
+  %\VignetteIndexEntry{4.4 Microbenchmark}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

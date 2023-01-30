@@ -2,9 +2,11 @@
 
 # Bioregionalisation Methods in R
 
+<!-- badges: start -->
 [![R build status](https://github.com/bioRgeo/bioRgeo/workflows/R-CMD-check/badge.svg)](https://github.com/bioRgeo/bioRgeo/actions) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo) 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
+<!-- badges: end -->
 
 ## 1 Install
 

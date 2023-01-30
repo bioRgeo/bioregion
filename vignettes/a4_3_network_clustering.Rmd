@@ -1,5 +1,5 @@
 ---
-title: "3.5 Network clustering"
+title: "4.3 Network clustering"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
@@ -12,7 +12,7 @@ output:
     smooth_scroll: false
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{3.5 Network clustering}
+  %\VignetteIndexEntry{4.3 Network clustering}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

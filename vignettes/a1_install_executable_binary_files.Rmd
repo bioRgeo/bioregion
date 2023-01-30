@@ -1,5 +1,5 @@
 ---
-title: "0. Installation of the executable binary files"
+title: "1. Installation of the executable binary files"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
@@ -12,7 +12,7 @@ output:
     smooth_scroll: false
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{3.1 Tutorial for the executable binary files installation}
+  %\VignetteIndexEntry{1. Installation of the executable binary files}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

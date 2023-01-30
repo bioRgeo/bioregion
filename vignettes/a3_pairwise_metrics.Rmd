@@ -1,12 +1,12 @@
 ---
-title: "2. Pairwise similarity/dissimilarity metrics"
+title: "3. Pairwise similarity/dissimilarity metrics"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{2. Pairwise similarity/dissimilarity metrics}
+  %\VignetteIndexEntry{3. Pairwise similarity/dissimilarity metrics}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
