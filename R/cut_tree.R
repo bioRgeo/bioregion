@@ -109,7 +109,7 @@
 #' 
 #' @importFrom stats as.dist na.omit
 #' @importFrom dynamicTreeCut cutreeDynamic
-#' @importFrom dendextend cutree
+# @importFrom dendextend cutree
 #' 
 #'@export
 
