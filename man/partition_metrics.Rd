@@ -111,23 +111,16 @@ only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
 }
 \examples{
 \dontrun{
-dissim <- dissimilarity(vegemat, metric = "all")
+dissim <- dissimilarity(fishmat, metric = "all")
 
 # User-defined number of clusters
-tree1 <- hclu_hierarclust(dissim,
-                          n_clust = 2:20,
-                          index = "Simpson")
+tree1 <- hclu_hierarclust(dissim, n_clust = 2:20, index = "Simpson")
 tree1
 
-a <- partition_metrics(tree1,
-                  dissimilarity = dissim,
-                  net = vegedf,
-                  site_col = "Site",
-                  species_col = "Species",
-                  eval_metric = c("tot_endemism",
-                                  "avg_endemism",
-                                  "pc_distance",
-                                  "anosim"))
+a <- partition_metrics(tree1, dissimilarity = dissim, net = fishdf,
+                  site_col = "Site", species_col = "Species",
+                  eval_metric = c("tot_endemism", "avg_endemism",
+                                  "pc_distance", "anosim"))
 }
 
 }

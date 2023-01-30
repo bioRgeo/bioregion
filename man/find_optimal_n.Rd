@@ -180,7 +180,7 @@ bioregionalisation.
 }
 \examples{
 \dontrun{
-dissim <- dissimilarity(vegemat, metric = "all")
+dissim <- dissimilarity(fishmat, metric = "all")
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissim,
@@ -190,7 +190,7 @@ tree1
 
 a <- partition_metrics(tree1,
                    dissimilarity = dissim,
-                   net = vegedf,
+                   net = fishdf,
                    species_col = "Species",
                    site_col = "Site",
                    eval_metric = c("tot_endemism",

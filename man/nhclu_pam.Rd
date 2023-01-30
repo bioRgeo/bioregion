@@ -63,22 +63,14 @@ input dissimilarity matrix if the distances are not euclidean).
 }
 \examples{
 \dontrun{
-dissim <- dissimilarity(vegemat, metric = "all")
+dissim <- dissimilarity(fishmat, metric = "all")
 
-clust1 <- nhclu_pam(dissim,
-     n_clust = 2:10,
-     index = "Simpson")
-clust2 <- nhclu_pam(dissim,
-     n_clust = 2:25,
-     index = "Simpson")
-partition_metrics(clust2,
-                   dissimilarity = dissim,
-                   eval_metric = "pc_distance")
-partition_metrics(clust2,
-                   net = vegedf,
-                   species_col = "Species",
-                   site_col = "Site",
-                   eval_metric = "avg_endemism")
+clust1 <- nhclu_pam(dissim, n_clust = 2:10, index = "Simpson")
+clust2 <- nhclu_pam(dissim, n_clust = 2:25, index = "Simpson")
+partition_metrics(clust2, dissimilarity = dissim,
+eval_metric = "pc_distance")
+partition_metrics(clust2, net = fishdf, species_col = "Species",
+                   site_col = "Site", eval_metric = "avg_endemism")
 }
    
 }

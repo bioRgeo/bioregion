@@ -35,12 +35,12 @@ included in the sites of \code{geometry}.
 }
 \examples{
 \dontrun{
-data(vegemat)
-data(vegesp)
+data(fishmat)
+data(fishsp)
 
-net=similarity(vegemat,metric=c("Simpson"))
-clu=netclu_greedy(net)
-map <- map_clusters(clu, vegesp, write_clusters = TRUE, plot = FALSE)
+net <- similarity(fishmat, metric = "Simpson")
+clu <- netclu_greedy(net)
+map <- map_clusters(clu, fishsf, write_clusters = TRUE, plot = FALSE)
 }
 
 }

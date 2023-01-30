@@ -64,23 +64,15 @@ should be preferred (\code{\link[=nhclu_pam]{nhclu_pam()}})
 }
 \examples{
 \dontrun{
-dissim <- dissimilarity(vegemat, metric = "all")
+dissim <- dissimilarity(fishmat, metric = "all")
 
-clust1 <- nhclu_kmeans(dissim,
-     n_clust = 2:10,
-     index = "Simpson")
-clust2 <- nhclu_kmeans(dissim,
-     n_clust = 2:25,
-     index = "Simpson")
-partition_metrics(clust2,
-                   dissimilarity = dissim,
+clust1 <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")
+clust2 <- nhclu_kmeans(dissim, n_clust = 2:25, index = "Simpson")
+partition_metrics(clust2, dissimilarity = dissim,
                    eval_metric = "pc_distance")
 
-partition_metrics(clust2,
-                   net = vegedf,
-                   species_col = "Species",
-                   site_col = "Site",
-                   eval_metric = "avg_endemism")
+partition_metrics(clust2, net = fishdf, species_col = "Species",
+                   site_col = "Site", eval_metric = "avg_endemism")
 }     
 
 }

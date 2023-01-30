@@ -81,7 +81,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' dissim <- dissimilarity(vegemat, metric = "all")
+#' dissim <- dissimilarity(fishmat, metric = "all")
 #' 
 #' clust1 <- nhclu_dbscan(dissim, index = "Simpson")
 #' clust2 <- nhclu_dbscan(dissim, index = "Simpson", eps = 0.2)

@@ -84,7 +84,7 @@
 #' @seealso [nhclu_dbscan] 
 #' @examples
 #' \dontrun{
-#' dissim <- dissimilarity(vegemat, metric = "all")
+#' dissim <- dissimilarity(fishmat, metric = "all")
 #'   
 #' clust1 <- hclu_optics(dissim, index = "Simpson")
 #' clust1
