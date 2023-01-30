@@ -1,5 +1,5 @@
 # Preamble code ----------------------------------------------------------------
-dissim <- dissimilarity(benthicmat, metric = "all")
+dissim <- dissimilarity(fishmat, metric = "all")
 
 # Tests for valid outputs -----------------------------------------------------
 test_that("number of columns in output", {

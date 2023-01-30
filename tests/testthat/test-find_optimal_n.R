@@ -1,12 +1,12 @@
 # Preamble code ----------------------------------------------------------------
-dissim <- dissimilarity(benthicmat, metric = "all")
+dissim <- dissimilarity(fishmat, metric = "all")
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissim, n_clust = 2:50, index = "Simpson")
 
 a <- partition_metrics(tree1,
                        dissimilarity = dissim,
-                       net = benthicdf,
+                       net = fishdf,
                        species_col = "Species",
                        site_col = "Site",
                        eval_metric = c("tot_endemism",
@@ -19,10 +19,10 @@ optim_a <- find_optimal_n(a, plot = FALSE)
 
 test_that("number of columns in output", {
   
-  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 9L)
-  expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 8L)
-  expect_equal(optim_a$optimal_nb_clusters$pc_distance, 24L)
-  expect_equal(optim_a$optimal_nb_clusters$anosim, 8L)
+  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 13L)
+  expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 12L)
+  expect_equal(optim_a$optimal_nb_clusters$pc_distance, 13L)
+  expect_equal(optim_a$optimal_nb_clusters$anosim, 2L)
   
 })
 
