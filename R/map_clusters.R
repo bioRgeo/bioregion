@@ -45,6 +45,9 @@
 map_clusters <- function(clusters, geometry, write_clusters = FALSE,
                          plot = TRUE) {
 
+  controls(args = write_clusters, data = NULL, type = "boolean")
+  controls(args = plot, data = NULL, type = "boolean")
+  
   # Control clusters 
   if (inherits(clusters, "bioRgeo.clusters")) {
     clu <- TRUE

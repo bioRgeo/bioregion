@@ -225,7 +225,7 @@ Please carefully check your data before using the clustering functions."))
   
   # Boolean ###################################################################
   if (type == "boolean") {
-    if (!is.logical(args)) {
+    if (!is.logical(args) || is.na(args)) {
       stop(paste0(deparse(substitute(args)), " must be a boolean."),
            call. = FALSE
       )
