@@ -134,14 +134,9 @@ nhclu_pam <- function(
          original, o_1, o_2, f_3, f_4, f_5 or faster.")
   }
   
-  if(!is.numeric(nstart) || nstart < 0){
-    stop("nstart must be a positive integer.")
-  }
-  
-  if(!is.logical(cluster_only)){
-    stop("cluster_only must be a Boolean.")
-  }
-  
+  controls(args = cluster_only, data = NULL, type = "boolean")
+  controls(args = nstart, data = NULL, type = "positive_integer")
+
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "pam")
   

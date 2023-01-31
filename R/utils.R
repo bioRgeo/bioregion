@@ -225,7 +225,7 @@ Please carefully check your data before using the clustering functions."))
   
   # Boolean ###################################################################
   if (type == "boolean") {
-    if (!is.logical(args) || is.na(args)) {
+    if (!is.logical(args) || is.na(args) || length(args) != 1) {
       stop(paste0(deparse(substitute(args)), " must be a boolean."),
            call. = FALSE
       )
@@ -284,7 +284,7 @@ Please carefully check your data before using the clustering functions."))
   
   # Positive integer ##########################################################
   if (type == "positive_integer") {
-    if (!is.numeric(args)) {
+    if (!is.numeric(args) || length(args) != 1) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {

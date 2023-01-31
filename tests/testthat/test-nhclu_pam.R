@@ -38,12 +38,12 @@ test_that("error messages with wrong inputs", {
   
   expect_error(
     nhclu_pam(dissim, nstart = "zz"),
-    "nstart must be a positive integer.",
+    "nstart must be numeric.",
     fixed = TRUE)
   
   expect_error(
     nhclu_pam(dissim, cluster_only = "zz"),
-    "cluster_only must be a Boolean.",
+    "cluster_only must be a boolean.",
     fixed = TRUE)
   
 })

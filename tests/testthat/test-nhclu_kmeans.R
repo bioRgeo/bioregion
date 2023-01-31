@@ -31,13 +31,13 @@ test_that("error messages with wrong inputs", {
     fixed = TRUE)
   
   expect_error(
-    nhclu_kmeans(dissim, iter_max = "zz"),
-    "iter_max must be a positive integer.",
+    nhclu_kmeans(dissim, iter_max = -1),
+    "iter_max must be higher than 0.",
     fixed = TRUE)
   
   expect_error(
     nhclu_kmeans(dissim, nstart = "zz"),
-    "nstart must be a positive integer.",
+    "nstart must be numeric.",
     fixed = TRUE)
   
   expect_error(

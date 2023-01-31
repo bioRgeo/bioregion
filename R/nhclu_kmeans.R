@@ -129,14 +129,9 @@ nhclu_kmeans <- function(dissimilarity,
     dist.obj <- dissimilarity
   }
   
-  if(!is.numeric(iter_max) || iter_max < 0){
-    stop("iter_max must be a positive integer.")
-  }
-  
-  if(!is.numeric(nstart) || nstart < 0){
-    stop("nstart must be a positive integer.")
-  }
-  
+  controls(args = iter_max, data = NULL, type = "positive_integer")
+  controls(args = nstart, data = NULL, type = "positive_integer")
+
   if(!is.character(algorithm) || length(algorithm) != 1 ||
      !(all(algorithm %in% c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen")))){
     stop("algorithm is a character string indicating. Available options are

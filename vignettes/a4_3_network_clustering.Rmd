@@ -65,7 +65,7 @@ In total, we have 9 functions, which can be classified like this:
 
 This vignette aims at briefly explaining how each algorithm and its associated
 `bioRgeo` function works.
-For this purpose, we use the benthic invertebrates datasets that come with
+For this purpose, we use the European freshwater fish dataset that comes with
 `bioRgeo`.
 
 # Introduction
@@ -77,10 +77,10 @@ This type of object can be obtained from a site x species matrix through the
 use of `mat_to_net()`.
 
 In this vignette, we directly load the network format for the distribution of
-benthic invertebrates in Brittany.
+fish in European basins.
 
 ```{r}
-data("benthicdf")
+data("fishdf")
 ```
 
 ## Main arguments
@@ -128,9 +128,9 @@ partition of the network (default is multi-level).
 identifiable in the outputs (FALSE by default).  
 
 ```{r}
-ex_infomap <- netclu_infomap(benthicdf,
+ex_infomap <- netclu_infomap(fishdf,
                              weight = TRUE,
-                             index = names(benthicdf)[3],
+                             index = names(fishdf)[3],
                              nbmod = 0,
                              markovtime = 1,
                              seed = 0,
@@ -169,9 +169,9 @@ more modules.
 or their union (default value is 0.5, bigger value leads to bigger clusters).  
 
 ```{r, eval = FALSE}
-ex_oslom <- netclu_oslom(benthicdf,
+ex_oslom <- netclu_oslom(fishdf,
                          weight = TRUE,
-                         index = names(benthicdf)[3],
+                         index = names(fishdf)[3],
                          reassign = "no",
                          r = 10,
                          hr = 50,
@@ -198,9 +198,9 @@ is chosen by default, see Details).
 1 is chosen by default)
 
 ```{r}
-ex_louvain <- netclu_louvain(benthicdf,
+ex_louvain <- netclu_louvain(fishdf,
                              weight = TRUE,
-                             index = names(benthicdf)[3],
+                             index = names(fishdf)[3],
                              lang = "Cpp",
                              q = 0,
                              c = 0.5,
@@ -221,9 +221,9 @@ table(ex_louvain$clusters$K_5)
 ## Fastgreedy
 Clauset et al. http://www.arxiv.org/abs/cond-mat/0408187
 ```{r}
-ex_greedy <- netclu_greedy(benthicdf,
+ex_greedy <- netclu_greedy(fishdf,
                            weight = TRUE,
-                           index = names(benthicdf)[3],
+                           index = names(fishdf)[3],
                            bipartite = FALSE,
                            site_col = 1,
                            species_col = 2,
@@ -235,9 +235,9 @@ table(ex_greedy$clusters$K_3)
 ## Label propagation
 
 ```{r}
-ex_labelprop <- netclu_labelprop(benthicdf,
+ex_labelprop <- netclu_labelprop(fishdf,
                                  weight = TRUE,
-                                 index = names(benthicdf)[3],
+                                 index = names(fishdf)[3],
                                  bipartite = FALSE,
                                  site_col = 1,
                                  species_col = 2,
@@ -249,9 +249,9 @@ table(ex_labelprop$clusters$K_1)
 ## Leading eigenvector
 
 ```{r}
-ex_leadingeigen <- netclu_leadingeigen(benthicdf,
+ex_leadingeigen <- netclu_leadingeigen(fishdf,
                                        weight = TRUE,
-                                       index = names(benthicdf)[3],
+                                       index = names(fishdf)[3],
                                        bipartite = FALSE,
                                        site_col = 1,
                                        species_col = 2,
@@ -263,9 +263,9 @@ table(ex_leadingeigen$clusters$K_4)
 ## Walktrap
 
 ```{r}
-ex_walktrap <- netclu_walktrap(benthicdf,
+ex_walktrap <- netclu_walktrap(fishdf,
                                weight = TRUE,
-                               index = names(benthicdf)[3],
+                               index = names(fishdf)[3],
                                steps = 4,
                                bipartite = FALSE,
                                site_col = 1,
@@ -279,9 +279,9 @@ table(ex_walktrap$clusters$K_1)
 ## Beckett
 
 ```{r, eval = FALSE}
-ex_beckett <- netclu_beckett(benthicdf,
+ex_beckett <- netclu_beckett(fishdf,
                              weight = TRUE,
-                             index = names(benthicdf)[3],
+                             index = names(fishdf)[3],
                              site_col = 1,
                              species_col = 2,
                              return_node_type = "both",
