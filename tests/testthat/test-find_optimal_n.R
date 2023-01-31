@@ -2,6 +2,7 @@
 dissim <- dissimilarity(fishmat, metric = "all")
 
 # User-defined number of clusters
+set.seed(1)
 tree1 <- hclu_hierarclust(dissim, n_clust = 2:50, index = "Simpson")
 
 a <- partition_metrics(tree1,
@@ -19,9 +20,9 @@ optim_a <- find_optimal_n(a, plot = FALSE)
 
 test_that("number of columns in output", {
   
-  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 13L)
+  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 12L)
   expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 12L)
-  expect_equal(optim_a$optimal_nb_clusters$pc_distance, 13L)
+  expect_equal(optim_a$optimal_nb_clusters$pc_distance, 26L)
   expect_equal(optim_a$optimal_nb_clusters$anosim, 2L)
   
 })
