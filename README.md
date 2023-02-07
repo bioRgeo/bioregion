@@ -1,30 +1,97 @@
-# __bioRgeo__ <img src="man/figures/logo.png" align="right" alt="" width="200" />
 
-# Bioregionalisation Methods in R
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# bioRgeo <img src="man/figures/logo.png" align="right" alt="" width="200" />
 
 <!-- badges: start -->
-[![R build status](https://github.com/bioRgeo/bioRgeo/workflows/R-CMD-check/badge.svg)](https://github.com/bioRgeo/bioRgeo/actions) 
-[![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo) 
-[![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
+
+[![R build
+status](https://github.com/bioRgeo/bioRgeo/workflows/R-CMD-check/badge.svg)](https://github.com/bioRgeo/bioRgeo/actions)
+[![version](https://img.shields.io/github/v/release/bioRgeo/bioRgeo?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioRgeo)
+[![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 <!-- badges: end -->
 
-## 1 Install
+This **R package** gathers a comprehensive set of algorithms to perform
+bioregionalization annalyses. <br> The different algorithms come from
+the network literature or can be (non)-hierarchical.
 
-The package `bioRgeo` can be installed with the following command line in R session:
+# :arrow_double_down: Installation
+
+The package is not on CRAN yet and is still under active development.
+You can install the development version from the GitHub repository with
+the following command:
 
 ``` r
+# install.packages("devtools")
 devtools::install_github("bioRgeo/bioRgeo")
+#> Downloading GitHub repo bioRgeo/bioRgeo@HEAD
+#> 
+#> ── R CMD build ─────────────────────────────────────────────────────────────────
+#>          checking for file 'C:\Users\Pierre\AppData\Local\Temp\Rtmp0mJcSm\remotes22585d642fef\bioRgeo-bioRgeo-f2b124c/DESCRIPTION' ...  ✔  checking for file 'C:\Users\Pierre\AppData\Local\Temp\Rtmp0mJcSm\remotes22585d642fef\bioRgeo-bioRgeo-f2b124c/DESCRIPTION'
+#>       ─  preparing 'bioRgeo': (803ms)
+#>    checking DESCRIPTION meta-information ...     checking DESCRIPTION meta-information ...   ✔  checking DESCRIPTION meta-information
+#> ─  cleaning src
+#>       ─  installing the package to process help pages
+#>      Loading required namespace: bioRgeo
+#>       ─  saving partial Rd database (2s)
+#>       ─  cleaning src
+#>       ─  checking for LF line-endings in source and make files and shell scripts
+#>       ─  checking for empty or unneeded directories
+#>      Removed empty directory 'bioRgeo/inst/bin'
+#>   Removed empty directory      Removed empty directory 'bioRgeo/tests'
+#>       ─  building 'bioRgeo_1.0.0.tar.gz'
+#>      
+#> 
+#> Installing package into 'C:/Users/Pierre/AppData/Local/Temp/Rtmp6ZJYtk/temp_libpath37004552716'
+#> (as 'lib' is unspecified)
 ```
 
-## 2 Tutorial
+# :scroll: Vignettes
 
-A tutorial vignette is available [here](https://biorgeo.github.io/bioRgeo/articles/bioRgeo.html).
+We wrote several vignettes that will help you using the **bioRgeo R
+package**. Vignettes available are the following ones: <br>
 
-## 3 Dependencies
+- **[1. Installation of the executable binary
+  files](https://biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html)**  
+- **[2. Matrix and network
+  formats](https://biorgeo.github.io/bioRgeo/articles/a2_matrix_and_network_formats.html)**
+- **[3. Pairwise similarity/dissimilarity
+  metrics](https://biorgeo.github.io/bioRgeo/articles/a3_pairwise_metrics.html)**
+- **[4.1 Hierarchical
+  clustering](https://biorgeo.github.io/bioRgeo/articles/a4_1_hierarchical_clustering.html)**
+- **[4.2 Non-hierarchical
+  clustering](https://biorgeo.github.io/bioRgeo/articles/a4_2_non_hierarchical_clustering.html)**
+- **[4.3 Network
+  clustering](https://biorgeo.github.io/bioRgeo/articles/a4_3_network_clustering.html)**
+- **[4.4
+  Microbenchmark](https://biorgeo.github.io/bioRgeo/articles/a4_4_microbenchmark.html)**
 
-`bioRgeo` depends on `ape`, `bipartite`, `cluster`, `data.table`, `dbscan`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `reshape2`, `rmarkdown`, `sf`, `stats`, `tidyr` and `utils`.
+Alternatively, if you prefer to view the vignettes in R, you can install
+the package with `build_vignettes = TRUE`. But be aware that some
+vignettes can be slow to generate.
 
-## 4  Citation
+``` r
+remotes::install_github("bioRgeo/bioRgeo",
+                        dependencies = TRUE, upgrade = "ask", 
+                        build_vignettes = TRUE)
 
-  
+vignette("bioRgeo")
+```
 
+# :desktop_computer: Functions
+
+An overview of all functions and data is given
+**[here](https://biorgeo.github.io/bioRgeo/reference/index.html)**.
+
+# :bug: Find a bug?
+
+Thank you for finding it. Head over to the GitHub Issues tab and let us
+know about it. Alternatively, you can also send us an e-mail. We will
+try to get to it as soon as we can!
+
+# References and dependencies
+
+`bioRgeo` depends on `ape`, `bipartite`, `cluster`, `data.table`,
+`dbscan`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`,
+`ggplot2`, `grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`,
+`Rdpack`, `rlang`, `rmarkdown`, `sf`, `stats`, `tidyr` and `utils`.
