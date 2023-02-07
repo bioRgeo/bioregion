@@ -57,6 +57,7 @@ Suggests:
     knitr,
     microbenchmark,
     rnaturalearth,
+    rnaturalearthdata,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
