@@ -33,7 +33,7 @@ The package is not on CRAN yet and is still under active development. You can
 install the development version from the GitHub repository with the following
 command:
 
-```{r}
+```{r, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("bioRgeo/bioRgeo")
 ```

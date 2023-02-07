@@ -24,26 +24,6 @@ the following command:
 ``` r
 # install.packages("devtools")
 devtools::install_github("bioRgeo/bioRgeo")
-#> Downloading GitHub repo bioRgeo/bioRgeo@HEAD
-#> 
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#>          checking for file 'C:\Users\Pierre\AppData\Local\Temp\Rtmp0mJcSm\remotes22585d642fef\bioRgeo-bioRgeo-f2b124c/DESCRIPTION' ...  ✔  checking for file 'C:\Users\Pierre\AppData\Local\Temp\Rtmp0mJcSm\remotes22585d642fef\bioRgeo-bioRgeo-f2b124c/DESCRIPTION'
-#>       ─  preparing 'bioRgeo': (803ms)
-#>    checking DESCRIPTION meta-information ...     checking DESCRIPTION meta-information ...   ✔  checking DESCRIPTION meta-information
-#> ─  cleaning src
-#>       ─  installing the package to process help pages
-#>      Loading required namespace: bioRgeo
-#>       ─  saving partial Rd database (2s)
-#>       ─  cleaning src
-#>       ─  checking for LF line-endings in source and make files and shell scripts
-#>       ─  checking for empty or unneeded directories
-#>      Removed empty directory 'bioRgeo/inst/bin'
-#>   Removed empty directory      Removed empty directory 'bioRgeo/tests'
-#>       ─  building 'bioRgeo_1.0.0.tar.gz'
-#>      
-#> 
-#> Installing package into 'C:/Users/Pierre/AppData/Local/Temp/Rtmp6ZJYtk/temp_libpath37004552716'
-#> (as 'lib' is unspecified)
 ```
 
 # :scroll: Vignettes
