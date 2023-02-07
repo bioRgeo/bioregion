@@ -114,7 +114,7 @@ install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
 
 ## Infomap
 
-Edler et al. (2016)
+@Farage2021
 
 * `nbmod` penalize solutions the more they differ from this number (0 by
 default for no preferred number of modules).  
@@ -155,8 +155,7 @@ table(ex_infomap$clusters$K_1)
 ## OSLOM
 OSLOM stands for Order Statistics Local Optimization Method.
 
-[Lancichinetti et al. (2011)](doi:10.1371/journal.pone.0018961)
-
+@Lancichinetti2011
 `reassign` a string indicating if the nodes belonging to several community
 should be reassign and what method should be used (see Note).  
 * `r` the number of runs for the first hierarchical level (10 by default).  
@@ -219,7 +218,7 @@ table(ex_louvain$clusters$K_5)
 
 # Functions from the igraph package
 ## Fastgreedy
-Clauset et al. http://www.arxiv.org/abs/cond-mat/0408187
+@Clauset2004
 ```{r}
 ex_greedy <- netclu_greedy(fishdf,
                            weight = TRUE,
@@ -289,3 +288,6 @@ ex_beckett <- netclu_beckett(fishdf,
                              algorithm_in_output = TRUE)
 table(ex_beckett$clusters$K_1)
 ```
+
+# References
+
