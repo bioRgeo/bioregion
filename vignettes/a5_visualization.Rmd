@@ -159,9 +159,9 @@ all_long <- as.data.frame(all_long)
 We now add back the geometry as an extra column to make this object spatial.
 
 ```{r}
-all_long_sf <- left_join(all_long,
-                         custom[, c("ID", "geometry")],
-                         by = "ID")
+all_long_sf <- dplyr::left_join(all_long,
+                                custom[, c("ID", "geometry")],
+                                by = "ID")
 all_long_sf <- sf::st_as_sf(all_long_sf)
 ```
 

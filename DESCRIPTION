@@ -56,6 +56,7 @@ Suggests:
     dplyr,
     knitr,
     microbenchmark,
+    rnaturalearth,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
