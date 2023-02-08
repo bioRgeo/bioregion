@@ -32,13 +32,7 @@ install_binaries <- function(binpath = NULL,
     # Identify bioRgeo directory on your computer
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
-    
     if(length(binpath) > 1){
-      message("Several bioRgeo directories have been detected in your default
-      package/library folder(s). 
-      The first one will be used by default.
-      Please use the binpath argument to manually set the path to the bin
-      folder.")
       binpath <- binpath[1]
     }
   } else {
@@ -48,7 +42,7 @@ install_binaries <- function(binpath = NULL,
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
-  
+
   # Control infomap_version
   infomap_versiondispo <- c("2.1.0", "2.6.0")
   if(!is.character(infomap_version)) {
@@ -353,7 +347,7 @@ install_binaries <- function(binpath = NULL,
         message("A library is probably missing to install the OpenMP
                 version...")
         message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
                 for more details")
       }
       utils::write.table(1, paste0(path, "check.txt"))
@@ -415,7 +409,7 @@ https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.h
     message(" ")
     message("Louvain is not installed...")
     message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
             for more details")
   } else {
     message(
@@ -518,7 +512,7 @@ https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.h
     message(" ")
     message("OSLOM is not installed...")
     message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
             for more details")
   } else {
     message("Congratulation, you successfully install the version ", version,

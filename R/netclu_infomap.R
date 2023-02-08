@@ -166,11 +166,7 @@ netclu_infomap <- function(net,
     # Identify bioRgeo directory on your computer
     biodir <- list.dirs(.libPaths(), recursive = FALSE)
     binpath <- biodir[grep("bioRgeo", biodir)]
-    if (length(binpath) > 1) {
-      message("Several bioRgeo directories have been detected in your default
-      package/library folder(s). The first one will be used by default.
-      Please use the binpath argument to manually set the path to the bin
-              folder.")
+    if(length(binpath) > 1){
       binpath <- binpath[1]
     }
   } else {
@@ -198,8 +194,10 @@ netclu_infomap <- function(net,
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     message(paste0(
       "Infomap ", version, " is not installed... Please have a look at
-    https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
-    for more details."))
+    https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+    for more details.\n", 
+      "It should be located in ", 
+      paste0(binpath, "/bin/INFOMAP/", version, "/")))
   } else {
     
     # Control input net
