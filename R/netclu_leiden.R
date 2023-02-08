@@ -17,7 +17,7 @@
 #' @param objective_function Whether to use the Constant Potts Model (CPM) or
 #' modularity. Must be either "CPM" or "modularity".
 #'
-#' @param resolution_paremeter The resolution parameter to use. Higher
+#' @param resolution_parameter The resolution parameter to use. Higher
 #' resolutions lead to more smaller communities, while lower resolutions lead
 #' to fewer larger communities.
 #'
@@ -156,6 +156,18 @@ both, sites and species", call. = FALSE)
   
   # Control algorithm_in_output
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
+  
+  # Controls for other arguments
+  controls(args = objective_function, data = NULL, type = "character")
+  if(!all(objective_function %in% c("CPM", "modularity"))){
+    stop("objective_function must be either 'CPM' or 'modularity'.")
+  }
+  
+  controls(args = resolution_parameter, data = NULL, type = "positive_integer")
+  controls(args = beta, data = NULL, type = "numeric")
+  # controls(args = initial_membership, data = NULL, type = "boolean")
+  controls(args = n_iterations, data = NULL, type = "positive_integer")
+  # controls(args = vertex_weights, data = NULL, type = "boolean")
   
   # Prepare input
   if (isbip) {

@@ -37,4 +37,16 @@ test_that("error messages with wrong inputs", {
   expect_error(netclu_leiden(net, algorithm_in_output = "zz"),
                "algorithm_in_output must be a boolean", fixed = TRUE)
   
+  expect_error(netclu_leiden(net, objective_function = "zz"),
+               "objective_function must be either 'CPM' or 'modularity'.",
+               fixed = TRUE)
+  
+  expect_error(netclu_leiden(net, resolution_parameter = "zz"),
+               "resolution_parameter must be numeric.", fixed = TRUE)
+  
+  expect_error(netclu_leiden(net, beta = "zz"),
+               "beta must be numeric.", fixed = TRUE)
+  
+  expect_error(netclu_leiden(net, n_iterations = "zz"),
+               "n_iterations must be numeric.", fixed = TRUE)
 })

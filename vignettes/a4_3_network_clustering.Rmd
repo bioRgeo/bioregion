@@ -189,6 +189,8 @@ ex_oslom <- netclu_oslom(fishdf,
 
 ## Louvain
 
+@Blondel2008
+
 * `q` the quality function used to compute partition of the graph (modularity
 is chosen by default, see Details).
 * `c` the parameter for the Owsinski-Zadrozny quality function (between 0 and
@@ -233,6 +235,8 @@ table(ex_greedy$clusters$K_3)
 
 ## Label propagation
 
+@Raghavan2007
+
 ```{r}
 ex_labelprop <- netclu_labelprop(fishdf,
                                  weight = TRUE,
@@ -245,7 +249,13 @@ ex_labelprop <- netclu_labelprop(fishdf,
 table(ex_labelprop$clusters$K_1)
 ```
 
+## Leiden algorithm
+@Traag2019
+
+
 ## Leading eigenvector
+
+@Newman2006
 
 ```{r}
 ex_leadingeigen <- netclu_leadingeigen(fishdf,
@@ -260,6 +270,8 @@ table(ex_leadingeigen$clusters$K_4)
 ```
 
 ## Walktrap
+
+@Pons2005
 
 ```{r}
 ex_walktrap <- netclu_walktrap(fishdf,
@@ -276,6 +288,8 @@ table(ex_walktrap$clusters$K_1)
 
 # Function from the bipartite package
 ## Beckett
+
+@Beckett2016
 
 ```{r, eval = FALSE}
 ex_beckett <- netclu_beckett(fishdf,

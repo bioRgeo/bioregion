@@ -36,6 +36,10 @@ the third column name of \code{net} is used.}
 \item{objective_function}{Whether to use the Constant Potts Model (CPM) or
 modularity. Must be either "CPM" or "modularity".}
 
+\item{resolution_parameter}{The resolution parameter to use. Higher
+resolutions lead to more smaller communities, while lower resolutions lead
+to fewer larger communities.}
+
 \item{beta}{Parameter affecting the randomness in the Leiden algorithm. This
 affects only the refinement step of the algorithm.}
 
@@ -66,10 +70,6 @@ interpret the vertex weights.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \code{communities} should be returned in the output (see Value).}
-
-\item{resolution_paremeter}{The resolution parameter to use. Higher
-resolutions lead to more smaller communities, while lower resolutions lead
-to fewer larger communities.}
 }
 \value{
 A \code{list} of class \code{bioRgeo.clusters} with five slots:
