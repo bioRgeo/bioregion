@@ -48,6 +48,7 @@ reference:
   - netclu_louvain
   - netclu_oslom
   - netclu_walktrap
+  - netclu_leiden
 
 - title: Clustering analysis
   desc: >
