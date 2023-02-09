@@ -164,8 +164,8 @@ netclu_infomap <- function(net,
   # Set binpath
   if (is.null(binpath)) {
     # Identify bioRgeo directory on your computer
-    biodir <- list.dirs(.libPaths(), recursive = FALSE)
-    binpath <- paste0(biodir[1],"/bioRgeo")
+    biodir <- .libPaths()[1]
+    binpath <- paste0(biodir,"/bioRgeo")
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
