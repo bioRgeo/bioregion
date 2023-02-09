@@ -6,21 +6,18 @@
 
 ### 1.1 Améliorations générales
 
-* A harmoniser
+* Points à vérifier
     -> stop( , call. = FALSE)
     -> \code{} pour le code dans les docs et `...` dans les vignettes
     -> mettre un point "." à la fin des phrases dans la documentation (?)
+    -> dir.exists() ou file.exists() (win et lin)
+    -> identifier package folder (lipPaths())
+    -> controls length (>1)
     
-* glossaire
-
-* faire la vignette
+    
+* glossaire ?
 
 * Bien vérifier les packages importés (il y en aura à supprimer...)
-
-* Bien vérifier utilisation similarité pour réseaux mais dissimilarité pour clustering classique (cas particulier euclidean)
-
-* créer une fonction minimaliste pour faire des cartes
-
 
 ### 1.2 Amélirations spécifiques dans des fonctions
 
