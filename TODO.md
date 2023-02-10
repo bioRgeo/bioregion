@@ -14,7 +14,6 @@
     -> identifier package folder (lipPaths())
     -> controls length (>1)
     
-    
 * glossaire ?
 
 * Bien vérifier les packages importés (il y en aura à supprimer...)
