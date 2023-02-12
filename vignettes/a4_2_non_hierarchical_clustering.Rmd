@@ -17,6 +17,110 @@ vignette: >
   %\VignetteIndexEntry{4.2 Non-hierarchical clustering}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+editor_options: 
+ chunk_output_type: console
 ---
 
+```{r setup, include=FALSE}
 
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 8)
+# Packages --------------------------------------------------------------------
+suppressPackageStartupMessages({
+  suppressWarnings({
+    library("bioRgeo")
+  })
+})
+
+options(tinytex.verbose = TRUE)
+
+```
+
+```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
+knitr::include_graphics("../man/figures/Workflow.png")
+```
+
+In total, we have 3 functions to perform non-hierarchical clustering:  
+* [nhclu_dbscan](https://biorgeo.github.io/bioRgeo/reference/nhclu_dbscan.html)  
+* [nhclu_kmeans](https://biorgeo.github.io/bioRgeo/reference/nhclu_kmeans.html)  
+* [nhclu_pam](https://biorgeo.github.io/bioRgeo/reference/nhclu_pam.html)  
+
+<br>
+This vignette aims at briefly explaining how each algorithm and its associated
+`bioRgeo` function works.
+For this purpose, we use the European freshwater fish dataset that comes with
+`bioRgeo`.
+
+# Introduction
+## Input data
+
+All network algorithms work with the network format, i.e. a `data.frame` with
+3 columns: sites, species and the abundance of a given species in a given site.
+This type of object can be obtained from a site x species matrix through the
+use of `mat_to_net()`.
+
+In this vignette, we directly load the network format for the distribution of
+fish in European basins.
+
+```{r}
+data("fishdf")
+data("fishmat")
+dissim <- dissimilarity(fishmat, metric = "all")
+```
+
+# DBSCAN
+Density-based Spatial Clustering of Applications with Noise (DBSCAN)
+@Hahsler2019
+
+```{r}
+ex_dbscan <- nhclu_dbscan(dissim, index = "Simpson",
+                          minPts = NULL,
+                          eps = NULL,
+                          plot = TRUE)
+
+ex_dbscan <- nhclu_dbscan(dissim, index = "Simpson",
+                          minPts = NULL,
+                          eps = 300,
+                          plot = FALSE)
+table(ex_dbscan$clusters$K_1)
+```
+
+# Kmeans
+Density-based Spatial Clustering of Applications with Noise (DBSCAN)
+
+```{r}
+ex_kmeans <- nhclu_kmeans(
+  dissim, index = "Simpson",
+  n_clust = 5,
+  iter_max = 10,
+  nstart = 10,
+  algorithm = "Hartigan-Wong") #  Lloyd, Forgy and MacQueen
+
+table(ex_kmeans$clusters$K_5)
+```
+
+# PAM
+partitioning around medoids
+
+```{r}
+ex_pam <- nhclu_pam(dissim, index = "Simpson",
+                    n_clust = 2,
+                    nstart = 1,
+                    variant = "faster",
+                    cluster_only = FALSE)
+table(ex_pam$clusters$K_2)
+```
+
+# Partition metrics
+`partition_metrics()`
+
+```{r}
+partition_metrics(clust2, dissimilarity = dissim,
+                   eval_metric = "pc_distance")
+
+partition_metrics(clust2, net = fishdf, species_col = "Species",
+                   site_col = "Site", eval_metric = "avg_endemism")
+
+```
+
+# References
