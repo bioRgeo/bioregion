@@ -292,10 +292,10 @@ partition_metrics <- function(
       dissimilarity,
       cluster_object$clusters[data.table::chmatch(dissimilarity$Site1,
                                                   cluster_object$clusters$ID), 
-                              cluster_object$cluster_info$partition_name],
+                              cluster_object$cluster_info$partition_name, drop = FALSE],
       cluster_object$clusters[data.table::chmatch(dissimilarity$Site2,
                                                   cluster_object$clusters$ID), 
-                              cluster_object$cluster_info$partition_name])
+                              cluster_object$cluster_info$partition_name, drop = FALSE])
     
     dissimilarity[, cluster_object$cluster_info$partition_name] <- 
       dissimilarity[, cluster_object$cluster_info$partition_name] ==
