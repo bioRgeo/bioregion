@@ -69,7 +69,7 @@
 #'
 #' This function is based on the C++ version of Infomap
 #' (<https://github.com/mapequation/infomap/releases>).
-#' This function needs executable  binary files to run. They can be installed
+#' This function needs binary files to run. They can be installed
 #' with [install_binaries()]. If you set the path to the folder that will host
 #' the bin folder manually while running [install_binaries] please make sure to
 #' set `binpath` accordingly.
@@ -169,7 +169,7 @@ netclu_infomap <- function(net,
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
-    if (!file.exists(binpath)) {
+    if (!dir.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
@@ -191,7 +191,7 @@ netclu_infomap <- function(net,
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     message(paste0(
       "Infomap ", version, " is not installed... Please have a look at
-    https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+    https//biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
     for more details.\n", 
       "It should be located in ", 
       paste0(binpath, "/bin/INFOMAP/", version, "/")))
@@ -253,14 +253,14 @@ both, sites and species", call. = FALSE)
     if (path_temp == "infomap_temp") {
       path_temp <- paste0(path_temp, "_", round(as.numeric(as.POSIXct(Sys.time()))))
     } else {
-      if (file.exists(path_temp)) {
+      if (dir.exists(path_temp)) {
         stop(paste0(path_temp, " already exists. Please rename it or remove it."),
              call. = FALSE
         )
       }
     }
     dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-    if (!file.exists(path_temp)) {
+    if (!dir.exists(path_temp)) {
       stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
     }
     

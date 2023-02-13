@@ -115,7 +115,7 @@ and (un)directed networks.
 
 This function is based on the C++ version of Infomap
 (\url{https://github.com/mapequation/infomap/releases}).
-This function needs executable  binary files to run. They can be installed
+This function needs binary files to run. They can be installed
 with \code{\link[=install_binaries]{install_binaries()}}. If you set the path to the folder that will host
 the bin folder manually while running \link{install_binaries} please make sure to
 set \code{binpath} accordingly.

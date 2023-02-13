@@ -72,7 +72,7 @@
 #'
 #' The C++ version of Louvain is based on the version 0.3
 #' (<https://sourceforge.net/projects/louvain/>). This function needs
-#' executable binary files to run. They can be installed with
+#'  binary files to run. They can be installed with
 #' [install_binaries()]. If you set the path to the folder that will host the
 #' bin folder manually while running [install_binaries()] please make sure to
 #' set `binpath` accordingly.
@@ -294,7 +294,7 @@ The bipartite argument should probably be set to TRUE.")
     } else {
       # Control
       controls(args = binpath, data = NULL, type = "character")
-      if (!file.exists(binpath)) {
+      if (!dir.exists(binpath)) {
         stop(paste0("Impossible to access ", binpath), call. = FALSE)
       }
     }
@@ -305,7 +305,7 @@ The bipartite argument should probably be set to TRUE.")
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       message("Louvain is not installed... Please have a look at
-              https://biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+              https://biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
               for more details.\n", 
               "It should be located in ", 
               paste0(binpath, "/bin/LOUVAIN/"))
@@ -318,7 +318,7 @@ The bipartite argument should probably be set to TRUE.")
         path_temp <- paste0(path_temp, "_",
                             round(as.numeric(as.POSIXct(Sys.time()))))
       } else {
-        if (file.exists(path_temp)) {
+        if (dir.exists(path_temp)) {
           stop(paste0(path_temp, " already exists. Please rename it or remove
                       it."),
                call. = FALSE
@@ -326,7 +326,7 @@ The bipartite argument should probably be set to TRUE.")
         }
       }
       dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-      if (!file.exists(path_temp)) {
+      if (!dir.exists(path_temp)) {
         stop(paste0("Impossible to create directory ", path_temp),
              call. = FALSE)
       }

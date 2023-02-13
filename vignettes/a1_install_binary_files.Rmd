@@ -1,5 +1,5 @@
 ---
-title: "1. Installation of the executable binary files"
+title: "1. Installation of the binary files"
 author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
 date: "`r Sys.Date()`"
 output: 
@@ -12,12 +12,12 @@ output:
     smooth_scroll: false
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{1. Installation of the executable binary files}
+  %\VignetteIndexEntry{1. Installation of the binary files}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-Some functions (listed below) or at least part of them require executable binary
+Some functions (listed below) or at least part of them require binary
 files to run. 
 
 * [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
@@ -27,7 +27,7 @@ files to run.
 The function [install_binaries](https://biorgeo.github.io/bioRgeo/reference/install_binaries.html)
 downloads and unzips the 'bin' folder needed to run these functions. It also 
 checks if the files have the permissions to be executed as programs. It finally 
-tests if the executable are running properly.
+tests if the binary files are running properly.
 
 ### Run install_binaries()
 
@@ -43,7 +43,7 @@ install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
 ```
 
 The function has two parameters. `binpath` indicating 
-the path to the folder that will host the 'bin' folder containing the executable 
+the path to the folder that will host the 'bin' folder containing the  
 binary files. It is located in the `bioRgeo`'s package folder by default. Any other
 folder can be chosen but if you use a different folder please be sure to update 
 the `binpath` argument in 
@@ -54,7 +54,7 @@ accordingly. The second parameter `infomap_version` indicating the Infomap
 version(s) to install. Only the Infomap version 2.1.0 and 2.6.0 are available 
 for now.
 
-The installation of the executable binary files is divided into six steps:
+The installation of the binary files is divided into six steps:
 
 #### 1. Download bin.zip 
 

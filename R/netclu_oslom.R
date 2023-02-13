@@ -64,7 +64,7 @@
 #' (overlapping) communities in (un)weighted and (un)directed networks.
 #'
 #' This function is based on the 2.4 C++ version of OSLOM
-#' (<http://www.oslom.org/software.htm>). This function needs executable files
+#' (<http://www.oslom.org/software.htm>). This function needs files
 #' to run. They can be installed with [install_binaries()]. If you set the path
 #' to the folder that will host the bin folder  manually while running
 #' [install_binaries()] please make sure to set `binpath` accordingly.
@@ -162,7 +162,7 @@ netclu_oslom <- function(net,
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
-    if (!file.exists(binpath)) {
+    if (!dir.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
@@ -175,7 +175,7 @@ netclu_oslom <- function(net,
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
-              https://biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+              https://biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
               for more details.\n", 
               "It should be located in ", 
               paste0(binpath, "/bin/OSLOM/"))
@@ -185,12 +185,12 @@ netclu_oslom <- function(net,
   } else {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
-              https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+              https://biorgeo.github.io/bioRgeo/articles/a3_1_install_binary_files.html
               for more details.")
     } else {
       if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir.txt"))) {
         message("The directed version of OSLOM is not installed... Please have
-                a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+                a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_binary_files.html
                 for more details")
       } else {
         check <- TRUE
@@ -268,14 +268,14 @@ both, sites and species", call. = FALSE)
       path_temp <- paste0(path_temp, "_",
                           round(as.numeric(as.POSIXct(Sys.time()))))
     } else {
-      if (file.exists(path_temp)) {
+      if (dir.exists(path_temp)) {
         stop(paste0(path_temp, " already exists. Please rename it or remove
                     it."),
              call. = FALSE)
       }
     }
     dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
-    if (!file.exists(path_temp)) {
+    if (!dir.exists(path_temp)) {
       stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
     }
     

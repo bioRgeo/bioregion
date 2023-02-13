@@ -117,7 +117,7 @@ criterion.
 
 The C++ version of Louvain is based on the version 0.3
 (\url{https://sourceforge.net/projects/louvain/}). This function needs
-executable binary files to run. They can be installed with
+binary files to run. They can be installed with
 \code{\link[=install_binaries]{install_binaries()}}. If you set the path to the folder that will host the
 bin folder manually while running \code{\link[=install_binaries]{install_binaries()}} please make sure to
 set \code{binpath} accordingly.

@@ -1,13 +1,12 @@
-#' Download, unzip, check permission and test the bioRgeo's executable binary
-#' files
+#' Download, unzip, check permission and test the bioRgeo's binary files
 #'
 #' This function downloads and unzips the 'bin' folder needed to run some
 #' functions of bioRgeo. It also checks if the files have the permissions to
-#' be executed as programs. It finally tests if the executable binary files
+#' be executed as programs. It finally tests if the binary files
 #' are running properly.
 #'
 #' @param binpath a `character` indicating the path to the folder that will
-#' host the 'bin' folder containing the executable binary files (bioRgeo's
+#' host the 'bin' folder containing the binary files (bioRgeo's
 #' package by default, if you use a different folder please be sure to update
 #' the `binpath` in [netclu_infomap], [netclu_louvain] and [netclu_oslom]).
 #' 
@@ -35,7 +34,7 @@ install_binaries <- function(binpath = NULL,
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
-    if(!file.exists(binpath)) {
+    if(!dir.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
@@ -319,7 +318,7 @@ install_binaries <- function(binpath = NULL,
       message(" ")
       message("Infomap is not installed...")
       message("Please have a look at
-      https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+      https//biorgeo.github.io/bioRgeo/articles/a3_1_install_binary_files.html
               for more details")
     } else {
       if (testopm) {
@@ -344,7 +343,7 @@ install_binaries <- function(binpath = NULL,
         message("A library is probably missing to install the OpenMP
                 version...")
         message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
                 for more details")
       }
       utils::write.table(1, paste0(path, "check.txt"))
@@ -406,7 +405,7 @@ https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.htm
     message(" ")
     message("Louvain is not installed...")
     message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
             for more details")
   } else {
     message(
@@ -509,7 +508,7 @@ https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.htm
     message(" ")
     message("OSLOM is not installed...")
     message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
             for more details")
   } else {
     message("Congratulation, you successfully install the version ", version,
@@ -520,7 +519,7 @@ https//biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.htm
       message("Warning: only the undirected version of OSLOM has been
               installed...")
       message("Please have a look at 
-https//biorgeo.github.io/bioRgeo/articles/a3_1_install_executable_binary_files.html
+https//biorgeo.github.io/bioRgeo/articles/a3_1_install_binary_files.html
               for more details")
     } else {
       utils::write.table(1, paste0(path, "checkdir.txt"))

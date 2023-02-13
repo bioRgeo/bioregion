@@ -108,7 +108,7 @@ OSLOM is a network community detection algorithm proposed in
 (overlapping) communities in (un)weighted and (un)directed networks.
 
 This function is based on the 2.4 C++ version of OSLOM
-(\url{http://www.oslom.org/software.htm}). This function needs executable files
+(\url{http://www.oslom.org/software.htm}). This function needs files
 to run. They can be installed with \code{\link[=install_binaries]{install_binaries()}}. If you set the path
 to the folder that will host the bin folder  manually while running
 \code{\link[=install_binaries]{install_binaries()}} please make sure to set \code{binpath} accordingly.

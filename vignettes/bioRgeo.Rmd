@@ -56,9 +56,9 @@ can be divided into four main steps:
 </center> 
 <br>
 
-## 1. Install executable binary files
+## 1. Install binary files
 
-Some functions or at least part of them (listed below) require executable binary
+Some functions or at least part of them (listed below) require binary
 files to run. 
 
 * [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
@@ -66,8 +66,8 @@ files to run.
 * [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
 
 Please check this 
-[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_install_executable_binary_files.html) 
-to get instructions regarding the installation of the executable binary files.
+[tutorial page](https://biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html) 
+to get instructions regarding the installation of the binary files.
 
 
 ## 2. Matrix or Network formats
