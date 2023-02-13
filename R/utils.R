@@ -210,8 +210,13 @@ Please carefully check your data before using the clustering functions."))
     }
   }
   
-  # Character #################################################################
+  # Character ##################################################################
   if (type == "character") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
     if (!is.character(args)) {
       stop(paste0(deparse(substitute(args)), " must be a character."),
            call. = FALSE
@@ -223,9 +228,36 @@ Please carefully check your data before using the clustering functions."))
     return(args)
   }
   
-  # Boolean ###################################################################
+  # Character vector ###########################################################
+  if (type == "character_vector") {
+    if (!is.character(args)) {
+      stop(paste0(deparse(substitute(args)), " must be a character."),
+           call. = FALSE
+      )
+    }
+    if (is.factor(args)) {
+      args <- as.character(args)
+    }
+    return(args)
+  }
+  
+  # Boolean ####################################################################
   if (type == "boolean") {
-    if (!is.logical(args) || is.na(args) || length(args) != 1) {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.logical(args) || is.na(args)) {
+      stop(paste0(deparse(substitute(args)), " must be a boolean."),
+           call. = FALSE
+      )
+    }
+  }
+  
+  # Boolean vector #############################################################
+  if (type == "boolean_vector") {
+    if (!is.logical(args) || is.na(args)) {
       stop(paste0(deparse(substitute(args)), " must be a boolean."),
            call. = FALSE
       )
@@ -234,6 +266,20 @@ Please carefully check your data before using the clustering functions."))
   
   # Numeric ###################################################################
   if (type == "numeric") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."),
+           call. = FALSE
+      )
+    }
+  }
+  
+  # Numeric vector #############################################################
+  if (type == "numeric_vector") {
     if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE
@@ -243,6 +289,25 @@ Please carefully check your data before using the clustering functions."))
   
   # Positive numeric ##########################################################
   if (type == "positive_numeric") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."),
+           call. = FALSE)
+    } else {
+      if (args < 0) {
+        stop(paste0(deparse(substitute(args)), " must be higher than 0."),
+             call. = FALSE
+        )
+      }
+    }
+  }
+  
+  # Positive numeric vector ####################################################
+  if (type == "positive_numeric_vector") {
     if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
@@ -257,6 +322,24 @@ Please carefully check your data before using the clustering functions."))
   
   # Strict positive numeric ###################################################
   if (type == "strict_positive_numeric") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."),
+           call. = FALSE)
+    } else {
+      if (args <= 0) {
+        stop(paste0(deparse(substitute(args)),
+                    " must be strictly higher than 0."), call. = FALSE)
+      }
+    }
+  }
+  
+  # Strict positive numeric vector #############################################
+  if (type == "strict_positive_numeric_vector") {
     if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
@@ -270,6 +353,25 @@ Please carefully check your data before using the clustering functions."))
   
   # Integer ###################################################################
   if (type == "integer") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."),
+           call. = FALSE)
+    } else {
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."),
+             call. = FALSE
+        )
+      }
+    }
+  }
+  
+  # Integer vector #############################################################
+  if (type == "integer_vector") {
     if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
@@ -284,7 +386,32 @@ Please carefully check your data before using the clustering functions."))
   
   # Positive integer ##########################################################
   if (type == "positive_integer") {
-    if (!is.numeric(args) || length(args) != 1) {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."),
+           call. = FALSE)
+    } else {
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."),
+             call. = FALSE
+        )
+      } else {
+        if (args < 0) {
+          stop(paste0(deparse(substitute(args)), " must be higher than 0."),
+               call. = FALSE
+          )
+        }
+      }
+    }
+  }
+  
+  # Positive integer vector ####################################################
+  if (type == "positive_integer_vector") {
+    if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {
@@ -304,6 +431,30 @@ Please carefully check your data before using the clustering functions."))
   
   # Strict positive integer ###################################################
   if (type == "strict_positive_integer") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), " must be numeric."),
+           call. = FALSE)
+    } else {
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."),
+             call. = FALSE
+        )
+      } else {
+        if (args <= 0) {
+          stop(paste0(deparse(substitute(args)),
+                      " must be strictly higher than 0."), call. = FALSE)
+        }
+      }
+    }
+  }
+  
+  # Strict positive integer vector #############################################
+  if (type == "strict_positive_integer_vector") {
     if (!is.numeric(args)) {
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
