@@ -33,7 +33,6 @@ suppressPackageStartupMessages({
 })
 
 options(tinytex.verbose = TRUE)
-
 ```
 
 ```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
@@ -72,6 +71,11 @@ dissim <- dissimilarity(fishmat, metric = "all")
 Density-based Spatial Clustering of Applications with Noise (DBSCAN)
 @Hahsler2019
 
+DBSCAN operates by locating points in the dataset that are surrounded by a
+significant number of other points. These points are regarded to be part of a
+dense zone, and the algorithm will next attempt to extend this region to
+encompass all of the cluster's points. 
+
 ```{r}
 ex_dbscan <- nhclu_dbscan(dissim, index = "Simpson",
                           minPts = NULL,
@@ -86,7 +90,11 @@ table(ex_dbscan$clusters$K_1)
 ```
 
 # Kmeans
-Density-based Spatial Clustering of Applications with Noise (DBSCAN)
+K-means clustering is a method of partition, aggregating *n* observations into
+*k* clusters in which each observation belongs to the cluster with the nearest
+mean (cluster centers or cluster centroid).
+<br>
+
 
 ```{r}
 ex_kmeans <- nhclu_kmeans(
@@ -100,11 +108,11 @@ table(ex_kmeans$clusters$K_5)
 ```
 
 # PAM
-partitioning around medoids
+Partitioning Around Medoids (PAM)
 
 ```{r}
 ex_pam <- nhclu_pam(dissim, index = "Simpson",
-                    n_clust = 2,
+                    n_clust = 2:25,
                     nstart = 1,
                     variant = "faster",
                     cluster_only = FALSE)
@@ -115,12 +123,11 @@ table(ex_pam$clusters$K_2)
 `partition_metrics()`
 
 ```{r}
-partition_metrics(clust2, dissimilarity = dissim,
+partition_metrics(ex_pam, dissimilarity = dissim,
                    eval_metric = "pc_distance")
 
-partition_metrics(clust2, net = fishdf, species_col = "Species",
+partition_metrics(ex_pam, net = fishdf, species_col = "Species",
                    site_col = "Site", eval_metric = "avg_endemism")
-
 ```
 
 # References

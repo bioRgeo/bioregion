@@ -45,6 +45,8 @@ package**. Vignettes available are the following ones: <br>
   clustering](https://biorgeo.github.io/bioRgeo/articles/a4_3_network_clustering.html)**
 - **[4.4
   Microbenchmark](https://biorgeo.github.io/bioRgeo/articles/a4_4_microbenchmark.html)**
+- **[5.
+  Visualization](https://biorgeo.github.io/bioRgeo/articles/a5_visualization.html)**
 
 Alternatively, if you prefer to view the vignettes in R, you can install
 the package with `build_vignettes = TRUE`. But be aware that some
