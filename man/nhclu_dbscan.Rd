@@ -74,18 +74,18 @@ by running the function multiple times.
 i.e., what is the minimum number of sites you expect in a bioregion? Set a
 value sufficiently large for your dataset and your expectations.
 
-\strong{Choosing eps:} how similar should sites be in a cluster?  If eps is
+\strong{Choosing eps:} how similar should sites be in a cluster?  If \code{eps} is
 too small, then a majority of points will be considered to distinct and will
 not be clustered at all (i.e., considered as noise)? If the value is too
 high, then clusters will merge together.
-The value of eps depends on the minPts argument, and the literature
-recommends to choose eps by identifying a knee in the k-nearest neighbor
+The value of \code{eps} depends on the \code{minPts} argument, and the literature
+recommends to choose \code{eps} by identifying a knee in the k-nearest neighbor
 distance plot. By default
 the function will try to automatically find a knee in that curve, but the
 result is uncertain, and so the user should inspect the graph and modify
-dbscan_eps accordingly.To explore eps values, follow the
+\code{dbscan_eps} accordingly.To explore eps values, follow the
 recommendation by the function when you launch it a first time without
-defining eps. Then, adjust depending on your clustering results.
+defining \code{eps}. Then, adjust depending on your clustering results.
 }
 \examples{
 \dontrun{
