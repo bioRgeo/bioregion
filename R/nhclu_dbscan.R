@@ -33,9 +33,10 @@
 #' The dbscan (Density-based spatial clustering of
 #' applications with noise) clustering algorithm clusters points on the basis
 #' of the density of neighbours around each data points. It necessitates two
-#' main arguments, minPts, which stands for the minimum number of points to
-#' identify a core, and eps, which is the radius to find neighbors.
-#' minPts and eps should be defined by the user, which is not straightforward.
+#' main arguments, `minPts`, which stands for the minimum number of points to
+#' identify a core, and `eps`, which is the radius to find neighbors.
+#' `minPts` and `eps` should be defined by the user, which is not
+#' straightforward.
 #' We recommend reading the help in [dbscan::dbscan()][dbscan::dbscan])
 #' to learn how to set these arguments, as well as the paper
 #' \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
@@ -50,9 +51,9 @@
 #' value sufficiently large for your dataset and your expectations.
 #'
 #' **Choosing eps:** how similar should sites be in a cluster?  If `eps` is
-#' too small, then a majority of points will be considered to distinct and will
-#' not be clustered at all (i.e., considered as noise)? If the value is too
-#' high, then clusters will merge together.
+#' too small, then a majority of points will be considered too distinct and
+#' will not be clustered at all (i.e., considered as noise)? If the value is
+#' too high, then clusters will merge together.
 #' The value of `eps` depends on the `minPts` argument, and the literature
 #' recommends to choose `eps` by identifying a knee in the k-nearest neighbor
 #' distance plot. By default

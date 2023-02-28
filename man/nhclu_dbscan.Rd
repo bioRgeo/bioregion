@@ -58,9 +58,10 @@ Noise (DBSCAN)
 The dbscan (Density-based spatial clustering of
 applications with noise) clustering algorithm clusters points on the basis
 of the density of neighbours around each data points. It necessitates two
-main arguments, minPts, which stands for the minimum number of points to
-identify a core, and eps, which is the radius to find neighbors.
-minPts and eps should be defined by the user, which is not straightforward.
+main arguments, \code{minPts}, which stands for the minimum number of points to
+identify a core, and \code{eps}, which is the radius to find neighbors.
+\code{minPts} and \code{eps} should be defined by the user, which is not
+straightforward.
 We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
 to learn how to set these arguments, as well as the paper
 \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
@@ -75,9 +76,9 @@ i.e., what is the minimum number of sites you expect in a bioregion? Set a
 value sufficiently large for your dataset and your expectations.
 
 \strong{Choosing eps:} how similar should sites be in a cluster?  If \code{eps} is
-too small, then a majority of points will be considered to distinct and will
-not be clustered at all (i.e., considered as noise)? If the value is too
-high, then clusters will merge together.
+too small, then a majority of points will be considered too distinct and
+will not be clustered at all (i.e., considered as noise)? If the value is
+too high, then clusters will merge together.
 The value of \code{eps} depends on the \code{minPts} argument, and the literature
 recommends to choose \code{eps} by identifying a knee in the k-nearest neighbor
 distance plot. By default
