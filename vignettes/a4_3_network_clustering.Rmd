@@ -36,11 +36,20 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-Network theory offers plenty of algorithms to classify nodes that are more
-connected than expected randomly. Within the `bioRgeo` R package, we try to
-cover the main network algorithms.  
+Identifying communities of nodes that tend to interact more with each other than the network as a whole.
+community detection algorithms
 
-Network clustering takes place on the left-hand size part of the bioRgeo
+optimal community partition of a network can be found by searching for the partition that maximizes modularity. Attempting to find the partition that maximizes modularity is a computationally hard problem requiring the use of algorithms.
+
+Beckett
+Bipartite networks are the representation of interactions between two distinct classes of nodes, such that nodes can only interact with nodes from the other class. Community detection algorithms are designed to identify clusters, or modules, of nodes within a network that are more likely to interact among themselves than with the rest of the network [5]. Modularity is an evaluation of the way in which nodes are partitioned into separate subsets, forming modules. This is done by assessing the extent to which interactions in the network occur within modules rather than between modules, relative to a null model [6,7]. One (of many) community detection methods is to find the partitioning of nodes into modules that will maximize the modularity of a network. Several modularity maximization algorithms have been designed to attempt to achieve this [5].
+
+Network theory offers plenty of algorithms to classify nodes that are more
+connected than expected randomly. With the `bioRgeo` R package, we cover the
+main network algorithms to identify bioregions in site-species matrices. All
+functions relying on network algorithms start with the prefix `netclu_`.
+
+Network clustering takes place on the left-hand size part of the `bioRgeo`
 conceptual diagram:
 
 ```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
@@ -54,7 +63,7 @@ In total, we have 9 functions, which can be classified like this:
 * [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)  
 
 <br>
-- Functions based on the igraph package  
+- Functions based on the `igraph` package  
 * [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)  
 * [netclu_greedy](https://biorgeo.github.io/bioRgeo/reference/netclu_greedy.html)  
 * [netclu_labelprop](https://biorgeo.github.io/bioRgeo/reference/netclu_labelprop.html)  
@@ -62,7 +71,7 @@ In total, we have 9 functions, which can be classified like this:
 * [netclu_walktrap](https://biorgeo.github.io/bioRgeo/reference/netclu_walktrap.html)  
 
 <br>
-- Function based on the bipartite package  
+- Function based on the `bipartite` package  
 * [netclu_beckett](https://biorgeo.github.io/bioRgeo/reference/netclu_beckett.html)  
 
 This vignette aims at briefly explaining how each algorithm and its associated
@@ -82,6 +91,7 @@ In this vignette, we directly load the network format for the distribution of
 fish in European basins.
 
 ```{r}
+library("bioRgeo")
 data("fishdf")
 ```
 
@@ -108,7 +118,7 @@ arguments are needed:
 * `path_temp` a character indicating the path to the temporary folder  
 * `binpath`	a character indicating the path to the bin folder  
 
-# Executable binary files
+# Binary files
 
 ```{r}
 install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
@@ -116,7 +126,7 @@ install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
 
 ## Infomap
 
-@Farage2021
+@Rosvall2008
 
 * `nbmod` penalize solutions the more they differ from this number (0 by
 default for no preferred number of modules).  
@@ -130,6 +140,7 @@ partition of the network (default is multi-level).
 identifiable in the outputs (FALSE by default).  
 
 ```{r}
+set.seed(1)
 ex_infomap <- netclu_infomap(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
@@ -150,7 +161,7 @@ ex_infomap <- netclu_infomap(fishdf,
                              path_temp = "infomap_temp",
                              binpath = NULL)
 
-table(ex_infomap$clusters$K_1)
+table(ex_infomap$clusters$K_10)
 ```
 
 
@@ -170,6 +181,7 @@ more modules.
 or their union (default value is 0.5, bigger value leads to bigger clusters).  
 
 ```{r, eval = FALSE}
+set.seed(1)
 ex_oslom <- netclu_oslom(fishdf,
                          weight = TRUE,
                          index = names(fishdf)[3],
@@ -187,6 +199,8 @@ ex_oslom <- netclu_oslom(fishdf,
                          delete_temp = TRUE,
                          path_temp = "oslom_temp",
                          binpath = NULL)
+
+table(ex_oslom$clusters$K_4_semel)
 ```
 
 ## Louvain
@@ -201,6 +215,7 @@ is chosen by default, see Details).
 1 is chosen by default)
 
 ```{r}
+set.seed(1)
 ex_louvain <- netclu_louvain(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
@@ -216,7 +231,7 @@ ex_louvain <- netclu_louvain(fishdf,
                              path_temp = "louvain_temp",
                              binpath = NULL,
                              algorithm_in_output = TRUE)
-table(ex_louvain$clusters$K_5)
+table(ex_louvain$clusters$K_23)
 ```
 
 
@@ -224,6 +239,7 @@ table(ex_louvain$clusters$K_5)
 ## Fastgreedy
 @Clauset2004
 ```{r}
+set.seed(1)
 ex_greedy <- netclu_greedy(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
@@ -232,7 +248,7 @@ ex_greedy <- netclu_greedy(fishdf,
                            species_col = 2,
                            return_node_type = "both",
                            algorithm_in_output = TRUE)
-table(ex_greedy$clusters$K_3)
+table(ex_greedy$clusters$K_5)
 ```
 
 ## Label propagation
@@ -240,6 +256,7 @@ table(ex_greedy$clusters$K_3)
 @Raghavan2007
 
 ```{r}
+set.seed(1)
 ex_labelprop <- netclu_labelprop(fishdf,
                                  weight = TRUE,
                                  index = names(fishdf)[3],
@@ -248,13 +265,14 @@ ex_labelprop <- netclu_labelprop(fishdf,
                                  species_col = 2,
                                  return_node_type = "both",
                                  algorithm_in_output = TRUE)
-table(ex_labelprop$clusters$K_1)
+table(ex_labelprop$clusters$K_11)
 ```
 
 ## Leiden algorithm
 @Traag2019
 
 ```{r}
+set.seed(1)
 ex_leiden <- netclu_leiden(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
@@ -269,15 +287,15 @@ ex_leiden <- netclu_leiden(fishdf,
                            species_col = 2,
                            return_node_type = "both",
                            algorithm_in_output = TRUE)
-length(unique(ex_leiden$clusters$K_533))
+length(unique(ex_leiden$clusters$K_505))
 ```
-
 
 ## Leading eigenvector
 
 @Newman2006
 
 ```{r}
+set.seed(1)
 ex_leadingeigen <- netclu_leadingeigen(fishdf,
                                        weight = TRUE,
                                        index = names(fishdf)[3],
@@ -286,7 +304,7 @@ ex_leadingeigen <- netclu_leadingeigen(fishdf,
                                        species_col = 2,
                                        return_node_type = "both",
                                        algorithm_in_output = TRUE)
-table(ex_leadingeigen$clusters$K_4)
+table(ex_leadingeigen$clusters$K_17)
 ```
 
 ## Walktrap
@@ -294,6 +312,7 @@ table(ex_leadingeigen$clusters$K_4)
 @Pons2005
 
 ```{r}
+set.seed(1)
 ex_walktrap <- netclu_walktrap(fishdf,
                                weight = TRUE,
                                index = names(fishdf)[3],
@@ -303,24 +322,27 @@ ex_walktrap <- netclu_walktrap(fishdf,
                                species_col = 2,
                                return_node_type = "both",
                                algorithm_in_output = TRUE)
-table(ex_walktrap$clusters$K_1)
+table(ex_walktrap$clusters$K_14)
 ```
 
 # Function from the bipartite package
 ## Beckett
 
+Update of the QuanBiMo algorithm developed by Dormann & Strauss (2014).
+
 @Beckett2016
 
-```{r, eval = FALSE}
+```{r}
+set.seed(1)
 ex_beckett <- netclu_beckett(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
                              site_col = 1,
                              species_col = 2,
                              return_node_type = "both",
-                             forceLPA = FALSE,
+                             forceLPA = TRUE,
                              algorithm_in_output = TRUE)
-table(ex_beckett$clusters$K_1)
+ex_beckett$clusters$K_23
 ```
 
 # References

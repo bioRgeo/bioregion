@@ -158,7 +158,9 @@ both, sites and species", call. = FALSE)
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
   # Controls for other arguments
-  controls(args = objective_function, data = NULL, type = "character")
+  if(!is.character(objective_function)){
+    stop("objective_function must be either 'CPM' or 'modularity'.")
+  }
   if(!all(objective_function %in% c("CPM", "modularity"))){
     stop("objective_function must be either 'CPM' or 'modularity'.")
   }
