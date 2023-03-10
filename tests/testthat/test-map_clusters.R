@@ -20,7 +20,7 @@ test_that("number of columns in output", {
 test_that("error messages with wrong inputs", {
   expect_error(
     map_clusters("zz"),
-    "If not a bioRgeo.clusters's object, clusters must be a data.frame.",
+    "If not a bioregion.clusters's object, clusters must be a data.frame.",
     fixed = TRUE)
   
   expect_error(

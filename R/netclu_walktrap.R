@@ -33,7 +33,7 @@
 #' of `communities` should be returned in the output (see Value).
 #'
 #' @details
-#' This function is based on random walks \insertCite{Pons2005}{bioRgeo}
+#' This function is based on random walks \insertCite{Pons2005}{bioregion}
 #' as implemented in the [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
 #' package ([cluster_walktrap][igraph::cluster_walktrap]).
 #'
@@ -51,7 +51,7 @@
 #' preserve only the species nodes.
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -84,7 +84,7 @@
 #' }
 #' 
 #' @references
-#' \insertRef{Pons2005}{bioRgeo}
+#' \insertRef{Pons2005}{bioregion}
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_walktrap
 #' 
@@ -100,7 +100,7 @@ netclu_walktrap <- function(net,
                             algorithm_in_output = TRUE) {
   
   # Control input net
-  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
   controls(args = NULL, data = net, type = "input_net")
   
   # Control input weight & index
@@ -231,6 +231,6 @@ The bipartite argument should probably be set to TRUE.")
       2, function(x) length(unique(x))))
   
   # Return outputs
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  class(outputs) <- append("bioregion.clusters", class(outputs))
   return(outputs)
 }

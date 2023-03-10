@@ -6,7 +6,7 @@
 #' The function implements randomization of the dissimilarity matrix to
 #' generate the tree, with a selection method based on the optimal cophenetic
 #' correlation coefficient. Typically, the dissimilarity `data.frame` is a
-#' `bioRgeo.pairwise.metric` object obtained by running `similarity`
+#' `bioregion.pairwise.metric` object obtained by running `similarity`
 #' or `similarity` and then `similarity_to_dissimilarity`.
 #'
 #' @param dissimilarity the output object from [dissimilarity()] or
@@ -57,7 +57,7 @@
 #' @details
 #' The default method for the hierarchical tree is `"average"`, i.e.
 #' UPGMA as it has been recommended as the best method to generate a tree
-#' from beta diversity dissimilarity \insertCite{Kreft2010}{bioRgeo}
+#' from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}
 #'
 #' Clusters can be obtained by two methods:
 #' \itemize{
@@ -67,7 +67,7 @@
 #' To find an optimal number of clusters, see [partition_metrics()]
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -90,7 +90,7 @@
 #' }
 #'
 #' @references
-#' \insertRef{Kreft2010}{bioRgeo}
+#' \insertRef{Kreft2010}{bioregion}
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
@@ -152,7 +152,7 @@ hclu_hierarclust <- function(dissimilarity,
                              h_min = 0){
   
   # 1. Controls ---------------------------------------------------------------
-  if(inherits(dissimilarity, "bioRgeo.pairwise.metric")){
+  if(inherits(dissimilarity, "bioregion.pairwise.metric")){
     if(attr(dissimilarity, "type") == "similarity") {
       stop("dissimilarity seems to be a similarity object.
          hclu_hierarclust() should be applied on dissimilarity, not
@@ -166,13 +166,13 @@ hclu_hierarclust <- function(dissimilarity,
       stop("Argument index should be one of the column names of dissimilarity")
     }
     
-  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                  inherits(dissimilarity, "dist"))){
     if(is.numeric(index)) {
       index <- names(dissimilarity)[index]
     } 
     if(is.null(index) || !(index %in% colnames(dissimilarity))) {
-      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a
+      stop("dissimilarity is not a bioregion.pairwise.metric object, a
            dissimilarity matrix (class dist) or a data.frame with at least 3
            columns (site1, site2, and your dissimilarity index).")
     }
@@ -184,7 +184,7 @@ hclu_hierarclust <- function(dissimilarity,
         stop("n_clust must an integer or a vector of integers determining the
              number of clusters.")
       }
-    } else if(inherits(n_clust, "bioRgeo.partition.metrics")){
+    } else if(inherits(n_clust, "bioregion.partition.metrics")){
       if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
@@ -360,7 +360,7 @@ hclu_hierarclust <- function(dissimilarity,
                    dissimilarity matrix\n"))
   }
   
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  class(outputs) <- append("bioregion.clusters", class(outputs))
   
   if(any(!is.null(n_clust) | !is.null(cut_height))){
     outputs <- cut_tree(outputs,

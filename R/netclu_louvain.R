@@ -54,7 +54,7 @@
 #' 
 #' @details
 #' Louvain is a network community detection algorithm proposed in
-#' \insertCite{Blondel2008}{bioRgeo}. This function proposed two
+#' \insertCite{Blondel2008}{bioregion}. This function proposed two
 #' implementations of the function (parameter `lang`): the
 #' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
 #' implementation ([cluster_louvain][igraph::cluster_louvain]) and the C++ 
@@ -95,7 +95,7 @@
 #' nodes and `"species"` to preserve only the species nodes.
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -133,7 +133,7 @@
 #' }
 #' 
 #' @references
-#' \insertRef{Blondel2008}{bioRgeo}
+#' \insertRef{Blondel2008}{bioregion}
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_louvain
 #' 
@@ -156,7 +156,7 @@ netclu_louvain <- function(net,
                            algorithm_in_output = TRUE) {
   
   # Control input net
-  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
   controls(args = NULL, data = net, type = "input_net")
   
   # Control input weight & index
@@ -288,9 +288,9 @@ The bipartite argument should probably be set to TRUE.")
     
     # Set binpath
     if (is.null(binpath)) {
-      # Identify bioRgeo directory on your computer
+      # Identify bioregion directory on your computer
       biodir <- .libPaths()[1]
-      binpath <- paste0(biodir,"/bioRgeo")
+      binpath <- paste0(biodir,"/bioregion")
     } else {
       # Control
       controls(args = binpath, data = NULL, type = "character")
@@ -305,7 +305,7 @@ The bipartite argument should probably be set to TRUE.")
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       message("Louvain is not installed... Please have a look at
-              https://biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
+              https://bioregion.github.io/bioregion/articles/a1_install_binary_files.html
               for more details.\n", 
               "It should be located in ", 
               paste0(binpath, "/bin/LOUVAIN/"))
@@ -441,6 +441,6 @@ The bipartite argument should probably be set to TRUE.")
   )
   
   # Return outputs
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  class(outputs) <- append("bioregion.clusters", class(outputs))
   return(outputs)
 }

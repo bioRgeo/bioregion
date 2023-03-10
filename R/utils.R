@@ -2,7 +2,7 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input similarity ##########################################################
   if (type == "input_similarity") {
-    if (inherits(data, "bioRgeo.pairwise.metric")) {
+    if (inherits(data, "bioregion.pairwise.metric")) {
       if (attr(data, "type") == "dissimilarity") {
         stop(paste0(deparse(substitute(data)),
                     " seems to be a dissimilarity object. 
@@ -11,7 +11,7 @@ Use dissimilarity_to_similarity() before using this function."), call. = FALSE)
       }
     } else {
       message(paste0(deparse(substitute(data)),
-                     " is not a bioRgeo.pairwise.metric object. 
+                     " is not a bioregion.pairwise.metric object. 
 Note that some functions required dissimilarity metrics (hclu_ & nhclu) and
 others similarity metrics (netclu_). 
 Please carefully check your data before using the clustering functions."),
@@ -21,7 +21,7 @@ Please carefully check your data before using the clustering functions."),
   
   # Input dissimilarity #######################################################
   if (type == "input_dissimilarity") {
-    if (inherits(data, "bioRgeo.pairwise.metric")) {
+    if (inherits(data, "bioregion.pairwise.metric")) {
       if (attr(data, "type") == "similarity") {
         stop(paste0(deparse(substitute(data)),
                     " seems to be a similarity object.
@@ -32,7 +32,7 @@ Use similarity_to_dissimilarity() before using this function."),
       }
     } else {
       message(paste0(deparse(substitute(data)),
-                     " is not a bioRgeo.pairwise.metric object. 
+                     " is not a bioregion.pairwise.metric object. 
 Note that some functions required dissimilarity metrics (hclu_ & nhclu) and
 others similarity metrics (netclu_). 
 Please carefully check your data before using the clustering functions."))

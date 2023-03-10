@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library("bioRgeo")
+    library("bioregion")
     library("ade4")
     library("microbenchmark")
     library("ggplot2")
@@ -34,22 +34,22 @@ options(tinytex.verbose = TRUE)
 ```
 
 In this vignette, we aim at showing the differences in terms of computation
-time between the different algorithms available in `bioRgeo`. For this purpose,
+time between the different algorithms available in `bioregion`. For this purpose,
 we use three datasets of varying size.
 <br>
 For each dataset, we use a site x species matrix as well as a dissimilarity
-matrix which we compute using `bioRgeo::dissimilarity()`.
+matrix which we compute using `bioregion::dissimilarity()`.
 
 # 1. Datasets
 ## 1.1. Vegemat
-The first dataset comes available with `bioRgeo` and was analyzed in
+The first dataset comes available with `bioregion` and was analyzed in
 [this article](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718).
 It contains the abundance of 3,697 plant species distributed in 715 sites in
 the French Mediterranean area. 
 From this dataset we use the two following files:
-[vegedf](https://biorgeo.github.io/bioRgeo/reference/vegedf.html) a 
+[vegedf](https://bioregion.github.io/bioregion/reference/vegedf.html) a 
 `data.frame` with 460,878 rows and 3 columns (Site, Species and Abundance) and
-[vegemat](https://biorgeo.github.io/bioRgeo/reference/vegemat.html) 
+[vegemat](https://bioregion.github.io/bioregion/reference/vegemat.html) 
 a co-occurrence `matrix` containing the same information gathered in a `matrix`
 with 715 rows and 3,697 columns.
 
@@ -62,7 +62,7 @@ vegemat_df <- mat_to_net(vegemat, weight = TRUE, remove_zeroes = TRUE)
 ```
 
 ## 1.2. European fish
-The second dataset also comes available with `bioRgeo` and contains
+The second dataset also comes available with `bioregion` and contains
 distribution of 195 freshwater fish distributed in the basins of Europe.
 
 ```{r}

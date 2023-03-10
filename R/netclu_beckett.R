@@ -35,7 +35,7 @@
 #' 
 #' @details
 #' This function is based on the modularity optimization algorithm provided by
-#' Stephen Beckett \insertCite{Beckett2016}{bioRgeo} as implemented in the
+#' Stephen Beckett \insertCite{Beckett2016}{bioregion} as implemented in the
 #' [bipartite](https://cran.r-project.org/web/packages/bipartite/index.html)
 #' package ([computeModules][bipartite::computeModules]).
 #'
@@ -51,7 +51,7 @@
 #' species nodes.
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -83,7 +83,7 @@
 #' }
 #' 
 #' @references
-#' \insertRef{Beckett2016}{bioRgeo}
+#' \insertRef{Beckett2016}{bioregion}
 #' 
 #' @importFrom bipartite computeModules
 #' 
@@ -206,6 +206,6 @@ both, sites and species", call. = FALSE)}
       2, function(x) length(unique(x))))
   
   # Return outputs
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  class(outputs) <- append("bioregion.clusters", class(outputs))
   return(outputs)
 }

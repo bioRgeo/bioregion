@@ -13,7 +13,7 @@ called "Site1" and "Site2", and the other columns being the similarity
 metrics.}
 }
 \value{
-A \code{data.frame} with additional class \code{bioRgeo.pairwise.metric},
+A \code{data.frame} with additional class \code{bioregion.pairwise.metric},
 providing one or several dissimilarity metric(s) between each pair of sites.
 The two first columns represent each pair of sites, and the other column
 represent dissimilarity metrics. Columns with names "a", "b", "c", "A", "B"

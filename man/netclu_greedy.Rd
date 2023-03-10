@@ -45,7 +45,7 @@ the third column name of \code{net} is used.}
 of \code{communities} should be returned in the output (see Value).}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -65,7 +65,7 @@ greedy optimization of modularity.
 }
 \details{
 This function is based on the fast greedy modularity optimization algorithm
-\insertCite{Clauset2004}{bioRgeo} as implemented in the
+\insertCite{Clauset2004}{bioregion} as implemented in the
 \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
 package (\link[igraph:cluster_fast_greedy]{cluster_fast_greedy}).
 }
@@ -97,7 +97,7 @@ clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
 
 }
 \references{
-\insertRef{Clauset2004}{bioRgeo}
+\insertRef{Clauset2004}{bioregion}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

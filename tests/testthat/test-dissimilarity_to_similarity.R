@@ -19,7 +19,7 @@ test_that("number of columns in output", {
 test_that("error messages with wrong inputs", {
   expect_error(
     dissimilarity_to_similarity(NULL),
-    "dissimilaritydata should be a bioRgeo object created by
+    "dissimilaritydata should be a bioregion object created by
          dissimilarity() or similarity_to_dissimilarity()",
     fixed = TRUE)
 })

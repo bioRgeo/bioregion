@@ -37,7 +37,7 @@ kmean (see \link[stats:kmeans]{stats::kmeans()}). Available options are
 Hartigan-Wong, Lloyd, Forgy and MacQueen.}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}

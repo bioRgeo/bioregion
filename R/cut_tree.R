@@ -6,7 +6,7 @@
 #' number(s) of clusters or selected height(s). It also includes a procedure to
 #' automatically return the height of cut for the chosen number(s) of clusters.
 #'
-#' @param tree a `bioRgeo.hierar.tree` or a `hclust` object
+#' @param tree a `bioregion.hierar.tree` or a `hclust` object
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
 #' [partition_metrics()]. Should not be used at the same time as `cut_height`
@@ -47,7 +47,7 @@
 #' The function can cut the tree with two main methods. First, it can cut
 #' the entire tree at the same height (either specified by `cut_height` or
 #' automatically defined for the chosen `n_clust`). Second, it can use
-#' the dynamic tree cut method \insertCite{Langfelder2008}{bioRgeo}, in which
+#' the dynamic tree cut method \insertCite{Langfelder2008}{bioregion}, in which
 #' case clusters are detected with an adaptive method based on the shape of
 #' branches in the tree (thus cuts happen at multiple heights depending on
 #' cluster positions in the tree).
@@ -79,7 +79,7 @@
 #' returned.
 #' 
 #' @references 
-#' \insertRef{Langfelder2008}{bioRgeo}
+#' \insertRef{Langfelder2008}{bioregion}
 #' 
 #' @seealso [hclu_hierarclust]
 #' 
@@ -130,7 +130,7 @@ cut_tree <- function(tree,
         stop("n_clust must an integer or a vector of integers determining the
              number of clusters.")
       }
-    } else if(inherits(n_clust, "bioRgeo.partition.metrics")){
+    } else if(inherits(n_clust, "bioregion.partition.metrics")){
       if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
@@ -164,7 +164,7 @@ cut_tree <- function(tree,
     
     if(dynamic_method == "hybrid")
     {
-      if(inherits(dissimilarity, "bioRgeo.pairwise.metric"))
+      if(inherits(dissimilarity, "bioregion.pairwise.metric"))
       {
         if(attr(dissimilarity, "type") == "similarity")
         {
@@ -181,11 +181,11 @@ cut_tree <- function(tree,
             weight = TRUE, squared = TRUE, symmetrical = TRUE))
         
         
-      } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+      } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                      inherits(dissimilarity, "dist")))
       {
         if(ncol(dissimilarity) != 3){
-          stop("dissimilarity is not a bioRgeo.pairwise.metric object, a 
+          stop("dissimilarity is not a bioregion.pairwise.metric object, a 
                dissimilarity matrix (class dist) or a data.frame with at least
                3 columns (site1, site2, and your dissimilarity index)")
         }
@@ -202,7 +202,7 @@ cut_tree <- function(tree,
   }
   
   arg_added <- list(...)
-  if(inherits(tree, "bioRgeo.clusters")){
+  if(inherits(tree, "bioregion.clusters")){
     if (tree$name == "hierarchical_clustering") {
       cur.tree <- tree$algorithm$final.tree
       # Update args
@@ -326,7 +326,7 @@ cut_tree <- function(tree,
   
   clusters <- knbclu(clusters, reorder = FALSE, method = "length")
   
-  if(inherits(tree, "bioRgeo.clusters")) {
+  if(inherits(tree, "bioregion.clusters")) {
     cur.tree$args$cut_height <- cut_height
     tree$clusters <- clusters
     tree$algorithm$output_n_clust <- output_n_clust

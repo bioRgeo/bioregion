@@ -24,7 +24,7 @@
 #' \mjeqn{dissimilarity = 1 - similarity}{dissimilarity = 1 - similarity}
 #'
 #' @return A `data.frame` with additional class 
-#' `bioRgeo.pairwise.metric`, providing one or several similarity
+#' `bioregion.pairwise.metric`, providing one or several similarity
 #' metric(s) between each pair of sites. The two first columns represent each 
 #' pair of sites, and the other column represent similarity metrics. Columns
 #' with names "a", "b", "c", "A", "B" and "C"  are not altered.
@@ -54,8 +54,8 @@
 
 similarity_to_dissimilarity <- function(similarity){
   
-  if (!inherits(similarity, "bioRgeo.pairwise.metric")) {
-    stop("similarity should be a bioRgeo object created by similarity() or
+  if (!inherits(similarity, "bioregion.pairwise.metric")) {
+    stop("similarity should be a bioregion object created by similarity() or
          dissimilarity_to_similarity()")
   }
   if (attr(similarity, "type") == "dissimilarity") {
@@ -112,7 +112,7 @@ similarity_to_dissimilarity <- function(similarity){
 #'
 #' \eqn{similarity = 1 - dissimilarity}
 #'
-#' @return A `data.frame` with additional class `bioRgeo.pairwise.metric`,
+#' @return A `data.frame` with additional class `bioregion.pairwise.metric`,
 #' providing one or several dissimilarity metric(s) between each pair of sites.
 #' The two first columns represent each pair of sites, and the other column
 #' represent dissimilarity metrics. Columns with names "a", "b", "c", "A", "B"
@@ -145,8 +145,8 @@ similarity_to_dissimilarity <- function(similarity){
 #' @export
 
 dissimilarity_to_similarity <- function(dissimilaritydata) {
-  if (!inherits(dissimilaritydata, "bioRgeo.pairwise.metric")) {
-    stop("dissimilaritydata should be a bioRgeo object created by
+  if (!inherits(dissimilaritydata, "bioregion.pairwise.metric")) {
+    stop("dissimilaritydata should be a bioregion object created by
          dissimilarity() or similarity_to_dissimilarity()")
   }
   if (attr(dissimilaritydata, "type") == "similarity") {

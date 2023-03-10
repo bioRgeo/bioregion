@@ -15,12 +15,12 @@ partition_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{tree a \code{bioRgeo.hierar.tree} or a \code{hclust} object}
+\item{cluster_object}{tree a \code{bioregion.hierar.tree} or a \code{hclust} object}
 
-\item{dissimilarity}{a \code{dist} object or a \code{bioRgeo.pairwise.metric} object (output
+\item{dissimilarity}{a \code{dist} object or a \code{bioregion.pairwise.metric} object (output
 from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if \code{eval_metric}
 includes \code{pc_distance} and \code{tree} is not a
-\code{bioRgeo.hierar.tree} object}
+\code{bioregion.hierar.tree} object}
 
 \item{dissimilarity_index}{a character string indicating the dissimilarity
 (beta-diversity) index to be used in case \code{dist} is a \code{data.frame} with
@@ -43,7 +43,7 @@ of clusters. Available options: \code{"pc_distance"}, \code{"anosim"},
 \code{"avg_endemism"} and \code{"tot_endemism"}}
 }
 \value{
-a \code{list} of class \code{bioRgeo.partition.metrics} with two elements:
+a \code{list} of class \code{bioregion.partition.metrics} with two elements:
 \itemize{
 \item{\code{args}: input arguments
 }
@@ -64,7 +64,7 @@ matrix, or to provide the initial species-site table.
 \strong{Evaluation metrics:}
 \itemize{
 \item{\code{pc_distance}: this metric is the method used by
-\insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of
+\insertCite{Holt2013}{bioregion}. It is a ratio of the between-cluster sum of
 dissimilarity (beta-diversity) versus the total sum of dissimilarity
 (beta-diversity) for the full dissimilarity matrix. In other words, it is
 calculated on the basis of two elements. First, the total sum of
@@ -78,7 +78,7 @@ the dissimilarity matrix, and then the dissimilarity matrix is summed. The
 dissimilarity by the total sum of dissimilarity.}
 
 \item{\code{anosim}: This metric is the statistic used in Analysis of
-Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
+Similarities, as suggested in \insertCite{Castro-Insua2018}{bioregion} (see
 \link[vegan:anosim]{vegan::anosim()}). It compares the between-cluster
 dissimilarities to the within-cluster dissimilarities. It is based based on
 the difference of mean ranks between groups and within groups with the
@@ -93,7 +93,7 @@ computes the statistic - for significance testing see
 
 \item{\code{avg_endemism}: this metric is the average percentage of
 endemism in clusters as
-recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
 \mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
 where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
 \mjeqn{S_i}{Si} is the number of
@@ -101,7 +101,7 @@ species in cluster i, and K the maximum number of clusters.
 }
 
 \item{\code{tot_endemism}: this metric is the total endemism across all clusters,
-as recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+as recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
 \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
 
 where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
@@ -125,15 +125,15 @@ a <- partition_metrics(tree1, dissimilarity = dissim, net = fishdf,
 
 }
 \references{
-\insertRef{Castro-Insua2018}{bioRgeo}
+\insertRef{Castro-Insua2018}{bioregion}
 
-\insertRef{Ficetola2017}{bioRgeo}
+\insertRef{Ficetola2017}{bioregion}
 
-\insertRef{Holt2013}{bioRgeo}
+\insertRef{Holt2013}{bioregion}
 
-\insertRef{Kreft2010}{bioRgeo}
+\insertRef{Kreft2010}{bioregion}
 
-\insertRef{Langfelder2008}{bioRgeo}
+\insertRef{Langfelder2008}{bioregion}
 }
 \seealso{
 \link{hclu_hierarclust}

@@ -10,10 +10,10 @@ dissimilarity <- similarity_to_dissimilarity(simil)
 tree1 <- hclu_hierarclust(dissimilarity, n_clust = 5)
 
 # Tests for valid outputs -----------------------------------------------------
-test_that("class list and bioRgeo.clusters", {
+test_that("class list and bioregion.clusters", {
   tree2 <- cut_tree(tree1, cut_height = 0.05)
   
-  expect_identical(class(tree2)[1], "bioRgeo.clusters")
+  expect_identical(class(tree2)[1], "bioregion.clusters")
   expect_identical(class(tree2)[2], "list")
   
 })

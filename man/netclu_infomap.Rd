@@ -87,7 +87,7 @@ be removed (see Details).}
 (see \link{install_binaries} and Details).}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -110,7 +110,7 @@ on the Infomap algorithm (\url{https://github.com/mapequation/infomap}).
 }
 \details{
 Infomap is a network clustering algorithm based on the Map equation proposed
-in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted
+in \insertCite{Rosvall2008}{bioregion} that finds communities in (un)weighted
 and (un)directed networks.
 
 This function is based on the C++ version of Infomap
@@ -156,7 +156,7 @@ com <- netclu_infomap(net)
 
 }
 \references{
-\insertRef{Rosvall2008}{bioRgeo}
+\insertRef{Rosvall2008}{bioregion}
 }
 \seealso{
 \link{install_binaries}, \link{netclu_louvain}, \link{netclu_oslom}

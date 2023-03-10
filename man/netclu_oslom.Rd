@@ -81,7 +81,7 @@ folder (see Details).}
 (see \code{\link[=install_binaries]{install_binaries()}} and Details).}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -104,7 +104,7 @@ on the OSLOM algorithm (\url{http://oslom.org/}, version 2.4).
 }
 \details{
 OSLOM is a network community detection algorithm proposed in
-\insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
+\insertCite{Lancichinetti2011}{bioregion} that finds statistically significant
 (overlapping) communities in (un)weighted and (un)directed networks.
 
 This function is based on the 2.4 C++ version of OSLOM
@@ -153,7 +153,7 @@ com <- netclu_oslom(net)
 
 }
 \references{
-\insertRef{Lancichinetti2011}{bioRgeo}
+\insertRef{Lancichinetti2011}{bioregion}
 }
 \seealso{
 \code{\link[=install_binaries]{install_binaries()}}, \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=netclu_louvain]{netclu_louvain()}}

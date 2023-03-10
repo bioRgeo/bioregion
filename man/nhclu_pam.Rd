@@ -40,7 +40,7 @@ returned from the \link[cluster:pam]{cluster::pam()} function (more efficient).}
 (see \link[cluster:pam]{cluster::pam()})}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}

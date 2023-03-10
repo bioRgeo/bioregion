@@ -8,7 +8,7 @@
 #' an increasing or decreasing sequence, or partitions which are not related
 #' to each other).
 #' 
-#' @param partitions a `bioRgeo.partition.metrics` object (output from 
+#' @param partitions a `bioregion.partition.metrics` object (output from 
 #' [partition_metrics()] or a `data.frame` with the first two 
 #' columns named "K" (partition name) and "n_clusters" (number of clusters) and
 #' the following columns containing evaluation metrics (numeric values)
@@ -73,7 +73,7 @@
 #' bioregionalisations. Using multiple partitions likely avoids this
 #' oversimplification bias and may convey more information.
 #' See, for example, the reanalysis of Holt et al. (2013)
-#' by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
+#' by \insertCite{Ficetola2017}{bioregion}, where they used deep, intermediate
 #' and shallow cuts. 
 #' 
 #' Following this rationale, several of the criteria implemented here can/will
@@ -117,7 +117,7 @@
 #' \item{`cutoffs`:
 #' This method consists in specifying the cutoff value(s) in the evaluation
 #' metric from which the number(s) of clusters should be derived. This is the
-#' method used by \insertCite{Holt2013}{bioRgeo}. Note, however, that the
+#' method used by \insertCite{Holt2013}{bioregion}. Note, however, that the
 #' cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
 #' relevant at very large spatial scales, and lower cut-offs should be
 #' considered at finer spatial scales.
@@ -137,7 +137,7 @@
 #' of the evaluation metric.}
 #' }
 #' @return
-#' a `list` of class `bioRgeo.optimal.n` with three elements:
+#' a `list` of class `bioregion.optimal.n` with three elements:
 #' \itemize{
 #' \item{`args`: input arguments
 #' }
@@ -158,15 +158,15 @@
 #' bioregionalisation.
 #' 
 #' @references
-#' \insertRef{Castro-Insua2018}{bioRgeo}
+#' \insertRef{Castro-Insua2018}{bioregion}
 #'
-#' \insertRef{Ficetola2017}{bioRgeo}
+#' \insertRef{Ficetola2017}{bioregion}
 #'
-#' \insertRef{Holt2013}{bioRgeo}
+#' \insertRef{Holt2013}{bioregion}
 #'
-#' \insertRef{Kreft2010}{bioRgeo}
+#' \insertRef{Kreft2010}{bioregion}
 #'
-#' \insertRef{Langfelder2008}{bioRgeo}
+#' \insertRef{Langfelder2008}{bioregion}
 #' 
 #' @importFrom rlang .data
 #' 
@@ -228,7 +228,7 @@ find_optimal_n <- function(
     mars_breakpoints = "all",
     plot = TRUE){
   
-  if(!inherits(partitions, "bioRgeo.partition.metrics")){
+  if(!inherits(partitions, "bioregion.partition.metrics")){
     if(!inherits(partitions, "data.frame")){
       stop("partitions should be the output object from partition_metrics()",
            "or a data.frame")
@@ -671,6 +671,6 @@ find_optimal_n <- function(
   optimal_nb_clusters = optim_n,
   plot = p)
   
-  class(outputs) <- append("bioRgeo.optimal.n", class(outputs))
+  class(outputs) <- append("bioregion.optimal.n", class(outputs))
   return(outputs)
 }

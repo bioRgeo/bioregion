@@ -67,7 +67,7 @@ the chosen \code{index}.}
 for the chosen \code{index}.}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -96,13 +96,13 @@ coefficient, and can get clusters from the tree if requested by the user.
 The function implements randomization of the dissimilarity matrix to
 generate the tree, with a selection method based on the optimal cophenetic
 correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
-\code{bioRgeo.pairwise.metric} object obtained by running \code{similarity}
+\code{bioregion.pairwise.metric} object obtained by running \code{similarity}
 or \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
 \details{
 The default method for the hierarchical tree is \code{"average"}, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
-from beta diversity dissimilarity \insertCite{Kreft2010}{bioRgeo}
+from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}
 
 Clusters can be obtained by two methods:
 \itemize{
@@ -149,7 +149,7 @@ tree4 <- hclu_hierarclust(dissim, n_clust = 1:19)
 
 }
 \references{
-\insertRef{Kreft2010}{bioRgeo}
+\insertRef{Kreft2010}{bioregion}
 }
 \seealso{
 \link{cut_tree}

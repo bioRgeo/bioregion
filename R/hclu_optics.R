@@ -55,7 +55,7 @@
 #' should be explored to understand the clusters and their hierarchical nature,
 #' by running plot on the output of the function:
 #' `plot(object$algorithm$optics)`.
-#' We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
+#' We recommend reading \insertCite{Hahsler2019}{bioregion} to grasp the
 #' algorithm, how it works, and what the clusters mean.
 #'
 #' To extract the clusters, we use the
@@ -64,10 +64,10 @@
 #' [dbscan::optics()][dbscan::optics])
 #'
 #' @references 
-#' \insertRef{Hahsler2019}{bioRgeo}
+#' \insertRef{Hahsler2019}{bioregion}
 #' 
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -113,7 +113,7 @@ hclu_optics <- function(dissimilarity,
                         # rename_clusters = TRUE, # to implement?
                         show_hierarchy = FALSE,
                         ...){
-  if(inherits(dissimilarity, "bioRgeo.pairwise.metric")){
+  if(inherits(dissimilarity, "bioregion.pairwise.metric")){
     if(attr(dissimilarity, "type") == "similarity"){
       stop("dissimilarity seems to be a similarity object.
          nhclu_dbscan() should be applied on dissimilarity, not similarities.
@@ -126,13 +126,13 @@ hclu_optics <- function(dissimilarity,
       stop("Argument index should be one of the column names of dissimilarity")
     }
     
-  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                  inherits(dissimilarity, "dist"))){
     if(is.numeric(index)){
       index <- names(dissimilarity)[index]
     }
     if(!(index %in% colnames(dissimilarity))){
-      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a
+      stop("dissimilarity is not a bioregion.pairwise.metric object, a
            dissimilarity matrix (class dist) or a data.frame with at least 3
            columns (site1, site2, and your dissimilarity index)")
     }
@@ -291,6 +291,6 @@ hclu_optics <- function(dissimilarity,
     outputs$cluster_info$hierarchical_level <- 1:max.col
   }
   
-  class(outputs) <-  append("bioRgeo.clusters", class(outputs))
+  class(outputs) <-  append("bioregion.clusters", class(outputs))
   return(outputs)
 }

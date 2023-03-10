@@ -73,7 +73,7 @@ of \code{communities} should be returned in the output (see Value).
 Default to TRUE.}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -99,7 +99,7 @@ on the Louvain algorithm.
 }
 \details{
 Louvain is a network community detection algorithm proposed in
-\insertCite{Blondel2008}{bioRgeo}. This function proposed two
+\insertCite{Blondel2008}{bioregion}. This function proposed two
 implementations of the function (parameter \code{lang}): the
 \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
 implementation (\link[igraph:cluster_louvain]{cluster_louvain}) and the C++
@@ -151,7 +151,7 @@ com <- netclu_louvain(net, lang = "igraph")
 
 }
 \references{
-\insertRef{Blondel2008}{bioRgeo}
+\insertRef{Blondel2008}{bioregion}
 }
 \seealso{
 \code{\link[=install_binaries]{install_binaries()}}, \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=netclu_oslom]{netclu_oslom()}}

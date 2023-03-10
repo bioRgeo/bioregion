@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library(bioRgeo)
+    library(bioregion)
   })
 })
 
@@ -30,7 +30,7 @@ options(tinytex.verbose = TRUE)
 data(vegemat)
 ```
 
-The function [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+The function [similarity](https://bioregion.github.io/bioregion/reference/similarity.html) 
 compute well-known and customized pairwise similarity metrics based on a 
 co-occurrence `matrix` such as `vegemat`. In the example below the Simpson similarity
 index is computed between each pair of sites.
@@ -41,8 +41,8 @@ sim[1:10,]
 ```
 
 The resulting `data.frame` is stored in a 
-`bioRgeo.pairwise.metric` object containing Simpson similarity metric between each 
-pair of sites. The function [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+`bioregion.pairwise.metric` object containing Simpson similarity metric between each 
+pair of sites. The function [similarity](https://bioregion.github.io/bioregion/reference/similarity.html) 
 can handle three types of metrics: the metrics based on `abc`, the metrics based 
 on `ABC` and one metric based on the Euclidean distance. 
 
@@ -54,7 +54,7 @@ in the second site. Two methods can be used to compute the `abc` based metrics.
 The first method is based on a matrix product (performed with the [tcrossprod](https://www.rdocumentation.org/packages/Matrix/versions/1.5-1/topics/matrix-products) 
 function from the R package [Matrix](https://www.rdocumentation.org/packages/Matrix/versions/1.5-1)). 
 The method is fast but is greedy in memory... The second method is 
-based on a [three loops function](https://github.com/bioRgeo/bioRgeo/blob/master/src/abc.cpp) 
+based on a [three loops function](https://github.com/bioregion/bioregion/blob/master/src/abc.cpp) 
 coded in C++ and largely inspired by the [bcdist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9/topics/bcdist) 
 function from the R package [ecodist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9) 
 (version 2.0.7). It is less efficient than the matrix product but allows to handle 
@@ -66,7 +66,7 @@ common species shared by a pair of sites. `B` and `C` are the total number of
 specimens counted at both sites minus `A`. Only three loops function is 
 available for the `ABC` based metrics. 
 
-The main advantage of the [similarity](https://biorgeo.github.io/bioRgeo/reference/similarity.html) 
+The main advantage of the [similarity](https://bioregion.github.io/bioregion/reference/similarity.html) 
 function is to compute and return several metrics, to allow the computation of
 customized metric with the `formula` argument and to include the possibility of
 returning `a`, `b` and `c` and/or `A`, `B` and `C`. This feature is particularly 
@@ -77,9 +77,9 @@ sim <- similarity(vegemat, metric = c("abc","ABC","Simpson","Bray"), formula =c(
 sim[1:10,]
 ```
 
-The [dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity.html) 
+The [dissimilarity](https://bioregion.github.io/bioregion/reference/dissimilarity.html) 
 function is very similar, with the sole exception that it computes the 
-dissimilarity version of the available metrics. The functions [dissimilarity_to_similarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://biorgeo.github.io/bioRgeo/reference/dissimilarity_to_similarity.html)
+dissimilarity version of the available metrics. The functions [dissimilarity_to_similarity](https://bioregion.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://bioregion.github.io/bioregion/reference/dissimilarity_to_similarity.html)
 can be used to switch between similarity and dissimilarity metrics.
 
 ``` {r dissimilarity}

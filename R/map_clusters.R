@@ -1,9 +1,9 @@
 #' Create a map of bioregions
 #'
 #' This plot function can be used to visualise bioregions based on a 
-#' bioRgeo.clusters object combined with a geometry (sf objects). 
+#' bioregion.clusters object combined with a geometry (sf objects). 
 #'
-#' @param clusters an object of class `bioRgeo.clusters` or a `data.frame`. If
+#' @param clusters an object of class `bioregion.clusters` or a `data.frame`. If
 #' a `data.frame` is used, the first column should represent the sites' ID, and
 #' the next column(s) the clusters.
 #'  
@@ -18,7 +18,7 @@
 #' @details
 #' The `clusters` and `geometry` site IDs should correspond. They should
 #' have the same type (i.e. `character` is cluster is a 
-#' `bioRgeo.clusters` object) and the site of `clusters` should be 
+#' `bioregion.clusters` object) and the site of `clusters` should be 
 #' included in the sites of `geometry`. 
 #' @return  One or several maps of bioregions if `plot = TRUE` and the 
 #' geometry with additional clusters' attributes if `write_clusters = TRUE`. 
@@ -49,14 +49,14 @@ map_clusters <- function(clusters, geometry, write_clusters = FALSE,
   controls(args = plot, data = NULL, type = "boolean")
   
   # Control clusters 
-  if (inherits(clusters, "bioRgeo.clusters")) {
+  if (inherits(clusters, "bioregion.clusters")) {
     clu <- TRUE
     df <- clusters$clusters
   }else{  
     # data.frame
     if (!is.data.frame(clusters)) {
       stop(
-        "If not a bioRgeo.clusters's object, clusters must be a data.frame.",
+        "If not a bioregion.clusters's object, clusters must be a data.frame.",
         call. = FALSE)
     }
     # at least two columns

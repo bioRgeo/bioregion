@@ -13,7 +13,7 @@ tree1 <- hclu_hierarclust(dissimilarity, n_clust = 2:20,
                           index = "Simpson")
 
 # Tests for valid outputs -----------------------------------------------------
-test_that("class list and bioRgeo.clusters", {
+test_that("class list and bioregion.clusters", {
   a <- partition_metrics(tree1,
                          dissimilarity = dissimilarity,
                          net = comat_df,
@@ -25,7 +25,7 @@ test_that("class list and bioRgeo.clusters", {
                                          "anosim"))
   
   
-  expect_identical(class(a)[1], "bioRgeo.partition.metrics")
+  expect_identical(class(a)[1], "bioregion.partition.metrics")
   expect_identical(class(a)[2], "list")
   
 })
@@ -42,6 +42,6 @@ test_that("error messages with wrong inputs", {
                                       "avg_endemism",
                                       "pc_distance",
                                       "anosim")),
-    "This function is designed to work either on bioRgeo.clusters objects
+    "This function is designed to work either on bioregion.clusters objects
          (outputs from clustering functions)", fixed = TRUE)
 })

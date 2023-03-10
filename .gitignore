@@ -6,7 +6,7 @@
 *.bak
 
 src/abc.o
-src/bioRgeo.so
+src/bioregion.so
 src/prodmat.o
 src/RcppExports.o
 

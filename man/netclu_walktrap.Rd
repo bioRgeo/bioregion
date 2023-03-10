@@ -47,7 +47,7 @@ the third column name of \code{net} is used.}
 of \code{communities} should be returned in the output (see Value).}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -66,7 +66,7 @@ This function finds communities in a (un)weighted undirected network via
 short random walks.
 }
 \details{
-This function is based on random walks \insertCite{Pons2005}{bioRgeo}
+This function is based on random walks \insertCite{Pons2005}{bioregion}
 as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
 package (\link[igraph:cluster_walktrap]{cluster_walktrap}).
 }
@@ -98,7 +98,7 @@ clust2 <- netclu_walktrap(net_bip, bipartite = TRUE)
 
 }
 \references{
-\insertRef{Pons2005}{bioRgeo}
+\insertRef{Pons2005}{bioregion}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

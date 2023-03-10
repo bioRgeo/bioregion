@@ -60,7 +60,7 @@
 #' @export
 #' @details
 #' OSLOM is a network community detection algorithm proposed in
-#' \insertCite{Lancichinetti2011}{bioRgeo} that finds statistically significant
+#' \insertCite{Lancichinetti2011}{bioregion} that finds statistically significant
 #' (overlapping) communities in (un)weighted and (un)directed networks.
 #'
 #' This function is based on the 2.4 C++ version of OSLOM
@@ -98,7 +98,7 @@
 #' were found for this node (i.e. non-overlapping nodes).
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -133,7 +133,7 @@
 #' }
 #' 
 #' @references
-#' \insertRef{Lancichinetti2011}{bioRgeo}
+#' \insertRef{Lancichinetti2011}{bioregion}
 #' 
 #' @export
 netclu_oslom <- function(net,
@@ -156,9 +156,9 @@ netclu_oslom <- function(net,
   
   # Set binpath
   if (is.null(binpath)) {
-    # Identify bioRgeo directory on your computer
+    # Identify bioregion directory on your computer
     biodir <- .libPaths()[1]
-    binpath <- paste0(biodir,"/bioRgeo")
+    binpath <- paste0(biodir,"/bioregion")
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
@@ -175,7 +175,7 @@ netclu_oslom <- function(net,
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
-              https://biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
+              https://bioregion.github.io/bioregion/articles/a1_install_binary_files.html
               for more details.\n", 
               "It should be located in ", 
               paste0(binpath, "/bin/OSLOM/"))
@@ -185,12 +185,12 @@ netclu_oslom <- function(net,
   } else {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
-              https://biorgeo.github.io/bioRgeo/articles/a3_1_install_binary_files.html
+              https://bioregion.github.io/bioregion/articles/a3_1_install_binary_files.html
               for more details.")
     } else {
       if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir.txt"))) {
         message("The directed version of OSLOM is not installed... Please have
-                a look at https://biorgeo.github.io/bioRgeo/articles/a3_1_install_binary_files.html
+                a look at https://bioregion.github.io/bioregion/articles/a3_1_install_binary_files.html
                 for more details")
       } else {
         check <- TRUE
@@ -201,7 +201,7 @@ netclu_oslom <- function(net,
   if (check) {
     
     # Control input net
-    controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+    controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
     controls(args = NULL, data = net, type = "input_net")
     
     # Control input weight & index
@@ -1021,7 +1021,7 @@ both, sites and species", call. = FALSE)
     )
     
     # Return outputs
-    class(outputs) <- append("bioRgeo.clusters", class(outputs))
+    class(outputs) <- append("bioregion.clusters", class(outputs))
     return(outputs)
   }
 }

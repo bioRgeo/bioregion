@@ -1,4 +1,4 @@
-# bioRgeo
+# bioregion
 
 **<span style="color:blue"><font size="4">TO DO list</span></font>**
 
@@ -42,7 +42,7 @@
 
 ### 1.4 Fonctions génériques
 
-* Envisager une fonction générique plot qui s'adapte au type de cluster pour la classe bioRgeo.clusters
+* Envisager une fonction générique plot qui s'adapte au type de cluster pour la classe bioregion.clusters
 
 ## 2. Package V2
 

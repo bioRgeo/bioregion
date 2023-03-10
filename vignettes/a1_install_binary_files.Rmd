@@ -20,22 +20,22 @@ vignette: >
 Some functions (listed below) or at least part of them require binary
 files to run. 
 
-* [netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html)
-* [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) (Cpp version)
-* [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
+* [netclu_infomap](https://bioregion.github.io/bioregion/reference/netclu_infomap.html)
+* [netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html) (Cpp version)
+* [netclu_oslom](https://bioregion.github.io/bioregion/reference/netclu_oslom.html)
 
-The function [install_binaries](https://biorgeo.github.io/bioRgeo/reference/install_binaries.html)
+The function [install_binaries](https://bioregion.github.io/bioregion/reference/install_binaries.html)
 downloads and unzips the 'bin' folder needed to run these functions. It also 
 checks if the files have the permissions to be executed as programs. It finally 
 tests if the binary files are running properly.
 
 ### Run install_binaries()
 
-The function [install_binaries](https://biorgeo.github.io/bioRgeo/reference/install_binaries.html) 
+The function [install_binaries](https://bioregion.github.io/bioregion/reference/install_binaries.html) 
 should be run prior to using 
-[netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html),
-the Cpp version of [netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html) 
-and [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html) 
+[netclu_infomap](https://bioregion.github.io/bioregion/reference/netclu_infomap.html),
+the Cpp version of [netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html) 
+and [netclu_oslom](https://bioregion.github.io/bioregion/reference/netclu_oslom.html) 
 as follows.
 
 ```{r install_binaries, eval=FALSE}
@@ -44,12 +44,12 @@ install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
 
 The function has two parameters. `binpath` indicating 
 the path to the folder that will host the 'bin' folder containing the  
-binary files. It is located in the `bioRgeo`'s package folder by default. Any other
+binary files. It is located in the `bioregion`'s package folder by default. Any other
 folder can be chosen but if you use a different folder please be sure to update 
 the `binpath` argument in 
-[netclu_infomap](https://biorgeo.github.io/bioRgeo/reference/netclu_infomap.html), 
-[netclu_louvain](https://biorgeo.github.io/bioRgeo/reference/netclu_louvain.html)
-and [netclu_oslom](https://biorgeo.github.io/bioRgeo/reference/netclu_oslom.html)
+[netclu_infomap](https://bioregion.github.io/bioregion/reference/netclu_infomap.html), 
+[netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html)
+and [netclu_oslom](https://bioregion.github.io/bioregion/reference/netclu_oslom.html)
 accordingly. The second parameter `infomap_version` indicating the Infomap 
 version(s) to install. Only the Infomap version 2.1.0 and 2.6.0 are available 
 for now.

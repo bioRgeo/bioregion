@@ -17,7 +17,7 @@ find_optimal_n(
 )
 }
 \arguments{
-\item{partitions}{a \code{bioRgeo.partition.metrics} object (output from
+\item{partitions}{a \code{bioregion.partition.metrics} object (output from
 \code{\link[=partition_metrics]{partition_metrics()}} or a \code{data.frame} with the first two
 columns named "K" (partition name) and "n_clusters" (number of clusters) and
 the following columns containing evaluation metrics (numeric values)}
@@ -62,7 +62,7 @@ Defaults to \code{"all"}}
 should be drawn with the identified optimal numbers of cutoffs}
 }
 \value{
-a \code{list} of class \code{bioRgeo.optimal.n} with three elements:
+a \code{list} of class \code{bioregion.optimal.n} with three elements:
 \itemize{
 \item{\code{args}: input arguments
 }
@@ -105,7 +105,7 @@ datasets, and, for example, ignore the often hierarchical / nested nature of
 bioregionalisations. Using multiple partitions likely avoids this
 oversimplification bias and may convey more information.
 See, for example, the reanalysis of Holt et al. (2013)
-by \insertCite{Ficetola2017}{bioRgeo}, where they used deep, intermediate
+by \insertCite{Ficetola2017}{bioregion}, where they used deep, intermediate
 and shallow cuts.
 
 Following this rationale, several of the criteria implemented here can/will
@@ -149,7 +149,7 @@ metrics that are monotonously increasing with the number of clusters (e.g.,
 \item{\code{cutoffs}:
 This method consists in specifying the cutoff value(s) in the evaluation
 metric from which the number(s) of clusters should be derived. This is the
-method used by \insertCite{Holt2013}{bioRgeo}. Note, however, that the
+method used by \insertCite{Holt2013}{bioregion}. Note, however, that the
 cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
 relevant at very large spatial scales, and lower cut-offs should be
 considered at finer spatial scales.
@@ -214,15 +214,15 @@ b <- find_optimal_n(a, criterion = "mars")
 
 }
 \references{
-\insertRef{Castro-Insua2018}{bioRgeo}
+\insertRef{Castro-Insua2018}{bioregion}
 
-\insertRef{Ficetola2017}{bioRgeo}
+\insertRef{Ficetola2017}{bioregion}
 
-\insertRef{Holt2013}{bioRgeo}
+\insertRef{Holt2013}{bioregion}
 
-\insertRef{Kreft2010}{bioRgeo}
+\insertRef{Kreft2010}{bioregion}
 
-\insertRef{Langfelder2008}{bioRgeo}
+\insertRef{Langfelder2008}{bioregion}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),

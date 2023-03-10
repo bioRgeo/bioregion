@@ -1,4 +1,4 @@
-Package: bioRgeo
+Package: bioregion
 Type: Package
 Title: Bioregionalisation Methods in R
 Version: 1.0.0
@@ -61,7 +61,7 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
-URL: https://github.com/bioRgeo/bioRgeo
-BugReports: https://github.com/bioRgeo/bioRgeo/issues
+URL: https://github.com/bioRgeo/bioregion
+BugReports: https://github.com/bioRgeo/bioregion/issues
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)

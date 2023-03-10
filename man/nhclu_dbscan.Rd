@@ -40,7 +40,7 @@ should be plotted.}
 (see \link[dbscan:dbscan]{dbscan::dbscan()})}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -64,7 +64,7 @@ identify a core, and \code{eps}, which is the radius to find neighbors.
 straightforward.
 We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
 to learn how to set these arguments, as well as the paper
-\insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
+\insertCite{Hahsler2019}{bioregion}. Note that clusters with a value of 0
 are points which were deemed as noise by the algorithm.
 
 By default the function will select values for \code{minPts} and \code{eps}. However,

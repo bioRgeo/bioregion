@@ -26,7 +26,7 @@ memory.}
 }
 \value{
 A \code{data.frame} with additional class
-\code{bioRgeo.pairwise.metric}, providing one or several similarity
+\code{bioregion.pairwise.metric}, providing one or several similarity
 metric(s) between each pair of sites. The two first columns represent each
 pair of sites.
 One column per similarity metric provided in \code{metric} and
@@ -46,7 +46,7 @@ the second site.
 
 \mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
 
-\mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioRgeo}
+\mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioregion}
 
 \mjeqn{Sorensen = 1 - (b + c) / (2a + b + c)}{Sorensen = 1 - (b + c) / (2a + b + c)}
 
@@ -57,7 +57,7 @@ also be computed with the following equation:
 
 \mjeqn{Bray = 1 - (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
 
-\mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioRgeo}
+\mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioregion}
 
 with A the sum of the lesser values for common species shared by a pair of
 sites.
@@ -90,9 +90,9 @@ formula = "1 - (b + c) / (a + b + c)")
 }
 }
 \references{
-\insertRef{Baselga2012}{bioRgeo}
+\insertRef{Baselga2012}{bioregion}
 
-\insertRef{Baselga2013}{bioRgeo}
+\insertRef{Baselga2013}{bioregion}
 }
 \seealso{
 \link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}

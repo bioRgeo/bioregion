@@ -26,10 +26,10 @@ can be obtained by cutting the tree.
 
 Although these methods are conceptually simple, their implementation can be 
 complex and requires important choices by the user. In the following, we provide
-a step-by-step guide on how to do hierarchical clustering analyses with bioRgeo,
+a step-by-step guide on how to do hierarchical clustering analyses with bioregion,
 along with comments on the philosophy on how we designed the functions. 
 
-Hierarchical clustering takes place on the right-hand size part of the bioRgeo
+Hierarchical clustering takes place on the right-hand size part of the bioregion
 conceptual diagram:
 
 ![](figures/diagram_nonetwork.png)
@@ -45,7 +45,7 @@ In the example below, we use the vegetation dataset from the package to
 compute distance metrics.
 
 ```{r}
-library(bioRgeo)
+library(bioregion)
 
 # Work with the vegetation dataset we include in the package
 data(vegemat)
@@ -292,7 +292,7 @@ tree1 <- hclu_hierarclust(dissim_random,
 Another approach could be to build a consensus tree from all the individual 
 trees, and use this tree, as is done for example in 
 [the package recluster](https://github.com/leondap/recluster), but this is not
-yet available in bioRgeo. 
+yet available in bioregion. 
 
 ### 2.3.2 Tree construction algorithm
 
@@ -488,7 +488,7 @@ A plethora of methods have been proposed over the years, and the best approach
 to tackle this issue is probably to compare the results of multiple approaches
 to make an informed decision.
 
-In the bioRgeo package, we have implemented several methods which are suitable
+In the bioregion package, we have implemented several methods which are suitable
 for bioregionalisation analyses specifically.
 
 For example, a standard criterion used to identify the optimal number of

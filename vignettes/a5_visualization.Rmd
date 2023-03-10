@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library("bioRgeo")
+    library("bioregion")
     library("ggplot2")
     library("dplyr")
     library("rnaturalearth")
@@ -32,9 +32,9 @@ options(tinytex.verbose = TRUE)
 ```
 
 In this vignette, we aim at illustrating how to plot the bioregions identified
-with the diferent algorithms available in `bioRgeo`.
+with the diferent algorithms available in `bioregion`.
 <br>
-Using one of the dataset coming along with `bioRgeo`, we show three strategies
+Using one of the dataset coming along with `bioregion`, we show three strategies
 to plot your results.
 
 # Data  
@@ -80,7 +80,7 @@ fish_nhclu_kmeans <- nhclu_kmeans(fishdissim, n_clust = 5, index = "Simpson")
 ```
 
 `map_clusters()` function can now simply takes the object `fish_nhclu_kmeans`,
-which is of `bioRgeo.clusters` class, and the spatial distribution of sites,
+which is of `bioregion.clusters` class, and the spatial distribution of sites,
 stored in `fishsf`.
 
 ```{r}

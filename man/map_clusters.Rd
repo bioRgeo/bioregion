@@ -7,7 +7,7 @@
 map_clusters(clusters, geometry, write_clusters = FALSE, plot = TRUE)
 }
 \arguments{
-\item{clusters}{an object of class \code{bioRgeo.clusters} or a \code{data.frame}. If
+\item{clusters}{an object of class \code{bioregion.clusters} or a \code{data.frame}. If
 a \code{data.frame} is used, the first column should represent the sites' ID, and
 the next column(s) the clusters.}
 
@@ -25,12 +25,12 @@ geometry with additional clusters' attributes if \code{write_clusters = TRUE}.
 }
 \description{
 This plot function can be used to visualise bioregions based on a
-bioRgeo.clusters object combined with a geometry (sf objects).
+bioregion.clusters object combined with a geometry (sf objects).
 }
 \details{
 The \code{clusters} and \code{geometry} site IDs should correspond. They should
 have the same type (i.e. \code{character} is cluster is a
-\code{bioRgeo.clusters} object) and the site of \code{clusters} should be
+\code{bioregion.clusters} object) and the site of \code{clusters} should be
 included in the sites of \code{geometry}.
 }
 \examples{

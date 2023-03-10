@@ -14,7 +14,7 @@ test_that("number of columns in output", {
 test_that("error messages with wrong inputs", {
   expect_error(
     nhclu_kmeans(dissimilarity = "zz"),
-    "dissimilarity is not a bioRgeo.pairwise.metric object, a dissimilarity
+    "dissimilarity is not a bioregion.pairwise.metric object, a dissimilarity
         matrix (class dist) or a data.frame with at least 3 columns (site1,
         site2, and your dissimilarity index)",
     fixed = TRUE)

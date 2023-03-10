@@ -1,6 +1,6 @@
 #' @export
-#' @method str bioRgeo.clusters
-str.bioRgeo.clusters <- function(object, ...)
+#' @method str bioregion.clusters
+str.bioregion.clusters <- function(object, ...)
 {
   args <- list(...)
   if(is.null(args$max.level))
@@ -12,8 +12,8 @@ str.bioRgeo.clusters <- function(object, ...)
 
 
 #' @export
-#' @method print bioRgeo.clusters
-print.bioRgeo.clusters <- function(x, ...)
+#' @method print bioregion.clusters
+print.bioregion.clusters <- function(x, ...)
 {
   # algorithm name -----
   cat("Clustering results for algorithm : ")
@@ -113,8 +113,8 @@ print.bioRgeo.clusters <- function(x, ...)
 
 
 #' @export
-#' @method plot bioRgeo.clusters
-plot.bioRgeo.clusters <- function(x, ...)
+#' @method plot bioregion.clusters
+plot.bioregion.clusters <- function(x, ...)
 {
   if(x$name == ("hierarchical_clustering"))
   {
@@ -201,8 +201,8 @@ plot.bioRgeo.clusters <- function(x, ...)
 
 
 #' @export
-#' @method print bioRgeo.partition.metrics
-print.bioRgeo.partition.metrics <- function(x, ...)
+#' @method print bioregion.partition.metrics
+print.bioregion.partition.metrics <- function(x, ...)
 {
   cat("Partition metrics:\n")
   cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
@@ -223,8 +223,8 @@ print.bioRgeo.partition.metrics <- function(x, ...)
 }
 
 #' @export
-#' @method print bioRgeo.optimal.n
-print.bioRgeo.optimal.n <- function(x, ...)
+#' @method print bioregion.optimal.n
+print.bioregion.optimal.n <- function(x, ...)
 {
   cat("Search for an optimal number of clusters:\n")
   cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
@@ -258,8 +258,8 @@ print.bioRgeo.optimal.n <- function(x, ...)
 }
 
 #' @export
-#' @method str bioRgeo.optimal.n
-str.bioRgeo.optimal.n <- function(object, ...)
+#' @method str bioregion.optimal.n
+str.bioregion.optimal.n <- function(object, ...)
 {
   args <- list(...)
   if(is.null(args$max.level))
@@ -271,8 +271,8 @@ str.bioRgeo.optimal.n <- function(object, ...)
 
 
 #' @export
-#' @method print bioRgeo.pairwise.metric
-print.bioRgeo.pairwise.metric <- function(x, ...)
+#' @method print bioregion.pairwise.metric
+print.bioregion.pairwise.metric <- function(x, ...)
 {
   metrics <- colnames(x)[-which(colnames(x) %in%
                                   c("Site1", "Site2", "a", "b",

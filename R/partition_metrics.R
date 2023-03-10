@@ -5,17 +5,17 @@
 #' may require the users to provide either a similarity or dissimilarity
 #' matrix, or to provide the initial species-site table.
 #'
-#' @param cluster_object tree a `bioRgeo.hierar.tree` or a `hclust` object
+#' @param cluster_object tree a `bioregion.hierar.tree` or a `hclust` object
 #' 
 #' @param eval_metric character string or vector of character strings indicating
 #'  metric(s) to be calculated to investigate the effect of different number
 #'  of clusters. Available options: `"pc_distance"`, `"anosim"`,
 #'  `"avg_endemism"` and `"tot_endemism"`
 #'  
-#' @param dissimilarity a `dist` object or a `bioRgeo.pairwise.metric` object (output
+#' @param dissimilarity a `dist` object or a `bioregion.pairwise.metric` object (output
 #' from [similarity_to_dissimilarity()]). Necessary if `eval_metric`
 #' includes `pc_distance` and `tree` is not a
-#' `bioRgeo.hierar.tree` object
+#' `bioregion.hierar.tree` object
 #' 
 #' @param dissimilarity_index a character string indicating the dissimilarity
 #' (beta-diversity) index to be used in case `dist` is a `data.frame` with
@@ -38,7 +38,7 @@
 #' **Evaluation metrics:**
 #' \itemize{
 #' \item{`pc_distance`: this metric is the method used by
-#' \insertCite{Holt2013}{bioRgeo}. It is a ratio of the between-cluster sum of
+#' \insertCite{Holt2013}{bioregion}. It is a ratio of the between-cluster sum of
 #' dissimilarity (beta-diversity) versus the total sum of dissimilarity
 #' (beta-diversity) for the full dissimilarity matrix. In other words, it is
 #' calculated on the basis of two elements. First, the total sum of
@@ -52,7 +52,7 @@
 #' dissimilarity by the total sum of dissimilarity.}
 #' 
 #' \item{`anosim`: This metric is the statistic used in Analysis of
-#' Similarities, as suggested in \insertCite{Castro-Insua2018}{bioRgeo} (see
+#' Similarities, as suggested in \insertCite{Castro-Insua2018}{bioregion} (see
 #' [vegan::anosim()][vegan::anosim]). It compares the between-cluster
 #' dissimilarities to the within-cluster dissimilarities. It is based based on
 #' the difference of mean ranks between groups and within groups with the
@@ -67,7 +67,7 @@
 #' 
 #' \item{`avg_endemism`: this metric is the average percentage of
 #' endemism in clusters as
-#' recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+#' recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
 #' \mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
 #'  where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
 #' \mjeqn{S_i}{Si} is the number of
@@ -75,7 +75,7 @@
 #' }
 #' 
 #' \item{`tot_endemism`: this metric is the total endemism across all clusters,
-#' as recommended by \insertCite{Kreft2010}{bioRgeo}. Calculated as follows:
+#' as recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
 #' \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
 #'
 #' where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
@@ -84,7 +84,7 @@
 #' }
 #'
 #' @return
-#' a `list` of class `bioRgeo.partition.metrics` with two elements:
+#' a `list` of class `bioregion.partition.metrics` with two elements:
 #' \itemize{
 #' \item{`args`: input arguments
 #' }
@@ -95,15 +95,15 @@
 #' @import data.table 
 #' 
 #' @references
-#' \insertRef{Castro-Insua2018}{bioRgeo}
+#' \insertRef{Castro-Insua2018}{bioregion}
 #'
-#' \insertRef{Ficetola2017}{bioRgeo}
+#' \insertRef{Ficetola2017}{bioregion}
 #'
-#' \insertRef{Holt2013}{bioRgeo}
+#' \insertRef{Holt2013}{bioregion}
 #'
-#' \insertRef{Kreft2010}{bioRgeo}
+#' \insertRef{Kreft2010}{bioregion}
 #'
-#' \insertRef{Langfelder2008}{bioRgeo}
+#' \insertRef{Langfelder2008}{bioregion}
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
@@ -139,7 +139,7 @@ partition_metrics <- function(
   compo_based_metrics <- c("avg_endemism", "tot_endemism")
   
   # 1. Does input object contains partitions? ---------------------------------
-  if (inherits(cluster_object, "bioRgeo.clusters")) {
+  if (inherits(cluster_object, "bioregion.clusters")) {
     if (inherits(cluster_object$clusters, "data.frame")) {
       has.clusters <- TRUE
     } else {
@@ -153,7 +153,7 @@ partition_metrics <- function(
       }
     }
   } else if (!inherits(cluster_object, "hclust")) {
-    stop("This function is designed to work either on bioRgeo.clusters objects
+    stop("This function is designed to work either on bioregion.clusters objects
          (outputs from clustering functions)")
   } 
   
@@ -168,7 +168,7 @@ partition_metrics <- function(
       eval_metric <-
         eval_metric[-which(eval_metric %in% dissimilarity_based_metrics)]
     }
-  } else if (inherits(dissimilarity, "bioRgeo.pairwise.metric")) {
+  } else if (inherits(dissimilarity, "bioregion.pairwise.metric")) {
     if (attr(dissimilarity, "type") == "dissimilarity") {
       dist_object <- stats::as.dist(
         net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2],
@@ -180,7 +180,7 @@ partition_metrics <- function(
            from dissimilarity() or similarity_to_dissimilarity(), or an object
            of class dist")
     }
-  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                  inherits(dissimilarity, "dist"))){
     if(is.numeric(dissimilarity_index)){
       dissimilarity_index <- names(dissimilarity)[dissimilarity_index]
@@ -192,7 +192,7 @@ partition_metrics <- function(
     has.dissimilarity <- TRUE
     
     if(!(dissimilarity_index %in% colnames(dissimilarity))){
-      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a
+      stop("dissimilarity is not a bioregion.pairwise.metric object, a
            dissimilarity matrix (class dist) or a data.frame with at least 3
            columns (site1, site2, and your dissimilarity index)")
     }
@@ -415,6 +415,6 @@ partition_metrics <- function(
   outputs <- list(args = list(eval_metric = eval_metric),
                   evaluation_df = evaluation_df)
   
-  class(outputs) <- append("bioRgeo.partition.metrics", class(outputs))
+  class(outputs) <- append("bioregion.partition.metrics", class(outputs))
   return(outputs)
 }

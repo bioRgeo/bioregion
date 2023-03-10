@@ -39,7 +39,7 @@
 #' straightforward.
 #' We recommend reading the help in [dbscan::dbscan()][dbscan::dbscan])
 #' to learn how to set these arguments, as well as the paper
-#' \insertCite{Hahsler2019}{bioRgeo}. Note that clusters with a value of 0
+#' \insertCite{Hahsler2019}{bioregion}. Note that clusters with a value of 0
 #' are points which were deemed as noise by the algorithm.
 #'
 #' By default the function will select values for `minPts` and `eps`. However,
@@ -64,7 +64,7 @@
 #' defining `eps`. Then, adjust depending on your clustering results.
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -103,7 +103,7 @@ nhclu_dbscan <- function(dissimilarity,
                          plot = TRUE,
                          ...){
   
-  if(inherits(dissimilarity, "bioRgeo.pairwise.metric")){
+  if(inherits(dissimilarity, "bioregion.pairwise.metric")){
     if(attr(dissimilarity, "type") == "similarity"){
       stop("dissimilarity seems to be a similarity object.
          nhclu_dbscan() should be applied on dissimilarity, not similarities.
@@ -115,13 +115,13 @@ nhclu_dbscan <- function(dissimilarity,
     if(!(index %in% colnames(dissimilarity))) {
       stop("Argument index should be one of the column names of dissimilarity")
     }
-  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                  inherits(dissimilarity, "dist"))) {
     if(is.numeric(index)){
       index <- names(dissimilarity)[index]
     }
     if(is.null(index) || !(index %in% colnames(dissimilarity))){
-      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a
+      stop("dissimilarity is not a bioregion.pairwise.metric object, a
            dissimilarity matrix (class dist) or a data.frame with at least 3
            columns (site1, site2, and your dissimilarity index)")
     }
@@ -247,7 +247,7 @@ nhclu_dbscan <- function(dissimilarity,
                     2, function(x) length(unique(x))),
     cluster_arg_order)
   
-  class(outputs) <-  append("bioRgeo.clusters", class(outputs))
+  class(outputs) <-  append("bioregion.clusters", class(outputs))
   
   return(outputs)
 }

@@ -4,12 +4,12 @@
 # -----------------------------------------------------------
  
 cff-version: 1.2.0
-message: 'To cite package "bioRgeo" in publications use:'
+message: 'To cite package "bioregion" in publications use:'
 type: software
 license: GPL-3.0-only
-title: 'bioRgeo: Bioregionalisation Methods in R'
+title: 'bioregion: Bioregionalisation Methods in R'
 version: 0.1.0
-abstract: bioRgeo provides multiple methods to delineate bioregions. Use methods based
+abstract: bioregion provides multiple methods to delineate bioregions. Use methods based
   on projected or bipartite networks.
 authors:
 - family-names: Denelle
@@ -26,7 +26,7 @@ authors:
   orcid: https://orcid.org/0000-0002-7686-4302
 preferred-citation:
   type: manual
-  title: 'bioRgeo: Bioregionalisation Methods in R'
+  title: 'bioregion: Bioregionalisation Methods in R'
   authors:
   - family-names: Denelle
     given-names: Pierre
@@ -41,10 +41,10 @@ preferred-citation:
     email: boris.leroy@gmail.com
     orcid: https://orcid.org/0000-0002-7686-4302
   version: 0.1.0
-  abstract: bioRgeo provides multiple methods to delineate bioregions. Use methods
+  abstract: bioregion provides multiple methods to delineate bioregions. Use methods
     based on projected or bipartite networks.
-  repository-code: https://github.com/bioRgeo/bioRgeo
-  url: https://github.com/bioRgeo/bioRgeo
+  repository-code: https://github.com/bioregion/bioregion
+  url: https://github.com/bioregion/bioregion
   contact:
   - family-names: Lenormand
     given-names: Maxime
@@ -52,8 +52,8 @@ preferred-citation:
     orcid: https://orcid.org/0000-0001-6362-3473
   license: GPL-3.0-only
   year: '2022'
-repository-code: https://github.com/bioRgeo/bioRgeo
-url: https://github.com/bioRgeo/bioRgeo
+repository-code: https://github.com/bioregion/bioregion
+url: https://github.com/bioregion/bioregion
 contact:
 - family-names: Lenormand
   given-names: Maxime

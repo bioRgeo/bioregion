@@ -19,7 +19,7 @@ cut_tree(
 )
 }
 \arguments{
-\item{tree}{a \code{bioRgeo.hierar.tree} or a \code{hclust} object}
+\item{tree}{a \code{bioregion.hierar.tree} or a \code{hclust} object}
 
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
@@ -74,7 +74,7 @@ automatically return the height of cut for the chosen number(s) of clusters.
 The function can cut the tree with two main methods. First, it can cut
 the entire tree at the same height (either specified by \code{cut_height} or
 automatically defined for the chosen \code{n_clust}). Second, it can use
-the dynamic tree cut method \insertCite{Langfelder2008}{bioRgeo}, in which
+the dynamic tree cut method \insertCite{Langfelder2008}{bioregion}, in which
 case clusters are detected with an adaptive method based on the shape of
 branches in the tree (thus cuts happen at multiple heights depending on
 cluster positions in the tree).
@@ -121,7 +121,7 @@ cluster_dynamic <- cut_tree(tree1, dynamic_tree_cut = TRUE,
 
 }
 \references{
-\insertRef{Langfelder2008}{bioRgeo}
+\insertRef{Langfelder2008}{bioregion}
 }
 \seealso{
 \link{hclu_hierarclust}

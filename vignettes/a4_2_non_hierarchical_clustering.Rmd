@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library("bioRgeo")
+    library("bioregion")
   })
 })
 
@@ -38,14 +38,14 @@ options(tinytex.verbose = TRUE)
 Non-hierarchical clustering consists in creating groups of objects (called
 clusters) while maximizing (or minimizing) an evaluating metric. Contrarily to
 hierarchical clustering, the partition obtained is not nested. All functions
-in `bioRgeo` relying on non-hierarchical clustering start with the prefix
+in `bioregion` relying on non-hierarchical clustering start with the prefix
 `nhclu_`.
 <br>
 In biogeography, non-hierarchical clustering is usually applied to identify
 clusters of sites having similar species compositions. These clusters are then
 called bioregions.  
 Non-hierarchical clustering takes place on the very right-hand size part of
-the `bioRgeo` conceptual diagram:  
+the `bioregion` conceptual diagram:  
 
 ```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
 knitr::include_graphics("../man/figures/Workflow.png")
@@ -55,7 +55,7 @@ knitr::include_graphics("../man/figures/Workflow.png")
 Although these methods are conceptually simple, their implementation can be 
 complex and requires important choices on the part of the user. In the
 following, we provide a step-by-step guide on how to do non-hierarchical
-clustering analyses with `bioRgeo`. Such analysis usually has the following
+clustering analyses with `bioregion`. Such analysis usually has the following
 steps.  
 <br>
 
@@ -66,18 +66,18 @@ pairwise distances between sites.
 *2. Clustering*
 Non-hierarchical algorithms rely on a **user-defined** number of clusters. Once
 this number is defined, users can chose among the 3 functions provided in
-`bioRgeo` to perform non-hierarchical clustering. These functions are based on
-centroid-based algorithms  ([Kmeans](https://biorgeo.github.io/bioRgeo/reference/nhclu_kmeans.html)
+`bioregion` to perform non-hierarchical clustering. These functions are based on
+centroid-based algorithms  ([Kmeans](https://bioregion.github.io/bioregion/reference/nhclu_kmeans.html)
 and
-[PAM](https://biorgeo.github.io/bioRgeo/reference/nhclu_pam.html)
+[PAM](https://bioregion.github.io/bioregion/reference/nhclu_pam.html)
 ) or density-based algorithms 
-([DBSCAN](https://biorgeo.github.io/bioRgeo/reference/nhclu_dbscan.html)).  
+([DBSCAN](https://bioregion.github.io/bioregion/reference/nhclu_dbscan.html)).  
 <br>
 *3. Determining the optimal number of clusters*  
 The two functions
-[`partition_metrics()`](https://biorgeo.github.io/bioRgeo/reference/partition_metrics.html)
+[`partition_metrics()`](https://bioregion.github.io/bioregion/reference/partition_metrics.html)
 and
-[`find_optimal_n()`](https://biorgeo.github.io/bioRgeo/reference/find_optimal_n.html)
+[`find_optimal_n()`](https://bioregion.github.io/bioregion/reference/find_optimal_n.html)
  help determining what the optimal number of clusters would be (see
  [Section 4](#section4) of this vignette).  
 <br>
@@ -91,7 +91,7 @@ In the example below, we use the fish dataset from the package to compute
 distance metrics.  
 
 ```{r}
-library("bioRgeo")
+library("bioregion")
 data("fishmat")
 
 # It is a presence/absence matrix with sites in rows and species in columns
@@ -174,7 +174,7 @@ clustering algorithm and adding noise to the data can help evaluate the
 robustness of the solution.  
 
 <br>
-The function to compute K-means clustering in `bioRgeo` is `nhclu_kmeans()`.
+The function to compute K-means clustering in `bioregion` is `nhclu_kmeans()`.
 We here illustrate how the functions works with an example applied on the
 dissimilarity matrix calculated above.  
 We chose 3 clusters.  
@@ -204,8 +204,8 @@ ex_kmeans <- nhclu_kmeans(dissim, index = "Simpson", n_clust = 3, iter_max = 3,
                           nstart = 1, algorithm = "Hartigan-Wong")
 ```
 
-Like for all other functions of the `bioRgeo` package, the `class` of the 
-object is specific for the package (here `bioRgeo.clusters`) and it contains
+Like for all other functions of the `bioregion` package, the `class` of the 
+object is specific for the package (here `bioregion.clusters`) and it contains
 several parts. The clusters assigned to each site are accessible in the
 `$clusters` part of the output:  
 

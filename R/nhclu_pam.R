@@ -36,7 +36,7 @@
 #' input dissimilarity matrix if the distances are not euclidean).
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -80,7 +80,7 @@ nhclu_pam <- function(
     ...){ # Further arguments to be passed to cluster::pam
   
   # 1. Controls ---------------------------------------------------------------
-  if(inherits(dissimilarity, "bioRgeo.pairwise.metric")){
+  if(inherits(dissimilarity, "bioregion.pairwise.metric")){
     if(attr(dissimilarity, "type") == "similarity"){
       stop("dissimilarity seems to be a similarity object.
          nhclu_pam() should be applied on dissimilarity, not similarities.
@@ -92,14 +92,14 @@ nhclu_pam <- function(
     if(!(index %in% colnames(dissimilarity))){
       stop("Argument index should be one of the column names of dissimilarity")
     }
-  } else if(!any(inherits(dissimilarity, "bioRgeo.pairwise.metric"),
+  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                  inherits(dissimilarity, "dist")))
   {
     if(is.numeric(index)) {
       index <- names(dissimilarity)[index]
     }
     if(is.null(index) || !(index %in% colnames(dissimilarity))) {
-      stop("dissimilarity is not a bioRgeo.pairwise.metric object, a
+      stop("dissimilarity is not a bioregion.pairwise.metric object, a
            dissimilarity matrix (class dist) or a data.frame with at least 3
            columns (site1, site2, and your dissimilarity index)")
     }
@@ -190,7 +190,7 @@ nhclu_pam <- function(
                                      drop = FALSE],
                     2, function(x) length(unique(x))))
   
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  class(outputs) <- append("bioregion.clusters", class(outputs))
   
   return(outputs)
 }

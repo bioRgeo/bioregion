@@ -64,7 +64,7 @@
 #' 
 #' @details
 #' Infomap is a network clustering algorithm based on the Map equation proposed
-#' in \insertCite{Rosvall2008}{bioRgeo} that finds communities in (un)weighted
+#' in \insertCite{Rosvall2008}{bioregion} that finds communities in (un)weighted
 #' and (un)directed networks.
 #'
 #' This function is based on the C++ version of Infomap
@@ -99,7 +99,7 @@
 #' species nodes.
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -134,7 +134,7 @@
 #' }
 #' 
 #' @references
-#' \insertRef{Rosvall2008}{bioRgeo}
+#' \insertRef{Rosvall2008}{bioregion}
 #' 
 #' @export
 netclu_infomap <- function(net,
@@ -163,9 +163,9 @@ netclu_infomap <- function(net,
   
   # Set binpath
   if (is.null(binpath)) {
-    # Identify bioRgeo directory on your computer
+    # Identify bioregion directory on your computer
     biodir <- .libPaths()[1]
-    binpath <- paste0(biodir,"/bioRgeo")
+    binpath <- paste0(biodir,"/bioregion")
   } else {
     # Control
     controls(args = binpath, data = NULL, type = "character")
@@ -191,14 +191,14 @@ netclu_infomap <- function(net,
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     message(paste0(
       "Infomap ", version, " is not installed... Please have a look at
-    https//biorgeo.github.io/bioRgeo/articles/a1_install_binary_files.html
+    https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
     for more details.\n", 
       "It should be located in ", 
       paste0(binpath, "/bin/INFOMAP/", version, "/")))
   } else {
     
     # Control input net
-    controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+    controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
     controls(args = NULL, data = net, type = "input_net")
     
     # Control input weight & index
@@ -462,7 +462,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.")
     }
     
     # Return outputs
-    class(outputs) <- append("bioRgeo.clusters", class(outputs))
+    class(outputs) <- append("bioregion.clusters", class(outputs))
     return(outputs)
   }
 }

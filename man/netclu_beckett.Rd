@@ -47,7 +47,7 @@ of \code{computeModules} should be returned in the output (see Value).
 Default to TRUE.}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -67,7 +67,7 @@ applying Newman’s modularity measure in a bipartite weighted version to it.
 }
 \details{
 This function is based on the modularity optimization algorithm provided by
-Stephen Beckett \insertCite{Beckett2016}{bioRgeo} as implemented in the
+Stephen Beckett \insertCite{Beckett2016}{bioregion} as implemented in the
 \href{https://cran.r-project.org/web/packages/bipartite/index.html}{bipartite}
 package (\link[bipartite:computeModules]{computeModules}).
 }
@@ -94,7 +94,7 @@ com <- netclu_beckett(net)
 
 }
 \references{
-\insertRef{Beckett2016}{bioRgeo}
+\insertRef{Beckett2016}{bioregion}
 }
 \seealso{
 \link{netclu_infomap}, \link{netclu_oslom}

@@ -58,7 +58,7 @@ showing the hierarchy of clusters.}
 (see \link[dbscan:optics]{dbscan::optics()})}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -82,7 +82,7 @@ depending on changes in the relative cluster density. The reachability plot
 should be explored to understand the clusters and their hierarchical nature,
 by running plot on the output of the function:
 \code{plot(object$algorithm$optics)}.
-We recommend reading \insertCite{Hahsler2019}{bioRgeo} to grasp the
+We recommend reading \insertCite{Hahsler2019}{bioregion} to grasp the
 algorithm, how it works, and what the clusters mean.
 
 To extract the clusters, we use the
@@ -108,7 +108,7 @@ clust1
 
 }
 \references{
-\insertRef{Hahsler2019}{bioRgeo}
+\insertRef{Hahsler2019}{bioregion}
 }
 \seealso{
 \link{nhclu_dbscan}

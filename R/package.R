@@ -1,4 +1,4 @@
-#' bioRgeo
+#' bioregion
 #'
 #' Bioregionalisation Methods in R
 #'
@@ -7,8 +7,8 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Boris Leroy (\email{leroy.boris@gmail.com}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
-#' @useDynLib bioRgeo, .registration=TRUE
+#' @useDynLib bioregion, .registration=TRUE
 #' @import mathjaxr Rdpack rmarkdown
-#' @name bioRgeo
+#' @name bioregion
 #' @noRd
 NULL

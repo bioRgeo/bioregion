@@ -44,7 +44,7 @@ the third column name of \code{net} is used.}
 of \code{communities} should be returned in the output (see Value).}
 }
 \value{
-A \code{list} of class \code{bioRgeo.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
@@ -64,7 +64,7 @@ on propagating labels.
 }
 \details{
 This function is based on propagating labels
-\insertCite{Raghavan2007}{bioRgeo} as implemented in the
+\insertCite{Raghavan2007}{bioregion} as implemented in the
 \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
 package (\link[igraph:cluster_label_prop]{cluster_label_prop}).
 }
@@ -96,7 +96,7 @@ clust2 <- netclu_labelprop(net_bip, bipartite = TRUE)
 
 }
 \references{
-\insertRef{Raghavan2007}{bioRgeo}
+\insertRef{Raghavan2007}{bioregion}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

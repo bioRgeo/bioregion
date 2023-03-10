@@ -53,7 +53,7 @@
 #'
 #' @details
 #' This function is based on the Leiden algorithm
-#' \insertCite{Traag2019}{bioRgeo} as implemented in the
+#' \insertCite{Traag2019}{bioregion} as implemented in the
 #' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
 #' package ([cluster_leiden][igraph::cluster_leiden]).
 #'
@@ -71,7 +71,7 @@
 #' preserve only the species nodes.
 #'
 #' @return
-#' A `list` of class `bioRgeo.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
@@ -104,7 +104,7 @@
 #' }
 #' 
 #' @references
-#' \insertRef{Traag2019}{bioRgeo}
+#' \insertRef{Traag2019}{bioregion}
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_leiden
 #' 
@@ -126,7 +126,7 @@ netclu_leiden <- function(net,
                           algorithm_in_output = TRUE) {
   
   # Control input net
-  controls(args = NULL, data = net, type = "input_bioRgeo.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
   controls(args = NULL, data = net, type = "input_net")
   
   # Control input weight & index
@@ -280,6 +280,6 @@ The bipartite argument should probably be set to TRUE.")
       2, function(x) length(unique(x))))
   
   # Return outputs
-  class(outputs) <- append("bioRgeo.clusters", class(outputs))
+  class(outputs) <- append("bioregion.clusters", class(outputs))
   return(outputs)
 }
