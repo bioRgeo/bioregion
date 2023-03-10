@@ -43,8 +43,8 @@ preferred-citation:
   version: 0.1.0
   abstract: bioregion provides multiple methods to delineate bioregions. Use methods
     based on projected or bipartite networks.
-  repository-code: https://github.com/bioregion/bioregion
-  url: https://github.com/bioregion/bioregion
+  repository-code: https://github.com/bioRgeo/bioregion
+  url: https://github.com/bioRgeo/bioregion
   contact:
   - family-names: Lenormand
     given-names: Maxime
@@ -52,8 +52,8 @@ preferred-citation:
     orcid: https://orcid.org/0000-0001-6362-3473
   license: GPL-3.0-only
   year: '2022'
-repository-code: https://github.com/bioregion/bioregion
-url: https://github.com/bioregion/bioregion
+repository-code: https://github.com/bioRgeo/bioregion
+url: https://github.com/bioRgeo/bioregion
 contact:
 - family-names: Lenormand
   given-names: Maxime
