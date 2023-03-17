@@ -7,7 +7,7 @@
 partition_metrics(
   cluster_object,
   dissimilarity = NULL,
-  dissimilarity_index = names(dissimilarity)[3],
+  dissimilarity_index = NULL,
   net = NULL,
   site_col = 1,
   species_col = 2,
@@ -15,7 +15,7 @@ partition_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{tree a \code{bioregion.hierar.tree} or a \code{hclust} object}
+\item{cluster_object}{tree a \code{bioregion.clusters} object}
 
 \item{dissimilarity}{a \code{dist} object or a \code{bioregion.pairwise.metric} object (output
 from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if \code{eval_metric}
@@ -43,12 +43,15 @@ of clusters. Available options: \code{"pc_distance"}, \code{"anosim"},
 \code{"avg_endemism"} and \code{"tot_endemism"}}
 }
 \value{
-a \code{list} of class \code{bioregion.partition.metrics} with two elements:
+a \code{list} of class \code{bioregion.partition.metrics} with two to three elements:
 \itemize{
 \item{\code{args}: input arguments
 }
 \item{\code{evaluation_df}: the data.frame containing \code{eval_metric}
 for all explored numbers of clusters
+}
+\item{\code{endemism_results}: if endemism calculations were requested, a list
+with the endemism results for each partition
 }
 }
 }
@@ -121,6 +124,7 @@ a <- partition_metrics(tree1, dissimilarity = dissim, net = fishdf,
                   site_col = "Site", species_col = "Species",
                   eval_metric = c("tot_endemism", "avg_endemism",
                                   "pc_distance", "anosim"))
+a
 }
 
 }

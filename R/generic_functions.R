@@ -219,7 +219,11 @@ print.bioregion.partition.metrics <- function(x, ...)
                               max(x, na.rm = TRUE))}),
                    row.names = c("Min", "Mean", "Max")))
   
-  cat("Access the data.frame of metrics with your_object$evaluation_df\n")
+  cat("\nAccess the data.frame of metrics with your_object$evaluation_df\n")
+  if("endemism_results" %in% names(x)) {
+    cat("Details of endemism % for each partition are available in 
+        your_object$endemism_results\n")
+  }
 }
 
 #' @export

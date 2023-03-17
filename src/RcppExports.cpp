@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // abc
 NumericMatrix abc(NumericMatrix comat);
-RcppExport SEXP _bioRgeo_abc(SEXP comatSEXP) {
+RcppExport SEXP _bioregion_abc(SEXP comatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,11 +23,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_bioRgeo_abc", (DL_FUNC) &_bioRgeo_abc, 1},
+    {"_bioregion_abc", (DL_FUNC) &_bioregion_abc, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_bioRgeo(DllInfo *dll) {
+RcppExport void R_init_bioregion(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -5,7 +5,7 @@
 #' may require the users to provide either a similarity or dissimilarity
 #' matrix, or to provide the initial species-site table.
 #'
-#' @param cluster_object tree a `bioregion.hierar.tree` or a `hclust` object
+#' @param cluster_object tree a `bioregion.clusters` object
 #' 
 #' @param eval_metric character string or vector of character strings indicating
 #'  metric(s) to be calculated to investigate the effect of different number
@@ -84,12 +84,15 @@
 #' }
 #'
 #' @return
-#' a `list` of class `bioregion.partition.metrics` with two elements:
+#' a `list` of class `bioregion.partition.metrics` with two to three elements:
 #' \itemize{
 #' \item{`args`: input arguments
 #' }
 #' \item{`evaluation_df`: the data.frame containing `eval_metric`
 #' for all explored numbers of clusters
+#' }
+#' \item{`endemism_results`: if endemism calculations were requested, a list
+#' with the endemism results for each partition
 #' }
 #' }
 #' @import data.table 
@@ -123,6 +126,7 @@
 #'                   site_col = "Site", species_col = "Species",
 #'                   eval_metric = c("tot_endemism", "avg_endemism",
 #'                                   "pc_distance", "anosim"))
+#' a
 #'}
 #'
 #' @importFrom stats as.dist
@@ -132,7 +136,8 @@
 
 partition_metrics <- function(
     cluster_object, dissimilarity = NULL,
-    dissimilarity_index = names(dissimilarity)[3], net = NULL,
+    dissimilarity_index = NULL, 
+    net = NULL,
     site_col = 1, species_col = 2,
     eval_metric = c("pc_distance", "anosim", "avg_endemism", "tot_endemism")){
   dissimilarity_based_metrics <- c("pc_distance", "anosim")
@@ -141,7 +146,7 @@ partition_metrics <- function(
   # 1. Does input object contains partitions? ---------------------------------
   if (inherits(cluster_object, "bioregion.clusters")) {
     if (inherits(cluster_object$clusters, "data.frame")) {
-      has.clusters <- TRUE
+      has.clusters <- TRUE # To remove? Does not seem relevant anymore
     } else {
       if (cluster_object$name == "hierarchical_clustering") {
         stop("No clusters have been generated for your hierarchical tree,
@@ -152,9 +157,11 @@ partition_metrics <- function(
           "cluster_object does not have the expected type of 'clusters' slot")
       }
     }
-  } else if (!inherits(cluster_object, "hclust")) {
-    stop("This function is designed to work either on bioregion.clusters objects
+  } else {
+    stop("This function is designed to work  on bioregion.clusters objects
          (outputs from clustering functions)")
+    # Add here the possibility to work on data.frame / matrices of clusters
+    # directly
   } 
   
   if (is.null(dissimilarity)) {
@@ -170,6 +177,12 @@ partition_metrics <- function(
     }
   } else if (inherits(dissimilarity, "bioregion.pairwise.metric")) {
     if (attr(dissimilarity, "type") == "dissimilarity") {
+      if(is.null(dissimilarity_index)) {
+        dissimilarity_index <- cluster_object$args$index
+      } else if(!(dissimilarity_index %in% colnames(dissimilarity))) {
+        stop("dissimilarity_index does not exist in the dissimilarity object.
+             Did you misspecify the metric name?")
+      }
       dist_object <- stats::as.dist(
         net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2],
                                      dissimilarity_index)],
@@ -309,10 +322,12 @@ partition_metrics <- function(
     
     if("pc_distance" %in% eval_metric) {
       evaluation_df$pc_distance <-
-        sapply(cluster_object$cluster_info$partition_name,
-               function(x, dist., index.) {
+        vapply(cluster_object$cluster_info$partition_name,
+               FUN = function(x, dist., index.) {
                  sum(dist.[!dist.[, x], index.]) / sum(dist.[, index.])
-               }, dist. = dissimilarity, index. = dissimilarity_index)
+               },
+               FUN.VALUE = numeric(1),
+               dist. = dissimilarity, index. = dissimilarity_index)
       
       message("  - pc_distance OK")
     }
@@ -320,16 +335,11 @@ partition_metrics <- function(
     if("anosim" %in% eval_metric){
       dissimilarity$ranks <- rank(dissimilarity[, dissimilarity_index])
       denom <- nb_sites * (nb_sites - 1) / 4
-      a <- sapply(cluster_object$cluster_info$partition_name,
-                  function(x, dist., denom.) {
-                    -diff(tapply(dist.$ranks,
-                                 dist.[, x],
-                                 mean)) / denom.
-                  }, dist. = dissimilarity, denom. = denom)
+ 
       # Fast calculation of the anosim for all clusters
-      evaluation_df$anosim <- sapply(
+      evaluation_df$anosim <- vapply(
         cluster_object$cluster_info$partition_name,
-        function(x, dist., denom.) {
+        FUN = function(x, dist., denom.) {
           # Testing if there is only one cluster
           if(all(dist.[, x])){
             NA # If only one cluster we cannot calculate anosim
@@ -338,7 +348,9 @@ partition_metrics <- function(
                          dist.[, x],
                          mean)) / denom.
           }
-        }, dist. = dissimilarity, denom. = denom)
+        },
+        FUN.VALUE = numeric(1),
+        dist. = dissimilarity, denom. = denom)
       message("  - anosim OK")
     }
   }
@@ -389,11 +401,12 @@ partition_metrics <- function(
     
     # Average endemism per cluster
     if("avg_endemism" %in% eval_metric){
-      evaluation_df$avg_endemism <- sapply(
+      evaluation_df$avg_endemism <- vapply(
         cluster_object$cluster_info$partition_name,
-        function(x, end_list) {
+        FUN = function(x, end_list) {
           mean(end_list[[x]]$pc_endemism)
         },
+        FUN.VALUE = numeric(1),
         end_list = endemism_results
       )
       message("  - avg_endemism OK")
@@ -401,11 +414,12 @@ partition_metrics <- function(
     # Total endemism
     if("tot_endemism" %in% eval_metric){
       nb_sp <- length(unique(net[, species_col])) 
-      evaluation_df$tot_endemism <- sapply(
+      evaluation_df$tot_endemism <- vapply(
         cluster_object$cluster_info$partition_name,
-        function(x, end_list) {
+        FUN = function(x, end_list) {
           sum(end_list[[x]]$end_richness)
         },
+        FUN.VALUE = numeric(1),
         end_list = endemism_results
       ) / nb_sp
       message("  - tot_endemism OK")
@@ -414,6 +428,10 @@ partition_metrics <- function(
   
   outputs <- list(args = list(eval_metric = eval_metric),
                   evaluation_df = evaluation_df)
+  
+  if(has.contin & any(c("avg_endemism", "tot_endemism") %in% eval_metric)){
+    outputs$endemism_results <- endemism_results
+  }
   
   class(outputs) <- append("bioregion.partition.metrics", class(outputs))
   return(outputs)
