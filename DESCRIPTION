@@ -22,7 +22,7 @@ Authors@R:
 Description: An R package to compare several methods of bioregionalisation.
 Depends:
   R (>= 4.0.0)
-License: GPL-3 + file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
