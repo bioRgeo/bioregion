@@ -1,44 +1,40 @@
-url: ~
+url: https://bioRgeo.github.io/bioregion/
 template:
   bootstrap: 5
-
 toc:
   depth: 1
-
 reference:
+
 - title: Utils
-  desc: >
+  desc: ~
   contents:
   - install_binaries
   - mat_to_net
   - net_to_mat
-
+  
 - title: Pairwise similarity and distance metrics
-  desc: >
+  desc: ~
   contents:
   - similarity
   - dissimilarity
   - similarity_to_dissimilarity
   - dissimilarity_to_similarity
-
+  
 - title: Clustering
-
 - subtitle: Hierarchical clustering
-  desc: >
+  desc: ~
   contents:
   - hclu_hierarclust
   - cut_tree
   - hclu_optics
-
 - subtitle: Non-hierarchical clustering
-  desc: >
+  desc: ~
   contents:
   - nhclu_dbscan
   - nhclu_kmeans
   - nhclu_pam
-
 - subtitle: Network clustering
-  desc: >
+  desc: ~
   contents:
   - netclu_beckett
   - netclu_infomap
@@ -49,20 +45,19 @@ reference:
   - netclu_oslom
   - netclu_walktrap
   - netclu_leiden
-
+  
 - title: Clustering analysis
-  desc: >
+  desc: ~
   contents:
   - partition_metrics
   - find_optimal_n
   
 - title: Visualisation
-  desc: >
-  contents:
-  - map_clusters
-
+  desc: ~
+  contents: map_clusters
+  
 - title: Data
-  desc: >
+  desc: ~
   contents:
   - vegedf
   - vegemat
@@ -70,3 +65,4 @@ reference:
   - fishdf
   - fishmat
   - fishsf
+

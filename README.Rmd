@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # bioregion <img src="man/figures/logo.png" align="right" alt="" width="200" />
 
 <!-- badges: start -->
-[![R build status](https://github.com/bioRgeo/bioregion/workflows/R-CMD-check/badge.svg)](https://github.com/bioRgeo/bioregion/actions) 
+[![R-CMD-check](https://github.com/bioRgeo/bioregion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bioRgeo/bioregion/actions/workflows/R-CMD-check.yaml) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioregion?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioregion) 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
 <!-- badges: end -->
