@@ -130,17 +130,17 @@ with the prefix <code>netclu_</code>.</p>
 <p>In total, we have 9 functions, which can be classified like
 this:<br>
 - Functions based on executable binary files<br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_infomap.html" class="external-link">netclu_infomap</a><br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_oslom.html" class="external-link">netclu_oslom</a><br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_louvain.html" class="external-link">netclu_louvain</a></p>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a><br>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a><br>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a></p>
 <p><br> - Functions based on the <code>igraph</code> package<br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_louvain.html" class="external-link">netclu_louvain</a><br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_greedy.html" class="external-link">netclu_greedy</a><br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_labelprop.html" class="external-link">netclu_labelprop</a><br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_leadingeigen.html" class="external-link">netclu_leadingeigen</a><br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_walktrap.html" class="external-link">netclu_walktrap</a></p>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a><br>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_greedy.html">netclu_greedy</a><br>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.html">netclu_labelprop</a><br>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.html">netclu_leadingeigen</a><br>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.html">netclu_walktrap</a></p>
 <p><br> - Function based on the <code>bipartite</code> package<br>
-* <a href="https://bioregion.github.io/bioregion/reference/netclu_beckett.html" class="external-link">netclu_beckett</a></p>
+* <a href="https://bioRgeo.github.io/bioregion/reference/netclu_beckett.html">netclu_beckett</a></p>
 <p>This vignette aims at briefly explaining how each algorithm and its
 associated <code>bioregion</code> function works. For this purpose, we
 use the European freshwater fish dataset that comes with
@@ -251,7 +251,9 @@ community should be identifiable in the outputs (FALSE by default).</li>
 <span>                             binpath <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_infomap</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">##   1  10   2   3   4   5   6   7   8   9 </span></span>
+<span><span class="co">## 273   4   7  46  58  47  33  26  27  12</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="oslom">OSLOM<a class="anchor" aria-label="anchor" href="#oslom"></a>
@@ -327,7 +329,11 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <span>                             binpath <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                             algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_louvain</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_23</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 </span></span>
+<span><span class="co">##   6   3  24  20 133  87  44  45  16   4   4  17   4  11   4   3  10  10  22  55 </span></span>
+<span><span class="co">##   7   8   9 </span></span>
+<span><span class="co">##   2   5   4</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -409,9 +415,7 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <span>                                       return_node_type <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>                                       algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_leadingeigen</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_17</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##   1  10  11  12  13  14  15  16  17   2   3   4   5   6   7   8   9 </span></span>
-<span><span class="co">## 108   2   2   2   1   1   2   1   1 136  81  69  34  22  28   1  42</span></span></code></pre>
+<pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="walktrap">Walktrap<a class="anchor" aria-label="anchor" href="#walktrap"></a>

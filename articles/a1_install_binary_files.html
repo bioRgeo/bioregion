@@ -103,23 +103,23 @@ Lenormand, Boris Leroy and Pierre Denelle</h4>
 <p>Some functions (listed below) or at least part of them require binary
 files to run.</p>
 <ul>
-<li><a href="https://bioregion.github.io/bioregion/reference/netclu_infomap.html" class="external-link">netclu_infomap</a></li>
+<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a></li>
 <li>
-<a href="https://bioregion.github.io/bioregion/reference/netclu_louvain.html" class="external-link">netclu_louvain</a>
+<a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a>
 (Cpp version)</li>
-<li><a href="https://bioregion.github.io/bioregion/reference/netclu_oslom.html" class="external-link">netclu_oslom</a></li>
+<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a></li>
 </ul>
-<p>The function <a href="https://bioregion.github.io/bioregion/reference/install_binaries.html" class="external-link">install_binaries</a>
+<p>The function <a href="https://bioRgeo.github.io/bioregion/reference/install_binaries.html">install_binaries</a>
 downloads and unzips the ‘bin’ folder needed to run these functions. It
 also checks if the files have the permissions to be executed as
 programs. It finally tests if the binary files are running properly.</p>
 <div class="section level3">
 <h3 id="run-install_binaries">Run install_binaries()<a class="anchor" aria-label="anchor" href="#run-install_binaries"></a>
 </h3>
-<p>The function <a href="https://bioregion.github.io/bioregion/reference/install_binaries.html" class="external-link">install_binaries</a>
-should be run prior to using <a href="https://bioregion.github.io/bioregion/reference/netclu_infomap.html" class="external-link">netclu_infomap</a>,
-the Cpp version of <a href="https://bioregion.github.io/bioregion/reference/netclu_louvain.html" class="external-link">netclu_louvain</a>
-and <a href="https://bioregion.github.io/bioregion/reference/netclu_oslom.html" class="external-link">netclu_oslom</a>
+<p>The function <a href="https://bioRgeo.github.io/bioregion/reference/install_binaries.html">install_binaries</a>
+should be run prior to using <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a>,
+the Cpp version of <a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a>
+and <a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a>
 as follows.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>binpath <span class="op">=</span> <span class="cn">NULL</span> , infomap_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.1.0"</span>, <span class="st">"2.6.0"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -128,9 +128,9 @@ path to the folder that will host the ‘bin’ folder containing the<br>
 binary files. It is located in the <code>bioregion</code>’s package
 folder by default. Any other folder can be chosen but if you use a
 different folder please be sure to update the <code>binpath</code>
-argument in <a href="https://bioregion.github.io/bioregion/reference/netclu_infomap.html" class="external-link">netclu_infomap</a>,
-<a href="https://bioregion.github.io/bioregion/reference/netclu_louvain.html" class="external-link">netclu_louvain</a>
-and <a href="https://bioregion.github.io/bioregion/reference/netclu_oslom.html" class="external-link">netclu_oslom</a>
+argument in <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a>,
+<a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a>
+and <a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a>
 accordingly. The second parameter <code>infomap_version</code>
 indicating the Infomap version(s) to install. Only the Infomap version
 2.1.0 and 2.6.0 are available for now.</p>

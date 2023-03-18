@@ -107,7 +107,7 @@ Lenormand, Boris Leroy and Pierre Denelle</h4>
 spatial distribution of Mediterranean vegetation. This dataset has been
 analyzed in <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718" class="external-link">this
 article</a> and contains the abundance of 3,697 species in 715 sites.
-This dataset is composed of three files, <a href="https://bioregion.github.io/bioregion/reference/vegedf.html" class="external-link">vegedf</a>
+This dataset is composed of three files, <a href="https://bioRgeo.github.io/bioregion/reference/vegedf.html">vegedf</a>
 a <code>data.frame</code> with 460,878 rows and 3 columns (Site, Species
 and Abundance),</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -129,7 +129,7 @@ and Abundance),</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">vegedf</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 3697</span></span></code></pre>
-<p><a href="https://bioregion.github.io/bioregion/reference/vegemat.html" class="external-link">vegemat</a>
+<p><a href="https://bioRgeo.github.io/bioregion/reference/vegemat.html">vegemat</a>
 a co-occurrence <code>matrix</code> containing the same information
 gathered in a <code>matrix</code> with 715 rows and 3,697 columns,</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -150,13 +150,13 @@ gathered in a <code>matrix</code> with 715 rows and 3,697 columns,</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1]  715 3697</span></span></code></pre>
-<p>and <a href="https://bioregion.github.io/bioregion/reference/vegesf.html" class="external-link">vegesf</a>
+<p>and <a href="https://bioRgeo.github.io/bioregion/reference/vegesf.html">vegesf</a>
 a spatial object containing the geometry of the 715 sites.</p>
 </div>
 <div class="section level2">
 <h2 id="from-matrix-to-network">From matrix to network<a class="anchor" aria-label="anchor" href="#from-matrix-to-network"></a>
 </h2>
-<p>The function <a href="https://bioregion.github.io/bioregion/reference/mat_to_net.html" class="external-link">mat_to_net</a>
+<p>The function <a href="https://bioRgeo.github.io/bioregion/reference/mat_to_net.html">mat_to_net</a>
 transforms a co-occurrence <code>matrix</code> such as
 <code>vegemat</code> into a network represented by a
 <code>data.frame</code> (such as <code>vegedf</code> in this case). If
@@ -198,7 +198,7 @@ equal to 0 will be removed from the output.</p>
 <div class="section level2">
 <h2 id="from-network-to-matrix">From network to matrix<a class="anchor" aria-label="anchor" href="#from-network-to-matrix"></a>
 </h2>
-<p>The function <a href="https://bioregion.github.io/bioregion/reference/net_to_mat.html" class="external-link">net_to_mat</a>
+<p>The function <a href="https://bioRgeo.github.io/bioregion/reference/net_to_mat.html">net_to_mat</a>
 does the opposite. It transforms a network represented by a two- or a
 three-columns <code>data.frame</code> (such as <code>vegedf</code>) into
 a co-occurrence <code>matrix</code> (such as <code>vegemat</code> in

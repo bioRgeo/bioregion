@@ -100,7 +100,7 @@ Lenormand, Boris Leroy and Pierre Denelle</h4>
 
     
     
-<p>The function <a href="https://bioregion.github.io/bioregion/reference/similarity.html" class="external-link">similarity</a>
+<p>The function <a href="https://bioRgeo.github.io/bioregion/reference/similarity.html">similarity</a>
 compute well-known and customized pairwise similarity metrics based on a
 co-occurrence <code>matrix</code> such as <code>vegemat</code>. In the
 example below the Simpson similarity index is computed between each pair
@@ -127,7 +127,7 @@ of sites.</p>
 <span><span class="co">## 11    35    89 0.6821705</span></span></code></pre>
 <p>The resulting <code>data.frame</code> is stored in a
 <code>bioregion.pairwise.metric</code> object containing Simpson
-similarity metric between each pair of sites. The function <a href="https://bioregion.github.io/bioregion/reference/similarity.html" class="external-link">similarity</a>
+similarity metric between each pair of sites. The function <a href="https://bioRgeo.github.io/bioregion/reference/similarity.html">similarity</a>
 can handle three types of metrics: the metrics based on
 <code>abc</code>, the metrics based on <code>ABC</code> and one metric
 based on the Euclidean distance.</p>
@@ -152,7 +152,7 @@ the sum of the lesser values for common species shared by a pair of
 sites. <code>B</code> and <code>C</code> are the total number of
 specimens counted at both sites minus <code>A</code>. Only three loops
 function is available for the <code>ABC</code> based metrics.</p>
-<p>The main advantage of the <a href="https://bioregion.github.io/bioregion/reference/similarity.html" class="external-link">similarity</a>
+<p>The main advantage of the <a href="https://bioRgeo.github.io/bioregion/reference/similarity.html">similarity</a>
 function is to compute and return several metrics, to allow the
 computation of customized metric with the <code>formula</code> argument
 and to include the possibility of returning <code>a</code>,
@@ -190,10 +190,10 @@ similarity metrics on large co-occurrence matrix.</p>
 <span><span class="co">## 9                0.9766734 128  1 909 406  17 33981</span></span>
 <span><span class="co">## 10               0.9780146 127  2 812 395  28 35115</span></span>
 <span><span class="co">## 11               0.8404558  88 41 177 196 227  1838</span></span></code></pre>
-<p>The <a href="https://bioregion.github.io/bioregion/reference/dissimilarity.html" class="external-link">dissimilarity</a>
+<p>The <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity.html">dissimilarity</a>
 function is very similar, with the sole exception that it computes the
-dissimilarity version of the available metrics. The functions <a href="https://bioregion.github.io/bioregion/reference/dissimilarity_to_similarity.html" class="external-link">dissimilarity_to_similarity</a>
-and <a href="https://bioregion.github.io/bioregion/reference/dissimilarity_to_similarity.html" class="external-link">similarity_to_dissimilarity</a>
+dissimilarity version of the available metrics. The functions <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a>
+and <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">similarity_to_dissimilarity</a>
 can be used to switch between similarity and dissimilarity metrics.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity.html">similarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>,<span class="st">"Simpson"</span><span class="op">)</span>, formula <span class="op">=</span> <span class="st">"(b + c) / (a + b + c)"</span><span class="op">)</span></span>
