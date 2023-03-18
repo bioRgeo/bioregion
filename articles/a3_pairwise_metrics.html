@@ -140,7 +140,7 @@ compute the <code>abc</code> based metrics. The first method is based on
 a matrix product (performed with the <a href="https://www.rdocumentation.org/packages/Matrix/versions/1.5-1/topics/matrix-products" class="external-link">tcrossprod</a>
 function from the R package <a href="https://www.rdocumentation.org/packages/Matrix/versions/1.5-1" class="external-link">Matrix</a>).
 The method is fast but is greedy in memory… The second method is based
-on a <a href="https://github.com/bioregion/bioregion/blob/master/src/abc.cpp" class="external-link">three
+on a <a href="https://github.com/bioRgeo/bioregion/blob/master/src/abc.cpp" class="external-link">three
 loops function</a> coded in C++ and largely inspired by the <a href="https://www.rdocumentation.org/packages/ecodist/versions/2.0.9/topics/bcdist" class="external-link">bcdist</a>
 function from the R package <a href="https://www.rdocumentation.org/packages/ecodist/versions/2.0.9" class="external-link">ecodist</a>
 (version 2.0.7). It is less efficient than the matrix product but allows

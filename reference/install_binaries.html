@@ -83,9 +83,7 @@ are running properly.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>binpath</dt>
 <dd><p>a <code>character</code> indicating the path to the folder that will
-host the 'bin' folder containing the binary files (bioregion's
-package by default, if you use a different folder please be sure to update
-the <code>binpath</code> in <a href="netclu_infomap.html">netclu_infomap</a>, <a href="netclu_louvain.html">netclu_louvain</a> and <a href="netclu_oslom.html">netclu_oslom</a>).</p></dd>
+host the 'bin' folder containing the binary files (see Details).</p></dd>
 
 
 <dt>infomap_version</dt>
@@ -93,6 +91,17 @@ the <code>binpath</code> in <a href="netclu_infomap.html">netclu_infomap</a>, <a
 version(s) to install.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code>binpath = "tempdir"</code> R's temporary directory by default, in this
+case the 'bin' folder will be automatically removed at the end of the R
+session.</p>
+<p><code>binpath = "pkgfolder"</code> bioregion's
+package or a path to a folder
+of your choice  (bioregion's
+package by default, if you use a different folder please be sure to update
+the <code>binpath</code> in <a href="netclu_infomap.html">netclu_infomap</a>, <a href="netclu_louvain.html">netclu_louvain</a> and <a href="netclu_oslom.html">netclu_oslom</a>).</p>
+    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Only the Infomap version 2.1.0 and 2.6.0 are available for now.</p>
