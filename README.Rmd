@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform
-bioregionalization annalyses.
+bioregionalization analyses.
 <br>
 The different algorithms come from the network literature or can be
 (non)-hierarchical.

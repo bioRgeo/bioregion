@@ -11,7 +11,7 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
-bibliography: REFERENCES.bib  
+bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl
 vignette: >
   %\VignetteIndexEntry{4.1 Hierarchical clustering}

@@ -11,7 +11,7 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
-bibliography: REFERENCES.bib  
+bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl
 vignette: >
   %\VignetteIndexEntry{4.3 Network clustering}
@@ -58,21 +58,21 @@ knitr::include_graphics("../man/figures/Workflow.png")
 
 In total, we have 9 functions, which can be classified like this:  
 -  Functions based on executable binary files  
-* [netclu_infomap](https://bioregion.github.io/bioregion/reference/netclu_infomap.html)  
-* [netclu_oslom](https://bioregion.github.io/bioregion/reference/netclu_oslom.html)  
-* [netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html)  
+* [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html)  
+* [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)  
+* [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html)  
 
 <br>
 - Functions based on the `igraph` package  
-* [netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html)  
-* [netclu_greedy](https://bioregion.github.io/bioregion/reference/netclu_greedy.html)  
-* [netclu_labelprop](https://bioregion.github.io/bioregion/reference/netclu_labelprop.html)  
-* [netclu_leadingeigen](https://bioregion.github.io/bioregion/reference/netclu_leadingeigen.html)  
-* [netclu_walktrap](https://bioregion.github.io/bioregion/reference/netclu_walktrap.html)  
+* [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html)  
+* [netclu_greedy](https://bioRgeo.github.io/bioregion/reference/netclu_greedy.html)  
+* [netclu_labelprop](https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.html)  
+* [netclu_leadingeigen](https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.html)  
+* [netclu_walktrap](https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.html)  
 
 <br>
 - Function based on the `bipartite` package  
-* [netclu_beckett](https://bioregion.github.io/bioregion/reference/netclu_beckett.html)  
+* [netclu_beckett](https://bioRgeo.github.io/bioregion/reference/netclu_beckett.html)  
 
 This vignette aims at briefly explaining how each algorithm and its associated
 `bioregion` function works.

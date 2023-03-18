@@ -5,15 +5,14 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/bioregion/bioregion/workflows/R-CMD-check/badge.svg)](https://github.com/bioregion/bioregion/actions)
-[![version](https://img.shields.io/github/v/release/bioregion/bioregion?label=version&style=flat&logo=github)](https://github.com/bioregion/bioregion)
+[![R-CMD-check](https://github.com/bioRgeo/bioregion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bioRgeo/bioregion/actions/workflows/R-CMD-check.yaml)
+[![version](https://img.shields.io/github/v/release/bioRgeo/bioregion?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioregion)
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform
-bioregionalization annalyses. <br> The different algorithms come from
-the network literature or can be (non)-hierarchical.
+bioregionalization analyses. <br> The different algorithms come from the
+network literature or can be (non)-hierarchical.
 
 # :arrow_double_down: Installation
 
@@ -23,7 +22,7 @@ the following command:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("bioregion/bioregion")
+devtools::install_github("bioRgeo/bioregion")
 ```
 
 # :scroll: Vignettes
@@ -32,28 +31,28 @@ We wrote several vignettes that will help you using the **bioregion R
 package**. Vignettes available are the following ones: <br>
 
 - **[1. Installation of the executable binary
-  files](https://bioregion.github.io/bioregion/articles/a1_install_executable_binary_files.html)**  
+  files](https://bioRgeo.github.io/bioregion/articles/a1_install_executable_binary_files.html)**  
 - **[2. Matrix and network
-  formats](https://bioregion.github.io/bioregion/articles/a2_matrix_and_network_formats.html)**
+  formats](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html)**
 - **[3. Pairwise similarity/dissimilarity
-  metrics](https://bioregion.github.io/bioregion/articles/a3_pairwise_metrics.html)**
+  metrics](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html)**
 - **[4.1 Hierarchical
-  clustering](https://bioregion.github.io/bioregion/articles/a4_1_hierarchical_clustering.html)**
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html)**
 - **[4.2 Non-hierarchical
-  clustering](https://bioregion.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)**
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)**
 - **[4.3 Network
-  clustering](https://bioregion.github.io/bioregion/articles/a4_3_network_clustering.html)**
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html)**
 - **[4.4
-  Microbenchmark](https://bioregion.github.io/bioregion/articles/a4_4_microbenchmark.html)**
+  Microbenchmark](https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html)**
 - **[5.
-  Visualization](https://bioregion.github.io/bioregion/articles/a5_visualization.html)**
+  Visualization](https://bioRgeo.github.io/bioregion/articles/a5_visualization.html)**
 
 Alternatively, if you prefer to view the vignettes in R, you can install
 the package with `build_vignettes = TRUE`. But be aware that some
 vignettes can be slow to generate.
 
 ``` r
-remotes::install_github("bioregion/bioregion",
+remotes::install_github("bioRgeo/bioregion",
                         dependencies = TRUE, upgrade = "ask", 
                         build_vignettes = TRUE)
 
@@ -63,7 +62,7 @@ vignette("bioregion")
 # :desktop_computer: Functions
 
 An overview of all functions and data is given
-**[here](https://bioregion.github.io/bioregion/reference/index.html)**.
+**[here](https://bioRgeo.github.io/bioregion/reference/index.html)**.
 
 # :bug: Find a bug?
 

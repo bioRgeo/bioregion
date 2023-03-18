@@ -175,7 +175,7 @@ netclu_oslom <- function(net,
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
-              https://bioregion.github.io/bioregion/articles/a1_install_binary_files.html
+              https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
               for more details.\n", 
               "It should be located in ", 
               paste0(binpath, "/bin/OSLOM/"))
@@ -185,12 +185,12 @@ netclu_oslom <- function(net,
   } else {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
-              https://bioregion.github.io/bioregion/articles/a3_1_install_binary_files.html
+              https://bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
               for more details.")
     } else {
       if (!file.exists(paste0(binpath, "/bin/OSLOM/checkdir.txt"))) {
         message("The directed version of OSLOM is not installed... Please have
-                a look at https://bioregion.github.io/bioregion/articles/a3_1_install_binary_files.html
+                a look at https://bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
                 for more details")
       } else {
         check <- TRUE

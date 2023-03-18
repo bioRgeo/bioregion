@@ -11,6 +11,8 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
+bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
+csl: journal-of-biogeography.csl
 vignette: >
   %\VignetteIndexEntry{Tutorial for bioregion}
   %\VignetteEngine{knitr::rmarkdown}
@@ -61,39 +63,39 @@ can be divided into four main steps:
 Some functions or at least part of them (listed below) require binary
 files to run. 
 
-* [netclu_infomap](https://bioregion.github.io/bioregion/reference/netclu_infomap.html)
-* [netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html) (Cpp version)
-* [netclu_oslom](https://bioregion.github.io/bioregion/reference/netclu_oslom.html)
+* [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html)
+* [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html) (Cpp version)
+* [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)
 
 Please check this 
-[tutorial page](https://bioregion.github.io/bioregion/articles/a1_install_binary_files.html) 
+[tutorial page](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html) 
 to get instructions regarding the installation of the binary files.
 
 
 ## 2. Matrix or Network formats
 
 The `bioregion`'s package takes as input site-species information stored in a 
-bipartite network or a co-occurrence matrix. Relying on the function  [mat_to_net](https://bioregion.github.io/bioregion/reference/mat_to_net.html)
-and [net_to_mat](https://bioregion.github.io/bioregion/reference/net_to_mat.html)
+bipartite network or a co-occurrence matrix. Relying on the function  [mat_to_net](https://bioRgeo.github.io/bioregion/reference/mat_to_net.html)
+and [net_to_mat](https://bioRgeo.github.io/bioregion/reference/net_to_mat.html)
 , it handles both the matrix and network formats throughout the workflow. 
 
-Please have a look at this [tutorial page](https://bioregion.github.io/bioregion/articles/a2_matrix_and_network_formats.html) 
+Please have a look at this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html) 
 to better understand how these two functions work.
 
 ## 3. Pairwise similarity/dissimilarity metrics
 
-The functions [similarity](https://bioregion.github.io/bioregion/reference/similarity.html) 
-and [dissimilarity](https://bioregion.github.io/bioregion/reference/dissimilarity.html)
+The functions [similarity](https://bioRgeo.github.io/bioregion/reference/similarity.html) 
+and [dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity.html)
 compute respectively pairwise similarity and dissimilarity metrics based on a 
 (site-species) co-occurrence matrix. The resulting `data.frame` is stored in a 
 `bioregion.pairwise.metric` object containing all requested metrics between each 
 pair of sites.
 
-The functions [dissimilarity_to_similarity](https://bioregion.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://bioregion.github.io/bioregion/reference/dissimilarity_to_similarity.html)
+The functions [dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html)
 can be used to transform a similarity object into a dissimilarity object 
 and vice versa.
 
-Please have a look at this [tutorial page](https://bioregion.github.io/bioregion/articles/a3_pairwise_metrics.html) 
+Please have a look at this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html) 
 to better understand how these functions work.
  
 ## 4. Clustering algorithms
@@ -108,17 +110,17 @@ to better understand how these functions work.
 
 The `bioregion`'s package contains 8 network clustering functions: 
 
-* [netclu_infomap](https://bioregion.github.io/bioregion/reference/netclu_infomap.html)
-* [netclu_oslom](https://bioregion.github.io/bioregion/reference/netclu_oslom.html)
-* [netclu_louvain](https://bioregion.github.io/bioregion/reference/netclu_louvain.html) 
-* [netclu_greedy](https://bioregion.github.io/bioregion/reference/netclu_greedy.html)
-* [netclu_labelprop](https://bioregion.github.io/bioregion/reference/netclu_labelprop.html)
-* [netclu_leadingeigen](https://bioregion.github.io/bioregion/reference/netclu_leadingeigen.html)
-* [netclu_walktrap](https://bioregion.github.io/bioregion/reference/netclu_walktrap.html) 
-* [netclu_beckett](https://bioregion.github.io/bioregion/reference/netclu_beckett.html) 
+* [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html)
+* [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)
+* [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html) 
+* [netclu_greedy](https://bioRgeo.github.io/bioregion/reference/netclu_greedy.html)
+* [netclu_labelprop](https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.html)
+* [netclu_leadingeigen](https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.html)
+* [netclu_walktrap](https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.html) 
+* [netclu_beckett](https://bioRgeo.github.io/bioregion/reference/netclu_beckett.html) 
 
 Please check this 
-[tutorial page](https://bioregion.github.io/bioregion/articles/a4_3_network_clustering.html) 
+[tutorial page](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html) 
 to get more information regarding the network clustering functions.
 
 ### 4.4 Microbenchmark

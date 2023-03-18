@@ -305,7 +305,7 @@ The bipartite argument should probably be set to TRUE.")
     # Check if LOUVAIN has successfully been installed
     if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       message("Louvain is not installed... Please have a look at
-              https://bioregion.github.io/bioregion/articles/a1_install_binary_files.html
+              https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
               for more details.\n", 
               "It should be located in ", 
               paste0(binpath, "/bin/LOUVAIN/"))

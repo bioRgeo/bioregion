@@ -11,12 +11,12 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
-bibliography: REFERENCES.bib  
+bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl
 vignette: >
   %\VignetteIndexEntry{4.2 Non-hierarchical clustering}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
  chunk_output_type: console
 ---
@@ -67,17 +67,17 @@ pairwise distances between sites.
 Non-hierarchical algorithms rely on a **user-defined** number of clusters. Once
 this number is defined, users can chose among the 3 functions provided in
 `bioregion` to perform non-hierarchical clustering. These functions are based on
-centroid-based algorithms  ([Kmeans](https://bioregion.github.io/bioregion/reference/nhclu_kmeans.html)
+centroid-based algorithms  ([Kmeans](https://bioRgeo.github.io/bioregion/reference/nhclu_kmeans.html)
 and
-[PAM](https://bioregion.github.io/bioregion/reference/nhclu_pam.html)
+[PAM](https://bioRgeo.github.io/bioregion/reference/nhclu_pam.html)
 ) or density-based algorithms 
-([DBSCAN](https://bioregion.github.io/bioregion/reference/nhclu_dbscan.html)).  
+([DBSCAN](https://bioRgeo.github.io/bioregion/reference/nhclu_dbscan.html)).  
 <br>
 *3. Determining the optimal number of clusters*  
 The two functions
-[`partition_metrics()`](https://bioregion.github.io/bioregion/reference/partition_metrics.html)
+[`partition_metrics()`](https://bioRgeo.github.io/bioregion/reference/partition_metrics.html)
 and
-[`find_optimal_n()`](https://bioregion.github.io/bioregion/reference/find_optimal_n.html)
+[`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.html)
  help determining what the optimal number of clusters would be (see
  [Section 4](#section4) of this vignette).  
 <br>

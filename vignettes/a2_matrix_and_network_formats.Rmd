@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
+bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
+csl: journal-of-biogeography.csl    
 vignette: >
   %\VignetteIndexEntry{2. Matrix and network formats}
   %\VignetteEngine{knitr::rmarkdown}
@@ -31,7 +33,7 @@ options(tinytex.verbose = TRUE)
 The `bioregion`'s package contains as example dataset the spatial distribution of 
 Mediterranean vegetation. This dataset has been analyzed in [this article](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718) and contains
 the abundance of 3,697 species in 715 sites. This dataset is composed of three 
-files, [vegedf](https://bioregion.github.io/bioregion/reference/vegedf.html) a 
+files, [vegedf](https://bioRgeo.github.io/bioregion/reference/vegedf.html) a 
 `data.frame` with 460,878 rows and 3 columns (Site, Species and Abundance), 
 
 ```{r loading_vegedf}
@@ -42,7 +44,7 @@ sum(!duplicated(vegedf[,1]))
 sum(!duplicated(vegedf[,2]))
 ```
 
-[vegemat](https://bioregion.github.io/bioregion/reference/vegemat.html) 
+[vegemat](https://bioRgeo.github.io/bioregion/reference/vegemat.html) 
 a co-occurrence `matrix` containing the same information gathered in a `matrix`
 with 715 rows and 3,697 columns,
 
@@ -52,12 +54,12 @@ vegemat[1:10,1:10]
 dim(vegemat)
 ```
 
-and [vegesf](https://bioregion.github.io/bioregion/reference/vegesf.html) a spatial
+and [vegesf](https://bioRgeo.github.io/bioregion/reference/vegesf.html) a spatial
 object containing the geometry of the 715 sites. 
 
 ## From matrix to network
 
-The function [mat_to_net](https://bioregion.github.io/bioregion/reference/mat_to_net.html) 
+The function [mat_to_net](https://bioRgeo.github.io/bioregion/reference/mat_to_net.html) 
 transforms a co-occurrence `matrix` such as `vegemat` into a network represented 
 by a `data.frame` (such as `vegedf` in this case). If `weight = TRUE` a third 
 column is added with the values contained in the `matrix`.  
@@ -88,7 +90,7 @@ dim(net)
 
 ## From network to matrix
 
-The function [net_to_mat](https://bioregion.github.io/bioregion/reference/net_to_mat.html)
+The function [net_to_mat](https://bioRgeo.github.io/bioregion/reference/net_to_mat.html)
 does the opposite. It transforms a network represented by a two- or a three-columns
 `data.frame` (such as `vegedf`) into a co-occurrence `matrix` (such as `vegemat` 
 in this case). 

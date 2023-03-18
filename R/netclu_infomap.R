@@ -191,7 +191,7 @@ netclu_infomap <- function(net,
   if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     message(paste0(
       "Infomap ", version, " is not installed... Please have a look at
-    https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
+    https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
     for more details.\n", 
       "It should be located in ", 
       paste0(binpath, "/bin/INFOMAP/", version, "/")))

@@ -318,7 +318,7 @@ install_binaries <- function(binpath = NULL,
       message(" ")
       message("Infomap is not installed...")
       message("Please have a look at
-      https//bioregion.github.io/bioregion/articles/a3_1_install_binary_files.html
+      https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
               for more details")
     } else {
       if (testopm) {
@@ -343,7 +343,7 @@ install_binaries <- function(binpath = NULL,
         message("A library is probably missing to install the OpenMP
                 version...")
         message("Please have a look at 
-https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
+https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
                 for more details")
       }
       utils::write.table(1, paste0(path, "check.txt"))
@@ -405,7 +405,7 @@ https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
     message(" ")
     message("Louvain is not installed...")
     message("Please have a look at 
-https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
+https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
             for more details")
   } else {
     message(
@@ -508,7 +508,7 @@ https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
     message(" ")
     message("OSLOM is not installed...")
     message("Please have a look at 
-https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
+https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
             for more details")
   } else {
     message("Congratulation, you successfully install the version ", version,
@@ -519,7 +519,7 @@ https//bioregion.github.io/bioregion/articles/a1_install_binary_files.html
       message("Warning: only the undirected version of OSLOM has been
               installed...")
       message("Please have a look at 
-https//bioregion.github.io/bioregion/articles/a3_1_install_binary_files.html
+https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
               for more details")
     } else {
       utils::write.table(1, paste0(path, "checkdir.txt"))

@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 output: 
   html_vignette:
     number_sections: true
+bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
+csl: journal-of-biogeography.csl    
 vignette: >
   %\VignetteIndexEntry{4.4 Microbenchmark}
   \usepackage[utf8]{inputenc}
@@ -47,9 +49,9 @@ The first dataset comes available with `bioregion` and was analyzed in
 It contains the abundance of 3,697 plant species distributed in 715 sites in
 the French Mediterranean area. 
 From this dataset we use the two following files:
-[vegedf](https://bioregion.github.io/bioregion/reference/vegedf.html) a 
+[vegedf](https://bioRgeo.github.io/bioregion/reference/vegedf.html) a 
 `data.frame` with 460,878 rows and 3 columns (Site, Species and Abundance) and
-[vegemat](https://bioregion.github.io/bioregion/reference/vegemat.html) 
+[vegemat](https://bioRgeo.github.io/bioregion/reference/vegemat.html) 
 a co-occurrence `matrix` containing the same information gathered in a `matrix`
 with 715 rows and 3,697 columns.
 
