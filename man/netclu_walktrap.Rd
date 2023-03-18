@@ -67,7 +67,7 @@ short random walks.
 }
 \details{
 This function is based on random walks \insertCite{Pons2005}{bioregion}
-as implemented in the \href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+as implemented in the \href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_walktrap]{cluster_walktrap}).
 }
 \note{

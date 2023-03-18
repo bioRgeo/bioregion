@@ -54,7 +54,7 @@
 #' @details
 #' This function is based on the Leiden algorithm
 #' \insertCite{Traag2019}{bioregion} as implemented in the
-#' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_leiden][igraph::cluster_leiden]).
 #'
 #' @note

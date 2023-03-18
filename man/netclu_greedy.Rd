@@ -66,7 +66,7 @@ greedy optimization of modularity.
 \details{
 This function is based on the fast greedy modularity optimization algorithm
 \insertCite{Clauset2004}{bioregion} as implemented in the
-\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+\href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_fast_greedy]{cluster_fast_greedy}).
 }
 \note{

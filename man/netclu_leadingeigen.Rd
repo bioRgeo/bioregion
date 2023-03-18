@@ -65,7 +65,7 @@ on leading eigen vector of the community matrix.
 \details{
 This function is based on leading eigenvector of the community matrix
 \insertCite{Newman2006}{bioregion} as implemented in the
-\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+\href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_leading_eigen]{cluster_leading_eigen}).
 }
 \note{

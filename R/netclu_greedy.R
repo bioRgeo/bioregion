@@ -28,7 +28,7 @@
 #' @details
 #' This function is based on the fast greedy modularity optimization algorithm
 #' \insertCite{Clauset2004}{bioregion} as implemented in the
-#' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_fast_greedy][igraph::cluster_fast_greedy]).
 #'
 #' @note

@@ -17,6 +17,7 @@
 #' 
 #' @param reassign a string indicating if the nodes belonging to several
 #' community should be reassign and what method should be used (see Note).
+#' 
 #' @param r the number of runs for the first hierarchical level
 #' (10 by default).
 #' 
@@ -25,7 +26,7 @@
 #' 
 #' @param seed for the random number generator (0 for random by default).
 #' 
-#' @param t the p−value, the default value is 0.10, increase this value you to
+#' @param t the p-value, the default value is 0.10, increase this value you to
 #' get more modules.
 #' 
 #' @param cp kind of resolution parameter used to decide between taking some
@@ -57,7 +58,6 @@
 #' @param binpath a `character` indicating the path to the bin folder
 #' (see [install_binaries()] and Details).
 #' 
-#' @export
 #' @details
 #' OSLOM is a network community detection algorithm proposed in
 #' \insertCite{Lancichinetti2011}{bioregion} that finds statistically significant

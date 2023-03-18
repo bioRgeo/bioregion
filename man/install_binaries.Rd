@@ -8,9 +8,7 @@ install_binaries(binpath = NULL, infomap_version = c("2.1.0", "2.6.0"))
 }
 \arguments{
 \item{binpath}{a \code{character} indicating the path to the folder that will
-host the 'bin' folder containing the binary files (bioregion's
-package by default, if you use a different folder please be sure to update
-the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
+host the 'bin' folder containing the binary files (see Details).}
 
 \item{infomap_version}{a \code{character} vector indicating the Infomap
 version(s) to install.}
@@ -20,6 +18,17 @@ This function downloads and unzips the 'bin' folder needed to run some
 functions of bioregion. It also checks if the files have the permissions to
 be executed as programs. It finally tests if the binary files
 are running properly.
+}
+\details{
+\code{binpath = "tempdir"} R's temporary directory by default, in this
+case the 'bin' folder will be automatically removed at the end of the R
+session.
+
+\code{binpath = "pkgfolder"} bioregion's
+package or a path to a folder
+of your choice  (bioregion's
+package by default, if you use a different folder please be sure to update
+the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).
 }
 \note{
 Only the Infomap version 2.1.0 and 2.6.0 are available for now.

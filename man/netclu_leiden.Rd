@@ -93,7 +93,7 @@ on the Leiden algorithm of Traag, van Eck & Waltman.
 \details{
 This function is based on the Leiden algorithm
 \insertCite{Traag2019}{bioregion} as implemented in the
-\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+\href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_leiden]{cluster_leiden}).
 }
 \note{

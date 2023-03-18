@@ -48,7 +48,7 @@ default, 0 if you are not interested in hierarchies).}
 
 \item{seed}{for the random number generator (0 for random by default).}
 
-\item{t}{the p−value, the default value is 0.10, increase this value you to
+\item{t}{the p-value, the default value is 0.10, increase this value you to
 get more modules.}
 
 \item{cp}{kind of resolution parameter used to decide between taking some

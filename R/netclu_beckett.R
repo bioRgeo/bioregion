@@ -36,7 +36,7 @@
 #' @details
 #' This function is based on the modularity optimization algorithm provided by
 #' Stephen Beckett \insertCite{Beckett2016}{bioregion} as implemented in the
-#' [bipartite](https://cran.r-project.org/web/packages/bipartite/index.html)
+#' [bipartite](https://cran.r-project.org/package=bipartite)
 #' package ([computeModules][bipartite::computeModules]).
 #'
 #' @note

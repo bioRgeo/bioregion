@@ -29,20 +29,20 @@
 #' With `a` the number of species shared by a pair of sites, `b` species only
 #' present in the first site  and `c` species only present in the second site.
 #'
-#' \mjeqn{Jaccard = (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
+#' \mjeqn{Jaccard = (b + c) / (a + b + c)}{Jaccard = (b + c) / (a + b + c)}
 #'
-#' \mjeqn{Jaccardturn = 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}\insertCite{Baselga2012}{bioregion}
+#' \mjeqn{Jaccardturn = 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 2min(b, c) / (a + 2min(b, c))}\insertCite{Baselga2012}{bioregion}
 #'
-#' \mjeqn{Sorensen = (b + c) / (2a + b + c)}{Sorensen = 1 - (b + c) / (2a + b + c)}
+#' \mjeqn{Sorensen = (b + c) / (2a + b + c)}{Sorensen = (b + c) / (2a + b + c)}
 #'
-#' \mjeqn{Simpson = min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
+#' \mjeqn{Simpson = min(b, c) / (a + min(b, c))}{Simpson = min(b, c) / (a + min(b, c))}
 #'
 #' If abundances data are available, Bray-Curtis and its turnover component
 #' can also be computed with the following equation:
 #'
-#' \mjeqn{Bray = (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
+#' \mjeqn{Bray = (B + C) / (2A + B + C)}{Bray = (B + C) / (2A + B + C)}
 #'
-#' \mjeqn{Brayturn = min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioregion}
+#' \mjeqn{Brayturn = min(B, C)/(A + min(B, C))}{Brayturn = min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioregion}
 #'
 #' with A the sum of the lesser values for common species shared by a pair of
 #' sites. B and C are the total number of specimens counted at both sites minus

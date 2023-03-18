@@ -68,7 +68,7 @@ applying Newman’s modularity measure in a bipartite weighted version to it.
 \details{
 This function is based on the modularity optimization algorithm provided by
 Stephen Beckett \insertCite{Beckett2016}{bioregion} as implemented in the
-\href{https://cran.r-project.org/web/packages/bipartite/index.html}{bipartite}
+\href{https://cran.r-project.org/package=bipartite}{bipartite}
 package (\link[bipartite:computeModules]{computeModules}).
 }
 \note{

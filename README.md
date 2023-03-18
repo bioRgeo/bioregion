@@ -31,7 +31,7 @@ We wrote several vignettes that will help you using the **bioregion R
 package**. Vignettes available are the following ones: <br>
 
 - **[1. Installation of the executable binary
-  files](https://bioRgeo.github.io/bioregion/articles/a1_install_executable_binary_files.html)**  
+  files](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html)**  
 - **[2. Matrix and network
   formats](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html)**
 - **[3. Pairwise similarity/dissimilarity

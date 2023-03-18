@@ -32,7 +32,7 @@
 #' @details
 #' This function is based on leading eigenvector of the community matrix
 #' \insertCite{Newman2006}{bioregion} as implemented in the
-#' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_leading_eigen][igraph::cluster_leading_eigen]).
 #'
 #' @note

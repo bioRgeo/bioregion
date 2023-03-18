@@ -65,7 +65,7 @@ on propagating labels.
 \details{
 This function is based on propagating labels
 \insertCite{Raghavan2007}{bioregion} as implemented in the
-\href{https://cran.r-project.org/web/packages/igraph/index.html}{igraph}
+\href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_label_prop]{cluster_label_prop}).
 }
 \note{

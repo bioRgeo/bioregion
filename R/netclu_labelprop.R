@@ -33,7 +33,7 @@
 #' @details
 #' This function is based on propagating labels
 #' \insertCite{Raghavan2007}{bioregion} as implemented in the
-#' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_label_prop][igraph::cluster_label_prop]).
 #'
 #' @note

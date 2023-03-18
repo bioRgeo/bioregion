@@ -71,10 +71,10 @@ will compute the Jaccard and Bray-Curtis similarity metrics, respectively.
 Euclidean computes the Euclidean similarity between each pair of site
 following this equation:
 
-\mjeqn{Euclidean = 1 / (1 + dij)}{Euclidean = 1 / (1 + dij)}
+\mjeqn{Euclidean = 1 / (1 + d_{ij})}{Euclidean = 1 / (1 + d_{ij})}
 
-Where dij is the Euclidean distance between site i and site j in terms of
-species composition.
+Where \mjeqn{d_{ij}}{d_{ij}} is the Euclidean distance between site i and
+site j in terms of species composition.
 }
 \examples{
 \dontrun{

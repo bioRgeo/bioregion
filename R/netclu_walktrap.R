@@ -34,7 +34,7 @@
 #'
 #' @details
 #' This function is based on random walks \insertCite{Pons2005}{bioregion}
-#' as implemented in the [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' as implemented in the [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_walktrap][igraph::cluster_walktrap]).
 #'
 #' @note

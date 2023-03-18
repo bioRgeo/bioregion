@@ -6,12 +6,20 @@
 #' are running properly.
 #'
 #' @param binpath a `character` indicating the path to the folder that will
-#' host the 'bin' folder containing the binary files (bioregion's
-#' package by default, if you use a different folder please be sure to update
-#' the `binpath` in [netclu_infomap], [netclu_louvain] and [netclu_oslom]).
+#' host the 'bin' folder containing the binary files (see Details).
 #' 
 #' @param infomap_version a `character` vector indicating the Infomap
 #' version(s) to install.
+#' 
+#' @details  `binpath = "tempdir"` R's temporary directory by default, in this
+#' case the 'bin' folder will be automatically removed at the end of the R 
+#' session. 
+#' 
+#' `binpath = "pkgfolder"` bioregion's
+#' package or a path to a folder 
+#' of your choice  (bioregion's
+#' package by default, if you use a different folder please be sure to update
+#' the `binpath` in [netclu_infomap], [netclu_louvain] and [netclu_oslom]).
 #' 
 #' @note
 #' Only the Infomap version 2.1.0 and 2.6.0 are available for now.

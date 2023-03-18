@@ -56,7 +56,7 @@
 #' Louvain is a network community detection algorithm proposed in
 #' \insertCite{Blondel2008}{bioregion}. This function proposed two
 #' implementations of the function (parameter `lang`): the
-#' [igraph](https://cran.r-project.org/web/packages/igraph/index.html)
+#' [igraph](https://cran.r-project.org/package=igraph)
 #' implementation ([cluster_louvain][igraph::cluster_louvain]) and the C++ 
 #' implementation (<https://sourceforge.net/projects/louvain/>, version 0.3).
 #' The latest offers the possibility to choose among several quality functions,
@@ -134,8 +134,6 @@
 #' 
 #' @references
 #' \insertRef{Blondel2008}{bioregion}
-#' 
-#' @importFrom igraph graph_from_data_frame cluster_louvain
 #' 
 #' @export
 

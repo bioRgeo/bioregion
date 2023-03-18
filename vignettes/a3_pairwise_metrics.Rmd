@@ -56,7 +56,7 @@ in the second site. Two methods can be used to compute the `abc` based metrics.
 The first method is based on a matrix product (performed with the [tcrossprod](https://www.rdocumentation.org/packages/Matrix/versions/1.5-1/topics/matrix-products) 
 function from the R package [Matrix](https://www.rdocumentation.org/packages/Matrix/versions/1.5-1)). 
 The method is fast but is greedy in memory... The second method is 
-based on a [three loops function](https://github.com/bioregion/bioregion/blob/master/src/abc.cpp) 
+based on a [three loops function](https://github.com/bioRgeo/bioregion/blob/master/src/abc.cpp) 
 coded in C++ and largely inspired by the [bcdist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9/topics/bcdist) 
 function from the R package [ecodist](https://www.rdocumentation.org/packages/ecodist/versions/2.0.9) 
 (version 2.0.7). It is less efficient than the matrix product but allows to handle 
