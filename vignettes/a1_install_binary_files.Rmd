@@ -40,12 +40,16 @@ and [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.ht
 as follows.
 
 ```{r install_binaries, eval=FALSE}
-install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
+install_binaries(binpath = "tempdir" , infomap_version = c("2.1.0", "2.6.0"))
 ```
 
 The function has two parameters. `binpath` indicating 
 the path to the folder that will host the 'bin' folder containing the  
-binary files. It is located in the `bioregion`'s package folder by default. Any other
+binary files. By default, the binary files are installed in R's temporary
+directory (`binpath = "tempdir"`). In this case the 'bin' folder will be
+automatically removed at the end of the R session. Alternatively, the binary
+files can be installed in the bioregion's package folder 
+(`binpath = "pkgfolder"`). Any other
 folder can be chosen but if you use a different folder please be sure to update 
 the `binpath` argument in 
 [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html), 

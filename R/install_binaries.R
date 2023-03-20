@@ -7,61 +7,62 @@
 #'
 #' @param binpath a `character` indicating the path to the folder that will
 #' host the 'bin' folder containing the binary files (see Details).
-#' 
+#'
 #' @param infomap_version a `character` vector indicating the Infomap
 #' version(s) to install.
-#' 
-#' @details  `binpath = "tempdir"` R's temporary directory by default, in this
-#' case the 'bin' folder will be automatically removed at the end of the R 
-#' session. 
-#' 
-#' `binpath = "pkgfolder"` bioregion's
-#' package or a path to a folder 
-#' of your choice  (bioregion's
-#' package by default, if you use a different folder please be sure to update
-#' the `binpath` in [netclu_infomap], [netclu_louvain] and [netclu_oslom]).
-#' 
+#'
+#' @details By default, the binary files are installed in R's temporary
+#' directory (`binpath = "tempdir"`). In this case the 'bin' folder will be
+#' automatically removed at the end of the R session. Alternatively, the binary
+#' files can be installed in the bioregion's package folder 
+#' (`binpath = "pkgfolder"`).
+#' Finally, a path to a folder of your choice can be chosen.
+#'
+#' Please be sure to update the `binpath` accordingly in [netclu_infomap],
+#' [netclu_louvain] and [netclu_oslom]).
+#'
 #' @note
 #' Only the Infomap version 2.1.0 and 2.6.0 are available for now.
-#' 
+#'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Boris Leroy (\email{leroy.boris@gmail.com}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
-#' 
+#'
 #' @export
 
-install_binaries <- function(binpath = NULL,
+install_binaries <- function(binpath = "tempdir",
                              infomap_version = c("2.1.0", "2.6.0")) {
-  
-  # Set binpath
-  if (is.null(binpath)) {
-    # Identify bioregion directory on your computer
-    biodir <- .libPaths()[1]
-    binpath <- paste0(biodir,"/bioregion")
+  # Control and set binpath
+  controls(args = binpath, data = NULL, type = "character")
+  if (binpath == "tempdir") {
+    binpath <- paste0(tempdir(), "/")
+  } else if (binpath == "pkgfolder") {
+    binpath <- paste0(.libPaths()[1], "/bioregion/")
   } else {
-    # Control
-    controls(args = binpath, data = NULL, type = "character")
-    if(!dir.exists(binpath)) {
+    if (substr(binpath, nchar(binpath), nchar(binpath)) != "/") {
+      binpath <- paste0(binpath, "/")
+    }
+    if (!dir.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
 
   # Control infomap_version
   infomap_versiondispo <- c("2.1.0", "2.6.0")
-  if(!is.character(infomap_version)) {
+  if (!is.character(infomap_version)) {
     stop("infomap_version must be a character", call. = FALSE)
   }
-  
+
   infomap_version <- infomap_version[!duplicated(infomap_version)]
-  
-  if(length(infomap_version) > length(infomap_versiondispo)) {
+
+  if (length(infomap_version) > length(infomap_versiondispo)) {
     stop(paste0(
       "Please choose versions of Infomap in the list: ",
       paste(infomap_versiondispo, collapse = " ")
     ), call. = FALSE)
   }
-  
+
   if (length(setdiff(infomap_version, infomap_versiondispo)) > 0) {
     stop(paste0(
       "Please choose versions of Infomap in the list: ",
@@ -69,54 +70,58 @@ install_binaries <- function(binpath = NULL,
     ), call. = FALSE)
   }
   nbversion <- length(infomap_version)
-  
+
   # Check if bin.zip and bin already exists and remove them
-  if (file.exists(paste0(binpath, "/bin.zip"))) {
-    unlink(paste0(binpath, "/bin.zip"))
+  if (file.exists(paste0(binpath, "bin.zip"))) {
+    unlink(paste0(binpath, "bin.zip"))
   }
-  if (dir.exists(paste0(binpath, "/bin"))) {
-    unlink(paste0(binpath, "/bin"), recursive = TRUE)
+  if (dir.exists(paste0(binpath, "bin"))) {
+    unlink(paste0(binpath, "bin"), recursive = TRUE)
   }
-  
+
   # Download bin.zip
   message(" ")
   message("1. Download bin.zip")
   message(" ")
   utils::download.file(
     "https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download",
-    paste0(binpath, "/bin.zip"),
-    mode = "wb")
-  
+    paste0(binpath, "bin.zip"),
+    mode = "wb"
+  )
+
   # Unzip folder
   message(" ")
   message("2. Unzip folder")
   message(" ")
-  utils::unzip(zipfile = paste0(binpath, "/bin.zip"), exdir = binpath)
-  
+  utils::unzip(zipfile = paste0(binpath, "bin.zip"), exdir = binpath)
+
   # Delete bin.zip
-  unlink(paste0(binpath, "/bin.zip"))
-  
+  unlink(paste0(binpath, "bin.zip"))
+
   # Check presence files
-  nboslom <- length(list.files(paste0(binpath, "/bin/OSLOM")))
+  nboslom <- length(list.files(paste0(binpath, "bin/OSLOM")))
   nbinfomap <- 0
-  for(vinf in 1:nbversion) {
+  for (vinf in 1:nbversion) {
     nbinfomap <- nbinfomap +
-      length(list.files(paste0(binpath, "/bin/INFOMAP/",
-                               infomap_version[vinf])))
+      length(list.files(paste0(
+        binpath, "bin/INFOMAP/",
+        infomap_version[vinf]
+      )))
   }
-  nblouvain <- length(list.files(paste0(binpath, "/bin/LOUVAIN")))
-  
-  if(nboslom == 8 & (nbinfomap == 8 * nbversion) & nblouvain == 8) {
+  nblouvain <- length(list.files(paste0(binpath, "bin/LOUVAIN")))
+
+  if (nboslom == 8 & (nbinfomap == 8 * nbversion) & nblouvain == 8) {
     message(paste0(
       "The folder has been successfully downloaded and dezipped in ",
       binpath
     ))
   } else {
-    unlink(paste0(binpath, "/bin"), recursive = TRUE)
+    unlink(paste0(binpath, "bin"), recursive = TRUE)
     stop(paste0("An error occurred, download and/or dezip failed"),
-         call. = FALSE)
+      call. = FALSE
+    )
   }
-  
+
   # Identify OS
   os <- Sys.info()[["sysname"]]
   if (os == "Linux") {
@@ -128,36 +133,42 @@ install_binaries <- function(binpath = NULL,
   if (os == "Darwin") {
     osid <- "mac"
   }
-  
+
   # List files
   files <- NULL
   for (vinf in 1:nbversion) {
     files <- c(
       files,
-      paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf],
-             "/infomap_omp_", osid),
-      paste0(binpath, "/bin/INFOMAP/", infomap_version[vinf],
-             "/infomap_noomp_", osid)
+      paste0(
+        binpath, "bin/INFOMAP/", infomap_version[vinf],
+        "/infomap_omp_", osid
+      ),
+      paste0(
+        binpath, "bin/INFOMAP/", infomap_version[vinf],
+        "/infomap_noomp_", osid
+      )
     )
   }
-  files <- c(files,
-             paste0(binpath, "/bin/LOUVAIN/convert_", osid),
-             paste0(binpath, "/bin/LOUVAIN/louvain_", osid),
-             paste0(binpath, "/bin/OSLOM/oslom_dir_", osid),
-             paste0(binpath, "/bin/OSLOM/oslom_undir_", osid))
-  
+  files <- c(
+    files,
+    paste0(binpath, "bin/LOUVAIN/convert_", osid),
+    paste0(binpath, "bin/LOUVAIN/louvain_", osid),
+    paste0(binpath, "bin/OSLOM/oslom_dir_", osid),
+    paste0(binpath, "bin/OSLOM/oslom_undir_", osid)
+  )
+
   if (osid == "win") {
     files <- paste0(files, ".exe")
   }
   nbfiles <- length(files)
-  
+
   # Check permissions
   message(" ")
   message("3. Check permissions")
   message(" ")
-  
+
   perm <- rep(-1, nbfiles)
-  for(f in 1:nbfiles) {
+  for (f in 1:nbfiles) {
     file <- files[f]
     perm[f] <- file.access(file, mode = 1)
     if (perm[f] == -1) {
@@ -167,13 +178,13 @@ install_binaries <- function(binpath = NULL,
       message(paste0("Permission to execute ", file, " as program: granted"))
     }
   }
-  
+
   if (sum(perm == -1) > 0) {
     message(" ")
     message("Try to change permissions automatically")
     message(" ")
-    
-    for(f in 1:nbfiles) {
+
+    for (f in 1:nbfiles) {
       file <- files[f]
       if (perm[f] == -1) {
         if (osid == "lin") { # Linux
@@ -187,8 +198,10 @@ install_binaries <- function(binpath = NULL,
         }
         perm[f] <- file.access(file, mode = 1)
         if (perm[f] == -1) {
-          message(paste0("Automatic change of permission of ", file,
-                         " failed"))
+          message(paste0(
+            "Automatic change of permission of ", file,
+            " failed"
+          ))
         } else {
           perm[f] == 10
           message(paste0(
@@ -199,7 +212,7 @@ install_binaries <- function(binpath = NULL,
       }
     }
   }
-  
+
   if (sum(perm == -1) > 0) {
     maxtry <- 10000
     nbtry <- 0
@@ -211,26 +224,28 @@ install_binaries <- function(binpath = NULL,
         message("All permissions granted!")
         break
       }
-      
+
       message(" ")
       message("Permission to execute the following files as program denied")
       message(" ")
       for (file in nopermfiles) {
         message(file)
       }
-      
+
       message(" ")
-      ask <- utils::menu(c(
-        "I've just tried to change the permission manually and I want to
+      ask <- utils::menu(
+        c(
+          "I've just tried to change the permission manually and I want to
         check the permission again",
-        "I would like to continue the execution of the function without
+          "I would like to continue the execution of the function without
         checking the permission",
-        "I would like to stop the function"
-      ),
-      title = "You can now try to change the permission of the above files
-      manually and check the permission again")
-      
-      if(ask == 1) {
+          "I would like to stop the function"
+        ),
+        title = "You can now try to change the permission of the above files
+      manually and check the permission again"
+      )
+
+      if (ask == 1) {
         for (f in 1:nbfiles) {
           file <- files[f]
           perm[f] <- file.access(file, mode = 1)
@@ -243,21 +258,21 @@ install_binaries <- function(binpath = NULL,
       } else if (ask == 2) {
         break
       } else {
-        unlink(paste0(binpath, "/bin"), recursive = TRUE)
+        unlink(paste0(binpath, "bin"), recursive = TRUE)
         message(" ")
         stop("Function install_binaries() stopped", call. = FALSE)
       }
     }
   }
-  
+
   # Test INFOMAP
   message(" ")
   message("4. Test Infomap")
   message(" ")
-  
-  for(vinf in 1:nbversion) {
+
+  for (vinf in 1:nbversion) {
     version <- infomap_version[vinf]
-    path <- paste0(binpath, "/bin/INFOMAP/", version, "/")
+    path <- paste0(binpath, "bin/INFOMAP/", version, "/")
     files <- c(paste0("infomap_omp_", osid), paste0("infomap_noomp_", osid))
     if (osid == "lin") {
       cmd <- paste0(
@@ -290,7 +305,7 @@ install_binaries <- function(binpath = NULL,
     if (file.exists(paste0(path, "/example.tree"))) {
       unlink(paste0(path, "/example.tree"))
     }
-    
+
     if (osid == "lin") {
       cmd <- paste0(
         path, files[2], " -N 10 --two-level --tree --markov-time 0.5 ",
@@ -321,7 +336,7 @@ install_binaries <- function(binpath = NULL,
     if (file.exists(paste0(path, "/example.tree"))) {
       unlink(paste0(path, "/example.tree"))
     }
-    
+
     if (!(testopm | testnoopm)) {
       message(" ")
       message("Infomap is not installed...")
@@ -340,8 +355,9 @@ install_binaries <- function(binpath = NULL,
         )
       } else {
         message(" ")
-        message("Congratulation, you successfully install the ", version,
-                " no OpenMP version of Infomap!"
+        message(
+          "Congratulation, you successfully install the ", version,
+          " no OpenMP version of Infomap!"
         )
         file.copy(
           paste0(path, files[2]),
@@ -357,13 +373,13 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
       utils::write.table(1, paste0(path, "check.txt"))
     }
   }
-  
+
   # Test LOUVAIN
   message(" ")
   message("5. Test Louvain")
   message(" ")
-  
-  path <- paste0(binpath, "/bin/LOUVAIN/")
+
+  path <- paste0(binpath, "bin/LOUVAIN/")
   version <- list.files(path)[substr(list.files(path), 1, 7) == "version"]
   version <- substr(version, 9, nchar(version))
   files <- c(paste0("convert_", osid), paste0("louvain_", osid))
@@ -395,7 +411,7 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
   if (!("example.bin" %in% list.files(path))) {
     testconvert <- FALSE
   }
-  
+
   if (testconvert) {
     cmd <- paste0(path, files[2], " ", path, "example.bin -l -1 -q id_qual")
     tree <- system(cmd, intern = TRUE)
@@ -404,11 +420,11 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
       testlouvain <- FALSE
     }
   }
-  
+
   if (file.exists(paste0(path, "/example.bin"))) {
     unlink(paste0(path, "/example.bin"))
   }
-  
+
   if (!testlouvain) {
     message(" ")
     message("Louvain is not installed...")
@@ -422,13 +438,13 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
     )
     utils::write.table(1, paste0(path, "check.txt"))
   }
-  
+
   # Test OSLOM
   message(" ")
   message("6. Test OSLOM")
   message(" ")
-  
-  path <- paste0(binpath, "/bin/OSLOM/")
+
+  path <- paste0(binpath, "bin/OSLOM/")
   version <- list.files(path)[substr(list.files(path), 1, 7) == "version"]
   version <- substr(version, 9, nchar(version))
   files <- c(paste0("oslom_undir_", osid), paste0("oslom_dir_", osid))
@@ -447,12 +463,12 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
     files <- paste0(files, ".exe")
     cmd <- paste0(path, files[1], " -f ", path, "example.txt -uw")
     dir.create(paste0(path, "example.txt_oslo_files"),
-               showWarnings = FALSE,
-               recursive = TRUE
+      showWarnings = FALSE,
+      recursive = TRUE
     )
     system(cmd, show.output.on.console = FALSE)
   }
-  
+
   testundir <- TRUE
   if (!("tp" %in% list.files(paste0(path, "example.txt_oslo_files")))) {
     testundir <- FALSE
@@ -472,7 +488,7 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
   if (file.exists("time_seed.dat")) {
     unlink("time_seed.dat")
   }
-  
+
   if (osid == "lin") {
     cmd <- paste0(path, files[2], " -f ", path, "example.txt -uw")
     cmd <- paste0(cmd, " >/dev/null 2>&1")
@@ -487,8 +503,8 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
   if (osid == "win") {
     cmd <- paste0(path, files[2], " -f ", path, "example.txt -uw")
     dir.create(paste0(path, "example.txt_oslo_files"),
-               showWarnings = FALSE,
-               recursive = TRUE
+      showWarnings = FALSE,
+      recursive = TRUE
     )
     system(cmd, show.output.on.console = FALSE)
   }
@@ -511,7 +527,7 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
   if (file.exists("time_seed.dat")) {
     unlink("time_seed.dat")
   }
-  
+
   if (!testundir) {
     message(" ")
     message("OSLOM is not installed...")
@@ -519,10 +535,12 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
 https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
             for more details")
   } else {
-    message("Congratulation, you successfully install the version ", version,
-            " of OSLOM!")
+    message(
+      "Congratulation, you successfully install the version ", version,
+      " of OSLOM!"
+    )
     utils::write.table(1, paste0(path, "check.txt"))
-    
+
     if (!testdir) {
       message("Warning: only the undirected version of OSLOM has been
               installed...")
@@ -533,15 +551,17 @@ https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
       utils::write.table(1, paste0(path, "checkdir.txt"))
     }
   }
-  
+
   # Remove unnecessary files in INFOMAP
   for (vinf in 1:length(infomap_versiondispo)) {
     version <- infomap_versiondispo[vinf]
-    if (file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))){
+    if (file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_mac"))
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_omp_mac"))
-      unlink(paste0(binpath, "/bin/INFOMAP/", version,
-                    "/infomap_noomp_win.exe"))
+      unlink(paste0(
+        binpath, "/bin/INFOMAP/", version,
+        "/infomap_noomp_win.exe"
+      ))
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_omp_win.exe"))
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_lin"))
       unlink(paste0(binpath, "/bin/INFOMAP/", version, "/infomap_omp_lin"))
@@ -553,7 +573,7 @@ https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
   if (length(list.files(paste0(binpath, "/bin/INFOMAP/"))) == 0) {
     unlink(paste0(binpath, "/bin/INFOMAP"), recursive = TRUE)
   }
-  
+
   # Remove unnecessary files in LOUVAIN
   if (file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
     if (osid == "lin") {
@@ -577,7 +597,7 @@ https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
   } else {
     unlink(paste0(binpath, "/bin/LOUVAIN"), recursive = TRUE)
   }
-  
+
   # Remove unnecessary files in OSLOM
   if (file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
     if (osid == "lin") {

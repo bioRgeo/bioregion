@@ -16,9 +16,9 @@ netclu_louvain(
   site_col = 1,
   species_col = 2,
   return_node_type = "both",
-  delete_temp = TRUE,
+  binpath = "tempdir",
   path_temp = "louvain_temp",
-  binpath = NULL,
+  delete_temp = TRUE,
   algorithm_in_output = TRUE
 )
 }
@@ -59,14 +59,14 @@ the third column name of \code{net} is used.}
 ("sites", "species" or "both") should be returned in the output
 (\code{keep_nodes_type="both"} by default).}
 
-\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
-be removed (see Details).}
-
-\item{path_temp}{a \code{character} indicating the path to the temporary
-folder (see Details).}
-
 \item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
+
+\item{path_temp}{a \code{character} indicating the path to the temporary folder
+(see Details).}
+
+\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
+be removed (see Details).}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \code{communities} should be returned in the output (see Value).
@@ -118,14 +118,14 @@ criterion.
 The C++ version of Louvain is based on the version 0.3
 (\url{https://sourceforge.net/projects/louvain/}). This function needs
 binary files to run. They can be installed with
-\code{\link[=install_binaries]{install_binaries()}}. If you set the path to the folder that will host the
-bin folder manually while running \code{\link[=install_binaries]{install_binaries()}} please make sure to
+\link{install_binaries}. If you set the path to the folder that will host the
+bin folder while running \link{install_binaries} please make sure to
 set \code{binpath} accordingly.
 
 The C++ version of Louvain generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp
-located in the working directory by default). This temporary folder is
-removed by default (\code{delete_temp = TRUE}).
+located in the bin folder in \code{binpath} by default). This temporary folder
+is removed by default (\code{delete_temp = TRUE}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite
