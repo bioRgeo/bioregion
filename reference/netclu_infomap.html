@@ -87,9 +87,9 @@ on the Infomap algorithm (<a href="https://github.com/mapequation/infomap" class
 <span>  species_col <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  return_node_type <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>  version <span class="op">=</span> <span class="st">"2.6.0"</span>,</span>
-<span>  delete_temp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  binpath <span class="op">=</span> <span class="st">"tempdir"</span>,</span>
 <span>  path_temp <span class="op">=</span> <span class="st">"infomap_temp"</span>,</span>
-<span>  binpath <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  delete_temp <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -177,9 +177,9 @@ Infomap should be used (see Note).</p></dd>
 <dd><p>a <code>character</code> indicating the Infomap version to use.</p></dd>
 
 
-<dt>delete_temp</dt>
-<dd><p>a <code>boolean</code> indicating if the temporary folder should
-be removed (see Details).</p></dd>
+<dt>binpath</dt>
+<dd><p>a <code>character</code> indicating the path to the bin folder
+(see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
 <dt>path_temp</dt>
@@ -187,9 +187,9 @@ be removed (see Details).</p></dd>
 (see Details).</p></dd>
 
 
-<dt>binpath</dt>
-<dd><p>a <code>character</code> indicating the path to the bin folder
-(see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
+<dt>delete_temp</dt>
+<dd><p>a <code>boolean</code> indicating if the temporary folder should
+be removed (see Details).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -218,15 +218,15 @@ and (un)directed networks.</p>
 <p>This function is based on the C++ version of Infomap
 (<a href="https://github.com/mapequation/infomap/releases" class="external-link">https://github.com/mapequation/infomap/releases</a>).
 This function needs binary files to run. They can be installed
-with <code><a href="install_binaries.html">install_binaries()</a></code>. If you set the path to the folder that will host
-the bin folder manually while running <a href="install_binaries.html">install_binaries</a> please make sure to
+with <a href="install_binaries.html">install_binaries</a>. If you set the path to the folder that will host
+the bin folder while running <a href="install_binaries.html">install_binaries</a> please make sure to
 set <code>binpath</code> accordingly.</p>
 <p>The C++ version of Infomap generates temporary folders and/or files that are
 stored in the <code>path_temp</code> folder ("infomap_temp" with an unique time stamp
-located in the working directory by default). This temporary folder is
+located in the bin folder in <code>binpath</code> by default). This temporary folder is
 removed by default (<code>delete_temp = TRUE</code>).</p>
 <p>Several version of Infomap are available in the package. See
-<code><a href="install_binaries.html">install_binaries()</a></code> for more details.</p>
+<a href="install_binaries.html">install_binaries</a> for more details.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

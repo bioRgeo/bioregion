@@ -92,7 +92,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2023-03-18</h4>
+            <h4 data-toc-skip class="date">2023-03-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a1_install_binary_files.Rmd" class="external-link"><code>vignettes/a1_install_binary_files.Rmd</code></a></small>
       <div class="d-none name"><code>a1_install_binary_files.Rmd</code></div>
@@ -122,13 +122,16 @@ the Cpp version of <a href="https://bioRgeo.github.io/bioregion/reference/netclu
 and <a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a>
 as follows.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>binpath <span class="op">=</span> <span class="cn">NULL</span> , infomap_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.1.0"</span>, <span class="st">"2.6.0"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>binpath <span class="op">=</span> <span class="st">"tempdir"</span> , infomap_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.1.0"</span>, <span class="st">"2.6.0"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The function has two parameters. <code>binpath</code> indicating the
 path to the folder that will host the ‘bin’ folder containing the<br>
-binary files. It is located in the <code>bioregion</code>’s package
-folder by default. Any other folder can be chosen but if you use a
-different folder please be sure to update the <code>binpath</code>
-argument in <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a>,
+binary files. By default, the binary files are installed in R’s
+temporary directory (<code>binpath = "tempdir"</code>). In this case the
+‘bin’ folder will be automatically removed at the end of the R session.
+Alternatively, the binary files can be installed in the bioregion’s
+package folder (<code>binpath = "pkgfolder"</code>). Any other folder
+can be chosen but if you use a different folder please be sure to update
+the <code>binpath</code> argument in <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a>,
 <a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a>
 and <a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a>
 accordingly. The second parameter <code>infomap_version</code>

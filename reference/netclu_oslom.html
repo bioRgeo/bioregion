@@ -85,9 +85,9 @@ on the OSLOM algorithm (<a href="http://oslom.org/" class="external-link">http:/
 <span>  site_col <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  species_col <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  return_node_type <span class="op">=</span> <span class="st">"both"</span>,</span>
-<span>  delete_temp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  binpath <span class="op">=</span> <span class="st">"tempdir"</span>,</span>
 <span>  path_temp <span class="op">=</span> <span class="st">"oslom_temp"</span>,</span>
-<span>  binpath <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  delete_temp <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -167,19 +167,19 @@ column 1 to column 2).</p></dd>
 (<code>keep_nodes_type="both"</code> by default).</p></dd>
 
 
-<dt>delete_temp</dt>
-<dd><p>a <code>boolean</code> indicating if the temporary folder should
-be removed (see Details).</p></dd>
+<dt>binpath</dt>
+<dd><p>a <code>character</code> indicating the path to the bin folder
+(see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
 <dt>path_temp</dt>
-<dd><p>a <code>character</code> indicating the path to the temporary
-folder (see Details).</p></dd>
+<dd><p>a <code>character</code> indicating the path to the temporary folder
+(see Details).</p></dd>
 
 
-<dt>binpath</dt>
-<dd><p>a <code>character</code> indicating the path to the bin folder
-(see <code><a href="install_binaries.html">install_binaries()</a></code> and Details).</p></dd>
+<dt>delete_temp</dt>
+<dd><p>a <code>boolean</code> indicating if the temporary folder should
+be removed (see Details).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -207,12 +207,12 @@ clustering procedure, such as original cluster objects</p></li>
 (overlapping) communities in (un)weighted and (un)directed networks.</p>
 <p>This function is based on the 2.4 C++ version of OSLOM
 (<a href="http://www.oslom.org/software.htm" class="external-link">http://www.oslom.org/software.htm</a>). This function needs files
-to run. They can be installed with <code><a href="install_binaries.html">install_binaries()</a></code>. If you set the path
-to the folder that will host the bin folder  manually while running
-<code><a href="install_binaries.html">install_binaries()</a></code> please make sure to set <code>binpath</code> accordingly.</p>
+to run. They can be installed with <a href="install_binaries.html">install_binaries</a>. If you set the path
+to the folder that will host the bin folder while running
+<a href="install_binaries.html">install_binaries</a> please make sure to set <code>binpath</code> accordingly.</p>
 <p>The C++ version of OSLOM generates temporary folders and/or files that are
-stored in the <code>path_temp</code> folder (folder "oslom_temp" in the working
-directory by default). This temporary folder is removed by default
+stored in the <code>path_temp</code> folder (folder "oslom_temp" in the bin
+folder in <code>binpath</code> by default). This temporary folder is removed by default
 (<code>delete_temp = TRUE</code>).</p>
     </div>
     <div class="section level2">
