@@ -121,7 +121,7 @@ the bin folder while running \link{install_binaries} please make sure to
 set \code{binpath} accordingly.
 
 The C++ version of Infomap generates temporary folders and/or files that are
-stored in the \code{path_temp} folder ("infomap_temp" with an unique time stamp
+stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
 located in the bin folder in \code{binpath} by default). This temporary folder is
 removed by default (\code{delete_temp = TRUE}).
 

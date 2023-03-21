@@ -75,7 +75,7 @@
 #' set `binpath` accordingly.
 #'
 #' The C++ version of Infomap generates temporary folders and/or files that are
-#' stored in the `path_temp` folder ("infomap_temp" with an unique time stamp
+#' stored in the `path_temp` folder ("infomap_temp" with an unique timestamp
 #' located in the bin folder in `binpath` by default). This temporary folder is
 #' removed by default (`delete_temp = TRUE`).
 #'

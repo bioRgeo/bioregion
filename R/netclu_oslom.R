@@ -70,9 +70,9 @@
 #' [install_binaries] please make sure to set `binpath` accordingly.
 #'
 #' The C++ version of OSLOM generates temporary folders and/or files that are
-#' stored in the `path_temp` folder (folder "oslom_temp" in the bin
-#' folder in `binpath` by default). This temporary folder is removed by default
-#' (`delete_temp = TRUE`).
+#' stored in the `path_temp` folder (folder "oslom_temp" with an unique timestamp
+#' located in the bin folder in `binpath` by default). This temporary folder is 
+#' removed by default (`delete_temp = TRUE`).
 #'
 #' @note
 #' Although this algorithm was not primarily designed to deal with bipartite
@@ -265,13 +265,15 @@ both, sites and species", call. = FALSE)
     # Control temp folder + create temp folder
     path_temp <- controls(args = path_temp, data = NULL, type = "character")
     controls(args = delete_temp, data = NULL, type = "boolean")
+    old_path_temp <- path_temp
     if (path_temp == "oslom_temp") {
+      fold_temp <- paste0(path_temp,
+                          "_",
+                          round(as.numeric(as.POSIXct(Sys.time()))))
       path_temp <- paste0(
         binpath,
         "/bin/",
-        path_temp,
-        "_",
-        round(as.numeric(as.POSIXct(Sys.time())))
+        fold_temp
       )
     } else {
       if (dir.exists(path_temp)) {
@@ -368,14 +370,14 @@ both, sites and species", call. = FALSE)
       "-r ", r, " -hr ", hr, " -seed ", seed, " -t ", t, " -cp ",
       cp
     )
-    if (weight) {
-      cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
-    } else {
-      cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
-    }
 
     # Run OSLOM
     if (os == "Linux") {
+      if (weight) {
+        cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
+      } else {
+        cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
+      }
       if (directed) {
         cmd <- paste0(
           binpath, "/bin/OSLOM/oslom_dir_lin ", cmd,
@@ -389,6 +391,11 @@ both, sites and species", call. = FALSE)
       }
       system(command = cmd)
     } else if (os == "Windows") {
+      if (weight) {
+        cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
+      } else {
+        cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
+      }
       if (directed) {
         cmd <- paste0(binpath, "/bin/OSLOM/oslom_dir_win.exe ", cmd)
       } else {
@@ -399,16 +406,38 @@ both, sites and species", call. = FALSE)
       )
       system(command = cmd, show.output.on.console = FALSE)
     } else if (os == "Darwin") {
-      if (directed) {
-        cmd <- paste0(
-          binpath, "/bin/OSLOM/oslom_dir_mac ", cmd,
-          " > /dev/null 2>&1"
-        )
-      } else {
-        cmd <- paste0(
-          binpath, "/bin/OSLOM/oslom_undir_mac ", cmd,
-          " > /dev/null 2>&1"
-        )
+      if(old_path_temp == "oslom_temp"){
+        if (weight) {
+          cmd <- paste0("-f ", fold_temp, "/net.txt -w ", cmd)
+        } else {
+          cmd <- paste0("-f ", fold_temp, "/net.txt -uw ", cmd)
+        }
+        if (directed) {
+          cmd1 <- paste0("cd ", binpath, "/bin >/dev/null 2>&1")
+          cmd2 <- paste0("OSLOM/oslom_dir_mac ", cmd, " > /dev/null 2>&1")
+          cmd <- paste0(cmd1, " && ", cmd2)
+        } else {
+          cmd1 <- paste0("cd ", binpath, "/bin >/dev/null 2>&1")
+          cmd2 <- paste0("OSLOM/oslom_undir_mac ", cmd, " > /dev/null 2>&1")
+          cmd <- paste0(cmd1, " && ", cmd2)
+        }
+      }else{
+        if (weight) {
+          cmd <- paste0("-f ", path_temp, "/net.txt -w ", cmd)
+        } else {
+          cmd <- paste0("-f ", path_temp, "/net.txt -uw ", cmd)
+        }
+        if (directed) {
+          cmd <- paste0(
+            binpath, "/bin/OSLOM/oslom_dir_mac ", cmd,
+            " > /dev/null 2>&1"
+          )
+        } else {
+          cmd <- paste0(
+            binpath, "/bin/OSLOM/oslom_undir_mac ", cmd,
+            " > /dev/null 2>&1"
+          )
+        }
       }
       system(command = cmd)
     } else {
@@ -417,15 +446,8 @@ both, sites and species", call. = FALSE)
 
     # Control: if the command line did not work
     if (!("tp" %in% list.files(paste0(path_temp, "/net.txt_oslo_files")))) {
-      if(os == "Darwin"){
-        stop("Command line was wrongly implemented. OSLOM did not run. Please 
-    have a look at https://biorgeo.github.io/bioregion/articles/a1_install_binary_files.html#known-issues
-    for more details.", 
+      stop("Command line was wrongly implemented. OSLOM did not run.", 
              call. = FALSE)
-      }else{
-        stop("Command line was wrongly implemented. OSLOM did not run.", 
-             call. = FALSE)
-      }
     }
 
     # Number of levels

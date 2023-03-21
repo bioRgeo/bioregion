@@ -114,9 +114,9 @@ to the folder that will host the bin folder while running
 \link{install_binaries} please make sure to set \code{binpath} accordingly.
 
 The C++ version of OSLOM generates temporary folders and/or files that are
-stored in the \code{path_temp} folder (folder "oslom_temp" in the bin
-folder in \code{binpath} by default). This temporary folder is removed by default
-(\code{delete_temp = TRUE}).
+stored in the \code{path_temp} folder (folder "oslom_temp" with an unique timestamp
+located in the bin folder in \code{binpath} by default). This temporary folder is
+removed by default (\code{delete_temp = TRUE}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite
