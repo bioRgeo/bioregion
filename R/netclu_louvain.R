@@ -399,7 +399,8 @@ The bipartite argument should probably be set to TRUE.")
 
       # Control: if the command line did not work
       if (!("net.tree" %in% list.files(paste0(path_temp)))) {
-        stop("Command line was wrongly implemented. Louvain did not run.")
+        stop("Command line was wrongly implemented. Louvain did not run.", 
+             call. = FALSE)
       }
 
       # Retrieve output from net.tree
