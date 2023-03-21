@@ -152,6 +152,7 @@ netclu_louvain <- function(net,
                            path_temp = "louvain_temp",
                            delete_temp = TRUE,
                            algorithm_in_output = TRUE) {
+  
   # Control input net
   controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
   controls(args = NULL, data = net, type = "input_net")
@@ -281,20 +282,19 @@ The bipartite argument should probably be set to TRUE.")
 
   # Cpp
   if (lang == "Cpp") {
+    
     # Control and set binpath
     controls(args = binpath, data = NULL, type = "character")
     if (binpath == "tempdir") {
-      binpath <- paste0(tempdir(), "/")
+      binpath <- tempdir()
     } else if (binpath == "pkgfolder") {
-      binpath <- paste0(.libPaths()[1], "/bioregion/")
+      binpath <- paste0(.libPaths()[1], "/bioregion")
     } else {
-      if (substr(binpath, nchar(binpath), nchar(binpath)) != "/") {
-        binpath <- paste0(binpath, "/")
-      }
       if (!dir.exists(binpath)) {
         stop(paste0("Impossible to access ", binpath), call. = FALSE)
       }
     }
+    binpath <- normalizePath(binpath)
 
     # Check OS
     os <- Sys.info()[["sysname"]]
@@ -315,7 +315,7 @@ The bipartite argument should probably be set to TRUE.")
       if (path_temp == "louvain_temp") {
         path_temp <- paste0(
           binpath,
-          "bin/",
+          "/bin/",
           path_temp,
           "_",
           round(as.numeric(as.POSIXct(Sys.time())))
@@ -328,6 +328,7 @@ The bipartite argument should probably be set to TRUE.")
           )
         }
       }
+      path_temp <- normalizePath(path_temp, mustWork = FALSE)
       dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
       if (!dir.exists(path_temp)) {
         stop(paste0("Impossible to create directory ", path_temp),

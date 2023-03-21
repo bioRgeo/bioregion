@@ -164,17 +164,15 @@ netclu_infomap <- function(net,
   # Control and set binpath
   controls(args = binpath, data = NULL, type = "character")
   if (binpath == "tempdir") {
-    binpath <- paste0(tempdir(), "/")
+    binpath <- tempdir()
   } else if (binpath == "pkgfolder") {
-    binpath <- paste0(.libPaths()[1], "/bioregion/")
+    binpath <- paste0(.libPaths()[1], "/bioregion")
   } else {
-    if (substr(binpath, nchar(binpath), nchar(binpath)) != "/") {
-      binpath <- paste0(binpath, "/")
-    }
     if (!dir.exists(binpath)) {
       stop(paste0("Impossible to access ", binpath), call. = FALSE)
     }
   }
+  binpath <- normalizePath(binpath)
 
   # Control version
   controls(args = version, data = NULL, type = "character")
@@ -255,7 +253,7 @@ both, sites and species", call. = FALSE)
     if (path_temp == "infomap_temp") {
       path_temp <- paste0(
         binpath,
-        "bin/",
+        "/bin/",
         path_temp,
         "_",
         round(as.numeric(as.POSIXct(Sys.time())))
@@ -267,6 +265,7 @@ both, sites and species", call. = FALSE)
         )
       }
     }
+    path_temp <- normalizePath(path_temp, mustWork = FALSE)
     dir.create(path_temp, showWarnings = FALSE, recursive = TRUE)
     if (!dir.exists(path_temp)) {
       stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
