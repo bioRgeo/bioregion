@@ -190,6 +190,26 @@ Please carefully check your data before using the clustering functions."))
     }
   }
   
+  # Input data.frame ##########################################################
+  if (type == "input_data_frame") {
+    if (!is.data.frame(data)) {
+      stop(paste0(deparse(substitute(data)), " must be a data.frame"),
+           call. = FALSE)
+    }
+    rowmat <- rownames(data)
+    colmat <- colnames(data)
+    if (sum(duplicated(rowmat)) > 0) {
+      message("Duplicated rownames detected!")
+    }
+    if (sum(duplicated(colmat)) > 0) {
+      message("Duplicated colnames detected!")
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop("NA(s) detected in the matrix!", call. = FALSE)
+    }
+  }
+  
   # Input matrix ##############################################################
   if (type == "input_matrix") {
     if (!is.matrix(data)) {
