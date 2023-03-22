@@ -17,5 +17,11 @@
 ^find_nclust.R
 ^vignettes/a3_2_hierarchical_clustering_cache/
 ^README.Rmd
+^vignettes/a3_pairwise_metrics.Rmd
+^vignettes/a4_1_hierarchical_clustering.Rmd
+^vignettes/a4_2_non_hierarchical_clustering.Rmd
+^vignettes/a4_3_network_clustering.Rmd
+^vignettes/a4_4_microbenchmark.Rmd
+^vignettes/a5_visualization.Rmd
 
 LICENSE
