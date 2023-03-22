@@ -98,7 +98,7 @@
 #' 
 #' @seealso [cut_tree] 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 #' 20, 25)
 #' rownames(comat) <- paste0("Site",1:20)

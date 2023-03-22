@@ -38,7 +38,7 @@
 #' @seealso [mat_to_net]
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' net <- data.frame(
 #'   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
 #'   Species = c("a", "b", "a", "c", "d", "b", "d"),

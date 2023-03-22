@@ -179,7 +179,7 @@ by this function as first approximation of the best numbers for your
 bioregionalisation.
 }
 \examples{
-\dontrun{
+\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
 
 # User-defined number of clusters

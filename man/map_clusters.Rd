@@ -34,7 +34,7 @@ have the same type (i.e. \code{character} is cluster is a
 included in the sites of \code{geometry}.
 }
 \examples{
-\dontrun{
+\donttest{
 data(fishmat)
 data(fishsp)
 

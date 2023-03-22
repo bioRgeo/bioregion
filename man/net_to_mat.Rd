@@ -46,7 +46,7 @@ nodes (site and species for example) and an optional third column indicating
 the weight of the interaction (if \code{weight = TRUE}).
 }
 \examples{
-\dontrun{
+\donttest{
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),

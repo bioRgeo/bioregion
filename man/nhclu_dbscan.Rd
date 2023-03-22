@@ -89,7 +89,7 @@ recommendation by the function when you launch it a first time without
 defining \code{eps}. Then, adjust depending on your clustering results.
 }
 \examples{
-\dontrun{
+\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
 
 clust1 <- nhclu_dbscan(dissim, index = "Simpson")

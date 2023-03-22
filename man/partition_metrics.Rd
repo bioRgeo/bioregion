@@ -113,7 +113,7 @@ only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
 }
 }
 \examples{
-\dontrun{
+\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
 
 # User-defined number of clusters

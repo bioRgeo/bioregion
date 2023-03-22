@@ -56,7 +56,7 @@
 #' 
 #' @seealso [cut_tree] 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' dissim <- dissimilarity(fishmat, metric = "all")
 #' 
 #' clust1 <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")

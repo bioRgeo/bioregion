@@ -115,7 +115,7 @@
 #' 
 #' @seealso [hclu_hierarclust]
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' dissim <- dissimilarity(fishmat, metric = "all")
 #'
 #' # User-defined number of clusters

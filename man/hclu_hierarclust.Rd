@@ -112,7 +112,7 @@ Clusters can be obtained by two methods:
 To find an optimal number of clusters, see \code{\link[=partition_metrics]{partition_metrics()}}
 }
 \examples{
-\dontrun{
+\donttest{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 20, 25)
 rownames(comat) <- paste0("Site",1:20)

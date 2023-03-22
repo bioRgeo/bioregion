@@ -91,7 +91,7 @@ steepness of the reachability plot (see
 \link[dbscan:optics]{dbscan::optics()})
 }
 \examples{
-\dontrun{
+\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
   
 clust1 <- hclu_optics(dissim, index = "Simpson")
