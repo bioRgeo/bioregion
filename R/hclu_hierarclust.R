@@ -228,7 +228,7 @@ hclu_hierarclust <- function(dissimilarity,
   }
   
   if(!is.null(cut_height)){
-    if(!is.numeric(cut_height) || cut_height < 0){
+    if(!is.numeric(cut_height) || any(cut_height < 0)){
       stop("cut_height must be a positive integer.")
     }
   }
