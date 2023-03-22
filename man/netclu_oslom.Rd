@@ -19,9 +19,9 @@ netclu_oslom(
   site_col = 1,
   species_col = 2,
   return_node_type = "both",
-  delete_temp = TRUE,
+  binpath = "tempdir",
   path_temp = "oslom_temp",
-  binpath = NULL
+  delete_temp = TRUE
 )
 }
 \arguments{
@@ -71,14 +71,14 @@ column 1 to column 2).}
 ("sites", "species" or "both") should be returned in the output
 (\code{keep_nodes_type="both"} by default).}
 
+\item{binpath}{a \code{character} indicating the path to the bin folder
+(see \link{install_binaries} and Details).}
+
+\item{path_temp}{a \code{character} indicating the path to the temporary folder
+(see Details).}
+
 \item{delete_temp}{a \code{boolean} indicating if the temporary folder should
 be removed (see Details).}
-
-\item{path_temp}{a \code{character} indicating the path to the temporary
-folder (see Details).}
-
-\item{binpath}{a \code{character} indicating the path to the bin folder
-(see \code{\link[=install_binaries]{install_binaries()}} and Details).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -109,14 +109,14 @@ OSLOM is a network community detection algorithm proposed in
 
 This function is based on the 2.4 C++ version of OSLOM
 (\url{http://www.oslom.org/software.htm}). This function needs files
-to run. They can be installed with \code{\link[=install_binaries]{install_binaries()}}. If you set the path
-to the folder that will host the bin folder  manually while running
-\code{\link[=install_binaries]{install_binaries()}} please make sure to set \code{binpath} accordingly.
+to run. They can be installed with \link{install_binaries}. If you set the path
+to the folder that will host the bin folder while running
+\link{install_binaries} please make sure to set \code{binpath} accordingly.
 
 The C++ version of OSLOM generates temporary folders and/or files that are
-stored in the \code{path_temp} folder (folder "oslom_temp" in the working
-directory by default). This temporary folder is removed by default
-(\code{delete_temp = TRUE}).
+stored in the \code{path_temp} folder (folder "oslom_temp" with an unique timestamp
+located in the bin folder in \code{binpath} by default). This temporary folder is
+removed by default (\code{delete_temp = TRUE}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite

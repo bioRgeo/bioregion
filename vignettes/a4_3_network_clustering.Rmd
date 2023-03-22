@@ -121,7 +121,7 @@ arguments are needed:
 # Binary files
 
 ```{r}
-install_binaries(binpath = NULL , infomap_version = c("2.1.0", "2.6.0"))
+install_binaries(binpath = "tempdir", infomap_version = c("2.1.0", "2.6.0"))
 ```
 
 ## Infomap
@@ -157,9 +157,9 @@ ex_infomap <- netclu_infomap(fishdf,
                              species_col = 2,
                              return_node_type = "both",
                              version = "2.6.0",
-                             delete_temp = TRUE,
+                             binpath = "tempdir",
                              path_temp = "infomap_temp",
-                             binpath = NULL)
+                             delete_temp = TRUE)
 
 table(ex_infomap$clusters$K_10)
 ```
@@ -196,9 +196,9 @@ ex_oslom <- netclu_oslom(fishdf,
                          site_col = 1,
                          species_col = 2,
                          return_node_type = "both",
-                         delete_temp = TRUE,
+                         binpath = "tempdir",
                          path_temp = "oslom_temp",
-                         binpath = NULL)
+                         delete_temp = TRUE))
 
 table(ex_oslom$clusters$K_4_semel)
 ```
@@ -227,9 +227,9 @@ ex_louvain <- netclu_louvain(fishdf,
                              site_col = 1,
                              species_col = 2,
                              return_node_type = "both",
-                             delete_temp = TRUE,
+                             binpath = "tempdir",
                              path_temp = "louvain_temp",
-                             binpath = NULL,
+                             delete_temp = TRUE,
                              algorithm_in_output = TRUE)
 table(ex_louvain$clusters$K_23)
 ```

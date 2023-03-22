@@ -21,9 +21,9 @@ netclu_infomap(
   species_col = 2,
   return_node_type = "both",
   version = "2.6.0",
-  delete_temp = TRUE,
+  binpath = "tempdir",
   path_temp = "infomap_temp",
-  binpath = NULL
+  delete_temp = TRUE
 )
 }
 \arguments{
@@ -77,14 +77,14 @@ Infomap should be used (see Note).}
 
 \item{version}{a \code{character} indicating the Infomap version to use.}
 
-\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
-be removed (see Details).}
+\item{binpath}{a \code{character} indicating the path to the bin folder
+(see \link{install_binaries} and Details).}
 
 \item{path_temp}{a \code{character} indicating the path to the temporary folder
 (see Details).}
 
-\item{binpath}{a \code{character} indicating the path to the bin folder
-(see \link{install_binaries} and Details).}
+\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
+be removed (see Details).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -116,17 +116,17 @@ and (un)directed networks.
 This function is based on the C++ version of Infomap
 (\url{https://github.com/mapequation/infomap/releases}).
 This function needs binary files to run. They can be installed
-with \code{\link[=install_binaries]{install_binaries()}}. If you set the path to the folder that will host
-the bin folder manually while running \link{install_binaries} please make sure to
+with \link{install_binaries}. If you set the path to the folder that will host
+the bin folder while running \link{install_binaries} please make sure to
 set \code{binpath} accordingly.
 
 The C++ version of Infomap generates temporary folders and/or files that are
-stored in the \code{path_temp} folder ("infomap_temp" with an unique time stamp
-located in the working directory by default). This temporary folder is
+stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
+located in the bin folder in \code{binpath} by default). This temporary folder is
 removed by default (\code{delete_temp = TRUE}).
 
 Several version of Infomap are available in the package. See
-\code{\link[=install_binaries]{install_binaries()}} for more details.
+\link{install_binaries} for more details.
 }
 \note{
 Infomap has been designed to deal with bipartite networks. To use this

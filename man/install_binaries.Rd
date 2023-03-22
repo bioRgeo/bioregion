@@ -4,7 +4,7 @@
 \alias{install_binaries}
 \title{Download, unzip, check permission and test the bioregion's binary files}
 \usage{
-install_binaries(binpath = NULL, infomap_version = c("2.1.0", "2.6.0"))
+install_binaries(binpath = "tempdir", infomap_version = c("2.1.0", "2.6.0"))
 }
 \arguments{
 \item{binpath}{a \code{character} indicating the path to the folder that will
@@ -20,15 +20,15 @@ be executed as programs. It finally tests if the binary files
 are running properly.
 }
 \details{
-\code{binpath = "tempdir"} R's temporary directory by default, in this
-case the 'bin' folder will be automatically removed at the end of the R
-session.
+By default, the binary files are installed in R's temporary
+directory (\code{binpath = "tempdir"}). In this case the 'bin' folder will be
+automatically removed at the end of the R session. Alternatively, the binary
+files can be installed in the bioregion's package folder
+(\code{binpath = "pkgfolder"}).
+Finally, a path to a folder of your choice can be chosen.
 
-\code{binpath = "pkgfolder"} bioregion's
-package or a path to a folder
-of your choice  (bioregion's
-package by default, if you use a different folder please be sure to update
-the \code{binpath} in \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).
+Please be sure to update the \code{binpath} accordingly in \link{netclu_infomap},
+\link{netclu_louvain} and \link{netclu_oslom}).
 }
 \note{
 Only the Infomap version 2.1.0 and 2.6.0 are available for now.
