@@ -5,7 +5,7 @@
 #' may require the users to provide either a similarity or dissimilarity
 #' matrix, or to provide the initial species-site table.
 #'
-#' @param cluster_object tree a `bioregion.clusters` object
+#' @param cluster_object a `bioregion.clusters` object
 #' 
 #' @param eval_metric character string or vector of character strings indicating
 #'  metric(s) to be calculated to investigate the effect of different number
@@ -113,7 +113,7 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
-#' @seealso [hclu_hierarclust]
+#' @seealso [compare_partitions]
 #' @examples
 #' \dontrun{
 #' dissim <- dissimilarity(fishmat, metric = "all")

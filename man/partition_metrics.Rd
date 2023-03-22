@@ -15,7 +15,7 @@ partition_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{tree a \code{bioregion.clusters} object}
+\item{cluster_object}{a \code{bioregion.clusters} object}
 
 \item{dissimilarity}{a \code{dist} object or a \code{bioregion.pairwise.metric} object (output
 from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if \code{eval_metric}
@@ -140,7 +140,7 @@ a
 \insertRef{Langfelder2008}{bioregion}
 }
 \seealso{
-\link{hclu_hierarclust}
+\link{compare_partitions}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),

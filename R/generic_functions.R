@@ -199,6 +199,55 @@ plot.bioregion.clusters <- function(x, ...)
   }
 }
 
+#' @export
+#' @method print bioregion.partition.comparison
+print.bioregion.partition.comparison <- function(x, ...)
+{
+  cat("Partition comparison:\n")
+  cat(" -", x$inputs["number_partitions"], "partitions compared\n")
+  cat(" -", x$inputs["number_items"], "items in the clustering\n")
+  
+  if(!is.null(x$args$sample_comparisons)) {
+    cat(" - ", x$args$sample_comparisons, 
+        "pairwise item comparisons sampled\n")
+  }
+  
+  if(!is.null(x$args$indices)) {
+    cat(" - Requested indices: ", x$args$indices, "\n")
+    cat(" - Metric summary:\n")
+
+    
+    
+    print(data.frame(sapply(x$partition_comparison[, x$args$indices],
+                            function(x) {
+                              c(min(x, na.rm = TRUE), 
+                                mean(x, na.rm = TRUE), 
+                                max(x, na.rm = TRUE))}),
+                     row.names = c("Min", "Mean", "Max")))
+  } else {
+    cat(" - No metrics computed\n")
+  }
+  
+  if(x$args$cor_frequency) {
+    cat(" - Correlation between each partition and the total frequency of item",
+        " pairwise membership computed:\n")
+    cat("   # Range: ", round(min(x$partition_freq_cor), 3), " - ", 
+        round(max(x$partition_freq_cor), 3), "\n")
+    cat("   # Partition(s) most representative (i.e., highest correlation): \n", 
+        paste(names(x$partition_freq_cor)[
+          which(x$partition_freq_cor == max(x$partition_freq_cor))
+        ], collapse = ", "),
+        "\n Correlation = ", round(max(x$partition_freq_cor), 3), "\n")
+  }
+ 
+  cat(" - Item pairwise membership", ifelse(x$args$store_pairwise_membership,
+                                             "", "not"),
+      "stored in outputs\n")
+  cat(" - Confusion matrices of partition comparisons",
+      ifelse(x$args$store_confusion_matrix,
+             "", "not"),
+      "stored in outputs\n")
+}
 
 #' @export
 #' @method print bioregion.partition.metrics
