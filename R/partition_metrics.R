@@ -115,7 +115,7 @@
 #' 
 #' @seealso [compare_partitions]
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' dissim <- dissimilarity(fishmat, metric = "all")
 #'
 #' # User-defined number of clusters

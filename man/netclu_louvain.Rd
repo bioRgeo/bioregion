@@ -140,7 +140,7 @@ the output can be chosen with the argument \code{return_node_type} equal to
 nodes and \code{"species"} to preserve only the species nodes.
 }
 \examples{
-\dontrun{
+\donttest{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)

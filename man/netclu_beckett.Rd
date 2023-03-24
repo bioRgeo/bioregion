@@ -83,7 +83,7 @@ to preserve only the sites nodes and \code{"species"} to preserve only the
 species nodes.
 }
 \examples{
-\dontrun{
+\donttest{
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),

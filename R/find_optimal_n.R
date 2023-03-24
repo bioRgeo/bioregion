@@ -176,7 +176,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' dissim <- dissimilarity(fishmat, metric = "all")
 #'
 #' # User-defined number of clusters

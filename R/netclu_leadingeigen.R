@@ -69,7 +69,7 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)

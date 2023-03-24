@@ -63,7 +63,7 @@ the initial matrix of dissimilarity, the partitioning around medoids method
 should be preferred (\code{\link[=nhclu_pam]{nhclu_pam()}})
 }
 \examples{
-\dontrun{
+\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
 
 clust1 <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")

@@ -27,7 +27,7 @@ interaction (if \code{weight = TRUE}) from a contingency table (sites as
 rows and species as columns for example).
 }
 \examples{
-\dontrun{
+\donttest{
 mat <- matrix(sample(1000, 50), 5, 10)
 rownames(mat) <- paste0("Site", 1:5)
 colnames(mat) <- paste0("Species", 1:10)

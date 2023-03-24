@@ -73,7 +73,7 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 #' prob = 1 / 1:1001), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)

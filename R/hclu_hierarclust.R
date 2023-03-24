@@ -98,7 +98,7 @@
 #' 
 #' @seealso [cut_tree] 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 #' 20, 25)
 #' rownames(comat) <- paste0("Site",1:20)
@@ -228,7 +228,7 @@ hclu_hierarclust <- function(dissimilarity,
   }
   
   if(!is.null(cut_height)){
-    if(!is.numeric(cut_height) || cut_height < 0){
+    if(!is.numeric(cut_height) || any(cut_height < 0)){
       stop("cut_height must be a positive integer.")
     }
   }

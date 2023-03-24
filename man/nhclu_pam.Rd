@@ -62,7 +62,7 @@ squared euclidean distances (thus k-means cannot be applied directly on the
 input dissimilarity matrix if the distances are not euclidean).
 }
 \examples{
-\dontrun{
+\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
 
 clust1 <- nhclu_pam(dissim, n_clust = 2:10, index = "Simpson")

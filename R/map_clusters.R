@@ -29,7 +29,7 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(fishmat)
 #' data(fishsp)
 #' 
