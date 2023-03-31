@@ -175,42 +175,66 @@ page</a> to better understand how these functions work.</p>
 <div class="section level2">
 <h2 id="clustering-algorithms">4. Clustering algorithms<a class="anchor" aria-label="anchor" href="#clustering-algorithms"></a>
 </h2>
-<p>bioregion.clusters class <code>bioregion.clusters</code></p>
+<p>The <code>bioregion</code> R package gathers several methods allowing
+to group sites and species into similar entities called bioregions. All
+these methods can lead to several partitions of sites and species,
+i.e. to different bioregionalizations. <br> Bioregionalization methods
+can be based on hierarchical clustering algorithms, non-hierarchical
+clustering algorithms or network algorithms. <br> The functions in the
+package are related to each of these three families and produce output
+that have a specific class, namely the bioregion.clusters class
+<code>bioregion.clusters</code>. <br></p>
 <div class="section level3">
 <h3 id="hierarchical-clustering">4.1 Hierarchical clustering<a class="anchor" aria-label="anchor" href="#hierarchical-clustering"></a>
 </h3>
+<p>The functions relying on hierarchical clustering start with the
+prefix <code>hclu_</code>. With these algorithms, the bioregions are
+placed into a dendrogram that ranges from two extremes: all sites belong
+to the same bioregion (top of the tree) or all sites belong to a
+different bioregion (bottom of the tree).</p>
+<p>See the following <a href="https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html" class="external-link">tutorial
+page</a> for more details.</p>
 </div>
 <div class="section level3">
 <h3 id="non-hierarchical-clustering">4.2 Non-hierarchical clustering<a class="anchor" aria-label="anchor" href="#non-hierarchical-clustering"></a>
 </h3>
+<p>The functions relying on hierarchical clustering start with the
+prefix <code>nhclu_</code>. For most of these algorithms, the user needs
+to predefine the number of clusters, although this number can be
+determined by estimating the optimal partition.</p>
+<p>See this <a href="https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html" class="external-link">tutorial
+page</a> for more details.</p>
 </div>
 <div class="section level3">
 <h3 id="network-clustering">4.3 Network clustering<a class="anchor" aria-label="anchor" href="#network-clustering"></a>
 </h3>
-<p>The <code>bioregion</code>’s package contains 8 network clustering
-functions:</p>
-<ul>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_greedy.html">netclu_greedy</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.html">netclu_labelprop</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.html">netclu_leadingeigen</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.html">netclu_walktrap</a></li>
-<li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_beckett.html">netclu_beckett</a></li>
-</ul>
-<p>Please check this <a href="https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html">tutorial
-page</a> to get more information regarding the network clustering
-functions.</p>
+<p>The functions relying on network clustering start with the prefix
+<code>netclu_</code>. Site-species matrices can be seen as (bipartite)
+networks where the nodes are either the sites or the species and the
+links between them are the occurrences of species within sites.<br>
+With networks, modularity algorithms can be applied, leading to
+bioregionalization.</p>
+<p>The following <a href="https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html">tutorial
+page</a> details more each clustering functions relying on a network
+algorithm.</p>
 </div>
 <div class="section level3">
 <h3 id="microbenchmark">4.4 Microbenchmark<a class="anchor" aria-label="anchor" href="#microbenchmark"></a>
 </h3>
+<p>The different bioregionalization methods listed in the package rely
+on more or less computationally intensive algorithms.</p>
+<p>The following <a href="https://biorgeo.github.io/bioregion/articles/a4_4_microbenchmark.html" class="external-link">page</a>
+estimates the time required to run each method on data sets of different
+sizes.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="visualization-and-evaluation-of-the-results">5. Visualization and evaluation of the results<a class="anchor" aria-label="anchor" href="#visualization-and-evaluation-of-the-results"></a>
 </h2>
+<p>If sites have geographic coordinates, then each bioregionalization
+can be visualized with the function <code><a href="../reference/map_clusters.html">map_clusters()</a></code>.</p>
+<p>This <a href="https://biorgeo.github.io/bioregion/articles/a5_visualization.html" class="external-link">tutorial
+page</a> details different ways to plot your bioregionalization.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
