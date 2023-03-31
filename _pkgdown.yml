@@ -51,6 +51,7 @@ reference:
   contents:
   - partition_metrics
   - find_optimal_n
+  - compare_partitions
   
 - title: Visualisation
   desc: ~

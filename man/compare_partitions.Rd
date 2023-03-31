@@ -67,9 +67,10 @@ partitions, the function computes a confusion matrix with four elements:
 \item \emph{c}: number of pairs of items not grouped in partition 1 but grouped in
 partition 2
 \item \emph{d}: number of pairs of items not grouped in both partition 1 & 2
-This confusion matrix is stored in \code{confusion_matrix} if
-\code{store_confusion_matrix = TRUE}.
 }
+
+The confusion matrix is stored in \code{confusion_matrix} if
+\code{store_confusion_matrix = TRUE}.
 
 Based on the confusion matrices, we can compute a range of indices to
 indicate the agreement among partitions. As of now, we have implemented:

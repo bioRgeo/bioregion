@@ -250,12 +250,19 @@ hclu_optics <- function(dissimilarity,
     max.col <- max(lengths(
       regmatches(cls_hierarchy$new_cls_id,
                  gregexpr("\\.", cls_hierarchy$new_cls_id)))) + 1
-    cls_hierarchy <- tidyr::separate(data = cls_hierarchy,
-                                     col = "new_cls_id",
-                                     remove = FALSE,
-                                     into = paste0("lvl", 1:max.col),
-                                     sep = "\\.",
-                                     fill = "right")
+    if("xics" %in% class(cls_hierarchy)) {
+      class(cls_hierarchy) <- class(cls_hierarchy)[
+        -which(class(cls_hierarchy) == "xics")]
+    }
+    cls_hierarchy <- 
+      as.data.frame(tidyr::separate_wider_delim(data = cls_hierarchy,
+                                                cols = "new_cls_id",
+                                                delim = ".",
+                                                cols_remove = FALSE,
+                                                names = paste0("lvl",
+                                                               1:max.col),
+                                                too_few = "align_start"
+      ))
     
     cls_hierarchy[which(is.na(cls_hierarchy), arr.ind = TRUE)] <- 0
     
