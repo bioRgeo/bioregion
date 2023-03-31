@@ -1,6 +1,6 @@
 ---
 title: "4.3 Network clustering"
-author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
+author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
