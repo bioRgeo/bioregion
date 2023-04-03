@@ -1,6 +1,6 @@
 ---
 title: "4.3 Network clustering"
-author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
+author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
@@ -36,19 +36,27 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-Identifying communities of nodes that tend to interact more with each other than the network as a whole.
-community detection algorithms
-
-optimal community partition of a network can be found by searching for the partition that maximizes modularity. Attempting to find the partition that maximizes modularity is a computationally hard problem requiring the use of algorithms.
-
-Beckett
-Bipartite networks are the representation of interactions between two distinct classes of nodes, such that nodes can only interact with nodes from the other class. Community detection algorithms are designed to identify clusters, or modules, of nodes within a network that are more likely to interact among themselves than with the rest of the network [5]. Modularity is an evaluation of the way in which nodes are partitioned into separate subsets, forming modules. This is done by assessing the extent to which interactions in the network occur within modules rather than between modules, relative to a null model [6,7]. One (of many) community detection methods is to find the partitioning of nodes into modules that will maximize the modularity of a network. Several modularity maximization algorithms have been designed to attempt to achieve this [5].
-
-Network theory offers plenty of algorithms to classify nodes that are more
+Networks are objects made of nodes and links. The links connect the nodes.
+Networks can be bipartite, i.e. the nodes can be of two different types and
+one type can only be linked with the second one. Links can also be weighted.
+<br>
+Site-species matrices can be viewed as bipartite networks where sites and
+species are two different classes of nodes, and the occurrences of species
+within sites are the links.
+<br>
+The community detection algorithms try to identify the communities of nodes
+that interact more with each other than the network as a whole. Appling these
+algorithms to site-species matrices is therefore equivalent to the more classic
+bioregionalization methods.
+<br>
+The optimal community partition of a network can be found by searching for the partition that maximizes a metric called modularity. Maximising the modularity
+is a computationally hard problem requiring the use of algorithms.
+<br>
+Network theory offers plenty of such algorithms to classify nodes that are more
 connected than expected randomly. With the `bioregion` R package, we cover the
 main network algorithms to identify bioregions in site-species matrices. All
 functions relying on network algorithms start with the prefix `netclu_`.
-
+<br>
 Network clustering takes place on the left-hand size part of the `bioregion`
 conceptual diagram:
 
