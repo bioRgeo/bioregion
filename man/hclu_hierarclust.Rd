@@ -71,7 +71,7 @@ A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
 \item{\strong{name}: \verb{character string} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the input dataset}
+\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}

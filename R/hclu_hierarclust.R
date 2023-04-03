@@ -71,7 +71,7 @@
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
@@ -370,11 +370,17 @@ hclu_hierarclust <- function(dissimilarity,
                         h_max = h_max,
                         h_min = h_min,
                         dynamic_tree_cut = dynamic_tree_cut)
-  } else{
+    outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
+                                          TRUE,
+                                          FALSE)
+  } else {
     outputs$clusters <- NA
     outputs$cluster_info <- NA
+    outputs$inputs$hierarchical <- FALSE
   }
   
+  
+
   if(!keep_trials){
     outputs$algorithm$trials <- "Trials not stored in output"
   }

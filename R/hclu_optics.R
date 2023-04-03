@@ -71,7 +71,7 @@
 #' \enumerate{
 #' \item{**name**: `character string` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the input dataset}
+#' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
@@ -191,6 +191,9 @@ hclu_optics <- function(dissimilarity,
                          pairwise_metric = TRUE,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
+  outputs$inputs$hierarchical <- ifelse(show_hierarchy,
+                                        TRUE,
+                                        FALSE)
   
   outputs$algorithm <- list()
   

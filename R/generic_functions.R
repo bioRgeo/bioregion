@@ -39,7 +39,7 @@ print.bioregion.clusters <- function(x, ...)
         round(x$algorithm$final.tree.coph.cor, 3), "\n")
   }
   
-  
+
   # number of clusters -----
   if (inherits(x$clusters, "data.frame")) {
     
@@ -77,6 +77,14 @@ print.bioregion.clusters <- function(x, ...)
     cat("Clustering results:\n")
     cat(" - Number of partitions: ",
         ncol(x$clusters) - 1, "\n")
+    
+    if(ncol(x$clusters) > 2) {
+      if(x$input$hierarchical) {
+        cat(" - Partitions are hierarchical\n")
+      } else {
+        cat(" - Partitions are not hierarchical\n")
+      }
+    }
     
     nclust <- apply(x$clusters[, 2:ncol(x$clusters), drop = FALSE],
                     2, function(y) length(unique(y)))
