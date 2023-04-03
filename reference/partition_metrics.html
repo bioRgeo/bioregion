@@ -233,13 +233,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Simpson </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.827 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.829 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  2 3 4 5 6 7 8 9 10 11 ... (with 9 more values) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  19 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  2 3 4 5 6 7 8 9 10 11 ... (with 9 more values) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.992 0.99 0.969 0.961 0.938 0.906 0.875 0.812 0.766 0.75 ... (with 9 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.992 0.969 0.938 0.922 0.875 0.859 0.812 0.766 0.75 0.688 ... (with 9 more values) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">partition_metrics</span><span class="op">(</span><span class="va">tree1</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span></span>
 <span class="r-in"><span>                  site_col <span class="op">=</span> <span class="st">"Site"</span>, species_col <span class="op">=</span> <span class="st">"Species"</span>,</span></span>
@@ -258,9 +258,9 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      tot_endemism avg_endemism pc_distance    anosim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min     0.5589744    0.2297125   0.1398730 0.6954843</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean    0.6941970    0.3975923   0.5628160 0.8116850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max     0.9435897    0.8188070   0.7787519 0.8581677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min     0.5230769    0.2169494   0.1398730 0.6954843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean    0.6558704    0.3986773   0.6100867 0.8251577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max     0.9435897    0.8188070   0.7907612 0.8655623</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each partition are available in </span>
