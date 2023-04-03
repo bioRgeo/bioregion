@@ -688,7 +688,7 @@ We can ask for a higher number of breaks:
 ```{r, cache = TRUE}
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
-               n_breaks = 2)
+               n_breakpoints = 2)
 
 ```
 
@@ -696,7 +696,7 @@ find_optimal_n(eval_tree5,
 ```{r, cache = TRUE}
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
-               n_breaks = 3)
+               n_breakpoints = 3)
 
 ```
 
