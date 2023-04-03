@@ -22,7 +22,7 @@
 #' identify optimal number(s) of clusters. Available methods currently include
 #' `"elbow"`,
 #' `"increasing_step"`, `"decreasing_step"`, `"cutoff"`, 
-#' `"mars"`, `"min"` or
+#' `"breakpoints"`, `"min"` or
 #' `"max"`. Default is `"elbow"`. See details.
 #' 
 #' @param step_quantile if `"increasing_step"` or `"decreasing_step"`,
@@ -43,11 +43,8 @@
 #' @param metric_cutoffs if `criterion = "cutoff"`, specify here the cutoffs
 #' of `eval_metric` at which the number of clusters should be extracted
 #' 
-#' @param mars_breakpoints `"all"`, "`increasing"` or `"decreasing"`. If 
-#' `criterion = "mars"`, specify here if you want to extract all break points
-#' identified by the mars model (`"all"`), or only the breakpoints 
-#' corresponding to increases (`increasing"`) or decreases `"decreasing"`.
-#' Defaults to `"all"` 
+#' @param n_breakpoints specify here the number of breakpoints to look for in
+#' the curve. Defaults to 1 
 #' 
 #' @param plot a boolean indicating if a plot of the first `eval_metric`
 #' should be drawn with the identified optimal numbers of cutoffs
@@ -122,15 +119,12 @@
 #' relevant at very large spatial scales, and lower cut-offs should be
 #' considered at finer spatial scales.
 #' }
-#' \item{`mars`:
-#' This method consists in fitting a mars model on the evaluation curve, and
-#' using it to identify all cutoffs at which there is no more increase in the
-#' evaluation metric. In other words, this method will find cutoffs with the
-#' two following conditions: (1) the evaluation metric was increasing before
-#' the cutoff and (2) there is no more increase or the increase is slower after
-#' the cutoff. This method uses [earth::earth()][earth::earth]. This method
-#' should probably not be applied if you have a low number of partitions (e.g.
-#' <= 20)}
+#' \item{`breakpoints`:
+#' This method consists in finding break points in the curve using a segmented
+#' regression. Users have to specify the number of expected break points in
+#' `n_breakpoints` (defaults to 1). Note that since this method relies on a 
+#' regression model, it should probably not be applied with a low number of
+#' partitions.}
 #'
 #' \item{`min` & `max`:
 #' Picks the optimal partition(s) respectively at the minimum or maximum value
@@ -206,10 +200,9 @@
 #'                step_levels = 3) 
 #' find_optimal_n(a, criterion = "decreasing_step",
 #'                step_levels = 3)                 
-#' b <- find_optimal_n(a, criterion = "mars")             
+#' find_optimal_n(a, criterion = "breakpoints")             
 #' }
 #'
-#' @importFrom earth earth
 #' @importFrom stats predict quantile
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes_string geom_line facet_wrap geom_vline
@@ -220,12 +213,12 @@
 find_optimal_n <- function(
     partitions,
     metrics_to_use = "all",
-    criterion = "elbow", # step, elbow, cutoff, min, max and mars for now
+    criterion = "elbow", 
     step_quantile = .99,
     step_levels = NULL,
     step_round_above = TRUE,
     metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
-    mars_breakpoints = "all",
+    n_breakpoints = 1,
     plot = TRUE){
   
   if(!inherits(partitions, "bioregion.partition.metrics")){
@@ -274,7 +267,7 @@ find_optimal_n <- function(
                    nrow(partitions$evaluation_df), "\n"))
     
     if(criterion %in% c("elbow", "increasing_step", "decreasing_step",
-                        "mars")) {
+                        "breakpoints")) {
       if(nrow(partitions$evaluation_df) <= 8) {
         message(paste0(
           "...Caveat: be cautious with the interpretation of metric analyses
@@ -282,7 +275,7 @@ find_optimal_n <- function(
       }
     } else if(!(criterion %in% c("min", "max", "cutoff"))) {
       stop("criterion must be one of elbow, increasing_step, decreasing_step,
-           min, max, cutoff or mars")
+           min, max, cutoff or breakpoints")
     }
     
     if(criterion %in% c("increasing_step", "decreasing_step")){
@@ -323,120 +316,73 @@ find_optimal_n <- function(
                     length(metrics_to_use)),
             dimnames = list(NULL,
                             paste0("optimal_n_", metrics_to_use))))
-    if(criterion == "mars"){
-      if(!(mars_breakpoints %in% c("all", "increasing", "decreasing"))) {
-        stop("mars_breakpoints should be 'all' or 'increasing' or 'decreasing'"
-        )
-      }
+    if(criterion == "breakpoints"){
+      controls(args = n_breakpoints, type = "positive_integer" )
       
-      mars_res <- lapply(
-        metrics_to_use, 
-        function(x, eval_df, hing) {
+      seg_res <- lapply(
+        metrics_to_use,
+        function(x, eval_df, n_breaks) {
           if(any(is.na(eval_df[, x]))){
-            NA_vals <- eval_df[which(is.na(eval_df[, x])), ]
+            # NA_vals <- eval_df[which(is.na(eval_df[, x])), ]
             eval_df <- eval_df[-which(is.na(eval_df[, x])), ]
-          } else {
-            NA_vals <- NULL
-          }
+          } # else {
+          # NA_vals <- NULL
+          # }
           
-          mars_model <- earth::earth(eval_df[, x] ~ eval_df$n_clusters)
-          # fit <- lm(tot_endemism ~ n_clusters, data = eval_df)
-          # fit_seg <- segmented(fit, seg.Z = ~n_clusters, psi = NA)
-          # Consider using segmented here, instead of mars?
-          mars_sum <- summary(mars_model)
-          mars_preds <- data.frame(
-            eval_df,
-            preds = as.vector(stats::predict(mars_model,
-                                             eval_df$n_clusters)))
-          if(nrow(mars_sum$coefficients) > 1){
-            funs <-
-              rownames(mars_sum$coefficients)[2:nrow(mars_sum$coefficients)]
-            funs <- gsub(")", "", gsub("h(", "", funs, fixed = TRUE),
-                         fixed = TRUE)
-            funs <- gsub(paste0("eval_df$n_clusters"), "", funs, fixed = TRUE)
-            
-            mars_hinges <- as.numeric(gsub("-", "", funs))
-            
-            mars_cutoffs <- data.frame(cutoff = unique(mars_hinges),
-                                       before = NA, after = NA)
-            mars_cutoffs <- mars_cutoffs[order(mars_cutoffs$cutoff), ]
-            
-            def_cut <- min(mars_preds$n_clusters)
-            
-            # Finding if the predictions are increasing or decreasing 
-            # after the hinge
-            for (cur_cut in mars_cutoffs$cutoff){
-              y2 <- unique(mars_preds[which(mars_preds$n_clusters == cur_cut),
-                                      ncol(mars_preds)])
-              y1 <- unique(mars_preds[which(mars_preds$n_clusters == def_cut),
-                                      ncol(mars_preds)])
-              
-              mars_cutoffs$before[mars_cutoffs$cutoff == cur_cut] <-
-                (y2 - y1) / (cur_cut - def_cut)
-              
-              def_cut <- cur_cut
-            }
-            if(nrow(mars_cutoffs) > 1){
-              mars_cutoffs$after[1:(nrow(mars_cutoffs) - 1)] <-
-                mars_cutoffs$before[2:nrow(mars_cutoffs)]
-            }
-            
-            val_after <- unique(mars_preds[which(mars_preds$n_clusters ==
-                                                   max(mars_preds$n_clusters)),
-                                           ncol(mars_preds)])
-            mars_cutoffs$after[nrow(mars_cutoffs)] <-
-              (val_after -
-                 mars_preds[which(mars_preds$n_clusters == def_cut),
-                            ncol(mars_preds)]) /
-              (max(mars_preds$n_clusters) - def_cut)
-            mars_cutoffs$change_slope <- mars_cutoffs$after -
-              mars_cutoffs$before
-            
-            mars_cutoffs$breaks <- ifelse(mars_cutoffs$before > 0 &
-                                            mars_cutoffs$change_slope < 0,
-                                          TRUE, FALSE)
-            
-            if(hing == "all"){
-              optim_cutoffs <- 
-                which(partitions$evaluation_df$n_clusters %in%
-                        mars_cutoffs$cutoff)
-            } else if (hing == "increase") {
-              optim_cutoffs <- 
-                which(partitions$evaluation_df$n_clusters %in%
-                        mars_cutoffs$cutoff[mars_cutoffs$breaks])
-            } else if (hing == "decrease") {
-              optim_cutoffs <- 
-                which(partitions$evaluation_df$n_clusters %in%
-                        mars_cutoffs$cutoff[!mars_cutoffs$breaks])
-            }
-          } else{
-            optim_cutoffs <- integer(0)
-          }
+          n_cl <- eval_df$n_clusters
+          y <- eval_df[, x]
+          fit <- stats::lm(y ~ n_cl)
+          fit_seg <- segmented::segmented(fit, 
+                                          npsi = n_breaks)
+          preds <- data.frame(n_clusters = n_cl,
+                              preds = segmented::broken.line(fit_seg)$fit,
+                              metric = x)
           
-          if(length(NA_vals)){
-            mars_preds <- rbind(data.frame(NA_vals, 
-                                           preds = NA),
-                                mars_preds)
-          }
+          optim_cutoffs <- fit_seg$psi[, 2]
+          
+          
+          # if(length(NA_vals)){
+          #   preds <- rbind(data.frame(NA_vals, 
+          #                             preds = NA),
+          #                  preds)
+          # }
           
           return(list(optim_cutoffs,
-                      mars_preds))
-        }, eval_df = partitions$evaluation_df, hing = mars_breakpoints)
+                      preds))
+        }, eval_df = partitions$evaluation_df, n_breaks = n_breakpoints)
       
-      optim_index <- lapply(mars_res, function(x) x[[1]])
       
-      optim_n <- lapply(
-        optim_index,
-        function(x) unique(partitions$evaluation_df$n_clusters[x]))
-      
-      mars_preds <- unlist(sapply(mars_res,
-                                  function(x) x[[2]][, ncol(x[[2]])],
-                                  simplify = FALSE))
-      
+      optim_n <- lapply(seg_res, function(x) x[[1]])
       names(optim_n) <- metrics_to_use
       
+      #Rounding to get the closest partition
+      optim_n <- lapply(optim_n, round)
+      if(any(!(unlist(optim_n) %in% partitions$evaluation_df$n_clusters))) {
+        message("Exact break point not in the list of partitions: finding the",
+                " closest partition...\n")
+        for(m in names(optim_n)) {
+          if(any(!(optim_n[[m]] %in% partitions$evaluation_df$n_clusters))) {
+            optim_n[[m]][which(!(optim_n[[m]] %in% 
+                                   partitions$evaluation_df$n_clusters))] <- 
+              partitions$evaluation_df$n_clusters[
+                which.min(abs(
+                  partitions$evaluation_df$n_clusters - 
+                    optim_n[[m]][which(!(optim_n[[m]] %in% 
+                                           partitions$evaluation_df$n_clusters))
+                                 ]
+                  ))
+                ]
+          }
+        }
+      }
+
+      
+      seg_preds <- data.frame(data.table::rbindlist(lapply(seg_res,
+                                                           function(x) x[[2]])))
+   
       for(metric in names(optim_n)) {
-        partitions$evaluation_df[optim_index[[metric]],
+        partitions$evaluation_df[which(partitions$evaluation_df$n_clusters %in%
+                                         optim_n[[metric]]),
                                  paste0("optimal_n_", metric)] <- TRUE
       }
     }
@@ -607,23 +553,13 @@ find_optimal_n <- function(
         names_to = "variable"))
       
       message("Plotting results...")
-      p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
-                                                     y = "value")) +
-        ggplot2::geom_line(col = "darkgrey") +
-        ggplot2::facet_wrap(~ variable, scales = "free_y") +
-        # ggplot2::geom_hline(
-        #   yintercept = partitions$evaluation_df[
-        #     partitions$evaluation_df$optimal_nclust, eval_metric[1]],
-        #   linetype = 2) +
-        ggplot2::geom_vline(data = ggdf2,
-                            ggplot2::aes_string(xintercept = "n_clusters"),
-                            linetype = 2) +
-        ggplot2::theme_bw()
-      if(criterion == "mars"){
+
+      if(criterion == "breakpoints"){
         
-        ggdf$mars_preds <- mars_preds
+        names(seg_preds) <- c("n_clusters", "value", "variable")
         
-        message("   (the red line is the prediction from MARS models)")
+        message("   (the red line is the prediction from the segmented ",
+                "regression)")
         
         p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
                                                        y = "value")) +
@@ -636,8 +572,7 @@ find_optimal_n <- function(
                               ggplot2::aes_string(xintercept = "n_clusters"),
                               linetype = 2) +
           ggplot2::theme_bw() +
-          ggplot2::geom_line(ggplot2::aes_string(x = "n_clusters",
-                                                 y = "mars_preds"),
+          ggplot2::geom_line(data = seg_preds,
                              col = "red")
       } else {
         p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
@@ -664,7 +599,7 @@ find_optimal_n <- function(
                               step_levels = step_levels,
                               step_round_above = step_round_above,
                               metric_cutoffs = metric_cutoffs,
-                              mars_breakpoints = mars_breakpoints,
+                              n_breakpoints = n_breakpoints,
                               plot = plot
   ),
   evaluation_df = partitions$evaluation_df,

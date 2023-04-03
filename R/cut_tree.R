@@ -109,7 +109,6 @@
 #' 
 #' @importFrom stats as.dist na.omit
 #' @importFrom dynamicTreeCut cutreeDynamic
-# @importFrom dendextend cutree
 #' 
 #'@export
 
@@ -270,7 +269,7 @@ cut_tree <- function(tree,
         max_iter <- 500
         while(k != cur_n &  h1 != h0 & iter < max_iter){
           h <- h0 + (h1 - h0) / 2
-          cls <- dendextend::cutree(cur.tree, h = h)
+          cls <- stats::cutree(cur.tree, h = h)
           k <- max(cls)
           if(k < cur_n) {
             h1 <- h
@@ -293,7 +292,7 @@ cut_tree <- function(tree,
       }
       names(output_cut_height) <- paste0("k_", n_clust)
     } else {
-      cls <- dendextend::cutree(cur.tree, k = n_clust)
+      cls <- stats::cutree(cur.tree, k = n_clust)
       clusters <- data.frame(rownames(cls),
                              cluster = cls)
       names(clusters) <- c("name", paste0("k_", n_clust))
@@ -306,7 +305,7 @@ cut_tree <- function(tree,
     
   } else if(!is.null(cut_height)) {
     cut_height <- cut_height[order(cut_height, decreasing = TRUE)]
-    cls <- dendextend::cutree(cur.tree,
+    cls <- stats::cutree(cur.tree,
                               h = cut_height)
     if(length(cut_height) == 1) {
       clusters <- data.frame(site = names(cls),

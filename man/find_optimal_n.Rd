@@ -12,7 +12,7 @@ find_optimal_n(
   step_levels = NULL,
   step_round_above = TRUE,
   metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
-  mars_breakpoints = "all",
+  n_breakpoints = 1,
   plot = TRUE
 )
 }
@@ -31,7 +31,7 @@ metrics available in \code{partitions} will be used}
 identify optimal number(s) of clusters. Available methods currently include
 \code{"elbow"},
 \code{"increasing_step"}, \code{"decreasing_step"}, \code{"cutoff"},
-\code{"mars"}, \code{"min"} or
+\code{"breakpoints"}, \code{"min"} or
 \code{"max"}. Default is \code{"elbow"}. See details.}
 
 \item{step_quantile}{if \code{"increasing_step"} or \code{"decreasing_step"},
@@ -52,11 +52,8 @@ Defaults to \code{TRUE}}
 \item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the cutoffs
 of \code{eval_metric} at which the number of clusters should be extracted}
 
-\item{mars_breakpoints}{\code{"all"}, "\verb{increasing"} or \code{"decreasing"}. If
-\code{criterion = "mars"}, specify here if you want to extract all break points
-identified by the mars model (\code{"all"}), or only the breakpoints
-corresponding to increases (\verb{increasing"}) or decreases \code{"decreasing"}.
-Defaults to \code{"all"}}
+\item{n_breakpoints}{specify here the number of breakpoints to look for in
+the curve. Defaults to 1}
 
 \item{plot}{a boolean indicating if a plot of the first \code{eval_metric}
 should be drawn with the identified optimal numbers of cutoffs}
@@ -154,15 +151,12 @@ cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
 relevant at very large spatial scales, and lower cut-offs should be
 considered at finer spatial scales.
 }
-\item{\code{mars}:
-This method consists in fitting a mars model on the evaluation curve, and
-using it to identify all cutoffs at which there is no more increase in the
-evaluation metric. In other words, this method will find cutoffs with the
-two following conditions: (1) the evaluation metric was increasing before
-the cutoff and (2) there is no more increase or the increase is slower after
-the cutoff. This method uses \link[earth:earth]{earth::earth()}. This method
-should probably not be applied if you have a low number of partitions (e.g.
-<= 20)}
+\item{\code{breakpoints}:
+This method consists in finding break points in the curve using a segmented
+regression. Users have to specify the number of expected break points in
+\code{n_breakpoints} (defaults to 1). Note that since this method relies on a
+regression model, it should probably not be applied with a low number of
+partitions.}
 
 \item{\code{min} & \code{max}:
 Picks the optimal partition(s) respectively at the minimum or maximum value
@@ -209,7 +203,7 @@ find_optimal_n(a, criterion = "decreasing_step",
                step_levels = 3) 
 find_optimal_n(a, criterion = "decreasing_step",
                step_levels = 3)                 
-b <- find_optimal_n(a, criterion = "mars")             
+find_optimal_n(a, criterion = "breakpoints")             
 }
 
 }

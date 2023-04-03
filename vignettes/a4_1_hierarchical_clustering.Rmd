@@ -656,19 +656,18 @@ of partitions and select the associated partition. Such a criterion can be
 interesting in the case of `anosim`, but is probably much less useful for the
 other metrics implemented in the package.
 
-### 3.2.5 Finding break points with a MARS model (experimental)
+### 3.2.5 Finding break points in the curve
 
-This is an exploratory method which may not give adequate results.
-
-This criterion consists in applying a MARS model with the formula 
-evaluation metric ~ number of clusters. The main issue with such a model is that
-it may require a larger number of points to find an appropriate number of 
+This criterion consists in applying a segmented regression model with the 
+formula evaluation metric ~ number of clusters. The user can define the number 
+of breaks to identify on the curve. Note that such a model likely 
+requires a minimum number of points to find an appropriate number of 
 clusters. In our example here, we make 100 cuts in the tree to have enough
 values.
 
 ```{r, cache = TRUE}
 tree5 <- cut_tree(tree4,
-                  cut_height = seq(0, 0.67, # We cut the tree 1000 times from 0 to 0.67 
+                  cut_height = seq(0, 0.67, # We cut the tree 100 times from 0 to 0.67 
                                    length = 100)) # (0.67 is the maximum height of my tree here)
 
 eval_tree5 <- partition_metrics(tree5, 
@@ -678,11 +677,18 @@ eval_tree5 <- partition_metrics(tree5,
                                                 "avg_endemism", "tot_endemism"))
 
 find_optimal_n(eval_tree5,
-               criterion = "mars")
+               criterion = "breakpoints")
 
 ```
-We can see that for anosim, the break point could be meaningful, whereas for the
-other metrics, the mars break points seem to lag behind the actual break points.
+
+We can ask for a higher number of breaks: 
+
+```
+find_optimal_n(eval_tree5,
+               criterion = "breakpoints",
+               n_breaks = 2)
+
+```
 
 # 4. OPTICS as a semi-hierarchical clustering approach
 
