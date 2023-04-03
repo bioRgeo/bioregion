@@ -17,3 +17,5 @@ docs/
 pkgdown/
 
 docs
+
+vignettes/a4_1_hierarchical_clustering_cache

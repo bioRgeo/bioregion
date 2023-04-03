@@ -349,7 +349,8 @@ The bipartite or bipartite_version argument should probably be set to TRUE.")
       pairwise = ifelse(isbip, FALSE, TRUE),
       pairwise_metric = ifelse(isbip, NA, index),
       dissimilarity = FALSE,
-      nb_sites = nbsites
+      nb_sites = nbsites,
+      hierarchical = FALSE
     )
 
     outputs$algorithm <- list()
@@ -477,6 +478,7 @@ The bipartite or bipartite_version argument should probably be set to TRUE.")
     )
     if (!twolevel & show_hierarchy) {
       outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
+      outputs$inputs$hierarchical <- TRUE
     }
 
     # Return outputs

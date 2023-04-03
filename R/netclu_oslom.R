@@ -354,7 +354,8 @@ both, sites and species", call. = FALSE)
       pairwise = ifelse(isbip, FALSE, TRUE),
       pairwise_metric = ifelse(isbip, NA, index),
       dissimilarity = FALSE,
-      nb_sites = nbsites
+      nb_sites = nbsites,
+      hierarchical = FALSE
     )
 
     outputs$algorithm <- list()

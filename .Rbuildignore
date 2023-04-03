@@ -16,6 +16,7 @@
 ^oslom_temp/
 ^find_nclust.R
 ^vignettes/a3_2_hierarchical_clustering_cache/
+^vignettes/a4_1_hierarchical_clustering_cache/
 ^README.Rmd
 ^vignettes/a3_pairwise_metrics.Rmd
 ^vignettes/a4_1_hierarchical_clustering.Rmd
