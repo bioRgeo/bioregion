@@ -683,12 +683,25 @@ find_optimal_n(eval_tree5,
 
 We can ask for a higher number of breaks: 
 
-```
+ - 2 breaks
+
+```{r, cache = TRUE}
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
                n_breaks = 2)
 
 ```
+
+ - 3 breaks
+```{r, cache = TRUE}
+find_optimal_n(eval_tree5,
+               criterion = "breakpoints",
+               n_breaks = 3)
+
+```
+
+Increasing the number of breaks can be useful in situations where you have, for
+example, non-linear silhouettes of metric ~ n clusters.
 
 # 4. OPTICS as a semi-hierarchical clustering approach
 
