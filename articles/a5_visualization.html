@@ -92,7 +92,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2023-04-03</h4>
+            <h4 data-toc-skip class="date">2023-04-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a5_visualization.Rmd" class="external-link"><code>vignettes/a5_visualization.Rmd</code></a></small>
       <div class="d-none name"><code>a5_visualization.Rmd</code></div>
@@ -113,13 +113,13 @@ of fresh water fish in Europe. We first load the matrix format of this
 dataset, computes the dissimilarity matrix out of it and also load the
 data.frame format of the data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fishmat"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishmat</span><span class="op">)</span></span>
 <span><span class="va">fishdissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fishdf"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span></span></code></pre></div>
 <p>Since we aim at plotting the result, we also need the object
 <code>fishsf</code> linking each site of the dataset to a geometry.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fishsf"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishsf</span><span class="op">)</span></span></code></pre></div>
 <p>We also import the world coastlines, available from the
 <code>rnaturalearth</code> R package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">

@@ -89,10 +89,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>4.4 Microbenchmark</h1>
-                        <h4 data-toc-skip class="author">Maxime
-Lenormand, Boris Leroy and Pierre Denelle</h4>
+                        <h4 data-toc-skip class="author">Pierre Denelle,
+Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2023-04-03</h4>
+            <h4 data-toc-skip class="date">2023-04-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a4_4_microbenchmark.Rmd" class="external-link"><code>vignettes/a4_4_microbenchmark.Rmd</code></a></small>
       <div class="d-none name"><code>a4_4_microbenchmark.Rmd</code></div>
@@ -103,8 +103,9 @@ Lenormand, Boris Leroy and Pierre Denelle</h4>
 <p>In this vignette, we aim at showing the differences in terms of
 computation time between the different algorithms available in
 <code>bioregion</code>. For this purpose, we use three datasets of
-varying size. <br> For each dataset, we use a site x species matrix as
-well as a dissimilarity matrix which we compute using
+varying size.</p>
+<p>For each dataset, we use a site x species matrix as well as a
+dissimilarity matrix which we compute using
 <code><a href="../reference/dissimilarity.html">bioregion::dissimilarity()</a></code>.</p>
 <div class="section level2">
 <h2 id="datasets">1. Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a>
@@ -135,9 +136,9 @@ gathered in a <code>matrix</code> with 715 rows and 3,697 columns.</p>
 and contains distribution of 195 freshwater fish distributed in the
 basins of Europe.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fishmat"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishmat</span><span class="op">)</span></span>
 <span><span class="va">fishdissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fishdf"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="aravo">1.3. Aravo<a class="anchor" aria-label="anchor" href="#aravo"></a>
@@ -146,7 +147,7 @@ basins of Europe.</p>
 package <code>ade4</code>. It contains the distribution of 82 alpine
 plants in 75 sites distributed in the French Alps.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"aravo"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">)</span></span>
 <span><span class="va">aravo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">$</span><span class="va">spe</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">aravo</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 75 82</span></span></code></pre>

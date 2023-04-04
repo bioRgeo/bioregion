@@ -92,7 +92,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2023-04-03</h4>
+            <h4 data-toc-skip class="date">2023-04-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a1_install_binary_files.Rmd" class="external-link"><code>vignettes/a1_install_binary_files.Rmd</code></a></small>
       <div class="d-none name"><code>a1_install_binary_files.Rmd</code></div>
@@ -110,9 +110,10 @@ files to run.</p>
 <li><a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a></li>
 </ul>
 <p>The function <a href="https://bioRgeo.github.io/bioregion/reference/install_binaries.html">install_binaries</a>
-downloads and unzips the ‘bin’ folder needed to run these functions. It
-also checks if the files have the permissions to be executed as
-programs. It finally tests if the binary files are running properly.</p>
+downloads and unzips the <code>bin</code> folder needed to run these
+functions. It also checks if the files have the permissions to be
+executed as programs. It finally tests if the binary files are running
+properly.</p>
 <div class="section level3">
 <h3 id="run-install_binaries">Run install_binaries()<a class="anchor" aria-label="anchor" href="#run-install_binaries"></a>
 </h3>
@@ -124,19 +125,20 @@ as follows.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>binpath <span class="op">=</span> <span class="st">"tempdir"</span> , infomap_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.1.0"</span>, <span class="st">"2.6.0"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The function has two parameters. <code>binpath</code> indicating the
-path to the folder that will host the ‘bin’ folder containing the<br>
-binary files. By default, the binary files are installed in R’s
+path to the folder that will host the <code>bin</code> folder containing
+the binary files. By default, the binary files are installed in R’s
 temporary directory (<code>binpath = "tempdir"</code>). In this case the
-‘bin’ folder will be automatically removed at the end of the R session.
-Alternatively, the binary files can be installed in the bioregion’s
-package folder (<code>binpath = "pkgfolder"</code>). Any other folder
-can be chosen but if you use a different folder please be sure to update
-the <code>binpath</code> argument in <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a>,
+<code>bin</code> folder will be automatically removed at the end of the
+R session. Alternatively, the binary files can be installed in the
+bioregion’s package folder (<code>binpath = "pkgfolder"</code>).
+<strong>Any other folder can be chosen but in any case PLEASE MAKE SURE
+to update the binpath argument in <a href="https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html">netclu_infomap</a>,
 <a href="https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html">netclu_louvain</a>
 and <a href="https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html">netclu_oslom</a>
-accordingly. The second parameter <code>infomap_version</code>
-indicating the Infomap version(s) to install. Only the Infomap version
-2.1.0 and 2.6.0 are available for now.</p>
+accordingly.</strong></p>
+<p>The second parameter <code>infomap_version</code> indicating the
+Infomap version(s) to install. Only the Infomap version 2.1.0 and 2.6.0
+are available for now.</p>
 <p>The installation of the binary files is divided into six steps:</p>
 <div class="section level4">
 <h4 id="download-bin-zip">1. Download bin.zip<a class="anchor" aria-label="anchor" href="#download-bin-zip"></a>
