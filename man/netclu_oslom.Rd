@@ -109,9 +109,11 @@ OSLOM is a network community detection algorithm proposed in
 
 This function is based on the 2.4 C++ version of OSLOM
 (\url{http://www.oslom.org/software.htm}). This function needs files
-to run. They can be installed with \link{install_binaries}. If you set the path
-to the folder that will host the bin folder while running
-\link{install_binaries} please make sure to set \code{binpath} accordingly.
+to run. They can be installed with \link{install_binaries}.
+
+\strong{If you changed the default path to the \code{bin} folder
+while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
+accordingly.}
 
 The C++ version of OSLOM generates temporary folders and/or files that are
 stored in the \code{path_temp} folder (folder "oslom_temp" with an unique timestamp

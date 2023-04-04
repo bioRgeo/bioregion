@@ -47,9 +47,7 @@ called bioregions.
 Non-hierarchical clustering takes place on the very right-hand size part of
 the `bioregion` conceptual diagram:  
 
-```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
-knitr::include_graphics("../man/figures/Workflow.png")
-```    
+![](figures/diagram_nonetwork.png) 
 
 <br>
 Although these methods are conceptually simple, their implementation can be 
@@ -63,7 +61,7 @@ steps.
 To initiate the non-hierarchical clustering procedure, we first need to provide
 pairwise distances between sites.  
 <br>
-*2. Clustering*
+*2. Clustering* 
 Non-hierarchical algorithms rely on a **user-defined** number of clusters. Once
 this number is defined, users can chose among the 3 functions provided in
 `bioregion` to perform non-hierarchical clustering. These functions are based on
@@ -91,8 +89,8 @@ In the example below, we use the fish dataset from the package to compute
 distance metrics.  
 
 ```{r}
-library("bioregion")
-data("fishmat")
+library(bioregion)
+data(fishmat)
 
 # It is a presence/absence matrix with sites in rows and species in columns
 fishmat[1:3, 1:3]

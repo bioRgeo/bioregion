@@ -118,9 +118,11 @@ criterion.
 The C++ version of Louvain is based on the version 0.3
 (\url{https://sourceforge.net/projects/louvain/}). This function needs
 binary files to run. They can be installed with
-\link{install_binaries}. If you set the path to the folder that will host the
-bin folder while running \link{install_binaries} please make sure to
-set \code{binpath} accordingly.
+\link{install_binaries}.
+
+\strong{If you changed the default path to the \code{bin} folder
+while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
+accordingly.}
 
 The C++ version of Louvain generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp

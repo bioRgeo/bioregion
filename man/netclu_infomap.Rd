@@ -116,9 +116,11 @@ and (un)directed networks.
 This function is based on the C++ version of Infomap
 (\url{https://github.com/mapequation/infomap/releases}).
 This function needs binary files to run. They can be installed
-with \link{install_binaries}. If you set the path to the folder that will host
-the bin folder while running \link{install_binaries} please make sure to
-set \code{binpath} accordingly.
+with \link{install_binaries}.
+
+\strong{If you changed the default path to the \code{bin} folder
+while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
+accordingly.}
 
 The C++ version of Infomap generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp

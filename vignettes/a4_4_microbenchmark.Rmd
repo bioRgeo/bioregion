@@ -1,6 +1,6 @@
 ---
 title: "4.4 Microbenchmark"
-author: "Maxime Lenormand, Boris Leroy and Pierre Denelle"
+author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
@@ -22,12 +22,12 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library("bioregion")
-    library("ade4")
-    library("microbenchmark")
-    library("ggplot2")
-    library("tidyr")
-    library("dplyr")
+    library(bioregion)
+    library(ade4)
+    library(microbenchmark)
+    library(ggplot2)
+    library(tidyr)
+    library(dplyr)
   })
 })
 
@@ -38,7 +38,7 @@ options(tinytex.verbose = TRUE)
 In this vignette, we aim at showing the differences in terms of computation
 time between the different algorithms available in `bioregion`. For this purpose,
 we use three datasets of varying size.
-<br>
+
 For each dataset, we use a site x species matrix as well as a dissimilarity
 matrix which we compute using `bioregion::dissimilarity()`.
 
@@ -68,9 +68,9 @@ The second dataset also comes available with `bioregion` and contains
 distribution of 195 freshwater fish distributed in the basins of Europe.
 
 ```{r}
-data("fishmat")
+data(fishmat)
 fishdissim <- dissimilarity(fishmat, metric = "all")
-data("fishdf")
+data(fishdf)
 ```
 
 ## 1.3. Aravo
@@ -79,7 +79,7 @@ contains the distribution of 82 alpine plants in 75 sites distributed in the
 French Alps.
 
 ```{r}
-data("aravo")
+data(aravo)
 aravo <- as.matrix(aravo$spe)
 dim(aravo)
 

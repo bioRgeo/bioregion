@@ -19,7 +19,7 @@ Authors@R:
              email = "pierre.denelle@gmail.com",
              comment = c(ORCID = "0000-0001-5037-2281"))
        )
-Description: The purpose of this package is to compare several methods of bioregionalisation.
+Description: The main purpose of this package is to propose a transparent methodological framework to compare bioregionalisation methods.
 Depends:
   R (>= 4.0.0)
 License: GPL-3

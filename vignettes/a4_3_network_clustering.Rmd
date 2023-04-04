@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library("bioregion")
+    library(bioregion)
   })
 })
 
@@ -39,33 +39,34 @@ options(tinytex.verbose = TRUE)
 Networks are objects made of nodes and links. The links connect the nodes.
 Networks can be bipartite, i.e. the nodes can be of two different types and
 one type can only be linked with the second one. Links can also be weighted.
-<br>
+
 Site-species matrices can be viewed as bipartite networks where sites and
 species are two different classes of nodes, and the occurrences of species
 within sites are the links.
-<br>
+
 The community detection algorithms try to identify the communities of nodes
 that interact more with each other than the network as a whole. Appling these
 algorithms to site-species matrices is therefore equivalent to the more classic
 bioregionalization methods.
-<br>
-The optimal community partition of a network can be found by searching for the partition that maximizes a metric called modularity. Maximising the modularity
+
+The optimal community partition of a network can be found by searching for the 
+partition that maximizes a metric called modularity. Maximising the modularity
 is a computationally hard problem requiring the use of algorithms.
-<br>
+
 Network theory offers plenty of such algorithms to classify nodes that are more
-connected than expected randomly. With the `bioregion` R package, we cover the
-main network algorithms to identify bioregions in site-species matrices. All
-functions relying on network algorithms start with the prefix `netclu_`.
-<br>
+connected than expected randomly based or not on the modularity. With the 
+`bioregion` R package, we cover the main network algorithms to identify 
+bioregions in site-species matrices. All functions relying on network algorithms
+start with the prefix `netclu_`.
+
 Network clustering takes place on the left-hand size part of the `bioregion`
 conceptual diagram:
 
-```{r diagram_nonetwork, out.width = "50%", fig.align='center', echo = FALSE}
-knitr::include_graphics("../man/figures/Workflow.png")
-```
+![](figures/diagram_network.png) 
 
 In total, we have 9 functions, which can be classified like this:  
--  Functions based on executable binary files  
+
+-  Functions based on binary files  
 * [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html)  
 * [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)  
 * [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html)  
@@ -99,8 +100,8 @@ In this vignette, we directly load the network format for the distribution of
 fish in European basins.
 
 ```{r}
-library("bioregion")
-data("fishdf")
+library(bioregion)
+data(fishdf)
 ```
 
 ## Main arguments

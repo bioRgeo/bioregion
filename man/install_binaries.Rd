@@ -21,14 +21,14 @@ are running properly.
 }
 \details{
 By default, the binary files are installed in R's temporary
-directory (\code{binpath = "tempdir"}). In this case the 'bin' folder will be
+directory (\code{binpath = "tempdir"}). In this case the \code{bin} folder will be
 automatically removed at the end of the R session. Alternatively, the binary
 files can be installed in the bioregion's package folder
 (\code{binpath = "pkgfolder"}).
 Finally, a path to a folder of your choice can be chosen.
 
-Please be sure to update the \code{binpath} accordingly in \link{netclu_infomap},
-\link{netclu_louvain} and \link{netclu_oslom}).
+\strong{In any case, PLEASE MAKE SURE to update the binpath accordingly in
+\link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
 }
 \note{
 Only the Infomap version 2.1.0 and 2.6.0 are available for now.

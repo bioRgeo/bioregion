@@ -12,14 +12,14 @@
 #' version(s) to install.
 #'
 #' @details By default, the binary files are installed in R's temporary
-#' directory (`binpath = "tempdir"`). In this case the 'bin' folder will be
+#' directory (`binpath = "tempdir"`). In this case the `bin` folder will be
 #' automatically removed at the end of the R session. Alternatively, the binary
 #' files can be installed in the bioregion's package folder 
 #' (`binpath = "pkgfolder"`).
 #' Finally, a path to a folder of your choice can be chosen.
 #'
-#' Please be sure to update the `binpath` accordingly in [netclu_infomap],
-#' [netclu_louvain] and [netclu_oslom]).
+#' **In any case, PLEASE MAKE SURE to update the binpath accordingly in 
+#' [netclu_infomap], [netclu_louvain] and [netclu_oslom]).**
 #'
 #' @note
 #' Only the Infomap version 2.1.0 and 2.6.0 are available for now.

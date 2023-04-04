@@ -70,9 +70,11 @@
 #' This function is based on the C++ version of Infomap
 #' (<https://github.com/mapequation/infomap/releases>).
 #' This function needs binary files to run. They can be installed
-#' with [install_binaries]. If you set the path to the folder that will host
-#' the bin folder while running [install_binaries] please make sure to
-#' set `binpath` accordingly.
+#' with [install_binaries]. 
+#' 
+#' **If you changed the default path to the `bin` folder
+#' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
+#' accordingly.**
 #'
 #' The C++ version of Infomap generates temporary folders and/or files that are
 #' stored in the `path_temp` folder ("infomap_temp" with an unique timestamp

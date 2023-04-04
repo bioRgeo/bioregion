@@ -21,12 +21,12 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library("bioregion")
-    library("ggplot2")
-    library("dplyr")
-    library("rnaturalearth")
-    library("sf")
-    library("tidyr")
+    library(bioregion)
+    library(ggplot2)
+    library(dplyr)
+    library(rnaturalearth)
+    library(sf)
+    library(tidyr)
   })
 })
 
@@ -46,16 +46,16 @@ the dissimilarity matrix out of it and also load the data.frame format of the
 data.
 
 ```{r}
-data("fishmat")
+data(fishmat)
 fishdissim <- dissimilarity(fishmat, metric = "all")
-data("fishdf")
+data(fishdf)
 ```
 
 Since we aim at plotting the result, we also need the object `fishsf` linking
 each site of the dataset to a geometry.
 
 ```{r}
-data("fishsf")
+data(fishsf)
 ```
 
 We also import the world coastlines, available from the `rnaturalearth`

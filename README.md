@@ -11,8 +11,11 @@
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform
-bioregionalization analyses. <br> The different algorithms come from the
-network literature or can be (non)-hierarchical.
+bioregionalization analyses.
+
+Bioregionalization methods can be based on hierarchical clustering
+algorithms, non-hierarchical clustering algorithms or network
+algorithms.
 
 # :arrow_double_down: Installation
 
@@ -73,6 +76,6 @@ try to get to it as soon as we can!
 # References and dependencies
 
 `bioregion` depends on `ape`, `bipartite`, `cluster`, `data.table`,
-`dbscan`, `dendextend`, `dynamicTreeCut`, `earth`, `fastcluster`,
-`ggplot2`, `grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`,
-`Rdpack`, `rlang`, `rmarkdown`, `sf`, `stats`, `tidyr` and `utils`.
+`dbscan`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`,
+`grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `rlang`,
+`rmarkdown`, `segmented`,`sf`, `stats`, `tidyr` and `utils`.

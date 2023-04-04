@@ -39,7 +39,7 @@ options(tinytex.verbose = TRUE)
 This tutorial aims at describing the different features of the R package
 `bioregion`. 
 The main purpose of the `bioregion`'s package is to propose a transparent 
-methodological framework to compare bioregionalization methods. Below is the 
+methodological framework to compare bioregionalisation methods. Below is the 
 typical flow chart of bioregions' identification based on a site-species 
 bipartite network or co-occurrence matrix with `bioregion` (Figure 1). This
 workflow can be divided into four main steps:
@@ -113,7 +113,8 @@ Bioregionalization methods can be based on hierarchical clustering
 algorithms, non-hierarchical clustering algorithms or network algorithms.
 <br>
 The functions in the package are related to each of these three families and
-produce output that have a specific class, namely the bioregion.clusters class `bioregion.clusters`.
+produce output that have a specific class, namely the `bioregion.clusters` 
+class.
 <br>
 
 ### 4.1 Hierarchical clustering
@@ -124,7 +125,8 @@ from two extremes: all sites belong to the same bioregion (top of the tree) or
 all sites belong to a different bioregion (bottom of the tree).  
 
 See the following 
-[tutorial page](https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html) for more details.
+[tutorial page](https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html) 
+for more details.
 
 ### 4.2 Non-hierarchical clustering
 
@@ -134,7 +136,7 @@ of clusters, although this number can be determined by estimating the optimal
 partition.
 
 See this
-[tutorial page](https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html)
+[tutorial page](https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)
 for more details.
 
 ### 4.3 Network clustering

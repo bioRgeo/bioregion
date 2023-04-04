@@ -73,10 +73,12 @@
 #' The C++ version of Louvain is based on the version 0.3
 #' (<https://sourceforge.net/projects/louvain/>). This function needs
 #'  binary files to run. They can be installed with
-#' [install_binaries]. If you set the path to the folder that will host the
-#' bin folder while running [install_binaries] please make sure to
-#' set `binpath` accordingly.
-#'
+#' [install_binaries]. 
+#' 
+#' **If you changed the default path to the `bin` folder
+#' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
+#' accordingly.**
+#' 
 #' The C++ version of Louvain generates temporary folders and/or files that are
 #' stored in the `path_temp` folder ("louvain_temp" with an unique timestamp
 #' located in the bin folder in `binpath` by default). This temporary folder
