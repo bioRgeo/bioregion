@@ -38,7 +38,7 @@ options(tinytex.verbose = TRUE)
 
 Networks are objects made of nodes and links. The links connect the nodes.
 Networks can be bipartite, i.e. the nodes can be of two different types and
-one type can only be linked with the second one. Links can also be weighted.
+one type can only be linked with the second one. Links can also be weighted. 
 
 Site-species matrices can be viewed as bipartite networks where sites and
 species are two different classes of nodes, and the occurrences of species
