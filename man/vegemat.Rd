@@ -10,7 +10,7 @@ columns. Each element of the matrix
 represents the abundance of the species in the site.
 }
 \source{
-\url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
+\doi{10.1002/ece3.4718}
 }
 \usage{
 vegemat

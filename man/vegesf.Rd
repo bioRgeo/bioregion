@@ -12,7 +12,7 @@ A
 }
 }
 \source{
-\url{https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718}
+\doi{10.1002/ece3.4718}
 }
 \usage{
 vegesf

@@ -31,7 +31,8 @@ options(tinytex.verbose = TRUE)
 ## Load data
 
 The `bioregion`'s package contains as example dataset the spatial distribution of 
-Mediterranean vegetation. This dataset has been analyzed in [this article](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.4718) and contains
+Mediterranean vegetation. This dataset has been analyzed in 
+[this article](doi.org/10.1002/ece3.4718) and contains
 the abundance of 3,697 species in 715 sites. This dataset is composed of three 
 files, [vegedf](https://bioRgeo.github.io/bioregion/reference/vegedf.html) a 
 `data.frame` with 460,878 rows and 3 columns (Site, Species and Abundance), 
