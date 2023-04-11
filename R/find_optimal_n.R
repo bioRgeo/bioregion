@@ -362,16 +362,17 @@ find_optimal_n <- function(
                 " closest partition...\n")
         for(m in names(optim_n)) {
           if(any(!(optim_n[[m]] %in% partitions$evaluation_df$n_clusters))) {
-            optim_n[[m]][which(!(optim_n[[m]] %in% 
-                                   partitions$evaluation_df$n_clusters))] <- 
-              partitions$evaluation_df$n_clusters[
-                which.min(abs(
-                  partitions$evaluation_df$n_clusters - 
-                    optim_n[[m]][which(!(optim_n[[m]] %in% 
-                                           partitions$evaluation_df$n_clusters))
-                                 ]
+            for(cutoff in  optim_n[[m]][
+              which(!(optim_n[[m]] %in% 
+                      partitions$evaluation_df$n_clusters))]) {
+              optim_n[[m]][which(optim_n[[m]] == cutoff)] <- 
+                partitions$evaluation_df$n_clusters[
+                  which.min(abs(
+                    partitions$evaluation_df$n_clusters - 
+                      cutoff
                   ))
                 ]
+            }
           }
         }
       }
