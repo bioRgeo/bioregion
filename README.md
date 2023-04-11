@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bioregion <img src="man/figures/logo.png" align="right" alt="" width="200" />
+# bioregion <img src="man/figures/logo.svg" align="right" alt="" width="200" />
 
 <!-- badges: start -->
 
