@@ -158,10 +158,6 @@ netclu_infomap <- function(net,
                            binpath = "tempdir",
                            path_temp = "infomap_temp",
                            delete_temp = TRUE) {
-  # Remove warning for tidyr
-  oldop <- options()
-  on.exit(options(oldop))
-  options(warn = -1)
 
   # Control and set binpath
   controls(args = binpath, data = NULL, type = "character")

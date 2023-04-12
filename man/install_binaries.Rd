@@ -13,6 +13,9 @@ host the 'bin' folder containing the binary files (see Details).}
 \item{infomap_version}{a \code{character} vector indicating the Infomap
 version(s) to install.}
 }
+\value{
+No return value
+}
 \description{
 This function downloads and unzips the 'bin' folder needed to run some
 functions of bioregion. It also checks if the files have the permissions to
