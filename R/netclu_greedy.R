@@ -65,7 +65,6 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
-#' \donttest{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
@@ -75,7 +74,6 @@
 #' 
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
-#' }
 #' 
 #' @references
 #' \insertRef{Clauset2004}{bioregion}

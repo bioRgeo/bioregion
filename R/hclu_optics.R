@@ -83,7 +83,6 @@
 #' 
 #' @seealso [nhclu_dbscan] 
 #' @examples
-#' \donttest{
 #' dissim <- dissimilarity(fishmat, metric = "all")
 #'   
 #' clust1 <- hclu_optics(dissim, index = "Simpson")
@@ -96,7 +95,6 @@
 #' # Extract the hierarchy of clusters
 #' clust1 <- hclu_optics(dissim, index = "Simpson", show_hierarchy = TRUE)
 #' clust1
-#' }
 #' 
 #' @importFrom stats as.dist
 #' @importFrom dbscan optics extractXi

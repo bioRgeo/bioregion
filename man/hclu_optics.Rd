@@ -91,7 +91,6 @@ steepness of the reachability plot (see
 \link[dbscan:optics]{dbscan::optics()})
 }
 \examples{
-\donttest{
 dissim <- dissimilarity(fishmat, metric = "all")
   
 clust1 <- hclu_optics(dissim, index = "Simpson")
@@ -104,7 +103,6 @@ plot(clust1$algorithm$optics)
 # Extract the hierarchy of clusters
 clust1 <- hclu_optics(dissim, index = "Simpson", show_hierarchy = TRUE)
 clust1
-}
 
 }
 \references{

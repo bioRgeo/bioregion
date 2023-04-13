@@ -110,7 +110,6 @@ The type of nodes returned in the output can be chosen with the argument
 preserve only the species nodes.
 }
 \examples{
-\donttest{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
@@ -120,7 +119,6 @@ com <- netclu_leiden(net)
 
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust2 <- netclu_leiden(net_bip, bipartite = TRUE)
-}
 
 }
 \references{

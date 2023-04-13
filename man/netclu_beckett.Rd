@@ -83,14 +83,12 @@ to preserve only the sites nodes and \code{"species"} to preserve only the
 species nodes.
 }
 \examples{
-\donttest{
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),
   Weight = c(10, 100, 1, 20, 50, 10, 20))
 
 com <- netclu_beckett(net)
-}
 
 }
 \references{

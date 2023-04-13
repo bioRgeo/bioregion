@@ -39,7 +39,6 @@ following formula:
 \eqn{similarity = 1 - dissimilarity}
 }
 \examples{
-\donttest{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
@@ -53,7 +52,6 @@ dissimilarity
 
 simil <- dissimilarity_to_similarity(dissimilarity)
 simil
-}
 
 }
 \seealso{

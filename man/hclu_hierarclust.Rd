@@ -112,7 +112,6 @@ Clusters can be obtained by two methods:
 To find an optimal number of clusters, see \code{\link[=partition_metrics]{partition_metrics()}}
 }
 \examples{
-\donttest{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 20, 25)
 rownames(comat) <- paste0("Site",1:20)
@@ -145,7 +144,6 @@ plot(tree3)
 tree3.1 <- cut_tree(tree3, n = 5)
 
 tree4 <- hclu_hierarclust(dissim, n_clust = 1:19)
-}
 
 }
 \references{

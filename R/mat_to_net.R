@@ -24,13 +24,11 @@
 #' @seealso [net_to_mat]
 #'
 #' @examples
-#' \donttest{
 #' mat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(mat) <- paste0("Site", 1:5)
 #' colnames(mat) <- paste0("Species", 1:10)
 #'
 #' net <- mat_to_net(mat, weight = TRUE)
-#' }
 #' 
 #' @importFrom tidyr pivot_longer
 #' 

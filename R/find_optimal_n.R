@@ -170,20 +170,26 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
 #' @examples
-#' \donttest{
-#' dissim <- dissimilarity(fishmat, metric = "all")
+#' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
+#' 20, 25)
+#' rownames(comat) <- paste0("Site",1:20)
+#' colnames(comat) <- paste0("Species",1:25)
+#' 
+#' comnet <- mat_to_net(comat)
+#' 
+#' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' # User-defined number of clusters
 #' tree1 <- hclu_hierarclust(dissim,
-#'                           n_clust = 2:50,
+#'                           n_clust = 2:15,
 #'                           index = "Simpson")
 #' tree1
 #' 
 #' a <- partition_metrics(tree1,
 #'                    dissimilarity = dissim,
-#'                    net = fishdf,
-#'                    species_col = "Species",
-#'                    site_col = "Site",
+#'                    net = comnet,
+#'                    species_col = "Node2",
+#'                    site_col = "Node1",
 #'                    eval_metric = c("tot_endemism",
 #'                                    "avg_endemism",
 #'                                    "pc_distance",
@@ -201,7 +207,6 @@
 #' find_optimal_n(a, criterion = "decreasing_step",
 #'                step_levels = 3)                 
 #' find_optimal_n(a, criterion = "breakpoints")             
-#' }
 #'
 #' @importFrom stats predict quantile
 #' @importFrom tidyr pivot_longer

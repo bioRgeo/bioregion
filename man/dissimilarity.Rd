@@ -75,7 +75,6 @@ compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.
 Euclidean computes the Euclidean distance between each pair of sites.
 }
 \examples{
-\donttest{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
@@ -86,7 +85,7 @@ metric = c("abc", "ABC", "Simpson", "Brayturn"))
 
 simil <- dissimilarity(comat, metric = "all",
 formula = "1 - (b + c) / (a + b + c)")
-}
+
 }
 \references{
 \insertRef{Baselga2012}{bioregion}

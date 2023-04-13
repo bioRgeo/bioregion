@@ -56,17 +56,22 @@
 #' 
 #' @seealso [cut_tree] 
 #' @examples
-#' \donttest{
-#' dissim <- dissimilarity(fishmat, metric = "all")
+#' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
+#' 20, 25)
+#' rownames(comat) <- paste0("Site",1:20)
+#' colnames(comat) <- paste0("Species",1:25)
+#'
+#' comnet <- mat_to_net(comat)
+#'
+#' dissim <- dissimilarity(comat, metric = "all")
 #' 
 #' clust1 <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")
-#' clust2 <- nhclu_kmeans(dissim, n_clust = 2:25, index = "Simpson")
+#' clust2 <- nhclu_kmeans(dissim, n_clust = 2:15, index = "Simpson")
 #' partition_metrics(clust2, dissimilarity = dissim,
-#'                    eval_metric = "pc_distance")
+#'                   eval_metric = "pc_distance")
 #' 
-#' partition_metrics(clust2, net = fishdf, species_col = "Species",
-#'                    site_col = "Site", eval_metric = "avg_endemism")
-#' }     
+#' partition_metrics(clust2, net = comnet, species_col = "Node2",
+#'                   site_col = "Node1", eval_metric = "avg_endemism")
 #'
 #' @importFrom stats as.dist kmeans
 #' @importFrom ape pcoa

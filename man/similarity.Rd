@@ -77,7 +77,6 @@ Where \mjeqn{d_{ij}}{d_{ij}} is the Euclidean distance between site i and
 site j in terms of species composition.
 }
 \examples{
-\donttest{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
@@ -87,7 +86,7 @@ simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 
 simil <- similarity(comat, metric = "all",
 formula = "1 - (b + c) / (a + b + c)")
-}
+
 }
 \references{
 \insertRef{Baselga2012}{bioregion}

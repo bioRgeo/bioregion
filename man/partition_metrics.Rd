@@ -113,19 +113,24 @@ only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
 }
 }
 \examples{
-\donttest{
-dissim <- dissimilarity(fishmat, metric = "all")
+comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
+20, 25)
+rownames(comat) <- paste0("Site",1:20)
+colnames(comat) <- paste0("Species",1:25)
+
+comnet <- mat_to_net(comat)
+
+dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissim, n_clust = 2:20, index = "Simpson")
 tree1
 
-a <- partition_metrics(tree1, dissimilarity = dissim, net = fishdf,
-                  site_col = "Site", species_col = "Species",
-                  eval_metric = c("tot_endemism", "avg_endemism",
-                                  "pc_distance", "anosim"))
+a <- partition_metrics(tree1, dissimilarity = dissim, net = comnet,
+                       site_col = "Node1", species_col = "Node2",
+                       eval_metric = c("tot_endemism", "avg_endemism",
+                                      "pc_distance", "anosim"))
 a
-}
 
 }
 \references{

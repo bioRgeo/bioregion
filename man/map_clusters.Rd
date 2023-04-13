@@ -34,14 +34,12 @@ have the same type (i.e. \code{character} is cluster is a
 included in the sites of \code{geometry}.
 }
 \examples{
-\donttest{
 data(fishmat)
-data(fishsp)
+data(fishsf)
 
 net <- similarity(fishmat, metric = "Simpson")
 clu <- netclu_greedy(net)
 map <- map_clusters(clu, fishsf, write_clusters = TRUE, plot = FALSE)
-}
 
 }
 \author{

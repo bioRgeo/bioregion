@@ -89,14 +89,17 @@ recommendation by the function when you launch it a first time without
 defining \code{eps}. Then, adjust depending on your clustering results.
 }
 \examples{
-\donttest{
-dissim <- dissimilarity(fishmat, metric = "all")
+comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
+20, 25)
+rownames(comat) <- paste0("Site",1:20)
+colnames(comat) <- paste0("Species",1:25)
+
+dissim <- dissimilarity(comat, metric = "all")
 
 clust1 <- nhclu_dbscan(dissim, index = "Simpson")
 clust2 <- nhclu_dbscan(dissim, index = "Simpson", eps = 0.2)
 clust3 <- nhclu_dbscan(dissim, index = "Simpson", minPts = c(5, 10, 15, 20),
      eps = c(.1, .15, .2, .25, .3))
-}
 
 }
 \seealso{

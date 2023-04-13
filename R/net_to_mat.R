@@ -38,7 +38,6 @@
 #' @seealso [mat_to_net]
 #'
 #' @examples
-#' \donttest{
 #' net <- data.frame(
 #'   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
 #'   Species = c("a", "b", "a", "c", "d", "b", "d"),
@@ -46,7 +45,6 @@
 #' )
 #'
 #' mat <- net_to_mat(net, weight = TRUE)
-#' }
 #'
 #' @export
 net_to_mat <- function(net, weight = FALSE, squared = FALSE,

@@ -29,14 +29,12 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #'
 #' @examples
-#' \donttest{
 #' data(fishmat)
-#' data(fishsp)
+#' data(fishsf)
 #' 
 #' net <- similarity(fishmat, metric = "Simpson")
 #' clu <- netclu_greedy(net)
 #' map <- map_clusters(clu, fishsf, write_clusters = TRUE, plot = FALSE)
-#' }
 #' 
 #' @importFrom sf st_geometry
 #' 

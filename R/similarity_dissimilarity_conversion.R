@@ -37,7 +37,6 @@
 #' @seealso [dissimilarity_to_similarity()]
 #' 
 #' @examples
-#' \donttest{
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 #' prob = 1 / 1:1001), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
@@ -48,7 +47,6 @@
 #'
 #' dissimilarity <- similarity_to_dissimilarity(simil)
 #' dissimilarity
-#' }
 #' 
 #' @export
 
@@ -126,7 +124,6 @@ similarity_to_dissimilarity <- function(similarity){
 #' @seealso [dissimilarity_to_similarity()]
 #' 
 #' @examples
-#' \donttest{
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 #' prob = 1 / 1:1001), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
@@ -140,7 +137,6 @@ similarity_to_dissimilarity <- function(similarity){
 #'
 #' simil <- dissimilarity_to_similarity(dissimilarity)
 #' simil
-#' }
 #' 
 #' @export
 
