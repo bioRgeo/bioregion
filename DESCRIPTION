@@ -19,7 +19,7 @@ Authors@R:
              email = "pierre.denelle@gmail.com",
              comment = c(ORCID = "0000-0001-5037-2281"))
        )
-Description: The main purpose of this package is to propose a transparent methodological framework to compare bioregionalisation methods based on hierarchical clustering algorithms, non-hierarchical clustering algorithms or network algorithms as in Lenormand et al. (2020) <doi:10.1002/ece3.4718>.
+Description: The main purpose of this package is to propose a transparent methodological framework to compare bioregionalisation methods based on hierarchical and non-hierarchical clustering algorithms (Kreft & Jetz (2010) <doi:10.1111/j.1365-2699.2010.02375.x>) and network algorithms (Lenormand et al. (2020) <doi:10.1002/ece3.4718> and Leroy et al. (2019) <doi:10.1111/jbi.13674>).
 Depends:
   R (>= 4.0.0)
 License: GPL-3
