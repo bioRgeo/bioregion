@@ -40,6 +40,36 @@ membership of items is stored in the output object.}
 \item{store_confusion_matrix}{a boolean. If \code{TRUE}, the confusion matrices
 of pairwise partition comparisons are stored in the output object.}
 }
+\value{
+A \code{list} with 4 to 7 elements:
+\itemize{
+\item \code{args}: arguments provided by the user
+\item \code{inputs}: information on the input partitions, such as the number of items
+being clustered
+\item (facultative) \code{pairwise_membership}: only if
+\code{store_pairwise_membership = TRUE}. This
+element contains the pairwise memberships of all items for each
+partition, in the form of a \verb{boolean matrix} where \code{TRUE} means that
+two items are in the same cluster, and \code{FALSE} means that two items
+are not in the same cluster
+\item \code{freq_item_pw_membership}: A \verb{numeric vector}
+containing the number of times each pair of items are clustered
+together. It corresponds to the sum of rows of the table in
+\code{pairwise_membership}
+\item (facultative) \code{partition_freq_cor}:  only if \code{cor_frequency = TRUE}.
+A \verb{numeric vector}
+indicating the correlation between individual partitions and the total
+frequency of pairwise membership across all partitions. It corresponds to
+the correlation between individual columns in \code{pairwise_membership} and
+\code{freq_item_pw_membership}
+\item (facultative) \code{confusion_matrix}: only if \code{store_confusion_matrix = TRUE}.
+A \code{list}
+containing all confusion matrices between each pair of partitions.
+\item \code{partition_comparison}: a \code{data.frame} containing the results of the
+comparison of partitions, where the first column indicates which partitions
+are compared, and the next columns correspond to the requested \code{indices}.
+}
+}
 \description{
 This function aims at computing pairwise comparisons for several
 partitions, usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_} functions.

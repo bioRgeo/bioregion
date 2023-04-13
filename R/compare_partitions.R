@@ -80,6 +80,34 @@
 #' of pairwise membership across all partitions. This correlation can be
 #' requested with `cor_frequency = TRUE`
 #' @seealso [partition_metrics]
+#' @return 
+#' A `list` with 4 to 7 elements:
+#'  * `args`: arguments provided by the user
+#'  * `inputs`: information on the input partitions, such as the number of items
+#'  being clustered
+#'  * (facultative) `pairwise_membership`: only if 
+#'  `store_pairwise_membership = TRUE`. This 
+#'  element contains the pairwise memberships of all items for each 
+#'  partition, in the form of a `boolean matrix` where `TRUE` means that 
+#'  two items are in the same cluster, and `FALSE` means that two items 
+#'  are not in the same cluster
+#'  * `freq_item_pw_membership`: A `numeric vector` 
+#'  containing the number of times each pair of items are clustered
+#'  together. It corresponds to the sum of rows of the table in 
+#'  `pairwise_membership`
+#'  * (facultative) `partition_freq_cor`:  only if `cor_frequency = TRUE`.
+#'   A `numeric vector`
+#'  indicating the correlation between individual partitions and the total
+#'  frequency of pairwise membership across all partitions. It corresponds to
+#'  the correlation between individual columns in `pairwise_membership` and 
+#'  `freq_item_pw_membership`
+#'  * (facultative) `confusion_matrix`: only if `store_confusion_matrix = TRUE`.
+#'   A `list` 
+#'  containing all confusion matrices between each pair of partitions.
+#'  * `partition_comparison`: a `data.frame` containing the results of the
+#'  comparison of partitions, where the first column indicates which partitions 
+#'  are compared, and the next columns correspond to the requested `indices`.
+#'  
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
