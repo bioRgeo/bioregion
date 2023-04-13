@@ -216,35 +216,49 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">comat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1000</span>, size <span class="op">=</span> <span class="fl">500</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">1</span><span class="op">:</span><span class="fl">1001</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fl">20</span>, <span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">comnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># User-defined number of clusters</span></span></span>
 <span class="r-in"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">20</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.8 - 0.84</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.84 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.35 - 0.49</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.49 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 17. Closest number found: 16</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 18. Closest number found: 16</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 19. Closest number found: 16</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 20. Closest number found: 16</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of sites:  338 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of sites:  20 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Simpson </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.835 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.491 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  2 3 4 5 6 7 8 9 10 11 ... (with 9 more values) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  19 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  2 3 4 5 6 7 8 9 10 11 ... (with 9 more values) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.992 0.969 0.953 0.938 0.875 0.812 0.781 0.773 0.75 0.719 ... (with 9 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.141 0.125 0.109 0.104 0.102 0.098 0.096 0.094 0.062 0.059 ... (with 9 more values) </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">partition_metrics</span><span class="op">(</span><span class="va">tree1</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span></span>
-<span class="r-in"><span>                  site_col <span class="op">=</span> <span class="st">"Site"</span>, species_col <span class="op">=</span> <span class="st">"Species"</span>,</span></span>
-<span class="r-in"><span>                  eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span></span>
-<span class="r-in"><span>                                  <span class="st">"pc_distance"</span>, <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">partition_metrics</span><span class="op">(</span><span class="va">tree1</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">comnet</span>,</span></span>
+<span class="r-in"><span>                       site_col <span class="op">=</span> <span class="st">"Node1"</span>, species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
+<span class="r-in"><span>                       eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"pc_distance"</span>, <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing similarity-based metrics...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - pc_distance OK</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - anosim OK</span>
@@ -254,18 +268,17 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="va">a</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition metrics:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 19  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  16 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      tot_endemism avg_endemism pc_distance    anosim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min     0.5076923    0.2373180   0.1398730 0.6954843</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean    0.6682861    0.3984009   0.6027563 0.8300521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max     0.9435897    0.8188070   0.8185552 0.8666151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.00000000  0.000000000   0.1444630 0.4134207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.01684211  0.006912281   0.8393689 0.6318289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.20000000  0.100000000   1.0000000 0.7989130</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each partition are available in </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         your_object$endemism_results</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -219,7 +219,7 @@ information:</p>
 <span><span class="co">##  - Name of dissimilarity metric:  Simpson </span></span>
 <span><span class="co">##  - Tree construction method:  average </span></span>
 <span><span class="co">##  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span></span>
-<span><span class="co">##  - Cophenetic correlation coefficient:  0.705 </span></span>
+<span><span class="co">##  - Cophenetic correlation coefficient:  0.708 </span></span>
 <span><span class="co">## Clustering procedure incomplete - no clusters yet</span></span></code></pre>
 <p>The last line tells us that the the clustering procedure is
 incomplete: the tree has been built, but it has not been cut yet - hence
@@ -230,9 +230,9 @@ there are no clusters yet in the object.</p>
 <span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree1</span>,</span>
 <span>                  n_clust <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Determining the cut height to reach 4 groups...</span></span></code></pre>
-<pre><code><span><span class="co">## --&gt; 0.53125</span></span></code></pre>
+<pre><code><span><span class="co">## --&gt; 0.546875</span></span></code></pre>
 <p>Here, we asked for 4 clusters, and the algorithm automatically finds
-the height at which 4 clusters are found (h = 0.531).</p>
+the height at which 4 clusters are found (h = 0.547).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span></span></code></pre></div>
 <pre><code><span><span class="co">## Clustering results for algorithm : hierarchical_clustering </span></span>
@@ -241,12 +241,12 @@ the height at which 4 clusters are found (h = 0.531).</p>
 <span><span class="co">##  - Name of dissimilarity metric:  Simpson </span></span>
 <span><span class="co">##  - Tree construction method:  average </span></span>
 <span><span class="co">##  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span></span>
-<span><span class="co">##  - Cophenetic correlation coefficient:  0.705 </span></span>
+<span><span class="co">##  - Cophenetic correlation coefficient:  0.708 </span></span>
 <span><span class="co">##  - Number of clusters requested by the user:  4 </span></span>
 <span><span class="co">## Clustering results:</span></span>
 <span><span class="co">##  - Number of partitions:  1 </span></span>
 <span><span class="co">##  - Number of clusters:  4 </span></span>
-<span><span class="co">##  - Height of cut of the hierarchical tree: 0.531</span></span></code></pre>
+<span><span class="co">##  - Height of cut of the hierarchical tree: 0.547</span></span></code></pre>
 <p>When we type again the name of the object in the console, it gives us
 the results of the clustering: we have</p>
 <ul>
@@ -258,7 +258,7 @@ only cut the tree once, so we only have 1 partition at the moment</li>
 partition. We asked for 4, and we obtained 4, which is good. Sometimes,
 however, we cannot get the number of clusters we asked for - in which
 case the outcome will be indicated.</li>
-<li>**a heigh of cut at 0.531: this is the height of cut at which we can
+<li>**a heigh of cut at 0.547: this is the height of cut at which we can
 obtain 4 clusters in our tree.</li>
 </ul>
 <p>We can make a quick plot of our partitioned tree with</p>
@@ -278,9 +278,9 @@ relationships among sites in our tree.</p>
 <span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree1</span>,</span>
 <span>                  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Determining the cut height to reach 4 groups...</span></span></code></pre>
-<pre><code><span><span class="co">## --&gt; 0.53125</span></span></code></pre>
+<pre><code><span><span class="co">## --&gt; 0.546875</span></span></code></pre>
 <pre><code><span><span class="co">## Determining the cut height to reach 10 groups...</span></span></code></pre>
-<pre><code><span><span class="co">## --&gt; 0.453125</span></span></code></pre>
+<pre><code><span><span class="co">## --&gt; 0.4609375</span></span></code></pre>
 <pre><code><span><span class="co">## Determining the cut height to reach 20 groups...</span></span></code></pre>
 <pre><code><span><span class="co">## --&gt; 0.411376953125</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -305,7 +305,7 @@ can rather extract the information directly from the object:</p>
 <span><span class="co">##  - Name of dissimilarity metric:  Simpson </span></span>
 <span><span class="co">##  - Tree construction method:  average </span></span>
 <span><span class="co">##  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span></span>
-<span><span class="co">##  - Cophenetic correlation coefficient:  0.705 </span></span>
+<span><span class="co">##  - Cophenetic correlation coefficient:  0.708 </span></span>
 <span><span class="co">##  - Heights of cut requested by the user:  0.4 0.5 0.6 </span></span>
 <span><span class="co">## Clustering results:</span></span>
 <span><span class="co">##  - Number of partitions:  3 </span></span>
@@ -352,15 +352,15 @@ object structure:</p>
 <span><span class="co">##   ..$ trials             : chr "Trials not stored in output"</span></span>
 <span><span class="co">##   ..$ final.tree         :List of 7</span></span>
 <span><span class="co">##   .. ..- attr(*, "class")= chr "hclust"</span></span>
-<span><span class="co">##   ..$ final.tree.coph.cor: num 0.705</span></span>
+<span><span class="co">##   ..$ final.tree.coph.cor: num 0.708</span></span>
 <span><span class="co">##   ..$ output_n_clust     : Named int [1:3] 2 7 22</span></span>
 <span><span class="co">##   .. ..- attr(*, "names")= chr [1:3] "h_0.6" "h_0.5" "h_0.4"</span></span>
 <span><span class="co">##   ..$ output_cut_height  : num [1:3] 0.6 0.5 0.4</span></span>
 <span><span class="co">##  $ clusters    :'data.frame':    715 obs. of  4 variables:</span></span>
-<span><span class="co">##   ..$ ID  : chr [1:715] "946" "700" "1428" "825" ...</span></span>
-<span><span class="co">##   ..$ K_2 : chr [1:715] "1" "1" "1" "1" ...</span></span>
-<span><span class="co">##   ..$ K_7 : chr [1:715] "1" "2" "2" "2" ...</span></span>
-<span><span class="co">##   ..$ K_22: chr [1:715] "1" "2" "3" "4" ...</span></span>
+<span><span class="co">##   ..$ ID  : chr [1:715] "746" "455" "160" "720" ...</span></span>
+<span><span class="co">##   ..$ K_2 : chr [1:715] "1" "1" "2" "1" ...</span></span>
+<span><span class="co">##   ..$ K_7 : chr [1:715] "1" "1" "2" "1" ...</span></span>
+<span><span class="co">##   ..$ K_22: chr [1:715] "1" "1" "2" "3" ...</span></span>
 <span><span class="co">##  $ cluster_info:'data.frame':    3 obs. of  3 variables:</span></span>
 <span><span class="co">##   ..$ partition_name      : chr [1:3] "K_2" "K_7" "K_22"</span></span>
 <span><span class="co">##   ..$ n_clust             : int [1:3] 2 7 22</span></span>
@@ -432,7 +432,7 @@ Now let’s randomize it and regenerate the tree:</p>
 <span><span class="co"># Recompute the tree</span></span>
 <span><span class="va">tree3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim_random</span>,</span>
 <span>                          randomize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Output tree has a 0.7 cophenetic correlation coefficient with the initial</span></span>
+<pre><code><span><span class="co">## Output tree has a 0.69 cophenetic correlation coefficient with the initial</span></span>
 <span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree3</span>, cex <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></code></pre></div>
@@ -570,7 +570,7 @@ of clusters as the elbow of the evaluation plot.</p>
 <pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
-<pre><code><span><span class="co">## pc_distance 24</span></span></code></pre>
+<pre><code><span><span class="co">## pc_distance 15</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
@@ -583,20 +583,20 @@ of clusters as the elbow of the evaluation plot.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## pc_distance - 24</span></span></code></pre>
+<span><span class="co">## pc_distance - 15</span></span></code></pre>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 5. Extract the optimal number of clusters</span></span>
 <span><span class="co"># We get the name of the correct partition in the next line</span></span>
 <span><span class="va">K_name</span> <span class="op">&lt;-</span> <span class="va">opti_n_tree4</span><span class="op">$</span><span class="va">evaluation_df</span><span class="op">$</span><span class="va">K</span><span class="op">[</span><span class="va">opti_n_tree4</span><span class="op">$</span><span class="va">evaluation_df</span><span class="op">$</span><span class="va">optimal_n_pc_distance</span><span class="op">]</span></span>
 <span><span class="co"># Look at the site-cluster table</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tree4</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="va">K_name</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##        ID K_24</span></span>
-<span><span class="co">## 458   458    1</span></span>
-<span><span class="co">## 1283 1283    2</span></span>
-<span><span class="co">## 1329 1329    3</span></span>
-<span><span class="co">## 625   625    4</span></span>
-<span><span class="co">## 587   587    5</span></span>
-<span><span class="co">## 860   860    6</span></span></code></pre>
+<pre><code><span><span class="co">##        ID K_15</span></span>
+<span><span class="co">## 434   434    1</span></span>
+<span><span class="co">## 187   187    1</span></span>
+<span><span class="co">## 937   937    2</span></span>
+<span><span class="co">## 944   944    3</span></span>
+<span><span class="co">## 1372 1372    4</span></span>
+<span><span class="co">## 212   212    5</span></span></code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make a map of the clusters</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegesf</span><span class="op">)</span></span>
@@ -663,9 +663,9 @@ your dataset, computing endemism-based metrics can take a while.</p>
 <span><span class="co">##  - Requested metric(s):  pc_distance anosim </span></span>
 <span><span class="co">##  - Metric summary:</span></span>
 <span><span class="co">##      pc_distance    anosim</span></span>
-<span><span class="co">## Min    0.5126314 0.7057988</span></span>
-<span><span class="co">## Mean   0.8905267 0.8087657</span></span>
-<span><span class="co">## Max    0.9746673 0.8549702</span></span>
+<span><span class="co">## Min    0.4774700 0.7019918</span></span>
+<span><span class="co">## Mean   0.8947654 0.8082678</span></span>
+<span><span class="co">## Max    0.9728844 0.8462379</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span></code></pre>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
@@ -685,9 +685,9 @@ your dataset, computing endemism-based metrics can take a while.</p>
 <span><span class="co">##  - Requested metric(s):  avg_endemism tot_endemism </span></span>
 <span><span class="co">##  - Metric summary:</span></span>
 <span><span class="co">##      avg_endemism tot_endemism</span></span>
-<span><span class="co">## Min   0.001183848   0.05031106</span></span>
-<span><span class="co">## Mean  0.009141860   0.08427800</span></span>
-<span><span class="co">## Max   0.185351615   0.31917771</span></span>
+<span><span class="co">## Min   0.001219422   0.05058155</span></span>
+<span><span class="co">## Mean  0.008024306   0.07789554</span></span>
+<span><span class="co">## Max   0.182541742   0.32242359</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span>
 <span><span class="co">## Details of endemism % for each partition are available in </span></span>
@@ -750,10 +750,10 @@ When the curve is not elbow-shaped, it may give spurious results.</p>
 <pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
-<pre><code><span><span class="co">## pc_distance 24</span></span>
-<span><span class="co">## anosim 24</span></span>
-<span><span class="co">## avg_endemism 9</span></span>
-<span><span class="co">## tot_endemism 15</span></span></code></pre>
+<pre><code><span><span class="co">## pc_distance 15</span></span>
+<span><span class="co">## anosim 15</span></span>
+<span><span class="co">## avg_endemism 8</span></span>
+<span><span class="co">## tot_endemism 9</span></span></code></pre>
 <pre><code><span><span class="co">## Warning in find_optimal_n(eval_tree4): The elbow method is likely not suitable</span></span>
 <span><span class="co">## for the ANOSIM metric. You should rather look for leaps in the curve (see</span></span>
 <span><span class="co">## criterion = 'increasing_step' or decreasing_step)</span></span></code></pre>
@@ -767,18 +767,18 @@ When the curve is not elbow-shaped, it may give spurious results.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## pc_distance - 24</span></span>
-<span><span class="co">## anosim - 24</span></span>
-<span><span class="co">## avg_endemism - 9</span></span>
-<span><span class="co">## tot_endemism - 15</span></span></code></pre>
+<span><span class="co">## pc_distance - 15</span></span>
+<span><span class="co">## anosim - 15</span></span>
+<span><span class="co">## avg_endemism - 8</span></span>
+<span><span class="co">## tot_endemism - 9</span></span></code></pre>
 <pre><code><span><span class="co">## [1] "pc_distance"  "anosim"       "avg_endemism" "tot_endemism"</span></span></code></pre>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <p>In our example above, the optimal number of clusters varies depending
-in the metric, from a minimum of 9 to a maximum of 24. The final choice
+in the metric, from a minimum of 8 to a maximum of 15. The final choice
 depends on your preferences with respect to metrics, and your objectives
 with the clustering. Alternatively, two cut-offs could be used, a deep
-cut-off based on endemism metrics at e.g. a value of 9, and a shallow
-cutoff based on <code>pc_distance</code>, at 24.</p>
+cut-off based on endemism metrics at e.g. a value of 8, and a shallow
+cutoff based on <code>pc_distance</code>, at 15.</p>
 </div>
 <div class="section level4">
 <h4 id="step-method">3.2.2 Step method<a class="anchor" aria-label="anchor" href="#step-method"></a>
@@ -815,8 +815,8 @@ your dataset, so you would have to explore both ways.</p>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  increasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## anosim - 15</span></span>
-<span><span class="co">## pc_distance - 7</span></span></code></pre>
+<span><span class="co">## anosim - 8</span></span>
+<span><span class="co">## pc_distance - 8</span></span></code></pre>
 <div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
@@ -836,8 +836,8 @@ your dataset, so you would have to explore both ways.</p>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  decreasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## avg_endemism - 3</span></span>
-<span><span class="co">## tot_endemism - 7</span></span></code></pre>
+<span><span class="co">## avg_endemism - 4</span></span>
+<span><span class="co">## tot_endemism - 4</span></span></code></pre>
 <p>However, you can adjust it in two different ways. First, choose a
 number of steps to select, e.g. to select the largest 3 steps, use
 <code>step_levels = 3</code>:</p>
@@ -861,8 +861,8 @@ number of steps to select, e.g. to select the largest 3 steps, use
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  increasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## anosim - 7 15 24</span></span>
-<span><span class="co">## pc_distance - 3 7 15</span></span></code></pre>
+<span><span class="co">## anosim - 8 14 52</span></span>
+<span><span class="co">## pc_distance - 4 8 14</span></span></code></pre>
 <p>Second, you can set a quantile of steps to select, e.g. to select the
 5% largest steps set the quantile to 0.90
 (<code>step_quantile = 0.95</code>):</p>
@@ -886,8 +886,8 @@ number of steps to select, e.g. to select the largest 3 steps, use
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  increasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.95  (i.e., only the top 5 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## anosim - 7 15 24 51 98</span></span>
-<span><span class="co">## pc_distance - 3 7 15 24 51</span></span></code></pre>
+<span><span class="co">## anosim - 8 14 15 52 96</span></span>
+<span><span class="co">## pc_distance - 3 4 8 14 46</span></span></code></pre>
 <p>Finally, one question that may arise is which cluster number to
 select when a large step happens. For example, if the largest step
 occurs between partitions with 4 and 5 clusters, should we keep the
@@ -915,8 +915,8 @@ You can change that by setting
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  decreasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## avg_endemism - 2</span></span>
-<span><span class="co">## tot_endemism - 6</span></span></code></pre>
+<span><span class="co">## avg_endemism - 3</span></span>
+<span><span class="co">## tot_endemism - 3</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="cutting-at-different-cut-off-values">3.2.3 Cutting at different cut-off values<a class="anchor" aria-label="anchor" href="#cutting-at-different-cut-off-values"></a>
@@ -968,7 +968,7 @@ use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff) and 0.9
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  cutoff </span></span>
 <span><span class="co">##    --&gt; cutoff(s) chosen:  0.6 0.8 0.9 </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## pc_distance - 7 15 47</span></span></code></pre>
+<span><span class="co">## pc_distance - 4 9 46</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="cutting-at-the-maximum-or-minimum-metric-value">3.2.4 Cutting at the maximum or minimum metric value<a class="anchor" aria-label="anchor" href="#cutting-at-the-maximum-or-minimum-metric-value"></a>
@@ -1022,10 +1022,10 @@ enough values.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  breakpoints </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## pc_distance - 23</span></span>
-<span><span class="co">## anosim - 98</span></span>
-<span><span class="co">## avg_endemism - 6</span></span>
-<span><span class="co">## tot_endemism - 10</span></span></code></pre>
+<span><span class="co">## pc_distance - 14</span></span>
+<span><span class="co">## anosim - 24</span></span>
+<span><span class="co">## avg_endemism - 5</span></span>
+<span><span class="co">## tot_endemism - 6</span></span></code></pre>
 <p>We can ask for a higher number of breaks:</p>
 <ul>
 <li>2 breaks</li>
@@ -1049,10 +1049,10 @@ enough values.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  breakpoints </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## pc_distance - 15 89</span></span>
-<span><span class="co">## anosim - 23 181</span></span>
-<span><span class="co">## avg_endemism - 3 10</span></span>
-<span><span class="co">## tot_endemism - 10 119</span></span></code></pre>
+<span><span class="co">## pc_distance - 9 88</span></span>
+<span><span class="co">## anosim - 18 212</span></span>
+<span><span class="co">## avg_endemism - 4 15</span></span>
+<span><span class="co">## tot_endemism - 5 116</span></span></code></pre>
 <ul>
 <li>3 breaks</li>
 </ul>
@@ -1075,10 +1075,10 @@ enough values.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  breakpoints </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## pc_distance - 15 55 132</span></span>
-<span><span class="co">## anosim - 20 156 327</span></span>
-<span><span class="co">## avg_endemism - 3 7 24</span></span>
-<span><span class="co">## tot_endemism - 10 98 168</span></span></code></pre>
+<span><span class="co">## pc_distance - 9 62 133</span></span>
+<span><span class="co">## anosim - 6 15 212</span></span>
+<span><span class="co">## avg_endemism - 4 9 36</span></span>
+<span><span class="co">## tot_endemism - 5 81 143</span></span></code></pre>
 <p>Increasing the number of breaks can be useful in situations where you
 have, for example, non-linear silhouettes of metric ~ n clusters.</p>
 </div>
