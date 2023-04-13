@@ -113,13 +113,13 @@ ggplot(custom) +
 ```
 
 ## Plot with facets  
-Finally, you can be interested in plotting several bioregionalizations at once.
+Finally, you can be interested in plotting several bioregionalisations at once.
 For this purpose, we can build a single `data.frame` gathering all the
 bioregions obtained from distinct algorithms and then take advantage of the
 `facets` implemented in `ggplot2`.
 <br>
 
-We first compute a few more bioregionalization on the same dataset using
+We first compute a few more bioregionalisation on the same dataset using
 other algorithms.
 <br>
 

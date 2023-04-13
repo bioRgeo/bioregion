@@ -11,9 +11,9 @@
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform
-bioregionalization analyses.
+bioregionalisation analyses.
 
-Bioregionalization methods can be based on hierarchical clustering
+Bioregionalisation methods can be based on hierarchical clustering
 algorithms, non-hierarchical clustering algorithms or network
 algorithms.
 

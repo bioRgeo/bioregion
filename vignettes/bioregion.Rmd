@@ -107,9 +107,9 @@ to better understand how these functions work.
 The `bioregion` R package gathers several methods allowing to group sites
 and species into similar entities called bioregions. All these methods can lead
 to several partitions of sites and species, i.e. to different
-bioregionalizations.
+bioregionalisations.
 <br>
-Bioregionalization methods can be based on hierarchical clustering
+Bioregionalisation methods can be based on hierarchical clustering
 algorithms, non-hierarchical clustering algorithms or network algorithms.
 <br>
 The functions in the package are related to each of these three families and
@@ -146,7 +146,7 @@ Site-species matrices can be seen as (bipartite) networks where the nodes are
 either the sites or the species and the links between them are the occurrences
 of species within sites.  
 With networks, modularity algorithms can be applied, leading to
-bioregionalization.
+bioregionalisation.
 
 The following 
 [tutorial page](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html) 
@@ -154,7 +154,7 @@ details more each clustering functions relying on a network algorithm.
 
 ### 4.4 Microbenchmark
 
-The different bioregionalization methods listed in the package rely on more or
+The different bioregionalisation methods listed in the package rely on more or
 less computationally intensive algorithms.
 
 The following [page](https://biorgeo.github.io/bioregion/articles/a4_4_microbenchmark.html)
@@ -162,8 +162,8 @@ estimates the time required to run each method on data sets of different sizes.
 
 ## 5. Visualization and evaluation of the results
 
-If sites have geographic coordinates, then each bioregionalization can be
+If sites have geographic coordinates, then each bioregionalisation can be
 visualized with the function `map_clusters()`.
 
 This [tutorial page](https://biorgeo.github.io/bioregion/articles/a5_visualization.html)
-details different ways to plot your bioregionalization.
+details different ways to plot your bioregionalisation.
