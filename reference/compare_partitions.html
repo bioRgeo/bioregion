@@ -127,6 +127,36 @@ of pairwise partition comparisons are stored in the output object.</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A <code>list</code> with 4 to 7 elements:</p><ul><li><p><code>args</code>: arguments provided by the user</p></li>
+<li><p><code>inputs</code>: information on the input partitions, such as the number of items
+being clustered</p></li>
+<li><p>(facultative) <code>pairwise_membership</code>: only if
+<code>store_pairwise_membership = TRUE</code>. This
+element contains the pairwise memberships of all items for each
+partition, in the form of a <code>boolean matrix</code> where <code>TRUE</code> means that
+two items are in the same cluster, and <code>FALSE</code> means that two items
+are not in the same cluster</p></li>
+<li><p><code>freq_item_pw_membership</code>: A <code>numeric vector</code>
+containing the number of times each pair of items are clustered
+together. It corresponds to the sum of rows of the table in
+<code>pairwise_membership</code></p></li>
+<li><p>(facultative) <code>partition_freq_cor</code>:  only if <code>cor_frequency = TRUE</code>.
+A <code>numeric vector</code>
+indicating the correlation between individual partitions and the total
+frequency of pairwise membership across all partitions. It corresponds to
+the correlation between individual columns in <code>pairwise_membership</code> and
+<code>freq_item_pw_membership</code></p></li>
+<li><p>(facultative) <code>confusion_matrix</code>: only if <code>store_confusion_matrix = TRUE</code>.
+A <code>list</code>
+containing all confusion matrices between each pair of partitions.</p></li>
+<li><p><code>partition_comparison</code>: a <code>data.frame</code> containing the results of the
+comparison of partitions, where the first column indicates which partitions
+are compared, and the next columns correspond to the requested <code>indices</code>.</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><script id="MathJax-script" async src="../../mathjaxr/doc/mathjax/es5/tex-chtml-full.js"></script>
 
@@ -197,10 +227,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  2  1  3  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  2  1  4  2</span>
 <span class="r-in"><span><span class="fu">compare_partitions</span><span class="op">(</span><span class="va">partitions</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing pairwise membership comparisons for eachpartition...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Comparing memberships among partitions...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing pairwise membership comparisons for eachpartition...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Comparing memberships among partitions...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing Jaccard index...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition comparison:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 partitions compared</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 items in the clustering</span>
@@ -216,11 +246,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="co"># Find out which partitions are most representative</span></span></span>
 <span class="r-in"><span><span class="fu">compare_partitions</span><span class="op">(</span><span class="va">partitions</span>,</span></span>
 <span class="r-in"><span>                   cor_frequency <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing pairwise membership comparisons for eachpartition...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Comparing memberships among partitions...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing Jaccard index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-12 12:42:49 - Computing the correlation between each partition and the vector of frequency of pairwise membership...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing pairwise membership comparisons for eachpartition...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Comparing memberships among partitions...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2023-04-13 08:03:20 - Computing the correlation between each partition and the vector of frequency of pairwise membership...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition comparison:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 partitions compared</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 items in the clustering</span>
