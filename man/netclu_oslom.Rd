@@ -144,14 +144,12 @@ on the number of overlapping modules (up to three). The suffix '_semel',
 were found for this node (i.e. non-overlapping nodes).
 }
 \examples{
-\dontrun{
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_oslom(net)
-}
 
 }
 \references{

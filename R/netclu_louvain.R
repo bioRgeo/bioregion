@@ -125,14 +125,12 @@
 #' @seealso [install_binaries()], [netclu_infomap()], [netclu_oslom()]
 #'
 #' @examples
-#' \donttest{
 #' comat <- matrix(sample(1000, 50), 5, 10)
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_louvain(net, lang = "igraph")
-#' }
 #'
 #' @references
 #' \insertRef{Blondel2008}{bioregion}
