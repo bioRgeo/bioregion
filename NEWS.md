@@ -1,4 +1,4 @@
-# bioregion v0.1.0 (Release date: 20??-??-??)
+# bioregion v1.0.0 
 
-First release in GitHub
+First release on CRAN
 
