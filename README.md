@@ -19,9 +19,16 @@ algorithms.
 
 # :arrow_double_down: Installation
 
-The package is not on CRAN yet and is still under active development.
-You can install the development version from the GitHub repository with
-the following command:
+The package can be installed with the following command line in R
+session:
+
+From the CRAN
+
+``` r
+install.packages("bioregion")
+```
+
+or from GitHub
 
 ``` r
 # install.packages("devtools")
