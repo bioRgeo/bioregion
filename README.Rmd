@@ -19,6 +19,9 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/bioRgeo/bioregion/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bioRgeo/bioregion/actions/workflows/R-CMD-check.yaml) 
 [![version](https://img.shields.io/github/v/release/bioRgeo/bioregion?label=version&style=flat&logo=github)](https://github.com/bioRgeo/bioregion) 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3) 
+
+![](https://www.r-pkg.org/badges/version/bioregion)  
+![](https://cranlogs.r-pkg.org/badges/grand-total/bioregion)
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform
