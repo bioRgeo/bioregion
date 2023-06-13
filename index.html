@@ -61,8 +61,14 @@
     <a class="dropdown-item" href="articles/a5_visualization.html">5. Visualization</a>
   </div>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="news/index.html">Changelog</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-news">
+    <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.0.0">Version 1.0.0</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="news/index.html">Changelog</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -185,10 +191,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://github.com/bioRgeo/bioregion/actions" class="external-link"><img src="https://github.com/bioRgeo/bioregion/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/bioRgeo/bioregion?branch=master" class="external-link"><img src="https://codecov.io/gh/bioRegio/bioregion/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://cran.r-project.org/package=bioregion" class="external-link"><img src="http://www.r-pkg.org/badges/version/bioregion" alt="CRAN_Status_Badge"></a></li>
 <li><a href="http://r-pkg.org/pkg/bioregion" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/bioregion" alt="rstudio mirror downloads"></a></li>
-<li><a href="https://github.com/bioRgeo/bioregion" class="external-link"><img src="https://img.shields.io/github/v/release/bioRgeo/bioregion?label=version&amp;style=flat&amp;logo=github" alt="version"></a></li>
-<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/Licence-GPL--3-blue.svg" alt="licence"></a></li>
 </ul>
 </div>
 
