@@ -332,8 +332,9 @@ Please carefully check your data before using the clustering functions."))
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {
-      if (args < 0) {
-        stop(paste0(deparse(substitute(args)), " must be higher than 0."),
+      if (sum(args < 0) > 0) {
+        stop(paste0(deparse(substitute(args)), " must be composed of value 
+                    higher than 0."),
              call. = FALSE
         )
       }
@@ -364,9 +365,10 @@ Please carefully check your data before using the clustering functions."))
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {
-      if (args <= 0) {
+      if (sum(args <= 0) > 0) {
         stop(paste0(deparse(substitute(args)),
-                    " must be strictly higher than 0."), call. = FALSE)
+                    " must be composed of value strictly higher than 0."),
+             call. = FALSE)
       }
     }
   }
@@ -396,8 +398,8 @@ Please carefully check your data before using the clustering functions."))
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {
-      if (args %% 1 != 0) {
-        stop(paste0(deparse(substitute(args)), " must be an integer."),
+      if (sum(args %% 1 != 0) > 0) {
+        stop(paste0(deparse(substitute(args)), " must be composed of integers."),
              call. = FALSE
         )
       }
@@ -435,13 +437,14 @@ Please carefully check your data before using the clustering functions."))
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {
-      if (args %% 1 != 0) {
-        stop(paste0(deparse(substitute(args)), " must be an integer."),
+      if (sum(args %% 1 != 0) > 0) {
+        stop(paste0(deparse(substitute(args)), " must be composed of integers."),
              call. = FALSE
         )
       } else {
-        if (args < 0) {
-          stop(paste0(deparse(substitute(args)), " must be higher than 0."),
+        if (sum(args < 0) > 0) {
+          stop(paste0(deparse(substitute(args)), " must be composed of value 
+                      higher than 0."),
                call. = FALSE
           )
         }
@@ -479,14 +482,15 @@ Please carefully check your data before using the clustering functions."))
       stop(paste0(deparse(substitute(args)), " must be numeric."),
            call. = FALSE)
     } else {
-      if (args %% 1 != 0) {
-        stop(paste0(deparse(substitute(args)), " must be an integer."),
+      if (sum(args %% 1 != 0) > 0) {
+        stop(paste0(deparse(substitute(args)), " must be composed of integers."),
              call. = FALSE
         )
       } else {
-        if (args <= 0) {
+        if (sum(args <= 0) > 0) {
           stop(paste0(deparse(substitute(args)),
-                      " must be strictly higher than 0."), call. = FALSE)
+                      " must be composed of value strictly higher than 0."), 
+               call. = FALSE)
         }
       }
     }
