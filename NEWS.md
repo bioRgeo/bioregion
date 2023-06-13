@@ -1,4 +1,11 @@
-# bioregion v1.0.0 
+# bioregion 1.0.0 (development/github version)
+
+This is a list of changes made in the development/github version of the package
+between bioregion 1.9.0 (CRAN release 2023-04-15) and the next CRAN release.
+
+* 
+
+# bioregion 1.0.0 
 
 First release on CRAN
 

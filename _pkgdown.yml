@@ -66,4 +66,10 @@ reference:
   - fishdf
   - fishmat
   - fishsf
+  
+news:
+  releases:
+  - text: "Version 1.0.0"
+    href: https://github.com/bioRgeo/bioregion/releases/tag/v1.0.0
+  cran_dates: false    
 
