@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(bioRgeo)
+library(bioregion)
 
-test_check("bioRgeo")
+test_check("bioregion")
