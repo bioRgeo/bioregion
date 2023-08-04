@@ -90,7 +90,7 @@
 #' approximate a two-step random walker (see
 #' <https://www.mapequation.org/infomap/> for more information). Note that
 #' a bipartite network can also be considered as unipartite network
-#' (`bipartite = TRUE`).
+#' (`bipartite = FALSE`).
 #'
 #' In both cases do not forget to indicate which of the first two columns is
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.

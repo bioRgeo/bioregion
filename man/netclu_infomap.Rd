@@ -136,7 +136,7 @@ functionality set the \code{bipartite_version} argument to TRUE in order to
 approximate a two-step random walker (see
 \url{https://www.mapequation.org/infomap/} for more information). Note that
 a bipartite network can also be considered as unipartite network
-(\code{bipartite = TRUE}).
+(\code{bipartite = FALSE}).
 
 In both cases do not forget to indicate which of the first two columns is
 dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
