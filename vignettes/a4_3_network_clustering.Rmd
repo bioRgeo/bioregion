@@ -177,6 +177,8 @@ table(ex_infomap$clusters$K_10)
 ## OSLOM
 OSLOM stands for Order Statistics Local Optimization Method.
 
+*Similarity-based* algorithm.
+
 @Lancichinetti2011
 `reassign` a string indicating if the nodes belonging to several community
 should be reassign and what method should be used (see Note).  
@@ -191,9 +193,10 @@ or their union (default value is 0.5, bigger value leads to bigger clusters).
 
 ```{r, eval = FALSE}
 set.seed(1)
-ex_oslom <- netclu_oslom(fishdf,
+fish_simil <- similarity(net_to_mat(fishdf), metric = "Simpson")
+ex_oslom <- netclu_oslom(fish_simil,
                          weight = TRUE,
-                         index = names(fishdf)[3],
+                         index = names(fish_simil)[3],
                          reassign = "no",
                          r = 10,
                          hr = 50,
@@ -207,9 +210,9 @@ ex_oslom <- netclu_oslom(fishdf,
                          return_node_type = "both",
                          binpath = "tempdir",
                          path_temp = "oslom_temp",
-                         delete_temp = TRUE))
+                         delete_temp = TRUE)
 
-table(ex_oslom$clusters$K_4_semel)
+table(ex_oslom$clusters$K_338)
 ```
 
 ## Louvain
