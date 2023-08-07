@@ -113,7 +113,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL,
   
   # Controls
   if (is.null(metric) & is.null(formula)) {
-    stop("metric or formula should be used")
+    stop("metric or formula should be used", call. = FALSE)
   }
   
   if (length(intersect(c(lsmetricabc, lsmetricABC, lsmetrico), metric)) !=
@@ -121,11 +121,11 @@ similarity <- function(comat, metric = "Simpson", formula = NULL,
     stop("One or several similarity metric(s) chosen is not available.
      Please chose among the followings:
          abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, Bray, Brayturn or
-         Euclidean.")
+         Euclidean.", call. = FALSE)
   }
   
   if (!is.null(formula) & !is.character(formula)) {
-    stop("formula should be a vector of characters if not NULL")
+    stop("formula should be a vector of characters if not NULL", call. = FALSE)
   } else { # Check if abc and ABC in formula
     abcinformula <- (sum(c(grepl("a", formula), grepl("b", formula),
                            grepl("c", formula))) > 0)
@@ -134,23 +134,28 @@ similarity <- function(comat, metric = "Simpson", formula = NULL,
   }
   
   if (!is.matrix(comat)) {
-    stop("Co-occurrence matrix should be a matrix")
+    stop("Co-occurrence matrix should be a matrix", call. = FALSE)
   }
   
   sco <- sum(is.na(comat))
   minco <- min(comat)
   if (sco > 0) {
     stop("Co-occurrence matrix should contains only positive real: NA(s)
-         detected!")
+         detected!", call. = FALSE)
   }
   if (minco < 0) {
-    stop("Co-occurrence matrix should contains only positive real: negative
-         value detected!")
+    if("Euclidean" %in% metric){
+      message("Negative value(s) detected in the co-occurence matrix!", 
+              call. = FALSE)
+    }else{
+      stop("Co-occurrence matrix should contains only positive real: negative
+         value detected!", call. = FALSE)
+    }
   }
   
   if (!(method %in% c("prodmat", "loops"))) {
     stop("The method is not available.
-     Please chose among the followings: prodmat, loops")
+     Please chose among the followings: prodmat, loops", call. = FALSE)
   }
   
   # Extract site id
