@@ -15,6 +15,8 @@
 #' 
 #' @param plot a `boolean` indicating if the plot should be drawn.
 #' 
+#' @param ... further arguments to be passed to `sf::plot()`
+#' 
 #' @details
 #' The `clusters` and `geometry` site IDs should correspond. They should
 #' have the same type (i.e. `character` is cluster is a 
@@ -41,7 +43,7 @@
 #' @export
 
 map_clusters <- function(clusters, geometry, write_clusters = FALSE,
-                         plot = TRUE) {
+                         plot = TRUE, ...) {
 
   controls(args = write_clusters, data = NULL, type = "boolean")
   controls(args = plot, data = NULL, type = "boolean")
@@ -114,15 +116,15 @@ map_clusters <- function(clusters, geometry, write_clusters = FALSE,
       mod4r <- nbplotsp-mod4q*4
 
       if(mod4q == 0){
-        plot(plotsp)
+        plot(plotsp, ...)
       }else{
         for(k in 1:mod4q){
           grDevices::dev.new()
-          plot(plotsp[((k-1)*4+1):((k-1)*4+4)])
+          plot(plotsp[((k-1)*4+1):((k-1)*4+4)], ...)
         }
         if(mod4r>0){
           grDevices::dev.new()
-          plot(plotsp[((mod4q)*4+1):((mod4q)*4+mod4r)], key.pos=NULL)
+          plot(plotsp[((mod4q)*4+1):((mod4q)*4+mod4r)], key.pos=NULL, ...)
         }
         
       }

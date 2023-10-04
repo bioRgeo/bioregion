@@ -4,7 +4,7 @@
 \alias{map_clusters}
 \title{Create a map of bioregions}
 \usage{
-map_clusters(clusters, geometry, write_clusters = FALSE, plot = TRUE)
+map_clusters(clusters, geometry, write_clusters = FALSE, plot = TRUE, ...)
 }
 \arguments{
 \item{clusters}{an object of class \code{bioregion.clusters} or a \code{data.frame}. If
@@ -18,6 +18,8 @@ The first attribute should correspond to the sites' ID (see Details).}
 should be added in \code{geometry}.}
 
 \item{plot}{a \code{boolean} indicating if the plot should be drawn.}
+
+\item{...}{further arguments to be passed to \code{sf::plot()}}
 }
 \value{
 One or several maps of bioregions if \code{plot = TRUE} and the

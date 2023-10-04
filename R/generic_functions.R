@@ -353,3 +353,21 @@ print.bioregion.pairwise.metric <- function(x, ...)
   cat("\n\n")
   print(as.data.frame(x))
 }
+
+
+#' @export
+#' @method as.dist bioregion.pairwise.metric
+as.dist.bioregion.pairwise.metric <- function(m, diag = FALSE, 
+                                              upper = FALSE)
+{
+  if(ncol(x) > 3) {
+    message("More than 3 columns in x: using the third column as the distance",
+            "index")
+    x <- x[, 1:3]
+  }
+  matrix.dist <- net_to_mat(x,
+                            weight = TRUE, squared = TRUE, symmetrical = TRUE)
+  matrix.dist <- stats::as.dist(x, diag = diag, 
+                                upper = upper)
+  return(matrix.dist)
+}
