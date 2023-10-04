@@ -12,7 +12,7 @@ bioregion.clusters object combined with a geometry (sf objects)."><meta property
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ bioregion.clusters object combined with a geometry (sf objects).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">map_clusters</span><span class="op">(</span><span class="va">clusters</span>, <span class="va">geometry</span>, write_clusters <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">map_clusters</span><span class="op">(</span><span class="va">clusters</span>, <span class="va">geometry</span>, write_clusters <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -99,6 +99,10 @@ should be added in <code>geometry</code>.</p></dd>
 
 <dt>plot</dt>
 <dd><p>a <code>boolean</code> indicating if the plot should be drawn.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>further arguments to be passed to <code><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">sf::plot()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
