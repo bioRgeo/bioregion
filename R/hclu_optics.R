@@ -154,14 +154,14 @@ hclu_optics <- function(dissimilarity,
   }
   
   if(!is.null(minPts)){
-    if(!is.integer(minPts) || minPts < 1){
+    if(minPts %% 1 != 0 || minPts < 1){
       stop("minPts must be a positive integer, indicating the number of points
       to form a dense region (see dbscan::dbscan()).")
     }
   }
   
   if(!is.null(eps)){
-    if(!is.integer(eps) || eps < 1){
+    if(eps %% 1 != 0 || eps < 1){
       stop("eps must be a positive integer, indicating the upper limit of the
          size of the epsilon neighborhood (see dbscan::optics()).")
     }
