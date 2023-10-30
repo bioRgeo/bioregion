@@ -202,7 +202,7 @@ netclu_oslom <- function(net,
 
   if (check) {
     # Control input net
-    controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
+    controls(args = NULL, data = net, type = "input_similarity")
     controls(args = NULL, data = net, type = "input_net")
 
     # Control input weight & index

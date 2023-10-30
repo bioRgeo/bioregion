@@ -83,7 +83,7 @@ colnames(comat) <- paste0("Species", 1:10)
 dissim <- dissimilarity(comat,
 metric = c("abc", "ABC", "Simpson", "Brayturn"))
 
-simil <- dissimilarity(comat, metric = "all",
+dissim <- dissimilarity(comat, metric = "all",
 formula = "1 - (b + c) / (a + b + c)")
 
 }
@@ -93,10 +93,11 @@ formula = "1 - (b + c) / (a + b + c)")
 \insertRef{Baselga2013}{bioregion}
 }
 \seealso{
-\code{\link[=similarity]{similarity()}} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
+\code{\link[=similarity]{similarity()}} \link{dissimilarity_to_similarity}
+\link{similarity_to_dissimilarity}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

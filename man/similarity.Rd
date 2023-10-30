@@ -10,8 +10,11 @@ similarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 \item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{metric}{a vector of string(s) indicating which similarity metric(s) to
-chose (see Details). If \code{"all"} is specified, then all metrics will be
+\item{metric}{a vector of string(s) indicating which metrics to chose
+(see Details). Available options are \emph{abc}, \emph{ABC}, \emph{Jaccard},
+\emph{Jaccardturn}, \emph{Sorensen}, \emph{Simpson},  \emph{Bray},
+\emph{Brayturn} or \emph{Euclidean}.\cr
+If \code{"all"} is specified, then all metrics will be
 calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
 \item{formula}{a vector of string(s) with your own formula based on the
@@ -21,7 +24,7 @@ calculated. Can be set to \code{NULL} if \code{formula} is used.}
 \item{method}{a string indicating what method should be used to compute
 \code{abc} (see Details).
 \code{method = "prodmat"} by default is more efficient but can be greedy in
-memory and \code{method="loops"} is less efficient but less greedy in
+memory and \code{method = "loops"} is less efficient but less greedy in
 memory.}
 }
 \value{
@@ -82,9 +85,9 @@ prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
-simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+sim <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 
-simil <- similarity(comat, metric = "all",
+sim <- similarity(comat, metric = "all",
 formula = "1 - (b + c) / (a + b + c)")
 
 }
@@ -94,7 +97,8 @@ formula = "1 - (b + c) / (a + b + c)")
 \insertRef{Baselga2013}{bioregion}
 }
 \seealso{
-\link{dissimilarity} \link{dissimilarity_to_similarity} \link{similarity_to_dissimilarity}
+\link{dissimilarity} \link{dissimilarity_to_similarity}
+\link{similarity_to_dissimilarity}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

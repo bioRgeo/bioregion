@@ -1,19 +1,27 @@
-#' Convert similarity indices to dissimilarity metrics
+#' Convert similarity metrics to dissimilarity metrics
 #'
 #' This function converts a data.frame of similarity metrics between sites to
-#'  dissimilarity metrics (= beta diversity).
+#'  dissimilarity metrics (beta diversity).
 #'
-#' @param similarity the output object from [similarity()] or a
-#' `data.frame` with the first columns called "Site1" and "Site2", and the
-#' other columns being the similarity metrics.
+#' @param similarity the output object from [similarity()] or
+#' [dissimilarity_to_similarity()].
+#' 
+#' @param include_formula a boolean indicating if the metrics based on your own
+#' formula should be converted (see Details). This argument is set to `TRUE`
+#' by default.
 #' 
 #' @note
 #' \loadmathjax
 #' The behavior of this function changes depending on column names. Columns
-#' "Site1" and "Site2" are copied identically. If there are columns called
-#' "a", "b", "c", "A", "B", "C", they will also be copied identically.
+#' `Site1` and `Site2` are copied identically. If there are columns called
+#' `a`, `b`, `c`, `A`, `B`, `C` they will also be copied identically. If there 
+#' are columns based on your own formula (argument `formula` in [similarity()])
+#' or not in the original list of similarity metrics (argument `metrics` in 
+#' [similarity()]) and if the argument `include_formula` is set to `FALSE`, 
+#' they will also be copied identically. Otherwise there are going to be
+#' converted like they other columns (default behavior).
 #'
-#' If a column is called "Euclidean", its distance will be calculated based
+#' If a column is called `Euclidean`, its distance will be calculated based
 #' on the following formula:
 #'
 #' \mjeqn{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}{Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity}
@@ -24,17 +32,15 @@
 #' \mjeqn{dissimilarity = 1 - similarity}{dissimilarity = 1 - similarity}
 #'
 #' @return A `data.frame` with additional class 
-#' `bioregion.pairwise.metric`, providing one or several similarity
-#' metric(s) between each pair of sites. The two first columns represent each 
-#' pair of sites, and the other column represent similarity metrics. Columns
-#' with names "a", "b", "c", "A", "B" and "C"  are not altered.
+#' `bioregion.pairwise.metric`, providing dissimilarity
+#' metric(s) between each pair of sites based on a similarity object.
 #'
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Boris Leroy (\email{leroy.boris@gmail.com}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
-#' @seealso [dissimilarity_to_similarity()]
+#' @seealso [dissimilarity_to_similarity()] [similarity()] [dissimilarity()]
 #' 
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
@@ -49,79 +55,101 @@
 #' dissimilarity
 #' 
 #' @export
-
-similarity_to_dissimilarity <- function(similarity){
+similarity_to_dissimilarity <- function(similarity, include_formula = TRUE){
   
-  if (!inherits(similarity, "bioregion.pairwise.metric")) {
-    stop("similarity should be a bioregion object created by similarity() or
-         dissimilarity_to_similarity()")
-  }
-  if (attr(similarity, "type") == "dissimilarity") {
-    stop("similarity is already composed of dissimilarity indices. If you want
-         to convert it to similarity, use dissimilarity_to_similarity()")
-  }
+  # List metrics to change
+  all <- c("a", "b", "c","A", "B", "C",
+           "Jaccard", "Jaccardturn", "Sorensen", "Simpson",
+           "Bray", "Brayturn",
+           "Euclidean")
+  noteucl <- c("Jaccard", "Jaccardturn", "Sorensen", "Simpson",
+               "Bray", "Brayturn")
+  eucl <- "Euclidean"
   
-  dissimilaritydata <- similarity
+  
+  # Initialize output
+  output <- similarity
+  
+  # Controls
+  controls(args = NULL, data = output, type = "input_conversion_similarity")
+  controls(args = include_formula, data = NULL, type = "boolean")
+  controls(args = NULL, data = output, type = "input_conversion")
   
   # Overwrite attribute
-  attr(dissimilaritydata, "type") <- "dissimilarity"
+  attr(output, "type") <- "dissimilarity"
   
-  metrics <- colnames(similarity)[-which(colnames(similarity) %in% 
-                                           c("Site1", "Site2", "a", "b", "c",
-                                             "A", "B", "C"))]
+  # Identify columns
+  metrics <- colnames(output)[-c(1,2)]
   
-  # Special case for Euclidean distances
-  if ("Euclidean" %in% metrics) {
-    dissimilaritydata[, "Euclidean"] <- (1 - similarity[, "Euclidean"]) /
-      similarity[, "Euclidean"]
-    metrics <- metrics[-which(metrics == "Euclidean")]
-  }
-  # If there are other metrics than Euclidean, we use the same formula for all
-  # of them
-  if (length(metrics)) {
-    dissimilaritydata[, metrics] <- 1 - similarity[, metrics]
+  # Euclidean
+  poseucl <- which(metrics %in% eucl)
+  if(length(poseucl) > 0){
+    output[,(poseucl + 2)] = (1 - output[,(poseucl + 2)]) / 
+      output[,(poseucl + 2)]
   }
   
-  return(dissimilaritydata)
+  # Not Euclidean
+  posnoteucl <- which(metrics %in% noteucl)
+  if(length(posnoteucl) > 0){
+    output[,(posnoteucl + 2)] = 1- output[,(posnoteucl + 2)]  
+  }
+  
+  # Include formula ?
+  if(include_formula){
+    posnotall <- which(!(metrics %in% all))
+    if(length(posnotall) > 0){
+      output[,(posnotall + 2)] = 1- output[,(posnotall + 2)]  
+    }
+  }
+
+  # Return output
+  return(output)
 }
 
-#' Convert dissimilarity indices to similarity indices
+#' Convert dissimilarity metrics to similarity metrics
 #'
-#' This function converts a data.frame of dissimilarity indices 
-#' (beta diversity) between sites to similarity indices.
+#' This function converts a data.frame of dissimilarity metrics (beta diversity)
+#' between sites to similarity metrics.
 #'
-#' @param dissimilaritydata the output object from
-#' [similarity_to_dissimilarity()] or a `data.frame` with the first columns
-#' called "Site1" and "Site2", and the other columns being the similarity
-#' metrics.
+#' @param dissimilarity the output object from [dissimilarity()] or
+#' [similarity_to_dissimilarity()].
+#' 
+#' @param include_formula a boolean indicating if the metrics based on your own
+#' formula should be converted (see Details). This argument is set to `TRUE`
+#' by default.
 #' 
 #' @note
-#' The behaviour of this function changes depending on column names. Columns
-#' "Site1" and "Site2" are copied identically. If there are columns called
-#' "a", "b", "c", "A", "B", "C", they will also be copied identically.
+#' \loadmathjax
+#' The behavior of this function changes depending on column names. Columns
+#' `Site1` and `Site2` are copied identically. If there are columns called
+#' `a`, `b`, `c`, `A`, `B`, `C` they will also be copied identically. If there 
+#' are columns based on your own formula (argument `formula` in 
+#' [dissimilarity()]) or not in the original list of dissimilarity metrics 
+#' (argument `metrics` in [dissimilarity()]) and if the argument 
+#' `include_formula` is set to `FALSE`, they will also be copied identically. 
+#' Otherwise there are going to be converted like they other columns (default 
+#' behavior).
 #'
-#' If a column is called "Euclidean", its similarity will be calculated based
+#' If a column is called `Euclidean`, the similarity will be calculated based
 #' on the following formula:
 #'
-#' \eqn{Euclidean similarity = (1 - Euclidean distance) / Euclidean distance}
+#' \mjeqn{Euclidean similarity = 1 / (1 - Euclidean distance)}{Euclidean similarity = 1 / (1 - Euclidean distance)}
 #'
-#' Otherwise, all other columns will be transformed into similarity with the
+#' Otherwise, all other columns will be transformed into dissimilarity with the
 #' following formula:
 #'
-#' \eqn{similarity = 1 - dissimilarity}
+#' \mjeqn{similarity = 1 - dissimilarity}{similarity = 1 - dissimilarity}
 #'
-#' @return A `data.frame` with additional class `bioregion.pairwise.metric`,
-#' providing one or several dissimilarity metric(s) between each pair of sites.
-#' The two first columns represent each pair of sites, and the other column
-#' represent dissimilarity metrics. Columns with names "a", "b", "c", "A", "B"
-#' and "C"  are not altered.
-#' 
+#' @return A `data.frame` with additional class 
+#' `bioregion.pairwise.metric`, providing similarity
+#' metric(s) between each pair of sites based on a dissimilarity object.
+#'
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+#' Boris Leroy (\email{leroy.boris@gmail.com}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
-#' @seealso [dissimilarity_to_similarity()]
+#' @seealso [similarity_to_dissimilarity()] [similarity()] [dissimilarity()]
 #' 
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
@@ -129,47 +157,59 @@ similarity_to_dissimilarity <- function(similarity){
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
-#' simil <- similarity(comat, metric = "all")
-#' simil
+#' dissimil <- dissimilarity(comat, metric = "all")
+#' dissimil
 #'
-#' dissimilarity <- similarity_to_dissimilarity(simil)
-#' dissimilarity
-#'
-#' simil <- dissimilarity_to_similarity(dissimilarity)
-#' simil
+#' similarity <- dissimilarity_to_similarity(dissimil)
+#' similarity
 #' 
 #' @export
-
-dissimilarity_to_similarity <- function(dissimilaritydata) {
-  if (!inherits(dissimilaritydata, "bioregion.pairwise.metric")) {
-    stop("dissimilaritydata should be a bioregion object created by
-         dissimilarity() or similarity_to_dissimilarity()")
-  }
-  if (attr(dissimilaritydata, "type") == "similarity") {
-    stop("dissimilaritydata is already composed of similarity indices. If you
-         want to convert it to dissimilarity, use
-         similarity_to_dissimilarity()")
-  }
+dissimilarity_to_similarity <- function(dissimilarity, include_formula = TRUE){
   
-  similarity <- dissimilaritydata
+  # List metrics to change
+  all <- c("a", "b", "c","A", "B", "C",
+           "Jaccard", "Jaccardturn", "Sorensen", "Simpson",
+           "Bray", "Brayturn",
+           "Euclidean")
+  noteucl <- c("Jaccard", "Jaccardturn", "Sorensen", "Simpson",
+               "Bray", "Brayturn")
+  eucl <- "Euclidean"
+  
+  
+  # Initialize output
+  output <- dissimilarity
+  
+  # Controls
+  controls(args = NULL, data = output, type = "input_conversion_dissimilarity")
+  controls(args = include_formula, data = NULL, type = "boolean")
+  controls(args = NULL, data = output, type = "input_conversion")
   
   # Overwrite attribute
-  attr(similarity, "type") <- "dissimilarity"
+  attr(output, "type") <- "similarity"
   
-  metrics <- colnames(similarity)[-which(colnames(similarity) %in%
-                                           c("Site1", "Site2", "a", "b", "c",
-                                             "A", "B", "C"))]
-  # Special case for Euclidean distances
-  if ("Euclidean" %in% metrics) {
-    similarity[, "Euclidean"] <- 1 / (1 + dissimilaritydata[, "Euclidean"])
-    metrics <- metrics[-which(metrics == "Euclidean")]
+  # Identify columns
+  metrics <- colnames(output)[-c(1,2)]
+  
+  # Euclidean
+  poseucl <- which(metrics %in% eucl)
+  if(length(poseucl) > 0){
+    output[,(poseucl + 2)] = 1 / (1 + output[,(poseucl + 2)])
   }
   
-  # If there are other metrics than Euclidean, we use the same formula for all
-  # of them
-  if (length(metrics)) {
-    similarity[, metrics] <- 1 - similarity[, metrics]
+  # Not Euclidean
+  posnoteucl <- which(metrics %in% noteucl)
+  if(length(posnoteucl) > 0){
+    output[,(posnoteucl + 2)] = 1- output[,(posnoteucl + 2)]  
   }
   
-  return(similarity)
+  # Include formula ?
+  if(include_formula){
+    posnotall <- which(!(metrics %in% all))
+    if(length(posnotall) > 0){
+      output[,(posnotall + 2)] = 1- output[,(posnotall + 2)]  
+    }
+  }
+  
+  # Return output
+  return(output)
 }

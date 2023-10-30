@@ -18,6 +18,7 @@
 #' @param formula a vector of string(s) with your own formula based on the
 #' `a`, `b`, `c`, `A`, `B`, and `C` quantities
 #' (see Details). `formula` is set to `NULL` by default.
+#' 
 #' @param method a string indicating what method should be used to compute
 #' `abc` (see Details).
 #' `method = "prodmat"` by default is more efficient but can be greedy
@@ -66,11 +67,12 @@
 #' `formula` except for the metric *abc* and *ABC* that
 #' are stored in three columns (one for each letter).
 #' 
-#' @seealso [bioregion::similarity()] [dissimilarity_to_similarity] [similarity_to_dissimilarity]
+#' @seealso [similarity()] [dissimilarity_to_similarity] 
+#' [similarity_to_dissimilarity]
 #' 
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}), 
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
@@ -82,7 +84,7 @@
 #' dissim <- dissimilarity(comat,
 #' metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #'
-#' simil <- dissimilarity(comat, metric = "all",
+#' dissim <- dissimilarity(comat, metric = "all",
 #' formula = "1 - (b + c) / (a + b + c)")
 #' 
 #' @references
@@ -98,7 +100,7 @@ dissimilarity <- function(comat, metric = "Simpson", formula = NULL,
   res <- similarity(comat, metric = metric, formula = formula, method = method)
   
   # Compute dissimilarity
-  res <- similarity_to_dissimilarity(res)
+  res <- similarity_to_dissimilarity(res, include_formula = FALSE)
   
   # Return the output
   return(res)

@@ -2,42 +2,141 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input similarity ##########################################################
   if (type == "input_similarity") {
-    if (inherits(data, "bioregion.pairwise.metric")) {
-      if (attr(data, "type") == "dissimilarity") {
-        stop(paste0(deparse(substitute(data)),
-                    " seems to be a dissimilarity object. 
+    if(!inherits(data, "bioregion.pairwise.metric")) {
+     message(paste0(deparse(substitute(data)),
+                     " is not a bioregion.pairwise.metric object. 
+Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+others similarity metrics (netclu_). 
+Please carefully check your data before using the clustering functions."))
+    }else{
+      if(is.null(attr(data, "type"))){
+        message(paste0(deparse(substitute(data)),
+                       " is a bioregion.pairwise.metric object but it has not 
+been possible to identify the object's type (similarity or dissimilarity) 
+probably because the bioregion.pairwise.metric object has been altered.
+Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+others similarity metrics (netclu_). 
+Please carefully check your data before using the clustering functions."))
+      }else{
+        if (attr(data, "type") == "dissimilarity") {
+          stop(paste0(deparse(substitute(data)),
+                      " seems to be a dissimilarity object. 
 This function should be applied on similarities, not dissimilarities. 
 Use dissimilarity_to_similarity() before using this function."), call. = FALSE)
+        }
       }
-    } else {
-      message(paste0(deparse(substitute(data)),
-                     " is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu) and
-others similarity metrics (netclu_). 
-Please carefully check your data before using the clustering functions."),
-              call. = FALSE)
     }
   }
   
   # Input dissimilarity #######################################################
   if (type == "input_dissimilarity") {
-    if (inherits(data, "bioregion.pairwise.metric")) {
-      if (attr(data, "type") == "similarity") {
-        stop(paste0(deparse(substitute(data)),
-                    " seems to be a similarity object.
-This function should be applied on dissimilarities, not similarities.
-Use similarity_to_dissimilarity() before using this function."),
-             call. = FALSE
-        )
-      }
-    } else {
+    if(!inherits(data, "bioregion.pairwise.metric")) {
       message(paste0(deparse(substitute(data)),
                      " is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu) and
+Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
 others similarity metrics (netclu_). 
 Please carefully check your data before using the clustering functions."))
+    }else{
+      if(is.null(attr(data, "type"))){
+        message(paste0(deparse(substitute(data)),
+                       " is a bioregion.pairwise.metric object but it has not 
+been possible to identify the object's type (similarity or dissimilarity) 
+probably because the bioregion.pairwise.metric object has been altered.
+Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+others similarity metrics (netclu_). 
+Please carefully check your data before using the clustering functions."))
+      }else{
+        if (attr(data, "type") == "similarity") {
+          stop(paste0(deparse(substitute(data)),
+                      " seems to be a dissimilarity object. 
+This function should be applied on dissimilarities, not similarities. 
+Use similarity_to_dissimilarity() before using this function."), call. = FALSE)
+        }
+      }
     }
   }
+  
+  # Input conversion similarity ################################################
+  if (type == "input_conversion_similarity") {
+    if (!inherits(data, "bioregion.pairwise.metric")) {
+      stop(paste0(deparse(substitute(data)), 
+                  " should be a bioregion.pairwise.metric object created by 
+similarity() or dissimilarity_to_similarity()"),
+                  call. = FALSE)
+    }
+    if(is.null(attr(data, "type"))){
+      stop(paste0(deparse(substitute(data)),
+                     " is a bioregion.pairwise.metric object but it has not 
+been possible to identify the object's type (similarity or dissimilarity) 
+probably because the bioregion.pairwise.metric object has been altered."),
+           call. = FALSE)
+    }
+    if (attr(data, "type") == "dissimilarity") {
+      stop(paste0(deparse(substitute(data)), " is already composed of 
+dissimilarity metrics. If you want to convert it to similarity, use 
+dissimilarity_to_similarity()"),
+           call. = FALSE)
+    }
+    if (!is.data.frame(data)) {
+      stop(paste0(deparse(substitute(data)), " must be a data.frame."),
+           call. = FALSE)
+    }
+    if (dim(data)[2] < 2) {
+      stop(paste0(deparse(substitute(data)),
+                  " must be a data.frame with at least two columns."),
+           call. = FALSE)
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop("NA(s) detected in the data.frame!", call. = FALSE)
+    }
+    for(k in 3:dim(data)[2]){
+      if (!is.numeric(data[, k])) {
+        stop("The (dis)similarity metric(s) must be numeric.", call. = FALSE)
+      }
+    }
+  }
+  
+  # Input conversion dissimilarity ################################################
+  if (type == "input_conversion_dissimilarity") {
+    if (!inherits(data, "bioregion.pairwise.metric")) {
+      stop(paste0(deparse(substitute(data)), 
+                  " should be a bioregion.pairwise.metric object created by 
+similarity() or dissimilarity_to_similarity()"),
+           call. = FALSE)
+    }
+    if(is.null(attr(data, "type"))){
+      stop(paste0(deparse(substitute(data)),
+                  " is a bioregion.pairwise.metric object but it has not 
+been possible to identify the object's type (similarity or dissimilarity) 
+probably because the bioregion.pairwise.metric object has been altered."),
+           call. = FALSE)
+    }
+    if (attr(data, "type") == "similarity") {
+      stop(paste0(deparse(substitute(data)), " is already composed of 
+similarity metrics. If you want to convert it to dissimilarity, use 
+similarity_to_dissimilarity()"),
+           call. = FALSE)
+    }
+    if (!is.data.frame(data)) {
+      stop(paste0(deparse(substitute(data)), " must be a data.frame."),
+           call. = FALSE)
+    }
+    if (dim(data)[2] < 2) {
+      stop(paste0(deparse(substitute(data)),
+                  " must be a data.frame with at least two columns."),
+           call. = FALSE)
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop("NA(s) detected in the data.frame!", call. = FALSE)
+    }
+    for(k in 3:dim(data)[2]){
+      if (!is.numeric(data[, k])) {
+        stop("The (dis)similarity metric(s) must be numeric.", call. = FALSE)
+      }
+    }
+  }  
   
   # Input network #############################################################
   if (type == "input_net") {

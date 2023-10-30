@@ -7,8 +7,11 @@
 #' @param comat a co-occurrence `matrix` with sites as rows and species as
 #' columns.
 #' 
-#' @param metric a vector of string(s) indicating which similarity metric(s) to
-#' chose (see Details). If `"all"` is specified, then all metrics will be
+#' @param metric a vector of string(s) indicating which metrics to chose
+#' (see Details). Available options are *abc*, *ABC*, *Jaccard*,
+#' *Jaccardturn*, *Sorensen*, *Simpson*,  *Bray*,
+#' *Brayturn* or *Euclidean*.\cr
+#' If `"all"` is specified, then all metrics will be
 #' calculated. Can be set to `NULL` if `formula` is used.
 #' 
 #' @param formula a vector of string(s) with your own formula based on the
@@ -18,7 +21,7 @@
 #' @param method a string indicating what method should be used to compute
 #' `abc` (see Details).
 #' `method = "prodmat"` by default is more efficient but can be greedy in
-#' memory and `method="loops"` is less efficient but less greedy in
+#' memory and `method = "loops"` is less efficient but less greedy in
 #' memory.
 #' 
 #' @details
@@ -67,7 +70,8 @@
 #' `formula` except for the metric *abc* and *ABC* that are
 #' stored in three columns (one for each letter).
 #' 
-#' @seealso [dissimilarity] [dissimilarity_to_similarity] [similarity_to_dissimilarity]
+#' @seealso [dissimilarity] [dissimilarity_to_similarity] 
+#' [similarity_to_dissimilarity]
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}), 
@@ -80,9 +84,9 @@
 #' rownames(comat) <- paste0("Site", 1:5)
 #' colnames(comat) <- paste0("Species", 1:10)
 #'
-#' simil <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
+#' sim <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #'
-#' simil <- similarity(comat, metric = "all",
+#' sim <- similarity(comat, metric = "all",
 #' formula = "1 - (b + c) / (a + b + c)")
 #' 
 #' @references
@@ -90,11 +94,7 @@
 #' 
 #' \insertRef{Baselga2013}{bioregion}
 #' 
-#' @importFrom Matrix tcrossprod
-#' @importFrom stats dist
-#' 
 #' @export
-
 similarity <- function(comat, metric = "Simpson", formula = NULL,
                        method = "prodmat"){
   
@@ -145,8 +145,7 @@ similarity <- function(comat, metric = "Simpson", formula = NULL,
   }
   if (minco < 0) {
     if("Euclidean" %in% metric){
-      message("Negative value(s) detected in the co-occurence matrix!", 
-              call. = FALSE)
+      message("Negative value(s) detected in the co-occurence matrix!")
     }else{
       stop("Co-occurrence matrix should contains only positive real: negative
          value detected!", call. = FALSE)

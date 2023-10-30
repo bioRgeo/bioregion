@@ -2,41 +2,48 @@
 % Please edit documentation in R/similarity_dissimilarity_conversion.R
 \name{dissimilarity_to_similarity}
 \alias{dissimilarity_to_similarity}
-\title{Convert dissimilarity indices to similarity indices}
+\title{Convert dissimilarity metrics to similarity metrics}
 \usage{
-dissimilarity_to_similarity(dissimilaritydata)
+dissimilarity_to_similarity(dissimilarity, include_formula = TRUE)
 }
 \arguments{
-\item{dissimilaritydata}{the output object from
-\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}} or a \code{data.frame} with the first columns
-called "Site1" and "Site2", and the other columns being the similarity
-metrics.}
+\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}.}
+
+\item{include_formula}{a boolean indicating if the metrics based on your own
+formula should be converted (see Details). This argument is set to \code{TRUE}
+by default.}
 }
 \value{
-A \code{data.frame} with additional class \code{bioregion.pairwise.metric},
-providing one or several dissimilarity metric(s) between each pair of sites.
-The two first columns represent each pair of sites, and the other column
-represent dissimilarity metrics. Columns with names "a", "b", "c", "A", "B"
-and "C"  are not altered.
+A \code{data.frame} with additional class
+\code{bioregion.pairwise.metric}, providing similarity
+metric(s) between each pair of sites based on a dissimilarity object.
 }
 \description{
-This function converts a data.frame of dissimilarity indices
-(beta diversity) between sites to similarity indices.
+This function converts a data.frame of dissimilarity metrics (beta diversity)
+between sites to similarity metrics.
 }
 \note{
-The behaviour of this function changes depending on column names. Columns
-"Site1" and "Site2" are copied identically. If there are columns called
-"a", "b", "c", "A", "B", "C", they will also be copied identically.
+\loadmathjax
+The behavior of this function changes depending on column names. Columns
+\code{Site1} and \code{Site2} are copied identically. If there are columns called
+\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, \code{C} they will also be copied identically. If there
+are columns based on your own formula (argument \code{formula} in
+\code{\link[=dissimilarity]{dissimilarity()}}) or not in the original list of dissimilarity metrics
+(argument \code{metrics} in \code{\link[=dissimilarity]{dissimilarity()}}) and if the argument
+\code{include_formula} is set to \code{FALSE}, they will also be copied identically.
+Otherwise there are going to be converted like they other columns (default
+behavior).
 
-If a column is called "Euclidean", its similarity will be calculated based
+If a column is called \code{Euclidean}, the similarity will be calculated based
 on the following formula:
 
-\eqn{Euclidean similarity = (1 - Euclidean distance) / Euclidean distance}
+\mjeqn{Euclidean similarity = 1 / (1 - Euclidean distance)}{Euclidean similarity = 1 / (1 - Euclidean distance)}
 
-Otherwise, all other columns will be transformed into similarity with the
+Otherwise, all other columns will be transformed into dissimilarity with the
 following formula:
 
-\eqn{similarity = 1 - dissimilarity}
+\mjeqn{similarity = 1 - dissimilarity}{similarity = 1 - dissimilarity}
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
@@ -44,21 +51,18 @@ prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
-simil <- similarity(comat, metric = "all")
-simil
+dissimil <- dissimilarity(comat, metric = "all")
+dissimil
 
-dissimilarity <- similarity_to_dissimilarity(simil)
-dissimilarity
-
-simil <- dissimilarity_to_similarity(dissimilarity)
-simil
+similarity <- dissimilarity_to_similarity(dissimil)
+similarity
 
 }
 \seealso{
-\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}
+\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}} \code{\link[=similarity]{similarity()}} \code{\link[=dissimilarity]{dissimilarity()}}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
+Boris Leroy (\email{leroy.boris@gmail.com}) and
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

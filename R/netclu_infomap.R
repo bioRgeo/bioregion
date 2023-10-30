@@ -90,7 +90,7 @@
 #' approximate a two-step random walker (see
 #' <https://www.mapequation.org/infomap/> for more information). Note that
 #' a bipartite network can also be considered as unipartite network
-#' (`bipartite = FALSE`).
+#' (`bipartite = TRUE`).
 #'
 #' In both cases do not forget to indicate which of the first two columns is
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
@@ -194,7 +194,7 @@ netclu_infomap <- function(net,
     ))
   } else {
     # Control input net
-    controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
+    controls(args = NULL, data = net, type = "input_similarity")
     controls(args = NULL, data = net, type = "input_net")
 
     # Control input weight & index

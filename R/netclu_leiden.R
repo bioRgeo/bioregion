@@ -124,7 +124,7 @@ netclu_leiden <- function(net,
                           algorithm_in_output = TRUE) {
   
   # Control input net
-  controls(args = NULL, data = net, type = "input_bioregion.pairwise.metric")
+  controls(args = NULL, data = net, type = "input_similarity")
   controls(args = NULL, data = net, type = "input_net")
   
   # Control input weight & index
