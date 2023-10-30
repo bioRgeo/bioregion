@@ -14,7 +14,7 @@ matrix with sites as rows and species as columns."><meta property="og:image" con
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,8 +90,11 @@ columns.</p></dd>
 
 
 <dt>metric</dt>
-<dd><p>a vector of string(s) indicating which similarity metric(s) to
-chose (see Details). If <code>"all"</code> is specified, then all metrics will be
+<dd><p>a vector of string(s) indicating which metrics to chose
+(see Details). Available options are <em>abc</em>, <em>ABC</em>, <em>Jaccard</em>,
+<em>Jaccardturn</em>, <em>Sorensen</em>, <em>Simpson</em>,  <em>Bray</em>,
+<em>Brayturn</em> or <em>Euclidean</em>.<br>
+If <code>"all"</code> is specified, then all metrics will be
 calculated. Can be set to <code>NULL</code> if <code>formula</code> is used.</p></dd>
 
 
@@ -105,7 +108,7 @@ calculated. Can be set to <code>NULL</code> if <code>formula</code> is used.</p>
 <dd><p>a string indicating what method should be used to compute
 <code>abc</code> (see Details).
 <code>method = "prodmat"</code> by default is more efficient but can be greedy in
-memory and <code>method="loops"</code> is less efficient but less greedy in
+memory and <code>method = "loops"</code> is less efficient but less greedy in
 memory.</p></dd>
 
 </dl></div>
@@ -160,7 +163,8 @@ site j in terms of species composition.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="dissimilarity.html">dissimilarity</a> <a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity</a> <a href="similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></p></div>
+    <div class="dont-index"><p><a href="dissimilarity.html">dissimilarity</a> <a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity</a>
+<a href="similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -176,9 +180,9 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">simil</span> <span class="op">&lt;-</span> <span class="fu">similarity</span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"ABC"</span>, <span class="st">"Simpson"</span>, <span class="st">"Brayturn"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">similarity</span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"ABC"</span>, <span class="st">"Simpson"</span>, <span class="st">"Brayturn"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">simil</span> <span class="op">&lt;-</span> <span class="fu">similarity</span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span>,</span></span>
+<span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">similarity</span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>formula <span class="op">=</span> <span class="st">"1 - (b + c) / (a + b + c)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

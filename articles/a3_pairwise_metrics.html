@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2023-10-18</h4>
+            <h4 data-toc-skip class="date">2023-10-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -231,16 +231,16 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##    Site1 Site2     Simpson (b + c) / (a + b + c)   a  b   c</span></span>
-<span><span class="co">## 2     35    36 0.023255814             0.1448276 126  3 741</span></span>
-<span><span class="co">## 3     35    37 0.031007752             0.1885370 125  4 534</span></span>
-<span><span class="co">## 4     35    38 0.054263566             0.2144112 122  7 440</span></span>
-<span><span class="co">## 5     35    39 0.054263566             0.1936508 122  7 501</span></span>
-<span><span class="co">## 6     35    84 0.720930233             0.1176471  36 93 177</span></span>
-<span><span class="co">## 7     35    85 0.085271318             0.1588156 118 11 614</span></span>
-<span><span class="co">## 8     35    86 0.000000000             0.1462585 129  0 753</span></span>
-<span><span class="co">## 9     35    87 0.007751938             0.1233141 128  1 909</span></span>
-<span><span class="co">## 10    35    88 0.015503876             0.1349628 127  2 812</span></span>
-<span><span class="co">## 11    35    89 0.317829457             0.2875817  88 41 177</span></span></code></pre>
+<span><span class="co">## 2     35    36 0.023255814             0.8551724 126  3 741</span></span>
+<span><span class="co">## 3     35    37 0.031007752             0.8114630 125  4 534</span></span>
+<span><span class="co">## 4     35    38 0.054263566             0.7855888 122  7 440</span></span>
+<span><span class="co">## 5     35    39 0.054263566             0.8063492 122  7 501</span></span>
+<span><span class="co">## 6     35    84 0.720930233             0.8823529  36 93 177</span></span>
+<span><span class="co">## 7     35    85 0.085271318             0.8411844 118 11 614</span></span>
+<span><span class="co">## 8     35    86 0.000000000             0.8537415 129  0 753</span></span>
+<span><span class="co">## 9     35    87 0.007751938             0.8766859 128  1 909</span></span>
+<span><span class="co">## 10    35    88 0.015503876             0.8650372 127  2 812</span></span>
+<span><span class="co">## 11    35    89 0.317829457             0.7124183  88 41 177</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>

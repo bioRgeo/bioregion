@@ -16,7 +16,7 @@ co-occurrence matrix with sites as rows and species as columns."><meta property=
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,12 +162,13 @@ compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="similarity.html">similarity()</a></code> <a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity</a> <a href="similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></p></div>
+    <div class="dont-index"><p><code><a href="similarity.html">similarity()</a></code> <a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity</a>
+<a href="similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>),
-Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>) and
+    <p>Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>),
+Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>) and
 Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</p>
     </div>
 
@@ -181,7 +182,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu">dissimilarity</span><span class="op">(</span><span class="va">comat</span>,</span></span>
 <span class="r-in"><span>metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"ABC"</span>, <span class="st">"Simpson"</span>, <span class="st">"Brayturn"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">simil</span> <span class="op">&lt;-</span> <span class="fu">dissimilarity</span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span>,</span></span>
+<span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu">dissimilarity</span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>formula <span class="op">=</span> <span class="st">"1 - (b + c) / (a + b + c)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
