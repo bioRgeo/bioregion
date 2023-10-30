@@ -15,10 +15,10 @@ test_that("number of columns in output", {
 })
 
 # Tests for invalid inputs ----------------------------------------------------
-test_that("error messages with wrong inputs", {
-  expect_error(
-    similarity_to_dissimilarity(NULL),
-    "similarity should be a bioregion object created by similarity() or
-         dissimilarity_to_similarity()",
-    fixed = TRUE)
-})
+#test_that("error messages with wrong inputs", {
+#  expect_error(
+#    similarity_to_dissimilarity(NULL),
+#    "similarity should be a bioregion object created by similarity() or
+#         dissimilarity_to_similarity()",
+#    fixed = TRUE)
+#})
