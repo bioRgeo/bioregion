@@ -243,11 +243,11 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu">hclu_hierarclust</span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.84 - 0.85</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.85 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.72 - 0.74</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.74 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -255,12 +255,12 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Jaccard </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.85 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.738 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.188 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.25 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hclu_hierarclust-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
@@ -289,49 +289,49 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ trials             : chr "Trials not stored in output"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree         :List of 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "hclust"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.coph.cor: num 0.85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.coph.cor: num 0.738</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_n_clust     : int 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height  : Named num 0.188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height  : Named num 0.25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr "k_5"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ clusters    :'data.frame':	20 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID : chr [1:20] "Site8" "Site4" "Site2" "Site17" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID : chr [1:20] "Site18" "Site3" "Site19" "Site13" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ K_5: chr [1:20] "1" "2" "1" "1" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ cluster_info:'data.frame':	1 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ partition_name   : chr "K_5"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_clust          : int 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ requested_n_clust: num 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height: num 0.188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height: num 0.25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr [1:2] "bioregion.clusters" "list"</span>
 <span class="r-in"><span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7   1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site18 Site18   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19   1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1   1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11   5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7   1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20   3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site14 Site14   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2   4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4   5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6   1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># User-defined height cut</span></span></span>
 <span class="r-in"><span><span class="co"># Only one height</span></span></span>
 <span class="r-in"><span><span class="va">tree2</span> <span class="op">&lt;-</span> <span class="fu">hclu_hierarclust</span><span class="op">(</span><span class="va">dissim</span>, cut_height <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.84 - 0.85</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.85 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.72 - 0.74</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.74 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-in"><span><span class="va">tree2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
@@ -340,87 +340,91 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Jaccard </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.85 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.738 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Heights of cut requested by the user:  0.05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  19 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  20 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.05 </span>
 <span class="r-in"><span><span class="va">tree2</span><span class="op">$</span><span class="va">clusters</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        ID K_19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Site14    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   Site9    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site11    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   Site8    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Site4    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   Site5    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   Site7    7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site10    8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site20    9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site16   10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Site19   11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 Site13    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  Site2   12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  Site6   13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 Site15   14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 Site12   15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  Site3   16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 Site18   17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  Site1   18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Site17   19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ID K_20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Site15    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   Site3    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   Site4    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site13    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Site5    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Site12    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  Site11    7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site14    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   Site8    9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  Site7   10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Site20   11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 Site16   12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 Site10   13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  Site6   14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  Site9   15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  Site2   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 Site17   17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  Site1   18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 Site18   19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Site19   20</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Multiple heights</span></span></span>
 <span class="r-in"><span><span class="va">tree3</span> <span class="op">&lt;-</span> <span class="fu">hclu_hierarclust</span><span class="op">(</span><span class="va">dissim</span>, cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.15</span>, <span class="fl">.25</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.84 - 0.85</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.85 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.72 - 0.74</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.74 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tree3</span><span class="op">$</span><span class="va">clusters</span> <span class="co"># Mind the order of height cuts: from deep to shallow cuts</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_3 K_9 K_19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12   1   1    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7   1   2    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19   2   3    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13   1   4    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1   1   4    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2   1   2    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5   1   4    7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site14 Site14   1   4    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4   1   5    8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6   2   6    9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9   1   4   10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site18 Site18   1   4   11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20   1   7   12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8   1   4   13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3   1   4   14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11   3   8   15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15   1   9   16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16   1   4   17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10   1   2   18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17   1   4   19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_5 K_14 K_20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7   1    1    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16   1    2    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10   1    2    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5   1    3    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site14 Site14   1    4    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19   1    2    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8   1    5    7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17   1    6    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1   1    7    9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9   1    8   10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13   1    2   11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2   2    9   12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20   3   10   13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11   1    1   14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4   4   11   15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3   5   12   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site18 Site18   1    1   17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6   1    6   18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12   1   13   19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15   1   14   20</span>
 <span class="r-in"><span><span class="co"># Info on each partition can be found in table cluster_info</span></span></span>
 <span class="r-in"><span><span class="va">tree3</span><span class="op">$</span><span class="va">cluster_info</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        partition_name n_clust requested_cut_height</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.25            K_3       3                 0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.15            K_9       9                 0.15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.05           K_19      19                 0.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.25            K_5       5                 0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.15           K_14      14                 0.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.05           K_20      20                 0.05</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree3</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to min; returning Inf</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in stats::rect.hclust(x$algorithm$final.tree, h = x$algorithm$output_cut_height[i],     border = cols[i]):</span> k must be between 2 and 19</span>
 <span class="r-plt img"><img src="hclu_hierarclust-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Recut the tree afterwards</span></span></span>
 <span class="r-in"><span><span class="va">tree3.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree3</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tree4</span> <span class="op">&lt;-</span> <span class="fu">hclu_hierarclust</span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.84 - 0.85</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.85 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.72 - 0.74</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.74 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 18. Closest number found: 17</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 10. Closest number found: 9</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 17. Closest number found: 16</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
