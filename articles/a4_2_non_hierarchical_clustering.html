@@ -98,7 +98,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2023-10-30</h4>
+            <h4 data-toc-skip class="date">2023-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a4_2_non_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_2_non_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_2_non_hierarchical_clustering.Rmd</code></div>
@@ -259,16 +259,16 @@ clusters assigned to each site are accessible in the
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_kmeans</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##                ID K_3</span></span>
-<span><span class="co">## Aa             Aa   1</span></span>
+<span><span class="co">## Aa             Aa   3</span></span>
 <span><span class="co">## Abula       Abula   1</span></span>
-<span><span class="co">## Acheloos Acheloos   3</span></span></code></pre>
+<span><span class="co">## Acheloos Acheloos   2</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_kmeans</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##   1   2   3 </span></span>
-<span><span class="co">## 243  19  76</span></span></code></pre>
-<p>Here, we see that 243 sites are assigned to cluster 1, 19 to cluster
-2 and 76 to cluster 3.<br><br> This assignment can change depending on the two other main
+<span><span class="co">## 141  79 118</span></span></code></pre>
+<p>Here, we see that 141 sites are assigned to cluster 1, 79 to cluster
+2 and 118 to cluster 3.<br><br> This assignment can change depending on the two other main
 arguments of the functions, <code>iter_max</code> and
 <code>nstart</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -286,16 +286,16 @@ emerge.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_kmeans</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_3</span>, <span class="va">ex_kmeans2</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    </span></span>
 <span><span class="co">##       1   2   3</span></span>
-<span><span class="co">##   1 237   6   0</span></span>
-<span><span class="co">##   2   0  19   0</span></span>
-<span><span class="co">##   3   0   9  67</span></span></code></pre>
+<span><span class="co">##   1   0 141   0</span></span>
+<span><span class="co">##   2  12   0  67</span></span>
+<span><span class="co">##   3  20  98   0</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_kmeans</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_3</span>, <span class="va">ex_kmeans3</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    </span></span>
 <span><span class="co">##       1   2   3</span></span>
-<span><span class="co">##   1   2 130 111</span></span>
-<span><span class="co">##   2  18   1   0</span></span>
-<span><span class="co">##   3  76   0   0</span></span></code></pre>
+<span><span class="co">##   1 111  30   0</span></span>
+<span><span class="co">##   2   0   0  79</span></span>
+<span><span class="co">##   3   0 101  17</span></span></code></pre>
 <p><br> Overall, increasing <code>iter_max</code> and
 <code>nstart</code> increases the chances of convergence of the
 algorithm but also increases the computation time.<br><br></p>
@@ -341,6 +341,25 @@ for more details).</p>
 <span><span class="co">## 258  80</span></span></code></pre>
 <p>With 2 clusters, we see that 258 sites are assigned to cluster 1 and
 80 to cluster 2. <br></p>
+</div>
+<div class="section level4">
+<h4 id="clustering-large-applications-clara">2.2.2. Clustering Large Applications (CLARA)<a class="anchor" aria-label="anchor" href="#clustering-large-applications-clara"></a>
+</h4>
+<p>CLARA (Clustering Large Applications, (Kaufman and Rousseeuw 1990))
+is an extension of the k-medoids (PAM) methods to deal with data
+containing a large number of objects (more than several thousand
+observations) in order to reduce the computational time and the RAM
+storage problem. This is achieved by using the sampling approach.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex_clara</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_clara.html">nhclu_clara</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
+<span>                        n_clust <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                        maxiter <span class="op">=</span> <span class="fl">0L</span>, initializer <span class="op">=</span> <span class="st">"LAB"</span>, fasttol <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                        numsamples <span class="op">=</span> <span class="fl">5L</span>, sampling <span class="op">=</span> <span class="fl">0.25</span>, independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                        seed <span class="op">=</span> <span class="fl">123456789L</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_clara</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">##   1   2   3   4   5 </span></span>
+<span><span class="co">## 241  21  16  50  10</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -393,7 +412,7 @@ covered.</p></li>
 arguments presented above, <code>minPts</code> and <code>eps</code>,
 then the function will provide a knee curve helping the search of an
 optimal <code>eps</code> value. <br></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_dbscan</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_dbscan.html">nhclu_dbscan</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, minPts <span class="op">=</span> <span class="cn">NULL</span>, eps <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                          plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Trying to find a knee in the curve to search for an optimal eps value...</span></span>
@@ -407,20 +426,20 @@ optimal <code>eps</code> value. <br></p>
 <span><span class="co">##   elbow -&gt;   /</span></span>
 <span><span class="co">##             /</span></span>
 <span><span class="co">##            /</span></span></code></pre>
-<p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
+<p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>Here, we see that we can set <code>eps</code> to 1.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_dbscan2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_dbscan.html">nhclu_dbscan</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, minPts <span class="op">=</span> <span class="cn">NULL</span>, eps <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                           plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>With this set of parameters, we only get one cluster.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_dbscan2</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##   1 </span></span>
 <span><span class="co">## 338</span></span></code></pre>
 <p>If we decrease the <code>eps</code> value and increase
 <code>minPts</code>, we can get more clusters.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_dbscan3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_dbscan.html">nhclu_dbscan</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, minPts <span class="op">=</span> <span class="fl">4</span>, eps <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                           plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -439,7 +458,7 @@ bioregions structuring the site-species matrix.</p>
 <code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> and <code>find_optimal()</code>.</p>
 <p><code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> calcultes several metrics based on
 the previous clustering attempts.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span>
 <span>                  eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Partition metrics:</span></span>
@@ -449,14 +468,14 @@ the previous clustering attempts.</p>
 <span><span class="co">##  - Metric summary:</span></span>
 <span><span class="co">##      pc_distance</span></span>
 <span><span class="co">## Min    0.5464742</span></span>
-<span><span class="co">## Mean   0.7862695</span></span>
-<span><span class="co">## Max    0.8817754</span></span>
+<span><span class="co">## Mean   0.7920160</span></span>
+<span><span class="co">## Max    0.8981242</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span></code></pre>
 <p>*Note For the two metrics <code>tot_endemism</code> and
 <code>avg_endemism</code>, you also need to provide the site-species
 matrix.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span>
 <span>                       species_col <span class="op">=</span> <span class="st">"Species"</span>, site_col <span class="op">=</span> <span class="st">"Site"</span>,</span>
 <span>                       eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span>
@@ -464,7 +483,7 @@ matrix.</p>
 <p>Once the <code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> function has calculated the
 partitioning metrics, we can call <code>find_optimal()</code> to get the
 optimal number of clusters. <br></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"</span></span></code></pre>
 <pre><code><span><span class="co">## Number of partitions: 24</span></span></code></pre>
@@ -472,10 +491,10 @@ optimal number of clusters. <br></p>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
 <pre><code><span><span class="co">## tot_endemism 4</span></span>
 <span><span class="co">## avg_endemism 4</span></span>
-<span><span class="co">## pc_distance 9</span></span>
-<span><span class="co">## anosim 3</span></span></code></pre>
+<span><span class="co">## pc_distance 7</span></span>
+<span><span class="co">## anosim 11</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-15-1.png" width="576"></p>
+<p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-16-1.png" width="576"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 24  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  25 </span></span>
@@ -486,8 +505,8 @@ optimal number of clusters. <br></p>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
 <span><span class="co">## tot_endemism - 4</span></span>
 <span><span class="co">## avg_endemism - 4</span></span>
-<span><span class="co">## pc_distance - 9</span></span>
-<span><span class="co">## anosim - 3</span></span></code></pre>
+<span><span class="co">## pc_distance - 7</span></span>
+<span><span class="co">## anosim - 11</span></span></code></pre>
 <p>Based on the metric selected, the optimal number of clusters can
 vary.</p>
 </div>
