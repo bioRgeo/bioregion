@@ -105,7 +105,7 @@
 #' cluster_dynamic <- cut_tree(tree1, dynamic_tree_cut = TRUE,
 #'                             dissimilarity = dissimilarity)
 #' 
-#' @importFrom stats as.dist na.omit
+#' @importFrom stats as.dist cutree na.omit
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' 
 #'@export

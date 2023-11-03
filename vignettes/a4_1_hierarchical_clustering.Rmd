@@ -327,7 +327,9 @@ once, this alternative approach consists in cutting individual branches at
 different heights. This method can be requested by using 
 `dynamic_tree_cut = TRUE`, and is based on the dynamicTreeCut R package.
 
+## 2.4. Divisive clustering
 
+Top-down approach of hierarchical clustering instead of the bottom-up approach.
 
 # 3. How to find an optimal number of clusters? {#optimaln}
 

@@ -25,6 +25,7 @@ reference:
   desc: ~
   contents:
   - hclu_hierarclust
+  - hclu_diana
   - cut_tree
   - hclu_optics
 - subtitle: Non-hierarchical clustering
