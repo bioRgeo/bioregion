@@ -120,6 +120,9 @@ nhclu_pam <- function(
       stop("n_clust must an integer or a vector of integers determining the
            number of clusters.")
     }
+  } else{
+    stop("n_clust must an integer or a vector of integers determining the
+           number of clusters.")
   }
   
   if(!inherits(dissimilarity, "dist")) {
