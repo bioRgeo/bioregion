@@ -3,7 +3,7 @@
 This is a list of changes made in the development/github version of the package
 between bioregion 1.0.0 (CRAN release 2023-04-15) and the next CRAN release.
 
-* Functions added: nhclu_clara()  
+* Functions added: nhclu_clara(), nhclu_clarans()  
 
 * The corresponding vignettes are edited to document the new functions.  
 

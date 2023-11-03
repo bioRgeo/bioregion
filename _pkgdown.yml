@@ -34,6 +34,7 @@ reference:
   - nhclu_kmeans
   - nhclu_pam
   - nhclu_clara
+  - nhclu_clarans
 - subtitle: Network clustering
   desc: ~
   contents:

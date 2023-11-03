@@ -342,10 +342,8 @@ hclu_hierarclust <- function(dissimilarity,
                                                         method = method)
     
     coph <- as.matrix(stats::cophenetic(outputs$algorithm$final.tree))
-    coph <- coph[match(attr(dist.obj, "Labels"),
-                       rownames(coph)),
-                 match(attr(dist.obj, "Labels"),
-                       colnames(coph))]
+    coph <- coph[match(attr(dist.obj, "Labels"), rownames(coph)),
+                 match(attr(dist.obj, "Labels"), colnames(coph))]
     dist.mat <- as.matrix(dist.obj)
     
     outputs$algorithm$final.tree.coph.cor <-
@@ -377,8 +375,6 @@ hclu_hierarclust <- function(dissimilarity,
     outputs$inputs$hierarchical <- FALSE
   }
   
-  
-
   if(!keep_trials){
     outputs$algorithm$trials <- "Trials not stored in output"
   }
