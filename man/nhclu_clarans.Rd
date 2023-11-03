@@ -64,6 +64,9 @@ eval_metric = "pc_distance")
 
    
 }
+\references{
+\insertRef{Schubert2019}{bioregion}
+}
 \seealso{
 \link{nhclu_pam}
 }

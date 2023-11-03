@@ -34,6 +34,9 @@
 #'  clustering procedure, such as original cluster objects}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #' 
+#' @references
+#' \insertRef{Schubert2019}{bioregion}
+#' 
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
 #' Boris Leroy (\email{leroy.boris@gmail.com}), and

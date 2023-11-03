@@ -91,7 +91,7 @@ fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 
 }
 \references{
-Kaufman and Rousseeuw (1990)
+\insertRef{Kaufman2009}{bioregion}
 }
 \seealso{
 \link{cut_tree}

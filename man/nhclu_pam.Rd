@@ -78,6 +78,9 @@ partition_metrics(clust2, net = comnet, species_col = "Node2",
                    site_col = "Node1", eval_metric = "avg_endemism")
    
 }
+\references{
+\insertRef{Kaufman2009}{bioregion}
+}
 \seealso{
 \link{nhclu_kmeans}
 }

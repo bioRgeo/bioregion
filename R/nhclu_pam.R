@@ -45,6 +45,9 @@
 #'  clustering procedure, such as original cluster objects}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #' 
+#' @references
+#' \insertRef{Kaufman2009}{bioregion}
+#' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and

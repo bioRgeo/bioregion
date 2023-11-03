@@ -52,7 +52,7 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}#'
 #'
 #' @references
-#' Kaufman and Rousseeuw (1990)
+#' \insertRef{Kaufman2009}{bioregion}
 #'
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
