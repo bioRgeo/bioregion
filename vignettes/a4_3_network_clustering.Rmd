@@ -100,8 +100,16 @@ In this vignette, we directly load the network format for the distribution of
 fish in European basins.
 
 ```{r}
-library(bioregion)
-data(fishdf)
+library("bioregion")
+data("fishdf")
+```
+
+Some network algorithms work with the similarity matrix between each pair of
+sites.
+
+```{r}
+data("fishmat")
+fish_simil <- similarity(fishmat, metric = "Simpson")
 ```
 
 ## Main arguments
@@ -150,9 +158,9 @@ identifiable in the outputs (FALSE by default).
 
 ```{r}
 set.seed(1)
-ex_infomap <- netclu_infomap(fishdf,
+ex_infomap <- netclu_infomap(fish_simil,
                              weight = TRUE,
-                             index = names(fishdf)[3],
+                             index = names(fish_simil)[3],
                              nbmod = 0,
                              markovtime = 1,
                              seed = 0,
@@ -170,9 +178,8 @@ ex_infomap <- netclu_infomap(fishdf,
                              path_temp = "infomap_temp",
                              delete_temp = TRUE)
 
-table(ex_infomap$clusters$K_10)
+table(ex_infomap$clusters$K_5)
 ```
-
 
 ## OSLOM
 OSLOM stands for Order Statistics Local Optimization Method.
@@ -193,7 +200,6 @@ or their union (default value is 0.5, bigger value leads to bigger clusters).
 
 ```{r, eval = FALSE}
 set.seed(1)
-fish_simil <- similarity(net_to_mat(fishdf), metric = "Simpson")
 ex_oslom <- netclu_oslom(fish_simil,
                          weight = TRUE,
                          index = names(fish_simil)[3],

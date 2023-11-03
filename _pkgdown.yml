@@ -33,6 +33,7 @@ reference:
   - nhclu_dbscan
   - nhclu_kmeans
   - nhclu_pam
+  - nhclu_clara
 - subtitle: Network clustering
   desc: ~
   contents:

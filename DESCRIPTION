@@ -33,6 +33,7 @@ Imports:
     dbscan,
     dynamicTreeCut,
     fastcluster,
+    fastkmedoids,
     ggplot2,
     grDevices,
     igraph,
