@@ -31,17 +31,17 @@ test_that("error messages with wrong inputs", {
     fixed = TRUE)
   
   expect_error(
-    nhclu_kmeans(dissim, iter_max = -1),
+    nhclu_kmeans(dissim, n_clust = 5, iter_max = -1),
     "iter_max must be higher than 0.",
     fixed = TRUE)
   
   expect_error(
-    nhclu_kmeans(dissim, nstart = "zz"),
+    nhclu_kmeans(dissim, n_clust = 5, nstart = "zz"),
     "nstart must be numeric.",
     fixed = TRUE)
   
   expect_error(
-    nhclu_kmeans(dissim, algorithm = "zz"),
+    nhclu_kmeans(dissim, n_clust = 5, algorithm = "zz"),
     "algorithm is a character string indicating. Available options are
          Hartigan-Wong, Lloyd, Forgy and MacQueen.",
     fixed = TRUE)

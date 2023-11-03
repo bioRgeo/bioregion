@@ -31,18 +31,18 @@ test_that("error messages with wrong inputs", {
     fixed = TRUE)
   
   expect_error(
-    nhclu_pam(dissim, variant = "zz"),
+    nhclu_pam(dissim, n_clust = 5, variant = "zz"),
     "variant is a character string indicating. Available options are
          original, o_1, o_2, f_3, f_4, f_5 or faster.",
     fixed = TRUE)
   
   expect_error(
-    nhclu_pam(dissim, nstart = "zz"),
+    nhclu_pam(dissim, n_clust = 5, nstart = "zz"),
     "nstart must be numeric.",
     fixed = TRUE)
   
   expect_error(
-    nhclu_pam(dissim, cluster_only = "zz"),
+    nhclu_pam(dissim, n_clust = 5, cluster_only = "zz"),
     "cluster_only must be a boolean.",
     fixed = TRUE)
   
