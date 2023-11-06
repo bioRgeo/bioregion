@@ -300,9 +300,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.38 - 0.47</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.47 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.35 - 0.5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.5 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 15. Closest number found: 14</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -310,13 +312,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Simpson </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.472 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  2 3 4 5 6 7 8 9 10 11 ... (with 4 more values) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  2 3 4 5 6 7 8 9 10 11 ... (with 4 more values) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.148 0.125 0.117 0.109 0.094 0.078 0.062 0.055 0.049 0.047 ... (with 4 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.09 0.086 0.078 0.07 0.062 0.055 0.047 0.039 0.035 0.031 ... (with 4 more values) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">tree1</span>,</span></span>
 <span class="r-in"><span>                   dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
@@ -339,25 +341,25 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the elbow method</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>    * elbow found at:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> tot_endemism 4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> avg_endemism 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> tot_endemism 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> avg_endemism 3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> pc_distance 7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> anosim 8</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> anosim 7</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The elbow method is likely not suitable for the ANOSIM metric. You should rather look for leaps in the curve (see criterion = 'increasing_step' or decreasing_step)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
 <span class="r-plt img"><img src="find_optimal_n-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  elbow </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 7</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"increasing_step"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
@@ -368,7 +370,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
@@ -378,7 +380,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 7</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
@@ -389,7 +391,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-3.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
@@ -398,8 +400,8 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 14</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -413,17 +415,17 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-4.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 10 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 9 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 9 11 14</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_quantile <span class="op">=</span> <span class="fl">.9</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -435,17 +437,17 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-5.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.9  (i.e., only the top 10 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 9 14</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -459,17 +461,17 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-6.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 10 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 9 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 9 11 14</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>                 </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -483,17 +485,17 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-7.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 10 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 9 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 9 11 14</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span>             </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
@@ -503,16 +505,16 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-plt img"><img src="find_optimal_n-8.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  breakpoints </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 8</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
