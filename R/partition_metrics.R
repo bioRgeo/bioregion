@@ -370,11 +370,14 @@ partition_metrics <- function(
                                                   cluster_object$clusters$ID),
                               -1])
     
-    # Correcting column names
-    colnames(net) <-
-      c(colnames(net)[1:2],
-        colnames(cluster_object$clusters)[2:ncol(cluster_object$clusters)])
-    
+    # Correcting column names when there is only one clustering
+    if("cluster_object.clusters.data.table..chmatch.net...site_col..." %in%
+       colnames(net)){
+      colnames(net)[colnames(net) ==
+                      "cluster_object.clusters.data.table..chmatch.net...site_col..."] <-
+        colnames(cluster_object$clusters)[2]
+    }
+
     # Visible binding for global variable
     N <- endemism <- end_richness <- pc_endemism <- NULL 
     
