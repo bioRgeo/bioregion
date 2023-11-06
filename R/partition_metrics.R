@@ -310,10 +310,12 @@ partition_metrics <- function(
       dissimilarity,
       cluster_object$clusters[data.table::chmatch(dissimilarity$Site1,
                                                   cluster_object$clusters$ID), 
-                              cluster_object$cluster_info$partition_name, drop = FALSE],
+                              cluster_object$cluster_info$partition_name,
+                              drop = FALSE],
       cluster_object$clusters[data.table::chmatch(dissimilarity$Site2,
                                                   cluster_object$clusters$ID), 
-                              cluster_object$cluster_info$partition_name, drop = FALSE])
+                              cluster_object$cluster_info$partition_name,
+                              drop = FALSE])
     
     dissimilarity[, cluster_object$cluster_info$partition_name] <- 
       dissimilarity[, cluster_object$cluster_info$partition_name] ==
@@ -340,7 +342,7 @@ partition_metrics <- function(
     if("anosim" %in% eval_metric){
       dissimilarity$ranks <- rank(dissimilarity[, dissimilarity_index])
       denom <- nb_sites * (nb_sites - 1) / 4
- 
+      
       # Fast calculation of the anosim for all clusters
       evaluation_df$anosim <- vapply(
         cluster_object$cluster_info$partition_name,
@@ -367,6 +369,11 @@ partition_metrics <- function(
       cluster_object$clusters[data.table::chmatch(net[, site_col],
                                                   cluster_object$clusters$ID),
                               -1])
+    
+    # Correcting column names
+    colnames(net) <-
+      c(colnames(net)[1:2],
+        colnames(cluster_object$clusters)[2:ncol(cluster_object$clusters)])
     
     # Visible binding for global variable
     N <- endemism <- end_richness <- pc_endemism <- NULL 

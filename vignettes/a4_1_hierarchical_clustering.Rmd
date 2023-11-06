@@ -440,7 +440,7 @@ This metric is the metric computed in @Holt2013.
 2. `anosim`: this the statistic used in Analysis of Similarities, 
 as suggested in @Castro-Insua2018. It 
 compares the between-cluster dissimilarities to the within-cluster 
-dissimilarities. It is based based on the difference of mean ranks between 
+dissimilarities. It is based on the difference of mean ranks between 
 groups and within groups with the following formula: 
 $R=(r_B-r_W)/(N(N-1)/4)$ where $r_B$ and $r_W$ are the average ranks between and 
 within clusters respectively, and $N$ is the total number of sites.
