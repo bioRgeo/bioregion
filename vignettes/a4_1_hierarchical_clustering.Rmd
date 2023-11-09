@@ -25,11 +25,11 @@ matrix of distances (or beta-diversities). From this hierarchical tree, clusters
 can be obtained by cutting the tree. 
 
 Although these methods are conceptually simple, their implementation can be 
-complex and requires important choices by the user. In the following, we provide
-a step-by-step guide on how to do hierarchical clustering analyses with bioregion,
+complex and requires important user decisions. Here, we provide a step-by-step
+guide to performing hierarchical clustering analyses with `bioregion`,
 along with comments on the philosophy on how we designed the functions. 
 
-Hierarchical clustering takes place on the right-hand size part of the bioregion
+Hierarchical clustering takes place on the right-hand side of the `bioregion`
 conceptual diagram:
 
 ![](figures/diagram_nonetwork.png)
@@ -67,7 +67,7 @@ only occurring only in the second site.
 We typically choose this metric for 
 bioregionalisation, because it is the **turnover** component of the Sorensen 
 index [@Baselga2012] (in a nutshell, it tells us how sites are different
-because they have distinct species), and because it has less dependence on 
+because they have distinct species), and because it is less dependent on 
 species richness than the Jaccard turnover [@Leprieur2014]. Alternatively,
 given that we have abundance data here, we could also use the Bray-Curtis 
 turnover index [@Baselga2013]. The choice of the distance metric is very 
@@ -82,7 +82,7 @@ head(dissim)
 
 By default, only the Simpson index is computed, but other options are available
 in the `metric` argument of dissimilarity(). Furthermore, users can also write
-down their own formula to compute any index they wish for in the argument 
+down their own formula to compute any index they want for in the argument 
 `formula`, see ?dissimilarity().
 
 We are now ready to start the hierarchical clustering procedure with the object
@@ -95,21 +95,21 @@ carefully in ?hclu_hierarclust).
 
 ## 2.1 Basic usage
 
-The basic usage of the function is as follows:
+The basic use of the function is as follows:
 
 ```{r}
 tree1 <- hclu_hierarclust(dissim)
 ```
 
-The functions gives us some information as it proceeds. Notably, it talks about
+The function gives us some information as it proceeds. Notably, it talks about
 a randomization of the dissimilarity matrix - this is a very important feature
-because hierarchical clustering is heavily influenced by the order of sites in
-the distance matrix. Therefore, by default, the function
+because hierarchical clustering is strongly influenced by the order of the
+sites in the distance matrix. Therefore, by default, the function
 performs a randomization of the order of sites in the distance
 matrix with 30 trials
 ([more information in the randomization section](#randomization)). It also
-tells us that among all trials it has selected the tree with the highest 
-cophenetic correlation coefficient, at a value of 
+tells us that among all the trials selected the tree with the highest 
+cophenetic correlation coefficient, with a value of 
 `r round(tree1$algorithm$final.tree.coph.cor, 2)`. 
 
 
@@ -120,10 +120,10 @@ tree1
 ```
 
 The last line tells us that the the clustering procedure is incomplete: the
-tree has been built, but it has not been cut yet - hence there are no clusters
-yet in the object.
+tree has been built, but it has not yet been cut - so there are no clusters
+in the object yet.
 
-To cut the tree, we can use the function cut_tree():
+To cut the tree, we can use the `cut_tree()` function:
 
 ```{r}
 # Ask for 4 clusters
@@ -485,28 +485,28 @@ partition_metrics(tree4,
 ## 3.2 Criteria to choose an optimal number of clusters
 
 Choosing the optimal number of clusters is a long-standing issue in the 
-literature and there is no absolute and objective answer to this question. 
+literature, and there is no absolute and objective answer to this question. 
 A plethora of methods have been proposed over the years, and the best approach
 to tackle this issue is probably to compare the results of multiple approaches
 to make an informed decision.
 
-In the bioregion package, we have implemented several methods which are suitable
-for bioregionalisation analyses specifically.
+In the `bioregion` package, we have implemented several methods that are
+specifically suited for bioregionalization analysis.
 
-For example, a standard criterion used to identify the optimal number of
+For example, a standard criterion used for identifying the optimal number of
 clusters is the **elbow method**, which is the default criterion in 
 `find_optimal_n()`. However, we recommend moving beyond the paradigm of a single
 optimal number of clusters, which is likely an oversimplification of the 
 hierarchy of the tree. We recommend considering multiple cuts of the tree, and
-we provide several methods to do that: 
+we provide several methods for doing so: 
 **identifying large steps in the curve** or **using multiple cutoffs**.
-Additionally, we implement other approaches such as using the maximum or 
-minimum value of metrics, or, experimentally, using a MARS model (multiple 
-adaptive regression splines) to identify cutoff points in the curve.
+Additionally, we implement other approaches, such as using the maximum or 
+minimum value of the metrics, or, experimentally, using a MARS (multiple 
+adaptive regression splines) model to identify cutoff points in the curve.
 
 
-Before we head into these different methods, we will compute all evaluation 
-metrics and store them into `eval_tree4`:
+Before we look at these different methods, we will compute all the evaluation 
+metrics and store them in `eval_tree4`:
 
 ```{r, cache = TRUE}
 vegenet <- mat_to_net(vegemat)
@@ -523,14 +523,14 @@ eval_tree4 <- partition_metrics(tree4,
 The elbow method consists in find the 'elbow' in the form of the metric-cluster
 relationship. This method will typically work for metrics which have an 
 L-shaped form (typically, pc_distance and endemism metrics), but not for other
-metrics (e.g. the form of anosim does not necessarily follow a L-shape).
+metrics (e.g. the form of anosim does not necessarily follow an L-shape).
 
-*The rationale behind the elbow method is to find a cut-off above which the
-metric values stop to increase significantly, such that adding new clusters
+*The rationale behind the elbow method is to find a cutoff above which the
+metric values stop increasing significantly, such that adding new clusters
 does not provide much significant improvement in the metric.*
 
 The elbow method is the default method in `find_optimal_n()`. There are no
-parameters to adjust it. When the curve is not elbow-shaped, it may give 
+parameters to adjust it. If the curve is not elbow-shaped, it may give 
 spurious results.
 
 ```{r}
@@ -540,29 +540,30 @@ find_optimal_n(eval_tree4)
 a <- find_optimal_n(eval_tree4)
 ```
 
-In our example above, the optimal number of clusters varies depending in the 
-metric, from a minimum of `r min(unlist(a$optimal_nb_clusters))` to a maximum of
-`r max(unlist(a$optimal_nb_clusters))`. The final choice depends on your 
-preferences with respect to metrics, and your objectives with the clustering.
-Alternatively, two cut-offs could be used, a deep cut-off based on endemism
-metrics at e.g. a value of `r a$optimal_nb_clusters$avg_endemism`, and a shallow
-cutoff based on `pc_distance`, at `r a$optimal_nb_clusters$pc_distance`.
+In our example above, the optimal number of clusters varies depending on the 
+metric, from a minimum of `r min(unlist(a$optimal_nb_clusters))` to a maximum
+of `r max(unlist(a$optimal_nb_clusters))`. The final choice depends on your
+metric preferences with respect to metrics, and your objectives with the 
+clustering.
+Alternatively, two cut-offs could be used, a deep cut-off based on the endemism
+metrics e.g. at a value of `r a$optimal_nb_clusters$avg_endemism`, and a
+shallow cutoff based on `pc_distance`,
+at `r a$optimal_nb_clusters$pc_distance`.
 
 ### 3.2.2 Step method
 
 The step method consists in identifying the largest "steps" in metrics, i.e.,
-largest increases or decreases in the value of the metric. 
+the largest increases or decreases in the value of the metric. 
 
-To do this, the 
-function will compute all the consecutive differences in metrics between 
-partitions. It will then keep only the largest positive differences 
+To do this, the function calculates all successive differences in metrics
+between partitions. It will then keep only the largest positive differences 
 (`increasing_step`) or negative differences (`decreasing_step`). 
 `increasing_step` is for increasing metrics (`pc_distance`) and 
 `decreasing_step` is for decreasing metrics (`avg_endemism` and 
 `tot_endemism`). `anosim` values can either increase or decrease depending on
 your dataset, so you would have to explore both ways.
 
-By default, the function will select the top 1% steps:
+By default, the function selects the top 1% steps:
 
 ```{r}
 find_optimal_n(eval_tree4,
@@ -596,13 +597,13 @@ find_optimal_n(eval_tree4,
 ```
 
 
-Finally, one question that may arise is which cluster number to select when
-a large step happens. For example, if the largest step occurs between partitions
+Finally, a question that may arise is which cluster number to select when
+a large step occurs. For example, if the largest step occurs between partitions
 with 4 and 5 clusters, should we keep the partition with 4 clusters, or the
 partition with 5 clusters?
 
-By default, the function will keep the partition $N + 1$ (5 clusters in our 
-example above). You can change that by setting `step_round_above = FALSE`:
+By default, the function keeps the partition with $N + 1$ (5 clusters in our 
+example above). You can change this by setting `step_round_above = FALSE`:
 
 ```{r}
 find_optimal_n(eval_tree4,
@@ -614,20 +615,19 @@ find_optimal_n(eval_tree4,
 
 The idea of this method is to select specific metric values at which the number
 of clusters should be used. For example, in their study, Holt et al. (2013) 
-used different cutoffs on `pc_distance` to find the global biogeographical 
-regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more \beta-diversity
-is explained but also the more clusters there are. Therefore, the choice is a 
-trade-off between the total \beta-diversity explained and the number of 
-clusters. 
+used different cutoffs for `pc_distance` to find the global biogeographic 
+regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more
+\beta-diversity is explained, but also the more clusters there are. Therefore,
+the choice is a trade-off between the total \beta-diversity explained and the
+number of clusters. 
  
-Eventually, the choice of these values depends
-on different factors: 
+Eventually, the choice of these values depends on different factors: 
 
-1. The geographical scale of your study. Global scale study can use
-large cutoffs like Holt et al. (2013) and end up with a reasonable amount of 
-clusters, whereas in regional to local-scale 
-studies with less endemism and more taxa shared among clusters, these values are
-too high, and other cutoffs should be explored, such as 0.5 and 0.75. 
+1. The geographic scope of your study. A global scale study can use
+large cutoffs like Holt et al. (2013) and end up with a reasonable number of 
+clusters, whereas in regional to local scale studies with less endemism and
+more taxa shared among clusters, these values are too high, and other cutoffs
+should be explored, such as 0.5 and 0.75. 
 
 2. The characteristics of your study which will increase or decrease the
 degree of endemism among clusters: dispersal capacities of your taxonomic
@@ -635,12 +635,12 @@ group, the connectivity/barriers in your study area, etc. Use lower cutoffs
 when you have a large number of widespread species, use higher cutoffs when
 you have high degrees of endemism.
 
-3. The use of abundance or phylogenetic data to compute \beta-diversity metrics
-may give a better distinction of clusters, which in turn will allow you to use
-higher cutoffs. 
+3. Using abundance or phylogenetic data to compute \beta-diversity metrics
+may allow you to better distinguish clusters, which in turn will allow you to
+use higher cutoffs. 
 
-In our case, a regional scale study on vegetation, we can for example use three
-cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff) and 0.9 (shallow
+For example, in our case, a regional-scale study on vegetation, we can use
+three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and 0.9 (shallow
 cutoff).
 
 ```{r}
@@ -652,18 +652,18 @@ find_optimal_n(eval_tree4,
 
 ### 3.2.4 Cutting at the maximum or minimum metric value
 
-This criterion will find the maximum (`criterion = "max"`) or minimum
-(`criterion = "min"`) value of the metric in the list
-of partitions and select the associated partition. Such a criterion can be
-interesting in the case of `anosim`, but is probably much less useful for the
-other metrics implemented in the package.
+This criterion finds the maximum (`criterion = "max"`) or minimum
+(`criterion = "min"`) value of the metric in the list of partitions and selects
+the corresponding partition. Such a criterion can be interesting in the case of
+`anosim`, but is probably much less useful for the other metrics implemented
+in the package.
 
 ### 3.2.5 Finding break points in the curve
 
 This criterion consists in applying a segmented regression model with the 
 formula evaluation metric ~ number of clusters. The user can define the number 
-of breaks to identify on the curve. Note that such a model likely 
-requires a minimum number of points to find an appropriate number of 
+of breaks to be identified on the curve. Note that such a model is likely to 
+require a minimum number of points to find an appropriate number of 
 clusters. In our example here, we make 100 cuts in the tree to have enough
 values.
 
@@ -707,15 +707,15 @@ example, non-linear silhouettes of metric ~ n clusters.
 
 # 4. OPTICS as a semi-hierarchical clustering approach
 
-OPTICS (Ordering Points To Identify the Clustering Structure) is a semi-
-hierarchical clustering approach which orders points in the datasets such that
-points which are closest become neighbours, calculates a 'reachability' 
-distance between each point and then extract clusters from this reachability 
+OPTICS (Ordering Points To Identify the Clustering Structure) is a
+semi-hierarchical clustering approach that orders the points in the datasets so
+that the closest points become neighbors, calculates a 'reachability' 
+distance between each point, and then extracts clusters from this reachability 
 distance in a hierarchical manner. However, the hierarchical nature of clusters 
 is not directly provided by the algorithm in a tree-like output. Hence, users 
 should explore the 'reachability plot' to understand the hierarchical nature of
-their OPTICS clusters, and read the associated publication to further grasp this
-method [@Hahsler2019].
+their OPTICS clusters, and read the related publication to further understand
+this method [@Hahsler2019].
 
 To run the optics algorithm, use the `hclu_optics()` function:
 
