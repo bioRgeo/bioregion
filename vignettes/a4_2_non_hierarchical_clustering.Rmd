@@ -47,7 +47,9 @@ called bioregions.
 Non-hierarchical clustering takes place on the very right-hand size part of
 the `bioregion` conceptual diagram:  
 
-![](figures/diagram_nonetwork.png) 
+<center>
+  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_nonetwork.png">
+</center> 
 
 <br>
 Although these methods are conceptually simple, their implementation can be 

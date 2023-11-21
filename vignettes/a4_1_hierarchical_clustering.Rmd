@@ -32,7 +32,9 @@ along with comments on the philosophy on how we designed the functions.
 Hierarchical clustering takes place on the right-hand side of the `bioregion`
 conceptual diagram:
 
-![](figures/diagram_nonetwork.png)
+<center>
+  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_nonetwork.png">
+</center> 
 
 # 1. Compute dissimilarity indices from input data
 
@@ -370,7 +372,10 @@ Top-down approach of hierarchical clustering instead of the bottom-up approach.
 #         axis.title = element_text(size = 15))
 #   
 ```
-![](figures/find_optimal_n.png)
+
+<center>
+  <img align="bottom" width="100%" height="100%" src="../man/figures/find_optimal_n.png">
+</center> 
 
 1. Step 1. **Build a tree** with `hclu_hierarclust()`
 
