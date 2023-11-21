@@ -62,7 +62,9 @@ start with the prefix `netclu_`.
 Network clustering takes place on the left-hand size part of the `bioregion`
 conceptual diagram:
 
-![](figures/diagram_network.png) 
+<center>
+  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_network.png">
+</center> 
 
 In total, we have 9 functions, which can be classified like this:  
 

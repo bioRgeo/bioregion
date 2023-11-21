@@ -303,6 +303,8 @@ similarity <- function(comat, metric = "Simpson", formula = NULL,
   
   # Inform nature of the output
   attr(res, "type") <- "similarity"
+  attr(res, "nb_sites") <- nrow(comat)
+  attr(res, "nb_species") <- ncol(comat)
   
   # Return the output
   return(res)

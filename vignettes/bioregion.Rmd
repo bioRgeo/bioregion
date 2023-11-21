@@ -52,7 +52,7 @@ composition
 
 <br>
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/Workflow.png">
+  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow.png">
 </center> 
 <br>
 <center>

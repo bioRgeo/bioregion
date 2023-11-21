@@ -343,8 +343,10 @@ print.bioregion.pairwise.metric <- function(x, ...)
                     "similarity",
                     "dissimilarity"),
              " between sites\n"))
-  cat(" - Total number of sites: ", length(unique(c(x$Site1, x$Site2))), "\n")
-  cat(" - Number of rows: ", nrow(x), "\n")
+  cat(" - Total number of sites: ", attr(x, "nb_sites"), "\n")
+  cat(" - Total number of species: ", attr(x, "nb_species"), "\n")
+  cat(" - Number of rows: ", 
+      (attr(x, "nb_sites") * (attr(x, "nb_sites") - 1)) / 2, "\n")
   # Warning, next line can be wrong if users alter the object
   cat(" - Number of", ifelse(attr(x, "type") == "similarity",
                              "similarity",
@@ -354,6 +356,24 @@ print.bioregion.pairwise.metric <- function(x, ...)
   print(as.data.frame(x))
 }
 
+#' @export
+#' @method `[` bioregion.pairwise.metric
+`[.bioregion.pairwise.metric` <- function(x, i, j, ..., drop = TRUE) {
+  metric_type <- attributes(x)$type
+  nb_sites <- attributes(x)$nb_sites
+  nb_species <- attributes(x)$nb_species
+  
+  class(x) <- "data.frame"
+  out <- x[i, j, ..., drop = drop]
+  # We keep track of pw metric class & attribute only if the subset is not a vector
+  if(class(out) == "data.frame") {
+    class(out) <- append("bioregion.pairwise.metric", class(out))
+    attributes(out)$type <- metric_type
+    attributes(out)$nb_sites <- nb_sites
+    attributes(out)$nb_species <- nb_species
+  }
+  out
+}
 
 #' @export
 #' @method as.dist bioregion.pairwise.metric

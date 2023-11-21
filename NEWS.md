@@ -1,3 +1,8 @@
+# bioregion 1.0.3 (development/github version)
+
+* Added a generic function to maintain attributes of bioregion.pairwise.metric
+objects + keep track of number of sites and species
+
 # bioregion 1.0.2 (development/github version)
 
 This is a list of changes made in the development/github version of the package
