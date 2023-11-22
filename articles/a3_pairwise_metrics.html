@@ -98,7 +98,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2023-11-21</h4>
+            <h4 data-toc-skip class="date">2023-11-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -115,8 +115,9 @@ of sites.</p>
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity.html">similarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span>, formula <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"prodmat"</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Data.frame of similarity between sites</span></span>
-<span><span class="co">##  - Total number of sites:  11 </span></span>
-<span><span class="co">##  - Number of rows:  10 </span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  3697 </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
 <span><span class="co">##  - Number of similarity metrics:  1 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
@@ -169,8 +170,9 @@ similarity metrics on large co-occurrence matrix.</p>
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity.html">similarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>,<span class="st">"ABC"</span>,<span class="st">"Simpson"</span>,<span class="st">"Bray"</span><span class="op">)</span>, formula <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(b + c) / (a + b + c)"</span>, <span class="st">"(B + C) / (2*A + B + C)"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Data.frame of similarity between sites</span></span>
-<span><span class="co">##  - Total number of sites:  11 </span></span>
-<span><span class="co">##  - Number of rows:  10 </span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  3697 </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
 <span><span class="co">##  - Number of similarity metrics:  4 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
@@ -205,8 +207,9 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity.html">similarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>,<span class="st">"Simpson"</span><span class="op">)</span>, formula <span class="op">=</span> <span class="st">"(b + c) / (a + b + c)"</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Data.frame of similarity between sites</span></span>
-<span><span class="co">##  - Total number of sites:  11 </span></span>
-<span><span class="co">##  - Number of rows:  10 </span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  3697 </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
 <span><span class="co">##  - Number of similarity metrics:  2 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
@@ -225,8 +228,9 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>,<span class="st">"Simpson"</span><span class="op">)</span>, formula <span class="op">=</span> <span class="st">"(b + c) / (a + b + c)"</span><span class="op">)</span></span>
 <span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
-<span><span class="co">##  - Total number of sites:  11 </span></span>
-<span><span class="co">##  - Number of rows:  10 </span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  3697 </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
 <span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
@@ -245,8 +249,9 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
-<span><span class="co">##  - Total number of sites:  11 </span></span>
-<span><span class="co">##  - Number of rows:  10 </span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  3697 </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
 <span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
