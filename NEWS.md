@@ -1,12 +1,14 @@
 # bioregion 1.0.3 (development/github version)
 
-* Added a generic function to maintain attributes of bioregion.pairwise.metric
-objects + keep track of number of sites and species
-
-# bioregion 1.0.2 (development/github version)
-
 This is a list of changes made in the development/github version of the package
 between bioregion 1.0.0 (CRAN release 2023-04-15) and the next CRAN release.
+
+* Added a function to extract a subset of node according to its type (sites or 
+species) from a bioregion.clusters object containing both types of nodes (sites 
+and species).
+
+* Added a generic function to maintain attributes of bioregion.pairwise.metric
+objects + keep track of number of sites and species
 
 * Functions added: nhclu_clara(), nhclu_clarans()  
 
