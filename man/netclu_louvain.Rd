@@ -57,7 +57,7 @@ the third column name of \code{net} is used.}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output
-(\code{keep_nodes_type="both"} by default).}
+(\code{return_node_type = "both"} by default).}
 
 \item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}

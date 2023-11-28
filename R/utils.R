@@ -1,3 +1,4 @@
+# Controls #####################################################################
 controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input similarity ##########################################################
@@ -596,6 +597,8 @@ similarity_to_dissimilarity()"),
   }
 }
 
+# Additional functions #########################################################
+# reformat_hierarchy
 reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
   # Input
@@ -653,6 +656,7 @@ reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   return(output)
 }
 
+# knbclu
 knbclu <- function(partitions, method = "length",
                    reorder = TRUE, rename_duplicates = TRUE) {
   
@@ -703,7 +707,8 @@ knbclu <- function(partitions, method = "length",
   partitions
 }
 
-# From https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
+# make.unique.2
+# from https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
 make.unique.2 <- function(x, sep = ".") {
   stats::ave(x, x, FUN = function(a) {
     if (length(a) > 1) {
@@ -713,3 +718,11 @@ make.unique.2 <- function(x, sep = ".") {
     }
   })
 }
+
+
+
+
+
+
+
+

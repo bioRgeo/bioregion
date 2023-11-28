@@ -38,7 +38,7 @@ the third column name of \code{net} is used.}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output
-(\code{keep_nodes_type="both"} by default).}
+(\code{return_node_type = "both"} by default).}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \code{communities} should be returned in the output (see Value).}

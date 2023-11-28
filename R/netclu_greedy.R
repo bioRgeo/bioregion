@@ -8,19 +8,26 @@
 #' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
+#' 
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
+#' 
 #' @param bipartite a `boolean` indicating if the network is bipartite
 #' (see Details).
+#' 
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
+#' 
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
+#' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (`keep_nodes_type="both"` by default).
+#' (`return_node_type = "both"` by default).
+#' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of `communities` should be returned in the output (see Value).
 #'

@@ -366,7 +366,8 @@ print.bioregion.pairwise.metric <- function(x, ...)
   class(x) <- "data.frame"
   out <- x[i, j, ..., drop = drop]
   # We keep track of pw metric class & attribute only if the subset is not a vector
-  if(class(out) == "data.frame") {
+  if(inherits(out, "data.frame")){
+  #if(class(out) == "data.frame") {
     class(out) <- append("bioregion.pairwise.metric", class(out))
     attributes(out)$type <- metric_type
     attributes(out)$nb_sites <- nb_sites

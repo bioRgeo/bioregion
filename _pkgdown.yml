@@ -11,6 +11,7 @@ reference:
   - install_binaries
   - mat_to_net
   - net_to_mat
+  - subset_node
   
 - title: Pairwise similarity and distance metrics
   desc: ~

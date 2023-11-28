@@ -24,7 +24,7 @@
 #' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (`keep_nodes_type="both"` by default).
+#' (`return_node_type = "both"` by default).
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of `communities` should be returned in the output (see Value).

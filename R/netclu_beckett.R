@@ -22,7 +22,7 @@
 #' 
 #' @param return_node_type a `character` indicating what types of nodes
 #' ("sites", "species" or "both") should be returned in the output
-#' (`keep_nodes_type="both"` by default).
+#' (`return_node_type = "both"` by default).
 #' 
 #' @param forceLPA a `boolean` indicating if the even faster pure
 #' LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less

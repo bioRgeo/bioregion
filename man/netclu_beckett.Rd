@@ -35,7 +35,7 @@ feature nodes).}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output
-(\code{keep_nodes_type="both"} by default).}
+(\code{return_node_type = "both"} by default).}
 
 \item{forceLPA}{a \code{boolean} indicating if the even faster pure
 LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
