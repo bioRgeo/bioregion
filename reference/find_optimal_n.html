@@ -5,7 +5,7 @@ number(s) of clusters on, for example, a hierarchical tree to cut, or a
 range of partitions obtained from k-means or PAM. Users are advised to be
 careful if applied in other cases (e.g., partitions which are not ordered in
 an increasing or decreasing sequence, or partitions which are not related
-to each other)."><title>Search for an optimal number of clusters in a list of partitions — find_optimal_n • bioregion</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Search for an optimal number of clusters in a list of partitions — find_optimal_n"><meta property="og:description" content="This function aims at optimizing one or several criteria on a set of
+to each other)."><title>Search for an optimal number of clusters in a list of partitions — find_optimal_n • bioregion</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Search for an optimal number of clusters in a list of partitions — find_optimal_n"><meta property="og:description" content="This function aims at optimizing one or several criteria on a set of
 ordered partitions. It is usually applied to find one (or several) optimal
 number(s) of clusters on, for example, a hierarchical tree to cut, or a
 range of partitions obtained from k-means or PAM. Users are advised to be
@@ -300,11 +300,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.53 - 0.53</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.53 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.44 - 0.48</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.48 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 14. Closest number found: 13</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 13. Closest number found: 12</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -312,13 +312,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Simpson </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.532 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.483 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  2 3 4 5 6 7 8 9 10 11 ... (with 4 more values) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  2 3 4 5 6 7 8 9 10 11 ... (with 4 more values) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.125 0.109 0.101 0.098 0.094 0.078 0.07 0.064 0.062 0.055 ... (with 4 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.148 0.141 0.125 0.117 0.109 0.098 0.094 0.078 0.062 0.051 ... (with 4 more values) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">tree1</span>,</span></span>
 <span class="r-in"><span>                   dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
@@ -341,10 +341,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the elbow method</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>    * elbow found at:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> tot_endemism 4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> avg_endemism 4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> pc_distance 7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> anosim 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> tot_endemism 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> avg_endemism 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> pc_distance 8</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> anosim 7</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The elbow method is likely not suitable for the ANOSIM metric. You should rather look for leaps in the curve (see criterion = 'increasing_step' or decreasing_step)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
 <span class="r-plt img"><img src="find_optimal_n-1.png" alt="" width="700" height="433"></span>
@@ -356,10 +356,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  elbow </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 7</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"increasing_step"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
@@ -380,7 +380,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 10</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
@@ -400,8 +400,8 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 15</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -422,10 +422,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 11 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 12 15</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_quantile <span class="op">=</span> <span class="fl">.9</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -444,10 +444,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.9  (i.e., only the top 10 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 12 15</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -468,10 +468,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 11 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 12 15</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
 <span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>                 </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
@@ -492,10 +492,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 14 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 11 12 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 12 15</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span>             </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
@@ -513,7 +513,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 4</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

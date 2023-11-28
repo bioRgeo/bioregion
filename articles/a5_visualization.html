@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5. Visualization">
 <meta property="og:description" content="bioregion">
@@ -98,7 +98,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2023-11-22</h4>
+            <h4 data-toc-skip class="date">2023-11-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a5_visualization.Rmd" class="external-link"><code>vignettes/a5_visualization.Rmd</code></a></small>
       <div class="d-none name"><code>a5_visualization.Rmd</code></div>
@@ -171,16 +171,16 @@ For this purpose, you can set the arguments like in the chunk below:</p>
 <span><span class="co">## Geodetic CRS:  +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0</span></span>
 <span><span class="co">## First 10 features:</span></span>
 <span><span class="co">##            ID K_5                       geometry</span></span>
-<span><span class="co">## 500        Aa   5 POLYGON ((2.09202 50.98091,...</span></span>
-<span><span class="co">## 2766    Abula   3       GEOMETRYCOLLECTION EMPTY</span></span>
-<span><span class="co">## 501  Acheloos   2 MULTIPOLYGON (((21.22557 38...</span></span>
-<span><span class="co">## 2277    Adige   4 POLYGON ((12.12917 47.07917...</span></span>
-<span><span class="co">## 504     Adour   5 POLYGON ((-0.06622891 44.10...</span></span>
-<span><span class="co">## 505      Agly   5 POLYGON ((2.761574 42.92824...</span></span>
-<span><span class="co">## 506      Agri   4 POLYGON ((16.52326 40.32881...</span></span>
-<span><span class="co">## 510   Albegna   2 POLYGON ((11.54804 42.5839,...</span></span>
-<span><span class="co">## 2278   Alfios   2 POLYGON ((21.29943 37.68212...</span></span>
-<span><span class="co">## 512  Aliakmon   5 POLYGON ((21.28508 40.75452...</span></span></code></pre>
+<span><span class="co">## 500        Aa   1 POLYGON ((2.09202 50.98091,...</span></span>
+<span><span class="co">## 2766    Abula   2       GEOMETRYCOLLECTION EMPTY</span></span>
+<span><span class="co">## 501  Acheloos   3 MULTIPOLYGON (((21.22557 38...</span></span>
+<span><span class="co">## 2277    Adige   3 POLYGON ((12.12917 47.07917...</span></span>
+<span><span class="co">## 504     Adour   1 POLYGON ((-0.06622891 44.10...</span></span>
+<span><span class="co">## 505      Agly   1 POLYGON ((2.761574 42.92824...</span></span>
+<span><span class="co">## 506      Agri   5 POLYGON ((16.52326 40.32881...</span></span>
+<span><span class="co">## 510   Albegna   3 POLYGON ((11.54804 42.5839,...</span></span>
+<span><span class="co">## 2278   Alfios   3 POLYGON ((21.29943 37.68212...</span></span>
+<span><span class="co">## 512  Aliakmon   1 POLYGON ((21.28508 40.75452...</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
 <span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">custom</span><span class="op">)</span><span class="op">)</span></span>
