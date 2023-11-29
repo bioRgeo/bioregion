@@ -193,8 +193,13 @@ netclu_infomap <- function(net,
       paste0(binpath, "/bin/INFOMAP/", version, "/")
     ))
   } else {
-    # Control input net
-    controls(args = NULL, data = net, type = "input_similarity")
+    # Control input net (+ check similarity if not bipartite)
+    controls(args = bipartite_version, data = NULL, type = "boolean")
+    controls(args = bipartite, data = NULL, type = "boolean")
+    isbip <- bipartite
+    if(!isbip){
+      controls(args = NULL, data = net, type = "input_similarity")
+    }
     controls(args = NULL, data = net, type = "input_net")
 
     # Control input weight & index
@@ -207,9 +212,6 @@ netclu_infomap <- function(net,
     }
 
     # Control input bipartite
-    controls(args = bipartite_version, data = NULL, type = "boolean")
-    controls(args = bipartite, data = NULL, type = "boolean")
-    isbip <- (bipartite | bipartite_version)
     if (isbip) {
       controls(args = NULL, data = net, type = "input_net_bip")
       controls(args = site_col, data = net, type = "input_net_bip_col")

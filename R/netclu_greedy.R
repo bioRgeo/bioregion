@@ -98,8 +98,12 @@ netclu_greedy <- function(net,
                           return_node_type = "both",
                           algorithm_in_output = TRUE) {
 
-  # Control input net
-  controls(args = NULL, data = net, type = "input_similarity")
+  # Control input net (+ check similarity if not bipartite)
+  controls(args = bipartite, data = NULL, type = "boolean")
+  isbip <- bipartite
+  if(!isbip){
+    controls(args = NULL, data = net, type = "input_similarity")
+  }
   controls(args = NULL, data = net, type = "input_net")
 
   # Control input weight & index
@@ -112,8 +116,6 @@ netclu_greedy <- function(net,
   }
 
   # Control input bipartite
-  controls(args = bipartite, data = NULL, type = "boolean")
-  isbip <- bipartite
   if (isbip) {
     controls(args = NULL, data = net, type = "input_net_bip")
     controls(args = site_col, data = net, type = "input_net_bip_col")
