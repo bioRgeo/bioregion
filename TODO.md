@@ -6,19 +6,13 @@
 
 ### 1.1 Améliorations générales
 
-* Points à vérifier
-    -> stop( , call. = FALSE)
-    -> \code{} pour le code dans les docs et `...` dans les vignettes
-    -> mettre un point "." à la fin des phrases dans la documentation (?)
-    -> dir.exists() ou file.exists() (win et lin)
-    -> identifier package folder (lipPaths())
-    -> controls length (>1)
-    
 * glossaire ?
 
-* Bien vérifier les packages importés (il y en aura à supprimer...)
-
 ### 1.2 Amélirations spécifiques dans des fonctions
+
+#### pairwise (dis)similarity
+
+* ajouter fonction from_abcABC (to compute metrics from abc and/or ABC)
 
 #### optics
 
