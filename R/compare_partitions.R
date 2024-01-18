@@ -127,18 +127,13 @@
 #'                                 
 #' 
 #' @export
-#' 
-#' 
-#' 
-#' 
-compare_partitions <- function(
-    cluster_object,
-    sample_comparisons = NULL,
-    indices = c("rand", "jaccard"),
-    cor_frequency = FALSE,
-    store_pairwise_membership = TRUE,
-    store_confusion_matrix = TRUE
-){
+
+compare_partitions <- function(cluster_object,
+                               sample_comparisons = NULL,
+                               indices = c("rand", "jaccard"),
+                               cor_frequency = FALSE,
+                               store_pairwise_membership = TRUE,
+                               store_confusion_matrix = TRUE){
   
   # input can be of format bioregion.clusters
   if (inherits(cluster_object, "bioregion.clusters")) {

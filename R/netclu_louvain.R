@@ -135,6 +135,8 @@
 #' @references
 #' \insertRef{Blondel2008}{bioregion}
 #'
+#' @importFrom igraph graph_from_data_frame cluster_louvain
+#'
 #' @export
 
 netclu_louvain <- function(net,

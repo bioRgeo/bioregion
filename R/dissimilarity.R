@@ -93,6 +93,7 @@
 #' \insertRef{Baselga2013}{bioregion}
 #' 
 #' @export
+
 dissimilarity <- function(comat, metric = "Simpson", formula = NULL,
                           method = "prodmat"){
   
