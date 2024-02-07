@@ -10,7 +10,7 @@
 coverage](https://codecov.io/gh/bioRgeo/bioregion/branch/master/graph/badge.svg)](https://app.codecov.io/gh/bioRgeo/bioregion?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/bioregion)](https://cran.r-project.org/package=bioregion)
 [![rstudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/grand-total/bioregion)](http://r-pkg.org/pkg/bioregion)
+downloads](http://cranlogs.r-pkg.org/badges/bioregion)](https://r-pkg.org:443/pkg/bioregion)
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform

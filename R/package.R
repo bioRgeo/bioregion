@@ -2,7 +2,7 @@
 #'
 #' Bioregionalisation Methods in R
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
 #' Boris Leroy (\email{leroy.boris@gmail.com}) and
