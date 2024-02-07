@@ -16,4 +16,25 @@ test_that("error messages with wrong inputs", {
   expect_error(
     mat_to_net(mat, weight = "zz"),
     "weight must be a boolean", fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, remove_zeroes = "zz"),
+    "remove_zeroes must be a boolean", fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, include_diag = "zz"),
+    "include_diag must be a boolean", fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, include_lower = "zz"),
+    "include_lower must be a boolean", fixed = TRUE)
+  
+  expect_message(
+    mat_to_net(mat, include_diag = FALSE),
+    "include_diag is only used with squared matrix.", fixed = TRUE)
+  
+  expect_message(
+    mat_to_net(mat, include_lower = FALSE),
+    "include_lower is only used with squared matrix.", fixed = TRUE)
+
 })

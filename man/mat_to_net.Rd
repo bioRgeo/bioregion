@@ -4,7 +4,13 @@
 \alias{mat_to_net}
 \title{Create a data.frame from a contingency table}
 \usage{
-mat_to_net(mat, weight = FALSE, remove_zeroes = TRUE)
+mat_to_net(
+  mat,
+  weight = FALSE,
+  remove_zeroes = TRUE,
+  include_diag = TRUE,
+  include_lower = TRUE
+)
 }
 \arguments{
 \item{mat}{a contingency table (i.e. \code{matrix}).}
@@ -13,6 +19,12 @@ mat_to_net(mat, weight = FALSE, remove_zeroes = TRUE)
 
 \item{remove_zeroes}{a \code{boolean} determining whether interactions with
 weight equal to 0 should be removed from the output.}
+
+\item{include_diag}{a \code{boolean} indicating whether the diagonal
+should be included in the output. Only for squared matrix.}
+
+\item{include_lower}{a \code{boolean} indicating whether the lower triangular
+matrix should be included in the output. Only for squared matrix.}
 }
 \value{
 A \code{data.frame} where each row represents the interaction
