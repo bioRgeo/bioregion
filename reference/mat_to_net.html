@@ -85,7 +85,13 @@ rows and species as columns for example).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mat_to_net</span><span class="op">(</span><span class="va">mat</span>, weight <span class="op">=</span> <span class="cn">FALSE</span>, remove_zeroes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mat_to_net</span><span class="op">(</span></span>
+<span>  <span class="va">mat</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  remove_zeroes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_diag <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_lower <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,6 +107,16 @@ rows and species as columns for example).</p>
 <dt>remove_zeroes</dt>
 <dd><p>a <code>boolean</code> determining whether interactions with
 weight equal to 0 should be removed from the output.</p></dd>
+
+
+<dt>include_diag</dt>
+<dd><p>a <code>boolean</code> indicating whether the diagonal
+should be included in the output. Only for squared matrix.</p></dd>
+
+
+<dt>include_lower</dt>
+<dd><p>a <code>boolean</code> indicating whether the lower triangular
+matrix should be included in the output. Only for squared matrix.</p></dd>
 
 </dl></div>
     <div class="section level2">
