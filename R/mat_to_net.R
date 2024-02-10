@@ -57,10 +57,10 @@ mat_to_net <- function(mat,
   # Squared matrix
   if (dim(mat)[1] == dim(mat)[2]) {
     if (!include_diag) {
-      diag(mat) <- 0
+      diag(mat) <- NA
     }
     if (!include_lower) {
-      mat[lower.tri(mat)] <- 0
+      mat[lower.tri(mat)] <- NA
     }
   } else {
     if (include_diag == FALSE) {
@@ -86,6 +86,9 @@ mat_to_net <- function(mat,
   # Remove interactions with weight equal 0
   if (remove_zeroes == TRUE) {
     net <- net[net$Weight != 0, ]
+  }
+  if(!include_diag | !include_lower){
+    net <- net[!is.na(net$Weight),]
   }
 
   # Remove the weight column if weight is set to FALSE
