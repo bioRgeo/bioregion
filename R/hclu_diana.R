@@ -73,15 +73,6 @@
 #' fishdissim <- dissimilarity(fishmat)
 #' fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 #' 
-#' # fish_diana <- cluster::diana(fishmat, #dissim,
-#' #                              diss = FALSE, #inherits(fishdissim, "dist"),
-#' #                              metric = "euclidean",
-#' #                              stand = FALSE,
-#' #                              stop.at.k = FALSE,
-#' #                              # keep.diss = n < 100,
-#' #                              # keep.data = !diss,
-#' #                              trace.lev = 0)
-#' 
 #' 
 #' @importFrom cluster diana
 #' @importFrom stats as.dist cophenetic cor
