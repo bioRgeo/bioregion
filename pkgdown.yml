@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -11,7 +11,7 @@ articles:
   a4_4_microbenchmark: a4_4_microbenchmark.html
   a5_visualization: a5_visualization.html
   bioregion: bioregion.html
-last_built: 2024-02-20T17:06Z
+last_built: 2024-02-29T10:42Z
 urls:
   reference: https://bioRgeo.github.io/bioregion/reference
   article: https://bioRgeo.github.io/bioregion/articles
