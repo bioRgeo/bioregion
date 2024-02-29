@@ -95,6 +95,16 @@ carefully in ?hclu_hierarclust).
 
 # 2. Hierarchical clustering with basic parameters
 
+Hierarchical clustering, and the associated hierarchical tree, can be
+constructed in two ways:
+- *agglomerative*, where all sites are initially assigned to their own
+bioregion and they are progressively grouped together
+- *divisive*, where all sites initially belong to the same unique bioregion
+and are then progressively divided into different bioregions  
+
+Subsections 2.1 to 2.3 detail the functioning of agglomerative hierarchical
+clustering, while [sub-section 2.4.](#2.4.) illustrates the divisive method.
+
 ## 2.1 Basic usage
 
 The basic use of the function is as follows:
@@ -329,9 +339,28 @@ once, this alternative approach consists in cutting individual branches at
 different heights. This method can be requested by using 
 `dynamic_tree_cut = TRUE`, and is based on the dynamicTreeCut R package.
 
-## 2.4. Divisive clustering
+## 2.4. Divisive clustering {#2.4.}
 
-Top-down approach of hierarchical clustering instead of the bottom-up approach.
+While the agglomerative hierarchical clustering in the previous subsections
+followed a bottom-up approach, divisive clustering follows a top-down approach.
+This means that in the first step of the clustering, all sites belong to the
+same bioregion, and then sites are iteratively divided into different
+bioregions until all sites belong to a unique bioregion.  
+
+Divisive clustering is following the DIvisive ANAlysis (DIANA) clustering
+algorithm described in [@Kaufman2009].  
+
+At each step, the algorithm splits the largest cluster by identifying the most
+dissimilar observation (i.e. site) and then putting sites that are closer to
+this most dissimilar observation than to the 'old party' group into a splinter
+group. The result is that the large cluster is split into two clusters.   
+
+The function `hclu_diana` performs the Diana divisive clustering.  
+
+```{r, fig.height = 5, fig.width = 8}
+# Compute the tree with the Diana algorithm
+tree_diana <- hclu_diana(dissim)
+```
 
 # 3. How to find an optimal number of clusters? {#optimaln}
 
