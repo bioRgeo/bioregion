@@ -12,7 +12,7 @@ on the Louvain algorithm."><meta property="og:image" content="https://bioRgeo.gi
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,7 @@ on the Louvain algorithm.</p>
 <span>  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
 <span>  lang <span class="op">=</span> <span class="st">"Cpp"</span>,</span>
+<span>  resolution <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  q <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  c <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -117,6 +118,11 @@ the third column name of <code>net</code> is used.</p></dd>
 <dt>lang</dt>
 <dd><p>a string indicating what version of Louvain should be used
 (igraph or Cpp, see Details).</p></dd>
+
+
+<dt>resolution</dt>
+<dd><p>a resolution parameter to adjust the modularity
+(1 is chosen by default, see Details).</p></dd>
 
 
 <dt>q</dt>
@@ -207,8 +213,15 @@ clustering procedure, such as original cluster objects (only if
 implementations of the function (parameter <code>lang</code>): the
 <a href="https://cran.r-project.org/package=igraph" class="external-link">igraph</a>
 implementation (<a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a>) and the C++
-implementation (<a href="https://sourceforge.net/projects/louvain/" class="external-link">https://sourceforge.net/projects/louvain/</a>, version 0.3).
-The latest offers the possibility to choose among several quality functions,
+implementation (<a href="https://sourceforge.net/projects/louvain/" class="external-link">https://sourceforge.net/projects/louvain/</a>, version 0.3).</p>
+<p>The <a href="https://cran.r-project.org/package=igraph" class="external-link">igraph</a>
+implementation offers the possibility to adjust the resolution parameter of
+the modularity function (<code>resolution</code> argument) that the algorithm uses
+internally. Lower values typically yield fewer, larger clusters. The original
+definition of modularity is recovered when the resolution parameter
+is set to 1 (by default).</p>
+<p>The C++ implementation offers the possibility to choose among several
+quality functions,
 <code>q = 0</code> for the classical Newman-Girvan criterion (also called
 "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
 Owsinski-Zadrozny criterion (you should specify the value of the parameter
