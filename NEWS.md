@@ -1,7 +1,9 @@
-# bioregion 1.0.3 (development/github version)
+# bioregion 1.1.0 (development/github version)
 
 This is a list of changes made in the development/github version of the package
 between bioregion 1.0.0 (CRAN release 2023-04-15) and the next CRAN release.
+
+* Added the resolution parameter in the igraph Louvain version
 
 * Added possibility to remove diagonal and lower triangular matrix in 
 mat_to_net() for squared matrix with argument include_diag and include_lower

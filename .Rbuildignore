@@ -16,6 +16,7 @@
 ^oslom_temp/
 ^find_nclust.R
 ^README.Rmd
+
 ^vignettes/a1_install_binary_files.Rmd
 ^vignettes/a2_matrix_and_network_formats.Rmd
 ^vignettes/a3_pairwise_metrics.Rmd

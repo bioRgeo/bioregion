@@ -20,7 +20,6 @@
 
 #### clustering_hierarchical
 
-* Ajouter l'algorithme `diana` ?
 
 #### partition_metrics
 

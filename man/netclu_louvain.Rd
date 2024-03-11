@@ -9,6 +9,7 @@ netclu_louvain(
   weight = TRUE,
   index = names(net)[3],
   lang = "Cpp",
+  resolution = 1,
   q = 0,
   c = 0.5,
   k = 1,
@@ -36,6 +37,9 @@ the third column name of \code{net} is used.}
 
 \item{lang}{a string indicating what version of Louvain should be used
 (igraph or Cpp, see Details).}
+
+\item{resolution}{a resolution parameter to adjust the modularity
+(1 is chosen by default, see Details).}
 
 \item{q}{the quality function used to compute partition of the graph
 (modularity is chosen by default, see Details).}
@@ -104,7 +108,16 @@ implementations of the function (parameter \code{lang}): the
 \href{https://cran.r-project.org/package=igraph}{igraph}
 implementation (\link[igraph:cluster_louvain]{cluster_louvain}) and the C++
 implementation (\url{https://sourceforge.net/projects/louvain/}, version 0.3).
-The latest offers the possibility to choose among several quality functions,
+
+The \href{https://cran.r-project.org/package=igraph}{igraph}
+implementation offers the possibility to adjust the resolution parameter of
+the modularity function (\code{resolution} argument) that the algorithm uses
+internally. Lower values typically yield fewer, larger clusters. The original
+definition of modularity is recovered when the resolution parameter
+is set to 1 (by default).
+
+The C++ implementation offers the possibility to choose among several
+quality functions,
 \code{q = 0} for the classical Newman-Girvan criterion (also called
 "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
 Owsinski-Zadrozny criterion (you should specify the value of the parameter
