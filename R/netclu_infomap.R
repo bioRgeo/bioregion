@@ -152,7 +152,7 @@ netclu_infomap <- function(net,
                            site_col = 1,
                            species_col = 2,
                            return_node_type = "both",
-                           version = "2.6.0",
+                           version = "2.7.1",
                            binpath = "tempdir",
                            path_temp = "infomap_temp",
                            delete_temp = TRUE) {

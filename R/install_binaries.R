@@ -22,7 +22,7 @@
 #' [netclu_infomap], [netclu_louvain] and [netclu_oslom]).**
 #'
 #' @note
-#' Only the Infomap version 2.1.0 and 2.6.0 are available for now.
+#' Only the Infomap version 2.1.0, 2.6.0 and 2.7.1 are available for now.
 #'
 #' @return
 #' No return value
@@ -35,7 +35,9 @@
 #' @export
 
 install_binaries <- function(binpath = "tempdir",
-                             infomap_version = c("2.1.0", "2.6.0")) {
+                             infomap_version = c("2.1.0", 
+                                                 "2.6.0", 
+                                                 "2.7.1")) {
   
   # Control and set binpath
   controls(args = binpath, data = NULL, type = "character")
@@ -51,7 +53,7 @@ install_binaries <- function(binpath = "tempdir",
   binpath <- normalizePath(binpath)
 
   # Control infomap_version
-  infomap_versiondispo <- c("2.1.0", "2.6.0")
+  infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1")
   if (!is.character(infomap_version)) {
     stop("infomap_version must be a character", call. = FALSE)
   }

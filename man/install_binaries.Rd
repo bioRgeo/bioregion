@@ -4,7 +4,10 @@
 \alias{install_binaries}
 \title{Download, unzip, check permission and test the bioregion's binary files}
 \usage{
-install_binaries(binpath = "tempdir", infomap_version = c("2.1.0", "2.6.0"))
+install_binaries(
+  binpath = "tempdir",
+  infomap_version = c("2.1.0", "2.6.0", "2.7.1")
+)
 }
 \arguments{
 \item{binpath}{a \code{character} indicating the path to the folder that will
@@ -34,7 +37,7 @@ Finally, a path to a folder of your choice can be chosen.
 \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
 }
 \note{
-Only the Infomap version 2.1.0 and 2.6.0 are available for now.
+Only the Infomap version 2.1.0, 2.6.0 and 2.7.1 are available for now.
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
