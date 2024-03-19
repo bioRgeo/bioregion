@@ -1,7 +1,15 @@
 # bioregion 1.1.0 (development/github version)
 
 This is a list of changes made in the development/github version of the package
-between bioregion 1.0.0 (CRAN release 2023-04-15) and the next CRAN release.
+between bioregion 1.1.0 (CRAN release 2024-03-19) and the next CRAN release.
+
+* 
+ 
+# bioregion 1.1.0 
+
+This is a list of changes made in the development/github version of the package
+between bioregion 1.0.0 (CRAN release 2023-04-15) and bioregion 1.1.0 
+(CRAN release 2024-03-19).
 
 * Added the resolution parameter in the igraph Louvain version
 
