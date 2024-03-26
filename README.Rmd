@@ -30,7 +30,7 @@ Bioregionalisation methods can be based on
 hierarchical clustering algorithms, non-hierarchical clustering algorithms or 
 network algorithms.
 
-# :arrow_double_down: Installation
+## :arrow_double_down: Installation
 
 The package can be installed with the following command line in R session:
 
@@ -47,7 +47,7 @@ or from GitHub
 devtools::install_github("bioRgeo/bioregion")
 ```
 
-# :scroll: Vignettes
+## :scroll: Vignettes
 
 We wrote several vignettes that will help you using the **bioregion R package**.
 Vignettes available are the following ones: <br>
@@ -73,18 +73,18 @@ remotes::install_github("bioRgeo/bioregion",
 vignette("bioregion")
 ```
 
-# :desktop_computer: Functions
+## :desktop_computer: Functions
 
 An overview of all functions and data is given 
 **[here](https://bioRgeo.github.io/bioregion/reference/index.html)**.
 
-# :bug: Find a bug?
+## :bug: Find a bug?
 
 Thank you for finding it. Head over to the GitHub Issues tab and let us know
 about it. Alternatively, you can also send us an e-mail.
 We will try to get to it as soon as we can!
 
-# References and dependencies  
+## References and dependencies  
 
 `bioregion` depends on `ape`, `bipartite`, `cluster`, `data.table`, `dbscan`, 
 `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`, `grDevices`, `igraph`, 
