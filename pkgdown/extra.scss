@@ -1,0 +1,136 @@
+/* Source: https://github.com/tidyverse/tidytemplate/blob/main/inst/pkgdown/BS5/extra.scss */
+
+$faint-background: #f9f9f9 !default;
+$faint-border: #efefef !default;
+
+$navbar-background: $faint-background !default;
+$footer-background: $faint-background !default;
+
+@include media-breakpoint-up(xxl) {
+  body { font-size: 19.5px }
+}
+
+// Headings ----------------------------------------------------
+// Use smaller headings with more vertical space
+
+h2 {
+  @include font-size(1.7rem);
+  margin-top: 2.5rem;
+}
+// Reduce margin of first h2 on page
+main .page-header + .section h2 {
+  margin-top: 1rem;
+}
+
+h3 {
+  @include font-size(1.4rem);
+  margin-top: 2rem;
+}
+h4 {
+  @include font-size(1.1rem);
+  font-weight: bold;
+  margin-top: 1.2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: mix($body-color, $primary, 90%);
+}
+
+h2, h3, h4, h5, h6 {
+  margin-bottom: 1rem;
+}
+
+.page-header {
+  border-bottom: none;
+  min-height: 0;
+  margin-bottom: 2rem;
+  h1 {margin-top: 3rem}
+}
+
+// Home page --------------------------------------------------------------
+
+.template-home {
+  .page-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    min-height: 0;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid $faint-border;
+
+    h1 {margin-top: 0rem}
+
+    @include media-breakpoint-down(sm) {
+      margin: 0.5rem 0;
+      padding: 0.5rem 0;
+    }
+  }
+  img.logo {
+    margin-left: 0;
+
+    @include media-breakpoint-down(sm) {
+      width: 100px;
+    }
+  }
+}
+
+// Navbar -----------------------------------------------------------------
+
+nav.navbar {
+  font-size: 18px;
+}
+
+
+// Sidebar ----------------------------------------------------------------
+
+@include media-breakpoint-up(sm) {
+  #toc {
+    top: calc(#{$pkgdown-nav-height} + 2rem);
+  }
+}
+
+.row > aside {
+  margin-top: calc(2rem + #{$pkgdown-nav-height});
+}
+
+aside {
+  
+  font-size: 18px;
+  
+  border-left: 1px solid $faint-border;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+
+  h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    margin-top: 2rem;
+    font-weight: bold;
+    letter-spacing: 0.15rem;
+    color: $gray-800;
+  }
+  div:first-child h2 {
+    margin-top: 0;
+  }
+  nav:first-child h2 {
+    margin-top: 0;
+  }
+
+  .list-unstyled li {
+    margin-bottom: 0.5rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    margin: 1rem 0 0 0;
+    padding: 2rem 1rem 1rem 1rem;
+    background-color: $faint-background;
+    width: 100vw;
+    border-top: 1px solid $faint-border;
+  }
+}
+
+
+
+

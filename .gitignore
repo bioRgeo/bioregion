@@ -14,8 +14,5 @@ src/RcppExports.o
 inst/REFERENCES.bib.bak
 
 docs/
-pkgdown/
-
-docs
 
 vignettes/a4_1_hierarchical_clustering_cache
