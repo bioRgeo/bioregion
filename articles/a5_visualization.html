@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-03-26</h4>
+            <h4 data-toc-skip class="date">2024-03-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a5_visualization.Rmd" class="external-link"><code>vignettes/a5_visualization.Rmd</code></a></small>
       <div class="d-none name"><code>a5_visualization.Rmd</code></div>
@@ -172,16 +172,16 @@ For this purpose, you can set the arguments like in the chunk below:</p>
 <span><span class="co">## Geodetic CRS:  +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0</span></span>
 <span><span class="co">## First 10 features:</span></span>
 <span><span class="co">##            ID K_5                       geometry</span></span>
-<span><span class="co">## 500        Aa   5 POLYGON ((2.09202 50.98091,...</span></span>
-<span><span class="co">## 2766    Abula   2       GEOMETRYCOLLECTION EMPTY</span></span>
+<span><span class="co">## 500        Aa   4 POLYGON ((2.09202 50.98091,...</span></span>
+<span><span class="co">## 2766    Abula   1       GEOMETRYCOLLECTION EMPTY</span></span>
 <span><span class="co">## 501  Acheloos   3 MULTIPOLYGON (((21.22557 38...</span></span>
 <span><span class="co">## 2277    Adige   3 POLYGON ((12.12917 47.07917...</span></span>
-<span><span class="co">## 504     Adour   5 POLYGON ((-0.06622891 44.10...</span></span>
-<span><span class="co">## 505      Agly   5 POLYGON ((2.761574 42.92824...</span></span>
-<span><span class="co">## 506      Agri   4 POLYGON ((16.52326 40.32881...</span></span>
+<span><span class="co">## 504     Adour   4 POLYGON ((-0.06622891 44.10...</span></span>
+<span><span class="co">## 505      Agly   4 POLYGON ((2.761574 42.92824...</span></span>
+<span><span class="co">## 506      Agri   2 POLYGON ((16.52326 40.32881...</span></span>
 <span><span class="co">## 510   Albegna   3 POLYGON ((11.54804 42.5839,...</span></span>
 <span><span class="co">## 2278   Alfios   3 POLYGON ((21.29943 37.68212...</span></span>
-<span><span class="co">## 512  Aliakmon   5 POLYGON ((21.28508 40.75452...</span></span></code></pre>
+<span><span class="co">## 512  Aliakmon   4 POLYGON ((21.28508 40.75452...</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
 <span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">custom</span><span class="op">)</span><span class="op">)</span></span>
