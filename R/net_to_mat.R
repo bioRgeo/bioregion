@@ -47,25 +47,22 @@
 #' mat <- net_to_mat(net, weight = TRUE)
 #'
 #' @export
-net_to_mat <- function(net, weight = FALSE, squared = FALSE,
-                       symmetrical = FALSE, missing_value = 0) {
-
-  # Control input net
-  controls(args = NULL, data = net, type = "input_net")
-
-  # Control parameters
-  controls(args = weight, data = net, type = "input_net_weight")
+net_to_mat <- function(net, 
+                       weight = FALSE, 
+                       squared = FALSE,
+                       symmetrical = FALSE, 
+                       missing_value = 0) {
+  
+  # Control inputs
   controls(args = squared, data = NULL, type = "boolean")
   controls(args = symmetrical, data = NULL, type = "boolean")
   controls(args = missing_value, data = NULL, type = "numeric")
   if (!squared & symmetrical) {
     stop("symmetrical only for squared matrix!", call. = FALSE)
   }
-  if (weight & dim(net)[2] == 3) {
-    if (!is.numeric(net[, 3])) {
-      stop("The third column of net must be numeric", call. = FALSE)
-    }
-  }
+
+  controls(args = NULL, data = net, type = "input_net")
+  controls(args = weight, data = net, type = "input_net_weight")
 
   # Rename columns
   colnames(net)[1:2] <- c("Object1", "Object2")

@@ -45,17 +45,15 @@ mat_to_net <- function(mat,
                        remove_zeroes = TRUE,
                        include_diag = TRUE,
                        include_lower = TRUE) {
-  # Control input mat
-  controls(args = NULL, data = mat, type = "input_matrix")
-
-  # Control parameters
+  
+  # Control inputs
   controls(args = weight, data = NULL, type = "boolean")
   controls(args = remove_zeroes, data = NULL, type = "boolean")
   controls(args = include_diag, data = NULL, type = "boolean")
   controls(args = include_lower, data = NULL, type = "boolean")
-
-  # Squared matrix
-  if (dim(mat)[1] == dim(mat)[2]) {
+  
+  controls(args = NULL, data = mat, type = "input_matrix")
+  if (dim(mat)[1] == dim(mat)[2]) { # Squared matrix
     if (!include_diag) {
       diag(mat) <- NA
     }
@@ -84,11 +82,11 @@ mat_to_net <- function(mat,
   ))
 
   # Remove interactions with weight equal 0
-  if (remove_zeroes == TRUE) {
-    net <- net[net$Weight != 0, ]
-  }
   if(!include_diag | !include_lower){
     net <- net[!is.na(net$Weight),]
+  }
+  if (remove_zeroes) {
+    net <- net[net$Weight != 0, ]
   }
 
   # Remove the weight column if weight is set to FALSE

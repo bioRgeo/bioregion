@@ -94,7 +94,9 @@
 #' 
 #' @export
 
-dissimilarity <- function(comat, metric = "Simpson", formula = NULL,
+dissimilarity <- function(comat, 
+                          metric = "Simpson", 
+                          formula = NULL,
                           method = "prodmat"){
   
 # Compute similarities

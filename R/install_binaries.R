@@ -54,10 +54,8 @@ install_binaries <- function(binpath = "tempdir",
 
   # Control infomap_version
   infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1")
-  if (!is.character(infomap_version)) {
-    stop("infomap_version must be a character", call. = FALSE)
-  }
-
+  controls(args = infomap_version, data = NULL, type = "character_vector")
+  
   infomap_version <- infomap_version[!duplicated(infomap_version)]
 
   if (length(infomap_version) > length(infomap_versiondispo)) {

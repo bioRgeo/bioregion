@@ -159,7 +159,7 @@ similarity_to_dissimilarity()"),
     }
     nbna <- sum(is.na(data))
     if (nbna > 0) {
-      stop("NA(s) detected in the data.frame!", call. = FALSE)
+      stop(paste0("NA(s) detected in ", deparse(substitute(data)),"."), call. = FALSE)
     }
   }
   
@@ -196,9 +196,17 @@ similarity_to_dissimilarity()"),
     }
     if (args & dim(data)[2] == 2) {
       stop(paste0(
-        deparse(substitute(args)),
+        deparse(substitute(data)),
         " must be a data.frame with at least three columns if weight equal 
         TRUE."), call. = FALSE)
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop(paste0("NA(s) detected in ", deparse(substitute(data)),"."), call. = FALSE)
+    }
+    if (!is.numeric(data[, 3])) {
+      stop(paste0("The third column of ", deparse(substitute(data)), 
+                  " must be numeric"), call. = FALSE)
     }
   }
   
@@ -319,10 +327,10 @@ similarity_to_dissimilarity()"),
     rowmat <- rownames(data)
     colmat <- colnames(data)
     if (sum(duplicated(rowmat)) > 0) {
-      message("Duplicated rownames detected!")
+      stop("Duplicated rownames detected!", call. = FALSE)
     }
     if (sum(duplicated(colmat)) > 0) {
-      message("Duplicated colnames detected!")
+      stop("Duplicated colnames detected!", call. = FALSE)
     }
     nbna <- sum(is.na(data))
     if (nbna > 0) {
