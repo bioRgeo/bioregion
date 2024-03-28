@@ -8,7 +8,7 @@
 
 #### optics
 
-* permettre de lancer plusieurs optics avec différentes valeurs de paramètres ?
+* permettre de lancer plusieurs optics avec différentes valeurs de paramètres ? 
 
 #### partition_metrics
 
