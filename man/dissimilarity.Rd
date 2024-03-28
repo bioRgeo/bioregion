@@ -67,10 +67,11 @@ sites. B and C are the total number of specimens counted at both sites minus
 A.
 
 \code{formula} can be used to compute customized metrics with the terms
-\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}.
-For example
-\code{formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")} will
-compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.
+\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}. For example
+\code{formula = c("pmin(b,c) / (a + pmin(b,c))", "(B + C) / (2*A + B + C)")}
+will compute the Simpson and Bray-Curtis dissimilarity metrics, respectively.
+\strong{Note that pmin is used in the Simpson formula because a, b, c, A, B and C
+are vectors.}
 
 Euclidean computes the Euclidean distance between each pair of sites.
 }

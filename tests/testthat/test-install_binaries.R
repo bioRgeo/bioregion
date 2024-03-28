@@ -3,6 +3,7 @@ infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1")
 
 # Tests for invalid inputs -----------------------------------------------------
 test_that("invalid inputs", {
+  
   expect_error(
     install_binaries(binpath = 1),
     "binpath must be a character.", 
@@ -29,4 +30,5 @@ test_that("invalid inputs", {
     )
     , 
     fixed = TRUE)
+  
 })  

@@ -50,10 +50,11 @@
 #' A.
 #'
 #' `formula` can be used to compute customized metrics with the terms
-#' `a`, `b`, `c`, `A`, `B`, and `C`.
-#' For example
-#' `formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")` will
-#' compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.
+#' `a`, `b`, `c`, `A`, `B`, and `C`. For example
+#' `formula = c("pmin(b,c) / (a + pmin(b,c))", "(B + C) / (2*A + B + C)")`
+#' will compute the Simpson and Bray-Curtis dissimilarity metrics, respectively. 
+#' **Note that pmin is used in the Simpson formula because a, b, c, A, B and C 
+#' are vectors.**
 #'
 #' Euclidean computes the Euclidean distance between each pair of sites.
 #'

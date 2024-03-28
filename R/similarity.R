@@ -51,8 +51,10 @@
 #'
 #' `formula` can be used to compute customized metrics with the terms
 #' `a`, `b`, `c`, `A`, `B`, and `C`. For example
-#' `formula = c("1 - (b + c) / (a + b + c)", "1 - (B + C) / (2*A + B + C)")`
-#' will compute the Jaccard and Bray-Curtis similarity metrics, respectively.
+#' `formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)")`
+#' will compute the Simpson and Bray-Curtis similarity metrics, respectively. 
+#' **Note that pmin is used in the Simpson formula because a, b, c, A, B and C 
+#' are vectors.**
 #'
 #' Euclidean computes the Euclidean similarity between each pair of site
 #' following this equation:
@@ -259,14 +261,6 @@ similarity <- function(comat,
     }
   }
   
-  # Compute equation in formula
-  if (!is.null(formula)) {
-    for (k in 1:length(formula)) {
-      res <- cbind(res, eval(parse(text = formula[k])))
-      colnames(res)[dim(res)[2]] <- formula[k]
-    }
-  }
-  
   # Compute Euclidean similarity between site using dist()
   if ("Euclidean" %in% metric) {
     eucl <- as.matrix(stats::dist(comat))
@@ -297,6 +291,14 @@ similarity <- function(comat,
     res$A <- abca$A
     res$B <- abca$B
     res$C <- abca$C
+  }
+  
+  # Compute equation in formula
+  if (!is.null(formula)) {
+    for (k in 1:length(formula)) {
+      res <- cbind(res, eval(parse(text = formula[k])))
+      colnames(res)[dim(res)[2]] <- formula[k]
+    }
   }
 
   # Create output class

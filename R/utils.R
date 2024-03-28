@@ -62,7 +62,7 @@ Use similarity_to_dissimilarity() before using this function."), call. = FALSE)
     if (!inherits(data, "bioregion.pairwise.metric")) {
       stop(paste0(deparse(substitute(data)), 
                   " should be a bioregion.pairwise.metric object created by 
-similarity() or dissimilarity_to_similarity()"),
+similarity() or dissimilarity_to_similarity()."),
                   call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
@@ -75,27 +75,10 @@ probably because the bioregion.pairwise.metric object has been altered."),
     if (attr(data, "type") == "dissimilarity") {
       stop(paste0(deparse(substitute(data)), " is already composed of 
 dissimilarity metrics. If you want to convert it to similarity, use 
-dissimilarity_to_similarity()"),
+dissimilarity_to_similarity()."),
            call. = FALSE)
     }
-    if (!is.data.frame(data)) {
-      stop(paste0(deparse(substitute(data)), " must be a data.frame."),
-           call. = FALSE)
-    }
-    if (dim(data)[2] < 2) {
-      stop(paste0(deparse(substitute(data)),
-                  " must be a data.frame with at least two columns."),
-           call. = FALSE)
-    }
-    nbna <- sum(is.na(data))
-    if (nbna > 0) {
-      stop("NA(s) detected in the data.frame!", call. = FALSE)
-    }
-    for(k in 3:dim(data)[2]){
-      if (!is.numeric(data[, k])) {
-        stop("The (dis)similarity metric(s) must be numeric.", call. = FALSE)
-      }
-    }
+
   }
   
   # Input conversion dissimilarity ################################################
@@ -103,7 +86,7 @@ dissimilarity_to_similarity()"),
     if (!inherits(data, "bioregion.pairwise.metric")) {
       stop(paste0(deparse(substitute(data)), 
                   " should be a bioregion.pairwise.metric object created by 
-similarity() or dissimilarity_to_similarity()"),
+dissimilarity() or similarity_to_dissimilarity()."),
            call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
@@ -116,26 +99,8 @@ probably because the bioregion.pairwise.metric object has been altered."),
     if (attr(data, "type") == "similarity") {
       stop(paste0(deparse(substitute(data)), " is already composed of 
 similarity metrics. If you want to convert it to dissimilarity, use 
-similarity_to_dissimilarity()"),
+similarity_to_dissimilarity()."),
            call. = FALSE)
-    }
-    if (!is.data.frame(data)) {
-      stop(paste0(deparse(substitute(data)), " must be a data.frame."),
-           call. = FALSE)
-    }
-    if (dim(data)[2] < 2) {
-      stop(paste0(deparse(substitute(data)),
-                  " must be a data.frame with at least two columns."),
-           call. = FALSE)
-    }
-    nbna <- sum(is.na(data))
-    if (nbna > 0) {
-      stop("NA(s) detected in the data.frame!", call. = FALSE)
-    }
-    for(k in 3:dim(data)[2]){
-      if (!is.numeric(data[, k])) {
-        stop("The (dis)similarity metric(s) must be numeric.", call. = FALSE)
-      }
     }
   }  
   

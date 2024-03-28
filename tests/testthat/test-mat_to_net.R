@@ -21,6 +21,7 @@ rownames(mat5)[2] <- rownames(mat5)[1]
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid outputs", {
+  
   net <- mat_to_net(mat, weight = TRUE)
   expect_equal(class(net), "data.frame")
   expect_equal(dim(net)[1], 50)
@@ -76,6 +77,7 @@ test_that("valid outputs", {
 
 # Tests for invalid inputs -----------------------------------------------------
 test_that("invalid inputs", {
+  
   expect_error(
     mat_to_net(mat, weight = "zz"),
     "weight must be a boolean", 

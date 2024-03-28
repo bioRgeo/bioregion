@@ -71,9 +71,8 @@ similarity_to_dissimilarity <- function(similarity, include_formula = TRUE){
   output <- similarity
   
   # Controls
-  controls(args = NULL, data = output, type = "input_conversion_similarity")
   controls(args = include_formula, data = NULL, type = "boolean")
-  controls(args = NULL, data = output, type = "input_conversion")
+  controls(args = NULL, data = similarity, type = "input_conversion_similarity")
   
   # Overwrite attribute
   attr(output, "type") <- "dissimilarity"
@@ -91,14 +90,14 @@ similarity_to_dissimilarity <- function(similarity, include_formula = TRUE){
   # Not Euclidean
   posnoteucl <- which(metrics %in% noteucl)
   if(length(posnoteucl) > 0){
-    output[,(posnoteucl + 2)] = 1- output[,(posnoteucl + 2)]  
+    output[,(posnoteucl + 2)] =  1- output[,(posnoteucl + 2)]  
   }
   
   # Include formula ?
   if(include_formula){
     posnotall <- which(!(metrics %in% all))
     if(length(posnotall) > 0){
-      output[,(posnotall + 2)] = 1- output[,(posnotall + 2)]  
+      output[,(posnotall + 2)] = 1 - output[,(posnotall + 2)]  
     }
   }
 
@@ -180,9 +179,8 @@ dissimilarity_to_similarity <- function(dissimilarity, include_formula = TRUE){
   output <- dissimilarity
   
   # Controls
-  controls(args = NULL, data = output, type = "input_conversion_dissimilarity")
   controls(args = include_formula, data = NULL, type = "boolean")
-  controls(args = NULL, data = output, type = "input_conversion")
+  controls(args = NULL, data = dissimilarity, type = "input_conversion_dissimilarity")
   
   # Overwrite attribute
   attr(output, "type") <- "similarity"

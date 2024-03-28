@@ -15,6 +15,7 @@ clu4 <- netclu_louvain(net,
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid outputs", {
+  
   sub <- subset_node(clu1, node_type = "sites")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
   expect_equal(sub$args$return_node_type, "sites")
@@ -27,6 +28,7 @@ test_that("valid outputs", {
 
 # Tests for invalid inputs -----------------------------------------------------
 test_that("indalid inputs", {
+  
   expect_error(
     subset_node(clu1, node_type = 1),
     "node_type must be a character.", 
@@ -57,6 +59,5 @@ sites and species",
     subset_node(clu4, node_type = "sites"),
     "clusters must contain both types of node.", 
     fixed = TRUE)
-  
   
 })

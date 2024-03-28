@@ -27,6 +27,7 @@ net6 <- data.frame(
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid outputs", {
+  
   mat <- net_to_mat(net)
   expect_equal(class(mat), c("matrix",  "array"))
   expect_equal(dim(mat)[1], 3)
@@ -98,6 +99,7 @@ test_that("valid outputs", {
 
 # Tests for invalid inputs -----------------------------------------------------
 test_that("indalid inputs", {
+  
   expect_error(
     net_to_mat(net, weight = "zz"),
     "weight must be a boolean.", 
