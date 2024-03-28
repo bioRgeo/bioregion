@@ -99,7 +99,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2024-03-27</h4>
+            <h4 data-toc-skip class="date">2024-03-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -177,28 +177,28 @@ similarity metrics on large co-occurrence matrix.</p>
 <span><span class="co">##  - Number of similarity metrics:  4 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##    Site1 Site2   Simpson       Bray (b + c) / (a + b + c)</span></span>
-<span><span class="co">## 2     35    36 0.9767442 0.01901485             0.8551724</span></span>
-<span><span class="co">## 3     35    37 0.9689922 0.03745203             0.8114630</span></span>
-<span><span class="co">## 4     35    38 0.9457364 0.04025289             0.7855888</span></span>
-<span><span class="co">## 5     35    39 0.9457364 0.09754761             0.8063492</span></span>
-<span><span class="co">## 6     35    84 0.2790698 0.18757921             0.8823529</span></span>
-<span><span class="co">## 7     35    85 0.9147287 0.13256181             0.8411844</span></span>
-<span><span class="co">## 8     35    86 1.0000000 0.02663928             0.8537415</span></span>
-<span><span class="co">## 9     35    87 0.9922481 0.02332663             0.8766859</span></span>
-<span><span class="co">## 10    35    88 0.9844961 0.02198536             0.8650372</span></span>
-<span><span class="co">## 11    35    89 0.6821705 0.15954416             0.7124183</span></span>
-<span><span class="co">##    (B + C) / (2*A + B + C)   a  b   c   A   B     C</span></span>
-<span><span class="co">## 2                0.9809852 126  3 741 420   3 43333</span></span>
-<span><span class="co">## 3                0.9625480 125  4 534 366  57 18756</span></span>
-<span><span class="co">## 4                0.9597471 122  7 440 347  76 16471</span></span>
-<span><span class="co">## 5                0.9024524 122  7 501 356  67  6520</span></span>
-<span><span class="co">## 6                0.8124208  36 93 177  74 349   292</span></span>
-<span><span class="co">## 7                0.8674382 118 11 614 378  45  4902</span></span>
-<span><span class="co">## 8                0.9733607 129  0 753 415   8 30319</span></span>
-<span><span class="co">## 9                0.9766734 128  1 909 406  17 33981</span></span>
-<span><span class="co">## 10               0.9780146 127  2 812 395  28 35115</span></span>
-<span><span class="co">## 11               0.8404558  88 41 177 196 227  1838</span></span></code></pre>
+<span><span class="co">##    Site1 Site2   Simpson       Bray   a  b   c   A   B     C</span></span>
+<span><span class="co">## 2     35    36 0.9767442 0.01901485 126  3 741 420   3 43333</span></span>
+<span><span class="co">## 3     35    37 0.9689922 0.03745203 125  4 534 366  57 18756</span></span>
+<span><span class="co">## 4     35    38 0.9457364 0.04025289 122  7 440 347  76 16471</span></span>
+<span><span class="co">## 5     35    39 0.9457364 0.09754761 122  7 501 356  67  6520</span></span>
+<span><span class="co">## 6     35    84 0.2790698 0.18757921  36 93 177  74 349   292</span></span>
+<span><span class="co">## 7     35    85 0.9147287 0.13256181 118 11 614 378  45  4902</span></span>
+<span><span class="co">## 8     35    86 1.0000000 0.02663928 129  0 753 415   8 30319</span></span>
+<span><span class="co">## 9     35    87 0.9922481 0.02332663 128  1 909 406  17 33981</span></span>
+<span><span class="co">## 10    35    88 0.9844961 0.02198536 127  2 812 395  28 35115</span></span>
+<span><span class="co">## 11    35    89 0.6821705 0.15954416  88 41 177 196 227  1838</span></span>
+<span><span class="co">##    (b + c) / (a + b + c) (B + C) / (2*A + B + C)</span></span>
+<span><span class="co">## 2              0.8551724               0.9809852</span></span>
+<span><span class="co">## 3              0.8114630               0.9625480</span></span>
+<span><span class="co">## 4              0.7855888               0.9597471</span></span>
+<span><span class="co">## 5              0.8063492               0.9024524</span></span>
+<span><span class="co">## 6              0.8823529               0.8124208</span></span>
+<span><span class="co">## 7              0.8411844               0.8674382</span></span>
+<span><span class="co">## 8              0.8537415               0.9733607</span></span>
+<span><span class="co">## 9              0.8766859               0.9766734</span></span>
+<span><span class="co">## 10             0.8650372               0.9780146</span></span>
+<span><span class="co">## 11             0.7124183               0.8404558</span></span></code></pre>
 <p>The <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity.html">dissimilarity</a>
 function is very similar, with the sole exception that it computes the
 dissimilarity version of the available metrics. The functions <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a>
@@ -214,17 +214,17 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <span><span class="co">##  - Number of similarity metrics:  2 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##    Site1 Site2   Simpson (b + c) / (a + b + c)   a  b   c</span></span>
-<span><span class="co">## 2     35    36 0.9767442             0.8551724 126  3 741</span></span>
-<span><span class="co">## 3     35    37 0.9689922             0.8114630 125  4 534</span></span>
-<span><span class="co">## 4     35    38 0.9457364             0.7855888 122  7 440</span></span>
-<span><span class="co">## 5     35    39 0.9457364             0.8063492 122  7 501</span></span>
-<span><span class="co">## 6     35    84 0.2790698             0.8823529  36 93 177</span></span>
-<span><span class="co">## 7     35    85 0.9147287             0.8411844 118 11 614</span></span>
-<span><span class="co">## 8     35    86 1.0000000             0.8537415 129  0 753</span></span>
-<span><span class="co">## 9     35    87 0.9922481             0.8766859 128  1 909</span></span>
-<span><span class="co">## 10    35    88 0.9844961             0.8650372 127  2 812</span></span>
-<span><span class="co">## 11    35    89 0.6821705             0.7124183  88 41 177</span></span></code></pre>
+<span><span class="co">##    Site1 Site2   Simpson   a  b   c (b + c) / (a + b + c)</span></span>
+<span><span class="co">## 2     35    36 0.9767442 126  3 741             0.8551724</span></span>
+<span><span class="co">## 3     35    37 0.9689922 125  4 534             0.8114630</span></span>
+<span><span class="co">## 4     35    38 0.9457364 122  7 440             0.7855888</span></span>
+<span><span class="co">## 5     35    39 0.9457364 122  7 501             0.8063492</span></span>
+<span><span class="co">## 6     35    84 0.2790698  36 93 177             0.8823529</span></span>
+<span><span class="co">## 7     35    85 0.9147287 118 11 614             0.8411844</span></span>
+<span><span class="co">## 8     35    86 1.0000000 129  0 753             0.8537415</span></span>
+<span><span class="co">## 9     35    87 0.9922481 128  1 909             0.8766859</span></span>
+<span><span class="co">## 10    35    88 0.9844961 127  2 812             0.8650372</span></span>
+<span><span class="co">## 11    35    89 0.6821705  88 41 177             0.7124183</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abc"</span>,<span class="st">"Simpson"</span><span class="op">)</span>, formula <span class="op">=</span> <span class="st">"(b + c) / (a + b + c)"</span><span class="op">)</span></span>
 <span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
@@ -235,17 +235,17 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##    Site1 Site2     Simpson (b + c) / (a + b + c)   a  b   c</span></span>
-<span><span class="co">## 2     35    36 0.023255814             0.8551724 126  3 741</span></span>
-<span><span class="co">## 3     35    37 0.031007752             0.8114630 125  4 534</span></span>
-<span><span class="co">## 4     35    38 0.054263566             0.7855888 122  7 440</span></span>
-<span><span class="co">## 5     35    39 0.054263566             0.8063492 122  7 501</span></span>
-<span><span class="co">## 6     35    84 0.720930233             0.8823529  36 93 177</span></span>
-<span><span class="co">## 7     35    85 0.085271318             0.8411844 118 11 614</span></span>
-<span><span class="co">## 8     35    86 0.000000000             0.8537415 129  0 753</span></span>
-<span><span class="co">## 9     35    87 0.007751938             0.8766859 128  1 909</span></span>
-<span><span class="co">## 10    35    88 0.015503876             0.8650372 127  2 812</span></span>
-<span><span class="co">## 11    35    89 0.317829457             0.7124183  88 41 177</span></span></code></pre>
+<span><span class="co">##    Site1 Site2     Simpson   a  b   c (b + c) / (a + b + c)</span></span>
+<span><span class="co">## 2     35    36 0.023255814 126  3 741             0.8551724</span></span>
+<span><span class="co">## 3     35    37 0.031007752 125  4 534             0.8114630</span></span>
+<span><span class="co">## 4     35    38 0.054263566 122  7 440             0.7855888</span></span>
+<span><span class="co">## 5     35    39 0.054263566 122  7 501             0.8063492</span></span>
+<span><span class="co">## 6     35    84 0.720930233  36 93 177             0.8823529</span></span>
+<span><span class="co">## 7     35    85 0.085271318 118 11 614             0.8411844</span></span>
+<span><span class="co">## 8     35    86 0.000000000 129  0 753             0.8537415</span></span>
+<span><span class="co">## 9     35    87 0.007751938 128  1 909             0.8766859</span></span>
+<span><span class="co">## 10    35    88 0.015503876 127  2 812             0.8650372</span></span>
+<span><span class="co">## 11    35    89 0.317829457  88 41 177             0.7124183</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity_to_dissimilarity.html">similarity_to_dissimilarity</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
@@ -256,17 +256,17 @@ can be used to switch between similarity and dissimilarity metrics.</p>
 <span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##    Site1 Site2     Simpson (b + c) / (a + b + c)   a  b   c</span></span>
-<span><span class="co">## 2     35    36 0.023255814             0.1448276 126  3 741</span></span>
-<span><span class="co">## 3     35    37 0.031007752             0.1885370 125  4 534</span></span>
-<span><span class="co">## 4     35    38 0.054263566             0.2144112 122  7 440</span></span>
-<span><span class="co">## 5     35    39 0.054263566             0.1936508 122  7 501</span></span>
-<span><span class="co">## 6     35    84 0.720930233             0.1176471  36 93 177</span></span>
-<span><span class="co">## 7     35    85 0.085271318             0.1588156 118 11 614</span></span>
-<span><span class="co">## 8     35    86 0.000000000             0.1462585 129  0 753</span></span>
-<span><span class="co">## 9     35    87 0.007751938             0.1233141 128  1 909</span></span>
-<span><span class="co">## 10    35    88 0.015503876             0.1349628 127  2 812</span></span>
-<span><span class="co">## 11    35    89 0.317829457             0.2875817  88 41 177</span></span></code></pre>
+<span><span class="co">##    Site1 Site2     Simpson   a  b   c (b + c) / (a + b + c)</span></span>
+<span><span class="co">## 2     35    36 0.023255814 126  3 741             0.1448276</span></span>
+<span><span class="co">## 3     35    37 0.031007752 125  4 534             0.1885370</span></span>
+<span><span class="co">## 4     35    38 0.054263566 122  7 440             0.2144112</span></span>
+<span><span class="co">## 5     35    39 0.054263566 122  7 501             0.1936508</span></span>
+<span><span class="co">## 6     35    84 0.720930233  36 93 177             0.1176471</span></span>
+<span><span class="co">## 7     35    85 0.085271318 118 11 614             0.1588156</span></span>
+<span><span class="co">## 8     35    86 0.000000000 129  0 753             0.1462585</span></span>
+<span><span class="co">## 9     35    87 0.007751938 128  1 909             0.1233141</span></span>
+<span><span class="co">## 10    35    88 0.015503876 127  2 812             0.1349628</span></span>
+<span><span class="co">## 11    35    89 0.317829457  88 41 177             0.2875817</span></span></code></pre>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>

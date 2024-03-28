@@ -146,10 +146,11 @@ can also be computed with the following equation:</p>
 sites. B and C are the total number of specimens counted at both sites minus
 A.</p>
 <p><code>formula</code> can be used to compute customized metrics with the terms
-<code>a</code>, <code>b</code>, <code>c</code>, <code>A</code>, <code>B</code>, and <code>C</code>.
-For example
-<code>formula = c("(b + c) / (a + b + c)", "(B + C) / (2*A + B + C)")</code> will
-compute the Jaccard and Bray-Curtis dissimilarity metrics, respectively.</p>
+<code>a</code>, <code>b</code>, <code>c</code>, <code>A</code>, <code>B</code>, and <code>C</code>. For example
+<code>formula = c("pmin(b,c) / (a + pmin(b,c))", "(B + C) / (2*A + B + C)")</code>
+will compute the Simpson and Bray-Curtis dissimilarity metrics, respectively.
+<strong>Note that pmin is used in the Simpson formula because a, b, c, A, B and C
+are vectors.</strong></p>
 <p>Euclidean computes the Euclidean distance between each pair of sites.</p>
     </div>
     <div class="section level2">
