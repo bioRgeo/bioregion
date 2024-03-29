@@ -106,18 +106,38 @@ test_that("indalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    net_to_mat(net, weight = c("zz",1)),
+    "weight must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
     net_to_mat(net, squared = "zz"),
-    "squared must be a boolean", 
+    "squared must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    net_to_mat(net, squared = c("zz",1)),
+    "squared must be of length 1.", 
     fixed = TRUE)
   
   expect_error(
     net_to_mat(net, symmetrical = "zz"),
-    "symmetrical must be a boolean", 
+    "symmetrical must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    net_to_mat(net, symmetrical = c("zz",1)),
+    "symmetrical must be of length 1.", 
     fixed = TRUE)
   
   expect_error(
     net_to_mat(net, missing_value = "zz"),
     "missing_value must be numeric.", 
+    fixed = TRUE)
+  
+  expect_error(
+    net_to_mat(net, missing_value = c("zz",1)),
+    "missing_value must be of length 1.", 
     fixed = TRUE)
   
   expect_error(
@@ -153,12 +173,12 @@ test_that("indalid inputs", {
   
   expect_error(
     net_to_mat(net5, weight = TRUE),
-    "NA(s) detected in net.", 
+    "NA(s) detected in the weight column.", 
     fixed = TRUE)
   
   expect_error(
     net_to_mat(net2, weight = TRUE),
-    "The third column of net must be numeric", 
+    "The weight column must be numeric.", 
     fixed = TRUE)
 
 })

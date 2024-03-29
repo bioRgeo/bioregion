@@ -1,6 +1,4 @@
-# bioregion
-
-**<span style="color:blue"><font size="4">TO DO list</span></font>**
+**<span style="color:black"><font size="4">bioregion's TO DO list</span></font>**
 
 #### pairwise (dis)similarity
 

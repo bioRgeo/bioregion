@@ -63,6 +63,9 @@ net_to_mat <- function(net,
 
   controls(args = NULL, data = net, type = "input_net")
   controls(args = weight, data = net, type = "input_net_weight")
+  if(weight){
+    controls(args = weight, data = net, type = "input_net_index_value")
+  }
 
   # Rename columns
   colnames(net)[1:2] <- c("Object1", "Object2")

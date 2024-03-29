@@ -10,6 +10,11 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    install_binaries(binpath = c(1,1)),
+    "binpath must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
     install_binaries(infomap_version = 1),
     "infomap_version must be a character.", 
     fixed = TRUE)

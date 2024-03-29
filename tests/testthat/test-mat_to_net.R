@@ -80,22 +80,42 @@ test_that("invalid inputs", {
   
   expect_error(
     mat_to_net(mat, weight = "zz"),
-    "weight must be a boolean", 
+    "weight must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, weight = c("zz",1)),
+    "weight must be of length 1.", 
     fixed = TRUE)
   
   expect_error(
     mat_to_net(mat, remove_zeroes = "zz"),
-    "remove_zeroes must be a boolean", 
+    "remove_zeroes must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, remove_zeroes = c("zz",1)),
+    "remove_zeroes must be of length 1.", 
     fixed = TRUE)
   
   expect_error(
     mat_to_net(mat, include_diag = "zz"),
-    "include_diag must be a boolean", 
+    "include_diag must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, include_diag = c("zz",1)),
+    "include_diag must be of length 1.", 
     fixed = TRUE)
   
   expect_error(
     mat_to_net(mat, include_lower = "zz"),
-    "include_lower must be a boolean", 
+    "include_lower must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    mat_to_net(mat, include_lower = c("zz",1)),
+    "include_lower must be of length 1.", 
     fixed = TRUE)
   
   expect_message(

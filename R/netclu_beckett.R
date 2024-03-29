@@ -95,29 +95,30 @@ netclu_beckett <- function(net,
                            forceLPA = FALSE,
                            algorithm_in_output = TRUE){
   
-  # Control input net
+  # Controls inputs
+  controls(args = forceLPA, data = NULL, type = "boolean")
+  controls(args = algorithm_in_output, data = NULL, type = "boolean")
+  
   controls(args = NULL, data = net, type = "input_net")
   
-  # Control input weight & index
+  controls(args = NULL, data = net, type = "input_net_bip")
+  if(site_col == species_col){
+    stop("site_col and species_col should not be the same.", call. = FALSE)
+  }
+  controls(args = site_col, data = net, type = "input_net_bip_col")
+  controls(args = species_col, data = net, type = "input_net_bip_col")
+  controls(args = return_node_type, data = NULL, type = "character")
+  if(!(return_node_type %in% c("both", "sites", "species"))) {
+    stop("Please choose return_node_type among the followings values:
+both, sites or species", call. = FALSE)}
+  
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
     controls(args = index, data = net, type = "input_net_index")
     net[, 3] <- net[, index]
     net <- net[, 1:3]
-    controls(args = NULL, data = net, type = "input_net_index_value")
+    controls(args = NULL, data = net, type = "input_net_index_positive_value")
   }
-  
-  # Control input bipartite
-  controls(args = NULL, data = net, type = "input_net_bip")
-  controls(args = site_col, data = net, type = "input_net_bip_col")
-  controls(args = species_col, data = net, type = "input_net_bip_col")
-  if(!(return_node_type %in% c("both", "sites", "species"))) {
-    stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)}
-  
-  # Controls parameters BECKETT
-  controls(args = forceLPA, data = NULL, type = "boolean")
-  controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
   # Prepare input
   idprim <- as.character(net[, site_col])

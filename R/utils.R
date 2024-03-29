@@ -122,7 +122,7 @@ similarity_to_dissimilarity()."),
         " contain duplicated pairs of nodes!"
       ), call. = FALSE)
     }
-    nbna <- sum(is.na(data))
+    nbna <- sum(is.na(data[,1:2]))
     if (nbna > 0) {
       stop(paste0("NA(s) detected in ", deparse(substitute(data)),"."), call. = FALSE)
     }
@@ -155,6 +155,11 @@ similarity_to_dissimilarity()."),
   
   # Input network weight ######################################################
   if (type == "input_net_weight") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
     if (!is.logical(args)) {
       stop(paste0(deparse(substitute(args)), " must be a boolean."),
            call. = FALSE)
@@ -165,21 +170,19 @@ similarity_to_dissimilarity()."),
         " must be a data.frame with at least three columns if weight equal 
         TRUE."), call. = FALSE)
     }
-    nbna <- sum(is.na(data))
-    if (nbna > 0) {
-      stop(paste0("NA(s) detected in ", deparse(substitute(data)),"."), call. = FALSE)
-    }
-    if (!is.numeric(data[, 3])) {
-      stop(paste0("The third column of ", deparse(substitute(data)), 
-                  " must be numeric"), call. = FALSE)
-    }
+
   }
   
   # Input network index #######################################################
   if (type == "input_net_index") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
     if (is.character(args)) {
       if (!(args %in% colnames(data)[-(1:2)])) {
-        stop(paste0(deparse(substitute(args)),
+        stop(paste0("If ", deparse(substitute(args)),
                     " is a character, it should be a column name (and not the
                     first or second column)."), call. = FALSE)
       }
@@ -213,15 +216,29 @@ similarity_to_dissimilarity()."),
     }
   }
   
-  # Input network index value #################################################
+  # Input network index value ##################################################
   if (type == "input_net_index_value") {
+    nbna <- sum(is.na(data[,3]))
+    if (nbna > 0) {
+      stop("NA(s) detected in the weight column.", call. = FALSE)
+    }
     if (!is.numeric(data[, 3])) {
-      stop("The (dis)similarity metric must be numeric.", call. = FALSE)
+      stop("The weight column must be numeric.", call. = FALSE)
+    } 
+  }
+  
+  # Input network index positive value #########################################
+  if (type == "input_net_index_positive_value") {
+    nbna <- sum(is.na(data[,3]))
+    if (nbna > 0) {
+      stop("NA(s) detected in the weight column.", call. = FALSE)
+    }
+    if (!is.numeric(data[, 3])) {
+      stop("The weight column must be numeric.", call. = FALSE)
     } else {
       minet <- min(data[, 3])
       if (minet < 0) {
-        stop(
-          "The (dis)similarity metric should contain only positive reals:
+        stop("The weight column should contain only positive reals:
           negative value(s) detected!", call. = FALSE)
       }
     }

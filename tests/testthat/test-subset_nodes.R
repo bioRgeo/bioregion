@@ -35,6 +35,11 @@ test_that("indalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    subset_node(clu1, node_type = c(1,1)),
+    "node_type must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
     subset_node(clu1, node_type = "1"),
     "Please choose node_type among the followings values:
 sites and species", 
