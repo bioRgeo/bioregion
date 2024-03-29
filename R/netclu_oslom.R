@@ -156,6 +156,8 @@ netclu_oslom <- function(net,
   
   # Control and set binpath
   controls(args = binpath, data = NULL, type = "character")
+  controls(args = path_temp, data = NULL, type = "character")
+  controls(args = delete_temp, data = NULL, type = "boolean")
   if (binpath == "tempdir") {
     binpath <- tempdir()
   } else if (binpath == "pkgfolder") {
@@ -172,6 +174,7 @@ netclu_oslom <- function(net,
 
   # Check if OSLOM has successfully been installed
   check <- FALSE
+  controls(args = directed, data = NULL, type = "boolean")
   if (!directed) {
     if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message(
@@ -201,6 +204,28 @@ netclu_oslom <- function(net,
   }
 
   if (check) {
+    
+    # Control parameters OSLOM
+    controls(args = reassign, data = NULL, type = "character")
+    if (!(reassign %in% c("no", "random", "simil"))) {
+      stop("Please choose reassign among the following values: 
+no, random or simil")
+    }
+    controls(args = r, data = NULL, type = "strict_positive_integer")
+    controls(args = hr, data = NULL, type = "positive_integer")
+    controls(args = seed, data = NULL, type = "positive_integer")
+    if (seed == 0) {
+      seed <- round(as.numeric(as.POSIXct(Sys.time())))
+    }
+    controls(args = t, data = NULL, type = "strict_positive_numeric")
+    if (t >= 1) {
+      stop("t must be in the interval (0,1)!", call. = FALSE)
+    }
+    controls(args = cp, data = NULL, type = "strict_positive_numeric")
+    if (cp >= 1) {
+      stop("cp must be in the interval (0,1)!", call. = FALSE)
+    }
+    
     # Control input net (+ check similarity if not bipartite)
     controls(args = bipartite, data = NULL, type = "boolean")
     isbip <- bipartite
@@ -211,26 +236,35 @@ netclu_oslom <- function(net,
 
     # Control input weight & index
     controls(args = weight, data = net, type = "input_net_weight")
+    if (reassign == "simil" & !weight) {
+      stop("A reassignement based on similarity should not be use when weight
+           equal FALSE")
+    }
     if (weight) {
       controls(args = index, data = net, type = "input_net_index")
       net[, 3] <- net[, index]
       net <- net[, 1:3]
-      controls(args = NULL, data = net, type = "input_net_index_value")
+      controls(args = NULL, data = net, type = "input_net_index_positive_value")
     }
 
     # Control input bipartite
     if (isbip) {
       controls(args = NULL, data = net, type = "input_net_bip")
+      if(site_col == species_col){
+        stop("site_col and species_col should not be the same.", call. = FALSE)
+      }
       controls(args = site_col, data = net, type = "input_net_bip_col")
       controls(args = species_col, data = net, type = "input_net_bip_col")
+      controls(args = return_node_type, data = NULL, type = "character")
       if (!(return_node_type %in% c("both", "sites", "species"))) {
         stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)
+both, sites or species", call. = FALSE)
       }
     }
 
     # Control input directed
     if (!isbip) {
+      controls(args = directed, data = net, type = "input_net_isloop")
       controls(args = directed, data = net, type = "input_net_directed")
     } else {
       if (directed) {
@@ -239,34 +273,8 @@ both, sites and species", call. = FALSE)
         )
       }
     }
-
-    # Control parameters OSLOM
-    if (!(reassign %in% c("no", "random", "simil"))) {
-      stop("Please choose reassign among the following values: no, random,
-           simil")
-    }
-    if (reassign == "simil" & !weight) {
-      stop("A reassignement based on similarity should not be use when weight
-           equal FALSE")
-    }
-    controls(args = r, data = NULL, type = "strict_positive_integer")
-    controls(args = hr, data = NULL, type = "positive_integer")
-    controls(args = seed, data = NULL, type = "positive_integer")
-    if (seed == 0) {
-      seed <- round(as.numeric(as.POSIXct(Sys.time())))
-    }
-    controls(args = t, data = NULL, type = "strict_positive_numeric")
-    if (t > 1) {
-      stop("t must be in the interval (0,1)!", call. = FALSE)
-    }
-    controls(args = cp, data = NULL, type = "strict_positive_numeric")
-    if (cp > 1) {
-      stop("cp must be in the interval (0,1)!", call. = FALSE)
-    }
-
-    # Control temp folder + create temp folder
-    path_temp <- controls(args = path_temp, data = NULL, type = "character")
-    controls(args = delete_temp, data = NULL, type = "boolean")
+    
+    # Control temp folder
     old_path_temp <- path_temp
     if (path_temp == "oslom_temp") {
       fold_temp <- paste0(path_temp,
@@ -291,7 +299,6 @@ both, sites and species", call. = FALSE)
       stop(paste0("Impossible to create directory ", path_temp), call. = FALSE)
     }
 
-
     # Prepare input for OSLOM
     if (isbip) {
       idprim <- as.character(net[, site_col])
@@ -309,10 +316,6 @@ both, sites and species", call. = FALSE)
     } else {
       idnode1 <- as.character(net[, 1])
       idnode2 <- as.character(net[, 2])
-      if (isbip) {
-        message("The network seems to be bipartite! The bipartite argument
-                should probably be set to TRUE.")
-      }
       idnode <- c(idnode1, idnode2)
       idnode <- idnode[!duplicated(idnode)]
       nbsites <- length(idnode)

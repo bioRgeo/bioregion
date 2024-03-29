@@ -128,12 +128,18 @@ similarity_to_dissimilarity()."),
     }
   }
   
-  # Input network directed ####################################################
+  # Input network loop or directed #############################################
   if (type == "input_net_directed") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
     if (!is.logical(args)) {
       stop(paste0(deparse(substitute(args)), " must be a boolean."),
            call. = FALSE)
     }
+    #data = data[data[,1] != data[,2],]
     pairs1 <- paste0(data[, 1], "_", data[, 2])
     pairs2 <- paste0(data[, 2], "_", data[, 1])
     if (!args) {
@@ -145,11 +151,17 @@ similarity_to_dissimilarity()."),
     }
   }
   if (type == "input_net_isdirected") {
+    #data = data[data[,1] != data[,2],]
     pairs1 <- paste0(data[, 1], "_", data[, 2])
     pairs2 <- paste0(data[, 2], "_", data[, 1])
     if (length(intersect(pairs1, pairs2)) > 0) {
-      message(paste0("It seems that the network is directed!
-                        This function is designed for undirected networks!"))
+       stop(paste0("The network is directed, this function is designed for undirected networks!"),
+            call. = FALSE)
+    }
+  }
+  if (type == "input_net_isloop") {
+    if (sum(data[,1] == data[,2]) > 0) {
+      message(paste0("It seems that the network contains self-loop(s)!"))
     }
   }
   
@@ -281,24 +293,24 @@ similarity_to_dissimilarity()."),
   }
   
   # Input data.frame ##########################################################
-  if (type == "input_data_frame") {
-    if (!is.data.frame(data)) {
-      stop(paste0(deparse(substitute(data)), " must be a data.frame"),
-           call. = FALSE)
-    }
-    rowmat <- rownames(data)
-    colmat <- colnames(data)
-    if (sum(duplicated(rowmat)) > 0) {
-      message("Duplicated rownames detected!")
-    }
-    if (sum(duplicated(colmat)) > 0) {
-      message("Duplicated colnames detected!")
-    }
-    nbna <- sum(is.na(data))
-    if (nbna > 0) {
-      stop("NA(s) detected in the matrix!", call. = FALSE)
-    }
-  }
+  # if (type == "input_data_frame") {
+  #   if (!is.data.frame(data)) {
+  #     stop(paste0(deparse(substitute(data)), " must be a data.frame"),
+  #          call. = FALSE)
+  #   }
+  #   rowmat <- rownames(data)
+  #   colmat <- colnames(data)
+  #   if (sum(duplicated(rowmat)) > 0) {
+  #     message("Duplicated rownames detected!")
+  #   }
+  #   if (sum(duplicated(colmat)) > 0) {
+  #     message("Duplicated colnames detected!")
+  #   }
+  #   nbna <- sum(is.na(data))
+  #   if (nbna > 0) {
+  #     stop("NA(s) detected in the matrix!", call. = FALSE)
+  #   }
+  # }
   
   # Input matrix ##############################################################
   if (type == "input_matrix") {
@@ -332,10 +344,6 @@ similarity_to_dissimilarity()."),
            call. = FALSE
       )
     }
-    if (is.factor(args)) {
-      args <- as.character(args)
-    }
-    return(args)
   }
   
   # Character vector ###########################################################
@@ -345,10 +353,6 @@ similarity_to_dissimilarity()."),
            call. = FALSE
       )
     }
-    if (is.factor(args)) {
-      args <- as.character(args)
-    }
-    return(args)
   }
   
   # Boolean ####################################################################

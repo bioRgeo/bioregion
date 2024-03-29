@@ -182,17 +182,21 @@ netclu_louvain <- function(net,
     controls(args = index, data = net, type = "input_net_index")
     net[, 3] <- net[, index]
     net <- net[, 1:3]
-    controls(args = NULL, data = net, type = "input_net_index_value")
+    controls(args = NULL, data = net, type = "input_net_index_positive_value")
   }
 
   # Control input bipartite
   if (isbip) {
     controls(args = NULL, data = net, type = "input_net_bip")
+    if(site_col == species_col){
+      stop("site_col and species_col should not be the same.", call. = FALSE)
+    }
     controls(args = site_col, data = net, type = "input_net_bip_col")
     controls(args = species_col, data = net, type = "input_net_bip_col")
+    controls(args = return_node_type, data = NULL, type = "character")
     if (!(return_node_type %in% c("both", "sites", "species"))) {
       stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)
+both, sites or species", call. = FALSE)
     }
   }
 
@@ -200,14 +204,15 @@ both, sites and species", call. = FALSE)
   controls(args = NULL, data = net, type = "input_net_isdirected")
 
   # Control parameters LOUVAIN
+  controls(args = lang, data = NULL, type = "character")
   if (!(lang %in% c("Cpp", "igraph"))) {
     stop("Please choose lang among the following values:
-Cpp, igraph", call. = FALSE)
+Cpp or igraph", call. = FALSE)
   }
   controls(args = resolution, data = NULL, type = "strict_positive_numeric")
   controls(args = q, data = NULL, type = "positive_integer")
   controls(args = c, data = NULL, type = "strict_positive_numeric")
-  if (c > 1) {
+  if (c >= 1) {
     stop("c must be in the interval (0,1)!", call. = FALSE)
   }
   controls(args = k, data = NULL, type = "strict_positive_numeric")
@@ -230,10 +235,6 @@ Cpp, igraph", call. = FALSE)
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
-    if (isbip) {
-      message("The network seems to be bipartite! 
-The bipartite argument should probably be set to TRUE.")
-    }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
     nbsites <- length(idnode)
@@ -305,6 +306,8 @@ The bipartite argument should probably be set to TRUE.")
     
     # Control and set binpath
     controls(args = binpath, data = NULL, type = "character")
+    controls(args = path_temp, data = NULL, type = "character")
+    controls(args = delete_temp, data = NULL, type = "boolean")
     if (binpath == "tempdir") {
       binpath <- tempdir()
     } else if (binpath == "pkgfolder") {
@@ -330,8 +333,6 @@ The bipartite argument should probably be set to TRUE.")
       )
     } else {
       # Control temp folder + create temp folder
-      path_temp <- controls(args = path_temp, data = NULL, type = "character")
-      controls(args = delete_temp, data = NULL, type = "boolean")
       if (path_temp == "louvain_temp") {
         path_temp <- paste0(
           binpath,
