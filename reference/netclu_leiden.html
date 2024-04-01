@@ -81,10 +81,9 @@ on the Leiden algorithm of Traag, van Eck &amp; Waltman.</p>
 <span>  <span class="va">net</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>  objective_function <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CPM"</span>, <span class="st">"modularity"</span><span class="op">)</span>,</span>
+<span>  objective_function <span class="op">=</span> <span class="st">"CPM"</span>,</span>
 <span>  resolution_parameter <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  beta <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  initial_membership <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_iterations <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  vertex_weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -115,25 +114,19 @@ the third column name of <code>net</code> is used.</p></dd>
 
 
 <dt>objective_function</dt>
-<dd><p>Whether to use the Constant Potts Model (CPM) or
-modularity. Must be either "CPM" or "modularity".</p></dd>
+<dd><p>a string indicating the objective function to use,
+the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).</p></dd>
 
 
 <dt>resolution_parameter</dt>
-<dd><p>The resolution parameter to use. Higher
+<dd><p>the resolution parameter to use. Higher
 resolutions lead to more smaller communities, while lower resolutions lead
 to fewer larger communities.</p></dd>
 
 
 <dt>beta</dt>
-<dd><p>Parameter affecting the randomness in the Leiden algorithm. This
+<dd><p>parameter affecting the randomness in the Leiden algorithm. This
 affects only the refinement step of the algorithm.</p></dd>
-
-
-<dt>initial_membership</dt>
-<dd><p>If provided, the Leiden algorithm will try to
-improve this provided membership. If no argument is provided, the aglorithm
-simply starts from the singleton partition.</p></dd>
 
 
 <dt>n_iterations</dt>
