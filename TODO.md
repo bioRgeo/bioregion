@@ -2,7 +2,7 @@
 
 #### pairwise (dis)similarity
 
-* ajouter fonction from_abcABC (to compute metrics from abc and/or ABC)
+* ajouter fonction from_abcABC (to compute metrics from abc and/or ABC) 
 
 #### optics
 
