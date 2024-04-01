@@ -296,7 +296,7 @@ set.seed(1)
 ex_leiden <- netclu_leiden(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
-                           objective_function = c("CPM", "modularity"),
+                           objective_function = "CPM",
                            resolution_parameter = 1,
                            beta = 0.01,
                            n_iterations = 2,
