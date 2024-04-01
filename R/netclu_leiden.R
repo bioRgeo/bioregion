@@ -14,19 +14,15 @@
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #'
-#' @param objective_function Whether to use the Constant Potts Model (CPM) or
-#' modularity. Must be either "CPM" or "modularity".
+#' @param objective_function a string indicating the objective function to use,
+#' the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).
 #'
-#' @param resolution_parameter The resolution parameter to use. Higher
+#' @param resolution_parameter the resolution parameter to use. Higher
 #' resolutions lead to more smaller communities, while lower resolutions lead
 #' to fewer larger communities.
 #'
-#' @param beta Parameter affecting the randomness in the Leiden algorithm. This
+#' @param beta parameter affecting the randomness in the Leiden algorithm. This
 #' affects only the refinement step of the algorithm.
-#'
-#' @param initial_membership If provided, the Leiden algorithm will try to
-#' improve this provided membership. If no argument is provided, the aglorithm
-#' simply starts from the singleton partition.
 #'
 #' @param n_iterations the number of iterations to iterate the Leiden
 #' algorithm. Each iteration may improve the partition further.
@@ -111,10 +107,9 @@
 netclu_leiden <- function(net,
                           weight = TRUE,
                           index = names(net)[3],
-                          objective_function = c("CPM", "modularity"),
+                          objective_function = "CPM",
                           resolution_parameter = 1,
                           beta = 0.01,
-                          initial_membership = NULL,
                           n_iterations = 2,
                           vertex_weights = NULL,
                           bipartite = FALSE,
@@ -137,17 +132,21 @@ netclu_leiden <- function(net,
     controls(args = index, data = net, type = "input_net_index")
     net[, 3] <- net[, index]
     net <- net[, 1:3]
-    controls(args = NULL, data = net, type = "input_net_index_value")
+    controls(args = NULL, data = net, type = "input_net_index_positive_value")
   }
   
   # Control input bipartite
   if (isbip) {
     controls(args = NULL, data = net, type = "input_net_bip")
+    if(site_col == species_col){
+      stop("site_col and species_col should not be the same.", call. = FALSE)
+    }
     controls(args = site_col, data = net, type = "input_net_bip_col")
     controls(args = species_col, data = net, type = "input_net_bip_col")
+    controls(args = return_node_type, data = NULL, type = "character")
     if (!(return_node_type %in% c("both", "sites", "species"))) {
       stop("Please choose return_node_type among the followings values:
-both, sites and species", call. = FALSE)
+both, sites or species", call. = FALSE)
     }
   }
   
@@ -157,19 +156,18 @@ both, sites and species", call. = FALSE)
   # Control algorithm_in_output
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
-  # Controls for other arguments
-  if(!is.character(objective_function)){
-    stop("objective_function must be either 'CPM' or 'modularity'.")
+  # Control parameters LEIDEN
+  controls(args = objective_function, data = NULL, type = "character")
+  if (!(objective_function %in% c("CPM", "modularity"))) {
+    stop("Please choose objective_function among the following values: 
+CPM or modularity", call. = FALSE)
   }
-  if(!all(objective_function %in% c("CPM", "modularity"))){
-    stop("objective_function must be either 'CPM' or 'modularity'.")
-  }
-  
   controls(args = resolution_parameter, data = NULL, type = "positive_integer")
   controls(args = beta, data = NULL, type = "numeric")
-  # controls(args = initial_membership, data = NULL, type = "boolean")
-  controls(args = n_iterations, data = NULL, type = "positive_integer")
-  # controls(args = vertex_weights, data = NULL, type = "boolean")
+  controls(args = n_iterations, data = NULL, type = "strict_positive_integer")
+  if(!is.null(vertex_weights)){
+    controls(args = vertex_weights, data = NULL, type = "numeric_vector")
+  }
   
   # Prepare input
   if (isbip) {
@@ -188,10 +186,6 @@ both, sites and species", call. = FALSE)
   } else {
     idnode1 <- as.character(net[, 1])
     idnode2 <- as.character(net[, 2])
-    if (isbip) {
-      message("The network seems to be bipartite! 
-The bipartite argument should probably be set to TRUE.")
-    }
     idnode <- c(idnode1, idnode2)
     idnode <- idnode[!duplicated(idnode)]
     nbsites <- length(idnode)
@@ -241,7 +235,7 @@ The bipartite argument should probably be set to TRUE.")
     objective_function = objective_function,
     resolution_parameter = resolution_parameter,
     beta = beta,
-    initial_membership = initial_membership,
+    initial_membership = NULL,
     n_iterations = n_iterations,
     vertex_weights = vertex_weights)
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))

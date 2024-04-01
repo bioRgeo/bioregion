@@ -50,7 +50,23 @@ net6 <- data.frame(
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  clust <- netclu_oslom(simil)
+  clust <- netclu_oslom(simil,
+                        weight = TRUE,
+                        index = 3,
+                        reassign = "no",
+                        r = 10,
+                        hr = 50,
+                        seed = 0,
+                        t = 0.1,
+                        cp = 0.5,
+                        directed = FALSE,
+                        bipartite = FALSE,
+                        site_col = 1,
+                        species_col = 2,
+                        return_node_type = "both",
+                        binpath = "tempdir",
+                        path_temp = "oslom_temp",
+                        delete_temp = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_oslom")
   expect_equal(dim(clust$clusters)[1], 5)
@@ -189,23 +205,23 @@ no, random or simil",
     fixed = TRUE) 
   
   expect_error(
-    netclu_oslom(net, hr =  c("zz","zz")),
-    "hr must be of length 1.",
+    netclu_oslom(net, seed =  c("zz","zz")),
+    "seed must be of length 1.",
     fixed = TRUE)  
   
   expect_error(
-    netclu_oslom(net, hr = "zz"),
-    "hr must be numeric.",
+    netclu_oslom(net, seed = "zz"),
+    "seed must be numeric.",
     fixed = TRUE)  
   
   expect_error(
-    netclu_oslom(net, hr = 1.1),
-    "hr must be an integer.",
+    netclu_oslom(net, seed = 1.1),
+    "seed must be an integer.",
     fixed = TRUE)  
   
   expect_error(
-    netclu_oslom(net, hr = -1),
-    "hr must be higher than 0.",
+    netclu_oslom(net, seed = -1),
+    "seed must be higher than 0.",
     fixed = TRUE) 
   
   expect_error(

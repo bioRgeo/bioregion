@@ -1,6 +1,4 @@
 # Inputs -----------------------------------------------------------------------
-install_binaries()
-
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),
@@ -50,7 +48,14 @@ net6 <- data.frame(
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  clust <- netclu_greedy(simil)
+  clust <- netclu_greedy(simil,
+                         weight = TRUE,
+                         index = 3,
+                         bipartite = FALSE,
+                         site_col = 1,
+                         species_col = 2,
+                         return_node_type = "both",
+                         algorithm_in_output = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_greedy")
   expect_equal(dim(clust$clusters)[1], 5)

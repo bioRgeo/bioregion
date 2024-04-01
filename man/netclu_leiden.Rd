@@ -8,10 +8,9 @@ netclu_leiden(
   net,
   weight = TRUE,
   index = names(net)[3],
-  objective_function = c("CPM", "modularity"),
+  objective_function = "CPM",
   resolution_parameter = 1,
   beta = 0.01,
-  initial_membership = NULL,
   n_iterations = 2,
   vertex_weights = NULL,
   bipartite = FALSE,
@@ -33,19 +32,15 @@ if there are more than two columns.}
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{objective_function}{Whether to use the Constant Potts Model (CPM) or
-modularity. Must be either "CPM" or "modularity".}
+\item{objective_function}{a string indicating the objective function to use,
+the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).}
 
-\item{resolution_parameter}{The resolution parameter to use. Higher
+\item{resolution_parameter}{the resolution parameter to use. Higher
 resolutions lead to more smaller communities, while lower resolutions lead
 to fewer larger communities.}
 
-\item{beta}{Parameter affecting the randomness in the Leiden algorithm. This
+\item{beta}{parameter affecting the randomness in the Leiden algorithm. This
 affects only the refinement step of the algorithm.}
-
-\item{initial_membership}{If provided, the Leiden algorithm will try to
-improve this provided membership. If no argument is provided, the aglorithm
-simply starts from the singleton partition.}
 
 \item{n_iterations}{the number of iterations to iterate the Leiden
 algorithm. Each iteration may improve the partition further.}

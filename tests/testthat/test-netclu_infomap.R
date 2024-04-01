@@ -50,7 +50,25 @@ net6 <- data.frame(
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  clust <- netclu_infomap(simil)
+  clust <- netclu_infomap(simil,
+                          weight = TRUE,
+                          index = 3,
+                          nbmod = 0,
+                          markovtime = 1,
+                          seed = 0,
+                          numtrials = 1,
+                          twolevel = FALSE,
+                          show_hierarchy = FALSE,
+                          directed = FALSE,
+                          bipartite_version = FALSE,
+                          bipartite = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          version = "2.7.1",
+                          binpath = "tempdir",
+                          path_temp = "infomap_temp",
+                          delete_temp = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_infomap")
   expect_equal(dim(clust$clusters)[1], 5)

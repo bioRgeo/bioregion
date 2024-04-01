@@ -50,7 +50,22 @@ net6 <- data.frame(
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  clust <- netclu_louvain(simil)
+  clust <- netclu_louvain(simil,
+                          weight = TRUE,
+                          index = 3,
+                          lang = "Cpp",
+                          resolution = 1,
+                          q = 0,
+                          c = 0.5,
+                          k = 1,
+                          bipartite = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          binpath = "tempdir",
+                          path_temp = "louvain_temp",
+                          delete_temp = TRUE,
+                          algorithm_in_output = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_louvain")
   expect_equal(dim(clust$clusters)[1], 5)
