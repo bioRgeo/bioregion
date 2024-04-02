@@ -36,23 +36,49 @@ net6 <- data.frame(
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  clust <- netclu_beckett(net)
+  clust <- netclu_beckett(net,
+                          weight = TRUE,
+                          index = names(net)[3],
+                          forceLPA = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          algorithm_in_output = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_beckett")
+  expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$index, "Weight")
+  expect_equal(clust$args$forceLPA, FALSE)
+  expect_equal(clust$args$site_col, 1)
+  expect_equal(clust$args$species_col, 2)
+  expect_equal(clust$args$return_node_type, "both")
+  expect_equal(clust$args$algorithm_in_output, TRUE)
+  expect_equal(clust$inputs$bipartite, TRUE)
+  expect_equal(clust$inputs$weight, TRUE)
+  expect_equal(clust$inputs$pairwise, FALSE)
+  expect_equal(clust$inputs$pairwise_metric, NA)
+  expect_equal(clust$inputs$dissimilarity, FALSE)
+  expect_equal(clust$inputs$nb_sites, 3)
+  expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(dim(clust$clusters)[1], 7)
   expect_equal(dim(clust$clusters)[2], 2)
-  expect_equal(clust$args$return_node_type, "both")
   
+  clust2 <- netclu_beckett(net,
+                           weight = TRUE,
+                           index = names(net)[3],
+                           forceLPA = FALSE,
+                           site_col = 1,
+                           species_col = 2,
+                           return_node_type = "both",
+                           algorithm_in_output = TRUE)
+  expect_equal(sum(clust$clusters$K_2==clust2$clusters$K_2), 7)
+
   clust <- netclu_beckett(net, return_node_type = "species")
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_beckett")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "species")
   
   clust <- netclu_beckett(net, return_node_type = "sites")
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_beckett")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "sites")

@@ -89,10 +89,10 @@
 netclu_beckett <- function(net,
                            weight = TRUE,
                            index = names(net)[3],
+                           forceLPA = FALSE,
                            site_col = 1,
                            species_col = 2,
                            return_node_type = "both",
-                           forceLPA = FALSE,
                            algorithm_in_output = TRUE){
   
   # Controls inputs

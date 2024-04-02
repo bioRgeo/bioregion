@@ -1,14 +1,65 @@
 # Controls #####################################################################
 controls <- function(args = NULL, data = NULL, type = "input_net") {
   
-  # Input similarity ##########################################################
+  lstype <- c("input_nhandhclu",
+              "input_similarity",
+              "input_dissimilarity",
+              "input_conversion_similarity",
+              "input_conversion_dissimilarity",
+              "input_net",
+              "input_net_directed",
+              "input_net_isdirected",
+              "input_net_isloop",
+              "input_net_weight",
+              "input_net_index",
+              "input_net_index_value",
+              "input_net_index_positive_value",
+              "input_net_bip",
+              "input_net_bip_col", 
+              "input_matrix",
+              "input_data_frame_nhandhclu",
+              "input_data_frame",
+              "character",
+              "character_vector",
+              "boolean",
+              "boolean_vector",
+              "numeric",
+              "numeric_vector",
+              "positive_numeric",
+              "positive_numeric_vector",
+              "strict_positive_numeric",
+              "strict_positive_numeric_vector",
+              "integer",
+              "integer_vector",
+              "positive_integer",
+              "positive_integer_vector",
+              "strict_positive_integer",
+              "strict_positive_integer_vector")
+  
+  if(!(type %in% lstype)){
+    stop("Control type not defined!", call.=FALSE)
+  }
+  
+  # Input nhandhclu ############################################################
+  if (type == "input_nhandhclu") {
+    if (!inherits(data, "bioregion.pairwise.metric") &
+        !inherits(data, "dist") &
+        !is.data.frame(data)) {
+      stop(paste0(deparse(substitute(data)), " is not a bioregion.pairwise.metric object, 
+a dissimilarity matrix (class dist) or 
+a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)."),
+           call. = FALSE)
+    }
+  }
+  
+  # Input similarity ###########################################################
   if (type == "input_similarity") {
     if(!inherits(data, "bioregion.pairwise.metric")) {
-     message(paste0(deparse(substitute(data)),
-                     " is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
-others similarity metrics (netclu_). 
-Please carefully check your data before using the clustering functions."))
+#      message(paste0(deparse(substitute(data)),
+#                      " is not a bioregion.pairwise.metric object. 
+# Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+# others similarity metrics (netclu_). 
+# Please carefully check your data before using the clustering functions."))
     }else{
       if(is.null(attr(data, "type"))){
         message(paste0(deparse(substitute(data)),
@@ -29,14 +80,14 @@ Use dissimilarity_to_similarity() before using this function."), call. = FALSE)
     }
   }
   
-  # Input dissimilarity #######################################################
+  # Input dissimilarity ########################################################
   if (type == "input_dissimilarity") {
     if(!inherits(data, "bioregion.pairwise.metric")) {
-      message(paste0(deparse(substitute(data)),
-                     " is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
-others similarity metrics (netclu_). 
-Please carefully check your data before using the clustering functions."))
+#       message(paste0(deparse(substitute(data)),
+#                      " is not a bioregion.pairwise.metric object. 
+# Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+# others similarity metrics (netclu_). 
+# Please carefully check your data before using the clustering functions."))
     }else{
       if(is.null(attr(data, "type"))){
         message(paste0(deparse(substitute(data)),
@@ -81,7 +132,7 @@ dissimilarity_to_similarity()."),
 
   }
   
-  # Input conversion dissimilarity ################################################
+  # Input conversion dissimilarity #############################################
   if (type == "input_conversion_dissimilarity") {
     if (!inherits(data, "bioregion.pairwise.metric")) {
       stop(paste0(deparse(substitute(data)), 
@@ -104,7 +155,7 @@ similarity_to_dissimilarity()."),
     }
   }  
   
-  # Input network #############################################################
+  # Input network ##############################################################
   if (type == "input_net") {
     if (!is.data.frame(data)) {
       stop(paste0(deparse(substitute(data)), " must be a data.frame."),
@@ -161,11 +212,12 @@ similarity_to_dissimilarity()."),
   }
   if (type == "input_net_isloop") {
     if (sum(data[,1] == data[,2]) > 0) {
-      message(paste0("It seems that the network contains self-loop(s)!"))
+      stop("The network contains self-loop(s)!",
+           call.=FALSE)
     }
   }
   
-  # Input network weight ######################################################
+  # Input network weight #######################################################
   if (type == "input_net_weight") {
     if (length(args) > 1) {
       stop(paste0(deparse(substitute(args)), " must be of length 1."),
@@ -185,7 +237,7 @@ similarity_to_dissimilarity()."),
 
   }
   
-  # Input network index #######################################################
+  # Input network index ########################################################
   if (type == "input_net_index") {
     if (length(args) > 1) {
       stop(paste0(deparse(substitute(args)), " must be of length 1."),
@@ -291,28 +343,8 @@ similarity_to_dissimilarity()."),
                   " should be numeric or character."), call. = FALSE)
     }
   }
-  
-  # Input data.frame ##########################################################
-  # if (type == "input_data_frame") {
-  #   if (!is.data.frame(data)) {
-  #     stop(paste0(deparse(substitute(data)), " must be a data.frame"),
-  #          call. = FALSE)
-  #   }
-  #   rowmat <- rownames(data)
-  #   colmat <- colnames(data)
-  #   if (sum(duplicated(rowmat)) > 0) {
-  #     message("Duplicated rownames detected!")
-  #   }
-  #   if (sum(duplicated(colmat)) > 0) {
-  #     message("Duplicated colnames detected!")
-  #   }
-  #   nbna <- sum(is.na(data))
-  #   if (nbna > 0) {
-  #     stop("NA(s) detected in the matrix!", call. = FALSE)
-  #   }
-  # }
-  
-  # Input matrix ##############################################################
+
+  # Input matrix ###############################################################
   if (type == "input_matrix") {
     if (!is.matrix(data)) {
       stop(paste0(deparse(substitute(data)), " must be a matrix."),
@@ -325,6 +357,65 @@ similarity_to_dissimilarity()."),
     }
     if (sum(duplicated(colmat)) > 0) {
       stop("Duplicated colnames detected!", call. = FALSE)
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop("NA(s) detected in the matrix!", call. = FALSE)
+    }
+  }
+
+  # Input data.frame nhandhclu #################################################
+  if (type == "input_data_frame_nhandhclu") {
+    if (!is.data.frame(data)) {
+      stop(paste0(deparse(substitute(data)), " must be a data.frame."),
+           call. = FALSE)
+    }
+    if (dim(data)[2] < 3) {
+      stop(paste0(deparse(substitute(data)),
+                  " must be a data.frame with at least three columns."),
+           call. = FALSE)
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop(paste0("NA(s) detected in ", deparse(substitute(data)),"."), call. = FALSE)
+    }
+
+    if (sum(data[,1] == data[,2]) > 0) {
+      stop(paste0(
+        deparse(substitute(data)),
+        " contains rows with the same site on both columns!"
+      ), call. = FALSE)
+    }
+        
+    pairs1 <- paste0(data[, 1], "_", data[, 2])
+    if (sum(duplicated(pairs1)) > 0) {
+      stop(paste0(
+        "The first two columns of ", deparse(substitute(data)),
+        " contain duplicated pairs of sites!"
+      ), call. = FALSE)
+    }
+    pairs2 <- paste0(data[, 2], "_", data[, 1])
+    if (length(intersect(pairs1, pairs2)) > 0) {
+      stop(paste0(
+        "The first two columns of ", deparse(substitute(data)),
+        " contain (unordered) duplicated pairs of sites!"
+      ), call. = FALSE)
+    }
+  }
+  
+  # Input data.frame ###########################################################
+  if (type == "input_data_frame") {
+    if (!is.data.frame(data)) {
+      stop(paste0(deparse(substitute(data)), " must be a data.frame"),
+           call. = FALSE)
+    }
+    rowmat <- rownames(data)
+    colmat <- colnames(data)
+    if (sum(duplicated(rowmat)) > 0) {
+      message("Duplicated rownames detected!")
+    }
+    if (sum(duplicated(colmat)) > 0) {
+      message("Duplicated colnames detected!")
     }
     nbna <- sum(is.na(data))
     if (nbna > 0) {
@@ -577,13 +668,13 @@ similarity_to_dissimilarity()."),
            call. = FALSE)
     } else {
       if (sum(args %% 1 != 0) > 0) {
-        stop(paste0(deparse(substitute(args)), " must be composed of integers."),
+        stop(paste0(deparse(substitute(args)), " must be composed of integer(s)."),
              call. = FALSE
         )
       } else {
         if (sum(args <= 0) > 0) {
           stop(paste0(deparse(substitute(args)),
-                      " must be composed of value strictly higher than 0."), 
+                      " must be composed of value(s) strictly higher than 0."), 
                call. = FALSE)
         }
       }

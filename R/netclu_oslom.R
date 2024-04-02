@@ -264,7 +264,7 @@ both, sites or species", call. = FALSE)
 
     # Control input directed
     if (!isbip) {
-      controls(args = directed, data = net, type = "input_net_isloop")
+      controls(args = NULL, data = net, type = "input_net_isloop")
       controls(args = directed, data = net, type = "input_net_directed")
     } else {
       if (directed) {
@@ -357,7 +357,9 @@ both, sites or species", call. = FALSE)
       bipartite = isbip,
       weight = weight,
       pairwise = ifelse(isbip, FALSE, TRUE),
-      pairwise_metric = ifelse(isbip, NA, index),
+      pairwise_metric = ifelse(!isbip & weight, 
+                               ifelse(is.numeric(index), names(net)[3], index), 
+                               NA),
       dissimilarity = FALSE,
       nb_sites = nbsites,
       hierarchical = FALSE

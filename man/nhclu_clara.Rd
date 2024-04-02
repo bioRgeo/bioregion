@@ -7,14 +7,15 @@
 nhclu_clara(
   dissimilarity,
   index = names(dissimilarity)[3],
-  n_clust = NULL,
-  maxiter = 0L,
+  n_clust = c(1, 2, 3),
+  maxiter = 0,
   initializer = "LAB",
   fasttol = 1,
-  numsamples = 5L,
+  numsamples = 5,
   sampling = 0.25,
   independent = FALSE,
-  seed = 123456789L
+  seed = 123456789,
+  algorithm_in_output = TRUE
 )
 }
 \arguments{
@@ -34,17 +35,20 @@ requested number(s) of clusters.}
 \item{initializer}{character string, either 'BUILD' (used in classic PAM
 algorithm) or 'LAB' (linear approximative BUILD).}
 
-\item{fasttol}{Positive numeric defining the tolerance for fast swapping
+\item{fasttol}{positive numeric defining the tolerance for fast swapping
 behavior, set to 1 by default.}
 
-\item{numsamples}{Positive integer defining the number of samples to draw.}
+\item{numsamples}{positive integer defining the number of samples to draw.}
 
-\item{sampling}{Positive numeric defining the sampling rate.}
+\item{sampling}{positive numeric defining the sampling rate.}
 
-\item{independent}{Logical, FALSE by default meaning that the previous
+\item{independent}{jogical, FALSE by default meaning that the previous
 medoids are not kept in the next sample.}
 
 \item{seed}{an \code{integer} to define a generator of random numbers.}
+
+\item{algorithm_in_output}{a \code{boolean} indicating if the original algorithm's
+outputs should be returned in the output (see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -53,8 +57,13 @@ A \code{list} of class \code{bioregion.clusters} with five slots:
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
+clustering procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE})}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find the output of
+\link[fastkmedoids:fastclara]{fastclara}.
 }
 \description{
 This function performs non hierarchical clustering on the basis of
@@ -62,7 +71,8 @@ dissimilarity with partitioning around medoids, using the Clustering Large
 Applications (CLARA) algorithm.
 }
 \details{
-Based on fastkmedoids R package.
+Based on \href{https://cran.r-project.org/package=fastkmedoids}{fastkmedoids}
+package (\link[fastkmedoids:fastclara]{fastclara}).
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),

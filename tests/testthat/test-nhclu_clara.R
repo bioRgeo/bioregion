@@ -1,69 +1,302 @@
-# Preamble code ----------------------------------------------------------------
+# Inputs -----------------------------------------------------------------------
 dissim <- dissimilarity(fishmat, metric = "all")
+dissim2 <- dissim[,1:2]
 
-# Tests for valid outputs -----------------------------------------------------
-test_that("number of columns in output", {
-  clust1 <- nhclu_clara(dissim, n_clust = 2:10, index = "Simpson")
+uni <- data.frame(
+  Site1 = c("c", "b", "a"),
+  Site2 = c("a", "c", "b"),
+  Weight = c(10, 100, 1))
+
+unina1 <- uni
+unina1[1,1] <- NA
+
+unina2 <- uni
+unina2[1,3] <- NA
+
+unichar <- uni
+unichar$Weight <- unichar$Site1
+
+uni2 <- data.frame(
+  Site1 = c("a", "c", "a"),
+  Site2 = c("a", "a", "b"),
+  Weight = c(10, 100, 1))
+
+uni3 <- data.frame(
+  Site1 = c("c", "b", "a"),
+  Site2 = c("a", "a", "b"),
+  Weight = c(10, 100, 1))
+
+uni4 <- data.frame(
+  Site1 = c("c", "a", "a"),
+  Site2 = c("a", "b", "b"),
+  Weight = c(10, 100, 1))
+
+# Tests for valid outputs ------------------------------------------------------
+test_that("valid output", {
   
-  expect_equal(clust1$name, "clara")
-  expect_equal(ncol(clust1$clusters), 10L)
-  expect_equal(length(unique(clust1$clusters$K_6)), 6L)
+   clust <- nhclu_clara(dissim,
+                        index = "Simpson",
+                        n_clust = c(1,2,3),
+                        maxiter = 0,
+                        initializer = "LAB",
+                        fasttol = 1,
+                        numsamples = 5,
+                        sampling = 0.25,
+                        independent = FALSE,
+                        seed = 1,
+                        algorithm_in_output = TRUE)
+   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
+   expect_equal(clust$name, "nhclu_clara")
+   expect_equal(clust$args$index, "Simpson")
+   expect_equal(clust$args$maxiter, 0)
+   expect_equal(clust$args$initializer, "LAB")
+   expect_equal(clust$args$fasttol, 1)
+   expect_equal(clust$args$numsamples, 5)
+   expect_equal(clust$args$sampling, 0.25)
+   expect_equal(clust$args$independent, FALSE)
+   expect_equal(clust$args$seed, 1)
+   expect_equal(clust$args$algorithm_in_output, TRUE)
+   expect_equal(clust$inputs$bipartite, FALSE)
+   expect_equal(clust$inputs$weight, TRUE)
+   expect_equal(clust$inputs$pairwise, TRUE)
+   expect_equal(clust$inputs$pairwise_metric, "Simpson")
+   expect_equal(clust$inputs$dissimilarity, TRUE)
+   expect_equal(clust$inputs$nb_sites, 338)
+   expect_equal(clust$inputs$hierarchical, FALSE)
+   expect_equal(dim(clust$clusters)[2], 4)
+   
 })
-
-# Tests for invalid inputs ----------------------------------------------------
-test_that("error messages with wrong inputs", {
+ 
+# Tests for invalid inputs -----------------------------------------------------
+test_that("invalid inputs", {
+  
   expect_error(
     nhclu_clara(dissimilarity = "zz"),
-    "dissimilarity is not a bioregion.pairwise.metric object, a
-           dissimilarity matrix (class dist) or a data.frame with at least 3
-           columns (site1, site2, and your dissimilarity index)",
+    "dissimilarity is not a bioregion.pairwise.metric object, 
+a dissimilarity matrix (class dist) or 
+a data.frame with at least 3 columns (site1, site2 and your dissimilarity index).",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(dissim2),
+    "dissimilarity must be a data.frame with at least three columns.",
+    fixed = TRUE)
+
+  expect_error(
+    nhclu_clara(uni[,-3]),
+    "dissimilarity must be a data.frame with at least three columns.",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(unina1),
+    "NA(s) detected in dissimilarity.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(unina2),
+    "NA(s) detected in dissimilarity.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(uni4),
+    "The first two columns of dissimilarity contain duplicated pairs of sites!",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(uni3),
+    "The first two columns of dissimilarity contain (unordered) duplicated pairs of sites!",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(uni2),
+    "dissimilarity contains rows with the same site on both columns!",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(unichar),
+    "The weight column must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, index = c("zz",1)),
+    "index must be of length 1.",
     fixed = TRUE)
   
   expect_error(
     nhclu_clara(dissim, index = "zz"),
-    "Argument index should be one of the column names of dissimilarity",
+    "If index is a character, it should be a column name (and not the
+                    first or second column).",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(dissim, index = "Site1"),
+    "If index is a character, it should be a column name (and not the
+                    first or second column).",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(dissim, index = 0.1),
+    "If index is numeric, it should be an integer.",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(dissim, index = 2),
+    "index should be stricltly higher than 2.",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(uni, index = 4),
+    "index should be lower or equal to 3.",
     fixed = TRUE)
   
   expect_error(
     nhclu_clara(dissim, n_clust = "zz"),
-    "n_clust must an integer or a vector of integers determining the
-           number of clusters.",
-    fixed = TRUE)
+    "n_clust must be numeric.",
+    fixed = TRUE)  
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, maxiter = "zz"),
+    nhclu_clara(dissim, n_clust = c(1.1,2)),
+    "n_clust must be composed of integer(s).",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, n_clust = -1),
+    "n_clust must be composed of value(s) strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, n_clust = c(1,-1)),
+    "n_clust must be composed of value(s) strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, n_clust = 0),
+    "n_clust must be composed of value(s) strictly higher than 0.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, maxiter =  c("zz","zz")),
+    "maxiter must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, maxiter = "zz"),
     "maxiter must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, maxiter = 1.1),
+    "maxiter must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, maxiter = -1),
+    "maxiter must be higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, initializer = 1),
+    "initializer must be a character.",
     fixed = TRUE)
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, initializer = "zz"),
-    "initializer must be either 'BUILD' (used in classic PAM) or 'LAB'
-         (linear approximative BUILD).",
+    nhclu_clara(dissim, initializer = "zz"),
+    "Please choose initializer among the followings values:
+BUILD or LAB",
     fixed = TRUE)
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, fasttol = "zz"),
+    nhclu_clara(dissim, fasttol =  c("zz","zz")),
+    "fasttol must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, fasttol = "zz"),
     "fasttol must be numeric.",
-    fixed = TRUE)
+    fixed = TRUE)  
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, numsamples = "zz"),
+    nhclu_clara(dissim, fasttol = -1.1),
+    "fasttol must be higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, numsamples =  c("zz","zz")),
+    "numsamples must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, numsamples = "zz"),
     "numsamples must be numeric.",
-    fixed = TRUE)
+    fixed = TRUE)  
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, sampling = "zz"),
+    nhclu_clara(dissim, numsamples = 1.1),
+    "numsamples must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, numsamples = -1),
+    "numsamples must be higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, sampling =  c("zz","zz")),
+    "sampling must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, sampling = "zz"),
     "sampling must be numeric.",
-    fixed = TRUE)
+    fixed = TRUE)  
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, independent = "zz"),
+    nhclu_clara(dissim, sampling = -1.1),
+    "sampling must be higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, independent = 1),
     "independent must be a boolean.",
     fixed = TRUE)
   
   expect_error(
-    nhclu_clara(dissim, n_clust = 2, seed = "zz"),
-    "seed must be numeric.",
+    nhclu_clara(dissim, independent = c("zz","zz")),
+    "independent must be of length 1.",
     fixed = TRUE)
   
+  expect_error(
+    nhclu_clara(dissim, seed =  c("zz","zz")),
+    "seed must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, seed = "zz"),
+    "seed must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, seed = 1.1),
+    "seed must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_clara(dissim, seed = -1),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(dissim, seed = 0),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  expect_error(
+    nhclu_clara(dissim, algorithm_in_output = 1),
+    "algorithm_in_output must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_clara(dissim, algorithm_in_output = c("zz","zz")),
+    "algorithm_in_output must be of length 1.",
+    fixed = TRUE)
+
 })

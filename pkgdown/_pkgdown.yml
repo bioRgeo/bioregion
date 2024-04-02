@@ -18,8 +18,8 @@ reference:
   desc: ~
   contents:
   - similarity
-  - dissimilarity
   - similarity_to_dissimilarity
+  - dissimilarity
   - dissimilarity_to_similarity
   
 - title: Clustering
@@ -33,11 +33,11 @@ reference:
 - subtitle: Non-hierarchical clustering
   desc: ~
   contents:
+  - nhclu_clara
+  - nhclu_clarans
   - nhclu_dbscan
   - nhclu_kmeans
   - nhclu_pam
-  - nhclu_clara
-  - nhclu_clarans
 - subtitle: Network clustering
   desc: ~
   contents:
@@ -45,19 +45,19 @@ reference:
   - netclu_infomap
   - netclu_greedy
   - netclu_labelprop
+  - netclu_leiden
   - netclu_leadingeigen
   - netclu_louvain
   - netclu_oslom
   - netclu_walktrap
-  - netclu_leiden
   
 - title: Clustering analysis
   desc: ~
   contents:
-  - partition_metrics
-  - find_optimal_n
   - compare_partitions
-  
+  - find_optimal_n
+  - partition_metrics
+
 - title: Visualisation
   desc: ~
   contents: map_clusters
@@ -65,12 +65,12 @@ reference:
 - title: Data
   desc: ~
   contents:
-  - vegedf
-  - vegemat
-  - vegesf
   - fishdf
   - fishmat
   - fishsf
+  - vegedf
+  - vegemat
+  - vegesf
   
 news:
   releases:

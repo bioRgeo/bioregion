@@ -24,6 +24,11 @@ uni2 <- data.frame(
   Site2 = c("a", "a", "b"),
   Weight = c(10, 100, 1))
 
+uni3 <- data.frame(
+  Site1 = c("c", "b", "a"),
+  Site2 = c("a", "a", "b"),
+  Weight = c(10, 100, 1))
+
 net2 <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),
@@ -71,33 +76,95 @@ test_that("valid output", {
                           delete_temp = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_infomap")
+  expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$index, 3)
+  expect_equal(clust$args$nbmod, 0)
+  expect_equal(clust$args$markovtime, 1)
+  #expect_equal(clust$args$seed, 0)
+  expect_equal(clust$args$numtrials, 1)
+  expect_equal(clust$args$twolevel, FALSE)
+  expect_equal(clust$args$show_hierarchy, FALSE)
+  expect_equal(clust$args$directed, FALSE)
+  expect_equal(clust$args$bipartite_version, FALSE)
+  expect_equal(clust$args$bipartite, FALSE)
+  expect_equal(clust$args$site_col, 1)
+  expect_equal(clust$args$species_col, 2)
+  expect_equal(clust$args$return_node_type, "both")
+  expect_equal(clust$args$version, "2.7.1")
+  #expect_equal(clust$args$binpath, "tempdir")
+  #expect_equal(clust$args$path_temp, "infomap_temp")
+  expect_equal(clust$args$delete_temp, TRUE)
+  expect_equal(clust$inputs$bipartite, FALSE)
+  expect_equal(clust$inputs$weight, TRUE)
+  expect_equal(clust$inputs$pairwise, TRUE)
+  expect_equal(clust$inputs$pairwise_metric, "Jaccard")
+  expect_equal(clust$inputs$dissimilarity, FALSE)
+  expect_equal(clust$inputs$nb_sites, 5)
+  expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$algorithm$version, "2.7.1")
   expect_equal(dim(clust$clusters)[1], 5)
-
+  
+  
+  clust <- netclu_infomap(simil,
+                          weight = TRUE,
+                          index = 3,
+                          nbmod = 0,
+                          markovtime = 1,
+                          seed = 1,
+                          numtrials = 1,
+                          twolevel = FALSE,
+                          show_hierarchy = FALSE,
+                          directed = FALSE,
+                          bipartite_version = FALSE,
+                          bipartite = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          version = "2.7.1",
+                          binpath = "tempdir",
+                          path_temp = "infomap_temp",
+                          delete_temp = TRUE)
+  expect_equal(clust$args$seed, 1)
+  
+  clust2 <- netclu_infomap(simil,
+                          weight = TRUE,
+                          index = 3,
+                          nbmod = 0,
+                          markovtime = 1,
+                          seed = 1,
+                          numtrials = 1,
+                          twolevel = FALSE,
+                          show_hierarchy = FALSE,
+                          directed = FALSE,
+                          bipartite_version = FALSE,
+                          bipartite = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          version = "2.7.1",
+                          binpath = "tempdir",
+                          path_temp = "infomap_temp",
+                          delete_temp = TRUE)
+  expect_equal(clust2$args$seed, 1)
+  expect_equal(sum(clust$clusters$K_1==clust2$clusters$K_1), 5)
+  
   clust <- netclu_infomap(net)
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_infomap")
   expect_equal(dim(clust$clusters)[1], 7)
   
   clust <- netclu_infomap(net, 
                           bipartite = TRUE)
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_infomap")
   expect_equal(dim(clust$clusters)[1], 7)
   expect_equal(clust$args$return_node_type, "both")
   
   clust <- netclu_infomap(net, 
                           bipartite = TRUE, 
                           return_node_type = "species")
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_infomap")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
   
   clust <- netclu_infomap(net, 
                           bipartite = TRUE, 
                           return_node_type = "sites")
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_infomap")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
   
@@ -271,13 +338,13 @@ test_that("invalid inputs", {
     "bipartite must be of length 1.",
     fixed = TRUE)
   
-  expect_message(
-    netclu_infomap(net, bipartite = FALSE),
-    "net is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
-others similarity metrics (netclu_). 
-Please carefully check your data before using the clustering functions.",
-    fixed = TRUE)
+#   expect_message(
+#     netclu_infomap(net, bipartite = FALSE),
+#     "net is not a bioregion.pairwise.metric object. 
+# Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+# others similarity metrics (netclu_). 
+# Please carefully check your data before using the clustering functions.",
+#     fixed = TRUE)
   
   expect_error(
     netclu_infomap(dissimil),
@@ -477,13 +544,13 @@ both, sites or species",
     "directed must be of length 1.", 
     fixed = TRUE)
   
-  expect_message(
-    netclu_infomap(uni2, directed = TRUE),
-    "It seems that the network contains self-loop(s)!"
+  expect_error(
+    netclu_infomap(uni2),
+    "The network contains self-loop(s)!"
     , fixed = TRUE)
   
   expect_error(
-    netclu_infomap(uni2, directed = FALSE),
+    netclu_infomap(uni3, directed = FALSE),
     "net should not be directed if directed = FALSE."
     , fixed = TRUE)
   

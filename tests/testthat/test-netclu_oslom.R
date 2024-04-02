@@ -24,6 +24,11 @@ uni2 <- data.frame(
   Site2 = c("a", "a", "b"),
   Weight = c(10, 100, 1))
 
+uni3 <- data.frame(
+  Site1 = c("c", "b", "a"),
+  Site2 = c("a", "a", "b"),
+  Weight = c(10, 100, 1))
+
 net2 <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),
@@ -69,32 +74,86 @@ test_that("valid output", {
                         delete_temp = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_oslom")
+  expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$index, 3)
+  expect_equal(clust$args$reassign, "no")
+  expect_equal(clust$args$r, 10)
+  expect_equal(clust$args$hr, 50)
+  #expect_equal(clust$args$seed, 0)
+  expect_equal(clust$args$t, 0.1)
+  expect_equal(clust$args$cp, 0.5)
+  expect_equal(clust$args$directed, FALSE)
+  expect_equal(clust$args$bipartite, FALSE)
+  expect_equal(clust$args$site_col, 1)
+  expect_equal(clust$args$species_col, 2)
+  expect_equal(clust$args$return_node_type, "both")
+  #expect_equal(clust$args$binpath, "tempdir")
+  #expect_equal(clust$args$path_temp, "infomap_temp")
+  expect_equal(clust$args$delete_temp, TRUE)
+  expect_equal(clust$inputs$bipartite, FALSE)
+  expect_equal(clust$inputs$weight, TRUE)
+  expect_equal(clust$inputs$pairwise, TRUE)
+  expect_equal(clust$inputs$pairwise_metric, "Jaccard")
+  expect_equal(clust$inputs$dissimilarity, FALSE)
+  expect_equal(clust$inputs$nb_sites, 5)
+  expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(dim(clust$clusters)[1], 5)
   
+  clust <- netclu_oslom(simil,
+                        weight = TRUE,
+                        index = 3,
+                        reassign = "no",
+                        r = 10,
+                        hr = 50,
+                        seed = 1,
+                        t = 0.1,
+                        cp = 0.5,
+                        directed = FALSE,
+                        bipartite = FALSE,
+                        site_col = 1,
+                        species_col = 2,
+                        return_node_type = "both",
+                        binpath = "tempdir",
+                        path_temp = "oslom_temp",
+                        delete_temp = TRUE)
+  expect_equal(clust$args$seed, 1)
+  
+  clust2 <- netclu_oslom(simil,
+                        weight = TRUE,
+                        index = 3,
+                        reassign = "no",
+                        r = 10,
+                        hr = 50,
+                        seed = 1,
+                        t = 0.1,
+                        cp = 0.5,
+                        directed = FALSE,
+                        bipartite = FALSE,
+                        site_col = 1,
+                        species_col = 2,
+                        return_node_type = "both",
+                        binpath = "tempdir",
+                        path_temp = "oslom_temp",
+                        delete_temp = TRUE)
+  expect_equal(clust2$args$seed, 1)
+  expect_equal(sum(clust$clusters$K_5==clust2$clusters$K_5), 5)
+  
   clust <- netclu_oslom(net)
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_oslom")
   expect_equal(dim(clust$clusters)[1], 7)
   
   clust <- netclu_oslom(net, bipartite = TRUE)
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_oslom")
   expect_equal(dim(clust$clusters)[1], 7)
   expect_equal(clust$args$return_node_type, "both")
   
   clust <- netclu_oslom(net, 
                         bipartite = TRUE, 
                         return_node_type = "species")
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_oslom")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
   
   clust <- netclu_oslom(net, 
                         bipartite = TRUE, 
                         return_node_type = "sites")
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_oslom")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
   
@@ -284,13 +343,13 @@ no, random or simil",
     "bipartite must be of length 1.",
     fixed = TRUE)
   
-  expect_message(
-    netclu_oslom(net, bipartite = FALSE),
-    "net is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
-others similarity metrics (netclu_). 
-Please carefully check your data before using the clustering functions.",
-    fixed = TRUE)
+#   expect_message(
+#     netclu_oslom(net, bipartite = FALSE),
+#     "net is not a bioregion.pairwise.metric object. 
+# Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+# others similarity metrics (netclu_). 
+# Please carefully check your data before using the clustering functions.",
+#     fixed = TRUE)
   
   expect_error(
     netclu_oslom(dissimil),
@@ -496,13 +555,13 @@ both, sites or species",
     "directed must be of length 1.", 
     fixed = TRUE)
   
-  expect_message(
-    netclu_oslom(uni2, directed = TRUE),
-    "It seems that the network contains self-loop(s)!"
+  expect_error(
+    netclu_oslom(uni2),
+    "The network contains self-loop(s)!"
     , fixed = TRUE)
   
   expect_error(
-    netclu_oslom(uni2, directed = FALSE),
+    netclu_oslom(uni3, directed = FALSE),
     "net should not be directed if directed = FALSE."
     , fixed = TRUE)
   

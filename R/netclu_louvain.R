@@ -200,7 +200,8 @@ both, sites or species", call. = FALSE)
     }
   }
 
-  # Control input directed
+  # Control input loop or directed
+  controls(args = NULL, data = net, type = "input_net_isloop")
   controls(args = NULL, data = net, type = "input_net_isdirected")
 
   # Control parameters LOUVAIN
@@ -276,7 +277,9 @@ Cpp or igraph", call. = FALSE)
     bipartite = isbip,
     weight = weight,
     pairwise = ifelse(isbip, FALSE, TRUE),
-    pairwise_metric = ifelse(isbip, NA, index),
+    pairwise_metric = ifelse(!isbip & weight, 
+                             ifelse(is.numeric(index), names(net)[3], index), 
+                             NA),
     dissimilarity = FALSE,
     nb_sites = nbsites,
     hierarchical = FALSE

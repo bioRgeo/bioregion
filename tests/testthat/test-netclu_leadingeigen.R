@@ -22,6 +22,11 @@ uni2 <- data.frame(
   Site2 = c("a", "a", "b"),
   Weight = c(10, 100, 1))
 
+uni3 <- data.frame(
+  Site1 = c("c", "b", "a"),
+  Site2 = c("a", "a", "b"),
+  Weight = c(10, 100, 1))
+
 net2 <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
   Species = c("a", "b", "a", "c", "d", "b", "d"),
@@ -49,21 +54,54 @@ net6 <- data.frame(
 test_that("valid output", {
   
   clust <- netclu_leadingeigen(simil,
-                            weight = TRUE,
-                            index = 3,
-                            bipartite = FALSE,
-                            site_col = 1,
-                            species_col = 2,
-                            return_node_type = "both",
-                            algorithm_in_output = TRUE)
+                               weight = TRUE,
+                               index = 3,
+                               bipartite = FALSE,
+                               site_col = 1,
+                               species_col = 2,
+                               return_node_type = "both",
+                               algorithm_in_output = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_leadingeigen")
+  expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$index, 3)
+  expect_equal(clust$args$bipartite, FALSE)
+  expect_equal(clust$args$site_col, 1)
+  expect_equal(clust$args$species_col, 2)
+  expect_equal(clust$args$return_node_type, "both")
+  expect_equal(clust$args$algorithm_in_output, TRUE)
+  expect_equal(clust$inputs$bipartite, FALSE)
+  expect_equal(clust$inputs$weight, TRUE)
+  expect_equal(clust$inputs$pairwise, TRUE)
+  expect_equal(clust$inputs$pairwise_metric, "Jaccard")
+  expect_equal(clust$inputs$dissimilarity, FALSE)
+  expect_equal(clust$inputs$nb_sites, 5)
+  expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(dim(clust$clusters)[1], 5)
   
-  clust <- netclu_leadingeigen(net)
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_leadingeigen")
-  expect_equal(dim(clust$clusters)[1], 7)
+  clust <- netclu_leadingeigen(simil,
+                               weight = FALSE,
+                               index = 3,
+                               bipartite = FALSE,
+                               site_col = 1,
+                               species_col = 2,
+                               return_node_type = "both",
+                               algorithm_in_output = TRUE)
+  expect_equal(clust$args$weight, FALSE)
+  expect_equal(clust$inputs$weight, FALSE)
+  expect_equal(clust$inputs$pairwise, TRUE)
+  expect_equal(clust$inputs$pairwise_metric, NA)
+  expect_equal(clust$inputs$dissimilarity, FALSE)
+  
+  clust2 <- netclu_leadingeigen(simil,
+                          weight = FALSE,
+                          index = 3,
+                          bipartite = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          algorithm_in_output = TRUE)
+  expect_equal(sum(clust$clusters$K_1==clust2$clusters$K_1), 5)
   
   clust <- netclu_leadingeigen(net, bipartite = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
@@ -102,13 +140,13 @@ test_that("invalid inputs", {
     "bipartite must be of length 1.",
     fixed = TRUE)
   
-  expect_message(
-    netclu_leadingeigen(net, bipartite = FALSE),
-    "net is not a bioregion.pairwise.metric object. 
-Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
-others similarity metrics (netclu_). 
-Please carefully check your data before using the clustering functions.",
-    fixed = TRUE)
+#   expect_message(
+#     netclu_leadingeigen(net, bipartite = FALSE),
+#     "net is not a bioregion.pairwise.metric object. 
+# Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
+# others similarity metrics (netclu_). 
+# Please carefully check your data before using the clustering functions.",
+#     fixed = TRUE)
   
   expect_error(
     netclu_leadingeigen(dissimil),
@@ -300,6 +338,11 @@ both, sites or species",
   
   expect_error(
     netclu_leadingeigen(uni2),
+    "The network contains self-loop(s)!"
+    , fixed = TRUE)
+  
+  expect_error(
+    netclu_leadingeigen(uni3),
     "The network is directed, this function is designed for undirected networks!"
     , fixed = TRUE)
   

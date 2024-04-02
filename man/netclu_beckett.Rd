@@ -9,10 +9,10 @@ netclu_beckett(
   net,
   weight = TRUE,
   index = names(net)[3],
+  forceLPA = FALSE,
   site_col = 1,
   species_col = 2,
   return_node_type = "both",
-  forceLPA = FALSE,
   algorithm_in_output = TRUE
 )
 }
@@ -27,6 +27,11 @@ if there are more than two columns (see Note).}
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
+\item{forceLPA}{a \code{boolean} indicating if the even faster pure
+LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
+likely to get trapped in a local minimum, but is slightly slower. Defaults
+to FALSE.}
+
 \item{site_col}{name or number for the column of site nodes (i.e. primary
 nodes).}
 
@@ -36,11 +41,6 @@ feature nodes).}
 \item{return_node_type}{a \code{character} indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output
 (\code{return_node_type = "both"} by default).}
-
-\item{forceLPA}{a \code{boolean} indicating if the even faster pure
-LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
-likely to get trapped in a local minimum, but is slightly slower. Defaults
-to FALSE.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \code{computeModules} should be returned in the output (see Value).
