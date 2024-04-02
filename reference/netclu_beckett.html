@@ -84,10 +84,10 @@ applying Newman’s modularity measure in a bipartite weighted version to it.</p
 <span>  <span class="va">net</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  forceLPA <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  site_col <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  species_col <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  return_node_type <span class="op">=</span> <span class="st">"both"</span>,</span>
-<span>  forceLPA <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,6 +110,13 @@ if there are more than two columns (see Note).</p></dd>
 the third column name of <code>net</code> is used.</p></dd>
 
 
+<dt>forceLPA</dt>
+<dd><p>a <code>boolean</code> indicating if the even faster pure
+LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
+likely to get trapped in a local minimum, but is slightly slower. Defaults
+to FALSE.</p></dd>
+
+
 <dt>site_col</dt>
 <dd><p>name or number for the column of site nodes (i.e. primary
 nodes).</p></dd>
@@ -124,13 +131,6 @@ feature nodes).</p></dd>
 <dd><p>a <code>character</code> indicating what types of nodes
 ("sites", "species" or "both") should be returned in the output
 (<code>return_node_type = "both"</code> by default).</p></dd>
-
-
-<dt>forceLPA</dt>
-<dd><p>a <code>boolean</code> indicating if the even faster pure
-LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
-likely to get trapped in a local minimum, but is slightly slower. Defaults
-to FALSE.</p></dd>
 
 
 <dt>algorithm_in_output</dt>

@@ -83,14 +83,15 @@ Applications (CLARA) algorithm.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nhclu_clara</span><span class="op">(</span></span>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>  n_clust <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  maxiter <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  maxiter <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  initializer <span class="op">=</span> <span class="st">"LAB"</span>,</span>
 <span>  fasttol <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  numsamples <span class="op">=</span> <span class="fl">5L</span>,</span>
+<span>  numsamples <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  sampling <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123456789L</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">123456789</span>,</span>
+<span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -123,25 +124,30 @@ algorithm) or 'LAB' (linear approximative BUILD).</p></dd>
 
 
 <dt>fasttol</dt>
-<dd><p>Positive numeric defining the tolerance for fast swapping
+<dd><p>positive numeric defining the tolerance for fast swapping
 behavior, set to 1 by default.</p></dd>
 
 
 <dt>numsamples</dt>
-<dd><p>Positive integer defining the number of samples to draw.</p></dd>
+<dd><p>positive integer defining the number of samples to draw.</p></dd>
 
 
 <dt>sampling</dt>
-<dd><p>Positive numeric defining the sampling rate.</p></dd>
+<dd><p>positive numeric defining the sampling rate.</p></dd>
 
 
 <dt>independent</dt>
-<dd><p>Logical, FALSE by default meaning that the previous
+<dd><p>jogical, FALSE by default meaning that the previous
 medoids are not kept in the next sample.</p></dd>
 
 
 <dt>seed</dt>
 <dd><p>an <code>integer</code> to define a generator of random numbers.</p></dd>
+
+
+<dt>algorithm_in_output</dt>
+<dd><p>a <code>boolean</code> indicating if the original algorithm's
+outputs should be returned in the output (see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -152,12 +158,17 @@ medoids are not kept in the next sample.</p></dd>
 <li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
 <li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
-clustering procedure, such as original cluster objects</p></li>
+clustering procedure, such as original cluster objects (only if
+<code>algorithm_in_output = TRUE</code>)</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
-</ol></div>
+</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
+find the output of
+<a href="https://rdrr.io/pkg/fastkmedoids/man/fastclara.html" class="external-link">fastclara</a>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Based on fastkmedoids R package.</p>
+    <p>Based on <a href="https://cran.r-project.org/package=fastkmedoids" class="external-link">fastkmedoids</a>
+package (<a href="https://rdrr.io/pkg/fastkmedoids/man/fastclara.html" class="external-link">fastclara</a>).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
