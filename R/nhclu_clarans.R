@@ -12,7 +12,7 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
-#' @param n_clust an `integer` or a `vector` of `integers` specifying the
+#' @param n_clust an `integer` or an `integer` vector specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param numlocal an `integer` defining the number of samples to draw.
@@ -22,7 +22,7 @@
 #' @param seed an `integer` to define a generator of random numbers.
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of `fastclarans` should be returned in the output (`TRUE` by 
+#' of [fastclarans][fastkmedoids::fastclarans] should be returned in the output (`TRUE` by 
 #' default, see Value).
 #' 
 #' @details
@@ -32,7 +32,7 @@
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**name**: `character` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
 #' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the
@@ -124,8 +124,10 @@ nhclu_clarans <- function(dissimilarity,
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, "dist"), 
-                                                  ifelse(is.numeric(index), names(net)[3], index), 
+                         pairwise_metric = ifelse(!inherits(dissimilarity, 
+                                                            "dist"), 
+                                                  ifelse(is.numeric(index), 
+                                                         names(net)[3], index), 
                                                   NA),
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
@@ -158,7 +160,7 @@ nhclu_clarans <- function(dissimilarity,
     data.frame(lapply(names(outputs$algorithm),
                       function(x) outputs$algorithm[[x]]@assignment)))
   
-  outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
+  outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

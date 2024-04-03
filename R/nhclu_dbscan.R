@@ -12,23 +12,27 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
-#' @param minPts a `numeric` value or a vector of `numeric` values
+#' @param minPts a `numeric` value or a `numeric` vector
 #' specifying the minPts argument of [dbscan::dbscan()][dbscan::dbscan]).
 #' minPts is the minimum number of points to form a dense region. By default,
 #' it is set to the natural logarithm of the number of sites in
 #' `dissimilarity`. See details for guidance on choosing this parameter.
 #' 
-#' @param eps a `numeric` value or a vector of `numeric` values specifying the
-#' eps argument of [dbscan::dbscan()][dbscan::dbscan]). eps specifies how
+#' @param eps a `numeric` value or a `numeric` vector specifying the
+#' eps argument of [dbscan][dbscan::dbscan]). eps specifies how
 #' similar points should be to each other to be considered a part of a cluster.
 #' See details for guidance on choosing this parameter.
 #' 
 #' @param plot a `boolean` indicating if the  k-nearest neighbor distance plot
 #' should be plotted.
 #' 
+#' @param algorithm_in_output a `boolean` indicating if the original output
+#' of [dbscan][dbscan::dbscan] should be returned in the output (`TRUE` by 
+#' default, see Value).
+#' 
 #' @param ... you can add here further arguments to be passed to `dbscan()`
-#' (see [dbscan::dbscan()][dbscan::dbscan])
-#'
+#' (see [dbscan][dbscan::dbscan]).
+#' 
 #' @details
 #' The dbscan (Density-based spatial clustering of
 #' applications with noise) clustering algorithm clusters points on the basis
@@ -37,7 +41,7 @@
 #' identify a core, and `eps`, which is the radius to find neighbors.
 #' `minPts` and `eps` should be defined by the user, which is not
 #' straightforward.
-#' We recommend reading the help in [dbscan::dbscan()][dbscan::dbscan])
+#' We recommend reading the help in [dbscan][dbscan::dbscan])
 #' to learn how to set these arguments, as well as the paper
 #' \insertCite{Hahsler2019}{bioregion}. Note that clusters with a value of 0
 #' are points which were deemed as noise by the algorithm.
@@ -66,12 +70,16 @@
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**name**: `character` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
 #' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the
 #'  clustering procedure, such as original cluster objects}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
+#' 
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
+#' find the output of
+#' [dbscan][dbscan::dbscan].
 #'
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
@@ -104,64 +112,65 @@ nhclu_dbscan <- function(dissimilarity,
                          minPts = NULL,
                          eps = NULL,
                          plot = TRUE,
+                         algorithm_in_output = TRUE,
                          ...){
   
-  if(inherits(dissimilarity, "bioregion.pairwise.metric")){
-    if(attr(dissimilarity, "type") == "similarity"){
-      stop("dissimilarity seems to be a similarity object.
-         nhclu_dbscan() should be applied on dissimilarity, not similarities.
-         Use similarity_to_dissimilarity() before using nhclu_dbscan()")
-    }
-    if(is.numeric(index)){
-      index <- names(dissimilarity)[index]
-    }
-    if(!(index %in% colnames(dissimilarity))) {
-      stop("Argument index should be one of the column names of dissimilarity")
-    }
-  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
-                 inherits(dissimilarity, "dist"))) {
-    if(is.numeric(index)){
-      index <- names(dissimilarity)[index]
-    }
-    if(is.null(index) || !(index %in% colnames(dissimilarity))){
-      stop("dissimilarity is not a bioregion.pairwise.metric object, a
-           dissimilarity matrix (class dist) or a data.frame with at least 3
-           columns (site1, site2, and your dissimilarity index)")
-    }
-  }
-  
+  # 1. Controls ----------------------------------------------------------------
+  controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
   if(!inherits(dissimilarity, "dist")){
+    controls(args = NULL, data = dissimilarity, type = "input_dissimilarity")
+    controls(args = NULL, data = dissimilarity, 
+             type = "input_data_frame_nhandhclu")
+    controls(args = index, data = dissimilarity, type = "input_net_index")
+    net <- dissimilarity
+    net[, 3] <- net[, index]
+    net <- net[, 1:3]
+    controls(args = NULL, data = net, type = "input_net_index_value")
     dist.obj <- stats::as.dist(
-      net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2], index)],
+      net_to_mat(net,
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
-    
   } else {
+    controls(args = NULL, data = dissimilarity, type = "input_dist")
     dist.obj <- dissimilarity
-  }
+    if(is.null(labels(dist.obj))){
+      attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
+      message("No labels detected, they have been assigned automatically.")
+    }
+  }  
   
-  if(!is.null(minPts) && !is.numeric(minPts)){
-    stop("minPts must be a numeric.")
-  }
   
-  if(!is.null(eps) && !is.numeric(eps)){
-    stop("eps must be a numeric.")
+  if(!is.null(minPts)){
+    controls(args = minPts, data = NULL, 
+             type = "integer_vector")
+    if(sum(minPts <= 2) > 0){
+      stop("minPts must be strictly higher than 2.", call. = FALSE)
+    }
   }
-  
-  if(!is.logical(plot)){
-    stop("plot must be a Boolean.")
+  if(!is.null(eps)){
+    controls(args = eps, data = NULL, type = "positive_numeric_vector")
   }
+  controls(args = plot, data = NULL, type = "boolean")
+  controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
-  outputs <- list(name = "dbscan")
+  # 2. Function ----------------------------------------------------------------
+  # Output format
+  outputs <- list(name = "nhclu_dbscan")
   
   outputs$args <- list(index = index,
                        minPts = minPts,
                        eps = eps,
                        plot = plot,
+                       algorithm_in_output = algorithm_in_output,
                        ...)
   
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
-                         pairwise_metric = TRUE,
+                         pairwise = TRUE,
+                         pairwise_metric = ifelse(!inherits(dissimilarity, 
+                                                            "dist"), 
+                                                  ifelse(is.numeric(index), 
+                                                         names(net)[3], index), 
+                                                  NA),
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
                          hierarchical = FALSE)
@@ -195,6 +204,7 @@ nhclu_dbscan <- function(dissimilarity,
            /")
   }
   
+  # DBSCAN algorithm
   cluster_arg_order <- data.frame()
   
   for(minPtsi in minPts){
@@ -223,7 +233,7 @@ nhclu_dbscan <- function(dissimilarity,
     }
     
     for(epsi in eps) {
-      outputs$algorithm$dbscan[[paste0("dbscan_minPts",
+      outputs$algorithm[[paste0("dbscan_minPts",
                                        minPtsi,
                                        "_eps", epsi)]]<-
         dbscan::dbscan(dist.obj,
@@ -238,10 +248,10 @@ nhclu_dbscan <- function(dissimilarity,
   # NOTE: values of 0 mean "noise / no cluster" with dbscan
   outputs$clusters <- data.frame(
     outputs$clusters,
-    data.frame(lapply(names(outputs$algorithm$dbscan),
-                      function(x) outputs$algorithm$dbscan[[x]]$cluster)))
+    data.frame(lapply(names(outputs$algorithm),
+                      function(x) outputs$algorithm[[x]]$cluster)))
   
-  outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
+  outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
@@ -250,6 +260,11 @@ nhclu_dbscan <- function(dissimilarity,
                                      drop = FALSE],
                     2, function(x) length(unique(x))),
     cluster_arg_order)
+  
+  # Set algorithm in output
+  if (!algorithm_in_output) {
+    outputs$algorithm <- NA
+  }
   
   class(outputs) <-  append("bioregion.clusters", class(outputs))
   

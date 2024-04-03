@@ -29,8 +29,8 @@
 #' (`return_node_type = "both"` by default).
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of `cluster_fast_greedy` should be returned in the output (`TRUE` by 
-#' default, see Value).
+#' of [cluster_fast_greedy][igraph::cluster_fast_greedy] should be returned in 
+#' the output (`TRUE` by default, see Value).
 #'
 #' @export
 #' @details
@@ -55,7 +55,7 @@
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**name**: `character` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
 #' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the

@@ -10,6 +10,7 @@ nhclu_dbscan(
   minPts = NULL,
   eps = NULL,
   plot = TRUE,
+  algorithm_in_output = TRUE,
   ...
 )
 }
@@ -22,32 +23,40 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{minPts}{a \code{numeric} value or a vector of \code{numeric} values
+\item{minPts}{a \code{numeric} value or a \code{numeric} vector
 specifying the minPts argument of \link[dbscan:dbscan]{dbscan::dbscan()}).
 minPts is the minimum number of points to form a dense region. By default,
 it is set to the natural logarithm of the number of sites in
 \code{dissimilarity}. See details for guidance on choosing this parameter.}
 
-\item{eps}{a \code{numeric} value or a vector of \code{numeric} values specifying the
-eps argument of \link[dbscan:dbscan]{dbscan::dbscan()}). eps specifies how
+\item{eps}{a \code{numeric} value or a \code{numeric} vector specifying the
+eps argument of \link[dbscan:dbscan]{dbscan}). eps specifies how
 similar points should be to each other to be considered a part of a cluster.
 See details for guidance on choosing this parameter.}
 
 \item{plot}{a \code{boolean} indicating if the  k-nearest neighbor distance plot
 should be plotted.}
 
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \link[dbscan:dbscan]{dbscan} should be returned in the output (\code{TRUE} by
+default, see Value).}
+
 \item{...}{you can add here further arguments to be passed to \code{dbscan()}
-(see \link[dbscan:dbscan]{dbscan::dbscan()})}
+(see \link[dbscan:dbscan]{dbscan}).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find the output of
+\link[dbscan:dbscan]{dbscan}.
 }
 \description{
 This function performs non hierarchical clustering on the basis of
@@ -62,7 +71,7 @@ main arguments, \code{minPts}, which stands for the minimum number of points to
 identify a core, and \code{eps}, which is the radius to find neighbors.
 \code{minPts} and \code{eps} should be defined by the user, which is not
 straightforward.
-We recommend reading the help in \link[dbscan:dbscan]{dbscan::dbscan()})
+We recommend reading the help in \link[dbscan:dbscan]{dbscan})
 to learn how to set these arguments, as well as the paper
 \insertCite{Hahsler2019}{bioregion}. Note that clusters with a value of 0
 are points which were deemed as noise by the algorithm.

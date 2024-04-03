@@ -12,7 +12,7 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
-#' @param n_clust an `integer` or a `vector` of `integers` specifying the
+#' @param n_clust an `integer` or an `integer` vector specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param maxiter an `integer` defining the maximum number of iterations.
@@ -43,7 +43,7 @@
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**name**: `character` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
 #' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the
@@ -152,8 +152,10 @@ BUILD or LAB", call. = FALSE)
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, "dist"), 
-                                                  ifelse(is.numeric(index), names(net)[3], index), 
+                         pairwise_metric = ifelse(!inherits(dissimilarity, 
+                                                            "dist"), 
+                                                  ifelse(is.numeric(index), 
+                                                         names(net)[3], index), 
                                                   NA),
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
@@ -190,7 +192,7 @@ BUILD or LAB", call. = FALSE)
     data.frame(lapply(names(outputs$algorithm),
                       function(x) outputs$algorithm[[x]]@assignment)))
   
-  outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
+  outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

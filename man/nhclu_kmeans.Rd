@@ -7,10 +7,11 @@
 nhclu_kmeans(
   dissimilarity,
   index = names(dissimilarity)[3],
-  n_clust = NULL,
+  n_clust = c(1, 2, 3),
   iter_max = 10,
   nstart = 10,
-  algorithm = "Hartigan-Wong"
+  algorithm = "Hartigan-Wong",
+  algorithm_in_output = TRUE
 )
 }
 \arguments{
@@ -22,29 +23,37 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers} specifying the
+\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters}
 
 \item{iter_max}{an \code{integer} specifying the maximum number of
-iterations for the kmeans method (see \link[stats:kmeans]{stats::kmeans()})}
+iterations for the kmeans method (see \link[stats:kmeans]{kmeans})}
 
 \item{nstart}{an \code{integer} specifying how many random sets of
 \code{n_clust} should be selected as starting points for the kmeans analysis
-(see \link[stats:kmeans]{stats::kmeans()})}
+(see \link[stats:kmeans]{kmeans})}
 
-\item{algorithm}{a \verb{character string} specifying the algorithm to use for
-kmean (see \link[stats:kmeans]{stats::kmeans()}). Available options are
+\item{algorithm}{a \code{character} specifying the algorithm to use for
+kmean (see \link[stats:kmeans]{kmeans}). Available options are
 Hartigan-Wong, Lloyd, Forgy and MacQueen.}
+
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \link[stats:kmeans]{kmeans} should be returned in the output (\code{TRUE} by
+default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find the output of
+\link[stats:kmeans]{kmeans}.
 }
 \description{
 This function performs non hierarchical
@@ -57,10 +66,10 @@ assigned cluster centers is minimized. k-means cannot be applied directly
 on dissimilarity/beta-diversity metrics, because these distances are not
 euclidean. Therefore, it requires first to transform the dissimilarity
 matrix with a Principal Coordinate Analysis (using the function
-\link[ape:pcoa]{ape::pcoa()}), and then applying k-means on the coordinates
+\link[ape:pcoa]{pcoa}), and then applying k-means on the coordinates
 of points in the PCoA. Because this makes an additional transformation of
 the initial matrix of dissimilarity, the partitioning around medoids method
-should be preferred (\code{\link[=nhclu_pam]{nhclu_pam()}})
+should be preferred (\link{nhclu_pam})
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -83,8 +92,6 @@ partition_metrics(clust2, net = comnet, species_col = "Node2",
 }
 \seealso{
 \link{nhclu_pam}
-
-\link{cut_tree}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),

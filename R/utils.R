@@ -536,8 +536,8 @@ similarity_to_dissimilarity()."),
            call. = FALSE)
     } else {
       if (sum(args < 0) > 0) {
-        stop(paste0(deparse(substitute(args)), " must be composed of value 
-                    higher than 0."),
+        stop(paste0(deparse(substitute(args)), 
+                    " must be composed of value(s) higher than 0."),
              call. = FALSE
         )
       }
@@ -570,7 +570,7 @@ similarity_to_dissimilarity()."),
     } else {
       if (sum(args <= 0) > 0) {
         stop(paste0(deparse(substitute(args)),
-                    " must be composed of value strictly higher than 0."),
+                    " must be composed of value(s) strictly higher than 0."),
              call. = FALSE)
       }
     }
@@ -602,7 +602,7 @@ similarity_to_dissimilarity()."),
            call. = FALSE)
     } else {
       if (sum(args %% 1 != 0) > 0) {
-        stop(paste0(deparse(substitute(args)), " must be composed of integers."),
+        stop(paste0(deparse(substitute(args)), " must be composed of integer(s)."),
              call. = FALSE
         )
       }
@@ -641,13 +641,13 @@ similarity_to_dissimilarity()."),
            call. = FALSE)
     } else {
       if (sum(args %% 1 != 0) > 0) {
-        stop(paste0(deparse(substitute(args)), " must be composed of integers."),
+        stop(paste0(deparse(substitute(args)), " must be composed of integer(s)."),
              call. = FALSE
         )
       } else {
         if (sum(args < 0) > 0) {
-          stop(paste0(deparse(substitute(args)), " must be composed of value 
-                      higher than 0."),
+          stop(paste0(deparse(substitute(args)), 
+                      " must be composed of value(s) higher than 0."),
                call. = FALSE
           )
         }
@@ -760,8 +760,10 @@ reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
 }
 
 # knbclu
-knbclu <- function(partitions, method = "length",
-                   reorder = TRUE, rename_duplicates = TRUE) {
+knbclu <- function(partitions, 
+                   method = "length",
+                   reorder = TRUE, 
+                   rename_duplicates = TRUE) {
   
   # Identify the number of clusters per partition
   nb <- dim(partitions)[2] - 1

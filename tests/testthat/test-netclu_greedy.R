@@ -9,6 +9,8 @@ comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
+#comat[1,]=0
+
 simil <- similarity(comat, metric = "all")
 dissimil <- dissimilarity(comat, metric = "all")
 

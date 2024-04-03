@@ -79,6 +79,20 @@ test_that("valid output", {
    expect_equal(clust$inputs$hierarchical, FALSE)
    expect_equal(dim(clust$clusters)[2], 4)
    
+   clust <- nhclu_clara(dissim,
+                         index = "Euclidean",
+                         n_clust = c(5,10),                       
+                         seed = 1)
+   expect_equal(colnames(clust$clusters)[2], "K_5")
+   expect_equal(colnames(clust$clusters)[3], "K_10")
+   
+   clust <- nhclu_clara(dissim,
+                        index = "Euclidean",
+                        n_clust = c(10,5),                       
+                        seed = 1)
+   expect_equal(colnames(clust$clusters)[2], "K_5")
+   expect_equal(colnames(clust$clusters)[3], "K_10")
+   
    clust1 <- nhclu_clara(dissim,
                         index = "Euclidean",
                         n_clust = c(5,10),                       
@@ -342,6 +356,7 @@ BUILD or LAB",
     nhclu_clara(dissim, seed = 0),
     "seed must be strictly higher than 0.",
     fixed = TRUE) 
+  
   expect_error(
     nhclu_clara(dissim, algorithm_in_output = 1),
     "algorithm_in_output must be a boolean.",

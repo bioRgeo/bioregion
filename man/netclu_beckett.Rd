@@ -43,13 +43,13 @@ feature nodes).}
 (\code{return_node_type = "both"} by default).}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \code{computeModules} should be returned in the output (see Value).
-Default to TRUE.}
+of \link[bipartite:computeModules]{computeModules} should be returned in the
+output (\code{TRUE} by default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the

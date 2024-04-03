@@ -23,7 +23,7 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers} specifying the
+\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters.}
 
 \item{numlocal}{an \code{integer} defining the number of samples to draw.}
@@ -33,13 +33,13 @@ requested number(s) of clusters.}
 \item{seed}{an \code{integer} to define a generator of random numbers.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \code{fastclarans} should be returned in the output (\code{TRUE} by
+of \link[fastkmedoids:fastclarans]{fastclarans} should be returned in the output (\code{TRUE} by
 default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
