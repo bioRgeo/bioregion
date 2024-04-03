@@ -17,6 +17,7 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
               "input_net_bip",
               "input_net_bip_col", 
               "input_matrix",
+              "input_dist",
               "input_data_frame_nhandhclu",
               "input_data_frame",
               "character",
@@ -361,6 +362,23 @@ similarity_to_dissimilarity()."),
     nbna <- sum(is.na(data))
     if (nbna > 0) {
       stop("NA(s) detected in the matrix!", call. = FALSE)
+    }
+  }
+  
+  # Input dist ###############################################################
+  if (type == "input_dist") {
+    if (!inherits(data, "dist")) {
+      stop(paste0(deparse(substitute(data)), " must be a dist object."),
+           call. = FALSE)
+    }
+    if (!is.numeric(data)) {
+      stop(paste0(deparse(substitute(data)), " must be numeric."),
+           call. = FALSE)
+    }
+    nbna <- sum(is.na(data))
+    if (nbna > 0) {
+      stop(paste0("NA(s) detected in ", paste0(deparse(substitute(data))), "."),
+           call. = FALSE)
     }
   }
 

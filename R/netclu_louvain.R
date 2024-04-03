@@ -52,8 +52,8 @@
 #' be removed (see Details).
 #'
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of `communities` should be returned in the output (see Value).
-#' Default to TRUE.
+#' of `cluster_louvain` should be returned in the output (`TRUE` by 
+#' default, see Value). 
 #'
 #' @details
 #' Louvain is a network community detection algorithm proposed in
@@ -76,9 +76,9 @@
 #' "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
 #' Owsinski-Zadrozny criterion (you should specify the value of the parameter
 #' with the `c` argument), 3 for the Goldberg Density criterion, 4 for the
-#' A-weighted Condorcet criterion,5 for the Deviation to Indetermination
+#' A-weighted Condorcet criterion, 5 for the Deviation to Indetermination
 #' criterion, 6 for the Deviation to Uniformity criterion, 7 for the Profile
-#' Difference criterion, 8	for the Shi-Malik criterion (you should specify the
+#' Difference criterion, 8 for the Shi-Malik criterion (you should specify the
 #' value of kappa_min with `k` argument) and 9 for the Balanced Modularity
 #' criterion.
 #'
@@ -120,7 +120,7 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find an
-#' "communities" object, output of [cluster_louvain][igraph::cluster_louvain]
+#' the output of [cluster_louvain][igraph::cluster_louvain]
 #' if `lang = "igraph"` and the following element if `lang = "Cpp"`:
 #'
 #' \itemize{

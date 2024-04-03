@@ -10,9 +10,9 @@ similarity_to_dissimilarity(similarity, include_formula = TRUE)
 \item{similarity}{the output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.}
 
-\item{include_formula}{a boolean indicating if the metrics based on your own
-formula should be converted (see Details). This argument is set to \code{TRUE}
-by default.}
+\item{include_formula}{a \code{boolean} indicating if the metrics based on your
+own formula(s) should be converted (see Details). This argument is set to
+\code{TRUE} by default.}
 }
 \value{
 A \code{data.frame} with additional class
@@ -20,7 +20,7 @@ A \code{data.frame} with additional class
 metric(s) between each pair of sites based on a similarity object.
 }
 \description{
-This function converts a data.frame of similarity metrics between sites to
+This function converts a \code{data.frame} of similarity metrics between sites to
 dissimilarity metrics (beta diversity).
 }
 \note{

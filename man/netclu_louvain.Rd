@@ -73,8 +73,8 @@ the third column name of \code{net} is used.}
 be removed (see Details).}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \code{communities} should be returned in the output (see Value).
-Default to TRUE.}
+of \code{cluster_louvain} should be returned in the output (\code{TRUE} by
+default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -88,7 +88,7 @@ clustering procedure, such as original cluster objects (only if
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can find an
-"communities" object, output of \link[igraph:cluster_louvain]{cluster_louvain}
+the output of \link[igraph:cluster_louvain]{cluster_louvain}
 if \code{lang = "igraph"} and the following element if \code{lang = "Cpp"}:
 
 \itemize{
@@ -122,9 +122,9 @@ quality functions,
 "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
 Owsinski-Zadrozny criterion (you should specify the value of the parameter
 with the \code{c} argument), 3 for the Goldberg Density criterion, 4 for the
-A-weighted Condorcet criterion,5 for the Deviation to Indetermination
+A-weighted Condorcet criterion, 5 for the Deviation to Indetermination
 criterion, 6 for the Deviation to Uniformity criterion, 7 for the Profile
-Difference criterion, 8	for the Shi-Malik criterion (you should specify the
+Difference criterion, 8 for the Shi-Malik criterion (you should specify the
 value of kappa_min with \code{k} argument) and 9 for the Balanced Modularity
 criterion.
 

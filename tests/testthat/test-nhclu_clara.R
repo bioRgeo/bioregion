@@ -2,6 +2,19 @@
 dissim <- dissimilarity(fishmat, metric = "all")
 dissim2 <- dissim[,1:2]
 
+df <- data.frame(ID1=dissim$Site1, ID2=dissim$Site2, W=dissim$Eucl)
+
+d <- dist(fishmat)
+mat <- fishmat
+rownames(mat) <- NULL
+colnames(mat) <- NULL
+d2 <- dist(mat)
+d3 <- d
+d3[1] <- "1"
+d4 <- d
+d4[1] <- NA
+
+
 uni <- data.frame(
   Site1 = c("c", "b", "a"),
   Site2 = c("a", "c", "b"),
@@ -48,6 +61,7 @@ test_that("valid output", {
    expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
    expect_equal(clust$name, "nhclu_clara")
    expect_equal(clust$args$index, "Simpson")
+   expect_equal(clust$args$n_clust, c(1,2,3))
    expect_equal(clust$args$maxiter, 0)
    expect_equal(clust$args$initializer, "LAB")
    expect_equal(clust$args$fasttol, 1)
@@ -64,6 +78,30 @@ test_that("valid output", {
    expect_equal(clust$inputs$nb_sites, 338)
    expect_equal(clust$inputs$hierarchical, FALSE)
    expect_equal(dim(clust$clusters)[2], 4)
+   
+   clust1 <- nhclu_clara(dissim,
+                        index = "Euclidean",
+                        n_clust = c(5,10),                       
+                        seed = 1)
+   clust2 <- nhclu_clara(df,
+                         index = 3,
+                         n_clust = c(5,10),                       
+                         seed = 1)
+   clust3 <- nhclu_clara(d,
+                         index = -1,
+                         n_clust = c(5,10),                       
+                         seed = 1)
+   clust4 <- nhclu_clara(d,
+                         index = -1,
+                         n_clust = c(5,10),                       
+                         seed = 1)
+   expect_equal(dim(clust1$clusters)[2], 3)
+   expect_equal(dim(clust2$clusters)[2], 3)
+   expect_equal(dim(clust3$clusters)[2], 3)
+   expect_equal(sum(clust1$clusters==clust2$clusters), 1014)
+   expect_equal(sum(clust1$clusters==clust3$clusters), 1014)
+   expect_equal(sum(clust2$clusters==clust3$clusters), 1014)
+   expect_equal(sum(clust3$clusters==clust4$clusters), 1014)
    
 })
  
@@ -116,6 +154,21 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
     nhclu_clara(unichar),
     "The weight column must be numeric.",
     fixed = TRUE)  
+  
+  expect_message(
+    nhclu_clara(d2),
+    "No labels detected, they have been assigned automatically.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(d3),
+    "dissimilarity must be numeric.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_clara(d4),
+    "NA(s) detected in dissimilarity.",
+    fixed = TRUE) 
   
   expect_error(
     nhclu_clara(dissim, index = c("zz",1)),

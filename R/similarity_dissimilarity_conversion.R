@@ -1,14 +1,14 @@
 #' Convert similarity metrics to dissimilarity metrics
 #'
-#' This function converts a data.frame of similarity metrics between sites to
+#' This function converts a `data.frame` of similarity metrics between sites to
 #'  dissimilarity metrics (beta diversity).
 #'
 #' @param similarity the output object from [similarity()] or
 #' [dissimilarity_to_similarity()].
 #' 
-#' @param include_formula a boolean indicating if the metrics based on your own
-#' formula should be converted (see Details). This argument is set to `TRUE`
-#' by default.
+#' @param include_formula a `boolean` indicating if the metrics based on your 
+#' own formula(s) should be converted (see Details). This argument is set to 
+#' `TRUE` by default.
 #' 
 #' @note
 #' \loadmathjax
@@ -107,15 +107,15 @@ similarity_to_dissimilarity <- function(similarity, include_formula = TRUE){
 
 #' Convert dissimilarity metrics to similarity metrics
 #'
-#' This function converts a data.frame of dissimilarity metrics (beta diversity)
+#' This function converts a `data.frame` of dissimilarity metrics (beta diversity)
 #' between sites to similarity metrics.
 #'
 #' @param dissimilarity the output object from [dissimilarity()] or
 #' [similarity_to_dissimilarity()].
 #' 
-#' @param include_formula a boolean indicating if the metrics based on your own
-#' formula should be converted (see Details). This argument is set to `TRUE`
-#' by default.
+#' @param include_formula a `boolean` indicating if the metrics based on your 
+#' own formula(s) should be converted (see Details). This argument is set to 
+#' `TRUE` by default.
 #' 
 #' @note
 #' \loadmathjax

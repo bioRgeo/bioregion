@@ -8,18 +8,18 @@
 #' @param comat a co-occurrence `matrix` with sites as rows and species
 #' as columns.
 #' 
-#' @param metric a vector of string(s) indicating which metrics to chose
+#' @param metric a `character` vector indicating which metrics to chose
 #' (see Details). Available options are *abc*, *ABC*, *Jaccard*,
 #' *Jaccardturn*, *Sorensen*, *Simpson*,  *Bray*,
 #' *Brayturn* or *Euclidean*.\cr
 #' If `"all"` is specified, then all metrics will be
 #' calculated. Can be set to `NULL` if `formula` is used.
 #' 
-#' @param formula a vector of string(s) with your own formula based on the
+#' @param formula a `character` vector with your own formula(s) based on the
 #' `a`, `b`, `c`, `A`, `B`, and `C` quantities
 #' (see Details). `formula` is set to `NULL` by default.
 #' 
-#' @param method a string indicating what method should be used to compute
+#' @param method a `character` indicating what method should be used to compute
 #' `abc` (see Details).
 #' `method = "prodmat"` by default is more efficient but can be greedy
 #' in memory and `method="loops"` is less efficient but less greedy in
@@ -54,7 +54,7 @@
 #' `formula = c("pmin(b,c) / (a + pmin(b,c))", "(B + C) / (2*A + B + C)")`
 #' will compute the Simpson and Bray-Curtis dissimilarity metrics, respectively. 
 #' **Note that pmin is used in the Simpson formula because a, b, c, A, B and C 
-#' are vectors.**
+#' are `numeric` vectors.**
 #'
 #' Euclidean computes the Euclidean distance between each pair of sites.
 #'

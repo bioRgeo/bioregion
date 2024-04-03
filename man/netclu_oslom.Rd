@@ -37,7 +37,7 @@ if there are more than two columns.}
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{reassign}{a string indicating if the nodes belonging to several
+\item{reassign}{a \code{character} indicating if the nodes belonging to several
 community should be reassign and what method should be used (see Note).}
 
 \item{r}{the number of runs for the first hierarchical level

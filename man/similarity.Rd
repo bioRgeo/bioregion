@@ -10,14 +10,14 @@ similarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 \item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{metric}{a vector of string(s) indicating which metrics to chose
+\item{metric}{a \code{character} vector indicating which metrics to chose
 (see Details). Available options are \emph{abc}, \emph{ABC}, \emph{Jaccard},
 \emph{Jaccardturn}, \emph{Sorensen}, \emph{Simpson},  \emph{Bray},
 \emph{Brayturn} or \emph{Euclidean}.\cr
 If \code{"all"} is specified, then all metrics will be
 calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
-\item{formula}{a vector of string(s) with your own formula based on the
+\item{formula}{a \code{character} vector with your own formula(s) based on the
 \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
 (see Details). \code{formula} is set to \code{NULL} by default.}
 
@@ -71,7 +71,7 @@ B and C are the total number of specimens counted at both sites minus A.
 \code{formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)")}
 will compute the Simpson and Bray-Curtis similarity metrics, respectively.
 \strong{Note that pmin is used in the Simpson formula because a, b, c, A, B and C
-are vectors.}
+are \code{numeric} vectors.}
 
 Euclidean computes the Euclidean similarity between each pair of site
 following this equation:

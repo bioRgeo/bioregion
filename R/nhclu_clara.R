@@ -17,23 +17,24 @@
 #' 
 #' @param maxiter an `integer` defining the maximum number of iterations.
 #' 
-#' @param initializer character string, either 'BUILD' (used in classic PAM
+#' @param initializer a `character`, either 'BUILD' (used in classic PAM
 #' algorithm) or 'LAB' (linear approximative BUILD).
 #' 
-#' @param fasttol positive numeric defining the tolerance for fast swapping
+#' @param fasttol positive `numeric` defining the tolerance for fast swapping
 #' behavior, set to 1 by default.
 #' 
-#' @param numsamples positive integer defining the number of samples to draw.
+#' @param numsamples positive `integer` defining the number of samples to draw.
 #' 
-#' @param sampling positive numeric defining the sampling rate.
+#' @param sampling positive `numeric` defining the sampling rate.
 #' 
-#' @param independent jogical, FALSE by default meaning that the previous
-#' medoids are not kept in the next sample.
+#' @param independent a `boolean` indicating that the previous
+#' medoids are not kept in the next sample (FALSE by default).
 #' 
 #' @param seed an `integer` to define a generator of random numbers.
 #' 
-#' @param algorithm_in_output a `boolean` indicating if the original algorithm's
-#' outputs should be returned in the output (see Value).
+#' @param algorithm_in_output a `boolean` indicating if the original output
+#' of `fastclara` should be returned in the output (`TRUE` by 
+#' default, see Value).
 #' 
 #' @details
 #' Based on [fastkmedoids](https://cran.r-project.org/package=fastkmedoids)
@@ -109,9 +110,13 @@ nhclu_clara <- function(dissimilarity,
     dist.obj <- stats::as.dist(
       net_to_mat(net,
                  weight = TRUE, squared = TRUE, symmetrical = TRUE))
-    
   } else {
+    controls(args = NULL, data = dissimilarity, type = "input_dist")
     dist.obj <- dissimilarity
+    if(is.null(labels(dist.obj))){
+      attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
+      message("No labels detected, they have been assigned automatically.")
+    }
   }
   
   controls(args = n_clust, data = NULL, 
@@ -194,7 +199,7 @@ BUILD or LAB", call. = FALSE)
                                      drop = FALSE],
                     2, function(x) length(unique(x))))
   
-  # Set algorithm in outputs
+  # Set algorithm in output
   if (!algorithm_in_output) {
     outputs$algorithm <- NA
   }

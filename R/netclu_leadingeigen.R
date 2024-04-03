@@ -27,7 +27,8 @@
 #' (`return_node_type = "both"` by default).
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of `communities` should be returned in the output (see Value).
+#' of `cluster_leading_eigen` should be returned in the output (`TRUE` by 
+#' default, see Value).
 #'
 #' @details
 #' This function is based on leading eigenvector of the community matrix
@@ -60,8 +61,7 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find an "communities" object, output of
-#' [cluster_leading_eigen][igraph::cluster_leading_eigen].
+#' find the output of [cluster_leading_eigen][igraph::cluster_leading_eigen].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

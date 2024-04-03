@@ -57,9 +57,8 @@ clustering procedure, such as original cluster objects (only if
 \code{algorithm_in_output = TRUE})}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can find an
-object of class "moduleWeb", output of
-\link[bipartite:computeModules]{computeModules}.
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can find the
+output of \link[bipartite:computeModules]{computeModules}.
 }
 \description{
 This function takes a bipartite weighted graph and computes modules by

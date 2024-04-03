@@ -7,10 +7,11 @@
 nhclu_clarans(
   dissimilarity,
   index = names(dissimilarity)[3],
-  n_clust = NULL,
-  numlocal = 2L,
+  n_clust = c(1, 2, 3),
+  numlocal = 2,
   maxneighbor = 0.025,
-  seed = 123456789L
+  seed = 123456789,
+  algorithm_in_output = TRUE
 )
 }
 \arguments{
@@ -27,9 +28,13 @@ requested number(s) of clusters.}
 
 \item{numlocal}{an \code{integer} defining the number of samples to draw.}
 
-\item{maxneighbor}{A positive numeric defining the sampling rate.}
+\item{maxneighbor}{a positive \code{numeric} defining the sampling rate.}
 
 \item{seed}{an \code{integer} to define a generator of random numbers.}
+
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \code{fastclarans} should be returned in the output (\code{TRUE} by
+default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -40,6 +45,10 @@ A \code{list} of class \code{bioregion.clusters} with five slots:
 \item{\strong{algorithm}: \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find the output of
+\link[fastkmedoids:fastclarans]{fastclarans}.
 }
 \description{
 This function performs non hierarchical clustering on the basis of
@@ -47,7 +56,8 @@ dissimilarity with partitioning around medoids, using the Clustering Large
 Applications based on RANdomized Search (CLARANS) algorithm.
 }
 \details{
-Based on fastkmedoids R package.
+Based on \href{https://cran.r-project.org/package=fastkmedoids}{fastkmedoids}
+package (\link[fastkmedoids:fastclarans]{fastclarans}).
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),

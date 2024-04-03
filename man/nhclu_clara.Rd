@@ -32,23 +32,24 @@ requested number(s) of clusters.}
 
 \item{maxiter}{an \code{integer} defining the maximum number of iterations.}
 
-\item{initializer}{character string, either 'BUILD' (used in classic PAM
+\item{initializer}{a \code{character}, either 'BUILD' (used in classic PAM
 algorithm) or 'LAB' (linear approximative BUILD).}
 
-\item{fasttol}{positive numeric defining the tolerance for fast swapping
+\item{fasttol}{positive \code{numeric} defining the tolerance for fast swapping
 behavior, set to 1 by default.}
 
-\item{numsamples}{positive integer defining the number of samples to draw.}
+\item{numsamples}{positive \code{integer} defining the number of samples to draw.}
 
-\item{sampling}{positive numeric defining the sampling rate.}
+\item{sampling}{positive \code{numeric} defining the sampling rate.}
 
-\item{independent}{jogical, FALSE by default meaning that the previous
-medoids are not kept in the next sample.}
+\item{independent}{a \code{boolean} indicating that the previous
+medoids are not kept in the next sample (FALSE by default).}
 
 \item{seed}{an \code{integer} to define a generator of random numbers.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original algorithm's
-outputs should be returned in the output (see Value).}
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \code{fastclara} should be returned in the output (\code{TRUE} by
+default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:

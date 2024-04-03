@@ -45,7 +45,8 @@
 #' (`return_node_type = "both"` by default).
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of `communities` should be returned in the output (see Value).
+#' of `cluster_leiden` should be returned in the output (`TRUE` by 
+#' default, see Value).
 #'
 #' @details
 #' This function is based on the Leiden algorithm
@@ -78,7 +79,7 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find an "communities" object, output of
+#' find the output of
 #' [cluster_leiden][igraph::cluster_leiden].
 #'
 #' @author

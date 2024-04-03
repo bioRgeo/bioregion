@@ -61,9 +61,8 @@
 #'  `algorithm_in_output = TRUE`)}
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find an
-#' object of class "moduleWeb", output of
-#' [computeModules][bipartite::computeModules].
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find the
+#'  output of [computeModules][bipartite::computeModules].
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

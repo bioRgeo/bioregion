@@ -15,7 +15,7 @@
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #'
-#' @param reassign a string indicating if the nodes belonging to several
+#' @param reassign a `character` indicating if the nodes belonging to several
 #' community should be reassign and what method should be used (see Note).
 #'
 #' @param r the number of runs for the first hierarchical level

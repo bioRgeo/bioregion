@@ -3,9 +3,9 @@
 This is a list of changes made in the development/github version of the package
 between bioregion 1.1.0 (CRAN release 2024-03-19) and the next CRAN release.
 
-* Updated automated tests [objective -> percentage of code coverage > 60%].
+* Updated automated tests (code coverage > 60%).
 
-* Controls and outputs (algorithm slot) standardization.
+* Controls and outputs/inputs standardization.
  
 # bioregion 1.1.0 
 

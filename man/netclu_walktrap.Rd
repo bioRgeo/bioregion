@@ -44,7 +44,8 @@ the third column name of \code{net} is used.}
 (\code{return_node_type = "both"} by default).}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \code{communities} should be returned in the output (see Value).}
+of \code{cluster_walktrap} should be returned in the output (\code{TRUE} by
+default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -58,7 +59,7 @@ clustering procedure, such as original cluster objects (only if
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find an "communities" object, output of
+find the output of
 \link[igraph:cluster_walktrap]{cluster_walktrap}.
 }
 \description{
