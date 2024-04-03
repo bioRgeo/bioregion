@@ -86,6 +86,7 @@ Noise (DBSCAN)</p>
 <span>  minPts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  eps <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -105,7 +106,7 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 
 <dt>minPts</dt>
-<dd><p>a <code>numeric</code> value or a vector of <code>numeric</code> values
+<dd><p>a <code>numeric</code> value or a <code>numeric</code> vector
 specifying the minPts argument of <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a>).
 minPts is the minimum number of points to form a dense region. By default,
 it is set to the natural logarithm of the number of sites in
@@ -113,8 +114,8 @@ it is set to the natural logarithm of the number of sites in
 
 
 <dt>eps</dt>
-<dd><p>a <code>numeric</code> value or a vector of <code>numeric</code> values specifying the
-eps argument of <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a>). eps specifies how
+<dd><p>a <code>numeric</code> value or a <code>numeric</code> vector specifying the
+eps argument of <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a>). eps specifies how
 similar points should be to each other to be considered a part of a cluster.
 See details for guidance on choosing this parameter.</p></dd>
 
@@ -124,22 +125,31 @@ See details for guidance on choosing this parameter.</p></dd>
 should be plotted.</p></dd>
 
 
+<dt>algorithm_in_output</dt>
+<dd><p>a <code>boolean</code> indicating if the original output
+of <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>you can add here further arguments to be passed to <code>dbscan()</code>
-(see <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a>)</p></dd>
+(see <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a>).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character string</code> containing the name of the algorithm</p></li>
+<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
 <li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
 <li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
 clustering procedure, such as original cluster objects</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
-</ol></div>
+</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
+find the output of
+<a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The dbscan (Density-based spatial clustering of
@@ -149,7 +159,7 @@ main arguments, <code>minPts</code>, which stands for the minimum number of poin
 identify a core, and <code>eps</code>, which is the radius to find neighbors.
 <code>minPts</code> and <code>eps</code> should be defined by the user, which is not
 straightforward.
-We recommend reading the help in <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a>)
+We recommend reading the help in <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a>)
 to learn how to set these arguments, as well as the paper
 (Hahsler et al. 2019)
 . Note that clusters with a value of 0

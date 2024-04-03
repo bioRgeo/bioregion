@@ -80,10 +80,11 @@ clustering on the basis of dissimilarity with a k-means analysis.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nhclu_kmeans</span><span class="op">(</span></span>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>  n_clust <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  iter_max <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  nstart <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  algorithm <span class="op">=</span> <span class="st">"Hartigan-Wong"</span></span>
+<span>  algorithm <span class="op">=</span> <span class="st">"Hartigan-Wong"</span>,</span>
+<span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -102,38 +103,47 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 
 <dt>n_clust</dt>
-<dd><p>an <code>integer</code> or a <code>vector</code> of <code>integers</code> specifying the
+<dd><p>an <code>integer</code> or an <code>integer</code> vector specifying the
 requested number(s) of clusters</p></dd>
 
 
 <dt>iter_max</dt>
 <dd><p>an <code>integer</code> specifying the maximum number of
-iterations for the kmeans method (see <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans()</a>)</p></dd>
+iterations for the kmeans method (see <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a>)</p></dd>
 
 
 <dt>nstart</dt>
 <dd><p>an <code>integer</code> specifying how many random sets of
 <code>n_clust</code> should be selected as starting points for the kmeans analysis
-(see <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans()</a>)</p></dd>
+(see <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a>)</p></dd>
 
 
 <dt>algorithm</dt>
-<dd><p>a <code>character string</code> specifying the algorithm to use for
-kmean (see <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans()</a>). Available options are
+<dd><p>a <code>character</code> specifying the algorithm to use for
+kmean (see <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a>). Available options are
 Hartigan-Wong, Lloyd, Forgy and MacQueen.</p></dd>
+
+
+<dt>algorithm_in_output</dt>
+<dd><p>a <code>boolean</code> indicating if the original output
+of <a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character string</code> containing the name of the algorithm</p></li>
+<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
 <li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
 <li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
 clustering procedure, such as original cluster objects</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
-</ol></div>
+</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
+find the output of
+<a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This method partitions the data into k groups
@@ -142,15 +152,14 @@ assigned cluster centers is minimized. k-means cannot be applied directly
 on dissimilarity/beta-diversity metrics, because these distances are not
 euclidean. Therefore, it requires first to transform the dissimilarity
 matrix with a Principal Coordinate Analysis (using the function
-<a href="https://rdrr.io/pkg/ape/man/pcoa.html" class="external-link">ape::pcoa()</a>), and then applying k-means on the coordinates
+<a href="https://rdrr.io/pkg/ape/man/pcoa.html" class="external-link">pcoa</a>), and then applying k-means on the coordinates
 of points in the PCoA. Because this makes an additional transformation of
 the initial matrix of dissimilarity, the partitioning around medoids method
-should be preferred (<code><a href="nhclu_pam.html">nhclu_pam()</a></code>)</p>
+should be preferred (<a href="nhclu_pam.html">nhclu_pam</a>)</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="nhclu_pam.html">nhclu_pam</a></p>
-<p><a href="cut_tree.html">cut_tree</a></p></div>
+    <div class="dont-index"><p><a href="nhclu_pam.html">nhclu_pam</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
