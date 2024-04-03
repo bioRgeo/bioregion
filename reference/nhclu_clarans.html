@@ -83,10 +83,11 @@ Applications based on RANdomized Search (CLARANS) algorithm.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nhclu_clarans</span><span class="op">(</span></span>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>  n_clust <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  numlocal <span class="op">=</span> <span class="fl">2L</span>,</span>
+<span>  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  numlocal <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  maxneighbor <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123456789L</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">123456789</span>,</span>
+<span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,11 +115,17 @@ requested number(s) of clusters.</p></dd>
 
 
 <dt>maxneighbor</dt>
-<dd><p>A positive numeric defining the sampling rate.</p></dd>
+<dd><p>a positive <code>numeric</code> defining the sampling rate.</p></dd>
 
 
 <dt>seed</dt>
 <dd><p>an <code>integer</code> to define a generator of random numbers.</p></dd>
+
+
+<dt>algorithm_in_output</dt>
+<dd><p>a <code>boolean</code> indicating if the original output
+of <code>fastclarans</code> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -131,10 +138,14 @@ requested number(s) of clusters.</p></dd>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
 clustering procedure, such as original cluster objects</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
-</ol></div>
+</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
+find the output of
+<a href="https://rdrr.io/pkg/fastkmedoids/man/fastclarans.html" class="external-link">fastclarans</a>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Based on fastkmedoids R package.</p>
+    <p>Based on <a href="https://cran.r-project.org/package=fastkmedoids" class="external-link">fastkmedoids</a>
+package (<a href="https://rdrr.io/pkg/fastkmedoids/man/fastclarans.html" class="external-link">fastclarans</a>).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

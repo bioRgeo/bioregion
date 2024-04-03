@@ -94,7 +94,7 @@ as columns.</p></dd>
 
 
 <dt>metric</dt>
-<dd><p>a vector of string(s) indicating which metrics to chose
+<dd><p>a <code>character</code> vector indicating which metrics to chose
 (see Details). Available options are <em>abc</em>, <em>ABC</em>, <em>Jaccard</em>,
 <em>Jaccardturn</em>, <em>Sorensen</em>, <em>Simpson</em>,  <em>Bray</em>,
 <em>Brayturn</em> or <em>Euclidean</em>.<br>
@@ -103,13 +103,13 @@ calculated. Can be set to <code>NULL</code> if <code>formula</code> is used.</p>
 
 
 <dt>formula</dt>
-<dd><p>a vector of string(s) with your own formula based on the
+<dd><p>a <code>character</code> vector with your own formula(s) based on the
 <code>a</code>, <code>b</code>, <code>c</code>, <code>A</code>, <code>B</code>, and <code>C</code> quantities
 (see Details). <code>formula</code> is set to <code>NULL</code> by default.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>a string indicating what method should be used to compute
+<dd><p>a <code>character</code> indicating what method should be used to compute
 <code>abc</code> (see Details).
 <code>method = "prodmat"</code> by default is more efficient but can be greedy
 in memory and <code>method="loops"</code> is less efficient but less greedy in
@@ -150,7 +150,7 @@ A.</p>
 <code>formula = c("pmin(b,c) / (a + pmin(b,c))", "(B + C) / (2*A + B + C)")</code>
 will compute the Simpson and Bray-Curtis dissimilarity metrics, respectively.
 <strong>Note that pmin is used in the Simpson formula because a, b, c, A, B and C
-are vectors.</strong></p>
+are <code>numeric</code> vectors.</strong></p>
 <p>Euclidean computes the Euclidean distance between each pair of sites.</p>
     </div>
     <div class="section level2">

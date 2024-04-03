@@ -91,7 +91,7 @@ columns.</p></dd>
 
 
 <dt>metric</dt>
-<dd><p>a vector of string(s) indicating which metrics to chose
+<dd><p>a <code>character</code> vector indicating which metrics to chose
 (see Details). Available options are <em>abc</em>, <em>ABC</em>, <em>Jaccard</em>,
 <em>Jaccardturn</em>, <em>Sorensen</em>, <em>Simpson</em>,  <em>Bray</em>,
 <em>Brayturn</em> or <em>Euclidean</em>.<br>
@@ -100,7 +100,7 @@ calculated. Can be set to <code>NULL</code> if <code>formula</code> is used.</p>
 
 
 <dt>formula</dt>
-<dd><p>a vector of string(s) with your own formula based on the
+<dd><p>a <code>character</code> vector with your own formula(s) based on the
 <code>a</code>, <code>b</code>, <code>c</code>, <code>A</code>, <code>B</code>, and <code>C</code> quantities
 (see Details). <code>formula</code> is set to <code>NULL</code> by default.</p></dd>
 
@@ -148,7 +148,7 @@ B and C are the total number of specimens counted at both sites minus A.</p>
 <code>formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)")</code>
 will compute the Simpson and Bray-Curtis similarity metrics, respectively.
 <strong>Note that pmin is used in the Simpson formula because a, b, c, A, B and C
-are vectors.</strong></p>
+are <code>numeric</code> vectors.</strong></p>
 <p>Euclidean computes the Euclidean similarity between each pair of site
 following this equation:</p>
 <p><em></em>\(Euclidean = 1 / (1 + d_{ij})\)</p>

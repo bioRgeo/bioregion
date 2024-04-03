@@ -131,7 +131,8 @@ the third column name of <code>net</code> is used.</p></dd>
 
 <dt>algorithm_in_output</dt>
 <dd><p>a <code>boolean</code> indicating if the original output
-of <code>communities</code> should be returned in the output (see Value).</p></dd>
+of <code>cluster_leading_eigen</code> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -146,8 +147,7 @@ clustering procedure, such as original cluster objects (only if
 <code>algorithm_in_output = TRUE</code>)</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
 </ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
-find an "communities" object, output of
-<a href="https://r.igraph.org/reference/cluster_leading_eigen.html" class="external-link">cluster_leading_eigen</a>.</p>
+find the output of <a href="https://r.igraph.org/reference/cluster_leading_eigen.html" class="external-link">cluster_leading_eigen</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

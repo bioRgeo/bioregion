@@ -119,26 +119,26 @@ requested number(s) of clusters.</p></dd>
 
 
 <dt>initializer</dt>
-<dd><p>character string, either 'BUILD' (used in classic PAM
+<dd><p>a <code>character</code>, either 'BUILD' (used in classic PAM
 algorithm) or 'LAB' (linear approximative BUILD).</p></dd>
 
 
 <dt>fasttol</dt>
-<dd><p>positive numeric defining the tolerance for fast swapping
+<dd><p>positive <code>numeric</code> defining the tolerance for fast swapping
 behavior, set to 1 by default.</p></dd>
 
 
 <dt>numsamples</dt>
-<dd><p>positive integer defining the number of samples to draw.</p></dd>
+<dd><p>positive <code>integer</code> defining the number of samples to draw.</p></dd>
 
 
 <dt>sampling</dt>
-<dd><p>positive numeric defining the sampling rate.</p></dd>
+<dd><p>positive <code>numeric</code> defining the sampling rate.</p></dd>
 
 
 <dt>independent</dt>
-<dd><p>jogical, FALSE by default meaning that the previous
-medoids are not kept in the next sample.</p></dd>
+<dd><p>a <code>boolean</code> indicating that the previous
+medoids are not kept in the next sample (FALSE by default).</p></dd>
 
 
 <dt>seed</dt>
@@ -146,8 +146,9 @@ medoids are not kept in the next sample.</p></dd>
 
 
 <dt>algorithm_in_output</dt>
-<dd><p>a <code>boolean</code> indicating if the original algorithm's
-outputs should be returned in the output (see Value).</p></dd>
+<dd><p>a <code>boolean</code> indicating if the original output
+of <code>fastclara</code> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -179,8 +179,8 @@ be removed (see Details).</p></dd>
 
 <dt>algorithm_in_output</dt>
 <dd><p>a <code>boolean</code> indicating if the original output
-of <code>communities</code> should be returned in the output (see Value).
-Default to TRUE.</p></dd>
+of <code>cluster_louvain</code> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -195,7 +195,7 @@ clustering procedure, such as original cluster objects (only if
 <code>algorithm_in_output = TRUE</code>)</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
 </ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can find an
-"communities" object, output of <a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a></p>
+the output of <a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a></p>
 
 
 <p>if <code>lang = "igraph"</code> and the following element if <code>lang = "Cpp"</code>:</p>
@@ -227,9 +227,9 @@ quality functions,
 "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
 Owsinski-Zadrozny criterion (you should specify the value of the parameter
 with the <code>c</code> argument), 3 for the Goldberg Density criterion, 4 for the
-A-weighted Condorcet criterion,5 for the Deviation to Indetermination
+A-weighted Condorcet criterion, 5 for the Deviation to Indetermination
 criterion, 6 for the Deviation to Uniformity criterion, 7 for the Profile
-Difference criterion, 8	for the Shi-Malik criterion (you should specify the
+Difference criterion, 8 for the Shi-Malik criterion (you should specify the
 value of kappa_min with <code>k</code> argument) and 9 for the Balanced Modularity
 criterion.</p>
 <p>The C++ version of Louvain is based on the version 0.3
