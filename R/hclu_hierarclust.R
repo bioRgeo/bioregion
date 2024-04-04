@@ -19,45 +19,47 @@
 #' the third column name of `dissimilarity` is used.
 #'  
 #' @param method name of the hierarchical classification method, as in
-#' [fastcluster::hclust()][fastcluster::hclust]. Should be one of `"ward.D"`,
-#' `"ward.D2"`, `"single"`, `"complete"`, `"average"`
-#' (= UPGMA), `"mcquitty"` (= WPGMA), `"median"` (= WPGMC) or
-#' `"centroid"` (= UPGMC).
+#' [hclust][fastcluster::hclust]. Should be one of "ward.D",
+#' "ward.D2", "single", "complete", "average"
+#' (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or
+#' "centroid" (= UPGMC).
 #' 
-#' @param randomize a boolean indicating if the dissimilarity matrix should be
+#' @param randomize a `boolean` indicating if the dissimilarity matrix should be
 #' randomized, to account for the order of sites in the dissimilarity matrix.
+#' 
 #' @param n_runs number of trials to randomize the dissimilarity matrix.
 #' 
-#' @param keep_trials a boolean indicating if all random trial results.
+#' @param keep_trials a `boolean` indicating if all random trial results.
 #' should be stored in the output object (set to FALSE to save space if your
 #' `dissimilarity` object is large).
 #' 
-#' @param optimal_tree_method a character vector indicating how the final tree
+#' @param optimal_tree_method a `character` indicating how the final tree
 #' should be obtained from all trials. The only option currently is
-#' `"best"`, which means the tree with the best cophenetic correlation
+#' "best", which means the tree with the best cophenetic correlation
 #' coefficient will be chosen.
 #' 
-#' @param n_clust an integer or a vector of integers indicating the number of
+#' @param n_clust an `integer` or an `integer` vector indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
 #' [partition_metrics]. Should not be used at the same time as
 #' `cut_height`.
 #' 
-#' @param cut_height a numeric vector indicating the height(s) at which the
+#' @param cut_height a `numeric` vector indicating the height(s) at which the
 #' tree should be cut. Should not be used at the same time as `n_clust`.
 #' 
-#' @param find_h a boolean indicating if the height of cut should be found for
+#' @param find_h a `boolean` indicating if the height of cut should be found for
 #' the requested `n_clust`.
 #' 
-#' @param h_max a numeric indicating the maximum possible tree height for
+#' @param h_max a `numeric` indicating the maximum possible tree height for
 #' the chosen `index`.
 #' 
-#' @param h_min a numeric indicating the minimum possible height in the tree
+#' @param h_min a `numeric` indicating the minimum possible height in the tree
 #' for the chosen `index`.
 #' 
 #' @details
-#' The default method for the hierarchical tree is `"average"`, i.e.
+#' The function is based on [hclust][fastcluster::hclust].
+#' The default method for the hierarchical tree is `average`, i.e.
 #' UPGMA as it has been recommended as the best method to generate a tree
-#' from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}
+#' from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}.
 #'
 #' Clusters can be obtained by two methods:
 #' \itemize{
@@ -69,7 +71,7 @@
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character string` containing the name of the algorithm}
+#' \item{**name**: `character` containing the name of the algorithm}
 #' \item{**args**: `list` of input arguments as provided by the user}
 #' \item{**inputs**: `list` of characteristics of the clustering process}
 #' \item{**algorithm**: `list` of all objects associated with the
@@ -150,115 +152,82 @@ hclu_hierarclust <- function(dissimilarity,
                              h_min = 0){
   
   # 1. Controls ---------------------------------------------------------------
-  if(inherits(dissimilarity, "bioregion.pairwise.metric")){
-    if(attr(dissimilarity, "type") == "similarity") {
-      stop("dissimilarity seems to be a similarity object.
-         hclu_hierarclust() should be applied on dissimilarity, not
-         similarities.
-         Use similarity_to_dissimilarity() before using hclu_hierarclust()")
+  controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
+  if(!inherits(dissimilarity, "dist")){
+    controls(args = NULL, data = dissimilarity, type = "input_dissimilarity")
+    controls(args = NULL, data = dissimilarity, 
+             type = "input_data_frame_nhandhclu")
+    controls(args = index, data = dissimilarity, type = "input_net_index")
+    net <- dissimilarity
+    net[, 3] <- net[, index]
+    net <- net[, 1:3]
+    controls(args = NULL, data = net, type = "input_net_index_value")
+    dist.obj <- stats::as.dist(
+      net_to_mat(net,
+                 weight = TRUE, squared = TRUE, symmetrical = TRUE))
+  } else {
+    controls(args = NULL, data = dissimilarity, type = "input_dist")
+    dist.obj <- dissimilarity
+    if(is.null(labels(dist.obj))){
+      attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
+      message("No labels detected, they have been assigned automatically.")
     }
-    if(is.numeric(index)){
-      index <- names(dissimilarity)[index]
-    }
-    if(!(index %in% colnames(dissimilarity))) {
-      stop("Argument index should be one of the column names of dissimilarity")
-    }
-    
-  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
-                 inherits(dissimilarity, "dist"))){
-    if(is.numeric(index)) {
-      index <- names(dissimilarity)[index]
-    } 
-    if(is.null(index) || !(index %in% colnames(dissimilarity))) {
-      stop("dissimilarity is not a bioregion.pairwise.metric object, a
-           dissimilarity matrix (class dist) or a data.frame with at least 3
-           columns (site1, site2, and your dissimilarity index).")
-    }
+  }
+  
+  controls(args = method, data = NULL, type = "character")
+  if(!(method %in% c("ward.D", "ward.D2", "single", "complete", "average",
+                          "mcquitty", "median", "centroid" ))){
+    stop("Please choose method among the followings values:
+ward.D, ward.D2, single, complete, average, mcquitty, median or centroid", 
+         call. = FALSE)
+  }
+  controls(args = randomize, data = NULL, type = "boolean")
+  controls(args = n_runs, data = NULL, type = "strict_positive_integer")
+  controls(args = keep_trials, data = NULL, type = "boolean")
+  controls(args = optimal_tree_method, data = NULL, type = "character")
+  if(!(optimal_tree_method %in% c("best" ))){
+    stop("Please choose optimal_tree_method among the followings values:
+best", 
+    call. = FALSE)
   }
   
   if(!is.null(n_clust)) {
     if(is.numeric(n_clust)) {
-      if(any(!(n_clust %% 1 == 0))) {
-        stop("n_clust must an integer or a vector of integers determining the
-             number of clusters.")
-      }
+        controls(args = n_clust, data = NULL, 
+                 type = "strict_positive_integer_vector")
     } else if(inherits(n_clust, "bioregion.partition.metrics")){
       if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
         stop("n_clust does not have an optimal number of clusters. Did you
-        specify partition_optimisation = TRUE in partition_metrics()?")
+        specify partition_optimisation = TRUE in partition_metrics()?", 
+             call. = FALSE)
       }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from partition_metrics()")
+        * the output from partition_metrics()", 
+           call. = FALSE)
     }
     if(!is.null(cut_height)){
       stop("Please provide either n_clust or cut_height, but not both at the
-           same time.")
+           same time.", 
+           call. = FALSE)
     }
   }
-  
-  if(!is.character(method) || length(method) != 1 ||
-     !(all(method %in% c("ward.D", "ward.D2", "single", "complete", "average",
-                         "mcquitty", "median", "centroid" )))){
-    stop("method is a character string indicating what hierarchical
-         classification method to use. See help for available options.")
-  }
-  
-  if(!is.logical(randomize)){
-    stop("randomize must be a Boolean.")
-  }
-  
-  if(!is.numeric(n_runs) || n_runs < 0){
-    stop("n_runs must be a positive integer.")
-  }
-  
-  if(!is.logical(keep_trials)){
-    stop("keep_trials must be a Boolean.")
-  }
-  
-  if(optimal_tree_method != "best"){
-    stop("optimal_tree_method must be a character string. Only available
-         option at the moment is best.")
-  }
-  
   if(!is.null(cut_height)){
-    if(!is.numeric(cut_height) || any(cut_height < 0)){
-      stop("cut_height must be a positive integer.")
-    }
+    controls(args = cut_height, data = NULL, type = "positive_numeric_vector")
   }
-  
-  if(!is.logical(find_h)){
-    stop("find_h must be a Boolean.")
-  }
-  
-  if(!is.numeric(h_max) || h_max < 0){
-    stop("h_max must be a positive integer.")
-  }
-  
-  if(!is.numeric(h_min) || h_min < 0){
-    stop("h_min must be a positive integer.")
-  }
-  
+  controls(args = find_h, data = NULL, type = "boolean")
+  controls(args = h_min, data = NULL, type = "positive_numeric")
+  controls(args = h_max, data = NULL, type = "positive_numeric")
   if(h_min > h_max){
     stop("h_min must be inferior to h_max.")
   }
   
   # 2. Function ---------------------------------------------------------------
-  outputs <- list(name = "hierarchical_clustering")
-  
-  if(!inherits(dissimilarity, "dist")){
-    # dist.obj <- .dfToDist(dissimilarity, metric = index)
-    dist.obj <- stats::as.dist(
-      net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2], index)],
-                 weight = TRUE, squared = TRUE, symmetrical = TRUE))
-    
-  } else {
-    dist.obj <- dissimilarity
-  }
+  outputs <- list(name = "hclu_hierarclust")
   
   # Adding dynamic_tree_cut = FALSE for compatibility with generic functions
   dynamic_tree_cut <- FALSE
@@ -267,6 +236,7 @@ hclu_hierarclust <- function(dissimilarity,
                        randomize = randomize,
                        n_runs = n_runs,
                        optimal_tree_method = optimal_tree_method,
+                       keep_trials = keep_trials,
                        n_clust = n_clust,
                        cut_height = cut_height,
                        find_h = find_h,
@@ -276,7 +246,12 @@ hclu_hierarclust <- function(dissimilarity,
   
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
-                         pairwise_metric = TRUE,
+                         pairwise = TRUE,
+                         pairwise_metric = ifelse(!inherits(dissimilarity, 
+                                                            "dist"), 
+                                                  ifelse(is.numeric(index), 
+                                                         names(net)[3], index), 
+                                                  NA),
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"))
   

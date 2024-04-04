@@ -138,7 +138,6 @@ nhclu_dbscan <- function(dissimilarity,
     }
   }  
   
-  
   if(!is.null(minPts)){
     controls(args = minPts, data = NULL, 
              type = "integer_vector")

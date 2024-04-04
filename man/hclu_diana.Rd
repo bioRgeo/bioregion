@@ -24,27 +24,27 @@ column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an integer or a vector of integers indicating the number of
+\item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
 \link{partition_metrics}. Should not be used at the same time as
 \code{cut_height}.}
 
-\item{cut_height}{a numeric vector indicating the height(s) at which the
+\item{cut_height}{a \code{numeric} vector indicating the height(s) at which the
 tree should be cut. Should not be used at the same time as \code{n_clust}.}
 
-\item{find_h}{a boolean indicating if the height of cut should be found for
+\item{find_h}{a \code{boolean} indicating if the height of cut should be found for
 the requested \code{n_clust}.}
 
-\item{h_max}{a numeric indicating the maximum possible tree height for
+\item{h_max}{a \code{numeric} indicating the maximum possible tree height for
 the chosen \code{index}.}
 
-\item{h_min}{a numeric indicating the minimum possible height in the tree
+\item{h_min}{a \code{numeric} indicating the minimum possible height in the tree
 for the chosen \code{index}.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
@@ -62,6 +62,7 @@ correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
 or \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
 \details{
+The function is based on \link[cluster:diana]{diana}.
 Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
 the diana algorithm.
 

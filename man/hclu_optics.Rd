@@ -12,6 +12,7 @@ hclu_optics(
   xi = 0.05,
   minimum = FALSE,
   show_hierarchy = FALSE,
+  algorithm_in_output = TRUE,
   ...
 )
 }
@@ -26,12 +27,12 @@ indices.}
 the third column name of \code{dissimilarity} is used.}
 
 \item{minPts}{a \code{numeric} value specifying the minPts argument of
-\link[dbscan:dbscan]{dbscan::dbscan()}). minPts is the minimum number of
+\link[dbscan:dbscan]{dbscan}). minPts is the minimum number of
 points to form a dense region. By default, it is set to the natural
 logarithm of the number of sites in \code{dissimilarity}.}
 
 \item{eps}{a \code{numeric} value specifying the eps argument of
-\link[dbscan:optics]{dbscan::optics()}). It is the upper limit of the size
+\link[dbscan:optics]{optics}). It is the upper limit of the size
 of the epsilon neighborhood. Limiting the neighborhood size improves
 performance and has no or very little impact on the ordering as long as it
 is not set too low. If not specified (default behavior), the largest
@@ -40,12 +41,12 @@ infinity.}
 
 \item{xi}{a \code{numeric} value specifying the steepness threshold to
 identify clusters hierarchically using the Xi method
-(see \link[dbscan:optics]{dbscan::optics()})}
+(see \link[dbscan:optics]{optics}).}
 
 \item{minimum}{a \code{boolean} specifying if the hierarchy should be pruned
 out from the output to only keep clusters at the "minimal" level, i.e.
 only leaf / non-overlapping clusters.
-If \code{TRUE}, then argument \code{show_hierarchy} should be \code{FALSE}}
+If \code{TRUE}, then argument \code{show_hierarchy} should be \code{FALSE}.}
 
 \item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
 clusters should be included in the output. By default, the hierarchy is not
@@ -54,18 +55,25 @@ visualising the plot of the OPTICS object. If \code{show_hierarchy = TRUE},
 then the output cluster \code{data.frame} will contain additional columns
 showing the hierarchy of clusters.}
 
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \link[dbscan:dbscan]{dbscan} should be returned in the output (\code{TRUE} by
+default, see Value).}
+
 \item{...}{you can add here further arguments to be passed to \code{optics()}
-(see \link[dbscan:optics]{dbscan::optics()})}
+(see \link[dbscan:optics]{optics}).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find the output of \link[dbscan:optics]{optics}.
 }
 \description{
 This function performs semi-hierarchical
@@ -80,15 +88,15 @@ a reachability distance for each point. Then, clusters can be extracted in a
 hierarchical manner from this reachability distance, by identifying clusters
 depending on changes in the relative cluster density. The reachability plot
 should be explored to understand the clusters and their hierarchical nature,
-by running plot on the output of the function:
-\code{plot(object$algorithm$optics)}.
+by running plot on the output of the function
+if \code{algorithm_in_output = TRUE}: \code{plot(object$algorithm)}.
 We recommend reading \insertCite{Hahsler2019}{bioregion} to grasp the
 algorithm, how it works, and what the clusters mean.
 
 To extract the clusters, we use the
-\link[dbscan:optics]{dbscan::extractXi()} function which is based on the
+\link[dbscan:optics]{extractXi} function which is based on the
 steepness of the reachability plot (see
-\link[dbscan:optics]{dbscan::optics()})
+\link[dbscan:optics]{optics})
 }
 \examples{
 dissim <- dissimilarity(fishmat, metric = "all")
@@ -98,7 +106,7 @@ clust1
 
 # Visualize the optics plot (the hierarchy of clusters is illustrated at the
 # bottom)
-plot(clust1$algorithm$optics)
+plot(clust1$algorithm)
 
 # Extract the hierarchy of clusters
 clust1 <- hclu_optics(dissim, index = "Simpson", show_hierarchy = TRUE)

@@ -30,46 +30,46 @@ column(s) are the dissimilarity indices.}
 the third column name of \code{dissimilarity} is used.}
 
 \item{method}{name of the hierarchical classification method, as in
-\link[fastcluster:hclust]{fastcluster::hclust()}. Should be one of \code{"ward.D"},
-\code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
-(= UPGMA), \code{"mcquitty"} (= WPGMA), \code{"median"} (= WPGMC) or
-\code{"centroid"} (= UPGMC).}
+\link[fastcluster:hclust]{hclust}. Should be one of "ward.D",
+"ward.D2", "single", "complete", "average"
+(= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or
+"centroid" (= UPGMC).}
 
-\item{randomize}{a boolean indicating if the dissimilarity matrix should be
+\item{randomize}{a \code{boolean} indicating if the dissimilarity matrix should be
 randomized, to account for the order of sites in the dissimilarity matrix.}
 
 \item{n_runs}{number of trials to randomize the dissimilarity matrix.}
 
-\item{keep_trials}{a boolean indicating if all random trial results.
+\item{keep_trials}{a \code{boolean} indicating if all random trial results.
 should be stored in the output object (set to FALSE to save space if your
 \code{dissimilarity} object is large).}
 
-\item{optimal_tree_method}{a character vector indicating how the final tree
+\item{optimal_tree_method}{a \code{character} indicating how the final tree
 should be obtained from all trials. The only option currently is
-\code{"best"}, which means the tree with the best cophenetic correlation
+"best", which means the tree with the best cophenetic correlation
 coefficient will be chosen.}
 
-\item{n_clust}{an integer or a vector of integers indicating the number of
+\item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
 \link{partition_metrics}. Should not be used at the same time as
 \code{cut_height}.}
 
-\item{cut_height}{a numeric vector indicating the height(s) at which the
+\item{cut_height}{a \code{numeric} vector indicating the height(s) at which the
 tree should be cut. Should not be used at the same time as \code{n_clust}.}
 
-\item{find_h}{a boolean indicating if the height of cut should be found for
+\item{find_h}{a \code{boolean} indicating if the height of cut should be found for
 the requested \code{n_clust}.}
 
-\item{h_max}{a numeric indicating the maximum possible tree height for
+\item{h_max}{a \code{numeric} indicating the maximum possible tree height for
 the chosen \code{index}.}
 
-\item{h_min}{a numeric indicating the minimum possible height in the tree
+\item{h_min}{a \code{numeric} indicating the minimum possible height in the tree
 for the chosen \code{index}.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
@@ -100,9 +100,10 @@ correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
 or \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
 \details{
-The default method for the hierarchical tree is \code{"average"}, i.e.
+The function is based on \link[fastcluster:hclust]{hclust}.
+The default method for the hierarchical tree is \code{average}, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
-from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}
+from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}.
 
 Clusters can be obtained by two methods:
 \itemize{

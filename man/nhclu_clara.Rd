@@ -48,8 +48,8 @@ medoids are not kept in the next sample (FALSE by default).}
 \item{seed}{an \code{integer} to define a generator of random numbers.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \code{fastclara} should be returned in the output (\code{TRUE} by
-default, see Value).}
+of \link[fastkmedoids:fastclara]{fastclara} should be returned in the output
+(\code{TRUE} by default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:

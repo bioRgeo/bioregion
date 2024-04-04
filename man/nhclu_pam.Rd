@@ -7,10 +7,11 @@
 nhclu_pam(
   dissimilarity,
   index = names(dissimilarity)[3],
-  n_clust = NULL,
-  nstart = if (variant == "faster") 1 else NA,
+  n_clust = c(1, 2, 3),
   variant = "faster",
+  nstart = 1,
   cluster_only = FALSE,
+  algorithm_in_output = TRUE,
   ...
 )
 }
@@ -23,31 +24,39 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an \code{integer} or a \code{vector} of \code{integers} specifying the
+\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters.}
+
+\item{variant}{a \code{character} string specifying the variant of pam to use,
+by default "faster". Available options are "original", "o_1", "o_2", "f_3",
+"f_4", "f_5" or faster. See \link[cluster:pam]{pam} for more details.}
 
 \item{nstart}{an \code{integer} specifying the number of random “starts” for the
 pam algorithm. By default, 1 (for the \code{"faster"} variant).}
 
-\item{variant}{a \code{character} string specifying the variant of pam to use,
-by default "faster". Available options are original, o_1, o_2, f_3, f_4,
-f_5 or fasterSee \link[cluster:pam]{cluster::pam()} for more details.}
-
 \item{cluster_only}{a \code{boolean} specifying if only the clustering should be
-returned from the \link[cluster:pam]{cluster::pam()} function (more efficient).}
+returned from the \link[cluster:pam]{pam} function (more efficient).}
+
+\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+of \link[cluster:pam]{pam} should be returned in the output (\code{TRUE} by
+default, see Value).}
 
 \item{...}{you can add here further arguments to be passed to \code{pam()}
-(see \link[cluster:pam]{cluster::pam()})}
+(see \link[cluster:pam]{pam})}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \verb{character string} containing the name of the algorithm}
+\item{\strong{name}: \code{character} containing the name of the algorithm}
 \item{\strong{args}: \code{list} of input arguments as provided by the user}
 \item{\strong{inputs}: \code{list} of characteristics of the clustering process}
 \item{\strong{algorithm}: \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects}
 \item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+
+In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
+find the output of
+\link[cluster:pam]{pam}.
 }
 \description{
 This function performs non hierarchical clustering on the basis of

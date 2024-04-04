@@ -18,7 +18,7 @@ print.bioregion.clusters <- function(x, ...)
   # algorithm name -----
   cat("Clustering results for algorithm : ")
   cat(x$name, "\n")
-  if(x$name == "hierarchical_clustering") {
+  if(x$name == "hclu_hierarclust") {
     cat("\t(hierarchical clustering based on a dissimilarity matrix)\n")
   }
   
@@ -26,7 +26,7 @@ print.bioregion.clusters <- function(x, ...)
   cat(" - Number of sites: ", x$inputs$nb_sites, "\n")
   
   # methodological details -----
-  if(x$name == "hierarchical_clustering") {
+  if(x$name == "hclu_hierarclust") {
     cat(" - Name of dissimilarity metric: ",
         ifelse(is.null(x$args$index),
                "Undefined",
@@ -44,7 +44,7 @@ print.bioregion.clusters <- function(x, ...)
   if (inherits(x$clusters, "data.frame")) {
     
     # Further methodological details if hclust
-    if(x$name == "hierarchical_clustering") {
+    if(x$name == "hclu_hierarclust") {
       if(!is.null(x$args$n_clust))
       {
         cat(" - Number of clusters requested by the user: ",
@@ -97,7 +97,7 @@ print.bioregion.clusters <- function(x, ...)
                paste(nclust, collapse = " ")),
         "\n")
     
-    if(x$name == "hierarchical_clustering") {
+    if(x$name == "hclu_hierarclust") {
       if(x$args$find_h)
       {
         cat(" - Height of cut of the hierarchical tree:",
@@ -124,7 +124,7 @@ print.bioregion.clusters <- function(x, ...)
 #' @method plot bioregion.clusters
 plot.bioregion.clusters <- function(x, ...)
 {
-  if(x$name == ("hierarchical_clustering"))
+  if(x$name == ("hclu_hierarclust"))
   {
     args <- list(...)
     # Changing default arguments for hclust plot

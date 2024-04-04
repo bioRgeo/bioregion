@@ -33,8 +33,8 @@
 #' @param seed an `integer` to define a generator of random numbers.
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of `fastclara` should be returned in the output (`TRUE` by 
-#' default, see Value).
+#' of [fastclara][fastkmedoids::fastclara] should be returned in the output 
+#' (`TRUE` by default, see Value).
 #' 
 #' @details
 #' Based on [fastkmedoids](https://cran.r-project.org/package=fastkmedoids)

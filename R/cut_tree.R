@@ -200,7 +200,7 @@ cut_tree <- function(tree,
   
   arg_added <- list(...)
   if(inherits(tree, "bioregion.clusters")){
-    if (tree$name == "hierarchical_clustering") {
+    if (tree$name == "hclu_hierarclust") {
       cur.tree <- tree$algorithm$final.tree
       # Update args
       tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min",
@@ -321,7 +321,7 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
   
-  clusters <- knbclu(clusters, reorder = FALSE, method = "length")
+  clusters <- knbclu(clusters, reorder = TRUE, method = "length")
   
   if(inherits(tree, "bioregion.clusters")) {
     cur.tree$args$cut_height <- cut_height
