@@ -122,29 +122,29 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 
 <dt>n_clust</dt>
-<dd><p>an integer or a vector of integers indicating the number of
+<dd><p>an <code>integer</code> or an <code>integer</code> vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
 <a href="partition_metrics.html">partition_metrics</a>. Should not be used at the same time as
 <code>cut_height</code>.</p></dd>
 
 
 <dt>cut_height</dt>
-<dd><p>a numeric vector indicating the height(s) at which the
+<dd><p>a <code>numeric</code> vector indicating the height(s) at which the
 tree should be cut. Should not be used at the same time as <code>n_clust</code>.</p></dd>
 
 
 <dt>find_h</dt>
-<dd><p>a boolean indicating if the height of cut should be found for
+<dd><p>a <code>boolean</code> indicating if the height of cut should be found for
 the requested <code>n_clust</code>.</p></dd>
 
 
 <dt>h_max</dt>
-<dd><p>a numeric indicating the maximum possible tree height for
+<dd><p>a <code>numeric</code> indicating the maximum possible tree height for
 the chosen <code>index</code>.</p></dd>
 
 
 <dt>h_min</dt>
-<dd><p>a numeric indicating the minimum possible height in the tree
+<dd><p>a <code>numeric</code> indicating the minimum possible height in the tree
 for the chosen <code>index</code>.</p></dd>
 
 </dl></div>
@@ -152,7 +152,7 @@ for the chosen <code>index</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character string</code> containing the name of the algorithm</p></li>
+<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
 <li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
 <li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
@@ -162,7 +162,8 @@ clustering procedure, such as original cluster objects</p></li>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
+    <p>The function is based on <a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a>.
+Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
 the diana algorithm.</p>
 <p>To find an optimal number of clusters, see <code><a href="partition_metrics.html">partition_metrics()</a></code></p>
     </div>

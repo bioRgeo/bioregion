@@ -128,14 +128,14 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 <dt>method</dt>
 <dd><p>name of the hierarchical classification method, as in
-<a href="https://rdrr.io/pkg/fastcluster/man/hclust.html" class="external-link">fastcluster::hclust()</a>. Should be one of <code>"ward.D"</code>,
-<code>"ward.D2"</code>, <code>"single"</code>, <code>"complete"</code>, <code>"average"</code>
-(= UPGMA), <code>"mcquitty"</code> (= WPGMA), <code>"median"</code> (= WPGMC) or
-<code>"centroid"</code> (= UPGMC).</p></dd>
+<a href="https://rdrr.io/pkg/fastcluster/man/hclust.html" class="external-link">hclust</a>. Should be one of "ward.D",
+"ward.D2", "single", "complete", "average"
+(= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or
+"centroid" (= UPGMC).</p></dd>
 
 
 <dt>randomize</dt>
-<dd><p>a boolean indicating if the dissimilarity matrix should be
+<dd><p>a <code>boolean</code> indicating if the dissimilarity matrix should be
 randomized, to account for the order of sites in the dissimilarity matrix.</p></dd>
 
 
@@ -144,42 +144,42 @@ randomized, to account for the order of sites in the dissimilarity matrix.</p></
 
 
 <dt>keep_trials</dt>
-<dd><p>a boolean indicating if all random trial results.
+<dd><p>a <code>boolean</code> indicating if all random trial results.
 should be stored in the output object (set to FALSE to save space if your
 <code>dissimilarity</code> object is large).</p></dd>
 
 
 <dt>optimal_tree_method</dt>
-<dd><p>a character vector indicating how the final tree
+<dd><p>a <code>character</code> indicating how the final tree
 should be obtained from all trials. The only option currently is
-<code>"best"</code>, which means the tree with the best cophenetic correlation
+"best", which means the tree with the best cophenetic correlation
 coefficient will be chosen.</p></dd>
 
 
 <dt>n_clust</dt>
-<dd><p>an integer or a vector of integers indicating the number of
+<dd><p>an <code>integer</code> or an <code>integer</code> vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
 <a href="partition_metrics.html">partition_metrics</a>. Should not be used at the same time as
 <code>cut_height</code>.</p></dd>
 
 
 <dt>cut_height</dt>
-<dd><p>a numeric vector indicating the height(s) at which the
+<dd><p>a <code>numeric</code> vector indicating the height(s) at which the
 tree should be cut. Should not be used at the same time as <code>n_clust</code>.</p></dd>
 
 
 <dt>find_h</dt>
-<dd><p>a boolean indicating if the height of cut should be found for
+<dd><p>a <code>boolean</code> indicating if the height of cut should be found for
 the requested <code>n_clust</code>.</p></dd>
 
 
 <dt>h_max</dt>
-<dd><p>a numeric indicating the maximum possible tree height for
+<dd><p>a <code>numeric</code> indicating the maximum possible tree height for
 the chosen <code>index</code>.</p></dd>
 
 
 <dt>h_min</dt>
-<dd><p>a numeric indicating the minimum possible height in the tree
+<dd><p>a <code>numeric</code> indicating the minimum possible height in the tree
 for the chosen <code>index</code>.</p></dd>
 
 </dl></div>
@@ -187,7 +187,7 @@ for the chosen <code>index</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character string</code> containing the name of the algorithm</p></li>
+<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
 <li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
 <li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
@@ -207,9 +207,11 @@ between the initial dissimilarity matrix and <code>final.tree</code></p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The default method for the hierarchical tree is <code>"average"</code>, i.e.
+    <p>The function is based on <a href="https://rdrr.io/pkg/fastcluster/man/hclust.html" class="external-link">hclust</a>.
+The default method for the hierarchical tree is <code>average</code>, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
-from beta diversity dissimilarity (Kreft and Jetz 2010)</p>
+from beta diversity dissimilarity (Kreft and Jetz 2010)
+.</p>
 <p>Clusters can be obtained by two methods:</p><ul><li><p>Specifying a desired number of clusters in <code>n_clust</code></p></li>
 <li><p>Specifying one or several heights of cut in <code>cut_height</code></p></li>
 </ul><p>To find an optimal number of clusters, see <code><a href="partition_metrics.html">partition_metrics()</a></code></p>
@@ -250,7 +252,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.2421875</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of sites:  20 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Jaccard </span>
@@ -266,23 +268,25 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-plt img"><img src="hclu_hierarclust-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ name        : chr "hierarchical_clustering"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ args        :List of 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ name        : chr "hclu_hierarclust"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ args        :List of 12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ index              : chr "Jaccard"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ method             : chr "average"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ randomize          : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_runs             : num 30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ optimal_tree_method: chr "best"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ keep_trials        : logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_clust            : num 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cut_height         : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ find_h             : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ h_max              : num 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ h_min              : num 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dynamic_tree_cut   : logi FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ inputs      :List of 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ inputs      :List of 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ bipartite      : logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ weight         : logi TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ pairwise_metric: logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ pairwise       : logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ pairwise_metric: chr "Jaccard"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dissimilarity  : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nb_sites       : int 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hierarchical   : logi FALSE</span>
@@ -335,7 +339,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.78 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-in"><span><span class="va">tree2</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hierarchical_clustering </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of sites:  20 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Jaccard </span>

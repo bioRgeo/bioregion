@@ -80,10 +80,11 @@ dissimilarity with partitioning around medoids.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nhclu_pam</span><span class="op">(</span></span>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>  n_clust <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nstart <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">variant</span> <span class="op">==</span> <span class="st">"faster"</span><span class="op">)</span> <span class="fl">1</span> <span class="kw">else</span> <span class="cn">NA</span>,</span>
+<span>  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  variant <span class="op">=</span> <span class="st">"faster"</span>,</span>
+<span>  nstart <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  cluster_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -103,8 +104,14 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 
 <dt>n_clust</dt>
-<dd><p>an <code>integer</code> or a <code>vector</code> of <code>integers</code> specifying the
+<dd><p>an <code>integer</code> or an <code>integer</code> vector specifying the
 requested number(s) of clusters.</p></dd>
+
+
+<dt>variant</dt>
+<dd><p>a <code>character</code> string specifying the variant of pam to use,
+by default "faster". Available options are "original", "o_1", "o_2", "f_3",
+"f_4", "f_5" or faster. See <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a> for more details.</p></dd>
 
 
 <dt>nstart</dt>
@@ -112,33 +119,36 @@ requested number(s) of clusters.</p></dd>
 pam algorithm. By default, 1 (for the <code>"faster"</code> variant).</p></dd>
 
 
-<dt>variant</dt>
-<dd><p>a <code>character</code> string specifying the variant of pam to use,
-by default "faster". Available options are original, o_1, o_2, f_3, f_4,
-f_5 or fasterSee <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a> for more details.</p></dd>
-
-
 <dt>cluster_only</dt>
 <dd><p>a <code>boolean</code> specifying if only the clustering should be
-returned from the <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a> function (more efficient).</p></dd>
+returned from the <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a> function (more efficient).</p></dd>
+
+
+<dt>algorithm_in_output</dt>
+<dd><p>a <code>boolean</code> indicating if the original output
+of <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a> should be returned in the output (<code>TRUE</code> by
+default, see Value).</p></dd>
 
 
 <dt>...</dt>
 <dd><p>you can add here further arguments to be passed to <code>pam()</code>
-(see <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a>)</p></dd>
+(see <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a>)</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character string</code> containing the name of the algorithm</p></li>
+<p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
 <li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
 <li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
 <li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
 clustering procedure, such as original cluster objects</p></li>
 <li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
-</ol></div>
+</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
+find the output of
+<a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This method partitions data into the chosen number of cluster on the basis
