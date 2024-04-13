@@ -3,6 +3,14 @@
 This is a list of changes made in the development/github version of the package
 between bioregion 1.1.0 (CRAN release 2024-03-19) and the next CRAN release.
 
+* Added hierarchy for Louvain cpp.
+
+* Added seed argument to stochastic algorithms (except Louvain cpp).
+
+* Added argument cut_weight in netclu_ fonctions.
+
+* Changed value for sites without cluster (0 -> NA).
+
 * Updated automated tests (code coverage > 60%).
 
 * Controls and outputs/inputs standardization.

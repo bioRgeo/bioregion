@@ -12,6 +12,10 @@
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' 
+#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' between sites with a weight strictly lower than this value will not be 
+#' considered (O by default).
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #' 
@@ -25,7 +29,7 @@
 #' (i.e. feature nodes).
 #' 
 #' @param return_node_type a `character` indicating what types of nodes
-#' ("sites", "species" or "both") should be returned in the output
+#' (`site`, `species` or `both`) should be returned in the output
 #' (`return_node_type = "both"` by default).
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
@@ -48,8 +52,8 @@
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 #' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
-#' `return_node_type` equal to `"both"` to keep both types of nodes,
-#' `"sites"` to preserve only the sites nodes and `"species"` to
+#' `return_node_type` equal to `both` to keep both types of nodes,
+#' `sites` to preserve only the sites nodes and `species` to
 #' preserve only the species nodes.
 #'
 #' @return
@@ -92,6 +96,7 @@
 
 netclu_greedy <- function(net,
                           weight = TRUE,
+                          cut_weight = 0,
                           index = names(net)[3],
                           bipartite = FALSE,
                           site_col = 1,
@@ -110,6 +115,7 @@ netclu_greedy <- function(net,
   # Control input weight & index
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
+    controls(args = cut_weight, data = net, type = "positive_numeric")
     controls(args = index, data = net, type = "input_net_index")
     net[, 3] <- net[, index]
     net <- net[, 1:3]
@@ -167,7 +173,7 @@ both, sites or species", call. = FALSE)
 
   if (weight) {
     netemp <- cbind(netemp, net[, 3])
-    netemp <- netemp[netemp[, 3] > 0, ]
+    netemp <- netemp[netemp[, 3] > cut_weight, ]
     colnames(netemp)[3] <- "weight"
   }
 
@@ -176,6 +182,7 @@ both, sites or species", call. = FALSE)
 
   outputs$args <- list(
     weight = weight,
+    cut_weight = cut_weight,
     index = index,
     bipartite = bipartite,
     site_col = site_col,
@@ -201,7 +208,7 @@ both, sites or species", call. = FALSE)
   outalg <- igraph::cluster_fast_greedy(net)
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
 
-  com <- data.frame(ID = idnode[, 2], Com = 0)
+  com <- data.frame(ID = idnode[, 2], Com = NA)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
 
   # Rename and reorder columns
@@ -233,7 +240,7 @@ both, sites or species", call. = FALSE)
     ],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))))
+      2, function(x) length(unique(x[!is.na(x)]))))
 
   # Return outputs
   class(outputs) <- append("bioregion.clusters", class(outputs))

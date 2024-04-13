@@ -81,7 +81,7 @@ clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
 Points To Identify the Clustering Structure)
 }
 \details{
-The optics (Ordering points to identify the clustering structure) is a
+The OPTICS (Ordering points to identify the clustering structure) is a
 semi-hierarchical clustering algorithm which orders the points in the
 dataset such that points which are closest become neighbors, and calculates
 a reachability distance for each point. Then, clusters can be extracted in a

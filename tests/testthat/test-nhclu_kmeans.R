@@ -14,7 +14,6 @@ d3[1] <- "1"
 d4 <- d
 d4[1] <- NA
 
-
 uni <- data.frame(
   Site1 = c("c", "b", "a"),
   Site2 = c("a", "c", "b"),
@@ -49,6 +48,7 @@ test_that("valid output", {
   
   clust <- nhclu_kmeans(dissim,
                        index = "Simpson",
+                       seed = NULL,
                        n_clust = c(1,2,3),
                        iter_max = 10,
                        nstart = 10,
@@ -57,6 +57,7 @@ test_that("valid output", {
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "nhclu_kmeans")
   expect_equal(clust$args$index, "Simpson")
+  expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$n_clust, c(1,2,3))
   expect_equal(clust$args$iter_max, 10)
   expect_equal(clust$args$nstart, 10)
@@ -82,6 +83,31 @@ test_that("valid output", {
                        n_clust = c(10,5))
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
+  
+  clust1 <- nhclu_kmeans(dissim,
+                      index = "Euclidean",
+                      n_clust = 5,
+                      seed = 1)
+  clust2 <- nhclu_kmeans(dissim,
+                      index = "Euclidean",
+                      n_clust = 5,
+                      seed =1)
+  expect_equal(sum(clust1$clusters$K_5==clust2$clusters$K_5), 338)
+  
+  r1 <- runif(1)
+  clust1 <- nhclu_kmeans(dissim,
+                      index = "Euclidean",
+                      n_clust = 5,
+                      seed = 1)
+  r2 <- runif(1)
+  clust2 <- nhclu_kmeans(dissim,
+                      index = "Euclidean",
+                      n_clust = 5,
+                      seed = 1)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
   
 })
 
@@ -181,6 +207,31 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
     nhclu_kmeans(uni, index = 4),
     "index should be lower or equal to 3.",
     fixed = TRUE)
+  
+  expect_error(
+    nhclu_kmeans(dissim, seed =  c("zz","zz")),
+    "seed must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_kmeans(dissim, seed = "zz"),
+    "seed must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_kmeans(dissim, seed = 1.1),
+    "seed must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    nhclu_kmeans(dissim, seed = -1),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    nhclu_kmeans(dissim, seed = 0),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
   
   expect_error(
     nhclu_kmeans(dissim, n_clust = "zz"),

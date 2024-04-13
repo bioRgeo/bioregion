@@ -12,6 +12,8 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
+#' @param seed for the random number generator (NULL for random by default).
+#' 
 #' @param n_clust an `integer` or an `integer` vector specifying the
 #' requested number(s) of clusters.
 #' 
@@ -29,8 +31,6 @@
 #' 
 #' @param independent a `boolean` indicating that the previous
 #' medoids are not kept in the next sample (FALSE by default).
-#' 
-#' @param seed an `integer` to define a generator of random numbers.
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of [fastclara][fastkmedoids::fastclara] should be returned in the output 
@@ -86,6 +86,7 @@
 
 nhclu_clara <- function(dissimilarity,
                         index = names(dissimilarity)[3],
+                        seed = NULL,
                         n_clust = c(1,2,3),
                         maxiter = 0,
                         initializer = "LAB",
@@ -93,7 +94,6 @@ nhclu_clara <- function(dissimilarity,
                         numsamples = 5,
                         sampling = 0.25,
                         independent = FALSE,
-                        seed = 123456789,
                         algorithm_in_output = TRUE){
   
   # 1. Controls ----------------------------------------------------------------
@@ -119,6 +119,9 @@ nhclu_clara <- function(dissimilarity,
     }
   }
   
+  if(!is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   controls(args = n_clust, data = NULL, 
              type = "strict_positive_integer_vector")
   controls(args = maxiter, data = NULL, type = "positive_integer")
@@ -131,7 +134,6 @@ BUILD or LAB", call. = FALSE)
   controls(args = numsamples, data = NULL, type = "positive_integer")
   controls(args = sampling, data = NULL, type = "positive_numeric")
   controls(args = independent, data = NULL, type = "boolean")
-  controls(args = seed, data = NULL, type = "strict_positive_integer")
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
   # 2. Function ---------------------------------------------------------------
@@ -139,6 +141,7 @@ BUILD or LAB", call. = FALSE)
   outputs <- list(name = "nhclu_clara")
   
   outputs$args <- list(index = index,
+                       seed = seed,
                        n_clust = n_clust,
                        maxiter = maxiter,
                        initializer = initializer,
@@ -146,7 +149,6 @@ BUILD or LAB", call. = FALSE)
                        numsamples = numsamples,
                        sampling = sampling,
                        independent = independent,
-                       seed = seed,
                        algorithm_in_output = algorithm_in_output)
   
   outputs$inputs <- list(bipartite = FALSE,
@@ -171,20 +173,36 @@ BUILD or LAB", call. = FALSE)
   outputs$clusters$name <- labels(dist.obj)
   
   # CLARA algorithm
-  outputs$algorithm <-
-    lapply(n_clust,
-           function(x)
-             fastkmedoids::fastclara(rdist = dist.obj,
-                                     n = nrow(dist.obj),
-                                     k = x,
-                                     maxiter = maxiter,
-                                     initializer = initializer,
-                                     fasttol = fasttol,
-                                     numsamples = numsamples,
-                                     sampling = sampling,
-                                     independent = independent,
-                                     seed = seed))
-  
+  if(is.null(seed)){
+    outputs$algorithm <-
+      lapply(n_clust,
+             function(x)
+               fastkmedoids::fastclara(rdist = dist.obj,
+                                       n = nrow(dist.obj),
+                                       k = x,
+                                       maxiter = maxiter,
+                                       initializer = initializer,
+                                       fasttol = fasttol,
+                                       numsamples = numsamples,
+                                       sampling = sampling,
+                                       independent = independent,
+                                       seed = as.numeric(as.POSIXct(
+                                         Sys.time())) + sample(-10:10, 1)))
+  }else{
+    outputs$algorithm <-
+      lapply(n_clust,
+             function(x)
+               fastkmedoids::fastclara(rdist = dist.obj,
+                                       n = nrow(dist.obj),
+                                       k = x,
+                                       maxiter = maxiter,
+                                       initializer = initializer,
+                                       fasttol = fasttol,
+                                       numsamples = numsamples,
+                                       sampling = sampling,
+                                       independent = independent,
+                                       seed = seed))
+  }
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(

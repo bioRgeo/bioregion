@@ -11,17 +11,21 @@
 #'
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
+#' 
+#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' between sites with a weight strictly lower than this value will not be 
+#' considered (O by default).
 #'
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
+#' 
+#' @param seed for the random number generator (NULL for random by default).
 #'
 #' @param nbmod penalize solutions the more they differ from this number (0 by
 #' default for no preferred number of modules).
 #'
 #' @param markovtime scales link flow to change the cost of moving between
 #' modules, higher values results in fewer modules (default is 1).
-#'
-#' @param seed for the random number generator (0 for random by default).
 #'
 #' @param numtrials for the number of trials before picking up the best
 #' solution.
@@ -48,7 +52,7 @@
 #' (i.e. feature nodes).
 #'
 #' @param return_node_type a `character` indicating what types of nodes
-#' ("sites", "species" or "both") should be returned in the output
+#' (`site`, `species` or `both`) should be returned in the output
 #' (`return_node_type = "both"` by default).
 #'
 #' @param version a `character` indicating the Infomap version to use.
@@ -96,8 +100,8 @@
 #' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 #' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
-#' `return_node_type` equal to `"both"` to keep both types of nodes, `"sites"`
-#' to preserve only the sites nodes and `"species"` to preserve only the
+#' `return_node_type` equal to `both` to keep both types of nodes, `sites`
+#' to preserve only the sites nodes and `species` to preserve only the
 #' species nodes.
 #'
 #' @return
@@ -139,10 +143,11 @@
 #' @export
 netclu_infomap <- function(net,
                            weight = TRUE,
+                           cut_weight = 0,
                            index = names(net)[3],
+                           seed = NULL,
                            nbmod = 0,
                            markovtime = 1,
-                           seed = 0,
                            numtrials = 1,
                            twolevel = FALSE,
                            show_hierarchy = FALSE,
@@ -189,12 +194,11 @@ netclu_infomap <- function(net,
     ))
   } else {
     # Control parameters INFOMAP
+    if(!is.null(seed)){
+      controls(args = seed, data = NULL, type = "strict_positive_integer")
+    }
     controls(args = nbmod, data = NULL, type = "positive_integer")
     controls(args = markovtime, data = NULL, type = "strict_positive_numeric")
-    controls(args = seed, data = NULL, type = "positive_integer")
-    if (seed == 0) {
-      seed <- round(as.numeric(as.POSIXct(Sys.time())))
-    }
     controls(args = numtrials, data = NULL, type = "strict_positive_integer")
     controls(args = twolevel, data = NULL, type = "boolean")
     controls(args = show_hierarchy, data = NULL, type = "boolean")
@@ -214,6 +218,7 @@ netclu_infomap <- function(net,
     # Control input weight & index
     controls(args = weight, data = net, type = "input_net_weight")
     if (weight) {
+      controls(args = cut_weight, data = net, type = "positive_numeric")
       controls(args = index, data = net, type = "input_net_index")
       net[, 3] <- net[, index]
       net <- net[, 1:3]
@@ -254,7 +259,7 @@ both, sites or species", call. = FALSE)
         "/bin/",
         path_temp,
         "_",
-        round(as.numeric(as.POSIXct(Sys.time())))
+        as.numeric(as.POSIXct(Sys.time()))
       )
     } else {
       if (dir.exists(path_temp)) {
@@ -311,7 +316,12 @@ both, sites or species", call. = FALSE)
 
     if (weight) {
       netemp <- cbind(netemp, net[, 3])
-      netemp <- netemp[netemp[, 3] > 0, ]
+      netemp <- netemp[netemp[, 3] > cut_weight, ]
+    }
+    
+    if(dim(netemp)[1]==0){
+      stop("The network is empty. 
+         Please check your data or choose an appropriate cut_weight value.")
     }
 
     # Class preparation
@@ -319,10 +329,11 @@ both, sites or species", call. = FALSE)
 
     outputs$args <- list(
       weight = weight,
+      cut_weight = cut_weight,
       index = index,
+      seed = seed,
       nbmod = nbmod,
       markovtime = markovtime,
-      seed = seed,
       numtrials = numtrials,
       twolevel = twolevel,
       show_hierarchy = show_hierarchy,
@@ -367,11 +378,19 @@ both, sites or species", call. = FALSE)
     }
 
     # Prepare command to run INFOMAP
-    cmd <- paste0(
-      "--silent --seed ", seed,
-      " --num-trials ", numtrials,
-      " --markov-time ", markovtime
-    )
+    if(is.null(seed)){
+      cmd <- paste0(
+        " --silent --num-trials ", numtrials,
+        " --markov-time ", markovtime
+      )
+    }else{
+      cmd <- paste0(
+        "--silent --seed ", seed,
+        " --num-trials ", numtrials,
+        " --markov-time ", markovtime
+      )
+    }
+
     if (nbmod > 0) {
       cmd <- paste0(cmd, " --preferred-number-of-modules ", nbmod)
     }
@@ -423,11 +442,11 @@ both, sites or species", call. = FALSE)
     nblev <- dim(cominf)[2]
     cominf <- cominf[, nblev:1] # Reverse column order
 
-    com <- data.frame(ID = idnode[, 2], dum = 0) # Dummy level
+    com <- data.frame(ID = idnode[, 2], dum = NA) # Dummy level
     com[match(idinf, idnode[, 1]), 2] <- cominf[, 1]
 
     for (knblev in 2:nblev) {
-      com$temp <- 0
+      com$temp <- NA
       com[match(idinf, idnode[, 1]), (knblev + 1)] <- cominf[, knblev]
       colnames(com)[(knblev + 1)] <- paste0("V", (knblev + 1))
     }
@@ -470,10 +489,10 @@ both, sites or species", call. = FALSE)
       ],
       n_clust = apply(
         outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-        2, function(x) length(unique(x))
+        2, function(x) length(unique(x[!is.na(x)]))
       )
     )
-    if (!twolevel & show_hierarchy) {
+    if (nrow(outputs$cluster_info)>1) {
       outputs$cluster_info$hierarchical_level <- 1:nrow(outputs$cluster_info)
       outputs$inputs$hierarchical <- TRUE
     }

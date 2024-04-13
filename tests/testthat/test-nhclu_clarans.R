@@ -49,18 +49,18 @@ test_that("valid output", {
   
   clust <- nhclu_clarans(dissim,
                        index = "Simpson",
+                       seed = NULL,
                        n_clust = c(1,2,3),
                        numlocal = 2,
                        maxneighbor = 0.025,
-                       seed = 1,
                        algorithm_in_output = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "nhclu_clarans")
   expect_equal(clust$args$index, "Simpson")
+  expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$n_clust, c(1,2,3))
   expect_equal(clust$args$numlocal, 2)
   expect_equal(clust$args$maxneighbor, 0.025)
-  expect_equal(clust$args$seed, 1)
   expect_equal(clust$args$algorithm_in_output, TRUE)
   expect_equal(clust$inputs$bipartite, FALSE)
   expect_equal(clust$inputs$weight, TRUE)
@@ -87,19 +87,45 @@ test_that("valid output", {
   
   clust1 <- nhclu_clarans(dissim,
                         index = "Euclidean",
-                        n_clust = c(5,10))
+                        n_clust = c(5,10),
+                        seed = 1)
   clust2 <- nhclu_clarans(df,
                         index = 3,
-                        n_clust = c(5,10))
+                        n_clust = c(5,10),
+                        seed = 1)
   clust3 <- nhclu_clarans(d,
                         index = -1,
-                        n_clust = c(5,10))
+                        n_clust = c(5,10),
+                        seed = 1)
   expect_equal(dim(clust1$clusters)[2], 3)
   expect_equal(dim(clust2$clusters)[2], 3)
   expect_equal(dim(clust3$clusters)[2], 3)
   expect_equal(sum(clust1$clusters==clust2$clusters), 1014)
   expect_equal(sum(clust1$clusters==clust3$clusters), 1014)
   expect_equal(sum(clust2$clusters==clust3$clusters), 1014)
+  
+  clust1 <- nhclu_clarans(dissim,
+                        index = "Euclidean",
+                        n_clust = c(5,10))
+  clust2 <- nhclu_clarans(dissim,
+                        index = "Euclidean",
+                        n_clust = c(5,10))
+  #expect_equal(sum(clust1$clusters$K_5==clust2$clusters$K_5), 338)
+  
+  r1 <- runif(1)
+  clust1 <- nhclu_clarans(dissim,
+                        index = "Euclidean",
+                        n_clust = 5,
+                        seed = 1)
+  r2 <- runif(1)
+  clust2 <- nhclu_clarans(dissim,
+                        index = "Euclidean",
+                        n_clust = 5,
+                        seed = 1)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
   
 })
 
@@ -278,7 +304,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   expect_error(
     nhclu_clarans(dissim, seed = -1),
     "seed must be strictly higher than 0.",
-    fixed = TRUE) 
+    fixed = TRUE)  
   
   expect_error(
     nhclu_clarans(dissim, seed = 0),

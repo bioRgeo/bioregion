@@ -49,13 +49,18 @@ net6 <- data.frame(
   Weight3 = c(1,-1,0,2)
 )
 
+fdf <- fishdf[1:1000,]
+vdf <- vegedf[1:1000,]
+simf <- similarity(fishmat, metric = "all")
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
   clust <- netclu_labelprop(simil,
                          weight = TRUE,
+                         cut_weight = 0,
                          index = 3,
+                         seed = NULL,
                          bipartite = FALSE,
                          site_col = 1,
                          species_col = 2,
@@ -64,7 +69,9 @@ test_that("valid output", {
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_labelprop")
   expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$cut_weight, 0)
   expect_equal(clust$args$index, 3)
+  expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$bipartite, FALSE)
   expect_equal(clust$args$site_col, 1)
   expect_equal(clust$args$species_col, 2)
@@ -118,6 +125,51 @@ test_that("valid output", {
                          return_node_type = "sites")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
+  
+  clust <- netclu_labelprop(net, cut_weight = 100)
+  expect_equal(colnames(clust$clusters), c("ID","K_0"))
+  expect_equal(length(table(clust$clusters$K_0)), 0)
+  expect_equal(clust$cluster_info[1,1], "K_0")
+  expect_equal(clust$cluster_info[1,2], 0)
+  
+  clust1 <- netclu_labelprop(fdf, seed=1)
+  clust2 <- netclu_labelprop(fdf, seed=1)
+  expect_equal(sum(clust1$clusters$K_9==clust2$clusters$K_9), 266)
+  
+  clust1 <- netclu_labelprop(vdf, seed=2)
+  clust2 <- netclu_labelprop(vdf, seed=2)
+  expect_equal(sum(clust1$clusters$K_2==clust2$clusters$K_2), 873)
+  
+  clust1 <- netclu_labelprop(simf, seed=1)
+  clust2 <- netclu_labelprop(simf, seed=1)
+  expect_equal(sum(clust1$clusters$K_4==clust2$clusters$K_4), 338)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_labelprop(vdf, seed = NULL)
+  r2 <- runif(1)
+  clust2 <- netclu_labelprop(vdf, seed = NULL)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_labelprop(vdf, seed = 1)
+  r2 <- runif(1)
+  clust2 <- netclu_labelprop(vdf, seed = 1)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_labelprop(vdf, seed = 1000)
+  r2 <- runif(1)
+  clust2 <- netclu_labelprop(vdf, seed = 1000)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
   
 })
 
@@ -177,6 +229,21 @@ Use dissimilarity_to_similarity() before using this function.",
   expect_error(
     netclu_labelprop(net, weight = c("zz",1)),
     "weight must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_labelprop(net, cut_weight =  c("zz","zz")),
+    "cut_weight must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_labelprop(net, cut_weight = "zz"),
+    "cut_weight must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_labelprop(net, cut_weight = -1),
+    "cut_weight must be higher than 0.",
     fixed = TRUE)
   
   expect_error(
@@ -271,6 +338,31 @@ Use dissimilarity_to_similarity() before using this function.",
     netclu_labelprop(net6, weight = TRUE, index = "Weight3"),
     "The weight column should contain only positive reals:
           negative value(s) detected!", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_labelprop(net, seed =  c("zz","zz")),
+    "seed must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_labelprop(net, seed = "zz"),
+    "seed must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_labelprop(net, seed = 1.1),
+    "seed must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_labelprop(net, seed = -1),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    netclu_labelprop(net, seed = 0),
+    "seed must be strictly higher than 0.",
     fixed = TRUE)
   
   expect_error(

@@ -11,6 +11,8 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
+#' @param seed for the random number generator (NULL for random by default).
+#' 
 #' @param n_clust an `integer` or an `integer` vector specifying the
 #' requested number(s) of clusters
 #' 
@@ -86,6 +88,7 @@
 
 nhclu_kmeans <- function(dissimilarity,
                          index = names(dissimilarity)[3],
+                         seed = NULL,
                          n_clust = c(1,2,3),
                          iter_max = 10,
                          nstart = 10,
@@ -115,6 +118,9 @@ nhclu_kmeans <- function(dissimilarity,
     }
   }
   
+  if(!is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   controls(args = n_clust, data = NULL, 
            type = "strict_positive_integer_vector")
   controls(args = iter_max, data = NULL, type = "positive_integer")
@@ -130,6 +136,7 @@ Hartigan-Wong, Lloyd, Forgy or MacQueen", call. = FALSE)
   outputs <- list(name = "nhclu_kmeans")
   
   outputs$args <- list(index = index,
+                       seed = seed,
                        n_clust = n_clust,
                        iter_max = iter_max,
                        nstart = nstart,
@@ -163,14 +170,25 @@ Hartigan-Wong, Lloyd, Forgy or MacQueen", call. = FALSE)
   outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)
   
   # Performing the kmeans on the PCoA with all axes
-  outputs$algorithm <- lapply(n_clust,
-                                     function(x)
-                                       stats::kmeans(dist.obj,
-                                                     centers = x,
-                                                     iter.max = iter_max,
-                                                     nstart = nstart,
-                                                     algorithm = algorithm))
-  
+  if(is.null(seed)){
+    outputs$algorithm <- lapply(n_clust,
+                                function(x)
+                                  stats::kmeans(dist.obj,
+                                                centers = x,
+                                                iter.max = iter_max,
+                                                nstart = nstart,
+                                                algorithm = algorithm))
+  }else{
+    set.seed(seed)
+    outputs$algorithm <- lapply(n_clust,
+                                function(x)
+                                  stats::kmeans(dist.obj,
+                                                centers = x,
+                                                iter.max = iter_max,
+                                                nstart = nstart,
+                                                algorithm = algorithm))
+    rm(.Random.seed, envir=globalenv())
+  }
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(

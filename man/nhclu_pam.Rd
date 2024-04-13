@@ -7,6 +7,7 @@
 nhclu_pam(
   dissimilarity,
   index = names(dissimilarity)[3],
+  seed = NULL,
   n_clust = c(1, 2, 3),
   variant = "faster",
   nstart = 1,
@@ -24,15 +25,17 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
+\item{seed}{for the random number generator (NULL for random by default).}
+
 \item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters.}
 
 \item{variant}{a \code{character} string specifying the variant of pam to use,
-by default "faster". Available options are "original", "o_1", "o_2", "f_3",
-"f_4", "f_5" or faster. See \link[cluster:pam]{pam} for more details.}
+by default \code{faster}. Available options are \code{original}, \code{o_1}, \code{o_2}, \code{f_3},
+\code{f_4}, \code{f_5} or \code{faster}. See \link[cluster:pam]{pam} for more details.}
 
-\item{nstart}{an \code{integer} specifying the number of random “starts” for the
-pam algorithm. By default, 1 (for the \code{"faster"} variant).}
+\item{nstart}{an \code{integer} specifying the number of random start for the
+pam algorithm. By default, 1 (for the \code{faster} variant).}
 
 \item{cluster_only}{a \code{boolean} specifying if only the clustering should be
 returned from the \link[cluster:pam]{pam} function (more efficient).}

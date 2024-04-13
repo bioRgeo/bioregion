@@ -51,16 +51,20 @@ net6 <- data.frame(
   Weight3 = c(1,-1,0,2)
 )
 
+fdf <- fishdf[1:1000,]
+vdf <- vegedf[1:1000,]
+simf <- similarity(fishmat, metric = "all")
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
   clust <- netclu_infomap(simil,
                           weight = TRUE,
+                          cut_weight = 0,
                           index = 3,
+                          seed = NULL,
                           nbmod = 0,
                           markovtime = 1,
-                          seed = 0,
                           numtrials = 1,
                           twolevel = FALSE,
                           show_hierarchy = FALSE,
@@ -77,10 +81,11 @@ test_that("valid output", {
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_infomap")
   expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$cut_weight, 0)
   expect_equal(clust$args$index, 3)
+  expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$nbmod, 0)
   expect_equal(clust$args$markovtime, 1)
-  #expect_equal(clust$args$seed, 0)
   expect_equal(clust$args$numtrials, 1)
   expect_equal(clust$args$twolevel, FALSE)
   expect_equal(clust$args$show_hierarchy, FALSE)
@@ -108,9 +113,9 @@ test_that("valid output", {
   clust <- netclu_infomap(simil,
                           weight = TRUE,
                           index = 3,
+                          seed = 1,
                           nbmod = 0,
                           markovtime = 1,
-                          seed = 1,
                           numtrials = 1,
                           twolevel = FALSE,
                           show_hierarchy = FALSE,
@@ -167,6 +172,70 @@ test_that("valid output", {
                           return_node_type = "sites")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
+  
+  clust <- netclu_infomap(net, cut_weight = 40, seed = 1)
+  expect_equal(colnames(clust$clusters), c("ID","K_2"))
+  expect_equal(length(table(clust$clusters$K_2)), 2)
+  expect_equal(clust$cluster_info[1,1], "K_2")
+  expect_equal(clust$cluster_info[1,2], 2)
+  
+  clust <- netclu_infomap(net, cut_weight = 60, seed = 1)
+  expect_equal(colnames(clust$clusters), c("ID","K_1"))
+  expect_equal(length(table(clust$clusters$K_1)), 1)
+  expect_equal(clust$cluster_info[1,1], "K_1")
+  expect_equal(clust$cluster_info[1,2], 1)
+  
+  clust1 <- netclu_infomap(fdf, seed = 1)
+  clust2 <- netclu_infomap(fdf, seed = 1)
+  expect_equal(clust1$args$seed==clust2$args$seed, TRUE)
+  
+  clust1 <- netclu_infomap(fdf, seed = 1)
+  clust2 <- netclu_infomap(fdf, seed = 1)
+  expect_equal(sum(clust1$clusters$K_8==clust2$clusters$K_8), 266)
+  expect_equal(sum(clust1$clusters$K_10==clust2$clusters$K_10), 266)
+  
+  clust1 <- netclu_infomap(vdf, seed = 1)
+  clust2 <- netclu_infomap(vdf, seed = 1)
+  expect_equal(sum(clust1$clusters$K_2==clust2$clusters$K_2), 873)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_infomap(vdf, seed = NULL)
+  r2 <- runif(1)
+  clust2 <- netclu_infomap(vdf, seed = NULL)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_infomap(vdf, seed = 1)
+  r2 <- runif(1)
+  clust2 <- netclu_infomap(vdf, seed = 1)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_infomap(vdf, seed = 1000)
+  r2 <- runif(1)
+  clust2 <- netclu_infomap(vdf, seed = 1000)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  clust <- netclu_infomap(simf, seed = 1, show_hierarchy = FALSE)
+  expect_equal(colnames(clust$clusters), c("ID","K_6","K_7"))
+  expect_equal(length(table(clust$clusters$K_6)), 6)
+  expect_equal(length(table(clust$clusters$K_7)), 7)
+  expect_equal(clust$cluster_info[1,1], "K_6")
+  expect_equal(clust$cluster_info[1,2], 6)
+  expect_equal(clust$cluster_info[1,3], 1)
+  expect_equal(clust$cluster_info[2,1], "K_7")
+  expect_equal(clust$cluster_info[2,2], 7)
+  expect_equal(clust$cluster_info[2,3], 2)
+  expect_equal(clust$inputs$hierarchical, TRUE)
   
 })
 
@@ -270,7 +339,12 @@ test_that("invalid inputs", {
   
   expect_error(
     netclu_infomap(net, seed = -1),
-    "seed must be higher than 0.",
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    netclu_infomap(net, seed = 0),
+    "seed must be strictly higher than 0.",
     fixed = TRUE) 
   
   expect_error(
@@ -381,6 +455,21 @@ Use dissimilarity_to_similarity() before using this function.",
   expect_error(
     netclu_infomap(net, weight = c("zz",1)),
     "weight must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_infomap(net, cut_weight =  c("zz","zz")),
+    "cut_weight must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_infomap(net, cut_weight = "zz"),
+    "cut_weight must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_infomap(net, cut_weight = -1),
+    "cut_weight must be higher than 0.",
     fixed = TRUE)
   
   expect_error(
@@ -558,5 +647,11 @@ both, sites or species",
     netclu_infomap(net, bipartite = TRUE, directed = TRUE),
     "directed cannot be set to TRUE if the network is bipartite!"
     , fixed = TRUE)
+  
+  expect_error(
+    netclu_infomap(net, cut_weight = 100),
+    "The network is empty. 
+         Please check your data or choose an appropriate cut_weight value.", 
+    fixed = TRUE)
   
 })

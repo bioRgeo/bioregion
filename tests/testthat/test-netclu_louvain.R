@@ -51,15 +51,20 @@ net6 <- data.frame(
   Weight3 = c(1,-1,0,2)
 )
 
+fdf <- fishdf[1:1000,]
+vdf <- vegedf[1:1000,]
+simf <- similarity(fishmat, metric = "all")
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
   clust <- netclu_louvain(simil,
                           weight = TRUE,
+                          cut_weight = 0,
                           index = 3,
-                          lang = "Cpp",
+                          lang = "igraph",
                           resolution = 1,
+                          seed = NULL,
                           q = 0,
                           c = 0.5,
                           k = 1,
@@ -74,9 +79,11 @@ test_that("valid output", {
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_louvain")
   expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$cut_weight, 0)
   expect_equal(clust$args$index, 3)
-  expect_equal(clust$args$lang, "Cpp")
+  expect_equal(clust$args$lang, "igraph")
   expect_equal(clust$args$resolution, 1)
+  expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$q, 0)
   expect_equal(clust$args$k, 1)
   expect_equal(clust$args$bipartite, FALSE)
@@ -113,6 +120,67 @@ test_that("valid output", {
                           return_node_type = "sites")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
+  
+  clust <- netclu_louvain(net, cut_weight = 100, lang = "igraph")
+  expect_equal(colnames(clust$clusters), c("ID","K_0"))
+  expect_equal(length(table(clust$clusters$K_0)), 0)
+  expect_equal(clust$cluster_info[1,1], "K_0")
+  expect_equal(clust$cluster_info[1,2], 0)
+  
+  clust <- netclu_louvain(net, cut_weight = 60, lang = "igraph")
+  expect_equal(colnames(clust$clusters), c("ID","K_1"))
+  expect_equal(length(table(clust$clusters$K_1)), 1)
+  expect_equal(clust$cluster_info[1,1], "K_1")
+  expect_equal(clust$cluster_info[1,2], 1)
+  
+  clust1 <- netclu_louvain(fdf, lang = "igraph", seed=1)
+  clust2 <- netclu_louvain(fdf, lang = "igraph", seed=1)
+  expect_equal(sum(clust1$clusters$K_6==clust2$clusters$K_6), 266)
+  
+  clust1 <- netclu_louvain(vdf, lang = "igraph", seed=2)
+  clust2 <- netclu_louvain(vdf, lang = "igraph", seed=2)
+  expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3), 873)
+  
+  clust1 <- netclu_louvain(simf, lang = "igraph", seed=1)
+  clust2 <- netclu_louvain(simf, lang = "igraph", seed=1)
+  expect_equal(sum(clust1$clusters$K_4==clust2$clusters$K_4), 338)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_louvain(vdf, lang = "igraph")
+  r2 <- runif(1)
+  clust2 <- netclu_louvain(vdf, lang = "igraph")
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_louvain(vdf, lang = "igraph", seed = 1)
+  r2 <- runif(1)
+  clust2 <- netclu_louvain(vdf, lang = "igraph", seed = 1)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  r1 <- runif(1)
+  clust1 <- netclu_louvain(vdf, lang = "igraph", seed = 1000)
+  r2 <- runif(1)
+  clust2 <- netclu_louvain(vdf, lang = "igraph", seed = 1000)
+  r3 <- runif(1)
+  expect_equal(r1!=r2, TRUE)
+  expect_equal(r2!=r3, TRUE)
+  expect_equal(r1!=r3, TRUE)
+  
+  clust <- netclu_louvain(net, cut_weight = 60, lang = "cpp")
+  expect_equal(colnames(clust$clusters), c("ID","K_1"))
+  expect_equal(length(table(clust$clusters$K_1)), 1)
+  expect_equal(clust$cluster_info[1,1], "K_1")
+  expect_equal(clust$cluster_info[1,2], 1)
+  
+  clust <- netclu_louvain(fdf, lang = "cpp")
+  expect_equal(clust$inputs$hierarchical, TRUE)
+
   
 })
 
@@ -172,6 +240,21 @@ Use dissimilarity_to_similarity() before using this function.",
   expect_error(
     netclu_louvain(net, weight = c("zz",1)),
     "weight must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, cut_weight =  c("zz","zz")),
+    "cut_weight must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_louvain(net, cut_weight = "zz"),
+    "cut_weight must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_louvain(net, cut_weight = -1),
+    "cut_weight must be higher than 0.",
     fixed = TRUE)
   
   expect_error(
@@ -348,7 +431,7 @@ both, sites or species",
   expect_error(
     netclu_louvain(net, lang = "zz"),
     "Please choose lang among the following values:
-Cpp or igraph",
+cpp or igraph",
     fixed = TRUE)
   
   expect_error(
@@ -369,6 +452,31 @@ Cpp or igraph",
   expect_error(
     netclu_louvain(net, resolution = 0),
     "resolution must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    netclu_louvain(net, seed =  c("zz","zz")),
+    "seed must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_louvain(net, seed = "zz"),
+    "seed must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_louvain(net, seed = 1.1),
+    "seed must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_louvain(net, seed = -1),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    netclu_louvain(net, seed = 0),
+    "seed must be strictly higher than 0.",
     fixed = TRUE) 
   
   expect_error(
@@ -444,6 +552,12 @@ Cpp or igraph",
   expect_error(
     netclu_louvain(net, algorithm_in_output = c("zz","zz")),
     "algorithm_in_output must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, cut_weight = 100, lang = "cpp"),
+    "The network is empty. 
+         Please check your data or choose an appropriate cut_weight value.", 
     fixed = TRUE)
   
 })

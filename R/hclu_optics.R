@@ -50,7 +50,7 @@
 #' (see [optics][dbscan::optics]).
 #'
 #' @details
-#' The optics (Ordering points to identify the clustering structure) is a
+#' The OPTICS (Ordering points to identify the clustering structure) is a
 #' semi-hierarchical clustering algorithm which orders the points in the
 #' dataset such that points which are closest become neighbors, and calculates
 #' a reachability distance for each point. Then, clusters can be extracted in a
@@ -281,16 +281,15 @@ hclu_optics <- function(dissimilarity,
                     paste0("lvl", 1:max.col)])
   }
   
-  outputs$clusters <- knbclu(outputs$clusters,
-                             method = "length",
-                             reorder = FALSE)
+  outputs$clusters[,-1][outputs$clusters[,-1]==0]=NA
+  outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),
                                              drop = FALSE],
     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters),
                                      drop = FALSE],
-                    2, function(x) length(unique(x))))
+                    2, function(x) length(unique(x[!is.na(x)]))))
   
   
   if(show_hierarchy){

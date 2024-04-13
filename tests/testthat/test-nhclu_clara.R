@@ -49,6 +49,7 @@ test_that("valid output", {
   
    clust <- nhclu_clara(dissim,
                         index = "Simpson",
+                        seed = NULL,
                         n_clust = c(1,2,3),
                         maxiter = 0,
                         initializer = "LAB",
@@ -56,11 +57,11 @@ test_that("valid output", {
                         numsamples = 5,
                         sampling = 0.25,
                         independent = FALSE,
-                        seed = 1,
                         algorithm_in_output = TRUE)
    expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
    expect_equal(clust$name, "nhclu_clara")
    expect_equal(clust$args$index, "Simpson")
+   expect_equal(clust$args$seed, NULL)
    expect_equal(clust$args$n_clust, c(1,2,3))
    expect_equal(clust$args$maxiter, 0)
    expect_equal(clust$args$initializer, "LAB")
@@ -68,7 +69,6 @@ test_that("valid output", {
    expect_equal(clust$args$numsamples, 5)
    expect_equal(clust$args$sampling, 0.25)
    expect_equal(clust$args$independent, FALSE)
-   expect_equal(clust$args$seed, 1)
    expect_equal(clust$args$algorithm_in_output, TRUE)
    expect_equal(clust$inputs$bipartite, FALSE)
    expect_equal(clust$inputs$weight, TRUE)
@@ -116,6 +116,29 @@ test_that("valid output", {
    expect_equal(sum(clust1$clusters==clust3$clusters), 1014)
    expect_equal(sum(clust2$clusters==clust3$clusters), 1014)
    expect_equal(sum(clust3$clusters==clust4$clusters), 1014)
+   
+   clust1 <- nhclu_clara(dissim,
+                         index = "Euclidean",
+                         n_clust = c(5,10))
+   clust2 <- nhclu_clara(dissim,
+                         index = "Euclidean",
+                         n_clust = c(5,10))
+   #expect_equal(sum(clust1$clusters$K_5==clust2$clusters$K_5), 338)
+   
+   r1 <- runif(1)
+   clust1 <- nhclu_clara(dissim,
+                          index = "Euclidean",
+                          n_clust = 5,
+                          seed = 1)
+   r2 <- runif(1)
+   clust2 <- nhclu_clara(dissim,
+                          index = "Euclidean",
+                          n_clust = 5,
+                          seed = 1)
+   r3 <- runif(1)
+   expect_equal(r1!=r2, TRUE)
+   expect_equal(r2!=r3, TRUE)
+   expect_equal(r1!=r3, TRUE)
    
 })
  
@@ -345,7 +368,7 @@ BUILD or LAB",
   expect_error(
     nhclu_clara(dissim, seed = 1.1),
     "seed must be an integer.",
-    fixed = TRUE)  
+    fixed = TRUE) 
   
   expect_error(
     nhclu_clara(dissim, seed = -1),

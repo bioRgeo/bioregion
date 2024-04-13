@@ -704,56 +704,71 @@ similarity_to_dissimilarity()."),
 # reformat_hierarchy
 reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
-  # Input
-  input <- as.character(as.vector(as.matrix(input)))
-  
-  # Algo
-  if (algo == "infomap") {
+  # Infomap
+  if(algo == "infomap"){
+    
     sep <- ":"
-  }
-  if (algo == "optics") {
-    sep <- "."
-  }
-  
-  # Nb levels
-  nblev <- max(lengths(regmatches(input, gregexpr(paste0("\\", sep),
-                                                  input)))) + 1
-  
-  # From input to table
-  table <- tidyr::separate(
-    data = data.frame(input),
-    col = input,
-    remove = FALSE,
-    into = paste0("lvl", 1:nblev),
-    sep = paste0("\\", sep),
-    fill = "right"
-  )
-  
-  # Replace NA by O
-  table[which(is.na(table), arr.ind = TRUE)] <- 0
-  
-  # Replace last number by 0 for infomap
-  if (algo == "infomap") {
+    
+    # Input
+    input <- as.character(as.vector(as.matrix(input)))
+    
+    # Nb levels
+    nblev <- max(lengths(regmatches(input, gregexpr(paste0("\\", sep),
+                                                    input)))) + 1
+    
+    # From input to table
+    table <- tidyr::separate(
+      data = data.frame(input),
+      col = input,
+      remove = FALSE,
+      into = paste0("lvl", 1:nblev),
+      sep = paste0("\\", sep),
+      fill = "right"
+    )
+    
+    # Replace NA by O
+    table[which(is.na(table), arr.ind = TRUE)] <- 0
+    
     for (k in 3:(nblev + 1)) {
       table[table[, k] == 0, (k - 1)] <- 0
     }
     table[, (nblev + 1)] <- 0
+    
+    # Output
+    output <- table
+    for (lvl in grep("lvl", colnames(output))[2:nblev]) {
+      output[, lvl] <- paste(output[, lvl - 1], output[, lvl], sep = ".")
+    }
+    output[grep("lvl", colnames(output))] <- lapply(
+      output[grep("lvl", colnames(output))],
+      function(x) gsub("\\.0", "", x)
+    )
+    # Integerize
+    if (integerize) {
+      for (k in 2:(nblev + 1)) {
+        output[, k] <- as.numeric(as.factor(output[, k]))
+      }
+    }
+  
   }
   
-  # Output
-  output <- table
-  for (lvl in grep("lvl", colnames(output))[2:nblev]) {
-    output[, lvl] <- paste(output[, lvl - 1], output[, lvl], sep = ".")
-  }
-  output[grep("lvl", colnames(output))] <- lapply(
-    output[grep("lvl", colnames(output))],
-    function(x) gsub("\\.0", "", x)
-  )
-  # Integerize
-  if (integerize) {
-    for (k in 2:(nblev + 1)) {
-      output[, k] <- as.numeric(as.factor(output[, k]))
+  # Algo
+  if (algo == "louvain") {
+    
+    id0 <- which(input[, 1] == 0)
+    output <- input[(id0[1] + 1):(id0[2] - 1), ]
+    colnames(output) <- c("ID", paste0("V",1))
+    
+    if(length(id0)>2){
+      for(k in 2:(length(id0)-1)){
+        output$temp <- NA
+        tabk <- input[(id0[k] + 1):(id0[k+1] - 1),]
+        output[,(k+1)] <- tabk[match(output[,k], tabk[,1]),2]
+        colnames(output)[(k+1)] <- paste0("V",k)
+        
+      }
     }
+    
   }
   
   return(output)
@@ -761,27 +776,14 @@ reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
 
 # knbclu
 knbclu <- function(partitions, 
-                   method = "length",
                    reorder = TRUE, 
                    rename_duplicates = TRUE) {
   
   # Identify the number of clusters per partition
   nb <- dim(partitions)[2] - 1
-  
-  
-  if (method == "max") {
-    nbclus <- as.numeric(apply(
-      partitions[, 2:(nb + 1), drop = FALSE],
-      2,
-      function(x) max(x)
-    ))
-  } else if (method == "length") {
-    nbclus <- apply(
-      partitions[, 2:(nb + 1), drop = FALSE],
-      2,
-      function(x) length(unique(x))
-    )
-  }
+  nbclus <- apply(partitions[, 2:(nb + 1), drop = FALSE],
+                  2,
+                  function(x) length(unique(x[!is.na(x)])))
   
   # Rename and reorder
   if (reorder) {

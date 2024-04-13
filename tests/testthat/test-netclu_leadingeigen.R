@@ -49,12 +49,16 @@ net6 <- data.frame(
   Weight3 = c(1,-1,0,2)
 )
 
+fdf <- fishdf[1:1000,]
+vdf <- vegedf[1:1000,]
+simf <- similarity(fishmat, metric = "all")
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
   clust <- netclu_leadingeigen(simil,
                                weight = TRUE,
+                               cut_weight = 0,
                                index = 3,
                                bipartite = FALSE,
                                site_col = 1,
@@ -64,6 +68,7 @@ test_that("valid output", {
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_leadingeigen")
   expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$cut_weight, 0)
   expect_equal(clust$args$index, 3)
   expect_equal(clust$args$bipartite, FALSE)
   expect_equal(clust$args$site_col, 1)
@@ -81,6 +86,7 @@ test_that("valid output", {
   
   clust <- netclu_leadingeigen(simil,
                                weight = FALSE,
+                               cut_weight = 0,
                                index = 3,
                                bipartite = FALSE,
                                site_col = 1,
@@ -124,6 +130,24 @@ test_that("valid output", {
   expect_equal(clust$name, "netclu_leadingeigen")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
+  
+  clust <- netclu_leadingeigen(net, cut_weight = 100)
+  expect_equal(colnames(clust$clusters), c("ID","K_0"))
+  expect_equal(length(table(clust$clusters$K_0)), 0)
+  expect_equal(clust$cluster_info[1,1], "K_0")
+  expect_equal(clust$cluster_info[1,2], 0)
+  
+  clust1 <- netclu_leadingeigen(fdf)
+  clust2 <- netclu_leadingeigen(fdf)
+  expect_equal(sum(clust1$clusters$K_11==clust2$clusters$K_11), 266)
+  
+  clust1 <- netclu_leadingeigen(vdf)
+  clust2 <- netclu_leadingeigen(vdf)
+  expect_equal(sum(clust1$clusters$K_2==clust2$clusters$K_2), 873)
+  
+  clust1 <- netclu_leadingeigen(simf)
+  clust2 <- netclu_leadingeigen(simf)
+  expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3), 338)
   
 })
 
@@ -183,6 +207,21 @@ Use dissimilarity_to_similarity() before using this function.",
   expect_error(
     netclu_leadingeigen(net, weight = c("zz",1)),
     "weight must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_leadingeigen(net, cut_weight =  c("zz","zz")),
+    "cut_weight must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_leadingeigen(net, cut_weight = "zz"),
+    "cut_weight must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_leadingeigen(net, cut_weight = -1),
+    "cut_weight must be higher than 0.",
     fixed = TRUE)
   
   expect_error(

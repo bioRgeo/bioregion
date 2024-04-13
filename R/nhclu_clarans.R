@@ -12,14 +12,14 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
+#' @param seed for the random number generator (NULL for random by default).
+#' 
 #' @param n_clust an `integer` or an `integer` vector specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param numlocal an `integer` defining the number of samples to draw.
 #' 
 #' @param maxneighbor a positive `numeric` defining the sampling rate.
-#' 
-#' @param seed an `integer` to define a generator of random numbers.
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
 #' of [fastclarans][fastkmedoids::fastclarans] should be returned in the output (`TRUE` by 
@@ -74,10 +74,10 @@
 
 nhclu_clarans <- function(dissimilarity,
                           index = names(dissimilarity)[3],
+                          seed = NULL,
                           n_clust = c(1,2,3),
                           numlocal = 2,
                           maxneighbor = 0.025,
-                          seed = 123456789,
                           algorithm_in_output = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
@@ -103,11 +103,13 @@ nhclu_clarans <- function(dissimilarity,
     }
   }
   
+  if(!is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   controls(args = n_clust, data = NULL, 
            type = "strict_positive_integer_vector")
   controls(args = numlocal, data = NULL, type = "positive_integer")
   controls(args = maxneighbor, data = NULL, type = "positive_numeric")
-  controls(args = seed, data = NULL, type = "strict_positive_integer")
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
   # 2. Function ---------------------------------------------------------------
@@ -115,10 +117,10 @@ nhclu_clarans <- function(dissimilarity,
   outputs <- list(name = "nhclu_clarans")
   
   outputs$args <- list(index = index,
+                       seed = seed,
                        n_clust = n_clust,
                        numlocal = numlocal,
                        maxneighbor = maxneighbor,
-                       seed = seed,
                        algorithm_in_output = algorithm_in_output)
   
   outputs$inputs <- list(bipartite = FALSE,
@@ -143,16 +145,28 @@ nhclu_clarans <- function(dissimilarity,
   outputs$clusters$name <- labels(dist.obj)
   
   # CLARANS algorithm
-  outputs$algorithm <-
-    lapply(n_clust,
-           function(x)
-             fastkmedoids::fastclarans(rdist = dist.obj,
-                                       n = nrow(dist.obj),
-                                       k = x,
-                                       numlocal = numlocal,
-                                       maxneighbor = maxneighbor,
-                                       seed = seed))
-  
+  if(is.null(seed)){
+    outputs$algorithm <-
+      lapply(n_clust,
+             function(x)
+               fastkmedoids::fastclarans(rdist = dist.obj,
+                                         n = nrow(dist.obj),
+                                         k = x,
+                                         numlocal = numlocal,
+                                         maxneighbor = maxneighbor,
+                                         seed = as.numeric(as.POSIXct(
+                                           Sys.time())) + sample(-10:10, 1)))
+  }else{
+    outputs$algorithm <-
+      lapply(n_clust,
+             function(x)
+               fastkmedoids::fastclarans(rdist = dist.obj,
+                                         n = nrow(dist.obj),
+                                         k = x,
+                                         numlocal = numlocal,
+                                         maxneighbor = maxneighbor,
+                                         seed = seed))
+  }
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(

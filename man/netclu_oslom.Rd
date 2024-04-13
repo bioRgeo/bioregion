@@ -7,11 +7,12 @@
 netclu_oslom(
   net,
   weight = TRUE,
+  cut_weight = 0,
   index = names(net)[3],
+  seed = NULL,
   reassign = "no",
   r = 10,
   hr = 50,
-  seed = 0,
   t = 0.1,
   cp = 0.5,
   directed = FALSE,
@@ -34,8 +35,14 @@ indices.}
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
+\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+between sites with a weight strictly lower than this value will not be
+considered (O by default).}
+
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
+
+\item{seed}{for the random number generator (NULL for random by default).}
 
 \item{reassign}{a \code{character} indicating if the nodes belonging to several
 community should be reassign and what method should be used (see Note).}
@@ -45,8 +52,6 @@ community should be reassign and what method should be used (see Note).}
 
 \item{hr}{the number of runs for the higher hierarchical level (50 by
 default, 0 if you are not interested in hierarchies).}
-
-\item{seed}{for the random number generator (0 for random by default).}
 
 \item{t}{the p-value, the default value is 0.10, increase this value you to
 get more modules.}
@@ -68,7 +73,7 @@ column 1 to column 2).}
 (i.e. feature nodes).}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
-("sites", "species" or "both") should be returned in the output
+(\code{site}, \code{species} or \code{both}) should be returned in the output
 (\code{return_node_type = "both"} by default).}
 
 \item{binpath}{a \code{character} indicating the path to the bin folder
@@ -127,20 +132,20 @@ network (\code{bipartite = TRUE}). Do not forget to indicate which of the
 first two columns is dedicated to the site nodes (i.e. primary nodes) and
 species nodes (i.e.feature nodes) using the arguments \code{site_col} and
 \code{species_col}. The type of nodes returned in the output can be chosen
-with the argument \code{return_node_type} equal to \code{"both"} to keep both
-types of nodes, \code{"sites"} to preserve only the sites nodes and
-\code{"species"} to preserve only the species nodes.
+with the argument \code{return_node_type} equal to \code{both} to keep both
+types of nodes, \code{sites} to preserve only the sites nodes and
+\code{species} to preserve only the species nodes.
 
 Since OSLOM potentially returns overlapping communities we propose two
-methods to reassign the 'overlapping' nodes randomly \code{reassign = 'random'}
-or based on the closest candidate community \code{reassign = 'simil'} (only for
+methods to reassign the 'overlapping' nodes randomly \code{reassign = "random"}
+or based on the closest candidate community \code{reassign = "simil"} (only for
 weighted networks, in this case the closest candidate community is
-determined with the average similarity). By default \code{reassign = 'no'} and
+determined with the average similarity). By default \code{reassign = "no"} and
 all the information will be provided. The number of partitions will depend
-on the number of overlapping modules (up to three). The suffix '_semel',
-'_bis' and '_ter' are added to the column names. The first partition
-('_semel') assigns a module for each node. A value of 0 in the second
-('_bis') and third ('_ter') columns indicates that no overlapping module
+on the number of overlapping modules (up to three). The suffix \verb{_semel},
+\verb{_bis} and \verb{_ter} are added to the column names. The first partition
+(\verb{_semel}) assigns a module to each node. A value of \code{NA} in the second
+(\verb{_bis}) and third (\verb{_ter}) columns indicates that no overlapping module
 were found for this node (i.e. non-overlapping nodes).
 }
 \examples{

@@ -11,15 +11,17 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
+#' @param seed for the random number generator (NULL for random by default).
+#' 
 #' @param n_clust an `integer` or an `integer` vector specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param variant a `character` string specifying the variant of pam to use,
-#' by default "faster". Available options are "original", "o_1", "o_2", "f_3", 
-#' "f_4", "f_5" or faster. See [pam][cluster::pam] for more details.
+#' by default `faster`. Available options are `original`, `o_1`, `o_2`, `f_3`, 
+#' `f_4`, `f_5` or `faster`. See [pam][cluster::pam] for more details.
 #' 
-#' @param nstart an `integer` specifying the number of random “starts” for the
-#' pam algorithm. By default, 1 (for the `"faster"` variant).
+#' @param nstart an `integer` specifying the number of random start for the
+#' pam algorithm. By default, 1 (for the `faster` variant).
 #' 
 #' @param cluster_only a `boolean` specifying if only the clustering should be
 #' returned from the [pam][cluster::pam] function (more efficient).
@@ -86,6 +88,7 @@
 
 nhclu_pam <- function(dissimilarity,
                       index = names(dissimilarity)[3],
+                      seed = NULL,
                       n_clust = c(1,2,3),
                       variant = "faster", 
                       nstart = 1,
@@ -116,6 +119,9 @@ nhclu_pam <- function(dissimilarity,
     }
   }
   
+  if(!is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   controls(args = n_clust, data = NULL, 
            type = "strict_positive_integer_vector")
   controls(args = variant, data = NULL, type = "character")
@@ -132,6 +138,7 @@ original, o_1, o_2, f_3, f_4, f_5 or faster", call. = FALSE)
   outputs <- list(name = "nhclu_pam")
   
   outputs$args <- list(index = index,
+                       seed = seed,
                        n_clust = n_clust,
                        nstart = nstart,
                        variant = variant,
@@ -160,17 +167,33 @@ original, o_1, o_2, f_3, f_4, f_5 or faster", call. = FALSE)
   
   outputs$clusters$name <- labels(dist.obj)
   
-  outputs$algorithm <- lapply(n_clust,
-                                  function(x)
-                                    cluster::pam(dist.obj,
-                                                 k = x,
-                                                 diss = TRUE,
-                                                 keep.diss = FALSE,
-                                                 keep.data = FALSE,
-                                                 nstart = nstart,
-                                                 variant = variant,
-                                                 cluster.only = cluster_only,
-                                                 ...))
+  if(is.null(seed)){
+    outputs$algorithm <- lapply(n_clust,
+                                function(x)
+                                  cluster::pam(dist.obj,
+                                               k = x,
+                                               diss = TRUE,
+                                               keep.diss = FALSE,
+                                               keep.data = FALSE,
+                                               nstart = nstart,
+                                               variant = variant,
+                                               cluster.only = cluster_only,
+                                               ...))
+  }else{
+    set.seed(seed)
+    outputs$algorithm <- lapply(n_clust,
+                                function(x)
+                                  cluster::pam(dist.obj,
+                                               k = x,
+                                               diss = TRUE,
+                                               keep.diss = FALSE,
+                                               keep.data = FALSE,
+                                               nstart = nstart,
+                                               variant = variant,
+                                               cluster.only = cluster_only,
+                                               ...))
+    rm(.Random.seed, envir=globalenv())
+  }
   
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
@@ -186,7 +209,7 @@ original, o_1, o_2, f_3, f_4, f_5 or faster", call. = FALSE)
                                              drop = FALSE],
     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters),
                                      drop = FALSE],
-                    2, function(x) length(unique(x))))
+                    2, function(x) length(unique(x[!is.na(x)]))))
   
   class(outputs) <- append("bioregion.clusters", class(outputs))
   

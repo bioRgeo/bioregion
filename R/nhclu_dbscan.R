@@ -63,7 +63,7 @@
 #' distance plot. By default
 #' the function will try to automatically find a knee in that curve, but the
 #' result is uncertain, and so the user should inspect the graph and modify
-#' `dbscan_eps` accordingly.To explore eps values, follow the
+#' `dbscan_eps` accordingly. To explore `eps` values, follow the
 #' recommendation by the function when you launch it a first time without
 #' defining `eps`. Then, adjust depending on your clustering results.
 #'
@@ -249,7 +249,7 @@ nhclu_dbscan <- function(dissimilarity,
     outputs$clusters,
     data.frame(lapply(names(outputs$algorithm),
                       function(x) outputs$algorithm[[x]]$cluster)))
-  
+  outputs$clusters[,-1][outputs$clusters[,-1]==0]=NA
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
   
   outputs$cluster_info <- data.frame(
@@ -257,7 +257,7 @@ nhclu_dbscan <- function(dissimilarity,
                                              drop = FALSE],
     n_clust = apply(outputs$clusters[, 2:length(outputs$clusters),
                                      drop = FALSE],
-                    2, function(x) length(unique(x))),
+                    2, function(x) length(unique(x[!is.na(x)]))),
     cluster_arg_order)
   
   # Set algorithm in output

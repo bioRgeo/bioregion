@@ -73,12 +73,25 @@ test_that("valid output", {
                         minPts = c(3,4),
                         eps = c(0,0.1,0.2),
                         plot = FALSE)
-  expect_equal(colnames(clust$clusters)[2], "K_13_1")
-  expect_equal(colnames(clust$clusters)[3], "K_13_2")
-  expect_equal(colnames(clust$clusters)[4], "K_13_3")
-  expect_equal(colnames(clust$clusters)[5], "K_20_1")
-  expect_equal(colnames(clust$clusters)[6], "K_20_2")
-  expect_equal(colnames(clust$clusters)[7], "K_20_3")
+  expect_equal(colnames(clust$clusters)[2], "K_12_1")
+  expect_equal(colnames(clust$clusters)[3], "K_12_2")
+  expect_equal(colnames(clust$clusters)[4], "K_12_3")
+  expect_equal(colnames(clust$clusters)[5], "K_19_1")
+  expect_equal(colnames(clust$clusters)[6], "K_19_2")
+  expect_equal(colnames(clust$clusters)[7], "K_19_3")
+  
+  clust1 <- nhclu_dbscan(dissim,
+                        index = "Euclidean",
+                        minPts = c(3,4),
+                        eps = c(0,0.1,0.2),
+                        plot = FALSE)
+  clust2 <- nhclu_dbscan(dissim,
+                         index = "Euclidean",
+                         minPts = c(3,4),
+                         eps = c(0,0.1,0.2),
+                         plot = FALSE)
+  expect_equal(sum(clust1$clusters$K_19_3==clust2$clusters$K_19_3, 
+                   na.rm = TRUE), 136)
   
 })
 

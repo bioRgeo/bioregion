@@ -7,10 +7,10 @@
 nhclu_clarans(
   dissimilarity,
   index = names(dissimilarity)[3],
+  seed = NULL,
   n_clust = c(1, 2, 3),
   numlocal = 2,
   maxneighbor = 0.025,
-  seed = 123456789,
   algorithm_in_output = TRUE
 )
 }
@@ -23,14 +23,14 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
+\item{seed}{for the random number generator (NULL for random by default).}
+
 \item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters.}
 
 \item{numlocal}{an \code{integer} defining the number of samples to draw.}
 
 \item{maxneighbor}{a positive \code{numeric} defining the sampling rate.}
-
-\item{seed}{an \code{integer} to define a generator of random numbers.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \link[fastkmedoids:fastclarans]{fastclarans} should be returned in the output (\code{TRUE} by

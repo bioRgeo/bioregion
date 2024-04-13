@@ -11,8 +11,14 @@
 #' @param weight a `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' 
+#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' between sites with a weight strictly lower than this value will not be 
+#' considered (O by default).
+#' 
 #' @param index name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
+#' 
+#' @param seed for the random number generator (NULL for random by default).
 #'
 #' @param objective_function a string indicating the objective function to use,
 #' the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).
@@ -107,7 +113,9 @@
 
 netclu_leiden <- function(net,
                           weight = TRUE,
+                          cut_weight = 0,
                           index = names(net)[3],
+                          seed = NULL,
                           objective_function = "CPM",
                           resolution_parameter = 1,
                           beta = 0.01,
@@ -130,6 +138,7 @@ netclu_leiden <- function(net,
   # Control input weight & index
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
+    controls(args = cut_weight, data = net, type = "positive_numeric")
     controls(args = index, data = net, type = "input_net_index")
     net[, 3] <- net[, index]
     net <- net[, 1:3]
@@ -159,6 +168,9 @@ both, sites or species", call. = FALSE)
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
   # Control parameters LEIDEN
+  if(!is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   controls(args = objective_function, data = NULL, type = "character")
   if (!(objective_function %in% c("CPM", "modularity"))) {
     stop("Please choose objective_function among the following values: 
@@ -200,7 +212,7 @@ CPM or modularity", call. = FALSE)
   
   if (weight) {
     netemp <- cbind(netemp, net[, 3])
-    netemp <- netemp[netemp[, 3] > 0, ]
+    netemp <- netemp[netemp[, 3] > cut_weight, ]
     colnames(netemp)[3] <- "weight"
   }
   
@@ -209,7 +221,9 @@ CPM or modularity", call. = FALSE)
   
   outputs$args <- list(
     weight = weight,
+    cut_weight = cut_weight,
     index = index,
+    seed = seed,
     objective_function = objective_function,
     resolution_parameter = resolution_parameter,
     beta = beta,
@@ -236,19 +250,31 @@ CPM or modularity", call. = FALSE)
   
   outputs$algorithm <- list()
   
-  # Run algo
+  # Run algo (with seed)
   net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-  outalg <- igraph::cluster_leiden(
-    graph = net,
-    weight = weight,
-    objective_function = objective_function,
-    resolution_parameter = resolution_parameter,
-    beta = beta,
-    n_iterations = n_iterations,
-    vertex_weights = vertex_weights)
+  if(is.null(seed)){
+    outalg <- igraph::cluster_leiden(
+      graph = net,
+      objective_function = objective_function,
+      resolution_parameter = resolution_parameter,
+      beta = beta,
+      n_iterations = n_iterations,
+      vertex_weights = vertex_weights)
+  }else{
+    set.seed(seed)
+    outalg <- igraph::cluster_leiden(
+      graph = net,
+      objective_function = objective_function,
+      resolution_parameter = resolution_parameter,
+      beta = beta,
+      n_iterations = n_iterations,
+      vertex_weights = vertex_weights)
+    rm(.Random.seed, envir=globalenv())
+  }
+
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
   
-  com <- data.frame(ID = idnode[, 2], Com = 0)
+  com <- data.frame(ID = idnode[, 2], Com = NA)
   com[match(comtemp[, 1], idnode[, 1]), 2] <- comtemp[, 2]
   
   # Rename and reorder columns
@@ -280,7 +306,7 @@ CPM or modularity", call. = FALSE)
     ],
     n_clust = apply(
       outputs$clusters[, 2:length(outputs$clusters), drop = FALSE],
-      2, function(x) length(unique(x))))
+      2, function(x) length(unique(x[!is.na(x)]))))
   
   # Return outputs
   class(outputs) <- append("bioregion.clusters", class(outputs))

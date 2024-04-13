@@ -7,7 +7,9 @@
 netclu_leiden(
   net,
   weight = TRUE,
+  cut_weight = 0,
   index = names(net)[3],
+  seed = NULL,
   objective_function = "CPM",
   resolution_parameter = 1,
   beta = 0.01,
@@ -29,8 +31,14 @@ column(s) are the similarity indices.}
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
+\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+between sites with a weight strictly lower than this value will not be
+considered (O by default).}
+
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
+
+\item{seed}{for the random number generator (NULL for random by default).}
 
 \item{objective_function}{a string indicating the objective function to use,
 the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).}

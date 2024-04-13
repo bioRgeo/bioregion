@@ -7,6 +7,7 @@
 nhclu_kmeans(
   dissimilarity,
   index = names(dissimilarity)[3],
+  seed = NULL,
   n_clust = c(1, 2, 3),
   iter_max = 10,
   nstart = 10,
@@ -22,6 +23,8 @@ and the next column(s) are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
+
+\item{seed}{for the random number generator (NULL for random by default).}
 
 \item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters}

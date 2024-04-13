@@ -93,7 +93,7 @@ recommends to choose \code{eps} by identifying a knee in the k-nearest neighbor
 distance plot. By default
 the function will try to automatically find a knee in that curve, but the
 result is uncertain, and so the user should inspect the graph and modify
-\code{dbscan_eps} accordingly.To explore eps values, follow the
+\code{dbscan_eps} accordingly. To explore \code{eps} values, follow the
 recommendation by the function when you launch it a first time without
 defining \code{eps}. Then, adjust depending on your clustering results.
 }

@@ -50,22 +50,28 @@ net6 <- data.frame(
   Weight3 = c(1,-1,0,2)
 )
 
+fdf <- fishdf[1:1000,]
+vdf <- vegedf[1:1000,]
+simf <- similarity(fishmat, metric = "all")
+
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
   clust <- netclu_walktrap(simil,
-                               weight = TRUE,
-                               index = 3,
-                               steps = 4,
-                               bipartite = FALSE,
-                               site_col = 1,
-                               species_col = 2,
-                               return_node_type = "both",
-                               algorithm_in_output = TRUE)
+                           weight = TRUE,
+                           cut_weight = 0,
+                           index = 3,
+                           steps = 4,
+                           bipartite = FALSE,
+                           site_col = 1,
+                           species_col = 2,
+                           return_node_type = "both",
+                           algorithm_in_output = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_walktrap")
   expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$cut_weight, 0)
   expect_equal(clust$args$index, 3)
   expect_equal(clust$args$steps, 4)
   expect_equal(clust$args$bipartite, FALSE)
@@ -116,16 +122,34 @@ test_that("valid output", {
   expect_equal(clust$args$return_node_type, "both")
   
   clust <- netclu_walktrap(net, 
-                               bipartite = TRUE, 
-                               return_node_type = "species")
+                           bipartite = TRUE, 
+                           return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
   
   clust <- netclu_walktrap(net, 
-                               bipartite = TRUE, 
-                               return_node_type = "sites")
+                           bipartite = TRUE, 
+                           return_node_type = "sites")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "sites")
+  
+  clust <- netclu_walktrap(net, cut_weight = 100)
+  expect_equal(colnames(clust$clusters), c("ID","K_0"))
+  expect_equal(length(table(clust$clusters$K_0)), 0)
+  expect_equal(clust$cluster_info[1,1], "K_0")
+  expect_equal(clust$cluster_info[1,2], 0)
+  
+  clust1 <- netclu_walktrap(fdf)
+  clust2 <- netclu_walktrap(fdf)
+  expect_equal(sum(clust1$clusters$K_13==clust2$clusters$K_13), 266)
+  
+  clust1 <- netclu_walktrap(vdf)
+  clust2 <- netclu_walktrap(vdf)
+  expect_equal(sum(clust1$clusters$K_308==clust2$clusters$K_308), 873)
+  
+  clust1 <- netclu_walktrap(simf)
+  clust2 <- netclu_walktrap(simf)
+  expect_equal(sum(clust1$clusters$K_18==clust2$clusters$K_18), 338)
   
 })
 
@@ -185,6 +209,21 @@ Use dissimilarity_to_similarity() before using this function.",
   expect_error(
     netclu_walktrap(net, weight = c("zz",1)),
     "weight must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_walktrap(net, cut_weight =  c("zz","zz")),
+    "cut_weight must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_walktrap(net, cut_weight = "zz"),
+    "cut_weight must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    netclu_walktrap(net, cut_weight = -1),
+    "cut_weight must be higher than 0.",
     fixed = TRUE)
   
   expect_error(

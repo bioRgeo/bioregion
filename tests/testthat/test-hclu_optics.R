@@ -72,15 +72,23 @@ test_that("valid output", {
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(dim(clust$clusters)[2], 2)
   
-  clust <- hclu_optics(dissim,
+  clust1 <- hclu_optics(dissim,
                        index = "Simpson",
                        minPts = NULL,
                        eps = NULL,
                        xi = 0.05,
                        minimum = FALSE,
-                       show_hierarchy = TRUE,
+                       show_hierarchy = FALSE,
                        algorithm_in_output = TRUE)
-  expect_equal(clust$inputs$hierarchical, TRUE)
+  clust2 <- hclu_optics(dissim,
+                       index = "Simpson",
+                       minPts = NULL,
+                       eps = NULL,
+                       xi = 0.05,
+                       minimum = FALSE,
+                       show_hierarchy = FALSE,
+                       algorithm_in_output = TRUE)
+  expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3, na.rm = TRUE), 337)
   
 })
 

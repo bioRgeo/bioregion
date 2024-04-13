@@ -321,7 +321,7 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
   
-  clusters <- knbclu(clusters, reorder = TRUE, method = "length")
+  clusters <- knbclu(clusters, reorder = TRUE)
   
   if(inherits(tree, "bioregion.clusters")) {
     cur.tree$args$cut_height <- cut_height

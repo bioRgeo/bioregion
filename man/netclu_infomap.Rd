@@ -7,10 +7,11 @@
 netclu_infomap(
   net,
   weight = TRUE,
+  cut_weight = 0,
   index = names(net)[3],
+  seed = NULL,
   nbmod = 0,
   markovtime = 1,
-  seed = 0,
   numtrials = 1,
   twolevel = FALSE,
   show_hierarchy = FALSE,
@@ -36,16 +37,20 @@ indices.}
 \item{weight}{a \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
+\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+between sites with a weight strictly lower than this value will not be
+considered (O by default).}
+
 \item{index}{name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
+
+\item{seed}{for the random number generator (NULL for random by default).}
 
 \item{nbmod}{penalize solutions the more they differ from this number (0 by
 default for no preferred number of modules).}
 
 \item{markovtime}{scales link flow to change the cost of moving between
 modules, higher values results in fewer modules (default is 1).}
-
-\item{seed}{for the random number generator (0 for random by default).}
 
 \item{numtrials}{for the number of trials before picking up the best
 solution.}
@@ -72,7 +77,7 @@ Infomap should be used (see Note).}
 (i.e. feature nodes).}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
-("sites", "species" or "both") should be returned in the output
+(\code{site}, \code{species} or \code{both}) should be returned in the output
 (\code{return_node_type = "both"} by default).}
 
 \item{version}{a \code{character} indicating the Infomap version to use.}
@@ -142,8 +147,8 @@ In both cases do not forget to indicate which of the first two columns is
 dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 feature nodes) using the arguments \code{site_col} and \code{species_col}.
 The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{"both"} to keep both types of nodes, \code{"sites"}
-to preserve only the sites nodes and \code{"species"} to preserve only the
+\code{return_node_type} equal to \code{both} to keep both types of nodes, \code{sites}
+to preserve only the sites nodes and \code{species} to preserve only the
 species nodes.
 }
 \examples{

@@ -7,6 +7,7 @@
 nhclu_clara(
   dissimilarity,
   index = names(dissimilarity)[3],
+  seed = NULL,
   n_clust = c(1, 2, 3),
   maxiter = 0,
   initializer = "LAB",
@@ -14,7 +15,6 @@ nhclu_clara(
   numsamples = 5,
   sampling = 0.25,
   independent = FALSE,
-  seed = 123456789,
   algorithm_in_output = TRUE
 )
 }
@@ -26,6 +26,8 @@ and the next column(s) are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
+
+\item{seed}{for the random number generator (NULL for random by default).}
 
 \item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
 requested number(s) of clusters.}
@@ -44,8 +46,6 @@ behavior, set to 1 by default.}
 
 \item{independent}{a \code{boolean} indicating that the previous
 medoids are not kept in the next sample (FALSE by default).}
-
-\item{seed}{an \code{integer} to define a generator of random numbers.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
 of \link[fastkmedoids:fastclara]{fastclara} should be returned in the output
