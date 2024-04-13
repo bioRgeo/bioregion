@@ -29,7 +29,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
@@ -99,7 +99,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-04-04</h4>
+            <h4 data-toc-skip class="date">2024-04-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a4_3_network_clustering.Rmd" class="external-link"><code>vignettes/a4_3_network_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_3_network_clustering.Rmd</code></div>
@@ -229,8 +229,8 @@ moving between modules,</li>
 <li>higher values results in fewer modules (default is 1).<br>
 </li>
 <li>
-<code>seed</code> for the random number generator (0 for random by
-default)<br>
+<code>seed</code> for the random number generator (NULL for random
+by default)<br>
 </li>
 <li>
 <code>numtrials</code> the number of trials before picking up the
@@ -252,7 +252,7 @@ community should be identifiable in the outputs (FALSE by default).</li>
 <span>                             index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fish_simil</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
 <span>                             nbmod <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                             markovtime <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                             seed <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                             seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                             numtrials <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                             twolevel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                             show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -285,7 +285,7 @@ Note).<br>
 by default).<br>
 * <code>hr</code> the number of runs for the higher hierarchical level
 (50 by default, 0 if you are not interested in hierarchies).<br>
-* <code>seed</code> for the random number generator (0 for random by
+* <code>seed</code> for the random number generator (NULL for random by
 default).<br>
 * <code>t</code> the p−value, the default value is 0.10, increase this
 value you to get more modules.<br>
@@ -300,7 +300,7 @@ leads to bigger clusters).</p>
 <span>                         reassign <span class="op">=</span> <span class="st">"no"</span>,</span>
 <span>                         r <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                         hr <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>                         seed <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                         seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                         t <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                         cp <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                         directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -334,7 +334,7 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <span><span class="va">ex_louvain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_louvain.html">netclu_louvain</a></span><span class="op">(</span><span class="va">fishdf</span>,</span>
 <span>                             weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                             index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>                             lang <span class="op">=</span> <span class="st">"Cpp"</span>,</span>
+<span>                             lang <span class="op">=</span> <span class="st">"cpp"</span>,</span>
 <span>                             q <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                             c <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                             k <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -347,11 +347,7 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <span>                             delete_temp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                             algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_louvain</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_23</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 </span></span>
-<span><span class="co">##   6  55   4   3  20 119  43 103  43   5   4  17  16   2   3  10  10  10  37   5 </span></span>
-<span><span class="co">##   7   8   9 </span></span>
-<span><span class="co">##   4   3  11</span></span></code></pre>
+<pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -581,7 +577,7 @@ communities. <em>Scientific Reports</em>, <em>9</em>(1), 5233.
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer>

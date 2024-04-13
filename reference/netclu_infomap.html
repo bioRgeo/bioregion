@@ -8,7 +8,7 @@ on the Infomap algorithm (https://github.com/mapequation/infomap)."><meta proper
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
@@ -80,10 +80,11 @@ on the Infomap algorithm (<a href="https://github.com/mapequation/infomap" class
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">netclu_infomap</span><span class="op">(</span></span>
 <span>  <span class="va">net</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cut_weight <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nbmod <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  markovtime <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  numtrials <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  twolevel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -115,9 +116,19 @@ indices.</p></dd>
 if there are more than two columns.</p></dd>
 
 
+<dt>cut_weight</dt>
+<dd><p>a minimal weight value. If <code>weight</code> is TRUE, the links
+between sites with a weight strictly lower than this value will not be
+considered (O by default).</p></dd>
+
+
 <dt>index</dt>
 <dd><p>name or number of the column to use as weight. By default,
 the third column name of <code>net</code> is used.</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>for the random number generator (NULL for random by default).</p></dd>
 
 
 <dt>nbmod</dt>
@@ -128,10 +139,6 @@ default for no preferred number of modules).</p></dd>
 <dt>markovtime</dt>
 <dd><p>scales link flow to change the cost of moving between
 modules, higher values results in fewer modules (default is 1).</p></dd>
-
-
-<dt>seed</dt>
-<dd><p>for the random number generator (0 for random by default).</p></dd>
 
 
 <dt>numtrials</dt>
@@ -176,7 +183,7 @@ Infomap should be used (see Note).</p></dd>
 
 <dt>return_node_type</dt>
 <dd><p>a <code>character</code> indicating what types of nodes
-("sites", "species" or "both") should be returned in the output
+(<code>site</code>, <code>species</code> or <code>both</code>) should be returned in the output
 (<code>return_node_type = "both"</code> by default).</p></dd>
 
 
@@ -248,8 +255,8 @@ a bipartite network can also be considered as unipartite network
 dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 feature nodes) using the arguments <code>site_col</code> and <code>species_col</code>.
 The type of nodes returned in the output can be chosen with the argument
-<code>return_node_type</code> equal to <code>"both"</code> to keep both types of nodes, <code>"sites"</code>
-to preserve only the sites nodes and <code>"species"</code> to preserve only the
+<code>return_node_type</code> equal to <code>both</code> to keep both types of nodes, <code>sites</code>
+to preserve only the sites nodes and <code>species</code> to preserve only the
 species nodes.</p>
     </div>
     <div class="section level2">
@@ -280,7 +287,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Infomap 2.7.1 is not installed... Please have a look at</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     for more details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/RtmpqAKkpd/bin/INFOMAP/2.7.1/</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/RtmpTBr62a/bin/INFOMAP/2.7.1/</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -293,7 +300,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

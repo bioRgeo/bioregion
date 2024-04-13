@@ -8,7 +8,7 @@ on the OSLOM algorithm (http://oslom.org/, version 2.4)."><meta property="og:ima
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
@@ -80,11 +80,12 @@ on the OSLOM algorithm (<a href="http://oslom.org/" class="external-link">http:/
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">netclu_oslom</span><span class="op">(</span></span>
 <span>  <span class="va">net</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cut_weight <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reassign <span class="op">=</span> <span class="st">"no"</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  hr <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  t <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  cp <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -113,9 +114,19 @@ indices.</p></dd>
 if there are more than two columns.</p></dd>
 
 
+<dt>cut_weight</dt>
+<dd><p>a minimal weight value. If <code>weight</code> is TRUE, the links
+between sites with a weight strictly lower than this value will not be
+considered (O by default).</p></dd>
+
+
 <dt>index</dt>
 <dd><p>name or number of the column to use as weight. By default,
 the third column name of <code>net</code> is used.</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>for the random number generator (NULL for random by default).</p></dd>
 
 
 <dt>reassign</dt>
@@ -131,10 +142,6 @@ community should be reassign and what method should be used (see Note).</p></dd>
 <dt>hr</dt>
 <dd><p>the number of runs for the higher hierarchical level (50 by
 default, 0 if you are not interested in hierarchies).</p></dd>
-
-
-<dt>seed</dt>
-<dd><p>for the random number generator (0 for random by default).</p></dd>
 
 
 <dt>t</dt>
@@ -170,7 +177,7 @@ column 1 to column 2).</p></dd>
 
 <dt>return_node_type</dt>
 <dd><p>a <code>character</code> indicating what types of nodes
-("sites", "species" or "both") should be returned in the output
+(<code>site</code>, <code>species</code> or <code>both</code>) should be returned in the output
 (<code>return_node_type = "both"</code> by default).</p></dd>
 
 
@@ -231,19 +238,19 @@ network (<code>bipartite = TRUE</code>). Do not forget to indicate which of the
 first two columns is dedicated to the site nodes (i.e. primary nodes) and
 species nodes (i.e.feature nodes) using the arguments <code>site_col</code> and
 <code>species_col</code>. The type of nodes returned in the output can be chosen
-with the argument <code>return_node_type</code> equal to <code>"both"</code> to keep both
-types of nodes, <code>"sites"</code> to preserve only the sites nodes and
-<code>"species"</code> to preserve only the species nodes.</p>
+with the argument <code>return_node_type</code> equal to <code>both</code> to keep both
+types of nodes, <code>sites</code> to preserve only the sites nodes and
+<code>species</code> to preserve only the species nodes.</p>
 <p>Since OSLOM potentially returns overlapping communities we propose two
-methods to reassign the 'overlapping' nodes randomly <code>reassign = 'random'</code>
-or based on the closest candidate community <code>reassign = 'simil'</code> (only for
+methods to reassign the 'overlapping' nodes randomly <code>reassign = "random"</code>
+or based on the closest candidate community <code>reassign = "simil"</code> (only for
 weighted networks, in this case the closest candidate community is
-determined with the average similarity). By default <code>reassign = 'no'</code> and
+determined with the average similarity). By default <code>reassign = "no"</code> and
 all the information will be provided. The number of partitions will depend
-on the number of overlapping modules (up to three). The suffix '_semel',
-'_bis' and '_ter' are added to the column names. The first partition
-('_semel') assigns a module for each node. A value of 0 in the second
-('_bis') and third ('_ter') columns indicates that no overlapping module
+on the number of overlapping modules (up to three). The suffix <code>_semel</code>,
+<code>_bis</code> and <code>_ter</code> are added to the column names. The first partition
+(<code>_semel</code>) assigns a module to each node. A value of <code>NA</code> in the second
+(<code>_bis</code>) and third (<code>_ter</code>) columns indicates that no overlapping module
 were found for this node (i.e. non-overlapping nodes).</p>
     </div>
     <div class="section level2">
@@ -274,7 +281,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-msg co"><span class="r-pr">#&gt;</span> OSLOM is not installed... Please have a look at</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>               https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>               for more details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/RtmpqAKkpd/bin/OSLOM/</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/RtmpTBr62a/bin/OSLOM/</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -287,7 +294,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

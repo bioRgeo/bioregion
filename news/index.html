@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
@@ -70,7 +70,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="bioregion-111-developmentgithub-version">bioregion 1.1.1 (development/github version)<a class="anchor" aria-label="anchor" href="#bioregion-111-developmentgithub-version"></a></h2>
 <p>This is a list of changes made in the development/github version of the package between bioregion 1.1.0 (CRAN release 2024-03-19) and the next CRAN release.</p>
-<ul><li><p>Updated automated tests (code coverage &gt; 60%).</p></li>
+<ul><li><p>Added hierarchy for Louvain cpp.</p></li>
+<li><p>Added seed argument to stochastic algorithms (except Louvain cpp).</p></li>
+<li><p>Added argument cut_weight in netclu_ fonctions.</p></li>
+<li><p>Changed value for sites without cluster (0 -&gt; NA).</p></li>
+<li><p>Updated automated tests (code coverage &gt; 60%).</p></li>
 <li><p>Controls and outputs/inputs standardization.</p></li>
 </ul></div>
     <div class="section level2">
@@ -99,7 +103,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

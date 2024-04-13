@@ -10,7 +10,7 @@ Applications (CLARA) algorithm."><meta property="og:image" content="https://bioR
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
@@ -83,6 +83,7 @@ Applications (CLARA) algorithm.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nhclu_clara</span><span class="op">(</span></span>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  maxiter <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  initializer <span class="op">=</span> <span class="st">"LAB"</span>,</span>
@@ -90,7 +91,6 @@ Applications (CLARA) algorithm.</p>
 <span>  numsamples <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  sampling <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123456789</span>,</span>
 <span>  algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -107,6 +107,10 @@ and the next column(s) are the dissimilarity indices.</p></dd>
 <dt>index</dt>
 <dd><p>name or number of the dissimilarity column to use. By default,
 the third column name of <code>dissimilarity</code> is used.</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>for the random number generator (NULL for random by default).</p></dd>
 
 
 <dt>n_clust</dt>
@@ -139,10 +143,6 @@ behavior, set to 1 by default.</p></dd>
 <dt>independent</dt>
 <dd><p>a <code>boolean</code> indicating that the previous
 medoids are not kept in the next sample (FALSE by default).</p></dd>
-
-
-<dt>seed</dt>
-<dd><p>an <code>integer</code> to define a generator of random numbers.</p></dd>
 
 
 <dt>algorithm_in_output</dt>
@@ -209,9 +209,9 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  pc_distance </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      pc_distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.7536506</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.7536506</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.7536506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.4181999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.4181999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.4181999</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-in"><span></span></span>
@@ -227,7 +227,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

@@ -8,7 +8,7 @@ dissimilarity with partitioning around medoids."><meta property="og:image" conte
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
@@ -80,6 +80,7 @@ dissimilarity with partitioning around medoids.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nhclu_pam</span><span class="op">(</span></span>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  variant <span class="op">=</span> <span class="st">"faster"</span>,</span>
 <span>  nstart <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -103,6 +104,10 @@ and the next column(s) are the dissimilarity indices.</p></dd>
 the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 
+<dt>seed</dt>
+<dd><p>for the random number generator (NULL for random by default).</p></dd>
+
+
 <dt>n_clust</dt>
 <dd><p>an <code>integer</code> or an <code>integer</code> vector specifying the
 requested number(s) of clusters.</p></dd>
@@ -110,13 +115,13 @@ requested number(s) of clusters.</p></dd>
 
 <dt>variant</dt>
 <dd><p>a <code>character</code> string specifying the variant of pam to use,
-by default "faster". Available options are "original", "o_1", "o_2", "f_3",
-"f_4", "f_5" or faster. See <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a> for more details.</p></dd>
+by default <code>faster</code>. Available options are <code>original</code>, <code>o_1</code>, <code>o_2</code>, <code>f_3</code>,
+<code>f_4</code>, <code>f_5</code> or <code>faster</code>. See <a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">pam</a> for more details.</p></dd>
 
 
 <dt>nstart</dt>
-<dd><p>an <code>integer</code> specifying the number of random “starts” for the
-pam algorithm. By default, 1 (for the <code>"faster"</code> variant).</p></dd>
+<dd><p>an <code>integer</code> specifying the number of random start for the
+pam algorithm. By default, 1 (for the <code>faster</code> variant).</p></dd>
 
 
 <dt>cluster_only</dt>
@@ -197,9 +202,9 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  pc_distance </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      pc_distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.5703569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.8565114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.9897981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.2715181</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.6583310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.9593075</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-in"><span><span class="fu"><a href="partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">clust2</span>, net <span class="op">=</span> <span class="va">comnet</span>, species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
@@ -212,9 +217,9 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  avg_endemism </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      avg_endemism</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min             0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min   0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean  0.001428571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max   0.020000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each partition are available in </span>
@@ -231,7 +236,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
