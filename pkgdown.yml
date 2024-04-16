@@ -9,9 +9,10 @@ articles:
   a4_2_non_hierarchical_clustering: a4_2_non_hierarchical_clustering.html
   a4_3_network_clustering: a4_3_network_clustering.html
   a4_4_microbenchmark: a4_4_microbenchmark.html
+  a5_3_compare_partitions: a5_3_compare_partitions.html
   a5_visualization: a5_visualization.html
   bioregion: bioregion.html
-last_built: 2024-04-13T13:27Z
+last_built: 2024-04-16T09:05Z
 urls:
   reference: https://bioRgeo.github.io/bioregion/reference
   article: https://bioRgeo.github.io/bioregion/articles
