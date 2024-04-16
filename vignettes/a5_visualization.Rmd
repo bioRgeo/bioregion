@@ -1,5 +1,5 @@
 ---
-title: "5. Visualization"
+title: "5.2 Visualization"
 author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
@@ -21,12 +21,12 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 # Packages --------------------------------------------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
-    library(bioregion)
-    library(ggplot2)
-    library(dplyr)
-    library(rnaturalearth)
-    library(sf)
-    library(tidyr)
+    library("bioregion")
+    library("ggplot2")
+    library("dplyr")
+    library("rnaturalearth")
+    library("sf")
+    library("tidyr")
   })
 })
 
@@ -40,29 +40,31 @@ Using one of the dataset coming along with `bioregion`, we show three strategies
 to plot your results.
 
 # Data  
-For this vignette, we rely on the dataset describing the distribution of fresh
-water fish in Europe. We first load the matrix format of this dataset, computes
-the dissimilarity matrix out of it and also load the data.frame format of the
-data.
+For this vignette, we rely on the dataset describing the distribution of 
+vascular plants in the Mediterranean part of France. We first load the matrix
+format of this dataset, computes the dissimilarity matrix out of it and also
+load the data.frame format of the data.
 
 ```{r}
-data(fishmat)
-fishdissim <- dissimilarity(fishmat, metric = "all")
-data(fishdf)
+data(vegemat)
+vegedissim <- dissimilarity(vegemat, metric = "all")
+data(vegedf)
 ```
 
 Since we aim at plotting the result, we also need the object `fishsf` linking
 each site of the dataset to a geometry.
 
 ```{r}
-data(fishsf)
+data(vegesf)
 ```
 
 We also import the world coastlines, available from the `rnaturalearth`
 R package.
 
 ```{r}
-world <- rnaturalearth::ne_coastline(returnclass = "sf")
+world <- rnaturalearth::ne_coastline(returnclass = "sf", scale = "large")
+# Align the CRS of both objects
+vegesf <- st_transform(vegesf, crs = st_crs(world))
 ```
 
 # Plots  
@@ -75,10 +77,10 @@ This function can directly provide a plot of each site colored according to
 the cluster they belong to.
 <br>
 Let's take an example with a K-means clustering, with a number of clusters set
-to 5.
+to 3.
 
 ```{r}
-fish_nhclu_kmeans <- nhclu_kmeans(fishdissim, n_clust = 5, index = "Simpson")
+vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, n_clust = 3, index = "Simpson")
 ```
 
 `map_clusters()` function can now simply takes the object `fish_nhclu_kmeans`,
@@ -86,7 +88,7 @@ which is of `bioregion.clusters` class, and the spatial distribution of sites,
 stored in `fishsf`.
 
 ```{r}
-map_clusters(fish_nhclu_kmeans, geometry = fishsf, plot = TRUE)
+map_clusters(vege_nhclu_kmeans, geometry = vegesf, plot = TRUE)
 ```
 
 ## Custom plot  
@@ -96,7 +98,7 @@ as its geometry and cluster number.
 For this purpose, you can set the arguments like in the chunk below:
 
 ```{r}
-custom <- map_clusters(fish_nhclu_kmeans, geometry = fishsf,
+custom <- map_clusters(vege_nhclu_kmeans, geometry = vegesf,
                        write_clusters = TRUE, plot = FALSE)
 custom
 
@@ -105,10 +107,10 @@ europe <- sf::st_crop(world, sf::st_bbox(custom))
 
 # Plot
 ggplot(custom) +
-  geom_sf(aes(fill = K_5), show.legend = FALSE) +
+  geom_sf(aes(fill = K_3), show.legend = FALSE) +
   geom_sf(data = europe) +
   scale_fill_viridis_d() +
-  labs(title = "Kmeans with 5 clusters") +
+  labs(title = "Kmeans with 3 clusters") +
   theme_void()
 ```
 
@@ -124,28 +126,34 @@ other algorithms.
 <br>
 
 ```{r}
-fish_nhclu_pam <- nhclu_pam(fishdissim, n_clust = 5, index = "Simpson")
-fish_hclu_hierarclust <- hclu_hierarclust(dissimilarity = fishdissim,
-                                          n_clust = 5)
-fish_netclu_greedy <- netclu_greedy(fishdf)
+# Hierarchical clustering
+set.seed(1)
+vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
+                                          index = names(vegedissim)[6],
+                                          method = "mcquitty", n_clust = 3)
+vege_hclu_hierarclust$cluster_info
+
+# Walktrap network bioregionalization
+vegesim <- dissimilarity_to_similarity(vegedissim)
+set.seed(1)
+vege_netclu_walktrap <- netclu_walktrap(vegesim,
+                                        index = names(vegesim)[6])
+vege_netclu_walktrap$cluster_info # 3
 ```
 
 We can now make a single `data.frame` with an extra-column indicating the
 algorithm used.
 
 ```{r}
-fish_kmeans <- fish_nhclu_kmeans$clusters
-colnames(fish_kmeans)<- c("ID", "NHCLU_KMEANS")
-fish_pam <- fish_nhclu_pam$clusters
-colnames(fish_pam)<- c("ID", "NHCLU_PAM")
-fish_hieraclust <- fish_hclu_hierarclust$clusters
-colnames(fish_hieraclust)<- c("ID", "HCLU_HIERARCLUST")
-fish_greedy <- fish_netclu_greedy$clusters
-colnames(fish_greedy)<- c("ID", "NET_GREEDY")
+vege_kmeans <- vege_nhclu_kmeans$clusters
+colnames(vege_kmeans)<- c("ID", "NHCLU_KMEANS")
+vege_hieraclust <- vege_hclu_hierarclust$clusters
+colnames(vege_hieraclust)<- c("ID", "HCLU_HIERARCLUST")
+vege_walktrap <- vege_netclu_walktrap$clusters
+colnames(vege_walktrap)<- c("ID", "NETCLU_Walktrap")
 
-all_clusters <- dplyr::left_join(fish_kmeans, fish_pam, by = "ID")
-all_clusters <- dplyr::left_join(all_clusters, fish_hieraclust, by = "ID")
-all_clusters <- dplyr::left_join(all_clusters, fish_greedy, by = "ID")
+all_clusters <- dplyr::left_join(vege_kmeans, vege_hieraclust, by = "ID")
+all_clusters <- dplyr::left_join(all_clusters, vege_walktrap, by = "ID")
 ```
 
 We now convert this `data.frame` into a long-format `data.frame`.
@@ -162,7 +170,7 @@ We now add back the geometry as an extra column to make this object spatial.
 
 ```{r}
 all_long_sf <- dplyr::left_join(all_long,
-                                custom[, c("ID", "geometry")],
+                                vegesf[, c("ID", "geometry")],
                                 by = "ID")
 all_long_sf <- sf::st_as_sf(all_long_sf)
 ```
@@ -178,4 +186,90 @@ ggplot(all_long_sf) +
   scale_fill_viridis_d() +
   theme_void() +
   facet_wrap(~ Algorithm)
+```
+
+We can refine the above map by:
+  * reordering the 3 bioregions so that they follow the same order
+  * add some background for the Mediterranean sea and the mainland
+  * crop the cells by the mainland
+  * adjust labels
+  
+```{r}
+world_countries <- rnaturalearth::ne_countries(scale = "large",
+                                               returnclass = "sf")
+
+# Background box
+xmin <- st_bbox(world)[["xmin"]]; xmax <- st_bbox(world)[["xmax"]]
+ymin <- st_bbox(world)[["ymin"]]; ymax <- st_bbox(world)[["ymax"]]
+bb <- sf::st_union(sf::st_make_grid(st_bbox(c(xmin = xmin,
+                                              xmax = xmax,
+                                              ymax = ymax,
+                                              ymin = ymin),
+                                            crs = st_crs(4326)),
+                                    n = 100))
+
+# Crop world coastlines to the extent of the sf object of interest
+vegesf <- st_transform(vegesf, crs = st_crs(world))
+larger_bbox <- sf::st_bbox(vegesf)
+larger_bbox[[1]] <- 1.5
+larger_bbox[[2]] <- 42.15
+larger_bbox[[3]] <- 8.1
+larger_bbox[[4]] <- 45.3
+
+europe <- sf::st_crop(world, larger_bbox)
+sf_use_s2(FALSE)
+europe_countries <- sf::st_crop(world_countries, larger_bbox)
+europe_bb <- sf::st_crop(bb, larger_bbox)
+
+plot_basis <- ggplot(europe) +
+  geom_sf(data = europe_bb, fill = "aliceblue") +
+  geom_sf(data = europe_countries, fill = "ivory", color = "gray50") +
+  theme_void()
+
+# Reordering bioregions
+all_long_sf$bioregion <- all_long_sf$Clusters
+
+all_long_sf[which(all_long_sf$Algorithm == "HCLU_HIERARCLUST" &
+                    all_long_sf$Clusters == "2"), ]$bioregion <- "1"
+all_long_sf[which(all_long_sf$Algorithm == "HCLU_HIERARCLUST" &
+                    all_long_sf$Clusters == "1"), ]$bioregion <- "2"
+
+all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
+                    all_long_sf$Clusters == "3"), ]$bioregion <- "2"
+all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
+                    all_long_sf$Clusters == "1"), ]$bioregion <- "1"
+all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
+                    all_long_sf$Clusters == "2"), ]$bioregion <- "3"
+
+all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
+                    all_long_sf$Clusters == "3"), ]$bioregion <- "1"
+all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
+                    all_long_sf$Clusters == "1"), ]$bioregion <- "2"
+all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
+                    all_long_sf$Clusters == "2"), ]$bioregion <- "3"
+
+# More readable labels for algorithms
+all_long_sf$Algo <-
+  ifelse(all_long_sf$Algorithm == "NHCLU_KMEANS", "K-Means",
+         ifelse(all_long_sf$Algorithm == "NHCLU_PAM", "PAM",
+                ifelse(all_long_sf$Algorithm == "HCLU_HIERARCLUST",
+                       "Hierarchical Clustering", "Walktrap")))
+
+# Cropping with borders of France
+all_long_sf_france <-
+  st_intersection(all_long_sf,
+                  europe_countries[which(europe_countries$sovereignt == "France"), ])
+
+# Plot
+final_plot <- plot_basis +
+  geom_sf(data = all_long_sf_france,
+          aes(color = bioregion, fill = bioregion), show.legend = TRUE) +
+  geom_sf(data = st_union(all_long_sf_france), fill = "NA", color = "gray50") +
+  geom_sf(data = europe, fill = "gray50", linewidth = 0.1) +
+  scale_color_viridis_d("Bioregion", option = "magma", direction = -1) +
+  scale_fill_viridis_d("Bioregion", option = "magma", direction = -1) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  facet_wrap(~ Algo)
+final_plot
 ```
