@@ -162,8 +162,17 @@ estimates the time required to run each method on data sets of different sizes.
 
 ## 5. Visualization and evaluation of the results
 
+## 5.2. Visualization
 If sites have geographic coordinates, then each bioregionalisation can be
 visualized with the function `map_clusters()`.
 
 This [tutorial page](https://biorgeo.github.io/bioregion/articles/a5_visualization.html)
 details different ways to plot your bioregionalisation.
+
+## 5.3. Compare partitions
+
+In this section, we look at how sites are assigned to bioregions within a
+single bioregionalization and also compare this assignment across different
+bioregionalizations. The following
+[page](https://biorgeo.github.io/bioregion/articles/a5_3_compare_partitions.html)
+illustrates this.
