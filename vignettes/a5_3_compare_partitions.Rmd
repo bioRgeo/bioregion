@@ -8,7 +8,7 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl    
 vignette: >
-  %\VignetteIndexEntry{5. Visualization}
+  %\VignetteIndexEntry{5.3 Compare partitions}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

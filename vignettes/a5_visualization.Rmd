@@ -25,7 +25,6 @@ suppressPackageStartupMessages({
     library("ggplot2")
     library("dplyr")
     library("rnaturalearth")
-    library("rnaturalearthhires")
     library("sf")
     library("tidyr")
   })
@@ -63,7 +62,7 @@ We also import the world coastlines, available from the `rnaturalearth`
 R package.
 
 ```{r}
-world <- rnaturalearth::ne_coastline(returnclass = "sf", scale = "large")
+world <- rnaturalearth::ne_coastline(returnclass = "sf", scale = "medium")
 # Align the CRS of both objects
 vegesf <- st_transform(vegesf, crs = st_crs(world))
 ```
@@ -196,7 +195,7 @@ We can refine the above map by:
   * adjust labels
   
 ```{r}
-world_countries <- rnaturalearth::ne_countries(scale = "large",
+world_countries <- rnaturalearth::ne_countries(scale = "medium",
                                                returnclass = "sf")
 
 # Background box
