@@ -263,6 +263,19 @@ find_optimal_n <- function(
   } else if(any(!(metrics_to_use %in% colnames(partitions$evaluation_df)))) {
     stop("metrics_to_use should exist in the evaluation table")
   }
+  
+  # Verifying that metrics vary, otherwise we remove them
+  nvals_metrics <- sapply(lapply(partitions$evaluation_df[, metrics_to_use],
+                               unique), length)
+  if (any(nvals_metrics == 1)) {
+    exclude_metrics <- names(nvals_metrics[which(nvals_metrics == 1)])
+    warning(paste0("Metrics ", 
+                   paste0(exclude_metrics, collapse = ", "),
+                   " did not vary in partitions, so they were removed."))
+    metrics_to_use <- metrics_to_use[-which(metrics_to_use %in% 
+                                              exclude_metrics)]
+  }
+  
   print(metrics_to_use)
   if(nrow(partitions$evaluation_df) <= 4){
     stop("The number of partitions is too low (<=4) for this function to work
@@ -337,13 +350,21 @@ find_optimal_n <- function(
           n_cl <- eval_df$n_clusters
           y <- eval_df[, x]
           fit <- stats::lm(y ~ n_cl)
-          fit_seg <- segmented::segmented(fit, 
-                                          npsi = n_breaks)
-          preds <- data.frame(n_clusters = n_cl,
-                              preds = segmented::broken.line(fit_seg)$fit,
-                              metric = x)
-          
-          optim_cutoffs <- fit_seg$psi[, 2]
+          if(fit$coefficients[2] != 0) {
+            fit_seg <- segmented::segmented(fit, 
+                                            npsi = n_breaks)
+            preds <- data.frame(n_clusters = n_cl,
+                                preds = segmented::broken.line(fit_seg)$fit,
+                                metric = x)
+            
+            optim_cutoffs <- fit_seg$psi[, 2]
+          } else {
+            preds <- data.frame(n_clusters = n_cl,
+                                preds = NA,
+                                metric = x)
+            optim_cutoffs <- NA
+          }
+
           
           
           # if(length(NA_vals)){
@@ -362,7 +383,7 @@ find_optimal_n <- function(
       
       #Rounding to get the closest partition
       optim_n <- lapply(optim_n, round)
-      if(any(!(unlist(optim_n) %in% partitions$evaluation_df$n_clusters))) {
+      if(any(!(na.omit(unlist(optim_n)) %in% partitions$evaluation_df$n_clusters))) {
         message("Exact break point not in the list of partitions: finding the",
                 " closest partition...\n")
         for(m in names(optim_n)) {
