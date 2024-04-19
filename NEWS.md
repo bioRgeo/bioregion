@@ -16,7 +16,7 @@ between bioregion 1.1.0 (CRAN release 2024-03-19) and the next CRAN release.
 * Controls and outputs/inputs standardization.
  
 * Fixed a bug in find_optimal_n() in the special case where partition 
-metrics did not vary
+metrics did not vary.
 
 # bioregion 1.1.0 
 

@@ -1,24 +1,19 @@
 **<span style="color:black"><font size="4">bioregion's TO DO list</span></font>**
 
-#### pairwise (dis)similarity
+#### New functions
 
-* ajouter fonction from_abcABC (to compute metrics from abc and/or ABC) 
+* from_abcABC (to compute metrics from abc and/or ABC).
 
-#### optics
+* reassign_cluster (to assign or reassign cluster based on a partition and a 
+(dis)similarity metric).
 
-* permettre de lancer plusieurs optics avec différentes valeurs de paramètres ? 
+#### New features
 
-#### partition_metrics
+* Allow to lauch OPTICS with a vector of parameter values (as in kmeans).
 
-* décider si MARS utile ou pas. Switcher vers segmented?
+* Parallelize clu_ functions. 
 
-* Voir si rounding nécessaire avec la nouvelle version de elbow
-
-* Implémenter la parallélisation de la recherche de clusters 
-
-* Ajouter d'autres métriques, basées par exemple sur l'abondance
-
-#### Divers 
+#### Miscellaneous
 
 * data-raw ?
 

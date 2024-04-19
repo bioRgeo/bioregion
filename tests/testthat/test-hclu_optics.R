@@ -90,6 +90,18 @@ test_that("valid output", {
                        algorithm_in_output = TRUE)
   expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3, na.rm = TRUE), 337)
   
+  clust1 <- hclu_optics(dissim,
+                        index = 5,
+                        show_hierarchy = FALSE)
+  expect_equal(clust$inputs$hierarchical, FALSE)
+  
+  clust2 <- hclu_optics(dissim,
+                        index = 5,
+                        show_hierarchy = TRUE)
+  expect_equal(clust2$inputs$hierarchical, TRUE)
+  tab12 <- table(clust1$clusters$K_18,clust2$clusters$K_18)
+  expect_equal(sum(apply(tab12==0,1,sum)==17),18)
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------
