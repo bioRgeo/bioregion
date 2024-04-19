@@ -497,7 +497,8 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 9 14 15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3 4 10</span>
 <span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span>             </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"      </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Metrics tot_endemism, avg_endemism do not vary sufficiently to use breakpoints, so they were removed.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pc_distance" "anosim"     </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of partitions: 14</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the breakpoints method</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
@@ -506,13 +507,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  breakpoints </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 10</span>
 <span class="r-in"><span></span></span>
