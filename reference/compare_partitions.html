@@ -40,8 +40,8 @@ the user can compute additional comparison metrics."><meta property="og:image" c
     <a class="dropdown-item" href="../articles/a4_2_non_hierarchical_clustering.html">4.2 Non-hierarchical clustering</a>
     <a class="dropdown-item" href="../articles/a4_3_network_clustering.html">4.3 Network clustering</a>
     <a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a>
-    <a class="dropdown-item" href="../articles/a5_3_compare_partitions.html">5.3 Compare partitions</a>
-    <a class="dropdown-item" href="../articles/a5_visualization.html">5.2 Visualization</a>
+    <a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a>
+    <a class="dropdown-item" href="../articles/a5_2_compare_partitions.html">5.2 Compare partitions</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -235,8 +235,8 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  2  1  3  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  2  1  4  2</span>
 <span class="r-in"><span><span class="fu">compare_partitions</span><span class="op">(</span><span class="va">partitions</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 08:46:15.367966 - Computing pairwise membership comparisons for eachpartition...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 08:46:15.369118 - Comparing memberships among partitions...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 09:13:41.441933 - Computing pairwise membership comparisons for eachpartition...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 09:13:41.443152 - Comparing memberships among partitions...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition comparison:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 partitions compared</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 items in the clustering</span>
@@ -247,9 +247,9 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="co"># Find out which partitions are most representative</span></span></span>
 <span class="r-in"><span><span class="fu">compare_partitions</span><span class="op">(</span><span class="va">partitions</span>,</span></span>
 <span class="r-in"><span>                   cor_frequency <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 08:46:15.3707 - Computing pairwise membership comparisons for eachpartition...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 08:46:15.371454 - Comparing memberships among partitions...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 08:46:15.371988 - Computing the correlation between each partition and the vector of frequency of pairwise membership...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 09:13:41.444844 - Computing pairwise membership comparisons for eachpartition...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 09:13:41.445675 - Comparing memberships among partitions...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-04-19 09:13:41.446163 - Computing the correlation between each partition and the vector of frequency of pairwise membership...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition comparison:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 partitions compared</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 items in the clustering</span>
