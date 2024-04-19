@@ -58,8 +58,10 @@ package**. Vignettes available are the following ones: <br>
   clustering](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html)**
 - **[4.4
   Microbenchmark](https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html)**
-- **[5.
-  Visualization](https://bioRgeo.github.io/bioregion/articles/a5_visualization.html)**
+- **[5.1
+  Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html)**
+- **[5.2 Compare
+  partitions](https://bioRgeo.github.io/bioregion/articles/a5_2_compare_partitions.html)**
 
 Alternatively, if you prefer to view the vignettes in R, you can install
 the package with `build_vignettes = TRUE`. But be aware that some
