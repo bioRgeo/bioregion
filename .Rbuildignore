@@ -25,6 +25,7 @@
 ^vignettes/a4_2_non_hierarchical_clustering.Rmd
 ^vignettes/a4_3_network_clustering.Rmd
 ^vignettes/a4_4_microbenchmark.Rmd
-^vignettes/a5_visualization.Rmd
+^vignettes/a5_1_visualization.Rmd
+^vignettes/a5_2_compare_partitions.Rmd
 
 LICENSE
