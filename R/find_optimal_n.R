@@ -265,7 +265,8 @@ find_optimal_n <- function(
   }
   
   # Verifying that metrics vary, otherwise we remove them
-  nvals_metrics <- sapply(lapply(partitions$evaluation_df[, metrics_to_use],
+  nvals_metrics <- sapply(lapply(partitions$evaluation_df[, metrics_to_use,
+                                                          drop = FALSE],
                                unique), length)
   if (any(nvals_metrics == 1)) {
     exclude_metrics <- names(nvals_metrics[which(nvals_metrics == 1)])
@@ -274,6 +275,21 @@ find_optimal_n <- function(
                    " did not vary in partitions, so they were removed."))
     metrics_to_use <- metrics_to_use[-which(metrics_to_use %in% 
                                               exclude_metrics)]
+  } 
+  if (any(nvals_metrics == 2) &
+             criterion == "breakpoints") {
+    exclude_metrics <- names(nvals_metrics[which(nvals_metrics == 2)])
+    warning(paste0("Metrics ", 
+                   paste0(exclude_metrics, collapse = ", "),
+                   " do not vary sufficiently to use breakpoints",
+                   ", so they were removed."))
+    metrics_to_use <- metrics_to_use[-which(metrics_to_use %in% 
+                                              exclude_metrics)]
+  }
+  if(!(length(metrics_to_use))) {
+    stop("The selected partition metrics did not vary sufficiently in input. ",
+         "Please check your partition metrics or increase your ",
+         "range of partitions when computing partition_metrics()")
   }
   
   print(metrics_to_use)
