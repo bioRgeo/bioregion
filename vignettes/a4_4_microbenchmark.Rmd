@@ -89,7 +89,7 @@ ara_df <- mat_to_net(aravo, weight = TRUE, remove_zeroes = TRUE)
 ```
 
 # 2. Microbenchmark
-We here assessing the time needed by each clustering algorithm on the three
+We here assess the time needed by each clustering algorithm on the three
 datasets loaded above.
 
 ```{r}

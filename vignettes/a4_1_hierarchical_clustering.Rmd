@@ -47,7 +47,7 @@ In the example below, we use the vegetation dataset from the package to
 compute distance metrics.
 
 ```{r}
-library(bioregion)
+library("bioregion")
 
 # Work with the vegetation dataset we include in the package
 data(vegemat)
@@ -89,9 +89,9 @@ down their own formula to compute any index they want for in the argument
 
 We are now ready to start the hierarchical clustering procedure with the object
 `dissim` we have just created. Alternatively, you can also use other types of
-objects in hclu_hierarclust(), such as a distance matrix object (class `dist`)
+objects in `hclu_hierarclust()`, such as a distance matrix object (class `dist`)
 or a `data.frame` of your own crafting (make sure to read the required format
-carefully in ?hclu_hierarclust).
+carefully in `?hclu_hierarclust`).
 
 # 2. Hierarchical clustering with basic parameters
 
@@ -423,8 +423,8 @@ number(s) of clusters.
 
 ## 3.1 A practical example
 
-In this example we will compute the evaluation metric used by Holt et al.
-(2013), which compares the total dissimilarity of the distance matrix (sum of
+In this example we will compute the evaluation metric used by @Holt2013,
+which compares the total dissimilarity of the distance matrix (sum of
 all distances) with the inter-cluster dissimilarity (sum of distances between
 clusters). Then we will choose the optimal number of clusters as the elbow of 
 the evaluation plot.
@@ -648,7 +648,7 @@ find_optimal_n(eval_tree4,
 ### 3.2.3 Cutting at different cut-off values
 
 The idea of this method is to select specific metric values at which the number
-of clusters should be used. For example, in their study, Holt et al. (2013) 
+of clusters should be used. For example, in their study, @Holt2013 
 used different cutoffs for `pc_distance` to find the global biogeographic 
 regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more
 \beta-diversity is explained, but also the more clusters there are. Therefore,
@@ -658,7 +658,7 @@ number of clusters.
 Eventually, the choice of these values depends on different factors: 
 
 1. The geographic scope of your study. A global scale study can use
-large cutoffs like Holt et al. (2013) and end up with a reasonable number of 
+large cutoffs like @Holt2013 and end up with a reasonable number of 
 clusters, whereas in regional to local scale studies with less endemism and
 more taxa shared among clusters, these values are too high, and other cutoffs
 should be explored, such as 0.5 and 0.75. 
