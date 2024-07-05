@@ -101,7 +101,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2024-05-15</h4>
+            <h4 data-toc-skip class="date">2024-07-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/HEAD/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -133,7 +133,7 @@ matrix.</p>
 <p>In the example below, we use the vegetation dataset from the package
 to compute distance metrics.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bioRgeo/bioregion" class="external-link">bioregion</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/bioRgeo/bioregion" class="external-link">"bioregion"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Work with the vegetation dataset we include in the package</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
@@ -193,10 +193,10 @@ index they want for in the argument <code>formula</code>, see
 ?dissimilarity().</p>
 <p>We are now ready to start the hierarchical clustering procedure with
 the object <code>dissim</code> we have just created. Alternatively, you
-can also use other types of objects in hclu_hierarclust(), such as a
-distance matrix object (class <code>dist</code>) or a
+can also use other types of objects in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>,
+such as a distance matrix object (class <code>dist</code>) or a
 <code>data.frame</code> of your own crafting (make sure to read the
-required format carefully in ?hclu_hierarclust).</p>
+required format carefully in <code><a href="../reference/hclu_hierarclust.html">?hclu_hierarclust</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="hierarchical-clustering-with-basic-parameters">2. Hierarchical clustering with basic parameters<a class="anchor" aria-label="anchor" href="#hierarchical-clustering-with-basic-parameters"></a>
@@ -587,11 +587,11 @@ object.</strong></p></li>
 <div class="section level3">
 <h3 id="a-practical-example">3.1 A practical example<a class="anchor" aria-label="anchor" href="#a-practical-example"></a>
 </h3>
-<p>In this example we will compute the evaluation metric used by Holt et
-al. (2013), which compares the total dissimilarity of the distance
-matrix (sum of all distances) with the inter-cluster dissimilarity (sum
-of distances between clusters). Then we will choose the optimal number
-of clusters as the elbow of the evaluation plot.</p>
+<p>In this example we will compute the evaluation metric used by <span class="citation">Holt et al. (2013)</span>, which compares the total
+dissimilarity of the distance matrix (sum of all distances) with the
+inter-cluster dissimilarity (sum of distances between clusters). Then we
+will choose the optimal number of clusters as the elbow of the
+evaluation plot.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span></span>
@@ -973,20 +973,22 @@ You can change this by setting
 <h4 id="cutting-at-different-cut-off-values">3.2.3 Cutting at different cut-off values<a class="anchor" aria-label="anchor" href="#cutting-at-different-cut-off-values"></a>
 </h4>
 <p>The idea of this method is to select specific metric values at which
-the number of clusters should be used. For example, in their study, Holt
-et al. (2013) used different cutoffs for <code>pc_distance</code> to
-find the global biogeographic regions: 0.90, 0.95, 0.99, 0.999. The
-higher the value, the more -diversity is explained, but also the more
-clusters there are. Therefore, the choice is a trade-off between the
-total -diversity explained and the number of clusters.</p>
+the number of clusters should be used. For example, in their study,
+<span class="citation">Holt et al. (2013)</span> used different cutoffs
+for <code>pc_distance</code> to find the global biogeographic regions:
+0.90, 0.95, 0.99, 0.999. The higher the value, the more -diversity is
+explained, but also the more clusters there are. Therefore, the choice
+is a trade-off between the total -diversity explained and the number of
+clusters.</p>
 <p>Eventually, the choice of these values depends on different
 factors:</p>
 <ol style="list-style-type: decimal">
 <li><p>The geographic scope of your study. A global scale study can use
-large cutoffs like Holt et al. (2013) and end up with a reasonable
-number of clusters, whereas in regional to local scale studies with less
-endemism and more taxa shared among clusters, these values are too high,
-and other cutoffs should be explored, such as 0.5 and 0.75.</p></li>
+large cutoffs like <span class="citation">Holt et al. (2013)</span> and
+end up with a reasonable number of clusters, whereas in regional to
+local scale studies with less endemism and more taxa shared among
+clusters, these values are too high, and other cutoffs should be
+explored, such as 0.5 and 0.75.</p></li>
 <li><p>The characteristics of your study which will increase or decrease
 the degree of endemism among clusters: dispersal capacities of your
 taxonomic group, the connectivity/barriers in your study area, etc. Use
