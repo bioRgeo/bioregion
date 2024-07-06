@@ -2,7 +2,7 @@
 % Please edit documentation in R/subset_node.R
 \name{subset_node}
 \alias{subset_node}
-\title{Extract a subset of node from a bioregion.clusters object}
+\title{Extract a subset of nodes from a bioregion.clusters object}
 \usage{
 subset_node(clusters, node_type = "sites")
 }
@@ -18,7 +18,7 @@ An object of class \code{bioregion.clusters} with a given node type (sites
 or species).
 }
 \description{
-This function extracts a subset of node according to its type (sites or
+This function extracts a subset of nodes according to its type (sites or
 species) from a bioregion.clusters object containing both types of
 nodes (sites and species).
 }

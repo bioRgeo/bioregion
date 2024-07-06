@@ -1,6 +1,6 @@
-#' Extract a subset of node from a bioregion.clusters object
+#' Extract a subset of nodes from a bioregion.clusters object
 #'
-#' This function extracts a subset of node according to its type (sites or 
+#' This function extracts a subset of nodes according to its type (sites or 
 #' species) from a bioregion.clusters object containing both types of 
 #' nodes (sites and species).
 #'
