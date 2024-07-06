@@ -13,6 +13,10 @@
 
 * Parallelize clu_ functions. 
 
+* https://stats.stackexchange.com/questions/260487/adjusted-rand-index-vs-adjusted-mutual-information
+
+* 
+
 #### Miscellaneous
 
 * data-raw ? 

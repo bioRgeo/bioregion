@@ -159,6 +159,10 @@ hclu_hierarclust <- function(dissimilarity,
              type = "input_data_frame_nhandhclu")
     controls(args = index, data = dissimilarity, type = "input_net_index")
     net <- dissimilarity
+    # Convert tibble into dataframe
+    if(inherits(net, "tbl_df")){
+      net <- as.data.frame(net)
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")

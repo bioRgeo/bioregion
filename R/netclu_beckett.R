@@ -121,6 +121,11 @@ netclu_beckett <- function(net,
     stop("Please choose return_node_type among the followings values:
 both, sites or species", call. = FALSE)}
   
+  # Convert tibble into dataframe
+  if(inherits(net, "tbl_df")){
+    net <- as.data.frame(net)
+  }
+  
   controls(args = weight, data = net, type = "input_net_weight")
   if (weight) {
     controls(args = cut_weight, data = net, type = "positive_numeric")

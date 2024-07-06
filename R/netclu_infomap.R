@@ -214,6 +214,11 @@ netclu_infomap <- function(net,
       controls(args = NULL, data = net, type = "input_similarity")
     }
     controls(args = NULL, data = net, type = "input_net")
+    
+    # Convert tibble into dataframe
+    if(inherits(net, "tbl_df")){
+      net <- as.data.frame(net)
+    }
 
     # Control input weight & index
     controls(args = weight, data = net, type = "input_net_weight")
