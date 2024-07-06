@@ -9,12 +9,12 @@
 
 #### New features
 
-* Allow to lauch OPTICS with a vector of parameter values (as in kmeans).
+* Allow to launch OPTICS with a vector of parameter values (as in kmeans).
 
 * Parallelize clu_ functions. 
 
 #### Miscellaneous
 
-* data-raw ?
+* data-raw ? 
 
 
