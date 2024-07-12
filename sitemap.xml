@@ -1,165 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/404.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/TODO.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/a5_2_compare_partitions.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/bioregion.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/compare_partitions.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/cut_tree.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/dissimilarity.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/find_optimal_n.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/fishdf.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/fishmat.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/fishsf.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/hclu_diana.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/hclu_optics.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/install_binaries.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/map_clusters.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/mat_to_net.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/net_to_mat.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_beckett.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_greedy.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_leiden.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/nhclu_clara.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/nhclu_clarans.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/nhclu_dbscan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/nhclu_kmeans.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/nhclu_pam.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/partition_metrics.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/similarity.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/similarity_to_dissimilarity.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/subset_node.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/vegedf.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/vegemat.html</loc>
-  </url>
-  <url>
-    <loc>https://bioRgeo.github.io/bioregion/reference/vegesf.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://bioRgeo.github.io/bioregion/404.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/LICENSE-text.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/TODO.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_2_compare_partitions.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/bioregion.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/index.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/authors.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/index.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/news/index.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/compare_partitions.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/cut_tree.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/dissimilarity.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/find_optimal_n.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/fishdf.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/fishmat.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/fishsf.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/hclu_diana.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/hclu_optics.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/index.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/install_binaries.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/map_clusters.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/mat_to_net.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/net_to_mat.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_beckett.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_greedy.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_leiden.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/nhclu_clara.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/nhclu_clarans.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/nhclu_dbscan.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/nhclu_kmeans.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/nhclu_pam.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/partition_metrics.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/similarity.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/similarity_to_dissimilarity.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/subset_node.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/vegedf.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/vegemat.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/vegesf.html</loc></url>
 </urlset>
+
