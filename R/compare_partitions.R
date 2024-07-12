@@ -184,7 +184,7 @@ compare_partitions <- function(cluster_object,
   }
   
   if(!is.null(indices)) {
-    indices <- controls(args = indices, type = "character_vector")
+    controls(args = indices, type = "character_vector")
   }
   
   controls(args = cor_frequency, type = "boolean")
