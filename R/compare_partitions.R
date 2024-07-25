@@ -10,10 +10,10 @@
 #' are required. If a list of `data.frame` is provided, they should all have
 #' the same number of rows (i.e., same items in the clustering for all
 #' partitions). 
-#' @param sample_comparisons `NULL` or a positive integer. Reduce computation
-#' time by sampling a number of pairwise comparisons in cluster membership
-#' of items. Useful if the number of items clustered is high. Suggested
-#' values 5000 or 10000.
+#' @param sample_items `NULL` or a positive integer. Reduce the number of items
+#' to be used in the comparison of partitions. Useful if the number of items is
+#' high and pairwise comparisons cannot be computed. Suggested values 
+#' 5000 or 10000 computation
 #' @param indices `NULL` or `character`. Indices to compute for the pairwise
 #' comparison of partitions. Current available metrics are `"rand"` and 
 #' `"jaccard"`
@@ -129,7 +129,7 @@
 #' @export
 
 compare_partitions <- function(cluster_object,
-                               sample_comparisons = NULL,
+                               sample_items = NULL,
                                indices = c("rand", "jaccard"),
                                cor_frequency = FALSE,
                                store_pairwise_membership = TRUE,
@@ -179,8 +179,8 @@ compare_partitions <- function(cluster_object,
          "Your cluster_object only has a single partition (one column)")
   }
   
-  if(!is.null(sample_comparisons)) {
-    controls(data = sample_comparisons, type = "integer")
+  if(!is.null(sample_items)) {
+    controls(args = sample_items, type = "integer")
   }
   
   if(!is.null(indices)) {
@@ -195,16 +195,18 @@ compare_partitions <- function(cluster_object,
   message(Sys.time(), 
           " - Computing pairwise membership comparisons for each",
           "partition...\n")
-  if(ncol(clusters) * (nrow(clusters) * (nrow(clusters) - 1)) / 2 > 10e6) {
-    message("       /!\\\ NOTE: Very high number of comparisons ",
-            "(", nrow(clusters), " rows in clusters --> ",
-            (nrow(clusters) * (nrow(clusters) - 1)) / 2, 
-            " pairwise comparisons per partition --> ",
-            ncol(clusters) * (nrow(clusters) * (nrow(clusters) - 1)) / 2, 
-            " comparisons in total across all partitions).\n      ",
-            "If the computation ",
-            "time is too long, consider using argument sample_comparisons and",
-            " set it to a reasonable number (e.g. 5000).")
+  if(!is.null(sample_items)) {
+    if(ncol(clusters) * (nrow(clusters) * (nrow(clusters) - 1)) / 2 > 10e6) {
+      message("       /!\\\ NOTE: Very high number of comparisons ",
+              "(", nrow(clusters), " rows in clusters --> ",
+              (nrow(clusters) * (nrow(clusters) - 1)) / 2, 
+              " pairwise comparisons per partition --> ",
+              ncol(clusters) * (nrow(clusters) * (nrow(clusters) - 1)) / 2, 
+              " comparisons in total across all partitions).\n      ",
+              "If the computation ",
+              "time is too long, consider using argument sample_items and",
+              " set it to a reasonable number (e.g. 5000).")
+    }
   }
   
   
@@ -214,7 +216,7 @@ compare_partitions <- function(cluster_object,
   # same cluster or not
   item_pw_mb <- get_pairwise_membership(
     clusters,
-    sample_pw_comparisons = sample_comparisons)
+    sample_pw_items = sample_items)
   
   # BETWEEN PARTITIONS - Pairwise partition comparison ----------------------
   
@@ -286,7 +288,7 @@ compare_partitions <- function(cluster_object,
   # Store outputs -----------------------------------------------------------
   
   outputs <- list(
-    args = list(sample_comparisons = sample_comparisons,
+    args = list(sample_items = sample_items,
                 indices = indices,
                 cor_frequency = cor_frequency,
                 store_pairwise_membership = store_pairwise_membership,
@@ -320,14 +322,19 @@ compare_partitions <- function(cluster_object,
 
 
 get_pairwise_membership <- function(input_clusters,
-                                    sample_pw_comparisons = NULL) {
+                                    sample_pw_items = NULL) {
+  
+  if(!is.null(sample_pw_items)) {
+    input_clusters <- input_clusters[sample(sample_pw_items), ]
+    # pairwise_comps <- pairwise_comps[sample(sample_pw_comparisons), ]
+  }
   
   # Get unique combinations of items to compare
   pairwise_comps <- t(utils::combn(seq_len(nrow(input_clusters)), 2))
   
-  if(!is.null(sample_pw_comparisons)) {
-    pairwise_comps <- pairwise_comps[sample(sample_pw_comparisons), ]
-  }
+  # if(!is.null(sample_pw_comparisons)) {
+  #   pairwise_comps <- pairwise_comps[sample(sample_pw_comparisons), ]
+  # }
   
   # Vectorised computation of group membership
   pw_membership <- vapply(seq_len(ncol(input_clusters)), function(x) {

@@ -215,9 +215,9 @@ print.bioregion.partition.comparison <- function(x, ...)
   cat(" -", x$inputs["number_partitions"], "partitions compared\n")
   cat(" -", x$inputs["number_items"], "items in the clustering\n")
   
-  if(!is.null(x$args$sample_comparisons)) {
-    cat(" - ", x$args$sample_comparisons, 
-        "pairwise item comparisons sampled\n")
+  if(!is.null(x$args$sample_lines)) {
+    cat(" - ", x$args$sample_lines, 
+        " items used to compute comparisons among partitions\n")
   }
   
   if(!is.null(x$args$indices)) {

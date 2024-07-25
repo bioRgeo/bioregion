@@ -6,7 +6,7 @@
 \usage{
 compare_partitions(
   cluster_object,
-  sample_comparisons = NULL,
+  sample_items = NULL,
   indices = c("rand", "jaccard"),
   cor_frequency = FALSE,
   store_pairwise_membership = TRUE,
@@ -20,10 +20,10 @@ are required. If a list of \code{data.frame} is provided, they should all have
 the same number of rows (i.e., same items in the clustering for all
 partitions).}
 
-\item{sample_comparisons}{\code{NULL} or a positive integer. Reduce computation
-time by sampling a number of pairwise comparisons in cluster membership
-of items. Useful if the number of items clustered is high. Suggested
-values 5000 or 10000.}
+\item{sample_items}{\code{NULL} or a positive integer. Reduce the number of items
+to be used in the comparison of partitions. Useful if the number of items is
+high and pairwise comparisons cannot be computed. Suggested values
+5000 or 10000 computation}
 
 \item{indices}{\code{NULL} or \code{character}. Indices to compute for the pairwise
 comparison of partitions. Current available metrics are \code{"rand"} and
