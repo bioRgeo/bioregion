@@ -1,4 +1,24 @@
 # Inputs -----------------------------------------------------------------------
+comat_1 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
+                         prob = 1/1:1001), 10, 12)
+rownames(comat_1) <- paste0("Site", 1:10)
+colnames(comat_1) <- paste0("Species", 1:12)
+comat_1 <- cbind(comat_1,
+                 matrix(0, 10, 8,
+                        dimnames = list(paste0("Site", 1:10),
+                                        paste0("Species", 13:20))))
+
+comat_2 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
+                         prob = 1/1:1001), 10, 12)
+rownames(comat_2) <- paste0("Site", 11:20)
+colnames(comat_2) <- paste0("Species", 9:20)
+comat_2 <- cbind(matrix(0, 10, 8,
+                        dimnames = list(paste0("Site", 11:20),
+                                        paste0("Species", 1:8))),
+                 comat_2)
+
+comat <- rbind(comat_1, comat_2)
+
 dissim <- dissimilarity(comat, metric = "Simpson")
 sim <- dissimilarity_to_similarity(dissim)
 

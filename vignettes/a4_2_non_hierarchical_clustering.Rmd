@@ -91,8 +91,8 @@ In the example below, we use the fish dataset from the package to compute
 distance metrics.  
 
 ```{r}
-library(bioregion)
-data(fishmat)
+library("bioregion")
+data("fishmat")
 
 # It is a presence/absence matrix with sites in rows and species in columns
 fishmat[1:3, 1:3]
@@ -407,7 +407,23 @@ ex_dbscan3 <- nhclu_dbscan(dissim, index = "Simpson", minPts = 4, eps = 0.5,
 table(ex_dbscan3$clusters$K_2)
 ```
 
-# 4. Optimal number of clusters {#section4}
+# 4. Affinity propagation {#section4}
+
+This algorithm is based on the paper of @Frey2007 and relies on the R
+package [apcluster](https://cran.r-project.org/package=apcluster)
+
+Unlike the previous algorithms in this vignette, this algorithm and its
+associated function use a similarity matrix.
+
+```{r}
+# Similarity matrix
+sim <- dissimilarity_to_similarity(dissim)
+
+# Algorithm
+clust1 <- nhclu_affprop(sim)
+```
+
+# 5. Optimal number of clusters {#section5}
 
 Previous methods did not help in determining the optimal number of bioregions
 structuring the site-species matrix.  
