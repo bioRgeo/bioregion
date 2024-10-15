@@ -134,10 +134,9 @@ with the endemism results for each partition</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><script id="MathJax-script" async src="../../mathjaxr/doc/mathjax/es5/tex-chtml-full.js"></script></p>
+    <p></p>
 <p><strong>Evaluation metrics:</strong></p><ul><li><p><code>pc_distance</code>: this metric is the method used by
-(Holt et al. 2013)
-. It is a ratio of the between-cluster sum of
+Holt2013bioregion. It is a ratio of the between-cluster sum of
 dissimilarity (beta-diversity) versus the total sum of dissimilarity
 (beta-diversity) for the full dissimilarity matrix. In other words, it is
 calculated on the basis of two elements. First, the total sum of
@@ -150,50 +149,37 @@ the dissimilarity matrix, and then the dissimilarity matrix is summed. The
 <code>pc_distance</code> ratio is obtained by dividing the between-cluster sum of
 dissimilarity by the total sum of dissimilarity.</p></li>
 <li><p><code>anosim</code>: This metric is the statistic used in Analysis of
-Similarities, as suggested in (Castro-Insua et al. 2018)
- (see
+Similarities, as suggested in Castro-Insua2018bioregion (see
 <a href="https://rdrr.io/pkg/vegan/man/anosim.html" class="external-link">vegan::anosim()</a>). It compares the between-cluster
 dissimilarities to the within-cluster dissimilarities. It is based based on
 the difference of mean ranks between groups and within groups with the
 following formula:
-<em></em>\(R = (r_B - r_W)/(N (N-1) / 4)\),
-where <em></em>\(r_B\) and <em></em>\(r_W\) are the average ranks
-between and within clusters respectively, and <em></em>\(N\) is the total
+R = (r_B - r_W)/(N (N-1) / 4)R = (r_B - r_W)/(N (N-1) / 4),
+where r_Br_B and r_Wr_W are the average ranks
+between and within clusters respectively, and NN is the total
 number of sites.
 Note that the function does not estimate the significance here, it only
 computes the statistic - for significance testing see
 <a href="https://rdrr.io/pkg/vegan/man/anosim.html" class="external-link">vegan::anosim()</a>.</p></li>
 <li><p><code>avg_endemism</code>: this metric is the average percentage of
 endemism in clusters as
-recommended by (Kreft and Jetz 2010)
-. Calculated as follows:
-<em></em>\(End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}\)
-where <em></em>\(E_i\) is the number of endemic species in cluster i,
-<em></em>\(S_i\) is the number of
+recommended by Kreft2010bioregion. Calculated as follows:
+End_mean = _i=1^K E_i / S_iKPc_endemism_mean = sum(Ei / Si) / K
+where E_iEi is the number of endemic species in cluster i,
+S_iSi is the number of
 species in cluster i, and K the maximum number of clusters.</p></li>
 <li><p><code>tot_endemism</code>: this metric is the total endemism across all clusters,
-as recommended by (Kreft and Jetz 2010)
-. Calculated as follows:
-<em></em>\(End_{tot} = \frac{E}{C}\)where <em></em>\(E\) is total the number of endemics (i.e., species found in
-only one cluster) and <em></em>\(C\) is the number of non-endemic species.</p></li>
+as recommended by Kreft2010bioregion. Calculated as follows:
+End_tot = ECEndemism_total = E/Cwhere EE is total the number of endemics (i.e., species found in
+only one cluster) and CC is the number of non-endemic species.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Castro-Insua A, Gómez-Rodríguez C, Baselga A (2018).
-“Dissimilarity measures affected by richness differences yield biased delimitations of biogeographic realms.”
-<em>Nature Communications</em>, <b>9</b>(1), 9–11.</p>
-<p>Ficetola GF, Mazel F, Thuiller W (2017).
-“Global determinants of zoogeographical boundaries.”
-<em>Nature Ecology &amp; Evolution</em>, <b>1</b>, 0089.</p>
-<p>Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P, Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ, Fjeldså J, Rahbek C (2013).
-“An update of Wallace's zoogeographic regions of the world.”
-<em>Science</em>, <b>339</b>(6115), 74–78.</p>
-<p>Kreft H, Jetz W (2010).
-“A framework for delineating biogeographical regions based on species distributions.”
-<em>Journal of Biogeography</em>, <b>37</b>, 2029–2053.</p>
-<p>Langfelder P, Zhang B, Horvath S (2008).
-“Defining clusters from a hierarchical cluster tree: the Dynamic Tree Cut package for R.”
-<em>BIOINFORMATICS</em>, <b>24</b>(5), 719–720.</p>
+    <p>Castro-Insua2018bioregion</p>
+<p>Ficetola2017bioregion</p>
+<p>Holt2013bioregion</p>
+<p>Kreft2010bioregion</p>
+<p>Langfelder2008bioregion</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -221,19 +207,19 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">20</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 30 trials</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.48 - 0.56</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.56 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                      trials: 0.23 - 0.51</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimal tree has a 0.51 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 15. Closest number found: 14</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 16. Closest number found: 15</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 16. Closest number found: 14</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 17. Closest number found: 15</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 18. Closest number found: 17</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 18. Closest number found: 15</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 19. Closest number found: 17</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 19. Closest number found: 15</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 20. Closest number found: 17</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>                          for k = 20. Closest number found: 15</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -241,13 +227,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Simpson </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 30 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.561 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.51 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  2 3 4 5 6 7 8 9 10 11 ... (with 9 more values) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  19 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  2 3 4 5 6 7 8 9 10 11 ... (with 9 more values) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.109 0.105 0.102 0.098 0.094 0.086 0.078 0.07 0.062 0.051 ... (with 9 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.098 0.094 0.082 0.078 0.07 0.062 0.047 0.046 0.046 0.039 ... (with 9 more values) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">partition_metrics</span><span class="op">(</span><span class="va">tree1</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">comnet</span>,</span></span>
 <span class="r-in"><span>                       site_col <span class="op">=</span> <span class="st">"Node1"</span>, species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
@@ -262,13 +248,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="va">a</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition metrics:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 19  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  17 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      tot_endemism avg_endemism pc_distance    anosim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.00000000  0.000000000   0.1332654 0.5032680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.01473684  0.006491228   0.7800817 0.7316629</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.20000000  0.100000000   1.0000000 0.9786096</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.00000000  0.000000000   0.1468789 0.4269006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.01263158  0.005438596   0.8148488 0.6839215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.16000000  0.080000000   1.0000000 0.8858696</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each partition are available in </span>
@@ -285,7 +271,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

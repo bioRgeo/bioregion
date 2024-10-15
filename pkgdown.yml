@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   a1_install_binary_files: a1_install_binary_files.html
@@ -12,7 +12,7 @@ articles:
   a5_1_visualization: a5_1_visualization.html
   a5_2_compare_partitions: a5_2_compare_partitions.html
   bioregion: bioregion.html
-last_built: 2024-07-25T18:17Z
+last_built: 2024-10-15T14:22Z
 urls:
   reference: https://bioRgeo.github.io/bioregion/reference
   article: https://bioRgeo.github.io/bioregion/articles

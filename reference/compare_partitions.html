@@ -150,9 +150,7 @@ are compared, and the next columns correspond to the requested <code>indices</co
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><script id="MathJax-script" async src="../../mathjaxr/doc/mathjax/es5/tex-chtml-full.js"></script>
-
-This function proceeds in two main steps:</p><ol><li><p>The first step is done within each partition. It will compare all pairs of
+    <p>This function proceeds in two main steps:</p><ol><li><p>The first step is done within each partition. It will compare all pairs of
 items and document if they are clustered together (<code>TRUE</code>) or separately
 (<code>FALSE</code>) in each partition. For example, if site 1 and site 2 are clustered
 in the same cluster in partition 1, then the pairwise membership site1_site2
@@ -171,12 +169,12 @@ partition 2</p></li>
 <code>store_confusion_matrix = TRUE</code>.</p>
 <p>Based on the confusion matrices, we can compute a range of indices to
 indicate the agreement among partitions. As of now, we have implemented:</p><ul><li><p><em>Rand index</em>
-<em></em>\((a + d)/(a + b + c + d)\)
+(a + d)/(a + b + c + d)(a + d)/(a + b + c + d)
 The Rand index measures agreement among partitions by accounting for both
 the pairs of sites that are grouped, but also the pairs of sites that are
 not grouped.</p></li>
 <li><p><em>Jaccard index</em>
-<em></em>\((a)/(a + b + c)\)
+(a)/(a + b + c)(a)/(a + b + c)
 The Jaccard index measures agreement among partitions by only accounting
 for pairs of sites that are grouped - it is</p></li>
 </ul><p>These two metrics are complementary, because the Jaccard index will tell
@@ -219,10 +217,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  2  1  3  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  2  1  4  2</span>
 <span class="r-in"><span><span class="fu">compare_partitions</span><span class="op">(</span><span class="va">partitions</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.518328 - Computing pairwise membership comparisons for eachpartition...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.519487 - Comparing memberships among partitions...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.519995 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.52022 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.750332 - Computing pairwise membership comparisons for eachpartition...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.751626 - Comparing memberships among partitions...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.752297 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.752697 - Computing Jaccard index...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition comparison:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 partitions compared</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 items in the clustering</span>
@@ -238,11 +236,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="co"># Find out which partitions are most representative</span></span></span>
 <span class="r-in"><span><span class="fu">compare_partitions</span><span class="op">(</span><span class="va">partitions</span>,</span></span>
 <span class="r-in"><span>                   cor_frequency <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.522107 - Computing pairwise membership comparisons for eachpartition...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.522878 - Comparing memberships among partitions...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.52332 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.523515 - Computing Jaccard index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-07-25 18:17:08.523682 - Computing the correlation between each partition and the vector of frequency of pairwise membership...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.754583 - Computing pairwise membership comparisons for eachpartition...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.755495 - Comparing memberships among partitions...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.756087 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.756411 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2024-10-15 14:22:34.756729 - Computing the correlation between each partition and the vector of frequency of pairwise membership...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partition comparison:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 partitions compared</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - 4 items in the clustering</span>
@@ -272,7 +270,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

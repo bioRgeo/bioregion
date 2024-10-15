@@ -165,7 +165,7 @@ the chosen <code>criterion</code></p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><script id="MathJax-script" async src="../../mathjaxr/doc/mathjax/es5/tex-chtml-full.js"></script></p>
+    <p></p>
 <p>This function explores the relationship evaluation metric ~ number of
 clusters, and a criterion is applied to search an optimal number of
 clusters.</p>
@@ -181,8 +181,7 @@ datasets, and, for example, ignore the often hierarchical / nested nature of
 bioregionalisations. Using multiple partitions likely avoids this
 oversimplification bias and may convey more information.
 See, for example, the reanalysis of Holt et al. (2013)
-by (Ficetola et al. 2017)
-, where they used deep, intermediate
+by Ficetola2017bioregion, where they used deep, intermediate
 and shallow cuts.</p>
 <p>Following this rationale, several of the criteria implemented here can/will
 return multiple "optimal" numbers of clusters, depending on user choices.</p>
@@ -219,8 +218,7 @@ metrics that are monotonously increasing with the number of clusters (e.g.,
 <li><p><code>cutoffs</code>:
 This method consists in specifying the cutoff value(s) in the evaluation
 metric from which the number(s) of clusters should be derived. This is the
-method used by (Holt et al. 2013)
-. Note, however, that the
+method used by Holt2013bioregion. Note, however, that the
 cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
 relevant at very large spatial scales, and lower cut-offs should be
 considered at finer spatial scales.</p></li>
@@ -246,21 +244,11 @@ bioregionalisation.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Castro-Insua A, Gómez-Rodríguez C, Baselga A (2018).
-“Dissimilarity measures affected by richness differences yield biased delimitations of biogeographic realms.”
-<em>Nature Communications</em>, <b>9</b>(1), 9–11.</p>
-<p>Ficetola GF, Mazel F, Thuiller W (2017).
-“Global determinants of zoogeographical boundaries.”
-<em>Nature Ecology &amp; Evolution</em>, <b>1</b>, 0089.</p>
-<p>Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P, Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ, Fjeldså J, Rahbek C (2013).
-“An update of Wallace's zoogeographic regions of the world.”
-<em>Science</em>, <b>339</b>(6115), 74–78.</p>
-<p>Kreft H, Jetz W (2010).
-“A framework for delineating biogeographical regions based on species distributions.”
-<em>Journal of Biogeography</em>, <b>37</b>, 2029–2053.</p>
-<p>Langfelder P, Zhang B, Horvath S (2008).
-“Defining clusters from a hierarchical cluster tree: the Dynamic Tree Cut package for R.”
-<em>BIOINFORMATICS</em>, <b>24</b>(5), 719–720.</p>
+    <p>Castro-Insua2018bioregion</p>
+<p>Ficetola2017bioregion</p>
+<p>Holt2013bioregion</p>
+<p>Kreft2010bioregion</p>
+<p>Langfelder2008bioregion</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -510,7 +498,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

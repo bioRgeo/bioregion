@@ -84,7 +84,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-07-25</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_2_non_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_2_non_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_2_non_hierarchical_clustering.Rmd</code></div>
@@ -130,8 +130,8 @@ help determining what the optimal number of clusters would be (see <a href="#sec
 <p>In the example below, we use the fish dataset from the package to
 compute distance metrics.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bioRgeo/bioregion" class="external-link">bioregion</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishmat</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/bioRgeo/bioregion" class="external-link">"bioregion"</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fishmat"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># It is a presence/absence matrix with sites in rows and species in columns</span></span>
 <span><span class="va">fishmat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
@@ -455,7 +455,21 @@ optimal <code>eps</code> value. <br></p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="section4">4. Optimal number of clusters<a class="anchor" aria-label="anchor" href="#section4"></a>
+<h2 id="section4">4. Affinity propagation<a class="anchor" aria-label="anchor" href="#section4"></a>
+</h2>
+<p>This algorithm is based on the paper of <span class="citation">Frey
+&amp; Dueck (2007)</span> and relies on the R package <a href="https://cran.r-project.org/package=apcluster" class="external-link">apcluster</a></p>
+<p>Unlike the previous algorithms in this vignette, this algorithm and
+its associated function use a similarity matrix.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Similarity matrix</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Algorithm</span></span>
+<span><span class="va">clust1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_affprop.html">nhclu_affprop</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="section5">5. Optimal number of clusters<a class="anchor" aria-label="anchor" href="#section5"></a>
 </h2>
 <p>Previous methods did not help in determining the optimal number of
 bioregions structuring the site-species matrix.</p>
@@ -463,7 +477,7 @@ bioregions structuring the site-species matrix.</p>
 <code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> and <code>find_optimal()</code>.</p>
 <p><code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> calcultes several metrics based on
 the previous clustering attempts.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span>
 <span>                  eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Partition metrics:</span></span>
@@ -480,7 +494,7 @@ the previous clustering attempts.</p>
 <p>*Note For the two metrics <code>tot_endemism</code> and
 <code>avg_endemism</code>, you also need to provide the site-species
 matrix.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span>
 <span>                       species_col <span class="op">=</span> <span class="st">"Species"</span>, site_col <span class="op">=</span> <span class="st">"Site"</span>,</span>
 <span>                       eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span>
@@ -488,7 +502,7 @@ matrix.</p>
 <p>Once the <code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> function has calculated the
 partitioning metrics, we can call <code>find_optimal()</code> to get the
 optimal number of clusters. <br></p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"</span></span></code></pre>
 <pre><code><span><span class="co">## Number of partitions: 24</span></span></code></pre>
@@ -499,7 +513,7 @@ optimal number of clusters. <br></p>
 <span><span class="co">## pc_distance 7</span></span>
 <span><span class="co">## anosim 2</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
+<p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-18-1.png" width="576"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 24  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  25 </span></span>
@@ -523,6 +537,10 @@ vary.</p>
 Baselga, A. (2012). The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. <em>Global
 Ecology and Biogeography</em>, <em>21</em>(12), 1223–1232.
+</div>
+<div id="ref-Frey2007" class="csl-entry">
+Frey, B., &amp; Dueck, D. (2007). Clustering by passing messages between
+data points. <em>Science</em>, <em>315</em>, 972–976.
 </div>
 <div id="ref-Hahsler2019" class="csl-entry">
 Hahsler, M., Piekenbrock, M., &amp; Doran, D. (2019). Dbscan: Fast
@@ -554,7 +572,7 @@ biogeographical regions</span>. <em>Journal of Biogeography</em>,
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

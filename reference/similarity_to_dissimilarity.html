@@ -88,9 +88,7 @@ metric(s) between each pair of sites based on a similarity object.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p><script id="MathJax-script" async src="../../mathjaxr/doc/mathjax/es5/tex-chtml-full.js"></script>
-
-The behavior of this function changes depending on column names. Columns
+    <p>The behavior of this function changes depending on column names. Columns
 <code>Site1</code> and <code>Site2</code> are copied identically. If there are columns called
 <code>a</code>, <code>b</code>, <code>c</code>, <code>A</code>, <code>B</code>, <code>C</code> they will also be copied identically. If there
 are columns based on your own formula (argument <code>formula</code> in <code><a href="similarity.html">similarity()</a></code>)
@@ -100,10 +98,10 @@ they will also be copied identically. Otherwise there are going to be
 converted like they other columns (default behavior).</p>
 <p>If a column is called <code>Euclidean</code>, its distance will be calculated based
 on the following formula:</p>
-<p><em></em>\(Euclidean distance = (1 - Euclidean similarity) / Euclidean similarity\)</p>
+<p>Euclidean distance = (1 - Euclidean similarity) / Euclidean similarityEuclidean distance = (1 - Euclidean similarity) / Euclidean similarity</p>
 <p>Otherwise, all other columns will be transformed into dissimilarity with the
 following formula:</p>
-<p><em></em>\(dissimilarity = 1 - similarity\)</p>
+<p>dissimilarity = 1 - similaritydissimilarity = 1 - similarity</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -132,28 +130,28 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of similarity metrics:  7 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Site1 Site2 Jaccard Jaccardturn  Sorensen   Simpson       Bray   Brayturn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Site1 Site2     0.7   0.7777778 0.8235294 0.8750000 0.21060383 0.32062780</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site1 Site3     0.9   1.0000000 0.9473684 1.0000000 0.17193948 0.27412281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site1 Site4     0.7   0.7777778 0.8235294 0.8750000 0.05630499 0.06052963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Site1 Site5     0.8   0.8000000 0.8888889 0.8888889 0.49366325 0.89692982</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site2 Site3     0.8   1.0000000 0.8888889 1.0000000 0.17280917 0.47309417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site2 Site4     0.6   0.6000000 0.7500000 0.7500000 0.08555287 0.11883408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site2 Site5     0.7   0.7777778 0.8235294 0.8750000 0.30126404 0.96188341</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Site3 Site4     0.8   1.0000000 0.8888889 1.0000000 0.31050556 0.54602774</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 Site3 Site5     0.9   1.0000000 0.9473684 1.0000000 0.20100045 0.22144289</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Site4 Site5     0.7   0.7777778 0.8235294 0.8750000 0.15273865 0.30769231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Euclidean a b c   A    B    C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.0019339025 7 2 1 143  769  303</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.0008485920 9 0 1 250  662 1746</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.0015518958 7 2 1  48  864  745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.0009916059 8 1 1 818   94 1584</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.0009110112 8 0 2 211  235 1785</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.0021393869 6 2 2  53  393  740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.0009764204 7 1 2 429   17 1973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.0009843675 8 2 0 433 1563  360</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.0006513612 9 1 0 442 1554 1960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.0008078410 7 1 2 244  549 2158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Site1 Site2 Jaccard Jaccardturn  Sorensen   Simpson       Bray  Brayturn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Site1 Site2     0.9   1.0000000 0.9473684 1.0000000 0.29383886 0.4092409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site1 Site3     0.9   1.0000000 0.9473684 1.0000000 0.18653846 0.2235023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site1 Site4     1.0   1.0000000 1.0000000 1.0000000 0.31585256 0.8696370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Site1 Site5     0.8   1.0000000 0.8888889 1.0000000 0.16043847 0.2656766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site2 Site3     0.8   0.8000000 0.8888889 0.8888889 0.19525066 0.3410138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site2 Site4     0.9   1.0000000 0.9473684 1.0000000 0.13690008 0.2412200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site2 Site5     0.7   0.7777778 0.8235294 0.8750000 0.34716069 0.3983364</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Site3 Site4     0.9   1.0000000 0.9473684 1.0000000 0.09162717 0.3341014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 Site3 Site5     0.7   0.7777778 0.8235294 0.8750000 0.31825613 0.6728111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Site4 Site5     0.8   1.0000000 0.8888889 1.0000000 0.41142304 0.6067095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Euclidean  a b c   A    B    C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.0018313203  9 1 0 248  358  834</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.0023847158  9 1 0  97  509  337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.0008225182 10 0 0 527   79 2204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.0012693631  8 2 0 161  445 1240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.0017895170  8 1 1 148  934  286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.0007393107  9 0 1 261  821 2470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.0012224847  7 2 1 431  651  970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.0007304974  9 0 1 145  289 2586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.0013313747  7 2 1 292  142 1109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.0008358470  8 2 0 850 1881  551</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dissimilarity</span> <span class="op">&lt;-</span> <span class="fu">similarity_to_dissimilarity</span><span class="op">(</span><span class="va">simil</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dissimilarity</span></span></span>
@@ -164,28 +162,28 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of dissimilarity metrics:  7 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Site1 Site2 Jaccard Jaccardturn   Sorensen   Simpson      Bray   Brayturn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Site1 Site2     0.3   0.2222222 0.17647059 0.1250000 0.7893962 0.67937220</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site1 Site3     0.1   0.0000000 0.05263158 0.0000000 0.8280605 0.72587719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site1 Site4     0.3   0.2222222 0.17647059 0.1250000 0.9436950 0.93947037</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Site1 Site5     0.2   0.2000000 0.11111111 0.1111111 0.5063368 0.10307018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site2 Site3     0.2   0.0000000 0.11111111 0.0000000 0.8271908 0.52690583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site2 Site4     0.4   0.4000000 0.25000000 0.2500000 0.9144471 0.88116592</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site2 Site5     0.3   0.2222222 0.17647059 0.1250000 0.6987360 0.03811659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Site3 Site4     0.2   0.0000000 0.11111111 0.0000000 0.6894944 0.45397226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 Site3 Site5     0.1   0.0000000 0.05263158 0.0000000 0.7989995 0.77855711</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Site4 Site5     0.3   0.2222222 0.17647059 0.1250000 0.8472613 0.69230769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Euclidean a b c   A    B    C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   516.0891 7 2 1 143  769  303</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1177.4226 9 0 1 250  662 1746</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   643.3731 7 2 1  48  864  745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1007.4651 8 1 1 818   94 1584</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1096.6814 8 0 2 211  235 1785</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   466.4236 6 2 2  53  393  740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1023.1491 7 1 2 429   17 1973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1014.8808 8 2 0 433 1563  360</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1534.2464 9 1 0 442 1554 1960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1236.8674 7 1 2 244  549 2158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Site1 Site2 Jaccard Jaccardturn   Sorensen   Simpson      Bray  Brayturn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Site1 Site2     0.1   0.0000000 0.05263158 0.0000000 0.7061611 0.5907591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site1 Site3     0.1   0.0000000 0.05263158 0.0000000 0.8134615 0.7764977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site1 Site4     0.0   0.0000000 0.00000000 0.0000000 0.6841474 0.1303630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Site1 Site5     0.2   0.0000000 0.11111111 0.0000000 0.8395615 0.7343234</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site2 Site3     0.2   0.2000000 0.11111111 0.1111111 0.8047493 0.6589862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site2 Site4     0.1   0.0000000 0.05263158 0.0000000 0.8630999 0.7587800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site2 Site5     0.3   0.2222222 0.17647059 0.1250000 0.6528393 0.6016636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Site3 Site4     0.1   0.0000000 0.05263158 0.0000000 0.9083728 0.6658986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 Site3 Site5     0.3   0.2222222 0.17647059 0.1250000 0.6817439 0.3271889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Site4 Site5     0.2   0.0000000 0.11111111 0.0000000 0.5885770 0.3932905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Euclidean  a b c   A    B    C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   545.0541  9 1 0 248  358  834</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   418.3372  9 1 0  97  509  337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1214.7786 10 0 0 527   79 2204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   786.7967  8 2 0 161  445 1240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   557.8100  8 1 1 148  934  286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1351.6113  9 0 1 261  821 2470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  817.0061  7 2 1 431  651  970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1367.9302  9 0 1 145  289 2586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  750.1033  7 2 1 292  142 1109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1195.3911  8 2 0 850 1881  551</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -198,7 +196,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
