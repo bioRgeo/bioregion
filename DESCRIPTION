@@ -27,6 +27,7 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     ape,
+    apcluster,
     bipartite,  
     cluster,
     data.table,

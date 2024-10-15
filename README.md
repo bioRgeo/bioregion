@@ -88,7 +88,8 @@ try to get to it as soon as we can!
 
 ## References and dependencies
 
-`bioregion` depends on `ape`, `bipartite`, `cluster`, `data.table`,
-`dbscan`, `dynamicTreeCut`, `earth`, `fastcluster`, `ggplot2`,
-`grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`, `Rdpack`, `rlang`,
-`rmarkdown`, `segmented`,`sf`, `stats`, `tidyr` and `utils`.
+`bioregion` depends on `ape`, `apcluster`, `bipartite`, `cluster`,
+`data.table`, `dbscan`, `dynamicTreeCut`, `earth`, `fastcluster`,
+`ggplot2`, `grDevices`, `igraph`, `mathjaxr`, `Matrix`, `Rcpp`,
+`Rdpack`, `rlang`, `rmarkdown`, `segmented`,`sf`, `stats`, `tidyr` and
+`utils`.
