@@ -62,6 +62,8 @@ package**. Vignettes available are the following ones: <br>
   Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html)**
 - **[5.2 Compare
   partitions](https://bioRgeo.github.io/bioregion/articles/a5_2_compare_partitions.html)**
+- **[5.3
+  Contribution](https://bioRgeo.github.io/bioregion/articles/a5_3_contribution.html)**
 
 Alternatively, if you prefer to view the vignettes in R, you can install
 the package with `build_vignettes = TRUE`. But be aware that some
