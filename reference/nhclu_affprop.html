@@ -30,6 +30,7 @@ clustering on the Affinity Propagation algorithm."><meta property="og:image" con
     <li><a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a></li>
     <li><a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a></li>
     <li><a class="dropdown-item" href="../articles/a5_2_compare_partitions.html">5.2 Compare partitions</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_3_contribution.html">5.3 Contribution</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
@@ -187,6 +188,10 @@ find the output of <a href="https://rdrr.io/pkg/apcluster/man/apcluster-methods.
 package (<a href="https://rdrr.io/pkg/apcluster/man/apcluster-methods.html" class="external-link">apcluster</a>).</p>
     </div>
     <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Frey2007bioregion</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="nhclu_pam.html">nhclu_pam</a></p></div>
     </div>
@@ -228,14 +233,18 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fixed number of clusters</span></span></span>
 <span class="r-in"><span><span class="va">clust3</span> <span class="op">&lt;-</span> <span class="fu">nhclu_affprop</span><span class="op">(</span><span class="va">sim</span>, K <span class="op">=</span> <span class="fl">2</span>, prc <span class="op">=</span> <span class="fl">10</span>, bimaxit <span class="op">=</span> <span class="fl">20</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9935083 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9350833 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.3508333 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9934053 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9967027 (bisection step no. 1 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9983513 (bisection step no. 2 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9991757 (bisection step no. 3 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9995878 (bisection step no. 4 )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of clusters: 2 for p = 0.3508333 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of clusters: 2 for p = 0.9995878 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
