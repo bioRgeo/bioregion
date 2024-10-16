@@ -112,7 +112,10 @@
 #'
 #' # Fixed number of clusters
 #' clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
-#'
+#' 
+#' @references
+#' \insertRef{Frey2007}{bioregion}
+#' 
 #' @importFrom apcluster apcluster apclusterK
 #'         
 #' @export
@@ -242,6 +245,8 @@ nhclu_affprop <- function(similarity, index = names(similarity)[3],
     }
     controls(args = exact, data = NULL, type = "boolean")
   }
+  
+  sim <- NULL
   
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "nhclu_affprop")

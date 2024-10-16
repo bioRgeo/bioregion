@@ -1,9 +1,16 @@
-# bioregion 1.1.2 (development/github version)
+
+# bioregion development/github version
 
 This is a list of changes made in the development/github version of the package
-between bioregion 1.1.1 (CRAN release 2024-04-19) and the next CRAN release.
+between bioregion 1.1.2 (CRAN release 2024-XX-XX) and the next CRAN release.
+
+# bioregion 1.1.2
+
+This is a list of changes made between bioregion 1.1.1 
+(CRAN release 2024-04-19) and bioregion 1.1.2 (CRAN release 2024-XX-XX).
 
 * Affinity propagation algorithm added (function nhclu_affprop)
+* Function contribution() added to the package and the workflow.
 
 # bioregion 1.1.1
 

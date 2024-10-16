@@ -131,6 +131,9 @@ clust2 <- nhclu_affprop(sim, q = 1)
 clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
 
 }
+\references{
+\insertRef{Frey2007}{bioregion}
+}
 \seealso{
 \link{nhclu_pam}
 }
