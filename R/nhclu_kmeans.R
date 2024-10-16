@@ -135,7 +135,7 @@ nhclu_kmeans <- function(dissimilarity,
 Hartigan-Wong, Lloyd, Forgy or MacQueen", call. = FALSE)
   }
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
-
+  
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "nhclu_kmeans")
   
@@ -171,7 +171,11 @@ Hartigan-Wong, Lloyd, Forgy or MacQueen", call. = FALSE)
   # kmeans only works on Euclidean distances, so the dissimilarity matrix needs
   # to be transformed into a multivariate space with euclidean distances
   # with a Principal Coordinate Analysis
-  outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)
+  if(unique(dist.obj) == 0){
+    stop("All sites are completely dissimilar.")
+  } else{
+    outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)
+  }
   
   # Performing the kmeans on the PCoA with all axes
   if(is.null(seed)){
