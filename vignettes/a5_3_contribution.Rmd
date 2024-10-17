@@ -73,6 +73,12 @@ vege_netclu_walktrap$cluster_info # 3
 
 # Indices
 
+<center>
+  <img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
+</center> 
+
+<br>
+
 The contribution index $\rho$ is calculated for each species x bioregion combination,
 following [@Lenormand2019].
 <br>
