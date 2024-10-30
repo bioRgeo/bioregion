@@ -4,8 +4,8 @@
 #' (beta-diversity) `data.frame`, calculates the cophenetic correlation
 #' coefficient, and can get clusters from the tree if requested by the user.
 #' The function implements randomization of the dissimilarity matrix to
-#' generate the tree, with a selection method based on the optimal cophenetic
-#' correlation coefficient. Typically, the dissimilarity `data.frame` is a
+#' generate the tree, with two different methods to generate the final tree.
+#' Typically, the dissimilarity `data.frame` is a
 #' `bioregion.pairwise.metric` object obtained by running `similarity`
 #' or `similarity` and then `similarity_to_dissimilarity`.
 #'
@@ -55,6 +55,10 @@
 #' @param h_min a `numeric` indicating the minimum possible height in the tree
 #' for the chosen `index`.
 #' 
+#' @param consensus_p a `numeric`, (only if `optimal_tree_method = "consensus"`, 
+#' indicating the threshold proportion of trees that must 
+#' support a region/cluster for it to be included in the final consensus tree.
+#'  
 #' @details
 #' The function is based on [hclust][fastcluster::hclust].
 #' The default method for the hierarchical tree is `average`, i.e.
@@ -67,6 +71,43 @@
 #' \item{Specifying one or several heights of cut in `cut_height`}}
 #'
 #' To find an optimal number of clusters, see [partition_metrics()]
+#' 
+#' It is important to pay attention to the fact that the order of rows
+#' in the input distance matrix
+#' influences the tree topology as explained in 
+#' \insertRef{Dapporto2013}{bioregion}. To address this, the function generates
+#'  multiple trees by randomizing the distance matrix. 
+#' Two methods are available to obtain the final tree:
+#' \itemize{
+#' \item{`optimal_tree_method = "best"`: This method selects the tree with 
+#' the highest cophenetic correlation coefficient, representing the best fit 
+#' between the hierarchical structure and the original distance matrix. }
+#' \item{`optimal_tree_method = "consensus"`: This method constructs a consensus 
+#' tree using phylogenetic methods with the function 
+#' [consensus][ape::consensus].
+#' When using this option, you must set the `consensus_p` parameter, which 
+#' indicates 
+#' the proportion of trees that must contain a region/cluster for it to be 
+#' included 
+#' in the final consensus tree. 
+#' Consensus trees lack an inherent height because they represent a majority 
+#' structure rather than an actual hierarchical clustering. To assign heights, 
+#' we use a non-negative least squares method ([nnls.tree][phangorn::nnls.tree]) 
+#' based on the initial distance matrix, ensuring that the consensus 
+#' tree preserves 
+#' approximate distances among clusters.}
+#' }
+#' AIt is currently unresolved which method is best to use, and so we recommend
+#' users to consult the literature.  
+#' Consensus trees can offer more stable solutions 
+#' in certain contexts \insertRef{Dapporto2013}{bioregion}, but at large 
+#' spatial scales, they may yield inconsistent results 
+#' (see appendix S2 in \insertRef{Leroy2019}{bioregion}). 
+#' Additionally, consensus trees often have a lower cophenetic 
+#' correlation coefficient 
+#' than the best individual tree, so users should consider these factors when 
+#' choosing the method.
+#'
 #'
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
@@ -98,14 +139,14 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso [cut_tree] 
+#' @seealso [cut_tree]
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 #' 20, 25)
 #' rownames(comat) <- paste0("Site",1:20)
 #' colnames(comat) <- paste0("Species",1:25)
 #'
-#' dissim <- dissimilarity(comat, metric = "all")
+#' dissim <- dissimilarity(comat, metric = "Simpson")
 #'
 #' # User-defined number of clusters
 #' tree1 <- hclu_hierarclust(dissim, n_clust = 5)
@@ -131,7 +172,15 @@
 #' # Recut the tree afterwards
 #' tree3.1 <- cut_tree(tree3, n = 5)
 #' 
+#' # Make multiple cuts
 #' tree4 <- hclu_hierarclust(dissim, n_clust = 1:19)
+#' 
+#' # Change the method to get the final tree (see details)
+#' tree5 <- hclu_hierarclust(dissim,
+#'                           optimal_tree_method = "consensus",
+#'                           n_clust = 10,
+#'                           consensus_p = 0.75)
+#' 
 #' 
 #' @importFrom stats as.dist cophenetic cor
 #' @importFrom fastcluster hclust
@@ -149,7 +198,8 @@ hclu_hierarclust <- function(dissimilarity,
                              cut_height = NULL,
                              find_h = TRUE,
                              h_max = 1,
-                             h_min = 0){
+                             h_min = 0,
+                             consensus_p = 0.5){
   
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
@@ -189,9 +239,9 @@ ward.D, ward.D2, single, complete, average, mcquitty, median or centroid",
   controls(args = n_runs, data = NULL, type = "strict_positive_integer")
   controls(args = keep_trials, data = NULL, type = "boolean")
   controls(args = optimal_tree_method, data = NULL, type = "character")
-  if(!(optimal_tree_method %in% c("best" ))){
+  if(!(optimal_tree_method %in% c("best", "consensus"))){
     stop("Please choose optimal_tree_method among the followings values:
-best", 
+best, consensus", 
     call. = FALSE)
   }
   
@@ -229,6 +279,10 @@ best",
   if(h_min > h_max){
     stop("h_min must be inferior to h_max.")
   }
+  controls(args = consensus_p, data = NULL, type = "positive_numeric")
+  if(consensus_p < 0.5 | consensus_p > 1) {
+    stop("consensus_p must be between 0.5 and 1")
+  }
   
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "hclu_hierarclust")
@@ -246,6 +300,7 @@ best",
                        find_h = find_h,
                        h_max = h_max,
                        h_min = h_min,
+                       consensus_p = consensus_p,
                        dynamic_tree_cut = dynamic_tree_cut)
   
   outputs$inputs <- list(bipartite = FALSE,
@@ -308,10 +363,44 @@ best",
       outputs$algorithm$final.tree <-
         outputs$algorithm$trials[[best.run]]$hierartree
       outputs$algorithm$final.tree.coph.cor <- max(coph.coeffs)
+    } else if (optimal_tree_method == "consensus") {
+      # New method - calculate the consensus tree
+      if (n_runs < 2) {
+        stop("At least two trees are required to calculate a consensus.")
+      }
+      trees <- lapply(outputs$algorithm$trials,
+                      function(trial) trial$hierartree)
+      trees <- lapply(trees, 
+                      function(tree) ape::as.phylo(tree))
+      consensus_tree <- ape::consensus(trees, p = 0.5)
+      consensus_tree <- phangorn::nnls.tree(dist.obj, consensus_tree, 
+                                            method = "ultrametric",
+                                            trace = 0)
+
+      consensus_tree <- ape::multi2di(consensus_tree)
+      # Calculate cophenetic correlation coefficient
+      coph <- as.matrix(
+        stats::cophenetic(consensus_tree))
+      consensus_tree <- ape::as.hclust.phylo(consensus_tree)
+      outputs$algorithm$final.tree <- consensus_tree
+      
+      # Correct site order to not mess the correlation
+      coph <- coph[match(attr(dist.obj,
+                              "Labels"),
+                         rownames(coph)),
+                   match(attr(dist.obj,
+                              "Labels"),
+                         colnames(coph))]
+      dist.mat <- as.matrix(dist.obj)
+      
+      outputs$algorithm$final.tree.coph.cor <-
+        stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
+                   method = "spearman")
+      
     }
     
     message(paste0(
-      "Optimal tree has a ",
+      "Final tree has a ",
       round(outputs$algorithm$final.tree.coph.cor, 2),
       " cophenetic correlation coefficient with the initial dissimilarity
       matrix\n"))
@@ -366,3 +455,6 @@ best",
   ord <- sample(rownames(distmatrix))
   return(stats::as.dist(distmatrix[ord, ord]))
 }
+
+
+

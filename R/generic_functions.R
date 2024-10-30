@@ -35,6 +35,11 @@ print.bioregion.clusters <- function(x, ...)
     cat(" - Randomization of the dissimilarity matrix: ",
         ifelse(x$args$randomize, paste0("yes, number of trials ",
                                         x$args$n_runs), "no"), "\n")
+    cat(" - Method to compute the final tree: ",
+        ifelse(x$args$optimal_tree_method == "best", 
+               "Tree with the best cophenetic correlation coefficient",
+               paste0("Consensus tree with p = ",
+                      x$args$consensus_p)), "\n")
     cat(" - Cophenetic correlation coefficient: ",
         round(x$algorithm$final.tree.coph.cor, 3), "\n")
   }

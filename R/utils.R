@@ -101,7 +101,7 @@ Please carefully check your data before using the clustering functions."))
       }else{
         if (attr(data, "type") == "similarity") {
           stop(paste0(deparse(substitute(data)),
-                      " seems to be a dissimilarity object. 
+                      " seems to be a similarity object. 
 This function should be applied on dissimilarities, not similarities. 
 Use similarity_to_dissimilarity() before using this function."), call. = FALSE)
         }

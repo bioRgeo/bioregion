@@ -16,7 +16,8 @@ hclu_hierarclust(
   cut_height = NULL,
   find_h = TRUE,
   h_max = 1,
-  h_min = 0
+  h_min = 0,
+  consensus_p = 0.5
 )
 }
 \arguments{
@@ -65,6 +66,10 @@ the chosen \code{index}.}
 
 \item{h_min}{a \code{numeric} indicating the minimum possible height in the tree
 for the chosen \code{index}.}
+
+\item{consensus_p}{a \code{numeric}, (only if \code{optimal_tree_method = "consensus"},
+indicating the threshold proportion of trees that must
+support a region/cluster for it to be included in the final consensus tree.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -94,8 +99,8 @@ This function generates a hierarchical tree from a dissimilarity
 (beta-diversity) \code{data.frame}, calculates the cophenetic correlation
 coefficient, and can get clusters from the tree if requested by the user.
 The function implements randomization of the dissimilarity matrix to
-generate the tree, with a selection method based on the optimal cophenetic
-correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
+generate the tree, with two different methods to generate the final tree.
+Typically, the dissimilarity \code{data.frame} is a
 \code{bioregion.pairwise.metric} object obtained by running \code{similarity}
 or \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
@@ -111,6 +116,42 @@ Clusters can be obtained by two methods:
 \item{Specifying one or several heights of cut in \code{cut_height}}}
 
 To find an optimal number of clusters, see \code{\link[=partition_metrics]{partition_metrics()}}
+
+It is important to pay attention to the fact that the order of rows
+in the input distance matrix
+influences the tree topology as explained in
+\insertRef{Dapporto2013}{bioregion}. To address this, the function generates
+multiple trees by randomizing the distance matrix.
+Two methods are available to obtain the final tree:
+\itemize{
+\item{\code{optimal_tree_method = "best"}: This method selects the tree with
+the highest cophenetic correlation coefficient, representing the best fit
+between the hierarchical structure and the original distance matrix. }
+\item{\code{optimal_tree_method = "consensus"}: This method constructs a consensus
+tree using phylogenetic methods with the function
+\link[ape:consensus]{consensus}.
+When using this option, you must set the \code{consensus_p} parameter, which
+indicates
+the proportion of trees that must contain a region/cluster for it to be
+included
+in the final consensus tree.
+Consensus trees lack an inherent height because they represent a majority
+structure rather than an actual hierarchical clustering. To assign heights,
+we use a non-negative least squares method (\link[phangorn:designTree]{nnls.tree})
+based on the initial distance matrix, ensuring that the consensus
+tree preserves
+approximate distances among clusters.}
+}
+AIt is currently unresolved which method is best to use, and so we recommend
+users to consult the literature.
+Consensus trees can offer more stable solutions
+in certain contexts \insertRef{Dapporto2013}{bioregion}, but at large
+spatial scales, they may yield inconsistent results
+(see appendix S2 in \insertRef{Leroy2019}{bioregion}).
+Additionally, consensus trees often have a lower cophenetic
+correlation coefficient
+than the best individual tree, so users should consider these factors when
+choosing the method.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -118,7 +159,7 @@ comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
 
-dissim <- dissimilarity(comat, metric = "all")
+dissim <- dissimilarity(comat, metric = "Simpson")
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissim, n_clust = 5)
@@ -144,7 +185,15 @@ plot(tree3)
 # Recut the tree afterwards
 tree3.1 <- cut_tree(tree3, n = 5)
 
+# Make multiple cuts
 tree4 <- hclu_hierarclust(dissim, n_clust = 1:19)
+
+# Change the method to get the final tree (see details)
+tree5 <- hclu_hierarclust(dissim,
+                          optimal_tree_method = "consensus",
+                          n_clust = 10,
+                          consensus_p = 0.75)
+
 
 }
 \references{
