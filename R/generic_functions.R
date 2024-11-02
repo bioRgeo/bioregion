@@ -26,20 +26,26 @@ print.bioregion.clusters <- function(x, ...)
   cat(" - Number of sites: ", x$inputs$nb_sites, "\n")
   
   # methodological details -----
-  if(x$name == "hclu_hierarclust") {
+  if(x$name %in% c("hclu_hierarclust",
+                   "hclu_diana")) {
     cat(" - Name of dissimilarity metric: ",
         ifelse(is.null(x$args$index),
                "Undefined",
                x$args$index), "\n")
-    cat(" - Tree construction method: ", x$args$method, "\n")
-    cat(" - Randomization of the dissimilarity matrix: ",
-        ifelse(x$args$randomize, paste0("yes, number of trials ",
-                                        x$args$n_runs), "no"), "\n")
-    cat(" - Method to compute the final tree: ",
-        ifelse(x$args$optimal_tree_method == "best", 
-               "Tree with the best cophenetic correlation coefficient",
-               paste0("Consensus tree with p = ",
-                      x$args$consensus_p)), "\n")
+    if(x$name == "hclu_hierarclust") {
+      cat(" - Tree construction method: ", x$args$method, "\n")
+      cat(" - Randomization of the dissimilarity matrix: ",
+          ifelse(x$args$randomize, paste0("yes, number of trials ",
+                                          x$args$n_runs), "no"), "\n")
+      cat(" - Method to compute the final tree: ",
+          ifelse(x$args$optimal_tree_method == "best", 
+                 "Tree with the best cophenetic correlation coefficient",
+                 ifelse(x$args$optimal_tree_method == "iterative_consensus_tree",
+                        "Iterative consensus hierarchical tree",
+                        paste0("Consensus tree with p = ",
+                               x$args$consensus_p))), "\n")
+      
+    }
     cat(" - Cophenetic correlation coefficient: ",
         round(x$algorithm$final.tree.coph.cor, 3), "\n")
   }
@@ -153,6 +159,89 @@ plot.bioregion.clusters <- function(x, ...)
     {
       args$hang <- -1
     }
+    args$x <- x$algorithm$final.tree
+    
+    do.call(plot,
+            args)
+    if(!is.null(x$algorithm$output_cut_height))
+    {
+      # abline(h = x$output_cut_height, lty = 3, col = "#756bb1")
+      
+      if(length(x$algorithm$output_cut_height) > 1)
+      {
+        if(length(x$algorithm$output_cut_height) > 3)
+        {
+          message(
+            "Multiple cuts detected, plotting only the first three levels")
+        }
+        
+        cols <- c("#253494", "#2c7fb8", "#41b6c4")
+        
+        for(i in 1:min(3, length(x$algorithm$output_cut_height)))
+        {
+          stats::rect.hclust(x$algorithm$final.tree,
+                             h = x$algorithm$output_cut_height[i],
+                             border = cols[i])
+        }
+        
+      } else
+      {
+        stats::rect.hclust(x$algorithm$final.tree,
+                           h = x$algorithm$output_cut_height,
+                           border = "#377eb8")
+      }
+    } else if(x$args$dynamic_tree_cut)
+    {
+      # Adding rectangles for dynamic tree cut
+      vect_clust <- x$clusters[, 2]
+      names(vect_clust) <- x$clusters[, 1]
+      tot_l <- x$algorithm$output_n_clust + length(which(is.na(vect_clust)))
+      
+      vect_clust[is.na(vect_clust)] <- (x$algorithm$output_n_clust + 1):
+        (x$algorithm$output_n_clust + length(which(is.na(vect_clust))))
+      
+      order_rect <- unique(vect_clust[x$algorithm$final.tree$order])
+      
+      true_cl <- which(order_rect %in% 1:x$algorithm$output_n_clust)
+      
+      stats::rect.hclust(x$final.tree,
+                         k = tot_l,
+                         which = true_cl,
+                         cluster = vect_clust,
+                         # to do: add border colours from a vector with a
+                         # distinct colour for each cluster
+                         border = "#377eb8")
+    }
+  } else if(x$name == ("hclu_diana"))
+  {
+    args <- list(...)
+    # Changing default arguments for hclust plot
+    if(is.null(args$xlab))
+    {
+      args$xlab <- ""
+    }
+    if(is.null(args$ylab))
+    {
+      args$ylab <- paste0(x$args$index, " dissimilarity")
+    }
+    if(is.null(args$main))
+    {
+      args$main <- ""
+    }
+    if(is.null(args$sub))
+    {
+      args$sub <- ""
+    }
+    if(is.null(args$ask))
+    {
+      args$ask <- FALSE
+    }
+    if(is.null(args$which.plots))
+    {
+      args$which.plots <- 2
+    }
+    
+    
     args$x <- x$algorithm$final.tree
     
     do.call(plot,

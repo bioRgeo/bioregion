@@ -110,7 +110,8 @@ clustering, while [sub-section 2.4.](#2.4.) illustrates the divisive method.
 The basic use of the function is as follows:
 
 ```{r}
-tree1 <- hclu_hierarclust(dissim)
+tree1 <- hclu_hierarclust(dissim,
+                          comat = vegemat)
 ```
 
 The function gives us some information as it proceeds. Notably, it talks about
@@ -138,13 +139,13 @@ in the object yet.
 To cut the tree, we can use the `cut_tree()` function:
 
 ```{r}
-# Ask for 4 clusters
+# Ask for 3 clusters
 tree1 <- cut_tree(tree1,
-                  n_clust = 4)
+                  n_clust = 3)
 ```
 
-Here, we asked for 4 clusters, and the algorithm automatically finds the height
-at which 4 clusters are found (h = `r round(tree1$algorithm$output_cut_height, 3)`).
+Here, we asked for 3 clusters, and the algorithm automatically finds the height
+at which 3 clusters are found (h = `r round(tree1$algorithm$output_cut_height, 3)`).
 
 
 ```{r}
@@ -157,7 +158,7 @@ results of the clustering: we have
  * **1 partition**: a partition is a clustering result. We only cut the tree once, 
  so we only have 1 partition at the moment
  * **4 clusters**: this is the number of clusters in the partition. We asked for
- 4, and we obtained 4, which is good. Sometimes, however, we cannot get the
+ 3, and we obtained 3, which is good. Sometimes, however, we cannot get the
  number of clusters we asked for - in which case the outcome will be indicated.
  * **a heigh of cut at `r round(tree1$algorithm$output_cut_height, 3)`: this
  is the height of cut at which we can obtain 4 clusters in our tree.
@@ -169,7 +170,16 @@ We can make a quick plot of our partitioned tree with
 plot(tree1, cex = .2)
 ```
 
- 
+
+Let's see how it looks like on a map:
+
+```{r, fig.width=12, fig.height=8}
+data(vegesf)
+library(sf)
+map_clusters(tree1$clusters[, c("ID", "K_3")],
+             vegesf)
+```
+
 Now, this is a hierarchical tree, and cutting it only once (= only 1 partition)
 oversimplifies the result of the tree. Why not cut it multiple times? For 
 example, we could make deep, intermediate, and shallow cuts to the tree, 
@@ -181,7 +191,7 @@ We can specify, e.g. 4, 10 and 20 clusters:
 ```{r, fig.width=12, fig.height=8}
 # Ask for 4, 10 and 20 clusters
 tree1 <- cut_tree(tree1,
-                  n_clust = c(4, 10, 20))
+                  n_clust = c(2, 3, 12))
 
 plot(tree1, cex = .2)
 ```
@@ -208,6 +218,18 @@ From the result, we can read that for the deep cut partition (h = 0.6) we have
 partition (h = 0.5) we have `r tree1$algorithm$output_n_clust[2]` clusters and 
 for the shallow cut partition (h = 0.4) we have 
 `r tree1$algorithm$output_n_clust[3]` clusters.
+
+Here is how the maps look like:
+
+```{r, fig.width=12, fig.height=8}
+for(i in 2:ncol(tree1$clusters))
+{
+  map_clusters(tree1$clusters[, c(1, i)],
+             vegesf)
+}
+
+```
+
 
 In the next section we will see what are the default settings and why we chose
 them, and then we will see how to find optimal numbers of clusters.
@@ -275,36 +297,70 @@ plot(tree3, cex = .1)
 See how the tree looks different? This is problematic because it means that the
 outcome is heavily influenced by the order of sites in the distance matrix.
 
-To address this issue, we randomize the distance matrix multiple times (30,
-by default, but you can probably increase the number to 100 or more) and 
-generate all the associated trees. For each individual tree, the function 
-calculates the **cophenetic correlation coefficient**, which is the *correlation
+To address this issue, we have developed an iterative algorithm that will 
+reconstruct the entire tree from top to bottom, by selecting for each branch
+a majority decision among multiple randomizations of the distance matrix (100
+times by default, can be increased). This method is called 
+**Iterative Hierarchical Consensus Tree** (argument 
+`optimal_tree_method = "best"`, default value)
+and it ensures that you obtain a
+consensus tree that it will find a majority decision for each branch of the
+tree. The tree produced with this method generally have a better topology than
+any individual tree. We estimate the performance of the topology  with 
+the **cophenetic correlation coefficient**, which is the *correlation
 between the initial distance $\beta_{sim}$ among sites* and *the cophenetic 
 distance*, which is the distance at which sites are connected in the tree. 
 It tells us how
 representative is the tree of the initial distance matrix.
 
-The next question is what to do with all the individual trees? By default, in
-the package we select the tree that best represents the distance matrix; i.e.,
-the one that has the highest cophenetic correlation coefficient 
-(argument `optimal_tree_method = "best"`)
+Although this method performs better than any other available method, it comes
+with a computing cost: it needs to randomize the distance matrix multiple times
+for each branching of the tree. Therefore, we recommend using it to obtain a 
+robust tree - be patient in that case. Otherwise, if you only need a very fast
+look at a *good* tree, you can simply select the single best tree among 
+multiple randomization trials. It will never be as good as the **Iterative
+Hierarchical Consensus Tree**, but it will be a best choice for a fast 
+exploration. To do that, choose `optimal_tree_method = "best"`. It will
+select the tree that best represents the distance matrix; i.e.,
+the one that has the highest cophenetic correlation coefficient among all 
+trials.
 
-Let's see an example with a higher number of runs (`n_runs = 100`). We can also
+Let's see an example of `optimal_tree_method = "best"`. We can also
 ask the function to keep all individual trees for further exploration 
 (`keep_trials = TRUE`).
 
 ```{r}
-tree1 <- hclu_hierarclust(dissim_random,
-                          randomize = TRUE,
-                          n_runs = 100,
-                          keep_trials = TRUE)
+tree_best <- hclu_hierarclust(dissim_random,
+                              randomize = TRUE,
+                              optimal_tree_method = "best",
+                              keep_trials = TRUE)
 ```
 
 
-Another approach could be to build a consensus tree from all the individual 
-trees, and use this tree, as is done for example in 
-[the package recluster](https://github.com/leondap/recluster), but this is not
-yet available in bioregion. 
+Another possible approach is to build a simple consensus tree among all the 
+trials. However, we generally do not recommend constructing a consensus tree, 
+because the topology of simple consensus trees can be very problematic if there
+are a lot of ties in the distance matrix. Let's see it in action here:
+
+```{r}
+tree_consensus <- hclu_hierarclust(dissim_random,
+                              randomize = TRUE,
+                              optimal_tree_method = "consensus",
+                              keep_trials = TRUE)
+```
+
+See how the cophenetic correlation coefficient for the consensus tree is
+terrible compared to the IHCT and best tree ?
+
+This consensus tree has almost no correlation with our initial distance matrix.
+This is because its topology is terribly wrong, see how the tree looks like:
+
+```{r}
+plot(tree_consensus)
+```
+
+Booo, this is just a large rake, not a tree!!!
+
 
 ### 2.3.2 Tree construction algorithm
 
@@ -313,6 +369,14 @@ with Arithmetic Mean) because it has been recommended in bioregionalisation for
 its better performance over other approaches [@Kreft2010]. You can change this
 method by changing the argument `method`; all methods implemented in 
 `stats::hclust()` are available. 
+
+Note that the current height distances for methods `method = "ward.D"` 
+and `method = "ward.D2"` may
+differ from the calculations in `stats::hclust()`, due to the iterative nature
+of the algorithm. In addition, using the method `method = "single"` are much
+slower than the other approaches, and we have not yet implemented a workaround
+to make it faster (do not hesitate to contact us if you need a faster 
+implementation or have an idea of how to make it run faster).
 
 ### 2.3.3 Cutting the tree
 
@@ -360,6 +424,8 @@ The function `hclu_diana` performs the Diana divisive clustering.
 ```{r, fig.height = 5, fig.width = 8}
 # Compute the tree with the Diana algorithm
 tree_diana <- hclu_diana(dissim)
+
+plot(tree_diana)
 ```
 
 # 3. How to find an optimal number of clusters? {#optimaln}
@@ -437,6 +503,7 @@ dissim <- dissimilarity(vegemat)
 
 # Step 1 & 2. Compute the tree and cut it into many different partitions
 tree4 <- hclu_hierarclust(dissim,
+                          comat = vegemat,
                           n_clust = 2:100)
 
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013
@@ -497,7 +564,10 @@ endemic species.
 To be able to calculate `pc_distance` and `anosim`, you need to provide
 your dissimilarity object to the argument `dissimilarity`. In addition, to be
 able to calculate `avg_endemism` and `tot_endemism`, you need to provide your
-species-site network to the argument `net`. Let's see that in practice. 
+species-site network to the argument `net` (don't panick if you only have
+a species x site matrix! We have a function to make the conversion).
+
+Let's see that in practice. 
 Depending on the size of your dataset, computing endemism-based metrics can 
 take a while.
 
@@ -619,9 +689,12 @@ find_optimal_n(eval_tree4,
                step_levels = 3)
 ```
 
+Note that these steps generally correspond to large jumps in the tree, which is
+why we like this approach as it fits well with the hierarchical nature of the 
+tree.
 
 Second, you can set a quantile of steps to select, e.g. to select the 5% 
-largest steps set the quantile to 0.90 (`step_quantile = 0.95`):
+largest steps set the quantile to 0.95 (`step_quantile = 0.95`):
 
 ```{r}
 find_optimal_n(eval_tree4,

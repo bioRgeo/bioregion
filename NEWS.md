@@ -4,12 +4,27 @@
 This is a list of changes made in the development/github version of the package
 between bioregion 1.1.2 (CRAN release 2024-XX-XX) and the next CRAN release.
 
+# bioregion 1.1.3
+
+This is a list of changes made between bioregion 1.1.2 
+(CRAN unreleased) and bioregion 1.1.3 (CRAN unreleased).
+
+* Added a new method to construct a consensus tree in hclu_hierarclust. This
+method is called Iterative Hierarchical Consensus Tree (IHCT). It conclusively
+solves issues related to the order of sites in the distance matrix and 
+building a consensus hierarchical tree with a meaningful topology.
+
+* Many changes to functions related to hclu_hierarclust due to this major change
+
+* Updated generic functions to provide plot and print for diana
+
 # bioregion 1.1.2
 
 This is a list of changes made between bioregion 1.1.1 
-(CRAN release 2024-04-19) and bioregion 1.1.2 (CRAN release 2024-XX-XX).
+(CRAN release 2024-04-19) and bioregion 1.1.2 (CRAN unreleased).
 
 * Affinity propagation algorithm added (function nhclu_affprop)
+
 * Function contribution() added to the package and the workflow.
 
 # bioregion 1.1.1

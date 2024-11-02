@@ -7,17 +7,19 @@
 hclu_hierarclust(
   dissimilarity,
   index = names(dissimilarity)[3],
+  comat = NULL,
   method = "average",
   randomize = TRUE,
-  n_runs = 30,
+  n_runs = 100,
   keep_trials = FALSE,
-  optimal_tree_method = "best",
+  optimal_tree_method = "iterative_consensus_tree",
   n_clust = NULL,
   cut_height = NULL,
   find_h = TRUE,
   h_max = 1,
   h_min = 0,
-  consensus_p = 0.5
+  consensus_p = 0.5,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -29,6 +31,10 @@ column(s) are the dissimilarity indices.}
 
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
+
+\item{comat}{a co-occurrence \code{matrix} with sites as rows and species
+as columns. Only useful if you choose
+\code{optimal_tree_method = "iterative_consensus_tree"}}
 
 \item{method}{name of the hierarchical classification method, as in
 \link[fastcluster:hclust]{hclust}. Should be one of "ward.D",
@@ -43,12 +49,13 @@ randomized, to account for the order of sites in the dissimilarity matrix.}
 
 \item{keep_trials}{a \code{boolean} indicating if all random trial results.
 should be stored in the output object (set to FALSE to save space if your
-\code{dissimilarity} object is large).}
+\code{dissimilarity} object is large). Note that it cannot be set to \code{TRUE} if
+\code{optimal_tree_method = "iterative_consensus_tree"}}
 
 \item{optimal_tree_method}{a \code{character} indicating how the final tree
-should be obtained from all trials. The only option currently is
-"best", which means the tree with the best cophenetic correlation
-coefficient will be chosen.}
+should be obtained from all trials. Possible values are
+\code{iterative_consensus_tree} (default), \code{best} and \code{consensus}.
+\strong{We recommend \code{iterative_consensus_tree}. See details}}
 
 \item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
@@ -67,9 +74,14 @@ the chosen \code{index}.}
 \item{h_min}{a \code{numeric} indicating the minimum possible height in the tree
 for the chosen \code{index}.}
 
-\item{consensus_p}{a \code{numeric}, (only if \code{optimal_tree_method = "consensus"},
+\item{consensus_p}{a \code{numeric}, (only if
+\code{optimal_tree_method = "consensus"}),
 indicating the threshold proportion of trees that must
 support a region/cluster for it to be included in the final consensus tree.}
+
+\item{verbose}{a \code{boolean}. (only if
+\code{optimal_tree_method = "iterative_consensus_tree"}), Set to \code{FALSE} if you
+want to disable the progress message}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -120,11 +132,24 @@ To find an optimal number of clusters, see \code{\link[=partition_metrics]{parti
 It is important to pay attention to the fact that the order of rows
 in the input distance matrix
 influences the tree topology as explained in
-\insertRef{Dapporto2013}{bioregion}. To address this, the function generates
+\insertCite{Dapporto2013}{bioregion}. To address this, the function generates
 multiple trees by randomizing the distance matrix.
 Two methods are available to obtain the final tree:
 \itemize{
-\item{\code{optimal_tree_method = "best"}: This method selects the tree with
+\item{\code{optimal_tree_method = "iterative_consensus_tree"}: The Iterative
+Hierarchical Consensus Tree (IHCT) method reconstructs a consensus tree by
+iteratively splitting the dataset into two subclusters based on the pairwise
+dissimilarity of sites across \code{n_runs} trees based on \code{n_runs} randomizations
+of the distance matrix. At each iteration, it
+identifies the majority membership of sites into two stable groups across
+all trees,
+calculates the height based on the selected linkage method (\code{method}),
+and enforces monotonic constraints on
+node heights to produce a coherent tree structure.
+This approach provides a robust, hierarchical representation of site
+relationships, balancing
+cluster stability and hierarchical constraints.}
+\item{\code{optimal_tree_method = "best"}: This method selects one tree among with
 the highest cophenetic correlation coefficient, representing the best fit
 between the hierarchical structure and the original distance matrix. }
 \item{\code{optimal_tree_method = "consensus"}: This method constructs a consensus
@@ -142,16 +167,20 @@ based on the initial distance matrix, ensuring that the consensus
 tree preserves
 approximate distances among clusters.}
 }
-AIt is currently unresolved which method is best to use, and so we recommend
-users to consult the literature.
-Consensus trees can offer more stable solutions
-in certain contexts \insertRef{Dapporto2013}{bioregion}, but at large
-spatial scales, they may yield inconsistent results
-(see appendix S2 in \insertRef{Leroy2019}{bioregion}).
-Additionally, consensus trees often have a lower cophenetic
-correlation coefficient
-than the best individual tree, so users should consider these factors when
-choosing the method.
+We recommend using the \code{"iterative_consensus_tree"} as all the branches of
+this tree will always reflect the majority decision among many randomized
+versions of the distance matrix. This method is inspired by
+\insertCite{Dapporto2015}{bioregion}, which also used the majority decision
+among many randomized versions of the distance matrix, but it expands it
+to reconstruct the entire topology of the tree iteratively.
+
+We do not recommend using the basic \code{consensus} method because in many
+contexts it provides inconsistent results, with a meaningless tree topology
+and a very low cophenetic correlation coefficient.
+
+For a fast exploration of the tree, we recommend using the \code{best} method
+which will only select the tree with the highest cophenetic correlation
+coefficient among all randomized versions of the distance matrix.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -198,6 +227,8 @@ tree5 <- hclu_hierarclust(dissim,
 }
 \references{
 \insertRef{Kreft2010}{bioregion}
+\insertRef{Dapporto2013}{bioregion}
+\insertRef{Dapporto2015}{bioregion}
 }
 \seealso{
 \link{cut_tree}

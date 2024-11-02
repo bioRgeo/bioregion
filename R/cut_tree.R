@@ -291,8 +291,14 @@ cut_tree <- function(tree,
       names(output_cut_height) <- paste0("k_", n_clust)
     } else {
       cls <- stats::cutree(cur.tree, k = n_clust)
-      clusters <- data.frame(rownames(cls),
-                             cluster = cls)
+      if(length(n_clust) == 1){
+        clusters <- data.frame(names(cls),
+                               cluster = cls)
+      } else {
+        clusters <- data.frame(rownames(cls),
+                               cluster = cls)
+      }
+
       names(clusters) <- c("name", paste0("k_", n_clust))
       output_cut_height <- "unknown"
       output_n_clust <- sapply(n_clust,

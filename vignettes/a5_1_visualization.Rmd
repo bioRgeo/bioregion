@@ -130,6 +130,7 @@ other algorithms.
 set.seed(1)
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
                                           index = names(vegedissim)[6],
+                                          comat = vegemat,
                                           method = "mcquitty", n_clust = 3)
 vege_hclu_hierarclust$cluster_info
 
