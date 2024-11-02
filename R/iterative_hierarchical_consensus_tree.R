@@ -145,7 +145,7 @@ stable_binary_split <- function(dist.obj,
   trees <- lapply(randomtrees, function(trial) trial$hierartree)
   clusts <- lapply(trees, function(tree) {
     suppressMessages(cut_tree(
-      stats::as.hclust(tree), n = 2, find_h = FALSE))
+      stats::as.hclust(tree), n_clust = 2, find_h = FALSE))
   })
   
   # Step 3: ensure we have the same order of sites in each partition
