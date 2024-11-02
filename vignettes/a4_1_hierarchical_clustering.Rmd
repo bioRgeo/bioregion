@@ -160,7 +160,7 @@ results of the clustering: we have
  * **4 clusters**: this is the number of clusters in the partition. We asked for
  3, and we obtained 3, which is good. Sometimes, however, we cannot get the
  number of clusters we asked for - in which case the outcome will be indicated.
- * **a heigh of cut at `r round(tree1$algorithm$output_cut_height, 3)`: this
+ * **a height of cut at `r round(tree1$algorithm$output_cut_height, 3)`**: this
  is the height of cut at which we can obtain 4 clusters in our tree.
 
 We can make a quick plot of our partitioned tree with
@@ -173,7 +173,7 @@ plot(tree1, cex = .2)
 
 Let's see how it looks like on a map:
 
-```{r, fig.width=12, fig.height=8}
+```{r, fig.width=6, fig.height=4}
 data(vegesf)
 library(sf)
 map_clusters(tree1$clusters[, c("ID", "K_3")],
@@ -221,7 +221,7 @@ for the shallow cut partition (h = 0.4) we have
 
 Here is how the maps look like:
 
-```{r, fig.width=12, fig.height=8}
+```{r, fig.width=6, fig.height=4}
 for(i in 2:ncol(tree1$clusters))
 {
   map_clusters(tree1$clusters[, c(1, i)],
@@ -302,7 +302,7 @@ reconstruct the entire tree from top to bottom, by selecting for each branch
 a majority decision among multiple randomizations of the distance matrix (100
 times by default, can be increased). This method is called 
 **Iterative Hierarchical Consensus Tree** (argument 
-`optimal_tree_method = "best"`, default value)
+`optimal_tree_method = "iterative_consensus_tree"`, default value)
 and it ensures that you obtain a
 consensus tree that it will find a majority decision for each branch of the
 tree. The tree produced with this method generally have a better topology than
@@ -355,7 +355,7 @@ terrible compared to the IHCT and best tree ?
 This consensus tree has almost no correlation with our initial distance matrix.
 This is because its topology is terribly wrong, see how the tree looks like:
 
-```{r}
+```{r, fig.height = 5, fig.width = 8}
 plot(tree_consensus)
 ```
 
@@ -495,7 +495,7 @@ all distances) with the inter-cluster dissimilarity (sum of distances between
 clusters). Then we will choose the optimal number of clusters as the elbow of 
 the evaluation plot.
 
-```{r}
+```{r, fig.height = 5, fig.width = 8}
 data(vegemat)
 
 # Calculate dissimilarities
@@ -605,8 +605,8 @@ hierarchy of the tree. We recommend considering multiple cuts of the tree, and
 we provide several methods for doing so: 
 **identifying large steps in the curve** or **using multiple cutoffs**.
 Additionally, we implement other approaches, such as using the maximum or 
-minimum value of the metrics, or, experimentally, using a MARS (multiple 
-adaptive regression splines) model to identify cutoff points in the curve.
+minimum value of the metrics, or by finding break points in the curve with
+a segmented model.
 
 
 Before we look at these different methods, we will compute all the evaluation 
@@ -637,10 +637,10 @@ The elbow method is the default method in `find_optimal_n()`. There are no
 parameters to adjust it. If the curve is not elbow-shaped, it may give 
 spurious results.
 
-```{r}
+```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4)
 ```
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.height = 5, fig.width = 5}
 a <- find_optimal_n(eval_tree4)
 ```
 
@@ -669,7 +669,7 @@ your dataset, so you would have to explore both ways.
 
 By default, the function selects the top 1% steps:
 
-```{r}
+```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
                metrics_to_use = c("anosim", "pc_distance"),
                criterion = "increasing_step")
@@ -682,7 +682,7 @@ find_optimal_n(eval_tree4,
 However, you can adjust it in two different ways. First, choose a number of 
 steps to select, e.g. to select the largest 3 steps, use `step_levels = 3`:
 
-```{r}
+```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
                metrics_to_use = c("anosim", "pc_distance"),
                criterion = "increasing_step",
@@ -696,7 +696,7 @@ tree.
 Second, you can set a quantile of steps to select, e.g. to select the 5% 
 largest steps set the quantile to 0.95 (`step_quantile = 0.95`):
 
-```{r}
+```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
                metrics_to_use = c("anosim", "pc_distance"),
                criterion = "increasing_step",
@@ -712,7 +712,7 @@ partition with 5 clusters?
 By default, the function keeps the partition with $N + 1$ (5 clusters in our 
 example above). You can change this by setting `step_round_above = FALSE`:
 
-```{r}
+```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
                metrics_to_use = c("avg_endemism", "tot_endemism"),
                criterion = "decreasing_step",
@@ -750,7 +750,7 @@ For example, in our case, a regional-scale study on vegetation, we can use
 three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and 0.9 (shallow
 cutoff).
 
-```{r}
+```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
                metrics_to_use = "pc_distance",
                criterion = "cutoff",
@@ -774,10 +774,10 @@ require a minimum number of points to find an appropriate number of
 clusters. In our example here, we make 100 cuts in the tree to have enough
 values.
 
-```{r, cache = TRUE}
+```{r, cache = TRUE, fig.height = 5, fig.width = 5}
 tree5 <- cut_tree(tree4,
-                  cut_height = seq(0, 0.67, # We cut the tree 100 times from 0 to 0.67 
-                                   length = 100)) # (0.67 is the maximum height of my tree here)
+                  cut_height = seq(0, max(tree4$algorithm$final.tree$height), 
+                                   length = 100)) 
 
 eval_tree5 <- partition_metrics(tree5, 
                                 dissimilarity = dissim, 
@@ -794,7 +794,7 @@ We can ask for a higher number of breaks:
 
  - 2 breaks
 
-```{r, cache = TRUE}
+```{r, cache = TRUE, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
                n_breakpoints = 2)
@@ -802,7 +802,7 @@ find_optimal_n(eval_tree5,
 ```
 
  - 3 breaks
-```{r, cache = TRUE}
+```{r, cache = TRUE, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
                n_breakpoints = 3)

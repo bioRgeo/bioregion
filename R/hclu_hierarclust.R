@@ -178,7 +178,9 @@
 #' dissim <- dissimilarity(comat, metric = "Simpson")
 #'
 #' # User-defined number of clusters
-#' tree1 <- hclu_hierarclust(dissim, n_clust = 5)
+#' tree1 <- hclu_hierarclust(dissim, 
+#'                           comat = comat,
+#'                           n_clust = 5)
 #' tree1
 #' plot(tree1)
 #' str(tree1)
@@ -186,12 +188,16 @@
 #' 
 #' # User-defined height cut
 #' # Only one height
-#' tree2 <- hclu_hierarclust(dissim, cut_height = .05)
+#' tree2 <- hclu_hierarclust(dissim, 
+#'                           comat = comat,
+#'                           cut_height = .05)
 #' tree2
 #' tree2$clusters
 #' 
 #' # Multiple heights
-#' tree3 <- hclu_hierarclust(dissim, cut_height = c(.05, .15, .25))
+#' tree3 <- hclu_hierarclust(dissim, 
+#'                           comat = comat,
+#'                           cut_height = c(.05, .15, .25))
 #' 
 #' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
 #' # Info on each partition can be found in table cluster_info
@@ -202,13 +208,14 @@
 #' tree3.1 <- cut_tree(tree3, n = 5)
 #' 
 #' # Make multiple cuts
-#' tree4 <- hclu_hierarclust(dissim, n_clust = 1:19)
+#' tree4 <- hclu_hierarclust(dissim, 
+#'                           comat = comat,
+#'                           n_clust = 1:19)
 #' 
-#' # Change the method to get the final tree (see details)
+#' # Change the method to get the final tree 
 #' tree5 <- hclu_hierarclust(dissim,
-#'                           optimal_tree_method = "consensus",
-#'                           n_clust = 10,
-#'                           consensus_p = 0.75)
+#'                           optimal_tree_method = "best",
+#'                           n_clust = 10)
 #' 
 #' 
 #' @importFrom stats as.dist cophenetic cor
@@ -279,7 +286,7 @@ iterative_consensus_tree, best, consensus",
   }
   # Note: controls for comat arrive later because we need to first check
   # randomize and optimal_tree_method
-  if(randomize & optimal_tree_method == "iterative_consensus_tree" &
+  if(randomize && optimal_tree_method == "iterative_consensus_tree" &&
      is.null(comat)) {
     stop("Please provide your species x site matrix in argument comat",
          " (recommended) or change optimal_tree_method to 'best' (recommended",
@@ -362,7 +369,8 @@ iterative_consensus_tree, best, consensus",
   
   if(randomize) {
     if(optimal_tree_method == "iterative_consensus_tree") {
-      message(paste0("Building the iterative tree consensus... Note that this",
+      message(paste0("Building the iterative hierarchical consensus tree...",
+                     " Note that this",
                      " process can take time especially if you have a lot of",
                      " sites."))
       net <- mat_to_net(comat, weight = TRUE)
@@ -483,7 +491,7 @@ iterative_consensus_tree, best, consensus",
 
     
     message(paste0(
-      "Final tree has a ",
+      "\nFinal tree has a ",
       round(outputs$algorithm$final.tree.coph.cor, 2),
       " cophenetic correlation coefficient with the initial dissimilarity
       matrix\n"))

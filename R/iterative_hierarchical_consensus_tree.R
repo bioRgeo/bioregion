@@ -1,20 +1,26 @@
 iterative_consensus_tree <- function(net, 
-                                      sites = unique(net[, 1]), 
-                                      index = NULL,
-                                      method = "average",
-                                      depth = 1, 
-                                      tree_structure = list(), 
-                                      previous_height = Inf, 
-                                      verbose = TRUE,
-                                      n_runs = 100) {
-  
+                                     sites = unique(net[, 1]), 
+                                     index = NULL,
+                                     method = "average",
+                                     depth = 1, 
+                                     tree_structure = list(), 
+                                     previous_height = Inf, 
+                                     verbose = TRUE,
+                                     n_runs = 100,
+                                     max_remaining_size = length(sites)) {
+
+
   # Progress info because the algorithm is quite long to run
-  if (verbose) {
-    cat(sprintf("\rProcessing height: %d | Cluster size: %d     ", 
-                previous_height,
-                length(sites)))
-    flush.console()  # Ensures the message is displayed in real-time
+  if (verbose && interactive()) {
+    cat(sprintf(
+      "\rProcessing height: %.3f | Current branch size: %d | Max cluster size remaining: %d     ", 
+      previous_height,
+      length(sites),
+      max(unlist(max_remaining_size))
+    ))
+    utils::flush.console()  # Ensures the message is displayed in real-time
   }
+
   
   # Step 1: species composition matrix for the current cluster
   current_net <- net[net[, 1] %in% sites, ]
@@ -66,7 +72,7 @@ iterative_consensus_tree <- function(net,
     "ward.D2" = 0.5 * (length(cluster1_sites) * length(cluster2_sites)) / 
       (length(cluster1_sites) + length(cluster2_sites)) * centroid_distance,
     "centroid" = centroid_distance,
-    "median" = median(pairwise_distances),
+    "median" = stats::median(pairwise_distances),
     stop("method argument is not valid")
   )
   
@@ -84,6 +90,13 @@ iterative_consensus_tree <- function(net,
     )
   ))
   
+  # If we are the iteration where we work on the max cluster size,
+  # then we update max_remaining_size based on the largest subcluster size
+  # (always in position 2)
+  if (length(sites) == max_remaining_size) {
+    max_remaining_size <- length(subclusters[[2]])
+  }
+  
   # Next we process each subcluster
   for (subcluster in subclusters) {
     if (length(subcluster) == 1) {
@@ -100,9 +113,13 @@ iterative_consensus_tree <- function(net,
         depth = depth + 1, 
         tree_structure = tree_structure, 
         previous_height = height, 
-        verbose = verbose)
+        verbose = verbose,
+        max_remaining_size = max_remaining_size)
     }
   }
+
+
+
 
   # It works!! :)
   return(tree_structure)
@@ -127,7 +144,8 @@ stable_binary_split <- function(dist.obj,
   # Step 2: cut trees at 2 clusters for each run
   trees <- lapply(randomtrees, function(trial) trial$hierartree)
   clusts <- lapply(trees, function(tree) {
-    suppressMessages(cut_tree(as.hclust(tree), n = 2, find_h = FALSE))
+    suppressMessages(cut_tree(
+      stats::as.hclust(tree), n = 2, find_h = FALSE))
   })
   
   # Step 3: ensure we have the same order of sites in each partition
@@ -177,15 +195,18 @@ reconstruct_hclust <- function(tree_structure) {
   # Separate internal nodes from leaf nodes
   internal_nodes <- Filter(function(x) !is.null(x$depth), tree_structure)
   
-  # Initialize merge and height vectors
-  merge <- matrix(0, nrow = length(internal_nodes), ncol = 2)
-  height <- numeric(length(internal_nodes))
+  # Initialize merge and height vectors + labels
+  n_clusters <- length(unique(unlist(lapply(tree_structure, 
+                                            function(x) if (!is.null(x$leaf)) x$leaf else
+                                              x$cluster))))
+  merge <- matrix(0, nrow = n_clusters - 1, ncol = 2)  # Correct matrix size
+  height <- numeric(n_clusters - 1)
   labels <- unique(unlist(lapply(tree_structure, 
                                  function(x) if (!is.null(x$leaf)) x$leaf else
                                    x$cluster)))
   
   # Map leaf nodes to negative IDs likewise to hclust
-  leaf_map <- setNames(-seq_along(labels), labels)
+  leaf_map <- stats::setNames(-seq_along(labels), labels)
   cluster_id <- 1  # Start IDs for clusters at 1
   
   # Map to track each cluster ID
@@ -194,35 +215,41 @@ reconstruct_hclust <- function(tree_structure) {
   # Sort internal nodes by increasing height to ensure monotonic height order
   internal_nodes <- internal_nodes[order(sapply(internal_nodes, function(x) x$height))]
   
-  # Process each internal node bottom up
+ # Process each internal node bottom up
   for (node in internal_nodes) {
     
     # Process left and right subclusters
     left <- node$subclusters[[1]]
     right <- node$subclusters[[2]]
     
+    # Ensure IDs for left and right subclusters are available in cluster_map
+    left_key <- paste(left, collapse = "-")
+    right_key <- paste(right, collapse = "-")
+    
+    # Assign a new cluster ID if the subcluster key is missing
+    if (!left_key %in% names(cluster_map)) {
+      cluster_map[[left_key]] <- cluster_id
+      cluster_id <- cluster_id + 1
+    }
+    if (!right_key %in% names(cluster_map)) {
+      cluster_map[[right_key]] <- cluster_id
+      cluster_id <- cluster_id + 1
+    }
+    
     # Get IDs for left and right subclusters
-    left_id <- if (length(left) == 1) {
-      leaf_map[[left]]
-    } else {
-      cluster_map[[paste(left, collapse = "-")]]
-    }
+    left_id <- cluster_map[[left_key]]
+    right_id <- cluster_map[[right_key]]
     
-    right_id <- if (length(right) == 1) {
-      leaf_map[[right]]
-    } else {
-      cluster_map[[paste(right, collapse = "-")]]
+    # Assign a new cluster ID for the current node if it’s not already assigned
+    current_key <- paste(node$cluster, collapse = "-")
+    if (!current_key %in% names(cluster_map)) {
+      cluster_map[[current_key]] <- cluster_id
+      cluster_id <- cluster_id + 1
     }
-    
-    # Assign a new cluster ID for this node
-    cluster_map[[paste(node$cluster, collapse = "-")]] <- cluster_id
     
     # Add to merge and height
-    merge[cluster_id, ] <- c(left_id, right_id)
-    height[cluster_id] <- node$height
-    
-    # Increment cluster_id for the next cluster
-    cluster_id <- cluster_id + 1
+    merge[cluster_map[[current_key]], ] <- c(left_id, right_id)
+    height[cluster_map[[current_key]]] <- node$height
   }
   
   # Compute order iteratively based on left and right structure
