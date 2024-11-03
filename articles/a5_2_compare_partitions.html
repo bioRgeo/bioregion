@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-10-30</h4>
+            <h4 data-toc-skip class="date">2024-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_2_compare_partitions.Rmd" class="external-link"><code>vignettes/a5_2_compare_partitions.Rmd</code></a></small>
       <div class="d-none name"><code>a5_2_compare_partitions.Rmd</code></div>
@@ -128,10 +128,11 @@ bioregionalizations. <br></p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>,</span>
 <span>                                          index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>                                          comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                                          method <span class="op">=</span> <span class="st">"mcquitty"</span>, n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span><span class="op">$</span><span class="va">cluster_info</span> <span class="co"># 3</span></span></code></pre></div>
 <pre><code><span><span class="co">##   partition_name n_clust requested_n_clust output_cut_height</span></span>
-<span><span class="co">## 1            K_3       3                 3             0.625</span></span></code></pre>
+<span><span class="co">## 1            K_3       3                 3         0.4638672</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Network bioregionalization</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
@@ -158,13 +159,13 @@ bioregionalizations. <br></p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"K_3_hclu"</span>, <span class="st">"K_3_netclu"</span>, <span class="st">"K_3_nhclu"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    ID K_3_hclu K_3_netclu K_3_nhclu</span></span>
-<span><span class="co">## 1 505        1          1         2</span></span>
-<span><span class="co">## 2 988        2          3         1</span></span>
-<span><span class="co">## 3 920        2          3         1</span></span>
-<span><span class="co">## 4 904        2          3         1</span></span>
-<span><span class="co">## 5 962        2          3         1</span></span>
-<span><span class="co">## 6 762        2          3         1</span></span></code></pre>
+<pre><code><span><span class="co">##     ID K_3_hclu K_3_netclu K_3_nhclu</span></span>
+<span><span class="co">## 1 1003        1          3         1</span></span>
+<span><span class="co">## 2 1004        1          3         3</span></span>
+<span><span class="co">## 3 1005        1          3         1</span></span>
+<span><span class="co">## 4 1006        1          3         3</span></span>
+<span><span class="co">## 5 1007        1          3         1</span></span>
+<span><span class="co">## 6 1008        1          3         1</span></span></code></pre>
 <p>We can now run the function <code><a href="../reference/compare_partitions.html">compare_partitions()</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hclu_vs_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_partitions.html">compare_partitions</a></span><span class="op">(</span></span>
@@ -179,14 +180,14 @@ bioregionalizations. <br></p>
 <span><span class="co">##  - Requested indices:  rand jaccard </span></span>
 <span><span class="co">##  - Metric summary:</span></span>
 <span><span class="co">##           rand   jaccard</span></span>
-<span><span class="co">## Min  0.7366751 0.4855142</span></span>
-<span><span class="co">## Mean 0.7755421 0.5479449</span></span>
-<span><span class="co">## Max  0.8417739 0.6505291</span></span>
+<span><span class="co">## Min  0.6761474 0.4271905</span></span>
+<span><span class="co">## Mean 0.7632459 0.5483558</span></span>
+<span><span class="co">## Max  0.8654130 0.7100855</span></span>
 <span><span class="co">##  - Correlation between each partition and the total frequency of item  pairwise membership computed:</span></span>
-<span><span class="co">##    # Range:  0.772  -  0.859 </span></span>
+<span><span class="co">##    # Range:  0.731  -  0.891 </span></span>
 <span><span class="co">##    # Partition(s) most representative (i.e., highest correlation): </span></span>
 <span><span class="co">##  K_3_nhclu </span></span>
-<span><span class="co">##  Correlation =  0.859 </span></span>
+<span><span class="co">##  Correlation =  0.891 </span></span>
 <span><span class="co">##  - Item pairwise membership  stored in outputs</span></span>
 <span><span class="co">##  - Confusion matrices of partition comparisons  stored in outputs</span></span></code></pre>
 <p><code><a href="../reference/compare_partitions.html">compare_partitions()</a></code> produces several outputs which: -
@@ -212,9 +213,9 @@ assigned to the same or to a different bioregion. Let’s look at the
 sites 1 and 9 across the different bioregionalization:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comp</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##    ID K_3_hclu K_3_netclu K_3_nhclu</span></span>
-<span><span class="co">## 1 505        1          1         2</span></span>
-<span><span class="co">## 9 557        1          1         1</span></span></code></pre>
+<pre><code><span><span class="co">##     ID K_3_hclu K_3_netclu K_3_nhclu</span></span>
+<span><span class="co">## 1 1003        1          3         1</span></span>
+<span><span class="co">## 9 1011        1          3         1</span></span></code></pre>
 <p>We can see that the sites 1 and 9 are classified in the same
 bioregion in the first two bioregionalizations, but not in the third
 one.<br>
@@ -224,16 +225,16 @@ The <code>$pairwise_membership</code> output of
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">pairwise_membership</span><span class="op">[</span><span class="fl">8</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##      K_3_hclu K_3_netclu K_3_nhclu</span></span>
-<span><span class="co">## 1_9      TRUE       TRUE     FALSE</span></span>
-<span><span class="co">## 1_10    FALSE      FALSE     FALSE</span></span>
-<span><span class="co">## 1_11    FALSE       TRUE     FALSE</span></span></code></pre>
+<span><span class="co">## 1_9      TRUE       TRUE      TRUE</span></span>
+<span><span class="co">## 1_10     TRUE      FALSE      TRUE</span></span>
+<span><span class="co">## 1_11     TRUE      FALSE      TRUE</span></span></code></pre>
 <p>The number of times each pair of sites are clustered together
 (i.e. the sum of rows of the table in <code>$pairwise_membership</code>)
 is available in the <code>$freq_item_pw_membership</code> output:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">freq_item_pw_membership</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## 1_2 1_9 </span></span>
-<span><span class="co">##   0   2</span></span></code></pre>
+<span><span class="co">##   2   3</span></span></code></pre>
 <p>The sites 1 and 2 were never classified in the same bioregion across
 the three bioregionalizations. Sites 1 and 9 were classified in the same
 bioregion in two bioregionalizations. If we look at the total
@@ -242,7 +243,7 @@ frequencies:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">freq_item_pw_membership</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##      0      1      2      3 </span></span>
-<span><span class="co">## 115150  43508  42433  54164</span></span></code></pre>
+<span><span class="co">## 109881  42717  47932  54725</span></span></code></pre>
 <p>we see that the most dominant situation is when sites are never
 assigned to the same bioregion.</p>
 </div>
@@ -268,11 +269,11 @@ number of pairs of sites not grouped in both bioregionalization 1 &amp;
 <code class="sourceCode R"><span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">confusion_matrix</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`K_3_hclu%K_3_netclu`</span></span>
 <span><span class="co">##      a      b      c      d </span></span>
-<span><span class="co">##  63430  30529  36686 124610 </span></span>
+<span><span class="co">##  61650  44199  38466 110940 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`K_3_hclu%K_3_nhclu`</span></span>
 <span><span class="co">##      a      b      c      d </span></span>
-<span><span class="co">##  75181  18778  21610 139686 </span></span>
+<span><span class="co">##  84143  21706  12648 136758 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`K_3_netclu%K_3_nhclu`</span></span>
 <span><span class="co">##      a      b      c      d </span></span>
@@ -305,7 +306,7 @@ can be requested with <code>cor_frequency = TRUE</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">partition_freq_cor</span></span></code></pre></div>
 <pre><code><span><span class="co">##   K_3_hclu K_3_netclu  K_3_nhclu </span></span>
-<span><span class="co">##  0.8475913  0.7723665  0.8592373</span></span></code></pre>
+<span><span class="co">##  0.8352365  0.7307649  0.8908211</span></span></code></pre>
 <p>Here the third bioregionalization is the most representative of all
 partitions.</p>
 </div>

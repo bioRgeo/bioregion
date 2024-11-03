@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-10-30</h4>
+            <h4 data-toc-skip class="date">2024-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_4_microbenchmark.Rmd" class="external-link"><code>vignettes/a4_4_microbenchmark.Rmd</code></a></small>
       <div class="d-none name"><code>a4_4_microbenchmark.Rmd</code></div>
@@ -167,6 +167,7 @@ three datasets loaded above.</p>
 <span>                                    index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    ara_nhclu_pam <span class="op">=</span> <span class="fu"><a href="../reference/nhclu_pam.html">nhclu_pam</a></span><span class="op">(</span><span class="va">ara_dissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    ara_hclu_hierarclust <span class="op">=</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">ara_dissim</span>,</span>
+<span>                                            comat <span class="op">=</span> <span class="va">aravo</span>,</span>
 <span>                                            n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
 <span>    ara_hclu_optics <span class="op">=</span> <span class="fu"><a href="../reference/hclu_optics.html">hclu_optics</a></span><span class="op">(</span><span class="va">ara_dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    ara_netclu_beckett <span class="op">=</span> <span class="fu"><a href="../reference/netclu_beckett.html">netclu_beckett</a></span><span class="op">(</span><span class="va">ara_df</span><span class="op">)</span>,</span>
@@ -185,6 +186,7 @@ three datasets loaded above.</p>
 <span>                                     index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    fish_nhclu_pam <span class="op">=</span> <span class="fu"><a href="../reference/nhclu_pam.html">nhclu_pam</a></span><span class="op">(</span><span class="va">fishdissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    fish_hclu_hierarclust <span class="op">=</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">fishdissim</span>,</span>
+<span>                                             comat <span class="op">=</span> <span class="va">fishmat</span>,</span>
 <span>                                             n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
 <span>    fish_hclu_optics <span class="op">=</span> <span class="fu"><a href="../reference/hclu_optics.html">hclu_optics</a></span><span class="op">(</span><span class="va">fishdissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    fish_netclu_beckett <span class="op">=</span> <span class="fu"><a href="../reference/netclu_beckett.html">netclu_beckett</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span>,</span>
@@ -204,6 +206,7 @@ three datasets loaded above.</p>
 <span>    veg_nhclu_pam <span class="op">=</span> <span class="fu"><a href="../reference/nhclu_pam.html">nhclu_pam</a></span><span class="op">(</span><span class="va">vegemat_dissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>,</span>
 <span>                              index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    veg_hclu_hierarclust <span class="op">=</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegemat_dissim</span>,</span>
+<span>                                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                                            n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
 <span>    veg_hclu_optics <span class="op">=</span> <span class="fu"><a href="../reference/hclu_optics.html">hclu_optics</a></span><span class="op">(</span><span class="va">vegemat_dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span>,</span>
 <span>    <span class="co"># veg_netclu_beckett = netclu_beckett(vegemat_df),</span></span>

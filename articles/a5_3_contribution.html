@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-10-30</h4>
+            <h4 data-toc-skip class="date">2024-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_contribution.Rmd" class="external-link"><code>vignettes/a5_3_contribution.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_contribution.Rmd</code></div>
@@ -128,10 +128,11 @@ bioregionalizations. <br></p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>,</span>
 <span>                                          index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>                                          comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                                          method <span class="op">=</span> <span class="st">"mcquitty"</span>, n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span><span class="op">$</span><span class="va">cluster_info</span> <span class="co"># 3</span></span></code></pre></div>
 <pre><code><span><span class="co">##   partition_name n_clust requested_n_clust output_cut_height</span></span>
-<span><span class="co">## 1            K_3       3                 3             0.625</span></span></code></pre>
+<span><span class="co">## 1            K_3       3                 3         0.4638672</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Network bioregionalization</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
