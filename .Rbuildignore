@@ -16,6 +16,8 @@
 ^oslom_temp/
 ^find_nclust.R
 ^README.Rmd
+^codecov.yml
+^temp
 
 ^vignettes/a1_install_binary_files.Rmd
 ^vignettes/a2_matrix_and_network_formats.Rmd
@@ -27,5 +29,7 @@
 ^vignettes/a4_4_microbenchmark.Rmd
 ^vignettes/a5_1_visualization.Rmd
 ^vignettes/a5_2_compare_partitions.Rmd
+^vignettes/a5_3_contributions.Rmd
+
 
 LICENSE

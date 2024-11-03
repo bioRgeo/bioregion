@@ -21,6 +21,7 @@ reference:
   - similarity_to_dissimilarity
   - dissimilarity
   - dissimilarity_to_similarity
+  - betapart_to_bioregion
   
 - title: Clustering
 - subtitle: Hierarchical clustering

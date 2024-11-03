@@ -188,124 +188,216 @@ stable_binary_split <- function(dist.obj,
   return(split(groups$Site, groups$cluster))
 }
 
+
 # Function to make hclust object based on the output list we prepared above
-# Function to make hclust object based on the output list we prepared above
+# Much harder to make than it looks...
 reconstruct_hclust <- function(tree_structure) {
+  # Extract all labels and sort them alphabetically
+  labels <- sort(tree_structure[[1]]$cluster)
+  n <- length(labels)
   
-  # Separate internal nodes from leaf nodes
-  internal_nodes <- Filter(function(x) !is.null(x$depth), tree_structure)
-  
-  # Initialize merge and height vectors + labels
-  n_clusters <- length(unique(unlist(lapply(tree_structure, 
-                                            function(x) if (!is.null(x$leaf)) x$leaf else
-                                              x$cluster))))
-  merge <- matrix(0, nrow = n_clusters - 1, ncol = 2)  # Correct matrix size
-  height <- numeric(n_clusters - 1)
-  labels <- unique(unlist(lapply(tree_structure, 
-                                 function(x) if (!is.null(x$leaf)) x$leaf else
-                                   x$cluster)))
-  
-  # Map leaf nodes to negative IDs likewise to hclust
-  leaf_map <- stats::setNames(-seq_along(labels), labels)
-  cluster_id <- 1  # Start IDs for clusters at 1
-  
-  # Map to track each cluster ID
-  cluster_map <- leaf_map  # Start with the map containing leaves
-  
-  # Sort internal nodes by increasing height to ensure monotonic height order
-  internal_nodes <- internal_nodes[order(sapply(internal_nodes, function(x) x$height))]
-  
- # Process each internal node bottom up
-  for (node in internal_nodes) {
-    
-    # Process left and right subclusters
-    left <- node$subclusters[[1]]
-    right <- node$subclusters[[2]]
-    
-    # Ensure IDs for left and right subclusters are available in cluster_map
-    left_key <- paste(left, collapse = "-")
-    right_key <- paste(right, collapse = "-")
-    
-    # Assign a new cluster ID if the subcluster key is missing
-    if (!left_key %in% names(cluster_map)) {
-      cluster_map[[left_key]] <- cluster_id
-      cluster_id <- cluster_id + 1
-    }
-    if (!right_key %in% names(cluster_map)) {
-      cluster_map[[right_key]] <- cluster_id
-      cluster_id <- cluster_id + 1
-    }
-    
-    # Get IDs for left and right subclusters
-    left_id <- cluster_map[[left_key]]
-    right_id <- cluster_map[[right_key]]
-    
-    # Assign a new cluster ID for the current node if it’s not already assigned
-    current_key <- paste(node$cluster, collapse = "-")
-    if (!current_key %in% names(cluster_map)) {
-      cluster_map[[current_key]] <- cluster_id
-      cluster_id <- cluster_id + 1
-    }
-    
-    # Add to merge and height
-    merge[cluster_map[[current_key]], ] <- c(left_id, right_id)
-    height[cluster_map[[current_key]]] <- node$height
+  # We need to make sure that the labels do not contain our concatenation
+  # character or it may mess up the results
+  if (any(grepl("|", labels, fixed = TRUE))) {
+    stop(paste0("Error: Labels contain the separator character '", "|",
+                "'. Please remove this character from labels"))
   }
   
-  # Compute order iteratively based on left and right structure
-  order <- c()
-  stack <- list(tree_structure[[1]])  # Start with the root node
   
-  while (length(stack) > 0) {
-    node <- stack[[1]]
-    stack <- stack[-1]  # Remove first node at every iteration
+  # Assign negative indices to leaf nodes based on alphabetical order
+  label_to_index <- stats::setNames(-seq_along(labels), labels)
+  
+  # Initialize variables
+  cluster_to_id <- list()  # Maps cluster keys to node IDs
+  merge_list <- list() # Merge object of hclust: matrix indicating how to 
+  # assemble nodes in the tree
+  height_list <- numeric() # List of heights for the hclust object, must be
+  # increasing
+  merge_index <- 1  # Index of the merge operation, corresponds to internal 
+  # node ID
+  
+  
+  # Create a mapping from cluster keys to nodes
+  cluster_to_node <- list()
+  for (node in tree_structure) {
+    if (!is.null(node$cluster)) {
+      key <- paste(sort(node$cluster), collapse = "|")
+      cluster_to_node[[key]] <- node
+    } else if (!is.null(node$leaf)) {
+      key <- node$leaf
+      cluster_to_node[[key]] <- node
+    }
+  }
+  
+
+  # Assign IDs to leaf nodes
+  for (label in labels) {
+    cluster_key <- label
+    cluster_to_id[[cluster_key]] <- label_to_index[[label]]  # Negative ID
+  }
+  
+  # Collect all unique heights and sort them
+  node_heights <- sapply(tree_structure, function(node) {
+    if (!is.null(node$height)) {
+      return(node$height)
+    } else {
+      return(Inf)   # Assign infinite height to leaf nodes just for the next 
+      # loop
+    }
+  })
+  unique_heights <- sort(unique(node_heights))
+  
+  # Process nodes in order of increasing height
+  for (height in unique_heights) {
+    # Skip processing for leaf nodes (height == Inf)
+    if (height == Inf) {
+      next
+    }
     
-    if (!is.null(node$leaf)) {
-      # If it's a leaf, add it to the order
-      order <- c(order, match(node$leaf, labels))
-    } else if (!is.null(node$cluster)) {
-      # If it's a cluster, determine if left and right are leaves or clusters
-      if (length(node$subclusters[[2]]) == 1) {
-        # Right subcluster is a leaf
-        right_id <- match(node$subclusters[[2]], labels)
-        order <- c(order, right_id)
+    # Get all nodes at this height
+    nodes_at_height <- lapply(tree_structure, function(node) {
+      node_height <- ifelse(is.null(node$height), Inf, node$height)
+      if (node_height == height) {
+        return(node)
       } else {
-        # Right subcluster is a cluster, add to stack
-        right_index <- which(
-          sapply(internal_nodes,
-                 function(x) identical(x$cluster, 
-                                       node$subclusters[[2]])))
-        if (length(right_index) == 1) stack <-
-            c(list(internal_nodes[[right_index]]), stack)
+        return(NULL)
+      }
+    })
+    nodes_at_height <- nodes_at_height[!sapply(nodes_at_height, is.null)]
+    
+    # Process nodes
+    pending_nodes <- nodes_at_height
+    while (length(pending_nodes) > 0) {
+      nodes_to_retry <- list()
+      for (node in pending_nodes) {
+        subclusters <- node$subclusters
+        left_subcluster <- subclusters[[1]]
+        right_subcluster <- subclusters[[2]]
+        
+        # Function to get ID of a subcluster
+        get_subcluster_id <- function(subcluster) {
+          if (length(subcluster) == 1 && subcluster %in% labels) {
+            # Leaf node
+            return(label_to_index[[subcluster]])  # Negative ID
+          } else {
+            key <- paste(sort(subcluster), collapse = "|")
+            id <- cluster_to_id[[key]]
+            return(id)
+          }
+        }
+        
+        left_id <- get_subcluster_id(left_subcluster)
+        right_id <- get_subcluster_id(right_subcluster)
+        
+        if (!is.null(left_id) && !is.null(right_id)) {
+          # Both subclusters have IDs, process the node
+          # Record the merge
+          merge_list[[merge_index]] <- c(left_id, right_id)
+          height_list[merge_index] <- height
+          
+          # Assign an ID to the current node (positive integer)
+          current_id <- merge_index
+          cluster_key <- paste(sort(node$cluster), collapse = "|")
+          cluster_to_id[[cluster_key]] <- current_id
+          
+          # Diagnostics to solve the issues we had
+          # cat("Assigned ID", current_id, "to cluster", cluster_key, "\n")
+          # cat("Merge", merge_index, ":", "Merging IDs", left_id, "and",
+          # right_id, "at height", height, "\n")
+          
+          merge_index <- merge_index + 1
+        } else {
+          # Subcluster IDs not yet assigned, defer processing
+          nodes_to_retry[[length(nodes_to_retry) + 1]] <- node
+        }
       }
       
-      if (length(node$subclusters[[1]]) == 1) {
-        # Left subcluster is a leaf
-        left_id <- match(node$subclusters[[1]], labels)
-        order <- c(order, left_id)
-      } else {
-        # Left subcluster is a cluster, add to stack
-        left_index <- which(
-          sapply(internal_nodes, function(x) identical(x$cluster, 
-                                                       node$subclusters[[1]])))
-        if (length(left_index) == 1) stack <- 
-            c(list(internal_nodes[[left_index]]), stack)
+      if (length(nodes_to_retry) == length(pending_nodes)) {
+        stop("Cannot resolve dependencies among internal nodes at height ",
+             height,
+             "\nPlease contact us with your objects so that we can resolve",
+             " the bug.")
       }
+      
+      pending_nodes <- nodes_to_retry
     }
   }
   
-  # Construct our beautiful hclust object
-  hc <- list(
-    merge = merge,
-    height = height,
+  # Convert the merge list to a matrix
+  merge_matrix <- do.call(rbind, merge_list)
+  
+  # Ensure that the height vector is in increasing order
+  if (any(diff(height_list) < 0)) {
+    stop("Heights must be in increasing order.")
+  }
+  
+  # Function to perform a depth-first traversal to get the order
+  order <- numeric()
+  traverse_order <- function(node_id) {
+    if (node_id < 0) {
+      # Leaf node
+      idx <- which(label_to_index == node_id)
+      order[length(order) + 1] <<- idx
+    } else {
+      # Internal node
+      merge_idx <- node_id
+      left_id <- merge_matrix[merge_idx, 1]
+      right_id <- merge_matrix[merge_idx, 2]
+      traverse_order(left_id)
+      traverse_order(right_id)
+    }
+  }
+  
+  # Start traversal from the last internal node
+  root_node_id <- merge_index - 1
+  traverse_order(root_node_id)
+  
+  # Construct the hclust object
+  hclust_obj <- list(
+    merge = merge_matrix,
+    height = height_list,
     order = order,
     labels = labels,
     method = "Iterative Hierarchical Consensus Tree"
   )
-  class(hc) <- "hclust"
+  class(hclust_obj) <- "hclust"
   
-  # tadam!
-  return(hc)
+  # FINALLY!
+  return(hclust_obj)
 }
 
+# Tests
+# hc$height
+# 
+# b <- reconstruct_hclust(a)
+# 
+# plot(b)
+# 
+# cophenetic_debug(b)
+# cutree(b, k=5)
+# cutree(b, h=0.1)
+# 
+# 
+# cophenetic_debug <- function(x) {
+#   x <- as.hclust(x)
+#   nobs <- length(x$order)
+#   ilist <- vector("list", length = nobs)
+#   out <- matrix(0, nrow = nobs, ncol = nobs)
+#   for (i in 1:(nobs - 1)) {
+#     inds <- x$merge[i, ]
+#     ids1 <- if (inds[1L] < 0L) -inds[1L] else ilist[[inds[1L]]]
+#     ids2 <- if (inds[2L] < 0L) -inds[2L] else ilist[[inds[2L]]]
+#     if (is.null(ids1) || is.null(ids2)) {
+#       print(paste("NULL encountered at row:", i))
+#       print(inds)
+#       stop("NULL values in cophenetic calculation")
+#     }
+#     ilist[[i]] <- c(ids1, ids2)
+#     out[cbind(rep.int(ids1, rep.int(length(ids2), length(ids1))),
+#               rep.int(ids2, length(ids1)))] <- x$height[i]
+#   }
+#   rownames(out) <- x$labels
+#   as.dist(out + t(out))
+# }
+# 
 
