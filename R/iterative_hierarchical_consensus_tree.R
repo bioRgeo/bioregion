@@ -77,7 +77,7 @@ iterative_consensus_tree <- function(net,
   )
   
   # Step 4: height constraint (monotonic constraint of trees)
-  height <- min(calculated_height, previous_height - 0.001)
+  height <- min(calculated_height, previous_height)
   if (height < 0) height <- 0
   
   # update tree_structure for the current split
