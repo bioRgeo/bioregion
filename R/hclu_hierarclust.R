@@ -18,10 +18,6 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
-#' @param comat a co-occurrence `matrix` with sites as rows and species
-#' as columns. Only useful if you choose 
-#' `optimal_tree_method = "iterative_consensus_tree"`
-#' 
 #' @param method name of the hierarchical classification method, as in
 #' [hclust][fastcluster::hclust]. Should be one of "ward.D",
 #' "ward.D2", "single", "complete", "average"
@@ -179,7 +175,6 @@
 #'
 #' # User-defined number of clusters
 #' tree1 <- hclu_hierarclust(dissim, 
-#'                           comat = comat,
 #'                           n_clust = 5)
 #' tree1
 #' plot(tree1)
@@ -189,14 +184,12 @@
 #' # User-defined height cut
 #' # Only one height
 #' tree2 <- hclu_hierarclust(dissim, 
-#'                           comat = comat,
 #'                           cut_height = .05)
 #' tree2
 #' tree2$clusters
 #' 
 #' # Multiple heights
 #' tree3 <- hclu_hierarclust(dissim, 
-#'                           comat = comat,
 #'                           cut_height = c(.05, .15, .25))
 #' 
 #' tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
@@ -209,7 +202,6 @@
 #' 
 #' # Make multiple cuts
 #' tree4 <- hclu_hierarclust(dissim, 
-#'                           comat = comat,
 #'                           n_clust = 1:19)
 #' 
 #' # Change the method to get the final tree 
@@ -225,7 +217,6 @@
 
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
-                             comat = NULL,
                              method = "average",
                              randomize = TRUE,
                              n_runs = 100,
@@ -283,16 +274,6 @@ ward.D, ward.D2, single, complete, average, mcquitty, median or centroid",
     stop("Please choose optimal_tree_method among the followings values:
 iterative_consensus_tree, best, consensus", 
     call. = FALSE)
-  }
-  # Note: controls for comat arrive later because we need to first check
-  # randomize and optimal_tree_method
-  if(randomize && optimal_tree_method == "iterative_consensus_tree" &&
-     is.null(comat)) {
-    stop("Please provide your species x site matrix in argument comat",
-         " (recommended) or change optimal_tree_method to 'best' (recommended",
-         " if you need a quick result) or",
-         " 'consensus' (not recommended).")
-    controls(args = NULL, data = comat, type = "input_matrix")
   }
 
   if(!is.null(n_clust)) {
@@ -373,126 +354,104 @@ iterative_consensus_tree, best, consensus",
                      " Note that this",
                      " process can take time especially if you have a lot of",
                      " sites."))
-      net <- mat_to_net(comat, weight = TRUE)
+
+      if(method == "mcquitty") {
+        warning("mcquitty (WPGMA) method may not be properly implemented",
+                " in Iterative Hierarchical Tree Construction (IHCT), because of the ",
+                "hybrid divise-agglomerative nature of IHCT. ",
+                "In WPGMA, heights are updated iteratively from bottom to top as ",
+                "the tree is constructed. ",
+                "In IHCT, divisions are created from top to bottom, based on a ",
+                "majority decision among many trees. ", 
+                "Hence, it is not possible to exactly compute WPGMA calculations ",
+                "with IHCT - final height calculations are approximated into UPGMA.")
+      }
       
-      consensus_tree <- iterative_consensus_tree(net, 
-                                                  sites = unique(net[, 1]), 
-                                                  index = index,
-                                                  method = method,
-                                                  depth = 1, 
-                                                  tree_structure = list(), 
-                                                  previous_height = Inf, 
-                                                  verbose = verbose,
-                                                  n_runs = n_runs)
+      consensus_tree <- iterative_consensus_tree(dissimilarity, 
+                                                 sites = unique(c(dissimilarity[, 1],
+                                                                  dissimilarity[, 2])), 
+                                                 # index = index,
+                                                 method = method,
+                                                 depth = 1, 
+                                                 # tree_structure = list(), 
+                                                 previous_height = Inf, 
+                                                 verbose = verbose,
+                                                 n_runs = n_runs,
+                                                 monotonicity_direction = "bottom-up")
       consensus_tree <- reconstruct_hclust(consensus_tree)
       
       # Compute hierarchical tree
       outputs$algorithm$final.tree <- consensus_tree
       
-      # Cophenetic distance
-      coph <- as.matrix(
-        stats::cophenetic(consensus_tree))
+      evals <- tree_eval(consensus_tree,
+                         dist.obj)
       
-      # Correct site order to not mess the correlation
-      coph <- coph[match(attr(dist.obj,
-                              "Labels"),
-                         rownames(coph)),
-                   match(attr(dist.obj,
-                              "Labels"),
-                         colnames(coph))]
-      dist.mat <- as.matrix(dist.obj)
+      outputs$algorithm$final.tree.coph.cor <- evals$cophcor
+      # outputs$algorithm$final.tree.2norm <- evals$norm2
+      outputs$algorithm$final.tree.msd <- evals$msd
       
-      outputs$algorithm$final.tree.coph.cor <-
-        stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
-                   method = "spearman")
+
     } else {
       message(paste0("Randomizing the dissimilarity matrix with ", n_runs,
                      " trials"))
-      for(run in 1:n_runs){
-        outputs$algorithm$trials[[run]] <- list()
-        outputs$algorithm$trials[[run]]$dist.matrix <-
-          .randomizeDistance(dist.obj)
-        
-        # Compute hierarchical tree
-        outputs$algorithm$trials[[run]]$hierartree <-
-          fastcluster::hclust(outputs$algorithm$trials[[run]]$dist.matrix,
-                              method = method)
-        
-        # Calculate cophenetic correlation coefficient
-        coph <- as.matrix(
-          stats::cophenetic(outputs$algorithm$trials[[run]]$hierartree))
-        # Correct site order to not mess the correlation
-        coph <- coph[match(attr(outputs$algorithm$trials[[run]]$dist.matrix,
-                                "Labels"),
-                           rownames(coph)),
-                     match(attr(outputs$algorithm$trials[[run]]$dist.matrix,
-                                "Labels"),
-                           colnames(coph))]
-        dist.mat <- as.matrix(outputs$algorithm$trials[[run]]$dist.matrix)
-        
-        outputs$algorithm$trials[[run]]$cophcor <-
-          stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
-                     method = "spearman")
+      
+      results <- vector("list", n_runs)
+      
+      for (run in 1:n_runs) {
+        trial <- list()
+
+        trial$dist.matrix <- .randomizeDistance(dist.obj)
+
+        trial$hierartree <- fastcluster::hclust(trial$dist.matrix, method = method)
+
+        evals <- tree_eval(trial$hierartree, trial$dist.matrix)
+        trial$cophcor <- evals$cophcor
+        # trial$`2norm` <- evals$norm2
+        trial$msd <- evals$msd
+
+        results[[run]] <- trial
       }
       
-      if(optimal_tree_method == "best")  {
-        coph.coeffs <- sapply(1:n_runs, function(x)
-        {
-          outputs$algorithm$trials[[x]]$cophcor
-        })
+      if (optimal_tree_method == "best") {
+        coph.coeffs <- sapply(results, function(x) x$cophcor)
         
-        message(paste0(" -- range of cophenetic correlation coefficients among
-                     trials: ", round(min(coph.coeffs), 2),
-                       " - ", round(max(coph.coeffs), 2)))
+        message(paste0(" -- range of cophenetic correlation coefficients among trials: ",
+                       round(min(coph.coeffs), 4), " - ", round(max(coph.coeffs), 4)))
+
+        best.run <- which.max(coph.coeffs)
+        final.tree <- results[[best.run]]$hierartree
+        final.tree.metrics <- results[[best.run]]
         
-        # There might be multiple trees with the highest cophenetic correlation
-        # coefficient, so we arbitrarily take the first one
-        best.run <- which(coph.coeffs == max(coph.coeffs))[1]
-        
-        outputs$algorithm$final.tree <-
-          outputs$algorithm$trials[[best.run]]$hierartree
-        outputs$algorithm$final.tree.coph.cor <- max(coph.coeffs)
       } else if (optimal_tree_method == "consensus") {
-        # New method - calculate the consensus tree
-        if (n_runs < 2) {
-          stop("At least two trees are required to calculate a consensus.")
-        }
-        trees <- lapply(outputs$algorithm$trials,
-                        function(trial) trial$hierartree)
-        trees <- lapply(trees, 
-                        function(tree) ape::as.phylo(tree))
+        if (n_runs < 2) stop("At least two trees are required to calculate a consensus.")
+
+        trees <- lapply(results, function(trial) ape::as.phylo(trial$hierartree))
+
         consensus_tree <- ape::consensus(trees, p = 0.5)
-        consensus_tree <- phangorn::nnls.tree(dist.obj, consensus_tree, 
-                                              method = "ultrametric",
-                                              trace = 0)
-        
+        consensus_tree <- phangorn::nnls.tree(dist.obj, consensus_tree, method = "ultrametric", trace = 0)
         consensus_tree <- ape::multi2di(consensus_tree)
-        # Calculate cophenetic correlation coefficient
-        coph <- as.matrix(
-          stats::cophenetic(consensus_tree))
+
+        tree_ape_for_coph <- consensus_tree
         consensus_tree <- ape::as.hclust.phylo(consensus_tree)
-        outputs$algorithm$final.tree <- consensus_tree
         
-        # Correct site order to not mess the correlation
-        coph <- coph[match(attr(dist.obj,
-                                "Labels"),
-                           rownames(coph)),
-                     match(attr(dist.obj,
-                                "Labels"),
-                           colnames(coph))]
-        dist.mat <- as.matrix(dist.obj)
-        
-        outputs$algorithm$final.tree.coph.cor <-
-          stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
-                     method = "spearman")
-        
-      } 
+        final.tree <- consensus_tree
+        evals <- tree_eval(tree_ape_for_coph, dist.obj)
+        final.tree.metrics <- list(cophcor = evals$cophcor, 
+                                   # `2norm` = evals$norm2, 
+                                   msd = evals$msd)
+      }
+
+      outputs$algorithm$final.tree <- final.tree
+      outputs$algorithm$final.tree.coph.cor <- final.tree.metrics$cophcor
+      # outputs$algorithm$final.tree.2norm <- final.tree.metrics$`2norm`
+      outputs$algorithm$final.tree.msd <- final.tree.metrics$msd
+
     }
 
     
     message(paste0(
       "\nFinal tree has a ",
-      round(outputs$algorithm$final.tree.coph.cor, 2),
+      round(outputs$algorithm$final.tree.coph.cor, 4),
       " cophenetic correlation coefficient with the initial dissimilarity
       matrix\n"))
     
@@ -500,14 +459,13 @@ iterative_consensus_tree, best, consensus",
     outputs$algorithm$final.tree <- fastcluster::hclust(dist.obj,
                                                         method = method)
     
-    coph <- as.matrix(stats::cophenetic(outputs$algorithm$final.tree))
-    coph <- coph[match(attr(dist.obj, "Labels"), rownames(coph)),
-                 match(attr(dist.obj, "Labels"), colnames(coph))]
-    dist.mat <- as.matrix(dist.obj)
     
-    outputs$algorithm$final.tree.coph.cor <-
-      stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
-                 method = "spearman")
+    evals <- tree_eval(outputs$algorithm$final.tree,
+                       dist.obj)
+    
+    outputs$algorithm$final.tree.coph.cor <- evals$cophcor
+    # outputs$algorithm$final.tree.2norm <- evals$norm2
+    outputs$algorithm$final.tree.msd <- evals$msd
     
     message(paste0("Output tree has a ",
                    round(outputs$algorithm$final.tree.coph.cor, 4),
@@ -547,5 +505,62 @@ iterative_consensus_tree, best, consensus",
   return(stats::as.dist(distmatrix[ord, ord]))
 }
 
+# squared_2norm <- function(D, U) {
+#   diff_matrix <- D - U
+#   singular_values <- svd(diff_matrix)$d
+#   return(max(singular_values)^2)
+# }
+# 
+# tree_eval <- function(tree, dist.obj, method = "pearson") {
+#   coph <- as.matrix(
+#     stats::cophenetic(tree))
+#   
+#   # Correct site order to not mess the correlation
+#   coph <- coph[match(attr(dist.obj,
+#                           "Labels"),
+#                      rownames(coph)),
+#                match(attr(dist.obj,
+#                           "Labels"),
+#                      colnames(coph))]
+#   dist.mat <- as.matrix(dist.obj)
+#   
+#   return(list(cophcor = stats::cor(dist.mat[lower.tri(dist.mat)],
+#                                    coph[lower.tri(coph)],
+#                                    method = method),
+#               norm2 = squared_2norm (dist.mat, coph),
+#               msd = mean((dist.mat - coph)^2)
+#   ))
+# 
+#   # cophcor: Sokal & Rohlf 1962 Taxon
+#   # norm2: Mérigot et al. 2010 Ecology
+#   # msd: Maire et al. 2015 GEB
+# }
 
 
+# Try to optimize tree_eval for faster calculations
+tree_eval <- function(tree, dist.obj, method = "pearson") {
+  coph <- as.matrix(stats::cophenetic(tree))
+
+  labels <- attr(dist.obj, "Labels")
+  coph <- coph[match(labels, rownames(coph)), 
+               match(labels, colnames(coph))]
+  
+  dist.mat <- as.matrix(dist.obj)
+  
+  lower_tri_idx <- lower.tri(dist.mat)
+
+  cophcor <- stats::cor(dist.mat[lower_tri_idx],
+                        coph[lower_tri_idx], method = method)
+  diff_matrix <- dist.mat - coph
+  
+  # singular_values <- svd(diff_matrix, nu = 0, nv = 0)$d
+  # norm2 <- max(singular_values)^2
+  
+  msd <- mean(diff_matrix[lower_tri_idx]^2)
+  #   # cophcor: Sokal & Rohlf 1962 Taxon
+  #   # norm2: Mérigot et al. 2010 Ecology
+  #   # msd: Maire et al. 2015 GEB
+  return(list(cophcor = cophcor, 
+              # norm2 = norm2,
+              msd = msd))
+}
