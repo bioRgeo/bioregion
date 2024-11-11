@@ -86,7 +86,7 @@ install_binaries <- function(binpath = "tempdir",
   message("1. Download bin.zip")
   message(" ")
   utils::download.file(
-    "https://www.mmmycloud.com/index.php/s/DtZqrXAora6SzLo/download",
+    "https://www.mmmycloud.com/index.php/s/wnyLYFZGESyckW8/download",
     paste0(binpath, "/bin.zip"),
     mode = "wb"
   )
