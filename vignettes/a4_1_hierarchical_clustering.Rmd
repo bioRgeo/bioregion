@@ -110,8 +110,7 @@ clustering, while [sub-section 2.4.](#2.4.) illustrates the divisive method.
 The basic use of the function is as follows:
 
 ```{r}
-tree1 <- hclu_hierarclust(dissim,
-                          comat = vegemat)
+tree1 <- hclu_hierarclust(dissim)
 ```
 
 The function gives us some information as it proceeds. Notably, it talks about
@@ -503,7 +502,6 @@ dissim <- dissimilarity(vegemat)
 
 # Step 1 & 2. Compute the tree and cut it into many different partitions
 tree4 <- hclu_hierarclust(dissim,
-                          comat = vegemat,
                           n_clust = 2:100)
 
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013

@@ -181,9 +181,7 @@
 #'
 #' # User-defined number of clusters
 #' tree1 <- hclu_hierarclust(dissim,
-#'                           comat = comat,
-#'                           n_clust = 2:15,
-#'                           index = "Simpson")
+#'                           n_clust = 2:15)
 #' tree1
 #' 
 #' a <- partition_metrics(tree1,

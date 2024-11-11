@@ -2,6 +2,7 @@ iterative_consensus_tree <- function(
     dissim, 
     sites = unique(c(dissim[, 1],
                             dissim[, 2])), 
+    index = colnames(dissim)[3],
     method = "average",
     depth = 1, 
     previous_height = Inf, 
@@ -11,8 +12,9 @@ iterative_consensus_tree <- function(
     monotonicity_direction = c("top-down", "bottom-up")) {
   
   if(inherits(dissim, "bioregion.pairwise.metric")) {
+    dissim[, 3] <- dissim[, index]
     dissim <- stats::as.dist(
-      net_to_mat(dissim, weight = TRUE, squared = TRUE, symmetrical = TRUE)
+      net_to_mat(dissim[, 1:3], weight = TRUE, squared = TRUE, symmetrical = TRUE)
     )
   }
   
@@ -280,7 +282,7 @@ reconstruct_hclust <- function(tree) {
   n_leaves <- length(leaf_labels)
   
   # Map leaf labels to negative IDs based on alphabetical order
-  leaf_ids <- setNames(-seq_along(leaf_labels), leaf_labels)
+  leaf_ids <- stats::setNames(-seq_along(leaf_labels), leaf_labels)
   
   # Step 2: Traverse the tree and collect internal nodes
   internal_nodes <- list()

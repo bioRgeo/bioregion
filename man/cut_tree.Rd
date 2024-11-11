@@ -106,7 +106,6 @@ dissimilarity <- similarity_to_dissimilarity(simil)
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissimilarity,
-                          comat = comat,
                           n_clust = 5)
 tree2 <- cut_tree(tree1, cut_height = .05)
 tree3 <- cut_tree(tree1, n_clust = c(3, 5, 10))

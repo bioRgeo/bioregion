@@ -126,7 +126,6 @@
 #' 
 #' # User-defined number of clusters
 #' tree1 <- hclu_hierarclust(dissim, 
-#'                           comat = comat,
 #'                           n_clust = 2:20, index = "Simpson")
 #' tree1
 #' 
