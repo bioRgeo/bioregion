@@ -72,7 +72,7 @@ vege_netclu_walktrap$cluster_info # 3
 ```
 
 # Indices
-
+## Contribution
 <center>
   <img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
 </center> 
@@ -90,6 +90,28 @@ is present, $n_j$ the number of sites belonging to the bioregion $j$, $n_ij$
 the number of occurrences of species $i$ in sites belonging to the bioregion
 $j$.
 
+## Cz statistics
+
+`Cz` metrics are derived from \insertRef{Guimera2005}{bioregion}.
+Their respective formula are:
+$$C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}$$
+ 
+where $k_{is}$ is the number of links of node (species or site) $i$
+to nodes in bioregion $s$, and $k_i$ is the total degree of node
+$i$. The participation coefficient of a node is therefore close to 1 if
+its links are uniformly distributed among all the bioregions and 0 if all
+its links are within its own bioregion.
+ 
+And:
+$$z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}$$
+ 
+where $k_i$ is the number of links of node (species or site) $i$ to
+other nodes in its bioregion $s_i$, $\overline{k_{si}}$ is the
+average of $k$ over all the nodes in $s_i$, and
+$\sigma_{k_{si}}$ is the standard deviation of $k$ in $s_i$.
+The within-bioregion degree z-score measures how well-connected node $i$
+is to other nodes in the bioregion.
+
 # Contribution
 We can now run the function `contribution()`.
 <br>
@@ -101,7 +123,14 @@ contrib_hclu <- contribution(vege_hclu_hierarclust, vegemat,
                              indices = "contribution")
 contrib_netclu <- contribution(vege_netclu_walktrap, vegemat,
                                indices = "contribution")
+
+# Cz indices
+clust_bip <- netclu_greedy(vegedf, bipartite = TRUE)
+cz_netclu <- contribution(cluster_object = clust_bip, comat = vegemat, 
+                          bipartite_link = vegedf, indices = "Cz")
 ```
 
-`contribution()` produces a single `data.frame` output.
+`contribution()` outputs `data.frame` with the contribution metrics available
+at the species level.
 
+# References

@@ -4,7 +4,12 @@
 \alias{contribution}
 \title{Calculate contribution metrics of sites and species}
 \usage{
-contribution(cluster_object, comat, indices = c("contribution", "Cz"))
+contribution(
+  cluster_object,
+  comat,
+  indices = c("contribution", "Cz"),
+  bipartite_link = NULL
+)
 }
 \arguments{
 \item{cluster_object}{a \code{bioregion.clusters} object or a \code{data.frame} or a
@@ -18,6 +23,10 @@ columns.}
 
 \item{indices}{a \code{character} specifying the contribution metric to compute.
 Available options are \code{contribution}.}
+
+\item{bipartite_link}{\code{NULL} by default. Needed for \code{Cz} indices. A
+\code{data.frame} where each row represents the interaction between two nodes
+and an optional third column indicating the weight of the interaction.}
 }
 \value{
 A \code{list} of \code{data.frames} if multiples indices are selected or a single
@@ -26,17 +35,38 @@ has three columns: the species, the bioregion, and the contribution
 statistics.
 }
 \description{
-Cz metrics
+This function calculates metrics that assess the contribution of a given
+species to its bioregion.
 }
 \details{
 The contribution metric is derived from \insertRef{Lenormand2019}{bioregion}.
 Its formula is the following:
 \eqn{(n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
 
-with n the number of sites, n_i the number of sites in which
-species i is present, n_j the number of sites belonging to the
-bioregion j, n_ij the number of occurrences of species i in sites
-belonging to the bioregion j.
+with \eqn{n} the number of sites, \eqn{n_i} the number of sites in which
+species \eqn{i} is present, \eqn{n_j} the number of sites belonging to the
+bioregion \eqn{j}, \eqn{n_ij} the number of occurrences of species \eqn{i}
+in sites belonging to the bioregion \eqn{j}.
+
+\code{Cz} metrics are derived from \insertRef{Guimera2005}{bioregion}.
+Their respective formula are:
+\eqn{C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}}
+
+where \eqn{k_{is}} is the number of links of node (species or site) \eqn{i}
+to nodes in bioregion \eqn{s}, and \eqn{k_i} is the total degree of node
+\eqn{i}. The participation coefficient of a node is therefore close to 1 if
+its links are uniformly distributed among all the bioregions and 0 if all
+its links are within its own bioregion.
+
+And:
+\eqn{z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}}
+
+where \eqn{k_i} is the number of links of node (species or site) \eqn{i} to
+other nodes in its bioregion \eqn{s_i}, \eqn{\overline{k_{si}}} is the
+average of \eqn{k} over all the nodes in \eqn{s_i}, and
+\eqn{\sigma_{k_{si}}} is the standard deviation of \eqn{k} in \eqn{s_i}.
+The within-bioregion degree z-score measures how well-connected node \eqn{i}
+is to other nodes in the bioregion.
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
@@ -59,6 +89,12 @@ indices = "contribution")
 
 contribution(cluster_object = com, comat = comat,
 indices = "contribution")
+
+# Cz indices
+net_bip <- mat_to_net(comat, weight = TRUE)
+clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
+contribution(cluster_object = clust_bip, comat = comat, 
+bipartite_link = net_bip, indices = "Cz")
 
 }
 \seealso{

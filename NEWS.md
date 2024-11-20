@@ -18,6 +18,8 @@ building a consensus hierarchical tree with a meaningful topology.
 
 * Updated generic functions to provide plot and print for diana
 
+* Indices Cz added to contribution()
+
 # bioregion 1.1.2
 
 This is a list of changes made between bioregion 1.1.1 

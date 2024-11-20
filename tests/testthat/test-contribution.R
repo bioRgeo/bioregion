@@ -14,7 +14,10 @@ clust1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_greedy(net)
 
-clust2 <- nhclu_kmeans(dissim, n_clust = 3:4, index = "Simpson")
+multi_clust <- nhclu_kmeans(dissim, n_clust = 3:4, index = "Simpson")
+
+net_bip <- mat_to_net(comat, weight = TRUE)
+clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
@@ -32,6 +35,13 @@ test_that("valid output", {
   expect_equal(inherits(contrib2, "data.frame"), TRUE)
   expect_equal(dim(contrib2)[1], 50)
   expect_equal(dim(contrib2)[2], 3)
+  
+  suppressWarnings({
+    contrib3 <- contribution(cluster_object = clust_bip, comat = comat,
+                             bipartite_link = net_bip,
+                             indices = c("contribution", "Cz"))
+  })
+  expect_equal(inherits(contrib3, "list"), TRUE)
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -44,7 +54,7 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
-    contribution(clust2, comat = comat, indices = "contribution"),
+    contribution(multi_clust, comat = comat, indices = "contribution"),
     "This function is designed to be applied on a single partition.Your cluster_object has multiple partitions (select only one).",
     fixed = TRUE)
   
@@ -57,6 +67,17 @@ test_that("invalid inputs", {
     contribution(com, comat = comat, indices = "zz"),
     "Please choose algorithm among the followings values:
     contribution or Cz.",
+    fixed = TRUE)
+  
+  expect_error(
+    contribution(com, comat = comat, bipartite_link = "zz", indices = "Cz"),
+    "Cz metrics can only be computed for a bipartite partition (where
+         both sites and species are assigned to a bioregion.",
+    fixed = TRUE)
+  
+  expect_error(
+    contribution(com, comat = comat, bipartite_link = NULL, indices = "Cz"),
+    "bipartite_link is needed to compute Cz indices.",
     fixed = TRUE)
   
 })
