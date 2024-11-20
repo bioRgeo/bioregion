@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5.3 Contribution">
 </head>
 <body>
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-11-11</h4>
+            <h4 data-toc-skip class="date">2024-11-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_contribution.Rmd" class="external-link"><code>vignettes/a5_3_contribution.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_contribution.Rmd</code></div>
@@ -144,6 +144,9 @@ bioregionalizations. <br></p>
 <div class="section level2">
 <h2 id="indices">Indices<a class="anchor" aria-label="anchor" href="#indices"></a>
 </h2>
+<div class="section level3">
+<h3 id="contribution">Contribution<a class="anchor" aria-label="anchor" href="#contribution"></a>
+</h3>
 <center>
 <img align="bottom" width="70%" height="70%" src="../reference/figures/zscore_scheme.svg">
 </center>
@@ -169,8 +172,51 @@ the number of occurrences of species
 in sites belonging to the bioregion
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>.</p>
 </div>
+<div class="section level3">
+<h3 id="cz-statistics">Cz statistics<a class="anchor" aria-label="anchor" href="#cz-statistics"></a>
+</h3>
+<p><code>Cz</code> metrics are derived from . Their respective formula
+are:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><munderover><mo>∑</mo><mrow><mi>s</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>M</mi></msub></munderover><mrow><mrow><mo stretchy="false" form="prefix">(</mo><mfrac><mrow><msub><mi>k</mi><mi>i</mi></msub><mi>s</mi></mrow><msub><mi>k</mi><mi>i</mi></msub></mfrac></mrow><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mrow><annotation encoding="application/x-tex">C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mrow><mi>i</mi><mi>s</mi></mrow></msub><annotation encoding="application/x-tex">k_{is}</annotation></semantics></math>
+is the number of links of node (species or site)
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+to nodes in bioregion
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mi>i</mi></msub><annotation encoding="application/x-tex">k_i</annotation></semantics></math>
+is the total degree of node
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
+The participation coefficient of a node is therefore close to 1 if its
+links are uniformly distributed among all the bioregions and 0 if all
+its links are within its own bioregion.</p>
+<p>And:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>−</mo><mover><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub><mo accent="true">¯</mo></mover></mrow><msub><mi>σ</mi><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub></msub></mfrac></mrow><annotation encoding="application/x-tex">z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mi>i</mi></msub><annotation encoding="application/x-tex">k_i</annotation></semantics></math>
+is the number of links of node (species or site)
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+to other nodes in its bioregion
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_i</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub><mo accent="true">¯</mo></mover><annotation encoding="application/x-tex">\overline{k_{si}}</annotation></semantics></math>
+is the average of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+over all the nodes in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_i</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub></msub><annotation encoding="application/x-tex">\sigma_{k_{si}}</annotation></semantics></math>
+is the standard deviation of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_i</annotation></semantics></math>.
+The within-bioregion degree z-score measures how well-connected node
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+is to other nodes in the bioregion.</p>
+</div>
+</div>
 <div class="section level2">
-<h2 id="contribution">Contribution<a class="anchor" aria-label="anchor" href="#contribution"></a>
+<h2 id="contribution-1">Contribution<a class="anchor" aria-label="anchor" href="#contribution-1"></a>
 </h2>
 <p>We can now run the function <code><a href="../reference/contribution.html">contribution()</a></code>. <br></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -179,9 +225,18 @@ in sites belonging to the bioregion
 <span><span class="va">contrib_hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_hclu_hierarclust</span>, <span class="va">vegemat</span>,</span>
 <span>                             indices <span class="op">=</span> <span class="st">"contribution"</span><span class="op">)</span></span>
 <span><span class="va">contrib_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_netclu_walktrap</span>, <span class="va">vegemat</span>,</span>
-<span>                               indices <span class="op">=</span> <span class="st">"contribution"</span><span class="op">)</span></span></code></pre></div>
-<p><code><a href="../reference/contribution.html">contribution()</a></code> produces a single <code>data.frame</code>
-output.</p>
+<span>                               indices <span class="op">=</span> <span class="st">"contribution"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Cz indices</span></span>
+<span><span class="va">clust_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">vegedf</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">cz_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">clust_bip</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, </span>
+<span>                          bipartite_link <span class="op">=</span> <span class="va">vegedf</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/contribution.html">contribution()</a></code> outputs <code>data.frame</code> with the
+contribution metrics available at the species level.</p>
+</div>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-Lenormand2019" class="csl-entry">
 Lenormand, M., Papuga, G., Argagnon, O., Soubeyrand, M., Alleaume, S.,
