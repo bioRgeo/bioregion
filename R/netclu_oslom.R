@@ -78,9 +78,8 @@
 #' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
 #' accordingly.**
 #' 
-#' **If you changed the default path to the `bin` folder
-#' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
-#' accordingly.**
+#' **If you did not used [install_binaries] to change the permissions and test 
+#' the binary files PLEASE MAKE SURE to set `check_install` accordingly.**
 #'
 #' The C++ version of OSLOM generates temporary folders and/or files that are
 #' stored in the `path_temp` folder (folder "oslom_temp" with an unique timestamp

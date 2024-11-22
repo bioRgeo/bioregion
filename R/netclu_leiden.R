@@ -261,7 +261,7 @@ CPM or modularity", call. = FALSE)
     outalg <- igraph::cluster_leiden(
       graph = net,
       objective_function = objective_function,
-      resolution_parameter = resolution_parameter,
+      resolution = resolution_parameter,
       beta = beta,
       n_iterations = n_iterations,
       vertex_weights = vertex_weights)
@@ -270,7 +270,7 @@ CPM or modularity", call. = FALSE)
     outalg <- igraph::cluster_leiden(
       graph = net,
       objective_function = objective_function,
-      resolution_parameter = resolution_parameter,
+      resolution = resolution_parameter,
       beta = beta,
       n_iterations = n_iterations,
       vertex_weights = vertex_weights)

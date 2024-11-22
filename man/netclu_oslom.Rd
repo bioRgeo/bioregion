@@ -124,9 +124,8 @@ to run. They can be installed with \link{install_binaries}.
 while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
 accordingly.}
 
-\strong{If you changed the default path to the \code{bin} folder
-while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
-accordingly.}
+\strong{If you did not used \link{install_binaries} to change the permissions and test
+the binary files PLEASE MAKE SURE to set \code{check_install} accordingly.}
 
 The C++ version of OSLOM generates temporary folders and/or files that are
 stored in the \code{path_temp} folder (folder "oslom_temp" with an unique timestamp
