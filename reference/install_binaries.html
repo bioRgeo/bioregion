@@ -71,6 +71,7 @@ are running properly.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">install_binaries</span><span class="op">(</span></span>
 <span>  binpath <span class="op">=</span> <span class="st">"tempdir"</span>,</span>
+<span>  download_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  infomap_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.1.0"</span>, <span class="st">"2.6.0"</span>, <span class="st">"2.7.1"</span>, <span class="st">"2.8.0"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -82,6 +83,11 @@ are running properly.</p>
 <dl><dt id="arg-binpath">binpath<a class="anchor" aria-label="anchor" href="#arg-binpath"></a></dt>
 <dd><p>a <code>character</code> indicating the path to the folder that will
 host the 'bin' folder containing the binary files (see Details).</p></dd>
+
+
+<dt id="arg-download-only">download_only<a class="anchor" aria-label="anchor" href="#arg-download-only"></a></dt>
+<dd><p>a <code>boolean</code> indicating whether the function should only
+download the 'bin.zip' file or execute the entire process (see Details).</p></dd>
 
 
 <dt id="arg-infomap-version">infomap_version<a class="anchor" aria-label="anchor" href="#arg-infomap-version"></a></dt>
@@ -99,9 +105,12 @@ version(s) to install.</p></dd>
 directory (<code>binpath = "tempdir"</code>). In this case the <code>bin</code> folder will be
 automatically removed at the end of the R session. Alternatively, the binary
 files can be installed in the bioregion's package folder
-(<code>binpath = "pkgfolder"</code>).
-Finally, a path to a folder of your choice can be chosen.</p>
-<p><strong>In any case, PLEASE MAKE SURE to update the binpath accordingly in
+(<code>binpath = "pkgfolder"</code>).</p>
+<p>Finally, a path to a folder of your choice can be specified. In this case
+, and only in this case, <code>download_only</code> can be set to <code>TRUE</code>, but you must
+ensure that the files have the necessary permissions to be executed as
+programs.</p>
+<p><strong>In any case, PLEASE MAKE SURE to update the <code>binpath</code> accordingly in
 <a href="netclu_infomap.html">netclu_infomap</a>, <a href="netclu_louvain.html">netclu_louvain</a> and <a href="netclu_oslom.html">netclu_oslom</a>).</strong></p>
     </div>
     <div class="section level2">
