@@ -1,9 +1,3 @@
-
-# bioregion development/github version
-
-This is a list of changes made in the development/github version of the package
-between bioregion 1.1.2 (CRAN release 2024-XX-XX) and the next CRAN release.
-
 # bioregion 1.1.3
 
 This is a list of changes made between bioregion 1.1.2 
@@ -21,11 +15,12 @@ building a consensus hierarchical tree with a meaningful topology.
 * Indices Cz added to contribution()
 
 * Updated install_binaries:
-   - Archive bin.zip now stored on GitHub and backed up on NextCloud
+   - Archive bin.zip now stored on GitHub and backed up on NextCloud  
    - Added Infomap version 2.8.0
-   - Added argument download_only to only execute the download step
+   - Added argument download_only to only execute the download step  
+&nbsp;
+* Added argument check_install in netclu_infomap, netclu_louvain, and netclu_oslom
 
-* Added argument check_install in netclu_infomap, netclu_louvain and netclu_oslom
 
 # bioregion 1.1.2
 

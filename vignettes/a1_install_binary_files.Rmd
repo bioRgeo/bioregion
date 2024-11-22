@@ -77,13 +77,17 @@ default, the binary files are installed in R's temporary directory
 (`binpath = "tempdir"`). In this case the `bin` folder will be
 automatically removed at the end of the R session. Alternatively, the
 binary files can be installed in the bioregion's package folder
-(`binpath = "pkgfolder"`). **Any other folder can be chosen but in any
+(`binpath = "pkgfolder"`). 
+
+**Any other folder can be chosen but in any
 case PLEASE MAKE SURE to update the `binpath` argument in
 [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html),
 [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html)
 and
 [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)
-accordingly.** Note that in this case, and only in this case,
+accordingly.** 
+
+Note that in this case, and only in this case,
 `download_only` can be set to `TRUE` (only the first step will be
 executed), but you must ensure that the files have the necessary
 permissions to be executed as programs otherwise.
@@ -97,9 +101,9 @@ The installation of the binary files is divided into six steps:
 1. Download bin.zip
 2. Unzip bin.zip in the binpath
 3. Check the permissions, try to change them automatically or propose an iterative process to change them manually
-4. Test that Infomap are running properly
-5. Test that Louvain are running properly
-6. Test that OSLOM are running properly
+4. Test that Infomap is running properly
+5. Test that Louvain is running properly
+6. Test that OSLOM is running properly
 
 The function is designed to help you change the permissions during the third 
 step. Subsequently, the binary files of Infomap, Louvain, and OSLOM are tested, 
@@ -112,7 +116,7 @@ can be used without any issues.
 
 However, it may happen (particularly on macOS) that the function fails to 
 automatically or manually assist you in changing the permissions. In this case, 
-set the argument `dowload_only` to `TRUE` to download `bin.zip` into a folder 
+set the argument `download_only` to `TRUE` to download `bin.zip` into a folder 
 `myfolder` of your choice (different from `tempdir` and `pkgfolder`) so that you
 can manually change the permissions yourself. Note that you will be on your own;
 the package will not be able to test the binary files before running [netclu_infomap](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.html),
