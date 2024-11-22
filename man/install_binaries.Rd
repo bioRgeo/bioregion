@@ -6,12 +6,16 @@
 \usage{
 install_binaries(
   binpath = "tempdir",
+  download_only = FALSE,
   infomap_version = c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
 )
 }
 \arguments{
 \item{binpath}{a \code{character} indicating the path to the folder that will
 host the 'bin' folder containing the binary files (see Details).}
+
+\item{download_only}{a \code{boolean} indicating whether the function should only
+download the 'bin.zip' file or execute the entire process (see Details).}
 
 \item{infomap_version}{a \code{character} vector indicating the Infomap
 version(s) to install.}
@@ -31,9 +35,13 @@ directory (\code{binpath = "tempdir"}). In this case the \code{bin} folder will 
 automatically removed at the end of the R session. Alternatively, the binary
 files can be installed in the bioregion's package folder
 (\code{binpath = "pkgfolder"}).
-Finally, a path to a folder of your choice can be chosen.
 
-\strong{In any case, PLEASE MAKE SURE to update the binpath accordingly in
+Finally, a path to a folder of your choice can be specified. In this case
+, and only in this case, \code{download_only} can be set to \code{TRUE}, but you must
+ensure that the files have the necessary permissions to be executed as
+programs.
+
+\strong{In any case, PLEASE MAKE SURE to update the \code{binpath} accordingly in
 \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
 }
 \note{

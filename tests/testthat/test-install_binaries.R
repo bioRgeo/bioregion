@@ -15,6 +15,26 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    install_binaries(binpath = "tempdir", download_only = 1),
+    "download_only must be a boolean.", 
+    fixed = TRUE)
+  
+  expect_error(
+    install_binaries(binpath = "tempdir", download_only = c(TRUE,FALSE)),
+    "download_only must be of length 1.", 
+    fixed = TRUE)
+  
+  expect_error(
+    install_binaries(binpath = "tempdir", download_only = TRUE),
+    "download_only cannot be set to TRUE if binpath is tempdir or pkgfolder!", 
+    fixed = TRUE)
+  
+  expect_error(
+    install_binaries(binpath = "pkgfolder", download_only = TRUE),
+    "download_only cannot be set to TRUE if binpath is tempdir or pkgfolder!", 
+    fixed = TRUE)
+  
+  expect_error(
     install_binaries(infomap_version = 1),
     "infomap_version must be a character.", 
     fixed = TRUE)

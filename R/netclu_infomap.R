@@ -159,6 +159,7 @@ netclu_infomap <- function(net,
                            return_node_type = "both",
                            version = "2.8.0",
                            binpath = "tempdir",
+                           #check_install = TRUE,
                            path_temp = "infomap_temp",
                            delete_temp = TRUE) {
 
