@@ -23,6 +23,7 @@ netclu_infomap(
   return_node_type = "both",
   version = "2.8.0",
   binpath = "tempdir",
+  check_install = TRUE,
   path_temp = "infomap_temp",
   delete_temp = TRUE
 )
@@ -85,6 +86,9 @@ Infomap should be used (see Note).}
 \item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
 
+\item{check_install}{a \code{boolean} indicating if the function should check that
+the Infomap as been properly installed (see \link{install_binaries} and Details).}
+
 \item{path_temp}{a \code{character} indicating the path to the temporary folder
 (see Details).}
 
@@ -126,6 +130,9 @@ with \link{install_binaries}.
 \strong{If you changed the default path to the \code{bin} folder
 while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
 accordingly.}
+
+\strong{If you did not used \link{install_binaries} to change the permissions and test
+the binary files PLEASE MAKE SURE to set \code{check_install} accordingly.}
 
 The C++ version of Infomap generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp

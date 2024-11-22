@@ -51,6 +51,9 @@
 #'
 #' @param binpath a `character` indicating the path to the bin folder
 #' (see [install_binaries] and Details).
+#' 
+#' @param check_install a `boolean` indicating if the function should check that
+#' the Louvain as been properly installed (see [install_binaries] and Details).
 #'
 #' @param path_temp a `character` indicating the path to the temporary folder
 #' (see Details).
@@ -97,6 +100,9 @@
 #' **If you changed the default path to the `bin` folder
 #' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
 #' accordingly.**
+#' 
+#' **If you did not used [install_binaries] to change the permissions and test 
+#' the binary files PLEASE MAKE SURE to set `check_install` accordingly.**
 #' 
 #' The C++ version of Louvain generates temporary folders and/or files that are
 #' stored in the `path_temp` folder ("louvain_temp" with an unique timestamp
@@ -173,6 +179,7 @@ netclu_louvain <- function(net,
                            species_col = 2,
                            return_node_type = "both",
                            binpath = "tempdir",
+                           check_install = TRUE,
                            path_temp = "louvain_temp",
                            delete_temp = TRUE,
                            algorithm_in_output = TRUE) {
@@ -287,9 +294,10 @@ cpp or igraph", call. = FALSE)
     site_col = site_col,
     species_col = species_col,
     return_node_type = return_node_type,
+    binpath = binpath,
+    check_install = check_install,
     delete_temp = delete_temp,
     path_temp = path_temp,
-    binpath = binpath,
     algorithm_in_output = algorithm_in_output
   )
 
@@ -342,6 +350,7 @@ cpp or igraph", call. = FALSE)
     
     # Control and set binpath
     controls(args = binpath, data = NULL, type = "character")
+    controls(args = check_install, data = NULL, type = "boolean")
     controls(args = path_temp, data = NULL, type = "character")
     controls(args = delete_temp, data = NULL, type = "boolean")
     if (binpath == "tempdir") {
@@ -359,7 +368,8 @@ cpp or igraph", call. = FALSE)
     os <- Sys.info()[["sysname"]]
 
     # Check if LOUVAIN has successfully been installed
-    if (!file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
+    if (check_install &
+        !file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
       message(
         "Louvain is not installed... Please have a look at
               https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html

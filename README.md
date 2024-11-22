@@ -8,9 +8,9 @@
 [![R-CMD-check](https://github.com/bioRgeo/bioregion/workflows/R-CMD-check/badge.svg)](https://github.com/bioRgeo/bioregion/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/bioRgeo/bioregion/branch/master/graph/badge.svg)](https://app.codecov.io/gh/bioRgeo/bioregion?branch=master)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/bioregion)](https://cran.r-project.org/package=bioregion)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/bioregion)](https://cran.r-project.org/package=bioregion)
 [![rstudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/bioregion)](https://r-pkg.org:443/pkg/bioregion)
+downloads](https://cranlogs.r-pkg.org/badges/bioregion)](https://r-pkg.org:443/pkg/bioregion)
 [![DOI](https://zenodo.org/badge/612244739.svg)](https://zenodo.org/doi/10.5281/zenodo.10843109)
 <!-- badges: end -->
 

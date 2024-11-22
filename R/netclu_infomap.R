@@ -59,6 +59,9 @@
 #'
 #' @param binpath a `character` indicating the path to the bin folder
 #' (see [install_binaries] and Details).
+#' 
+#' @param check_install a `boolean` indicating if the function should check that
+#' the Infomap as been properly installed (see [install_binaries] and Details).
 #'
 #' @param path_temp a `character` indicating the path to the temporary folder
 #' (see Details).
@@ -79,6 +82,9 @@
 #' **If you changed the default path to the `bin` folder
 #' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
 #' accordingly.**
+#' 
+#' **If you did not used [install_binaries] to change the permissions and test 
+#' the binary files PLEASE MAKE SURE to set `check_install` accordingly.**
 #'
 #' The C++ version of Infomap generates temporary folders and/or files that are
 #' stored in the `path_temp` folder ("infomap_temp" with an unique timestamp
@@ -159,12 +165,13 @@ netclu_infomap <- function(net,
                            return_node_type = "both",
                            version = "2.8.0",
                            binpath = "tempdir",
-                           #check_install = TRUE,
+                           check_install = TRUE,
                            path_temp = "infomap_temp",
                            delete_temp = TRUE) {
 
-  # Control binpath, path_temp and delete_temp
+  # Control binpath, check_install, path_temp and delete_temp
   controls(args = binpath, data = NULL, type = "character")
+  controls(args = check_install, data = NULL, type = "boolean")
   controls(args = path_temp, data = NULL, type = "character")
   controls(args = delete_temp, data = NULL, type = "boolean")
   if (binpath == "tempdir") {
@@ -185,7 +192,8 @@ netclu_infomap <- function(net,
   os <- Sys.info()[["sysname"]]
 
   # Check if INFOMAP has successfully been installed
-  if (!file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
+  if (check_install &
+      !file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
     message(paste0(
       "Infomap ", version, " is not installed... Please have a look at
     https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
@@ -350,9 +358,10 @@ both, sites or species", call. = FALSE)
       species_col = species_col,
       return_node_type = return_node_type,
       version = version,
+      binpath = binpath,
+      check_install = check_install,
       delete_temp = delete_temp,
-      path_temp = path_temp,
-      binpath = binpath
+      path_temp = path_temp
     )
 
     outputs$inputs <- list(
@@ -412,11 +421,23 @@ both, sites or species", call. = FALSE)
     cmd <- paste0(cmd, " ", path_temp, "/net.txt ", path_temp)
 
     if (os == "Linux") {
-      cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_lin ", cmd)
+      if(check_install){
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_lin ", cmd)
+      }else{
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_lin ", cmd)
+      }
     } else if (os == "Windows") {
-      cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", cmd)
+      if(check_install){
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", cmd)
+      }else{
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_win.exe ", cmd)
+      }
     } else if (os == "Darwin") {
-      cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", cmd)
+      if(check_install){
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", cmd)
+      }else{
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_mac ", cmd)
+      }
     } else {
       stop("Linux, Windows or Mac distributions only.", call. = FALSE)
     }

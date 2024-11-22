@@ -25,8 +25,8 @@
 #' ensure that the files have the necessary permissions to be executed as 
 #' programs.
 #'
-#' **In any case, PLEASE MAKE SURE to update the `binpath` accordingly in 
-#' [netclu_infomap], [netclu_louvain] and [netclu_oslom]).**
+#' **In any case, PLEASE MAKE SURE to update the `binpath` and `check_install` 
+#' accordingly in [netclu_infomap], [netclu_louvain] and [netclu_oslom]).**
 #'
 #' @note
 #' Only the Infomap version 2.1.0, 2.6.0, 2.7.1 and 2.8.0 are available for now.
@@ -271,14 +271,11 @@ install_binaries <- function(binpath = "tempdir",
         message(" ")
         ask <- utils::menu(
           c(
-            "I've just tried to change the permission manually and I want to
-        check the permission again",
-            "I would like to continue the execution of the function without
-        checking the permission",
+            "I've just tried to change the permission manually and I want to check the permission again",
+            "I would like to continue the execution of the function without checking the permission",
             "I would like to stop the function"
           ),
-          title = "You can now try to change the permission of the above files
-      manually and check the permission again"
+          title = "You can now try to change the permission of the above files manually and check the permission again"
         )
         
         if (ask == 1) {

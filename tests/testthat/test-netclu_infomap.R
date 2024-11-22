@@ -76,6 +76,7 @@ test_that("valid output", {
                           return_node_type = "both",
                           version = "2.8.0",
                           binpath = "tempdir",
+                          check_install = TRUE,
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
@@ -97,6 +98,7 @@ test_that("valid output", {
   expect_equal(clust$args$return_node_type, "both")
   expect_equal(clust$args$version, "2.8.0")
   #expect_equal(clust$args$binpath, "tempdir")
+  expect_equal(clust$args$check_install, TRUE)
   #expect_equal(clust$args$path_temp, "infomap_temp")
   expect_equal(clust$args$delete_temp, TRUE)
   expect_equal(clust$inputs$bipartite, FALSE)
@@ -127,6 +129,7 @@ test_that("valid output", {
                           return_node_type = "both",
                           version = "2.8.0",
                           binpath = "tempdir",
+                          check_install = TRUE,
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
   expect_equal(clust$args$seed, 1)
@@ -148,6 +151,7 @@ test_that("valid output", {
                           return_node_type = "both",
                           version = "2.8.0",
                           binpath = "tempdir",
+                          check_install = TRUE,
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
   expect_equal(clust2$args$seed, 1)
@@ -253,8 +257,23 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    netclu_infomap(net, check_install = 1),
+    "check_install must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_infomap(net, check_install = c(TRUE,FALSE)),
+    "check_install must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
     netclu_infomap(net, path_temp = 1),
     "path_temp must be a character.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_infomap(net, path_temp = c("zz","zz")),
+    "path_temp must be of length 1.",
     fixed = TRUE)
   
   expect_error(
@@ -265,11 +284,6 @@ test_that("invalid inputs", {
   expect_error(
     netclu_infomap(net, delete_temp =  1),
     "delete_temp must be a boolean.",
-    fixed = TRUE)
-  
-  expect_error(
-    netclu_infomap(net, binpath = c("zz","zz")),
-    "binpath must be of length 1.",
     fixed = TRUE)
   
   expect_error(

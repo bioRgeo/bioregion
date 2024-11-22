@@ -20,6 +20,7 @@ netclu_louvain(
   species_col = 2,
   return_node_type = "both",
   binpath = "tempdir",
+  check_install = TRUE,
   path_temp = "louvain_temp",
   delete_temp = TRUE,
   algorithm_in_output = TRUE
@@ -74,6 +75,9 @@ NULL for random by default).}
 
 \item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
+
+\item{check_install}{a \code{boolean} indicating if the function should check that
+the Louvain as been properly installed (see \link{install_binaries} and Details).}
 
 \item{path_temp}{a \code{character} indicating the path to the temporary folder
 (see Details).}
@@ -145,6 +149,9 @@ binary files to run. They can be installed with
 \strong{If you changed the default path to the \code{bin} folder
 while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
 accordingly.}
+
+\strong{If you did not used \link{install_binaries} to change the permissions and test
+the binary files PLEASE MAKE SURE to set \code{check_install} accordingly.}
 
 The C++ version of Louvain generates temporary folders and/or files that are
 stored in the \code{path_temp} folder ("louvain_temp" with an unique timestamp

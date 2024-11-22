@@ -74,6 +74,7 @@ test_that("valid output", {
                         species_col = 2,
                         return_node_type = "both",
                         binpath = "tempdir",
+                        check_install = TRUE,
                         path_temp = "oslom_temp",
                         delete_temp = TRUE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
@@ -93,6 +94,7 @@ test_that("valid output", {
   expect_equal(clust$args$species_col, 2)
   expect_equal(clust$args$return_node_type, "both")
   #expect_equal(clust$args$binpath, "tempdir")
+  expect_equal(clust$args$check_install, TRUE)
   #expect_equal(clust$args$path_temp, "infomap_temp")
   expect_equal(clust$args$delete_temp, TRUE)
   expect_equal(clust$inputs$bipartite, FALSE)
@@ -236,6 +238,11 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    netclu_oslom(net, path_temp = c("zz","zz")),
+    "path_temp must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
     netclu_oslom(net, delete_temp = c("zz","zz")),
     "delete_temp must be of length 1.",
     fixed = TRUE)
@@ -243,11 +250,6 @@ test_that("invalid inputs", {
   expect_error(
     netclu_oslom(net, delete_temp =  1),
     "delete_temp must be a boolean.",
-    fixed = TRUE)
-  
-  expect_error(
-    netclu_oslom(net, binpath = c("zz","zz")),
-    "binpath must be of length 1.",
     fixed = TRUE)
   
   expect_error(

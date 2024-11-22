@@ -73,6 +73,7 @@ test_that("valid output", {
                           species_col = 2,
                           return_node_type = "both",
                           binpath = "tempdir",
+                          check_install = TRUE,
                           path_temp = "louvain_temp",
                           delete_temp = TRUE,
                           algorithm_in_output = TRUE)
@@ -91,6 +92,7 @@ test_that("valid output", {
   expect_equal(clust$args$species_col, 2)
   expect_equal(clust$args$return_node_type, "both")
   #expect_equal(clust$args$binpath, "tempdir")
+  expect_equal(clust$args$check_install, TRUE)
   #expect_equal(clust$args$path_temp, "infomap_temp")
   expect_equal(clust$args$delete_temp, TRUE)
   expect_equal(clust$inputs$bipartite, FALSE)
@@ -558,6 +560,46 @@ cpp or igraph",
     netclu_louvain(net, cut_weight = 100, lang = "cpp"),
     "The network is empty. 
          Please check your data or choose an appropriate cut_weight value.", 
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", binpath = 1),
+    "binpath must be a character.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", binpath = c("zz","zz")),
+    "binpath must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", check_install = 1),
+    "check_install must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", check_install = c(TRUE,FALSE)),
+    "check_install must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", path_temp = 1),
+    "path_temp must be a character.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", path_temp = c("zz","zz")),
+    "path_temp must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", delete_temp = c("zz","zz")),
+    "delete_temp must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    netclu_louvain(net, lang="cpp", delete_temp =  1),
+    "delete_temp must be a boolean.",
     fixed = TRUE)
   
 })

@@ -20,9 +20,12 @@ building a consensus hierarchical tree with a meaningful topology.
 
 * Indices Cz added to contribution()
 
-* Archive bin.zip now stored on GitHub and backed up on NextCloud
+* Updated install_binaries:
+   - Archive bin.zip now stored on GitHub and backed up on NextCloud
+   - Added Infomap version 2.8.0
+   - Added argument download_only to only execute the download step
 
-* Added Infomap version 2.8.0
+* Added argument check_install in netclu_infomap, netclu_louvain and netclu_oslom
 
 # bioregion 1.1.2
 

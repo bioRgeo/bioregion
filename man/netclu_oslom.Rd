@@ -21,6 +21,7 @@ netclu_oslom(
   species_col = 2,
   return_node_type = "both",
   binpath = "tempdir",
+  check_install = TRUE,
   path_temp = "oslom_temp",
   delete_temp = TRUE
 )
@@ -79,6 +80,9 @@ column 1 to column 2).}
 \item{binpath}{a \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
 
+\item{check_install}{a \code{boolean} indicating if the function should check that
+the OSLOM as been properly installed (see \link{install_binaries} and Details).}
+
 \item{path_temp}{a \code{character} indicating the path to the temporary folder
 (see Details).}
 
@@ -115,6 +119,10 @@ OSLOM is a network community detection algorithm proposed in
 This function is based on the 2.4 C++ version of OSLOM
 (\url{http://www.oslom.org/software.htm}). This function needs files
 to run. They can be installed with \link{install_binaries}.
+
+\strong{If you changed the default path to the \code{bin} folder
+while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
+accordingly.}
 
 \strong{If you changed the default path to the \code{bin} folder
 while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}

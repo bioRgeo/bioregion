@@ -56,6 +56,9 @@
 #' @param binpath a `character` indicating the path to the bin folder
 #' (see [install_binaries] and Details).
 #'
+#' @param check_install a `boolean` indicating if the function should check that
+#' the OSLOM as been properly installed (see [install_binaries] and Details).
+#'
 #' @param path_temp a `character` indicating the path to the temporary folder
 #' (see Details).
 #'
@@ -70,6 +73,10 @@
 #' This function is based on the 2.4 C++ version of OSLOM
 #' (<http://www.oslom.org/software.htm>). This function needs files
 #' to run. They can be installed with [install_binaries]. 
+#' 
+#' **If you changed the default path to the `bin` folder
+#' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
+#' accordingly.**
 #' 
 #' **If you changed the default path to the `bin` folder
 #' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
@@ -156,11 +163,13 @@ netclu_oslom <- function(net,
                          species_col = 2,
                          return_node_type = "both",
                          binpath = "tempdir",
+                         check_install = TRUE,
                          path_temp = "oslom_temp",
                          delete_temp = TRUE) {
   
   # Control and set binpath
   controls(args = binpath, data = NULL, type = "character")
+  controls(args = check_install, data = NULL, type = "boolean")
   controls(args = path_temp, data = NULL, type = "character")
   controls(args = delete_temp, data = NULL, type = "boolean")
   if (binpath == "tempdir") {
@@ -181,7 +190,8 @@ netclu_oslom <- function(net,
   check <- FALSE
   controls(args = directed, data = NULL, type = "boolean")
   if (!directed) {
-    if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
+    if (check_install &
+        !file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message(
         "OSLOM is not installed... Please have a look at
               https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
@@ -193,7 +203,8 @@ netclu_oslom <- function(net,
       check <- TRUE
     }
   } else {
-    if (!file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
+    if (check_install &
+        !file.exists(paste0(binpath, "/bin/OSLOM/check.txt"))) {
       message("OSLOM is not installed... Please have a look at
               https://bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
               for more details.")
@@ -359,9 +370,10 @@ both, sites or species", call. = FALSE)
       site_col = site_col,
       species_col = species_col,
       return_node_type = return_node_type,
+      binpath = binpath,
+      check_install = check_install,
       delete_temp = delete_temp,
-      path_temp = path_temp,
-      binpath = binpath
+      path_temp = path_temp
     )
 
     outputs$inputs <- list(

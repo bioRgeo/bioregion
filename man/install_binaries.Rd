@@ -41,8 +41,8 @@ Finally, a path to a folder of your choice can be specified. In this case
 ensure that the files have the necessary permissions to be executed as
 programs.
 
-\strong{In any case, PLEASE MAKE SURE to update the \code{binpath} accordingly in
-\link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
+\strong{In any case, PLEASE MAKE SURE to update the \code{binpath} and \code{check_install}
+accordingly in \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
 }
 \note{
 Only the Infomap version 2.1.0, 2.6.0, 2.7.1 and 2.8.0 are available for now.
