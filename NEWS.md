@@ -20,6 +20,10 @@ building a consensus hierarchical tree with a meaningful topology.
 
 * Indices Cz added to contribution()
 
+* Archive bin.zip now stored on GitHub and backed up on NextCloud
+
+* Added Infomap version 2.8.0
+
 # bioregion 1.1.2
 
 This is a list of changes made between bioregion 1.1.1 
