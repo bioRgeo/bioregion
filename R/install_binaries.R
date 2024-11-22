@@ -22,7 +22,7 @@
 #' [netclu_infomap], [netclu_louvain] and [netclu_oslom]).**
 #'
 #' @note
-#' Only the Infomap version 2.1.0, 2.6.0 and 2.7.1 are available for now.
+#' Only the Infomap version 2.1.0, 2.6.0, 2.7.1 and 2.8.0 are available for now.
 #'
 #' @return
 #' No return value
@@ -37,7 +37,8 @@
 install_binaries <- function(binpath = "tempdir",
                              infomap_version = c("2.1.0", 
                                                  "2.6.0", 
-                                                 "2.7.1")) {
+                                                 "2.7.1",
+                                                 "2.8.0")) {
   
   # Control and set binpath
   controls(args = binpath, data = NULL, type = "character")
@@ -53,7 +54,7 @@ install_binaries <- function(binpath = "tempdir",
   binpath <- normalizePath(binpath)
 
   # Control infomap_version
-  infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1")
+  infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
   controls(args = infomap_version, data = NULL, type = "character_vector")
   
   infomap_version <- infomap_version[!duplicated(infomap_version)]
@@ -85,12 +86,18 @@ install_binaries <- function(binpath = "tempdir",
   message(" ")
   message("1. Download bin.zip")
   message(" ")
-  utils::download.file(
-    "https://www.mmmycloud.com/index.php/s/wnyLYFZGESyckW8/download",
-    paste0(binpath, "/bin.zip"),
-    mode = "wb"
-  )
-
+  
+  url <- "https://github.com/bioRgeo/bioregion/releases/download/v1.0.0/bin.zip"
+  backup <- "https://www.mmmycloud.com/index.php/s/wnyLYFZGESyckW8/download"
+  if(httr::HEAD(url)$status_code == 200){
+    utils::download.file(url, paste0(binpath, "/bin.zip"), mode = "wb")
+  }else if(httr::HEAD(backup)$status_code == 200){
+    utils::download.file(backup, paste0(binpath, "/bin.zip"), mode = "wb")
+  }else{
+    stop(paste0("An error occurred. Check your connection or contact the maintainers."),
+         call. = FALSE)
+  }
+  
   # Unzip folder
   message(" ")
   message("2. Unzip folder")
@@ -115,11 +122,11 @@ install_binaries <- function(binpath = "tempdir",
   if (nboslom == 8 & (nbinfomap == 8 * nbversion) & nblouvain == 8) {
     message(paste0(
       "The folder has been successfully downloaded and dezipped in ",
-      binpath
+      binpath, "."
     ))
   } else {
     unlink(paste0(binpath, "/bin"), recursive = TRUE)
-    stop(paste0("An error occurred, download and/or dezip failed"),
+    stop(paste0("An error occurred, download and/or dezip failed."),
       call. = FALSE
     )
   }
@@ -174,10 +181,10 @@ install_binaries <- function(binpath = "tempdir",
     file <- files[f]
     perm[f] <- file.access(file, mode = 1)
     if (perm[f] == -1) {
-      message(paste0("Permission to execute ", file, " as program: denied"))
+      message(paste0("Permission to execute ", file, " as program: denied."))
     } else {
       perm[f] == 10
-      message(paste0("Permission to execute ", file, " as program: granted"))
+      message(paste0("Permission to execute ", file, " as program: granted."))
     }
   }
 

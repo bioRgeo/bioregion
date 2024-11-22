@@ -6,7 +6,7 @@
 \usage{
 install_binaries(
   binpath = "tempdir",
-  infomap_version = c("2.1.0", "2.6.0", "2.7.1")
+  infomap_version = c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
 )
 }
 \arguments{
@@ -37,7 +37,7 @@ Finally, a path to a folder of your choice can be chosen.
 \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_oslom}).}
 }
 \note{
-Only the Infomap version 2.1.0, 2.6.0 and 2.7.1 are available for now.
+Only the Infomap version 2.1.0, 2.6.0, 2.7.1 and 2.8.0 are available for now.
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),

@@ -37,6 +37,7 @@ Imports:
     fastkmedoids,
     ggplot2,
     grDevices,
+    httr,
     igraph,
     mathjaxr,
     Matrix,

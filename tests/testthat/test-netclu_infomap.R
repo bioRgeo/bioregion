@@ -74,7 +74,7 @@ test_that("valid output", {
                           site_col = 1,
                           species_col = 2,
                           return_node_type = "both",
-                          version = "2.7.1",
+                          version = "2.8.0",
                           binpath = "tempdir",
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
@@ -95,7 +95,7 @@ test_that("valid output", {
   expect_equal(clust$args$site_col, 1)
   expect_equal(clust$args$species_col, 2)
   expect_equal(clust$args$return_node_type, "both")
-  expect_equal(clust$args$version, "2.7.1")
+  expect_equal(clust$args$version, "2.8.0")
   #expect_equal(clust$args$binpath, "tempdir")
   #expect_equal(clust$args$path_temp, "infomap_temp")
   expect_equal(clust$args$delete_temp, TRUE)
@@ -106,7 +106,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
-  expect_equal(clust$algorithm$version, "2.7.1")
+  expect_equal(clust$algorithm$version, "2.8.0")
   expect_equal(dim(clust$clusters)[1], 5)
   
   
@@ -125,7 +125,7 @@ test_that("valid output", {
                           site_col = 1,
                           species_col = 2,
                           return_node_type = "both",
-                          version = "2.7.1",
+                          version = "2.8.0",
                           binpath = "tempdir",
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
@@ -146,7 +146,7 @@ test_that("valid output", {
                           site_col = 1,
                           species_col = 2,
                           return_node_type = "both",
-                          version = "2.7.1",
+                          version = "2.8.0",
                           binpath = "tempdir",
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
