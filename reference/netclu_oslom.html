@@ -80,6 +80,7 @@ on the OSLOM algorithm (<a href="http://oslom.org/" class="external-link">http:/
 <span>  species_col <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  return_node_type <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>  binpath <span class="op">=</span> <span class="st">"tempdir"</span>,</span>
+<span>  check_install <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  path_temp <span class="op">=</span> <span class="st">"oslom_temp"</span>,</span>
 <span>  delete_temp <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -174,6 +175,11 @@ column 1 to column 2).</p></dd>
 (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
+<dt id="arg-check-install">check_install<a class="anchor" aria-label="anchor" href="#arg-check-install"></a></dt>
+<dd><p>a <code>boolean</code> indicating if the function should check that
+the OSLOM as been properly installed (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
+
+
 <dt id="arg-path-temp">path_temp<a class="anchor" aria-label="anchor" href="#arg-path-temp"></a></dt>
 <dd><p>a <code>character</code> indicating the path to the temporary folder
 (see Details).</p></dd>
@@ -205,6 +211,9 @@ Lancichinetti2011bioregion that finds statistically significant
 <p>This function is based on the 2.4 C++ version of OSLOM
 (<a href="http://www.oslom.org/software.htm" class="external-link">http://www.oslom.org/software.htm</a>). This function needs files
 to run. They can be installed with <a href="install_binaries.html">install_binaries</a>.</p>
+<p><strong>If you changed the default path to the <code>bin</code> folder
+while running <a href="install_binaries.html">install_binaries</a> PLEASE MAKE SURE to set <code>binpath</code>
+accordingly.</strong></p>
 <p><strong>If you changed the default path to the <code>bin</code> folder
 while running <a href="install_binaries.html">install_binaries</a> PLEASE MAKE SURE to set <code>binpath</code>
 accordingly.</strong></p>
@@ -262,7 +271,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-msg co"><span class="r-pr">#&gt;</span> OSLOM is not installed... Please have a look at</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>               https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>               for more details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/RtmpJiKf7Z/bin/OSLOM/</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/RtmphgZY1E/bin/OSLOM/</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
