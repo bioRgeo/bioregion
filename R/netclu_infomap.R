@@ -248,7 +248,7 @@ netclu_infomap <- function(net,
       controls(args = site_col, data = net, type = "input_net_bip_col")
       controls(args = species_col, data = net, type = "input_net_bip_col")
       controls(args = return_node_type, data = NULL, type = "character")
-      if (!(return_node_type %in% c("both", "sites", "species"))) {
+      if (!(return_node_type %in% c("both", "site", "species"))) {
         stop("Please choose return_node_type among the followings values:
 both, sites or species", call. = FALSE)
       }
@@ -495,7 +495,7 @@ both, sites or species", call. = FALSE)
         com[, 1],
         idfeat$ID_NODE
       ))] <- "species"
-      if (return_node_type == "sites") {
+      if (return_node_type == "site") {
         com <- com[attributes(com)$node_type == "site", ]
       }
       if (return_node_type == "species") {

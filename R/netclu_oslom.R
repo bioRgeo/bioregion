@@ -276,7 +276,7 @@ no, random or simil")
       controls(args = site_col, data = net, type = "input_net_bip_col")
       controls(args = species_col, data = net, type = "input_net_bip_col")
       controls(args = return_node_type, data = NULL, type = "character")
-      if (!(return_node_type %in% c("both", "sites", "species"))) {
+      if (!(return_node_type %in% c("both", "site", "species"))) {
         stop("Please choose return_node_type among the followings values:
 both, sites or species", call. = FALSE)
       }
@@ -1095,7 +1095,7 @@ both, sites or species", call. = FALSE)
     if (isbip) {
       attr(com, "node_type") <- rep("site", dim(com)[1])
       attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
-      if (return_node_type == "sites") {
+      if (return_node_type == "site") {
         com <- com[attributes(com)$node_type == "site", ]
       }
       if (return_node_type == "species") {

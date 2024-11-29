@@ -173,9 +173,9 @@ test_that("valid output", {
   
   clust <- netclu_infomap(net, 
                           bipartite = TRUE, 
-                          return_node_type = "sites")
+                          return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
-  expect_equal(clust$args$return_node_type, "sites")
+  expect_equal(clust$args$return_node_type, "site")
   
   clust <- netclu_infomap(net, cut_weight = 40, seed = 1)
   expect_equal(colnames(clust$clusters), c("ID","K_2"))

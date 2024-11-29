@@ -125,11 +125,11 @@ test_that("valid output", {
   
   clust <- netclu_leadingeigen(net, 
                             bipartite = TRUE, 
-                            return_node_type = "sites")
+                            return_node_type = "site")
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "netclu_leadingeigen")
   expect_equal(dim(clust$clusters)[1], 3)
-  expect_equal(clust$args$return_node_type, "sites")
+  expect_equal(clust$args$return_node_type, "site")
   
   clust <- netclu_leadingeigen(net, cut_weight = 100)
   expect_equal(colnames(clust$clusters), c("ID","K_0"))

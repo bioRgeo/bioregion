@@ -75,10 +75,10 @@ test_that("valid output", {
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "species")
   
-  clust <- netclu_beckett(net, return_node_type = "sites")
+  clust <- netclu_beckett(net, return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(dim(clust$clusters)[2], 2)
-  expect_equal(clust$args$return_node_type, "sites")
+  expect_equal(clust$args$return_node_type, "site")
   
   clust <- netclu_beckett(net, cut_weight = 40, seed = 1)
   expect_equal(colnames(clust$clusters), c("ID","K_2"))

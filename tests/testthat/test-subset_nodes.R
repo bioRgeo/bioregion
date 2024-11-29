@@ -11,14 +11,14 @@
 # clu4 <- netclu_louvain(net, 
 #                        lang = "igraph", 
 #                        bipartite = TRUE, 
-#                        return_node_type = "sites")
+#                        return_node_type = "site")
 # 
 # # Tests for valid outputs ------------------------------------------------------
 # test_that("valid outputs", {
 #   
-#   sub <- subset_node(clu1, node_type = "sites")
+#   sub <- subset_node(clu1, node_type = "site")
 #   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
-#   expect_equal(sub$args$return_node_type, "sites")
+#   expect_equal(sub$args$return_node_type, "site")
 #   
 #   sub <- subset_node(clu1, node_type = "species")
 #   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
@@ -46,22 +46,22 @@
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node("1", node_type = "sites"),
+#     subset_node("1", node_type = "site"),
 #     "clusters must be a bioregion.clusters object.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu2, node_type = "sites"),
+#     subset_node(clu2, node_type = "site"),
 #     "clusters must be an output of a 'netclu_' function.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu3, node_type = "sites"),
+#     subset_node(clu3, node_type = "site"),
 #     "clusters must be based on a bipartite network.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu4, node_type = "sites"),
+#     subset_node(clu4, node_type = "site"),
 #     "clusters must contain both types of node.", 
 #     fixed = TRUE)
 #   

@@ -47,7 +47,7 @@
 #' (i.e. feature nodes).
 #' 
 #' @param return_node_type a `character` indicating what types of nodes
-#' ("sites", "species" or "both") should be returned in the output
+#' ("site", "species" or "both") should be returned in the output
 #' (`return_node_type = "both"` by default).
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
@@ -70,7 +70,7 @@
 #' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
 #' `return_node_type` equal to `"both"` to keep both types of nodes,
-#' `"sites"` to preserve only the sites nodes and `"species"` to
+#' `"site"` to preserve only the sites nodes and `"species"` to
 #' preserve only the species nodes.
 #'
 #' @return
@@ -159,7 +159,7 @@ netclu_leiden <- function(net,
     controls(args = site_col, data = net, type = "input_net_bip_col")
     controls(args = species_col, data = net, type = "input_net_bip_col")
     controls(args = return_node_type, data = NULL, type = "character")
-    if (!(return_node_type %in% c("both", "sites", "species"))) {
+    if (!(return_node_type %in% c("both", "site", "species"))) {
       stop("Please choose return_node_type among the followings values:
 both, sites or species", call. = FALSE)
     }
@@ -289,7 +289,7 @@ CPM or modularity", call. = FALSE)
   if (isbip) {
     attr(com, "node_type") <- rep("site", dim(com)[1])
     attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
-    if (return_node_type == "sites") {
+    if (return_node_type == "site") {
       com <- com[attributes(com)$node_type == "site", ]
     }
     if (return_node_type == "species") {

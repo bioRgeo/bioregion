@@ -7,8 +7,8 @@
 #' @param clusters an object of class `bioregion.clusters`.
 #'
 #' @param node_type a `character` indicating what types of nodes
-#' ("sites" or "species") should be extracted
-#' (`node_type = "sites"` by default).
+#' ("site" or "species") should be extracted
+#' (`node_type = "site"` by default).
 #'
 #' @return An object of class `bioregion.clusters` with a given node type (sites 
 #' or species).
@@ -35,14 +35,14 @@
 #'
 #' clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 #' 
-#' clusters_sites <- subset_node(clusters, node_type = "sites")
+#' clusters_sites <- subset_node(clusters, node_type = "site")
 #'
 #' @export
-subset_node <- function(clusters, node_type = "sites") {
+subset_node <- function(clusters, node_type = "site") {
 
   # Control node_type
   controls(args = node_type, data = NULL, type = "character")
-  if (!(node_type %in% c("sites", "species"))) {
+  if (!(node_type %in% c("site", "species"))) {
     stop("Please choose node_type among the followings values:
 sites and species", call. = FALSE)
   }
@@ -86,7 +86,7 @@ sites and species", call. = FALSE)
   }
   
   # Get type
-  if(node_type == "sites"){
+  if(node_type == "site"){
     clusters$clusters <- clusters$clusters[
       attributes(clusters$clusters)$node_type == "site", ]
   }
