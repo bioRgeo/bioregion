@@ -22,26 +22,26 @@ clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  contrib <- contribution(cluster_object = clust1, comat = comat,
-                          indices = "contribution")
+  rho <- contribution(cluster_object = clust1, comat = comat,
+                      indices = "rho")
   
-  expect_equal(inherits(contrib, "data.frame"), TRUE)
-  expect_equal(dim(contrib)[1], 75)
-  expect_equal(dim(contrib)[2], 3)
+  expect_equal(inherits(rho, "data.frame"), TRUE)
+  expect_equal(dim(rho)[1], 75)
+  expect_equal(dim(rho)[2], 3)
   
-  contrib2 <- contribution(cluster_object = com, comat = comat,
-                           indices = "contribution")
+  rho2 <- contribution(cluster_object = com, comat = comat,
+                       indices = "rho")
   
-  expect_equal(inherits(contrib2, "data.frame"), TRUE)
-  expect_equal(dim(contrib2)[1], 50)
-  expect_equal(dim(contrib2)[2], 3)
+  expect_equal(inherits(rho2, "data.frame"), TRUE)
+  expect_equal(dim(rho2)[1], 50)
+  expect_equal(dim(rho2)[2], 3)
   
   suppressWarnings({
-    contrib3 <- contribution(cluster_object = clust_bip, comat = comat,
-                             bipartite_link = net_bip,
-                             indices = c("contribution", "Cz"))
+    rho3 <- contribution(cluster_object = clust_bip, comat = comat,
+                         bipartite_link = net_bip,
+                         indices = c("rho", "Cz"))
   })
-  expect_equal(inherits(contrib3, "list"), TRUE)
+  expect_equal(inherits(rho3, "list"), TRUE)
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -54,7 +54,7 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
-    contribution(multi_clust, comat = comat, indices = "contribution"),
+    contribution(multi_clust, comat = comat, indices = "rho"),
     "This function is designed to be applied on a single partition.Your cluster_object has multiple partitions (select only one).",
     fixed = TRUE)
   
@@ -66,7 +66,7 @@ test_that("invalid inputs", {
   expect_error(
     contribution(com, comat = comat, indices = "zz"),
     "Please choose algorithm among the followings values:
-    contribution or Cz.",
+    rho or Cz.",
     fixed = TRUE)
   
   expect_error(

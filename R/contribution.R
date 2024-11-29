@@ -1,4 +1,5 @@
 #' Calculate contribution metrics of sites and species
+#' https://github.com/Farewe/biogeonetworks/blob/master/R/networkmetrics.R
 #' 
 #' This function calculates metrics that assess the contribution of a given
 #' species to its bioregion.
@@ -17,12 +18,12 @@
 #'  and an optional third column indicating the weight of the interaction.  
 #' 
 #' @param indices a `character` specifying the contribution metric to compute.
-#' Available options are `contribution`.
+#' Available options are `rho` and `Cz`.
 #' 
 #' @details 
-#' The contribution metric is derived from \insertRef{Lenormand2019}{bioregion}.
+#' The \rho metric is derived from \insertRef{Lenormand2019}{bioregion}.
 #' Its formula is the following:
-#' \eqn{(n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
+#' \eqn{\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
 #' 
 #' with \eqn{n} the number of sites, \eqn{n_i} the number of sites in which
 #' species \eqn{i} is present, \eqn{n_j} the number of sites belonging to the
@@ -53,7 +54,7 @@
 #' @return 
 #' A `list` of `data.frames` if multiples indices are selected or a single
 #' `data.frame` with three columns if one index is selected. Each `data.frame`
-#' has three columns: the species, the bioregion, and the contribution
+#' has three columns: the species, the bioregion, and the desired summary
 #' statistics.
 #'  
 #' @author
@@ -77,11 +78,9 @@
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_greedy(net)
 #' 
-#' contribution(cluster_object = clust1, comat = comat,
-#' indices = "contribution")
+#' contribution(cluster_object = clust1, comat = comat, indices = "rho")
 #' 
-#' contribution(cluster_object = com, comat = comat,
-#' indices = "contribution")
+#' contribution(cluster_object = com, comat = comat, indices = "rho")
 #' 
 #' # Cz indices
 #' net_bip <- mat_to_net(comat, weight = TRUE)
@@ -93,7 +92,7 @@
 
 contribution <- function(cluster_object,
                          comat,
-                         indices = c("contribution", "Cz"),
+                         indices = c("rho", "Cz"),
                          bipartite_link = NULL){
   # 1. Controls ---------------------------------------------------------------
   # input can be of format bioregion.clusters
@@ -132,9 +131,9 @@ contribution <- function(cluster_object,
     )
   }
   
-  if(!isTRUE(unique(indices %in% c("contribution", "Cz")))){
+  if(!isTRUE(unique(indices %in% c("rho", "Cz")))){
     stop("Please choose algorithm among the followings values:
-    contribution or Cz.", call. = FALSE)
+    rho or Cz.", call. = FALSE)
   }
   
   if("Cz" %in% indices && is.null(bipartite_link)){
@@ -148,7 +147,7 @@ contribution <- function(cluster_object,
   
   # Add controls for bipartite_link
   
-  contribution_df <- NULL
+  rho_df <- NULL
   
   # 2. Function ---------------------------------------------------------------
   ## 2.1. Cz ------------------------------------------------------------------
@@ -279,7 +278,7 @@ contribution <- function(cluster_object,
   }
   
   ## 2.2. Contribution --------------------------------------------------------
-  if("contribution" %in% indices){
+  if("rho" %in% indices){
     # Binary site-species matrix
     comat_bin <- comat
     comat_bin[comat_bin > 0] <- 1
@@ -296,7 +295,7 @@ contribution <- function(cluster_object,
     n_i <- colSums(comat_bin) # number of occurrences per species
     n_j <- table(cluster_object$clusters[, 2]) # number of sites per bioregion
     
-    contrib_df <- data.frame()
+    rho_df <- data.frame()
     
     # Loop over bioregions
     for(j in 1:cluster_object$cluster_info$n_clust){
@@ -315,27 +314,27 @@ contribution <- function(cluster_object,
       p_ij <- (n_ij - ((n_i*n_j)/n))/(sqrt(((n - n_j)/
                                               (n-1))*(1-(n_j/n))*((n_i*n_j)/n)))
       
-      contrib_df <- rbind(contrib_df,
-                          data.frame(Bioregion = focal_j,
-                                     Species = names(p_ij),
-                                     Contribution = as.numeric(p_ij)))
+      rho_df <- rbind(rho_df,
+                      data.frame(Bioregion = focal_j,
+                                 Species = names(p_ij),
+                                 rho = as.numeric(p_ij)))
     }
     
     # Controls on the output
     # test if all bioregions are there
-    if(length(unique(contrib_df$Bioregion)) !=
+    if(length(unique(rho_df$Bioregion)) !=
        cluster_object$cluster_info$n_clust){
       warning("Not all bioregions are in the output.")
     }
     
     # test if all species are there
-    if(length(unique(contrib_df$Species)) != ncol(comat)){
+    if(length(unique(rho_df$Species)) != ncol(comat)){
       warning("Not all species are in the output.")
     }
     
     # test if all species are there X times (X = nb of bioregions)
-    if(length(unique(table(contrib_df$Species))) != 1 ||
-       unique(table(contrib_df$Species)) != cluster_object$cluster_info$n_clust){
+    if(length(unique(table(rho_df$Species))) != 1 ||
+       unique(table(rho_df$Species)) != cluster_object$cluster_info$n_clust){
       warning("Not all species x bioregions combinations are in the output.")
     }
   }
@@ -343,12 +342,12 @@ contribution <- function(cluster_object,
   if(length(indices) == 1){
     if(indices == "Cz"){
       return(bipartite_df)
-    } else if(indices == "contribution"){
-      return(contrib_df)    
+    } else if(indices == "rho"){
+      return(rho_df)    
     }
   } else{
-    if("contribution" %in% indices && "Cz" %in% indices){
-      return(list(contribution = contribution_df,
+    if("rho" %in% indices && "Cz" %in% indices){
+      return(list(rho = rho_df,
                   cz = bipartite_df))
     }
   }

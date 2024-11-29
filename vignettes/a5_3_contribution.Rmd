@@ -117,12 +117,9 @@ We can now run the function `contribution()`.
 <br>
 
 ```{r}
-contrib_kmeans <- contribution(vege_nhclu_kmeans, vegemat,
-                               indices = "contribution")
-contrib_hclu <- contribution(vege_hclu_hierarclust, vegemat,
-                             indices = "contribution")
-contrib_netclu <- contribution(vege_netclu_walktrap, vegemat,
-                               indices = "contribution")
+contrib_kmeans <- contribution(vege_nhclu_kmeans, vegemat, indices = "rho")
+contrib_hclu <- contribution(vege_hclu_hierarclust, vegemat, indices = "rho")
+contrib_netclu <- contribution(vege_netclu_walktrap, vegemat, indices = "rho")
 
 # Cz indices
 clust_bip <- netclu_greedy(vegedf, bipartite = TRUE)
