@@ -66,7 +66,7 @@ nodes (sites and species).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">subset_node</span><span class="op">(</span><span class="va">clusters</span>, node_type <span class="op">=</span> <span class="st">"sites"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">subset_node</span><span class="op">(</span><span class="va">clusters</span>, node_type <span class="op">=</span> <span class="st">"site"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,8 +79,8 @@ nodes (sites and species).</p>
 
 <dt id="arg-node-type">node_type<a class="anchor" aria-label="anchor" href="#arg-node-type"></a></dt>
 <dd><p>a <code>character</code> indicating what types of nodes
-("sites" or "species") should be extracted
-(<code>node_type = "sites"</code> by default).</p></dd>
+("site" or "species") should be extracted
+(<code>node_type = "site"</code> by default).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,9 +114,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_louvain.html">netclu_louvain</a></span><span class="op">(</span><span class="va">net</span>, lang <span class="op">=</span> <span class="st">"igraph"</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">clusters_sites</span> <span class="op">&lt;-</span> <span class="fu">subset_node</span><span class="op">(</span><span class="va">clusters</span>, node_type <span class="op">=</span> <span class="st">"sites"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Please choose node_type among the followings values:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> sites and species</span>
+<span class="r-in"><span><span class="va">clusters_sites</span> <span class="op">&lt;-</span> <span class="fu">subset_node</span><span class="op">(</span><span class="va">clusters</span>, node_type <span class="op">=</span> <span class="st">"site"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
