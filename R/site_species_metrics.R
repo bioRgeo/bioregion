@@ -2,7 +2,7 @@
 #' https://github.com/Farewe/biogeonetworks/blob/master/R/networkmetrics.R
 #' 
 #' This function calculates metrics that assess the contribution of a given
-#' species to its bioregion.
+#' species or site to its bioregion.
 #' 
 #' @param cluster_object a `bioregion.clusters` object or a `data.frame` or a 
 #' list of `data.frame` containing multiple partitions. At least two partitions
@@ -21,7 +21,7 @@
 #' Available options are `rho` and `Cz`.
 #' 
 #' @details 
-#' The \rho metric is derived from \insertRef{Lenormand2019}{bioregion}.
+#' The \eqn{\rho} metric is derived from \insertRef{Lenormand2019}{bioregion}.
 #' Its formula is the following:
 #' \eqn{\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
 #' 
@@ -78,19 +78,20 @@
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_greedy(net)
 #' 
-#' contribution(cluster_object = clust1, comat = comat, indices = "rho")
+#' site_species_metrics(cluster_object = clust1, comat = comat,
+#' indices = "rho")
 #' 
-#' contribution(cluster_object = com, comat = comat, indices = "rho")
+#' site_species_metrics(cluster_object = com, comat = comat, indices = "rho")
 #' 
 #' # Cz indices
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
-#' contribution(cluster_object = clust_bip, comat = comat, 
+#' site_species_metrics(cluster_object = clust_bip, comat = comat, 
 #' bipartite_link = net_bip, indices = "Cz")
 #' 
 #' @export
 
-contribution <- function(cluster_object,
+site_species_metrics <- function(cluster_object,
                          comat,
                          indices = c("rho", "Cz"),
                          bipartite_link = NULL){
@@ -277,7 +278,7 @@ contribution <- function(cluster_object,
       bipartite_df[, c("Node", "Bioregion", "Category", "C", "z")]
   }
   
-  ## 2.2. Contribution --------------------------------------------------------
+  ## 2.2. Metrics -------------------------------------------------------------
   if("rho" %in% indices){
     # Binary site-species matrix
     comat_bin <- comat

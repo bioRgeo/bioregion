@@ -1,5 +1,5 @@
 ---
-title: "5.3 Contribution"
+title: "5.3 Site-species metrics"
 author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
@@ -8,7 +8,7 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl    
 vignette: >
-  %\VignetteIndexEntry{5.3 Contribution}
+  %\VignetteIndexEntry{5.3 Site-species metrics}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -30,7 +30,7 @@ options(tinytex.verbose = TRUE)
 ```
 
 In this vignette, we aim at evaluating the contribution of individual species
-to each bioregion, using the function `contribution()`.
+to each bioregion, using the function `site_species_metrics()`.
 
 # Data  
 We use the vegetation dataset that comes with `bioregion`.
@@ -74,7 +74,7 @@ vege_netclu_walktrap$cluster_info # 3
 # Indices
 ## Contribution
 <center>
-  <img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
+<img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
 </center> 
 
 <br>
@@ -95,16 +95,16 @@ $j$.
 `Cz` metrics are derived from \insertRef{Guimera2005}{bioregion}.
 Their respective formula are:
 $$C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}$$
- 
+
 where $k_{is}$ is the number of links of node (species or site) $i$
 to nodes in bioregion $s$, and $k_i$ is the total degree of node
 $i$. The participation coefficient of a node is therefore close to 1 if
 its links are uniformly distributed among all the bioregions and 0 if all
 its links are within its own bioregion.
- 
+
 And:
 $$z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}$$
- 
+
 where $k_i$ is the number of links of node (species or site) $i$ to
 other nodes in its bioregion $s_i$, $\overline{k_{si}}$ is the
 average of $k$ over all the nodes in $s_i$, and
@@ -112,22 +112,25 @@ $\sigma_{k_{si}}$ is the standard deviation of $k$ in $s_i$.
 The within-bioregion degree z-score measures how well-connected node $i$
 is to other nodes in the bioregion.
 
-# Contribution
-We can now run the function `contribution()`.
+# Site/species metrics
+We can now run the function `site_species_metrics()`.
 <br>
 
 ```{r}
-contrib_kmeans <- contribution(vege_nhclu_kmeans, vegemat, indices = "rho")
-contrib_hclu <- contribution(vege_hclu_hierarclust, vegemat, indices = "rho")
-contrib_netclu <- contribution(vege_netclu_walktrap, vegemat, indices = "rho")
+contrib_kmeans <- site_species_metrics(vege_nhclu_kmeans, vegemat,
+                                       indices = "rho")
+contrib_hclu <- site_species_metrics(vege_hclu_hierarclust, vegemat,
+                                     indices = "rho")
+contrib_netclu <- site_species_metrics(vege_netclu_walktrap, vegemat,
+                                       indices = "rho")
 
 # Cz indices
 clust_bip <- netclu_greedy(vegedf, bipartite = TRUE)
-cz_netclu <- contribution(cluster_object = clust_bip, comat = vegemat, 
-                          bipartite_link = vegedf, indices = "Cz")
+cz_netclu <- site_species_metrics(cluster_object = clust_bip,  comat = vegemat,
+                                  bipartite_link = vegedf, indices = "Cz")
 ```
 
-`contribution()` outputs `data.frame` with the contribution metrics available
+`site_species_metrics()` outputs `data.frame` with the contribution metrics available
 at the species level.
 
 # References
