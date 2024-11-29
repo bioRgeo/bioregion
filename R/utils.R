@@ -41,6 +41,14 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     stop("Control type not defined!", call.=FALSE)
   }
   
+  
+  # TODO: reformat all error messages to single lines, using the following
+  # format:
+  # paste0("This is a multiline ",
+  #        "error sentence ",
+  #        "with no problematic line ",
+  #        "breaks")
+  
   # Input nhandhclu ############################################################
   if (type == "input_nhandhclu") {
     if (!inherits(data, "bioregion.pairwise.metric") &

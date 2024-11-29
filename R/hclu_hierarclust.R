@@ -255,6 +255,12 @@ hclu_hierarclust <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    dissimilarity <- mat_to_net(as.matrix(dissimilarity), weight = TRUE)
+    if(is.null(index)) {
+      colnames(dissimilarity)[3] <- index <- "Dissimilarity"
+    } else {
+      colnames(dissimilarity)[3] <- index
+    }
   }
 
   

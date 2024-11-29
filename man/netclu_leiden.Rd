@@ -68,7 +68,7 @@ interpret the vertex weights.}
 (i.e. feature nodes).}
 
 \item{return_node_type}{a \code{character} indicating what types of nodes
-("sites", "species" or "both") should be returned in the output
+("site", "species" or "both") should be returned in the output
 (\code{return_node_type = "both"} by default).}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
@@ -110,7 +110,7 @@ dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
 feature nodes) using the arguments \code{site_col} and \code{species_col}.
 The type of nodes returned in the output can be chosen with the argument
 \code{return_node_type} equal to \code{"both"} to keep both types of nodes,
-\code{"sites"} to preserve only the sites nodes and \code{"species"} to
+\code{"site"} to preserve only the sites nodes and \code{"species"} to
 preserve only the species nodes.
 }
 \examples{

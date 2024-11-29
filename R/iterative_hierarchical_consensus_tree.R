@@ -10,13 +10,14 @@ iterative_consensus_tree <- function(
     n_runs = 100,
     max_remaining_size = length(sites),
     monotonicity_direction = c("top-down", "bottom-up")) {
-  
-  if(inherits(dissim, "bioregion.pairwise.metric")) {
+
+  if(inherits(dissim, "bioregion.pairwise.metric") |
+     inherits(dissim, "data.frame")) {
     dissim[, 3] <- dissim[, index]
     dissim <- stats::as.dist(
       net_to_mat(dissim[, 1:3], weight = TRUE, squared = TRUE, symmetrical = TRUE)
     )
-  }
+  } 
   
   monotonicity_direction <- match.arg(monotonicity_direction)
   

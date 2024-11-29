@@ -4,14 +4,14 @@
 \alias{subset_node}
 \title{Extract a subset of nodes from a bioregion.clusters object}
 \usage{
-subset_node(clusters, node_type = "sites")
+subset_node(clusters, node_type = "site")
 }
 \arguments{
 \item{clusters}{an object of class \code{bioregion.clusters}.}
 
 \item{node_type}{a \code{character} indicating what types of nodes
-("sites" or "species") should be extracted
-(\code{node_type = "sites"} by default).}
+("site" or "species") should be extracted
+(\code{node_type = "site"} by default).}
 }
 \value{
 An object of class \code{bioregion.clusters} with a given node type (sites
@@ -39,7 +39,7 @@ net <- data.frame(
 
 clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 
-clusters_sites <- subset_node(clusters, node_type = "sites")
+clusters_sites <- subset_node(clusters, node_type = "site")
 
 }
 \author{
