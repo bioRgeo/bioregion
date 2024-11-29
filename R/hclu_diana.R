@@ -183,15 +183,23 @@ hclu_diana <- function(dissimilarity,
   outputs$algorithm$final.tree <- diana_clust
   # outputs$diana <- diana_clust
   
-  # Cophenetic correlation
-  coph <- as.matrix(stats::cophenetic(outputs$algorithm$final.tree))
-  coph <- coph[match(attr(dist.obj, "Labels"), rownames(coph)),
-               match(attr(dist.obj, "Labels"), colnames(coph))]
-  dist.mat <- as.matrix(dist.obj)
+  # Evaluation
+  # coph <- as.matrix(stats::cophenetic(outputs$algorithm$final.tree))
+  # coph <- coph[match(attr(dist.obj, "Labels"), rownames(coph)),
+  #              match(attr(dist.obj, "Labels"), colnames(coph))]
+  # dist.mat <- as.matrix(dist.obj)
   
-  outputs$algorithm$final.tree.coph.cor <-
-    stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
-               method = "spearman")
+  
+  evals <- tree_eval(outputs$algorithm$final.tree,
+                     dist.obj)
+  
+  outputs$algorithm$final.tree.coph.cor <- evals$cophcor
+  # outputs$algorithm$final.tree.2norm <- evals$norm2
+  outputs$algorithm$final.tree.msd <- evals$msd
+  
+  # outputs$algorithm$final.tree.coph.cor <-
+  #   stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
+  #              method = "spearman")
   
   message(paste0("Output tree has a ",
                  round(outputs$algorithm$final.tree.coph.cor, 2),
