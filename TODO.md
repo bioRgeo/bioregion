@@ -5,7 +5,13 @@
 * from_abcABC (to compute metrics from abc and/or ABC).
 
 * reassign_cluster (to assign or reassign cluster based on a partition and a 
-(dis)similarity metric).
+(dis)similarity metric) + spatial coherence (reassignment of sites)
+
+* between_bioregions_metrics() => 'beta-diversity' between bioregions, output:
+matrix/network, produces results like in Lenormand et al. 2019
+
+* Function to visualize network (maybe with visNetwork()) from
+between_bioregions_metrics()
 
 #### New features
 
