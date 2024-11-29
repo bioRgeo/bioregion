@@ -220,12 +220,9 @@ is to other nodes in the bioregion.</p>
 </h2>
 <p>We can now run the function <code><a href="../reference/contribution.html">contribution()</a></code>. <br></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">contrib_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, <span class="va">vegemat</span>,</span>
-<span>                               indices <span class="op">=</span> <span class="st">"contribution"</span><span class="op">)</span></span>
-<span><span class="va">contrib_hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_hclu_hierarclust</span>, <span class="va">vegemat</span>,</span>
-<span>                             indices <span class="op">=</span> <span class="st">"contribution"</span><span class="op">)</span></span>
-<span><span class="va">contrib_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_netclu_walktrap</span>, <span class="va">vegemat</span>,</span>
-<span>                               indices <span class="op">=</span> <span class="st">"contribution"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">contrib_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, <span class="va">vegemat</span>, indices <span class="op">=</span> <span class="st">"rho"</span><span class="op">)</span></span>
+<span><span class="va">contrib_hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_hclu_hierarclust</span>, <span class="va">vegemat</span>, indices <span class="op">=</span> <span class="st">"rho"</span><span class="op">)</span></span>
+<span><span class="va">contrib_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contribution.html">contribution</a></span><span class="op">(</span><span class="va">vege_netclu_walktrap</span>, <span class="va">vegemat</span>, indices <span class="op">=</span> <span class="st">"rho"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Cz indices</span></span>
 <span><span class="va">clust_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">vegedf</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
