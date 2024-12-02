@@ -176,3 +176,10 @@ single bioregionalization and also compare this assignment across different
 bioregionalizations. The following
 [page](https://biorgeo.github.io/bioregion/articles/a5_2_compare_partitions.html)
 illustrates this.
+
+## 5.3 Summary metrics
+
+In this section, we compute summary statistics at different scales, either
+at the bioregion or at the site or species level. Related functions are
+detailed in this
+[page](https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html).

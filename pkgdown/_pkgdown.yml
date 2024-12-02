@@ -12,7 +12,7 @@ reference:
   - install_binaries
   - mat_to_net
   - net_to_mat
-  - subset_node
+  - site_species_subset
   
 - title: Pairwise similarity and distance metrics
   desc: ~
@@ -60,6 +60,7 @@ reference:
   - find_optimal_n
   - partition_metrics
   - site_species_metrics
+  - bioregion_metrics
 
 - title: Visualisation
   desc: ~

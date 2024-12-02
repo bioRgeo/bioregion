@@ -1,5 +1,5 @@
 ---
-title: "5.3 Site-species metrics"
+title: "5.3 Summary metrics"
 author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
@@ -8,7 +8,7 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl    
 vignette: >
-  %\VignetteIndexEntry{5.3 Site-species metrics}
+  %\VignetteIndexEntry{5.3 Summary metrics}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -71,8 +71,24 @@ vege_netclu_walktrap <- netclu_walktrap(vegesim,
 vege_netclu_walktrap$cluster_info # 3
 ```
 
-# Indices
-## Contribution
+# Bioregion metrics
+
+Number of sites belonging to a bioregion, how many species do these sites
+contain. Number of endemic and proportion of endemism are also calculated.
+Endemic species are species only present in sites assigned to a particular
+bioregion.
+
+```{r}
+bioregion_summary <- bioregion_metrics(cluster_object = vege_nhclu_kmeans,
+                                       comat = vegemat)
+bioregion_summary
+```
+
+# Site/species metrics
+
+Different indices are available/
+
+## Contribution ($\rho$)
 <center>
 <img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
 </center> 
@@ -112,7 +128,7 @@ $\sigma_{k_{si}}$ is the standard deviation of $k$ in $s_i$.
 The within-bioregion degree z-score measures how well-connected node $i$
 is to other nodes in the bioregion.
 
-# Site/species metrics
+## Running the site_species_metrics function
 We can now run the function `site_species_metrics()`.
 <br>
 
