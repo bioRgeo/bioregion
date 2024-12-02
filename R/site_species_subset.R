@@ -1,4 +1,4 @@
-#' Extract a subset of nodes from a bioregion.clusters object
+#' Extract a subset of sites or species from a bioregion.clusters object
 #'
 #' This function extracts a subset of nodes according to its type (sites or 
 #' species) from a bioregion.clusters object containing both types of 
@@ -38,7 +38,7 @@
 #' clusters_sites <- subset_node(clusters, node_type = "site")
 #'
 #' @export
-subset_node <- function(clusters, node_type = "site") {
+site_species_subset <- function(clusters, node_type = "site") {
 
   # Control node_type
   controls(args = node_type, data = NULL, type = "character")
@@ -98,8 +98,6 @@ sites and species", call. = FALSE)
   # Update return_node_type
   clusters$args$return_node_type <- node_type
 
-
   # Return output
   return(clusters)
-  
 }

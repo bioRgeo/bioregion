@@ -16,11 +16,11 @@
 # # Tests for valid outputs ------------------------------------------------------
 # test_that("valid outputs", {
 #   
-#   sub <- subset_node(clu1, node_type = "site")
+#   sub <- site_species_subset(clu1, node_type = "site")
 #   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
 #   expect_equal(sub$args$return_node_type, "site")
 #   
-#   sub <- subset_node(clu1, node_type = "species")
+#   sub <- site_species_subset(clu1, node_type = "species")
 #   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
 #   expect_equal(sub$args$return_node_type, "species")
 #   
@@ -30,38 +30,38 @@
 # test_that("indalid inputs", {
 #   
 #   expect_error(
-#     subset_node(clu1, node_type = 1),
+#     site_species_subset(clu1, node_type = 1),
 #     "node_type must be a character.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu1, node_type = c(1,1)),
+#     site_species_subset(clu1, node_type = c(1,1)),
 #     "node_type must be of length 1.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu1, node_type = "1"),
+#     site_species_subset(clu1, node_type = "1"),
 #     "Please choose node_type among the followings values:
 # sites and species", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node("1", node_type = "site"),
+#     site_species_subset("1", node_type = "site"),
 #     "clusters must be a bioregion.clusters object.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu2, node_type = "site"),
+#     site_species_subset(clu2, node_type = "site"),
 #     "clusters must be an output of a 'netclu_' function.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu3, node_type = "site"),
+#     site_species_subset(clu3, node_type = "site"),
 #     "clusters must be based on a bipartite network.", 
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     subset_node(clu4, node_type = "site"),
+#     site_species_subset(clu4, node_type = "site"),
 #     "clusters must contain both types of node.", 
 #     fixed = TRUE)
 #   
