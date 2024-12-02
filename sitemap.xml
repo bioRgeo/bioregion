@@ -11,13 +11,14 @@
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a5_2_compare_partitions.html</loc></url>
-<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_3_site_species_metrics.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_3_summary_metrics.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/bioregion.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/index.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/authors.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/index.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/news/index.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/betapart_to_bioregion.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/compare_partitions.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/cut_tree.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/dissimilarity.html</loc></url>
@@ -53,7 +54,7 @@
 <url><loc>https://bioRgeo.github.io/bioregion/reference/similarity.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/similarity_to_dissimilarity.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/site_species_metrics.html</loc></url>
-<url><loc>https://bioRgeo.github.io/bioregion/reference/subset_node.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/reference/site_species_subset.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/vegedf.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/vegemat.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/reference/vegesf.html</loc></url>
