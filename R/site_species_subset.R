@@ -35,7 +35,7 @@
 #'
 #' clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 #' 
-#' clusters_sites <- subset_node(clusters, node_type = "site")
+#' clusters_sites <- site_species_subset(clusters, node_type = "site")
 #'
 #' @export
 site_species_subset <- function(clusters, node_type = "site") {

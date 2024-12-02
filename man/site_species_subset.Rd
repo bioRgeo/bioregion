@@ -39,7 +39,7 @@ net <- data.frame(
 
 clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 
-clusters_sites <- subset_node(clusters, node_type = "site")
+clusters_sites <- site_species_subset(clusters, node_type = "site")
 
 }
 \author{
