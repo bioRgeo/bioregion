@@ -95,8 +95,7 @@ Different indices are available/
 
 <br>
 
-The contribution index $\rho$ is calculated for each species x bioregion combination,
-following [@Lenormand2019].
+The contribution index $\rho$ is calculated for each species x bioregion combination, following [@Lenormand2019].
 <br>
 Its formula is the following:
 
@@ -108,7 +107,7 @@ $j$.
 
 ## Cz statistics
 
-`Cz` metrics are derived from \insertRef{Guimera2005}{bioregion}.
+`Cz` metrics are derived from [@Guimera2005].
 Their respective formula are:
 $$C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}$$
 
