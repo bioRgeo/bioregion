@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-12-02</h4>
+            <h4 data-toc-skip class="date">2024-12-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_3_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_summary_metrics.Rmd</code></div>
@@ -254,9 +254,51 @@ with the contribution metrics available at the species level.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="spatial-coherence">Spatial coherence<a class="anchor" aria-label="anchor" href="#spatial-coherence"></a>
+</h2>
+<p>We use the metric of spatial coherence as in <span class="citation">(Divíšek et al., 2016)</span>, except that we replace
+the number of pixels per bioregion with the area of each coherent
+part.</p>
+<p>The spatial coherence is expressed in percentage, and has the
+following formula:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><msub><mi>C</mi><mi>j</mi></msub><mo>=</mo><mn>100</mn><mo>×</mo><mfrac><mrow><mi>L</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi><mi>s</mi><mi>t</mi><mi>P</mi><mi>a</mi><mi>t</mi><mi>c</mi><msub><mi>h</mi><mi>j</mi></msub></mrow><mrow><mi>A</mi><mi>r</mi><mi>e</mi><msub><mi>a</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">SC_j = 100 \times \frac{LargestPatch_j}{Area_j}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+is a bioregion.</p>
+<p>Here is an example with the vegetation dataset.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Spatial coherence</span></span>
+<span><span class="va">vegedissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
+<span><span class="va">hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">vegemap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_clusters.html">map_clusters</a></span><span class="op">(</span><span class="va">hclu</span>, <span class="va">vegesf</span>, write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">hclu</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, map <span class="op">=</span> <span class="va">vegemap</span>,</span>
+<span>col_bioregion <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">##   Bioregion Site_number Species_number Endemics Percentage_Endemic Coherence</span></span>
+<span><span class="co">## 1         2         128           2527       90           3.561535  49.21875</span></span>
+<span><span class="co">## 2         1         169           2983       45           1.508548  56.21302</span></span>
+<span><span class="co">## 3         4         298           2936       56           1.907357  98.99329</span></span>
+<span><span class="co">## 4         3         120           2262       67           2.961981  79.16667</span></span></code></pre>
+<p>The bioregion 4 is almost constituted of one homogeneous block, which
+is why the spatial coherence is very close to 100 %.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">vegemap</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">K_4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="st">"Bioregion"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_3_summary_metrics_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
+</div>
+<div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-Divisek2016" class="csl-entry">
+Divíšek, J., Storch, D., Zelený, D., &amp; Culek, M. (2016). Towards the
+spatial coherence of biogeographical regionalizations at subcontinental
+and landscape scales. <em>Journal of Biogeography</em>, <em>43</em>,
+2489–2501. <a href="https://doi.org/10.1111/jbi.12832" class="external-link">https://doi.org/10.1111/jbi.12832</a>
+</div>
 <div id="ref-Guimera2005" class="csl-entry">
 Guimerà, R., &amp; Nunes Amaral, L. (2005). Functional cartography of
 complex metabolic networks. <em>Nature</em>, <em>433</em>, 895–900.
