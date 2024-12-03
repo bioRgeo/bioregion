@@ -168,7 +168,7 @@ Here is an example with the vegetation dataset.
 # Spatial coherence
 vegedissim <- dissimilarity(vegemat)
 hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
-vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 
 bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
 col_bioregion = 2) 

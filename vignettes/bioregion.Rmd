@@ -164,7 +164,7 @@ estimates the time required to run each method on data sets of different sizes.
 
 ## 5.1 Visualization
 If sites have geographic coordinates, then each bioregionalisation can be
-visualized with the function `map_clusters()`.
+visualized with the function `map_bioregions()`.
 
 This [tutorial page](https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html)
 details different ways to plot your bioregionalisation.
