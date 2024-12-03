@@ -125,33 +125,33 @@ of it and also load the data.frame format of the data.</p>
 </h2>
 <p>In this section, we show three ways to plot your results. <br></p>
 <div class="section level3">
-<h3 id="map_clusters">map_clusters()<a class="anchor" aria-label="anchor" href="#map_clusters"></a>
+<h3 id="map_bioregions">map_bioregions()<a class="anchor" aria-label="anchor" href="#map_bioregions"></a>
 </h3>
 <p>The first possibility is to use the function
-<code><a href="../reference/map_clusters.html">map_clusters()</a></code> from the package. This function can directly
-provide a plot of each site colored according to the cluster they belong
-to. <br> Let’s take an example with a K-means clustering, with a number
-of clusters set to 3.</p>
+<code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> from the package. This function can
+directly provide a plot of each site colored according to the cluster
+they belong to. <br> Let’s take an example with a K-means clustering,
+with a number of clusters set to 3.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
-<p><code><a href="../reference/map_clusters.html">map_clusters()</a></code> function can now simply takes the object
-<code>fish_nhclu_kmeans</code>, which is of
+<p><code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> function can now simply takes the
+object <code>fish_nhclu_kmeans</code>, which is of
 <code>bioregion.clusters</code> class, and the spatial distribution of
 sites, stored in <code>fishsf</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_clusters.html">map_clusters</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 </div>
 <div class="section level3">
 <h3 id="custom-plot">Custom plot<a class="anchor" aria-label="anchor" href="#custom-plot"></a>
 </h3>
 <p>If you want to customize yourself the plot and not simply rely on the
-default option, <code><a href="../reference/map_clusters.html">map_clusters()</a></code> gives you the possibility to
-extract each site as well as its geometry and cluster number.<br>
+default option, <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> gives you the possibility
+to extract each site as well as its geometry and cluster number.<br>
 For this purpose, you can set the arguments like in the chunk below:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_clusters.html">map_clusters</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>,</span>
-<span>                       write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>,</span>
+<span>                         write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">custom</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 715 features and 2 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
