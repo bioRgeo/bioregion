@@ -12,7 +12,13 @@ building a consensus hierarchical tree with a meaningful topology.
 
 * Updated generic functions to provide plot and print for diana
 
-* Indices Cz added to contribution()
+* Function contribution() renamed as site_species_metrics()
+
+* Function bioregion_metrics() created
+
+* Function subset_node() renamed site_species_subset()
+
+* Indices Cz added to site_species_metrics()
 
 * Updated install_binaries:
    - Archive bin.zip now stored on GitHub and backed up on NextCloud  

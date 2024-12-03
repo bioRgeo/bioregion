@@ -175,8 +175,7 @@ Let's see how it looks like on a map:
 ```{r, fig.width=6, fig.height=4}
 data(vegesf)
 library(sf)
-map_clusters(tree1$clusters[, c("ID", "K_3")],
-             vegesf)
+map_bioregions(tree1$clusters[, c("ID", "K_3")], vegesf)
 ```
 
 Now, this is a hierarchical tree, and cutting it only once (= only 1 partition)
@@ -221,12 +220,9 @@ for the shallow cut partition (h = 0.4) we have
 Here is how the maps look like:
 
 ```{r, fig.width=6, fig.height=4}
-for(i in 2:ncol(tree1$clusters))
-{
-  map_clusters(tree1$clusters[, c(1, i)],
-             vegesf)
+for(i in 2:ncol(tree1$clusters)){
+  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
 }
-
 ```
 
 
@@ -520,10 +516,9 @@ K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_d
 head(tree4$clusters[, c("ID", K_name)])
 
 # Make a map of the clusters
-data(vegesf)
-library(sf)
-map_clusters(tree4$clusters[, c("ID", K_name)],
-             vegesf)
+data("vegesf")
+library("sf")
+map_bioregions(tree4$clusters[, c("ID", K_name)], vegesf)
 ```
 
 Or if you are allergic to lines of code, you could also simply recut your tree 
