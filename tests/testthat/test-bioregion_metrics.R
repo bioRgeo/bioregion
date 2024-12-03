@@ -27,6 +27,15 @@ com <- netclu_greedy(net)
 
 multi_clust <- nhclu_kmeans(dissim, n_clust = 3:4, index = "Simpson")
 
+
+# Spatial coherence
+vegedissim <- dissimilarity(vegemat)
+hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
+vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+
+vegemap_error <- vegemap
+vegemap_error$K_4 <- NA
+
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
@@ -35,6 +44,13 @@ test_that("valid output", {
   expect_equal(inherits(test_output, "data.frame"), TRUE)
   expect_equal(dim(test_output)[1], 3)
   expect_equal(dim(test_output)[2], 5)
+  
+  test_output2 <- bioregion_metrics(cluster_object = hclu, comat = vegemat,
+                                    map = vegemap, col_bioregion = 2) 
+  
+  expect_equal(inherits(test_output2, "data.frame"), TRUE)
+  expect_equal(dim(test_output2)[1], 4)
+  expect_equal(dim(test_output2)[2], 6)
   
 })
 
@@ -55,6 +71,30 @@ test_that("invalid inputs", {
   expect_error(
     bioregion_metrics(com, comat = "zz"),
     "comat must be a matrix.",
+    fixed = TRUE)
+  
+  # Spatial coherence
+  expect_error(
+    bioregion_metrics(hclu, comat = vegemat, map = "zz"),
+    "map must be a 'sf' spatial data.frame with bioregions and sites.",
+    fixed = TRUE)
+  
+  expect_error(
+    bioregion_metrics(hclu, comat = vegemat, map = vegemap[, 2, drop = FALSE],
+                      col_bioregion = 2),
+    "map must have at least 3 columns: sites, bioregions and geometry.",
+    fixed = TRUE)
+  
+  expect_error(
+    bioregion_metrics(hclu, comat = vegemat, map = vegemap,
+                      col_bioregion = "zz"),
+    "col_bioregion must be numeric.",
+    fixed = TRUE)
+  
+  expect_error(
+    bioregion_metrics(hclu, comat = vegemat, map = vegemap_error,
+                      col_bioregion = 2),
+    "There is no bioregion in the Bioregion column.",
     fixed = TRUE)
   
 })

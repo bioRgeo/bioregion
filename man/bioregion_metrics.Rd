@@ -4,7 +4,7 @@
 \alias{bioregion_metrics}
 \title{Calculate contribution metrics for bioregions}
 \usage{
-bioregion_metrics(cluster_object, comat)
+bioregion_metrics(cluster_object, comat, map = NULL, col_bioregion = NULL)
 }
 \arguments{
 \item{cluster_object}{a \code{bioregion.clusters} object or a \code{data.frame} or a
@@ -15,9 +15,15 @@ partitions).}
 
 \item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
 columns.}
+
+\item{map}{a spatial \verb{sf data.frame} with sites and bioregions. It is the
+output of the function \code{map_clusters}. \code{NULL} by default.}
+
+\item{col_bioregion}{an \code{integer} specifying the column position of the
+bioregion.}
 }
 \value{
-A \code{data.frame} with 5 columns.
+A \code{data.frame} with 5 columns, or 6 if the spatial coherence is computed.
 }
 \description{
 This function calculates the number of sites per bioregion, as well as the
@@ -56,6 +62,14 @@ net <- similarity(comat, metric = "Simpson")
 com <- netclu_greedy(net)
 
 bioregion_metrics(cluster_object = clust1, comat = comat) 
+
+# Spatial coherence
+vegedissim <- dissimilarity(vegemat)
+hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
+vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+
+bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
+col_bioregion = 2) 
 
 }
 \seealso{

@@ -13,13 +13,19 @@
 #' @param comat a co-occurrence `matrix` with sites as rows and species as
 #' columns. 
 #' 
+#' @param map a spatial `sf data.frame` with sites and bioregions. It is the
+#' output of the function `map_clusters`. `NULL` by default.
+#'
+#' @param col_bioregion an `integer` specifying the column position of the
+#' bioregion.
+#'
 #' @details 
 #' Endemic species are species only found in the sites belonging to one
 #' bioregion.
 #'
 #' @seealso [site_species_metrics]
 #' @return 
-#' A `data.frame` with 5 columns.
+#' A `data.frame` with 5 columns, or 6 if the spatial coherence is computed.
 #'  
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
@@ -55,9 +61,18 @@
 #' 
 #' bioregion_metrics(cluster_object = clust1, comat = comat) 
 #' 
+#' # Spatial coherence
+#' vegedissim <- dissimilarity(vegemat)
+#' hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
+#' vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+#' 
+#' bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
+#' col_bioregion = 2) 
+#' 
 #' @export
 
-bioregion_metrics <- function(cluster_object, comat){
+bioregion_metrics <- function(cluster_object, comat,
+                              map = NULL, col_bioregion = NULL){
   # 1. Controls ---------------------------------------------------------------
   # input can be of format bioregion.clusters
   if (inherits(cluster_object, "bioregion.clusters")) {
@@ -87,14 +102,41 @@ bioregion_metrics <- function(cluster_object, comat){
   
   controls(args = NULL, data = comat, type = "input_matrix")
   
+  if(!is.null(map)){
+    if(!("sf" %in% class(map))){
+      stop("map must be a 'sf' spatial data.frame with bioregions and sites.")
+    }
+    if(!("data.frame" %in% class(map))){
+      stop("map must be a 'sf' spatial data.frame with bioregions and sites.")
+    }
+    if(ncol(map) < 3){
+      stop("map must have at least 3 columns: sites, bioregions and geometry.")
+    }
+    if(is.null(col_bioregion)){
+      stop("col_bioregion must be defined, it is the column position of the
+           bioregion.")
+    }
+  }
+  
+  if(!is.null(col_bioregion)){
+    if(is.null(map)){
+      warning("col_bioregion is defined but is not considered since map is set
+              to NULL.")
+    }
+    
+    controls(args = col_bioregion, data = NULL, type = "positive_integer")
+    
+    map_test <- map
+    sf::st_geometry(map_test) <- NULL
+    if(class(map_test[, col_bioregion]) == "logical"){
+      stop("There is no bioregion in the Bioregion column.")
+    }
+    rm(map_test)
+  }
+  
   bioregion_df <- NULL
   
   # 2. Function ---------------------------------------------------------------
-  # clusters <- clust1$clusters
-  # tmp <- unique(clusters[which(clusters[, 2] == 1), "ID"])
-  # colnames(comat[tmp, ])
-  # dim(comat); dim(comat[tmp, ]); dim(comat[tmp, colSums(comat[tmp, ]) > 0])
-  
   # If it is a bipartite object, we can directly count the species
   if(cluster_object$inputs$bipartite == TRUE){
     clusters <- clusters[which(attributes(clusters)$node_type == "site"), ]
@@ -133,6 +175,48 @@ bioregion_metrics <- function(cluster_object, comat){
   if(length(unique(bioregion_df$Bioregion)) !=
      cluster_object$cluster_info$n_clust){
     warning("Not all bioregions are in the output.")
+  }
+  
+  ## 2.2. Spatial coherence ---------------------------------------------------
+  if(!is.null(map)){
+    # Rename column with bioregion
+    colnames(map)[col_bioregion] <- "Bioregion"
+    
+    # If one bioregion only: spatial coherence equals 100%
+    if(dplyr::n_distinct(map$Bioregion) == 1){
+      bioregion_df <- data.frame(bioregion_df,
+                                 Coherence = 100)
+    } else if(dplyr::n_distinct(map$Bioregion) > 1){
+      spatial_coherence_df <- data.frame()
+      for(j in 1:dplyr::n_distinct(map$Bioregion)){
+        bioregion_j <-
+          unique(map[which(map$Bioregion ==
+                             unique(map$Bioregion)[j]), ]$Bioregion)
+        
+        # Merging sites belonging to bioregion j that touch each other
+        map_j <- map[which(map$Bioregion == bioregion_j), ] 
+        map_j <- dplyr::summarise(map_j, geometry = st_union(geometry))
+        map_j <- sf::st_cast(map_j, "POLYGON")
+        map_j <- dplyr::mutate(map_j, ID = dplyr::row_number())
+        
+        # Adding area of each touching entity
+        map_j$area <- as.numeric(sf::st_area(map_j))
+        
+        # Spatial coherence of bioregion i
+        sp_coherence_j <- 100* max(map_j$area, na.rm = TRUE) /
+          sum(map_j$area, na.rm = TRUE)
+        
+        # Storing spatial coherence
+        spatial_coherence_df <- rbind(spatial_coherence_df,
+                                      data.frame(Bioregion = bioregion_j,
+                                                 Coherence = sp_coherence_j))
+      }
+      
+      bioregion_df <- dplyr::left_join(bioregion_df, spatial_coherence_df,
+                                       by = "Bioregion")
+    } else{
+      stop("There is no bioregion in the Bioregion column.")
+    }
   }
   
   return(bioregion_df)    

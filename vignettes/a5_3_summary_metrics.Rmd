@@ -23,6 +23,8 @@ suppressPackageStartupMessages({
   suppressWarnings({
     library("bioregion")
     library("dplyr")
+    library("ggplot2")
+    library("sf")
   })
 })
 
@@ -147,5 +149,41 @@ cz_netclu <- site_species_metrics(cluster_object = clust_bip,  comat = vegemat,
 
 `site_species_metrics()` outputs `data.frame` with the contribution metrics available
 at the species level.
+
+# Spatial coherence
+
+We use the metric of spatial coherence as in [@Divisek2016], except that we
+replace the number of pixels per bioregion with the area of each coherent part.
+
+The spatial coherence is expressed in percentage, and has the following
+formula:
+
+$$SC_j = 100 \times \frac{LargestPatch_j}{Area_j}$$
+
+where $j$ is a bioregion.
+
+Here is an example with the vegetation dataset.
+
+```{r}
+# Spatial coherence
+vegedissim <- dissimilarity(vegemat)
+hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
+vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+
+bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
+col_bioregion = 2) 
+```
+
+The bioregion 4 is almost constituted of one homogeneous block, which is why 
+the spatial coherence is very close to 100 %.
+
+```{r}
+ggplot(vegemap) +
+  geom_sf(aes(fill = as.factor(K_4))) +
+  scale_fill_viridis_d("Bioregion") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
 
 # References
