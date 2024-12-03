@@ -31,7 +31,7 @@ multi_clust <- nhclu_kmeans(dissim, n_clust = 3:4, index = "Simpson")
 # Spatial coherence
 vegedissim <- dissimilarity(vegemat)
 hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
-vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 
 vegemap_error <- vegemap
 vegemap_error$K_4 <- NA

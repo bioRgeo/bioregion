@@ -5,7 +5,7 @@
 # clu <- netclu_greedy(net)
 # 
 # # Tests for valid outputs -----------------------------------------------------
-# map <- map_clusters(clu, fishsf, write_clusters = TRUE, plot = FALSE)
+# map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
 # 
 # test_that("number of columns in output", {
 #   
@@ -19,22 +19,22 @@
 # # Tests for invalid inputs ----------------------------------------------------
 # test_that("error messages with wrong inputs", {
 #   expect_error(
-#     map_clusters("zz"),
+#     map_bioregions("zz"),
 #     "If not a bioregion.clusters's object, clusters must be a data.frame.",
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     map_clusters(clu, "zz"),
+#     map_bioregions(clu, "zz"),
 #     "It seems that the geometry used is not an sf object.",
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     map_clusters(clu, fishsf, write_clusters = NA, plot = FALSE),
+#     map_bioregions(clu, fishsf, write_clusters = NA, plot = FALSE),
 #     "write_clusters must be a boolean.",
 #     fixed = TRUE)
 #   
 #   expect_error(
-#     map_clusters(clu, fishsf, write_clusters = TRUE, plot = NA),
+#     map_bioregions(clu, fishsf, write_clusters = TRUE, plot = NA),
 #     "plot must be a boolean.",
 #     fixed = TRUE)
 # })

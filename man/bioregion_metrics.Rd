@@ -17,7 +17,7 @@ partitions).}
 columns.}
 
 \item{map}{a spatial \verb{sf data.frame} with sites and bioregions. It is the
-output of the function \code{map_clusters}. \code{NULL} by default.}
+output of the function \code{map_bioregions}. \code{NULL} by default.}
 
 \item{col_bioregion}{an \code{integer} specifying the column position of the
 bioregion.}
@@ -66,7 +66,7 @@ bioregion_metrics(cluster_object = clust1, comat = comat)
 # Spatial coherence
 vegedissim <- dissimilarity(vegemat)
 hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
-vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 
 bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
 col_bioregion = 2) 

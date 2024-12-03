@@ -14,7 +14,7 @@
 #' columns. 
 #' 
 #' @param map a spatial `sf data.frame` with sites and bioregions. It is the
-#' output of the function `map_clusters`. `NULL` by default.
+#' output of the function `map_bioregions`. `NULL` by default.
 #'
 #' @param col_bioregion an `integer` specifying the column position of the
 #' bioregion.
@@ -64,7 +64,7 @@
 #' # Spatial coherence
 #' vegedissim <- dissimilarity(vegemat)
 #' hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
-#' vegemap <- map_clusters(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+#' vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 #' 
 #' bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
 #' col_bioregion = 2) 
@@ -128,13 +128,13 @@ bioregion_metrics <- function(cluster_object, comat,
     
     map_test <- map
     sf::st_geometry(map_test) <- NULL
-    if(class(map_test[, col_bioregion]) == "logical"){
+    if(inherits(map_test[, col_bioregion], "logical")){
       stop("There is no bioregion in the Bioregion column.")
     }
     rm(map_test)
   }
   
-  bioregion_df <- NULL
+  bioregion_df <- geometry <- NULL
   
   # 2. Function ---------------------------------------------------------------
   # If it is a bipartite object, we can directly count the species
@@ -195,7 +195,7 @@ bioregion_metrics <- function(cluster_object, comat,
         
         # Merging sites belonging to bioregion j that touch each other
         map_j <- map[which(map$Bioregion == bioregion_j), ] 
-        map_j <- dplyr::summarise(map_j, geometry = st_union(geometry))
+        map_j <- dplyr::summarise(map_j, geometry = sf::st_union(geometry))
         map_j <- sf::st_cast(map_j, "POLYGON")
         map_j <- dplyr::mutate(map_j, ID = dplyr::row_number())
         

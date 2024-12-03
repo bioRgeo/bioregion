@@ -36,13 +36,13 @@
 #' 
 #' net <- similarity(fishmat, metric = "Simpson")
 #' clu <- netclu_greedy(net)
-#' map <- map_clusters(clu, fishsf, write_clusters = TRUE, plot = FALSE)
+#' map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
 #' 
 #' @importFrom sf st_geometry
 #' 
 #' @export
 
-map_clusters <- function(clusters, geometry, write_clusters = FALSE,
+map_bioregions <- function(clusters, geometry, write_clusters = FALSE,
                          plot = TRUE, ...) {
 
   controls(args = write_clusters, data = NULL, type = "boolean")
