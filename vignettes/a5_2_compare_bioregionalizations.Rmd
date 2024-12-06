@@ -1,5 +1,5 @@
 ---
-title: "5.2 Compare partitions"
+title: "5.2 Compare bioregionalizations"
 author: "Pierre Denelle, Boris Leroy and Maxime Lenormand"
 date: "`r Sys.Date()`"
 output: 
@@ -8,7 +8,7 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl    
 vignette: >
-  %\VignetteIndexEntry{5.2 Compare partitions}
+  %\VignetteIndexEntry{5.2 Compare bioregionalizations}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -31,7 +31,7 @@ options(tinytex.verbose = TRUE)
 
 In this vignette, we aim at comparing the assignment of sites into different
 bioregions across multiple bioregionalizations, using the function
-`compare_partitions()`.
+`compare_bioregionalizations()`.
 
 # Data  
 We use the vegetation dataset that comes with `bioregion`.
@@ -71,9 +71,9 @@ vege_netclu_walktrap <- netclu_walktrap(vegesim,
 vege_netclu_walktrap$cluster_info # 3
 ```
 
-# Compare the partitions 
-Before comparing the partitions, we build a common `data.frame` containing the
-three distinct bioregionalizations.
+# Compare the bioregionalizations 
+Before comparing the bioregionalizations, we build a common `data.frame`
+containing the three distinct bioregionalizations.
 <br>
 
 ```{r}
@@ -89,10 +89,10 @@ colnames(comp) <- c("ID", "K_3_hclu", "K_3_netclu", "K_3_nhclu")
 head(comp)
 ```
 
-We can now run the function `compare_partitions()`.
+We can now run the function `compare_bioregionalizations()`.
 
 ```{r}
-hclu_vs_netclu <- compare_partitions(
+hclu_vs_netclu <- compare_bioregionalizations(
   cluster_object = comp[, c("K_3_hclu", "K_3_netclu", "K_3_nhclu")],
   store_pairwise_membership = TRUE,
   cor_frequency = TRUE,
@@ -100,12 +100,11 @@ hclu_vs_netclu <- compare_partitions(
 hclu_vs_netclu
 ```
 
-`compare_partitions()` produces several outputs which:
-  - look within each partition/bioregionalization how sites are assigned to
-  bioregions
-  - compare different partitions/bioregionalizations by analysing whether they
-  produce similar pairwise memberships
-  
+`compare_bioregionalizations()` produces several outputs which:
+- look within each bioregionalization how sites are assigned to bioregions
+- compare different bioregionalizations by analysing whether they produce
+similar pairwise memberships
+
 Let's first look at pairwise membership within bioregionalization.
 
 ## Pairwise membership
@@ -127,8 +126,8 @@ comp[c(1, 9), ]
 
 We can see that the sites 1 and 9 are classified in the same bioregion in the
 first two bioregionalizations, but not in the third one.  
-The `$pairwise_membership` output of `compare_partitions()` shows this as a
-`TRUE/FALSE` statement.
+The `$pairwise_membership` output of `compare_bioregionalizations()` shows this
+as a `TRUE/FALSE` statement.
 
 ```{r}
 hclu_vs_netclu$pairwise_membership[8:10, ]
@@ -157,49 +156,52 @@ the same bioregion.
 The confusion matrix allows to compare different bioregionalizations by looking
 at the similarity of their pairwise memberships. To do so, the function
 computes a confusion matrix with four elements:
-  . $a$ number of pairs of sites grouped in bioregionalization 1 and in
-  bioregionalization 2
-  . $b$ number of pairs of sites grouped in bioregionalization 1 but not in
-  bioregionalization 2
-  . $c$ number of pairs of sites not grouped in bioregionalization 1 but
-  grouped in bioregionalization 2
-  . $d$ number of pairs of sites not grouped in both bioregionalization 1 & 2
+
+. $a$ number of pairs of sites grouped in bioregionalization 1 and in
+bioregionalization 2
+. $b$ number of pairs of sites grouped in bioregionalization 1 but not in
+bioregionalization 2
+. $c$ number of pairs of sites not grouped in bioregionalization 1 but
+grouped in bioregionalization 2
+. $d$ number of pairs of sites not grouped in both bioregionalization 1 & 2
 
 ```{r}
 hclu_vs_netclu$confusion_matrix
 ```
 
 Based on the confusion matrices, we can compute a range of indices to indicate
-the agreement among partitions. As of now, we have implemented:  
+the agreement among bioregionalizations. As of now, we have implemented:  
 <br>
-  *Rand index* $(a+d)/(a+b+c+d)$ 
-The Rand index measures agreement among partitions by accounting for both the
-pairs of sites that are grouped, but also the pairs of sites that are not
-grouped.  
+*Rand index* $(a+d)/(a+b+c+d)$ 
+The Rand index measures agreement among bioregionalizations by accounting for
+both the pairs of sites that are grouped, but also the pairs of sites that are
+not grouped.  
 <br>
-  *Jaccard index * $a/(a+b+c)$
-The Jaccard index measures agreement among partitions by only accounting for
-pairs of sites that are grouped.
+*Jaccard index * $a/(a+b+c)$
+The Jaccard index measures agreement among bioregionalizations by only
+accounting for pairs of sites that are grouped.
 
 These two metrics are complementary, because the Jaccard index will tell if
-partitions are similar in their clustering structure, whereas the Rand index
-will tell if partitions are similar not only in the pairs of items clustered
-together, but also in terms of the pairs of sites that are not clustered
-together. For example, take two partitions which never group together the same
-pairs of sites. Their Jaccard index will be 0, whereas the Rand index can
-be > 0 due to the sites that are not grouped together.  
+bioregionalizations are similar in their clustering structure, whereas the Rand
+index will tell if bioregionalizations are similar not only in the pairs of
+items clustered together, but also in terms of the pairs of sites that are not
+clustered together. For example, take two bioregionalizations which never
+group together the same pairs of sites. Their Jaccard index will be 0,
+whereas the Rand index can be > 0 due to the sites that are not grouped
+together.  
 
 Additional indices can be manually computed by the users on the basis of the
 list of confusion matrices.  
 
-In some cases, users may be interested in finding which of the partitions is 
-most representative of all partitions. To find it out, we can compare the
-pairwise membership of each partition with the total frequency of pairwise
-membership across all partitions. This correlation can be requested with
-`cor_frequency = TRUE`.
+In some cases, users may be interested in finding which of the
+bioregionalizations is most representative of all bioregionalizations To find
+it out, we can compare the pairwise membership of each bioregionalization with
+the total frequency of pairwise membership across all bioregionalizations.
+This correlation can be requested with `cor_frequency = TRUE`.
 
 ```{r}
 hclu_vs_netclu$partition_freq_cor
 ```
 
-Here the third bioregionalization is the most representative of all partitions.
+Here the third bioregionalization is the most representative of all
+bioregionalizations.

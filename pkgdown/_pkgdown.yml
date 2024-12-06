@@ -56,7 +56,7 @@ reference:
 - title: Clustering analysis
   desc: ~
   contents:
-  - compare_partitions
+  - compare_bioregionalizations
   - find_optimal_n
   - partition_metrics
   - site_species_metrics

@@ -146,7 +146,7 @@ a
 \insertRef{Langfelder2008}{bioregion}
 }
 \seealso{
-\link{compare_partitions}
+\link{compare_bioregionalizations}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),

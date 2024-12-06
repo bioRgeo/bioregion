@@ -113,7 +113,7 @@
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
-#' @seealso [compare_partitions]
+#' @seealso [compare_bioregionalizations]
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 #' 20, 25)

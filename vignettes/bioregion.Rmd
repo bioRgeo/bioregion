@@ -39,7 +39,7 @@ options(tinytex.verbose = TRUE)
 This tutorial aims at describing the different features of the R package
 `bioregion`. 
 The main purpose of the `bioregion`'s package is to propose a transparent 
-methodological framework to compare bioregionalisation methods. Below is the 
+methodological framework to compare bioregionalization methods. Below is the 
 typical flow chart of bioregions' identification based on a site-species 
 bipartite network or co-occurrence matrix with `bioregion` (Figure 1). This
 workflow can be divided into four main steps:
@@ -169,12 +169,12 @@ visualized with the function `map_bioregions()`.
 This [tutorial page](https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html)
 details different ways to plot your bioregionalisation.
 
-## 5.2 Compare partitions
+## 5.2 Compare bioregionalizations
 
 In this section, we look at how sites are assigned to bioregions within a
 single bioregionalization and also compare this assignment across different
 bioregionalizations. The following
-[page](https://biorgeo.github.io/bioregion/articles/a5_2_compare_partitions.html)
+[page](https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html)
 illustrates this.
 
 ## 5.3 Summary metrics
