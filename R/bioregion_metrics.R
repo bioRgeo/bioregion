@@ -152,7 +152,7 @@ bioregion_metrics <- function(cluster_object, comat,
     sites_j <- clusters[which(clusters[, 2] == focal_j), "ID"]
     
     # Subset site x species matrix with sites belonging to bioregion j
-    comat_j <- comat[sites_j, colSums(comat[sites_j, ]) > 0]
+    comat_j <- comat[sites_j, colSums(comat[sites_j, ]) > 0, drop = FALSE]
     
     # Other sites
     comat_not_j <- comat[-which(rownames(comat) %in% sites_j), ]
