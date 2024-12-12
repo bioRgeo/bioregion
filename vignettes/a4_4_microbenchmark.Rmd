@@ -8,10 +8,10 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl    
 vignette: >
-%\VignetteIndexEntry{4.4 Microbenchmark}
+  %\VignetteIndexEntry{4.4 Microbenchmark}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-  editor_options: 
+editor_options: 
  chunk_output_type: console
 ---
 
