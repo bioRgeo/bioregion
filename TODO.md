@@ -2,6 +2,8 @@
 
 #### New functions
 
+* Add fuzzy clustering methods
+
 * from_abcABC (to compute metrics from abc and/or ABC).
 
 * reassign_cluster (to assign or reassign cluster based on a partition and a 
@@ -21,7 +23,7 @@ between_bioregions_metrics()
 
 * https://stats.stackexchange.com/questions/260487/adjusted-rand-index-vs-adjusted-mutual-information
 
-* 
+* Code IHCT in Rcpp
 
 #### Miscellaneous
 
