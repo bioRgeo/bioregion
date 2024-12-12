@@ -67,7 +67,7 @@ species occurring only in the first site; and *c* is the number of species
 only occurring only in the second site.
 
 We typically choose this metric for 
-bioregionalisation, because it is the **turnover** component of the Sorensen 
+bioregionalization, because it is the **turnover** component of the Sorensen 
 index [@Baselga2012] (in a nutshell, it tells us how sites are different
 because they have distinct species), and because it is less dependent on 
 species richness than the Jaccard turnover [@Leprieur2014]. Alternatively,
@@ -360,7 +360,7 @@ Booo, this is just a large rake, not a tree!!!
 ### 2.3.2 Tree construction algorithm
 
 By default, the function uses the UPGMA method (Unweighted Pair Group Method
-with Arithmetic Mean) because it has been recommended in bioregionalisation for
+with Arithmetic Mean) because it has been recommended in bioregionalization for
 its better performance over other approaches [@Kreft2010]. You can change this
 method by changing the argument `method`; all methods implemented in 
 `stats::hclust()` are available. 

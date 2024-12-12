@@ -80,6 +80,7 @@ Let's take an example with a K-means clustering, with a number of clusters set
 to 3.
 
 ```{r}
+set.seed(1)
 vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, n_clust = 3, index = "Simpson")
 ```
 
@@ -115,13 +116,13 @@ ggplot(custom) +
 ```
 
 ## Plot with facets  
-Finally, you can be interested in plotting several bioregionalisations at once.
+Finally, you can be interested in plotting several bioregionalizations at once.
 For this purpose, we can build a single `data.frame` gathering all the
 bioregions obtained from distinct algorithms and then take advantage of the
 `facets` implemented in `ggplot2`.
 <br>
 
-We first compute a few more bioregionalisation on the same dataset using
+We first compute a few more bioregionalizations on the same dataset using
 other algorithms.
 <br>
 
@@ -130,7 +131,8 @@ other algorithms.
 set.seed(1)
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
                                           index = names(vegedissim)[6],
-                                          method = "average", n_clust = 3)
+                                          method = "mcquitty", n_clust = 3,
+                                          optimal_tree_method = "best")
 vege_hclu_hierarclust$cluster_info
 
 # Walktrap network bioregionalization
@@ -188,12 +190,14 @@ ggplot(all_long_sf) +
   facet_wrap(~ Algorithm)
 ```
 
-We can refine the above map by:
-  * reordering the 3 bioregions so that they follow the same order
-  * add some background for the Mediterranean sea and the mainland
-  * crop the cells by the mainland
-  * adjust labels
-  
+We can refine the above map by:  
+  * reordering the 3 bioregions so that they follow the same order  
+  * add some background for the Mediterranean sea and the mainland  
+  * crop the cells by the mainland  
+  * adjust labels  
+
+<br>
+
 ```{r}
 world_countries <- rnaturalearth::ne_countries(scale = "medium",
                                                returnclass = "sf")
@@ -229,24 +233,17 @@ plot_basis <- ggplot(europe) +
 # Reordering bioregions
 all_long_sf$bioregion <- all_long_sf$Clusters
 
-all_long_sf[which(all_long_sf$Algorithm == "HCLU_HIERARCLUST" &
-                    all_long_sf$Clusters == "2"), ]$bioregion <- "1"
-all_long_sf[which(all_long_sf$Algorithm == "HCLU_HIERARCLUST" &
-                    all_long_sf$Clusters == "1"), ]$bioregion <- "2"
-
+all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
+                    all_long_sf$Clusters == "2"), ]$bioregion <- "3"
 all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
                     all_long_sf$Clusters == "3"), ]$bioregion <- "2"
-all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
-                    all_long_sf$Clusters == "1"), ]$bioregion <- "1"
-all_long_sf[which(all_long_sf$Algorithm == "NHCLU_KMEANS" &
-                    all_long_sf$Clusters == "2"), ]$bioregion <- "3"
 
-all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
-                    all_long_sf$Clusters == "3"), ]$bioregion <- "1"
 all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
                     all_long_sf$Clusters == "1"), ]$bioregion <- "2"
 all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
                     all_long_sf$Clusters == "2"), ]$bioregion <- "3"
+all_long_sf[which(all_long_sf$Algorithm == "NETCLU_Walktrap" &
+                    all_long_sf$Clusters == "3"), ]$bioregion <- "1"
 
 # More readable labels for algorithms
 all_long_sf$Algo <-

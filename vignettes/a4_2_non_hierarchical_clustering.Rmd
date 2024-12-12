@@ -106,7 +106,7 @@ Where *a* is the number of species shared by both sites; *b* is the number of
 species occurring only in the first site; and *c* is the number of species 
 only occurring only in the second site.
 
-We typically choose this metric for bioregionalisation, because it is the
+We typically choose this metric for bioregionalization, because it is the
 **turnover** component of the Sorensen index [@Baselga2012] (in a nutshell,
 it tells us how sites are different because they have distinct species), and
 because it has less dependence on species richness than the Jaccard turnover

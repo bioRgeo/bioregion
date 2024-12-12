@@ -1,6 +1,6 @@
 #' bioregion
 #'
-#' Bioregionalisation Methods in R
+#' Bioregionalization Methods in R
 #'
 #' @docType _PACKAGE
 #' @author

@@ -61,13 +61,13 @@
 #' Foreword: 
 #' 
 #' Here we implemented a set of criteria commonly found in the literature or
-#' recommended in the bioregionalisation literature. Nevertheless, we also
+#' recommended in the bioregionalization literature. Nevertheless, we also
 #' advocate to move
 #' beyond the "Search one optimal number of clusters" paradigm, and consider
 #' investigating "multiple optimal numbers of clusters". Indeed, using only one
 #' optimal number of clusters may simplify the natural complexity of biological
 #' datasets, and, for example, ignore the often hierarchical / nested nature of
-#' bioregionalisations. Using multiple partitions likely avoids this
+#' bioregionalizations. Using multiple partitions likely avoids this
 #' oversimplification bias and may convey more information.
 #' See, for example, the reanalysis of Holt et al. (2013)
 #' by \insertCite{Ficetola2017}{bioregion}, where they used deep, intermediate
@@ -149,7 +149,7 @@
 #' indicated below to look for guidance on how to choose their optimal
 #' number(s) of clusters. Consider the "optimal" numbers of clusters returned
 #' by this function as first approximation of the best numbers for your 
-#' bioregionalisation.
+#' bioregionalization.
 #' 
 #' @references
 #' \insertRef{Castro-Insua2018}{bioregion}

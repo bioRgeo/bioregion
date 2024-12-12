@@ -47,7 +47,7 @@ within sites are the links.
 The community detection algorithms try to identify the communities of nodes
 that interact more with each other than the network as a whole. Appling these
 algorithms to site-species matrices is therefore equivalent to the more classic
-bioregionalisation methods.
+bioregionalization methods.
 
 The optimal community partition of a network can be found by searching for the 
 partition that maximizes a metric called modularity. Maximising the modularity
