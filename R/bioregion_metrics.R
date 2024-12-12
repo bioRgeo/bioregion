@@ -156,7 +156,7 @@ bioregion_metrics <- function(cluster_object, comat,
     
     # Other sites
     comat_not_j <- comat[-which(rownames(comat) %in% sites_j), ]
-    comat_not_j <- comat_not_j[, colSums(comat_not_j) > 0]
+    comat_not_j <- comat_not_j[, colSums(comat_not_j) > 0, drop = FALSE]
     
     # Number of endemics
     endemic_j <- sum(!(colnames(comat_j) %in% colnames(comat_not_j)))
