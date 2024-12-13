@@ -98,7 +98,8 @@ hclu_vs_netclu <- compare_bioregionalizations(
   store_pairwise_membership = TRUE,
   cor_frequency = TRUE,
   store_confusion_matrix = TRUE)
-hclu_vs_netclu
+
+str(hclu_vs_netclu)
 ```
 
 `compare_bioregionalizations()` produces several outputs which:

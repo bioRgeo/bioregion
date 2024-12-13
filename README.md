@@ -61,9 +61,9 @@ package**. Vignettes available are the following ones: <br>
 - **[5.1
   Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html)**
 - **[5.2 Compare
-  partitions](https://bioRgeo.github.io/bioregion/articles/a5_2_compare_partitions.html)**
+  bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html)**
 - **[5.3 Summary
-  metrics”](https://bioRgeo.github.io/bioregion/articles/a5_3_summary_metrics.html)**
+  metrics](https://bioRgeo.github.io/bioregion/articles/a5_3_summary_metrics.html)**
 
 Alternatively, if you prefer to view the vignettes in R, you can install
 the package with `build_vignettes = TRUE`. But be aware that some
