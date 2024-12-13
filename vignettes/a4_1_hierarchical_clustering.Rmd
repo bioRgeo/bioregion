@@ -14,39 +14,39 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl
 vignette: >
-%\VignetteIndexEntry{4.1 Hierarchical clustering}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{4.1 Hierarchical clustering}
   \usepackage[utf8]{inputenc}
-  ---
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+ chunk_output_type: console
+---
   
+Hierarchical clustering consists in creating a hierarchical tree from a 
+matrix of distances (or beta-diversities). From this hierarchical tree, clusters
+can be obtained by cutting the tree. 
   
-  Hierarchical clustering consists in creating a hierarchical tree from a 
-  matrix of distances (or beta-diversities). From this hierarchical tree, clusters
-  can be obtained by cutting the tree. 
+Although these methods are conceptually simple, their implementation can be 
+complex and requires important user decisions. Here, we provide a step-by-step
+guide to performing hierarchical clustering analyses with `bioregion`,
+along with comments on the philosophy on how we designed the functions. 
   
-  Although these methods are conceptually simple, their implementation can be 
-  complex and requires important user decisions. Here, we provide a step-by-step
-  guide to performing hierarchical clustering analyses with `bioregion`,
-  along with comments on the philosophy on how we designed the functions. 
+Hierarchical clustering takes place on the right-hand side of the `bioregion`
+conceptual diagram:
   
-  Hierarchical clustering takes place on the right-hand side of the `bioregion`
-  conceptual diagram:
+<center>
+<img align="bottom" width="100%" height="100%" src="../man/figures/workflow_nonetwork.png">
+</center> 
   
-  <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_nonetwork.png">
-  </center> 
+# 1. Compute dissimilarity indices from input data
+To initiate the hierarchical clustering procedure, you need to provide pairwise 
+distances between sites. These pairwise distances between sites can be obtained
+by running `dissimilarity()` on a species-site matrix, such as a presence-absence
+or an abundance matrix. 
   
-  # 1. Compute dissimilarity indices from input data
+In the example below, we use the vegetation dataset from the package to 
+compute distance metrics.
   
-  To initiate the hierarchical clustering procedure, you need to provide pairwise 
-  distances between sites. These pairwise distances between sites can be obtained
-  by running `dissimilarity()` on a species-site matrix, such as a presence-absence
-  or an abundance matrix. 
-  
-  In the example below, we use the vegetation dataset from the package to 
-  compute distance metrics.
-  
-  ```{r}
+```{r}
 library("bioregion")
 
 # Work with the vegetation dataset we include in the package
