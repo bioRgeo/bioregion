@@ -14,7 +14,7 @@
 # 
 # # Tests for valid outputs -----------------------------------------------------
 # test_that("class list and bioregion.clusters", {
-#   a <- partition_metrics(tree1,
+#   a <- bioregionalization_metrics(tree1,
 #                          dissimilarity = dissimilarity,
 #                          net = comat_df,
 #                          site_col = "Node1",
@@ -33,7 +33,7 @@
 # # Tests for invalid inputs ----------------------------------------------------
 # test_that("error messages with wrong inputs", {
 #   expect_error(
-#     partition_metrics(NULL,
+#     bioregionalization_metrics(NULL,
 #                       dissimilarity = dissimilarity,
 #                       net = comat_df,
 #                       site_col = "Node1",

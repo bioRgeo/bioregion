@@ -102,7 +102,7 @@ and vice versa.
 Please have a look at this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html) 
 to better understand how these functions work.
  
-## 4. Clustering algorithms
+## 4. Bioregionalization algorithms
 
 The `bioregion` R package gathers several methods allowing to group sites
 and species into similar entities called bioregions. All these methods can lead
@@ -133,7 +133,7 @@ for more details.
 The functions relying on hierarchical clustering start with the prefix 
 `nhclu_`. For most of these algorithms, the user needs to predefine the number
 of clusters, although this number can be determined by estimating the optimal
-partition.
+bioregionalization.
 
 See this
 [tutorial page](https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)

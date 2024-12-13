@@ -20,7 +20,7 @@
 #'  
 #' @param n_clust an `integer` or an `integer` vector indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' [partition_metrics]. Should not be used at the same time as
+#' [bioregionalization_metrics]. Should not be used at the same time as
 #' `cut_height`.
 #' 
 #' @param cut_height a `numeric` vector indicating the height(s) at which the
@@ -40,7 +40,7 @@
 #' Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
 #' the diana algorithm.
 #'
-#' To find an optimal number of clusters, see [partition_metrics()]
+#' To find an optimal number of clusters, see [bioregionalization_metrics()]
 #'
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
@@ -124,14 +124,14 @@ hclu_diana <- function(dissimilarity,
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
         stop("n_clust does not have an optimal number of clusters. Did you
-        specify partition_optimisation = TRUE in partition_metrics()?", 
+        specify partition_optimisation = TRUE in bioregionalization_metrics()?", 
              call. = FALSE)
       }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from partition_metrics()", 
+        * the output from bioregionalization_metrics()", 
            call. = FALSE)
     }
     if(!is.null(cut_height)){

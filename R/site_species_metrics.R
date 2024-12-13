@@ -50,7 +50,7 @@
 #' The within-bioregion degree z-score measures how well-connected node \eqn{i}
 #' is to other nodes in the bioregion.
 #'
-#' @seealso [partition_metrics]
+#' @seealso [bioregionalization_metrics]
 #' @return 
 #' A `list` of `data.frames` if multiples indices are selected or a single
 #' `data.frame` with three columns if one index is selected. Each `data.frame`
@@ -110,7 +110,7 @@ site_species_metrics <- function(cluster_object,
     } else {
       if (cluster_object$name == "hierarchical_clustering") {
         stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using partition_metrics()
+        please extract clusters from the tree before using bioregionalization_metrics()
         See ?hclu_hierarclust or ?cut_tree")
       } else {
         stop(

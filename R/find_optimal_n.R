@@ -9,7 +9,7 @@
 #' to each other).
 #' 
 #' @param partitions a `bioregion.partition.metrics` object (output from 
-#' [partition_metrics()] or a `data.frame` with the first two 
+#' [bioregionalization_metrics()] or a `data.frame` with the first two 
 #' columns named "K" (partition name) and "n_clusters" (number of clusters) and
 #' the following columns containing evaluation metrics (numeric values)
 #' 
@@ -184,7 +184,7 @@
 #'                           n_clust = 2:15)
 #' tree1
 #' 
-#' a <- partition_metrics(tree1,
+#' a <- bioregionalization_metrics(tree1,
 #'                    dissimilarity = dissim,
 #'                    net = comnet,
 #'                    species_col = "Node2",
@@ -227,7 +227,7 @@ find_optimal_n <- function(
   
   if(!inherits(partitions, "bioregion.partition.metrics")){
     if(!inherits(partitions, "data.frame")){
-      stop("partitions should be the output object from partition_metrics()",
+      stop("partitions should be the output object from bioregionalization_metrics()",
            "or a data.frame")
     } else {
       if(all(colnames(partitions)[1:2] == c("K", "n_clusters")) &
@@ -245,7 +245,7 @@ find_optimal_n <- function(
         
       } else {
         stop(
-          "partitions should be the output object from partition_metrics() ",
+          "partitions should be the output object from bioregionalization_metrics() ",
           "or a data.frame with the first two columns named as 'K' & ",
           "'n_clusters' and the following columns being the evaluation ",
           "metrics")
@@ -288,7 +288,7 @@ find_optimal_n <- function(
   if(!(length(metrics_to_use))) {
     stop("The selected partition metrics did not vary sufficiently in input. ",
          "Please check your partition metrics or increase your ",
-         "range of partitions when computing partition_metrics()")
+         "range of partitions when computing bioregionalization_metrics()")
   }
   
   print(metrics_to_use)

@@ -18,7 +18,7 @@ find_optimal_n(
 }
 \arguments{
 \item{partitions}{a \code{bioregion.partition.metrics} object (output from
-\code{\link[=partition_metrics]{partition_metrics()}} or a \code{data.frame} with the first two
+\code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}} or a \code{data.frame} with the first two
 columns named "K" (partition name) and "n_clusters" (number of clusters) and
 the following columns containing evaluation metrics (numeric values)}
 
@@ -187,7 +187,7 @@ tree1 <- hclu_hierarclust(dissim,
                           n_clust = 2:15)
 tree1
 
-a <- partition_metrics(tree1,
+a <- bioregionalization_metrics(tree1,
                    dissimilarity = dissim,
                    net = comnet,
                    species_col = "Node2",

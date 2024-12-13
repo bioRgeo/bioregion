@@ -9,7 +9,7 @@
 #' @param tree a `bioregion.hierar.tree` or a `hclust` object
 #' @param n_clust an integer or a vector of integers indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' [partition_metrics()]. Should not be used at the same time as `cut_height`
+#' [bioregionalization_metrics()]. Should not be used at the same time as `cut_height`
 #' 
 #' @param cut_height a numeric vector indicating the height(s) at which the
 #' tree should be cut. Should not be used at the same time as `n_clust` or
@@ -133,13 +133,13 @@ cut_tree <- function(tree,
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
         stop("n_clust does not have an optimal number of clusters. Did you
-        specify partition_optimisation = TRUE in partition_metrics()?")
+        specify partition_optimisation = TRUE in bioregionalization_metrics()?")
       }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from partition_metrics()")
+        * the output from bioregionalization_metrics()")
     }
     if(!is.null(cut_height)){
       stop("Please provide either n_clust or cut_height, but not both at the

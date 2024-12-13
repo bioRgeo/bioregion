@@ -152,7 +152,7 @@ compare_bioregionalizations(bioregionalizations,
 
 }
 \seealso{
-\link{partition_metrics}
+\link{bioregionalization_metrics}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),

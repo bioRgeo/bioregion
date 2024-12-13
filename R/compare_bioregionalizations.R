@@ -83,7 +83,7 @@
 #' bioregionalization with the total frequency of pairwise membership across
 #' all bioregionalizations. This correlation can be requested with
 #' `cor_frequency = TRUE`
-#' @seealso [partition_metrics]
+#' @seealso [bioregionalization_metrics]
 #' @return 
 #' A `list` with 4 to 7 elements:
 #'  * `args`: arguments provided by the user
@@ -147,7 +147,7 @@ compare_bioregionalizations <- function(cluster_object,
     } else {
       if (cluster_object$name == "hierarchical_clustering") {
         stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using partition_metrics()
+        please extract clusters from the tree before using bioregionalization_metrics()
         See ?hclu_hierarclust or ?cut_tree")
       } else {
         stop(

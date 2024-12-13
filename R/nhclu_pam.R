@@ -76,9 +76,9 @@
 #' 
 #' clust1 <- nhclu_pam(dissim, n_clust = 2:10, index = "Simpson")
 #' clust2 <- nhclu_pam(dissim, n_clust = 2:15, index = "Simpson")
-#' partition_metrics(clust2, dissimilarity = dissim,
+#' bioregionalization_metrics(clust2, dissimilarity = dissim,
 #' eval_metric = "pc_distance")
-#' partition_metrics(clust2, net = comnet, species_col = "Node2",
+#' bioregionalization_metrics(clust2, net = comnet, species_col = "Node2",
 #'                    site_col = "Node1", eval_metric = "avg_endemism")
 #'    
 #' @importFrom stats as.dist

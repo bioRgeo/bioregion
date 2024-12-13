@@ -14,39 +14,39 @@ output:
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
 csl: journal-of-biogeography.csl
 vignette: >
-  %\VignetteIndexEntry{4.1 Hierarchical clustering}
+%\VignetteIndexEntry{4.1 Hierarchical clustering}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
----
-
-
-Hierarchical clustering consists in creating a hierarchical tree from a 
-matrix of distances (or beta-diversities). From this hierarchical tree, clusters
-can be obtained by cutting the tree. 
-
-Although these methods are conceptually simple, their implementation can be 
-complex and requires important user decisions. Here, we provide a step-by-step
-guide to performing hierarchical clustering analyses with `bioregion`,
-along with comments on the philosophy on how we designed the functions. 
-
-Hierarchical clustering takes place on the right-hand side of the `bioregion`
-conceptual diagram:
-
-<center>
+  ---
+  
+  
+  Hierarchical clustering consists in creating a hierarchical tree from a 
+  matrix of distances (or beta-diversities). From this hierarchical tree, clusters
+  can be obtained by cutting the tree. 
+  
+  Although these methods are conceptually simple, their implementation can be 
+  complex and requires important user decisions. Here, we provide a step-by-step
+  guide to performing hierarchical clustering analyses with `bioregion`,
+  along with comments on the philosophy on how we designed the functions. 
+  
+  Hierarchical clustering takes place on the right-hand side of the `bioregion`
+  conceptual diagram:
+  
+  <center>
   <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_nonetwork.png">
-</center> 
-
-# 1. Compute dissimilarity indices from input data
-
-To initiate the hierarchical clustering procedure, you need to provide pairwise 
-distances between sites. These pairwise distances between sites can be obtained
-by running `dissimilarity()` on a species-site matrix, such as a presence-absence
-or an abundance matrix. 
-
-In the example below, we use the vegetation dataset from the package to 
-compute distance metrics.
-
-```{r}
+  </center> 
+  
+  # 1. Compute dissimilarity indices from input data
+  
+  To initiate the hierarchical clustering procedure, you need to provide pairwise 
+  distances between sites. These pairwise distances between sites can be obtained
+  by running `dissimilarity()` on a species-site matrix, such as a presence-absence
+  or an abundance matrix. 
+  
+  In the example below, we use the vegetation dataset from the package to 
+  compute distance metrics.
+  
+  ```{r}
 library("bioregion")
 
 # Work with the vegetation dataset we include in the package
@@ -154,16 +154,16 @@ tree1
 When we type again the name of the object in the console, it gives us the 
 results of the clustering: we have
 
- * **1 partition**: a partition is a clustering result. We only cut the tree once, 
- so we only have 1 partition at the moment
- * **4 clusters**: this is the number of clusters in the partition. We asked for
- 3, and we obtained 3, which is good. Sometimes, however, we cannot get the
- number of clusters we asked for - in which case the outcome will be indicated.
- * **a height of cut at `r round(tree1$algorithm$output_cut_height, 3)`**: this
- is the height of cut at which we can obtain 4 clusters in our tree.
+* **1 partition**: a partition is a clustering result. We only cut the tree once, 
+so we only have 1 partition at the moment
+* **4 clusters**: this is the number of clusters in the partition. We asked for
+3, and we obtained 3, which is good. Sometimes, however, we cannot get the
+number of clusters we asked for - in which case the outcome will be indicated.
+* **a height of cut at `r round(tree1$algorithm$output_cut_height, 3)`**: this
+is the height of cut at which we can obtain 4 clusters in our tree.
 
 We can make a quick plot of our partitioned tree with
- 
+
 ```{r, fig.width=12, fig.height=8}
 # We reduced the size of text labels with cex = .2, because there are too many sites
 plot(tree1, cex = .2)
@@ -339,9 +339,9 @@ are a lot of ties in the distance matrix. Let's see it in action here:
 
 ```{r}
 tree_consensus <- hclu_hierarclust(dissim_random,
-                              randomize = TRUE,
-                              optimal_tree_method = "consensus",
-                              keep_trials = TRUE)
+                                   randomize = TRUE,
+                                   optimal_tree_method = "consensus",
+                                   keep_trials = TRUE)
 ```
 
 See how the cophenetic correlation coefficient for the consensus tree is
@@ -445,7 +445,7 @@ plot(tree_diana)
 # b <- cut_tree(b, 
 #               cut_height = seq(0.02, 0.78, by = 0.05))
 # 
-# d <- partition_metrics(b,
+# d <- bioregionalization_metrics(b,
 #                   dissimilarity = a)
 # d$evaluation_df
 # write.csv(d$evaluation_df, "./test.csv")
@@ -464,7 +464,7 @@ plot(tree_diana)
 ```
 
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/find_optimal_n.png">
+<img align="bottom" width="100%" height="100%" src="../man/figures/find_optimal_n.png">
 </center> 
 
 1. Step 1. **Build a tree** with `hclu_hierarclust()`
@@ -501,9 +501,10 @@ tree4 <- hclu_hierarclust(dissim,
                           n_clust = 2:100)
 
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013
-eval_tree4 <- partition_metrics(tree4, 
-                                dissimilarity = dissim, # Provide distances to compute the metrics
-                                eval_metric = "pc_distance")
+eval_tree4 <- bioregionalization_metrics(
+  tree4, 
+  dissimilarity = dissim, # Provide distances to compute the metrics
+  eval_metric = "pc_distance")
 
 # Step 4. Find the optimal number of clusters
 opti_n_tree4 <- find_optimal_n(eval_tree4)
@@ -536,8 +537,8 @@ as suggested in @Castro-Insua2018. It
 compares the between-cluster dissimilarities to the within-cluster 
 dissimilarities. It is based on the difference of mean ranks between 
 groups and within groups with the following formula: 
-$R=(r_B-r_W)/(N(N-1)/4)$ where $r_B$ and $r_W$ are the average ranks between and 
-within clusters respectively, and $N$ is the total number of sites.
+$R=(r_B-r_W)/(N(N-1)/4)$ where $r_B$ and $r_W$ are the average ranks between
+and within clusters respectively, and $N$ is the total number of sites.
 
 3. `avg_endemism`: it is the average percentage of endemism in clusters 
 [@Kreft2010]. It is calculated as follows: 
@@ -566,17 +567,17 @@ take a while.
 
 ```{r, cache = TRUE}
 # Calculate pc_distance and anosim
-partition_metrics(tree4, 
-                  dissimilarity = dissim, 
-                  eval_metric = c("pc_distance", "anosim"))
+bioregionalization_metrics(tree4, 
+                           dissimilarity = dissim, 
+                           eval_metric = c("pc_distance", "anosim"))
 
 # Calculate avg_endemism and tot_endemism
 # I have an abundance matrix, I need to convert it into network format first:
 vegenet <- mat_to_net(vegemat)
 
-partition_metrics(tree4, 
-                  net = vegenet, 
-                  eval_metric = c("avg_endemism", "tot_endemism"))
+bioregionalization_metrics(tree4, 
+                           net = vegenet, 
+                           eval_metric = c("avg_endemism", "tot_endemism"))
 ```
 
 ## 3.2 Criteria to choose an optimal number of clusters
@@ -607,11 +608,11 @@ metrics and store them in `eval_tree4`:
 
 ```{r, cache = TRUE}
 vegenet <- mat_to_net(vegemat)
-eval_tree4 <- partition_metrics(tree4, 
-                                dissimilarity = dissim, 
-                                net = vegenet, 
-                                eval_metric = c("pc_distance", "anosim",
-                                                "avg_endemism", "tot_endemism"))
+eval_tree4 <- bioregionalization_metrics(tree4, 
+                                         dissimilarity = dissim, 
+                                         net = vegenet, 
+                                         eval_metric = c("pc_distance", "anosim",
+                                                         "avg_endemism", "tot_endemism"))
 
 ```
 
@@ -720,7 +721,7 @@ regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more
 \beta-diversity is explained, but also the more clusters there are. Therefore,
 the choice is a trade-off between the total \beta-diversity explained and the
 number of clusters. 
- 
+
 Eventually, the choice of these values depends on different factors: 
 
 1. The geographic scope of your study. A global scale study can use
@@ -772,11 +773,11 @@ tree5 <- cut_tree(tree4,
                   cut_height = seq(0, max(tree4$algorithm$final.tree$height), 
                                    length = 100)) 
 
-eval_tree5 <- partition_metrics(tree5, 
-                                dissimilarity = dissim, 
-                                net = vegenet, 
-                                eval_metric = c("pc_distance", "anosim",
-                                                "avg_endemism", "tot_endemism"))
+eval_tree5 <- bioregionalization_metrics(tree5, 
+                                         dissimilarity = dissim, 
+                                         net = vegenet, 
+                                         eval_metric = c("pc_distance", "anosim",
+                                                         "avg_endemism", "tot_endemism"))
 
 find_optimal_n(eval_tree5,
                criterion = "breakpoints")
@@ -785,7 +786,7 @@ find_optimal_n(eval_tree5,
 
 We can ask for a higher number of breaks: 
 
- - 2 breaks
+- 2 breaks
 
 ```{r, cache = TRUE, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree5,
@@ -794,7 +795,7 @@ find_optimal_n(eval_tree5,
 
 ```
 
- - 3 breaks
+- 3 breaks
 ```{r, cache = TRUE, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",

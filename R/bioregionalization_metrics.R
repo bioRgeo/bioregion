@@ -129,7 +129,7 @@
 #'                           n_clust = 2:20, index = "Simpson")
 #' tree1
 #' 
-#' a <- partition_metrics(tree1, dissimilarity = dissim, net = comnet,
+#' a <- bioregionalization_metrics(tree1, dissimilarity = dissim, net = comnet,
 #'                        site_col = "Node1", species_col = "Node2",
 #'                        eval_metric = c("tot_endemism", "avg_endemism",
 #'                                       "pc_distance", "anosim"))
@@ -140,7 +140,7 @@
 #'
 #'@export
 
-partition_metrics <- function(
+bioregionalization_metrics <- function(
     cluster_object, dissimilarity = NULL,
     dissimilarity_index = NULL, 
     net = NULL,
@@ -156,7 +156,7 @@ partition_metrics <- function(
     } else {
       if (cluster_object$name == "hierarchical_clustering") {
         stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using partition_metrics()
+        please extract clusters from the tree before using bioregionalization_metrics()
         See ?hclu_hierarclust or ?cut_tree")
       } else {
         stop(

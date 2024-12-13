@@ -23,7 +23,7 @@ cut_tree(
 
 \item{n_clust}{an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\code{\link[=partition_metrics]{partition_metrics()}}. Should not be used at the same time as \code{cut_height}}
+\code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}. Should not be used at the same time as \code{cut_height}}
 
 \item{cut_height}{a numeric vector indicating the height(s) at which the
 tree should be cut. Should not be used at the same time as \code{n_clust} or

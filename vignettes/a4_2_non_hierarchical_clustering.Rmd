@@ -75,7 +75,7 @@ and
 <br>
 *3. Determining the optimal number of clusters*  
 The two functions
-[`partition_metrics()`](https://bioRgeo.github.io/bioregion/reference/partition_metrics.html)
+[`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.html)
 and
 [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.html)
 help determining what the optimal number of clusters would be (see
@@ -428,15 +428,15 @@ clust1 <- nhclu_affprop(sim)
 Previous methods did not help in determining the optimal number of bioregions
 structuring the site-species matrix.  
 
-For this purpose, we can combine both functions `partition_metrics()` and
-`find_optimal()`.  
+For this purpose, we can combine both functions `bioregionalization_metrics()`
+and `find_optimal_n()`.  
 
-`partition_metrics()` calcultes several metrics based on the previous
+`bioregionalization_metrics()` calcultes several metrics based on the previous
 clustering attempts.  
 
 ```{r}
-partition_metrics(ex_pam, dissimilarity = dissim,
-                  eval_metric = "pc_distance")
+bioregionalization_metrics(ex_pam, dissimilarity = dissim,
+                           eval_metric = "pc_distance")
 ```
 
 *Note
@@ -444,15 +444,15 @@ For the two metrics `tot_endemism` and `avg_endemism`, you also need to provide
 the site-species matrix.
 
 ```{r}
-a <- partition_metrics(ex_pam, dissimilarity = dissim, net = fishdf,
-                       species_col = "Species", site_col = "Site",
-                       eval_metric = c("tot_endemism", "avg_endemism",
-                                       "pc_distance", "anosim"))
+a <- bioregionalization_metrics(ex_pam, dissimilarity = dissim, net = fishdf,
+                                species_col = "Species", site_col = "Site",
+                                eval_metric = c("tot_endemism", "avg_endemism",
+                                                "pc_distance", "anosim"))
 ```
 
-
-Once the `partition_metrics()` function has calculated the partitioning
-metrics, we can call `find_optimal()` to get the optimal number of clusters.
+Once the `bioregionalization_metrics()` function has calculated the
+partitioning metrics, we can call `find_optimal_n()` to get the optimal number
+of clusters.
 <br>
 
 ```{r, message = TRUE}

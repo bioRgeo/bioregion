@@ -5,7 +5,7 @@
 # set.seed(1)
 # tree1 <- hclu_hierarclust(dissim, n_clust = 2:50, index = "Simpson")
 # 
-# a <- partition_metrics(tree1,
+# a <- bioregionalization_metrics(tree1,
 #                        dissimilarity = dissim,
 #                        net = fishdf,
 #                        species_col = "Species",
@@ -31,7 +31,7 @@
 # test_that("error messages with wrong inputs", {
 #   expect_error(
 #     find_optimal_n("zz"),
-#     "partitions should be the output object from partition_metrics()or a data.frame",
+#     "partitions should be the output object from bioregionalization_metrics()or a data.frame",
 #     fixed = TRUE)
 #   
 #   expect_error(

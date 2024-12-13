@@ -58,7 +58,7 @@ reference:
   contents:
   - compare_bioregionalizations
   - find_optimal_n
-  - partition_metrics
+  - bioregionalization_metrics
   - site_species_metrics
   - bioregion_metrics
 

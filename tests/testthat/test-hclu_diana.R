@@ -189,7 +189,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
     "n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from partition_metrics()",
+        * the output from bioregionalization_metrics()",
     fixed = TRUE)  
   
   expect_error(

@@ -98,7 +98,7 @@ bipartite_link = net_bip, indices = "Cz")
 
 }
 \seealso{
-\link{partition_metrics}
+\link{bioregionalization_metrics}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),

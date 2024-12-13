@@ -54,7 +54,7 @@ should be obtained from all trials. Possible values are
 
 \item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\link{partition_metrics}. Should not be used at the same time as
+\link{bioregionalization_metrics}. Should not be used at the same time as
 \code{cut_height}.}
 
 \item{cut_height}{a \code{numeric} vector indicating the height(s) at which the
@@ -122,7 +122,7 @@ Clusters can be obtained by two methods:
 \item{Specifying a desired number of clusters in \code{n_clust}}
 \item{Specifying one or several heights of cut in \code{cut_height}}}
 
-To find an optimal number of clusters, see \code{\link[=partition_metrics]{partition_metrics()}}
+To find an optimal number of clusters, see \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}
 
 It is important to pay attention to the fact that the order of rows
 in the input distance matrix

@@ -88,7 +88,7 @@ bioregion_metrics <- function(cluster_object, comat,
     } else {
       if (cluster_object$name == "hierarchical_clustering") {
         stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using partition_metrics()
+        please extract clusters from the tree before using bioregionalization_metrics()
         See ?hclu_hierarclust or ?cut_tree")
       } else {
         stop(

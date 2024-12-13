@@ -63,7 +63,7 @@
 #'
 #' clust1 <- nhclu_clarans(dissim, index = "Simpson", n_clust = 5)
 #' 
-#' partition_metrics(clust1, dissimilarity = dissim,
+#' bioregionalization_metrics(clust1, dissimilarity = dissim,
 #' eval_metric = "pc_distance")
 #' 
 #'    

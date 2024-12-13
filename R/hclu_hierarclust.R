@@ -41,7 +41,7 @@
 #' 
 #' @param n_clust an `integer` or an `integer` vector indicating the number of
 #' clusters to be obtained from the hierarchical tree, or the output from
-#' [partition_metrics]. Should not be used at the same time as
+#' [bioregionalization_metrics]. Should not be used at the same time as
 #' `cut_height`.
 #' 
 #' @param cut_height a `numeric` vector indicating the height(s) at which the
@@ -76,7 +76,7 @@
 #' \item{Specifying a desired number of clusters in `n_clust`}
 #' \item{Specifying one or several heights of cut in `cut_height`}}
 #'
-#' To find an optimal number of clusters, see [partition_metrics()]
+#' To find an optimal number of clusters, see [bioregionalization_metrics()]
 #' 
 #' It is important to pay attention to the fact that the order of rows
 #' in the input distance matrix
@@ -291,14 +291,14 @@ iterative_consensus_tree, best, consensus",
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
         stop("n_clust does not have an optimal number of clusters. Did you
-        specify partition_optimisation = TRUE in partition_metrics()?", 
+        specify partition_optimisation = TRUE in bioregionalization_metrics()?", 
              call. = FALSE)
       }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from partition_metrics()", 
+        * the output from bioregionalization_metrics()", 
            call. = FALSE)
     }
     if(!is.null(cut_height)){

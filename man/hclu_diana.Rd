@@ -26,7 +26,7 @@ the third column name of \code{dissimilarity} is used.}
 
 \item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-\link{partition_metrics}. Should not be used at the same time as
+\link{bioregionalization_metrics}. Should not be used at the same time as
 \code{cut_height}.}
 
 \item{cut_height}{a \code{numeric} vector indicating the height(s) at which the
@@ -66,7 +66,7 @@ The function is based on \link[cluster:diana]{diana}.
 Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
 the diana algorithm.
 
-To find an optimal number of clusters, see \code{\link[=partition_metrics]{partition_metrics()}}
+To find an optimal number of clusters, see \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
