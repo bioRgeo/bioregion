@@ -176,7 +176,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">clust1</span> <span class="op">&lt;-</span> <span class="fu">nhclu_pam</span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clust2</span> <span class="op">&lt;-</span> <span class="fu">nhclu_pam</span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">15</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">clust2</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">clust2</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
 <span class="r-in"><span>eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing similarity-based metrics...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - pc_distance OK</span>
@@ -186,12 +186,12 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  pc_distance </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      pc_distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.1250892</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.6069988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.9367605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.4383977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.7543747</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.9694532</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
-<span class="r-in"><span><span class="fu"><a href="partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">clust2</span>, net <span class="op">=</span> <span class="va">comnet</span>, species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">clust2</span>, net <span class="op">=</span> <span class="va">comnet</span>, species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
 <span class="r-in"><span>                   site_col <span class="op">=</span> <span class="st">"Node1"</span>, eval_metric <span class="op">=</span> <span class="st">"avg_endemism"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing composition-based metrics...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - avg_endemism OK</span>
@@ -202,8 +202,8 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      avg_endemism</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Min   0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean  0.007619048</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max   0.080000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean  0.001428571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max   0.020000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each partition are available in </span>

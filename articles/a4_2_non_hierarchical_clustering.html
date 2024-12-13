@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-12-12</h4>
+            <h4 data-toc-skip class="date">2024-12-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_2_non_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_2_non_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_2_non_hierarchical_clustering.Rmd</code></div>
@@ -120,7 +120,7 @@ defined, users can chose among the 3 functions provided in
 functions are based on centroid-based algorithms (<a href="https://bioRgeo.github.io/bioregion/reference/nhclu_kmeans.html">Kmeans</a>
 and <a href="https://bioRgeo.github.io/bioregion/reference/nhclu_pam.html">PAM</a>
 ) or density-based algorithms (<a href="https://bioRgeo.github.io/bioregion/reference/nhclu_dbscan.html">DBSCAN</a>).<br><br><em>3. Determining the optimal number of clusters</em><br>
-The two functions <a href="https://bioRgeo.github.io/bioregion/reference/partition_metrics.html"><code>partition_metrics()</code></a>
+The two functions <a href="https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.html"><code>bioregionalization_metrics()</code></a>
 and <a href="https://bioRgeo.github.io/bioregion/reference/find_optimal_n.html"><code>find_optimal_n()</code></a>
 help determining what the optimal number of clusters would be (see <a href="#section4">Section 4</a> of this vignette).<br><br></p>
 <div class="section level2">
@@ -475,12 +475,13 @@ its associated function use a similarity matrix.</p>
 <p>Previous methods did not help in determining the optimal number of
 bioregions structuring the site-species matrix.</p>
 <p>For this purpose, we can combine both functions
-<code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> and <code>find_optimal()</code>.</p>
-<p><code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> calcultes several metrics based on
-the previous clustering attempts.</p>
+<code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> and
+<code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code>.</p>
+<p><code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> calcultes several metrics
+based on the previous clustering attempts.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span>
-<span>                  eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span>
+<span>                           eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Partition metrics:</span></span>
 <span><span class="co">##  - 24  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  25 </span></span>
@@ -496,13 +497,14 @@ the previous clustering attempts.</p>
 <code>avg_endemism</code>, you also need to provide the site-species
 matrix.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/partition_metrics.html">partition_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span>
-<span>                       species_col <span class="op">=</span> <span class="st">"Species"</span>, site_col <span class="op">=</span> <span class="st">"Site"</span>,</span>
-<span>                       eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span>
-<span>                                       <span class="st">"pc_distance"</span>, <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Once the <code><a href="../reference/partition_metrics.html">partition_metrics()</a></code> function has calculated the
-partitioning metrics, we can call <code>find_optimal()</code> to get the
-optimal number of clusters. <br></p>
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span>
+<span>                                species_col <span class="op">=</span> <span class="st">"Species"</span>, site_col <span class="op">=</span> <span class="st">"Site"</span>,</span>
+<span>                                eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span>
+<span>                                                <span class="st">"pc_distance"</span>, <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Once the <code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> function has
+calculated the partitioning metrics, we can call
+<code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> to get the optimal number of clusters.
+<br></p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "tot_endemism" "avg_endemism" "pc_distance"  "anosim"</span></span></code></pre>

@@ -98,7 +98,7 @@ automatically return the height of cut for the chosen number(s) of clusters.</p>
 <dt id="arg-n-clust">n_clust<a class="anchor" aria-label="anchor" href="#arg-n-clust"></a></dt>
 <dd><p>an integer or a vector of integers indicating the number of
 clusters to be obtained from the hierarchical tree, or the output from
-<code><a href="partition_metrics.html">partition_metrics()</a></code>. Should not be used at the same time as <code>cut_height</code></p></dd>
+<code><a href="bioregionalization_metrics.html">bioregionalization_metrics()</a></code>. Should not be used at the same time as <code>cut_height</code></p></dd>
 
 
 <dt id="arg-cut-height">cut_height<a class="anchor" aria-label="anchor" href="#arg-cut-height"></a></dt>
@@ -211,16 +211,16 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.8118 cophenetic correlation coefficient with the initial dissimilarity</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.7262 cophenetic correlation coefficient with the initial dissimilarity</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>       matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.265625</span>
 <span class="r-in"><span><span class="va">tree2</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, cut_height <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tree3</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 3 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.28125</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.265625</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
 <span class="r-in"><span><span class="va">tree4</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.1</span>, <span class="fl">.15</span>, <span class="fl">.2</span>, <span class="fl">.25</span><span class="op">)</span><span class="op">)</span></span></span>
