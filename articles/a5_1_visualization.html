@@ -133,7 +133,8 @@ directly provide a plot of each site colored according to the cluster
 they belong to. <br> Let’s take an example with a K-means clustering,
 with a number of clusters set to 3.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> function can now simply takes the
 object <code>fish_nhclu_kmeans</code>, which is of
 <code>bioregion.clusters</code> class, and the spatial distribution of
@@ -160,16 +161,16 @@ For this purpose, you can set the arguments like in the chunk below:</p>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">## First 10 features:</span></span>
 <span><span class="co">##    ID K_3                       geometry</span></span>
-<span><span class="co">## 1  35   3 POLYGON ((6.098099 45.13742...</span></span>
-<span><span class="co">## 2  36   3 POLYGON ((6.22521 45.13381,...</span></span>
-<span><span class="co">## 3  37   3 POLYGON ((6.352304 45.13007...</span></span>
-<span><span class="co">## 4  38   3 POLYGON ((6.47938 45.12617,...</span></span>
-<span><span class="co">## 5  39   3 POLYGON ((6.606438 45.12213...</span></span>
-<span><span class="co">## 6  84   3 POLYGON ((6.093117 45.04745...</span></span>
-<span><span class="co">## 7  85   3 POLYGON ((6.220024 45.04385...</span></span>
-<span><span class="co">## 8  86   3 POLYGON ((6.346914 45.04011...</span></span>
-<span><span class="co">## 9  87   3 POLYGON ((6.473786 45.03622...</span></span>
-<span><span class="co">## 10 88   3 POLYGON ((6.600641 45.03219...</span></span></code></pre>
+<span><span class="co">## 1  35   2 POLYGON ((6.098099 45.13742...</span></span>
+<span><span class="co">## 2  36   2 POLYGON ((6.22521 45.13381,...</span></span>
+<span><span class="co">## 3  37   2 POLYGON ((6.352304 45.13007...</span></span>
+<span><span class="co">## 4  38   2 POLYGON ((6.47938 45.12617,...</span></span>
+<span><span class="co">## 5  39   2 POLYGON ((6.606438 45.12213...</span></span>
+<span><span class="co">## 6  84   2 POLYGON ((6.093117 45.04745...</span></span>
+<span><span class="co">## 7  85   2 POLYGON ((6.220024 45.04385...</span></span>
+<span><span class="co">## 8  86   2 POLYGON ((6.346914 45.04011...</span></span>
+<span><span class="co">## 9  87   2 POLYGON ((6.473786 45.03622...</span></span>
+<span><span class="co">## 10 88   2 POLYGON ((6.600641 45.03219...</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
 <span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">custom</span><span class="op">)</span><span class="op">)</span></span>
@@ -187,21 +188,22 @@ For this purpose, you can set the arguments like in the chunk below:</p>
 <h3 id="plot-with-facets">Plot with facets<a class="anchor" aria-label="anchor" href="#plot-with-facets"></a>
 </h3>
 <p>Finally, you can be interested in plotting several
-bioregionalisations at once. For this purpose, we can build a single
+bioregionalizations at once. For this purpose, we can build a single
 <code>data.frame</code> gathering all the bioregions obtained from
 distinct algorithms and then take advantage of the <code>facets</code>
 implemented in <code>ggplot2</code>. <br></p>
-<p>We first compute a few more bioregionalisation on the same dataset
+<p>We first compute a few more bioregionalizations on the same dataset
 using other algorithms. <br></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Hierarchical clustering</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>,</span>
 <span>                                          index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span>,</span>
-<span>                                          method <span class="op">=</span> <span class="st">"average"</span>, n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>                                          method <span class="op">=</span> <span class="st">"mcquitty"</span>, n_clust <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                          optimal_tree_method <span class="op">=</span> <span class="st">"best"</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span><span class="op">$</span><span class="va">cluster_info</span></span></code></pre></div>
 <pre><code><span><span class="co">##   partition_name n_clust requested_n_clust output_cut_height</span></span>
-<span><span class="co">## 1            K_3       3                 3            0.5625</span></span></code></pre>
+<span><span class="co">## 1            K_3       3                 3             0.625</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Walktrap network bioregionalization</span></span>
 <span><span class="va">vegesim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span></span>
@@ -250,10 +252,12 @@ can take advantage of the facets implemented in
 <span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">Algorithm</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
-<p>We can refine the above map by: * reordering the 3 bioregions so that
-they follow the same order * add some background for the Mediterranean
-sea and the mainland * crop the cells by the mainland * adjust
-labels</p>
+<p>We can refine the above map by:<br>
+* reordering the 3 bioregions so that they follow the same order<br>
+* add some background for the Mediterranean sea and the mainland<br>
+* crop the cells by the mainland<br>
+* adjust labels</p>
+<p><br></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">world_countries</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_countries.html" class="external-link">ne_countries</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="st">"medium"</span>,</span>
 <span>                                               returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
@@ -289,24 +293,17 @@ labels</p>
 <span><span class="co"># Reordering bioregions</span></span>
 <span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span></span>
 <span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"HCLU_HIERARCLUST"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"2"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"HCLU_HIERARCLUST"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"2"</span></span>
-<span></span>
+<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span> <span class="op">&amp;</span></span>
+<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"2"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"3"</span></span>
 <span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span> <span class="op">&amp;</span></span>
 <span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"3"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"2"</span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"2"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"3"</span></span>
 <span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"3"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span>
 <span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
 <span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"2"</span></span>
 <span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
 <span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"2"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"3"</span></span>
+<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
+<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"3"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span>
 <span></span>
 <span><span class="co"># More readable labels for algorithms</span></span>
 <span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algo</span> <span class="op">&lt;-</span></span>
