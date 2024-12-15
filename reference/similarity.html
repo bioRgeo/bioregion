@@ -80,10 +80,10 @@ columns.</p></dd>
 
 <dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
 <dd><p>a <code>character</code> vector indicating which metrics to chose
-(see Details). Available options are <em>abc</em>, <em>ABC</em>, <em>Jaccard</em>,
-<em>Jaccardturn</em>, <em>Sorensen</em>, <em>Simpson</em>,  <em>Bray</em>,
-<em>Brayturn</em> or <em>Euclidean</em>.<br>
-If <code>"all"</code> is specified, then all metrics will be
+(see Details). Available options are <code>abc</code>, <code>ABC</code>, <code>Jaccard</code>,
+<code>Jaccardturn</code>, <code>Sorensen</code>, <code>Simpson</code>,  <code>Bray</code>,
+<code>Brayturn</code> or <code>Euclidean</code>.<br>
+If <code>all</code> is specified, then all metrics will be
 calculated. Can be set to <code>NULL</code> if <code>formula</code> is used.</p></dd>
 
 
@@ -108,7 +108,7 @@ memory.</p></dd>
 metric(s) between each pair of sites. The two first columns represent each
 pair of sites.
 One column per similarity metric provided in <code>metric</code> and
-<code>formula</code> except for the metric <em>abc</em> and <em>ABC</em> that are
+<code>formula</code> except for the metric <code>abc</code> and <code>ABC</code> that are
 stored in three columns (one for each letter).</p>
     </div>
     <div class="section level2">
@@ -116,14 +116,14 @@ stored in three columns (one for each letter).</p>
     <p>With <code>a</code> the number of species shared by a pair of sites, <code>b</code>
 species only present in the first site and <code>c</code> species only present in
 the second site.</p>
-<p>Jaccard = 1 - (b + c) / (a + b + c)Jaccard = 1 - (b + c) / (a + b + c)</p>
-<p>Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c)) Baselga2012bioregion</p>
-<p>Sorensen = 1 - (b + c) / (2a + b + c)Sorensen = 1 - (b + c) / (2a + b + c)</p>
-<p>Simpson = 1 - min(b, c) / (a + min(b, c))Simpson = 1 - min(b, c) / (a + min(b, c))</p>
+<p>Jaccard = 1 - (b + c) / (a + b + c)</p>
+<p>Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c)) (Baselga, 2012)</p>
+<p>Sorensen = 1 - (b + c) / (2a + b + c)</p>
+<p>Simpson = 1 - min(b, c) / (a + min(b, c))</p>
 <p>If abundances data are available, Bray-Curtis and its turnover component can
 also be computed with the following equation:</p>
-<p>Bray = 1 - (B + C) / (2A + B + C)Bray = 1 - (B + C) / (2A + B + C)</p>
-<p>Brayturn = 1 - min(B, C)/(A + min(B, C))Brayturn = 1 - min(B, C)/(A + min(B, C)) Baselga2013bioregion</p>
+<p>Bray = 1 - (B + C) / (2A + B + C)</p>
+<p>Brayturn = 1 - min(B, C)/(A + min(B, C)) (Baselga, 2013)</p>
 <p>with A the sum of the lesser values for common species shared by a pair of
 sites.
 B and C are the total number of specimens counted at both sites minus A.</p>
@@ -135,14 +135,18 @@ will compute the Simpson and Bray-Curtis similarity metrics, respectively.
 are <code>numeric</code> vectors.</strong></p>
 <p>Euclidean computes the Euclidean similarity between each pair of site
 following this equation:</p>
-<p>Euclidean = 1 / (1 + d_ij)Euclidean = 1 / (1 + d_ij)</p>
-<p>Where d_ijd_ij is the Euclidean distance between site i and
+<p>Euclidean = 1 / (1 + dij)</p>
+<p>Where dij is the Euclidean distance between site i and
 site j in terms of species composition.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Baselga2012bioregion</p>
-<p>Baselga2013bioregion</p>
+    <p>Baselga, A. (2012). "The Relationship between Species Replacement,
+Dissimilarity Derived from Nestedness, and Nestedness."
+<em>Global Ecology and Biogeography</em>, <b>21</b>(12), 1223–1232.</p>
+<p>Baselga, A. (2013). "Separating the two components of abundance-based
+dissimilarity: balanced changes in abundance vs. abundance gradients."
+<em>Methods in Ecology and Evolution</em>, <b>4</b>(6), 552–557.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
