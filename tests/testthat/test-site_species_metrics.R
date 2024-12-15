@@ -66,7 +66,7 @@ test_that("invalid inputs", {
   expect_error(
     site_species_metrics(com, comat = comat, indices = "zz"),
     "Please choose algorithm among the followings values:
-    rho or Cz.",
+    rho, affinity, fidelity, indicator_value or Cz.",
     fixed = TRUE)
   
   expect_error(

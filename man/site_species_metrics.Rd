@@ -2,13 +2,12 @@
 % Please edit documentation in R/site_species_metrics.R
 \name{site_species_metrics}
 \alias{site_species_metrics}
-\title{Calculate contribution metrics of sites and species
-https://github.com/Farewe/biogeonetworks/blob/master/R/networkmetrics.R}
+\title{Calculate contribution metrics of sites and species}
 \usage{
 site_species_metrics(
   cluster_object,
   comat,
-  indices = c("rho", "Cz"),
+  indices = c("rho"),
   bipartite_link = NULL
 )
 }
@@ -30,10 +29,9 @@ Available options are \code{rho} and \code{Cz}.}
 and an optional third column indicating the weight of the interaction.}
 }
 \value{
-A \code{list} of \code{data.frames} if multiples indices are selected or a single
-\code{data.frame} with three columns if one index is selected. Each \code{data.frame}
-has three columns: the species, the bioregion, and the desired summary
-statistics.
+A \code{data.frame} with the columns Bioregion, Species, and the desired summary
+statistics, or a list of \code{data.frames} if \code{Cz} and other indices are
+selected.
 }
 \description{
 This function calculates metrics that assess the contribution of a given
@@ -48,6 +46,25 @@ with \eqn{n} the number of sites, \eqn{n_i} the number of sites in which
 species \eqn{i} is present, \eqn{n_j} the number of sites belonging to the
 bioregion \eqn{j}, \eqn{n_ij} the number of occurrences of species \eqn{i}
 in sites belonging to the bioregion \eqn{j}.
+
+Affinity, fidelity and individual contributions describe how species are
+linked to their bioregions.
+Affinity of species to their region, \eqn{A_i = R_i / Z}
+where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
+associated cluster, and \eqn{Z} the total size (number of sites) of the
+bioregion.
+
+A high affinity means that the species is occupying most sites of its
+associated bioregion.
+
+Fidelity of species to their region, \eqn{F_i = R_i / D_i}
+where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
+associated bioregion, and \eqn{D_i} is its total occurrence/range size.
+
+A high fidelity means that the species is not present in other bioregions
+than their associated one.
+
+Indicator Value of species, \eqn{IndVal = F_i * A_i}
 
 \code{Cz} metrics are derived from \insertRef{Guimera2005}{bioregion}.
 Their respective formula are:
@@ -88,7 +105,9 @@ com <- netclu_greedy(net)
 site_species_metrics(cluster_object = clust1, comat = comat,
 indices = "rho")
 
-site_species_metrics(cluster_object = com, comat = comat, indices = "rho")
+# Contribution metrics
+site_species_metrics(cluster_object = com, comat = comat,
+indices = c("rho", "affinity", "fidelity", "indicator_value"))
 
 # Cz indices
 net_bip <- mat_to_net(comat, weight = TRUE)
