@@ -1,7 +1,8 @@
 url: https://bioRgeo.github.io/bioregion/
+
 template:
   bootstrap: 5
-  
+
 toc:
   depth: 1
   

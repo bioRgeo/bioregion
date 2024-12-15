@@ -1,41 +1,41 @@
-# bioregion 1.1.3
+# bioregion 1.1.1.9000
 
-This is a list of changes made between bioregion 1.1.2 
-(CRAN unreleased) and bioregion 1.1.3 (CRAN unreleased).
+This is a list of changes made in the development/GitHub version of the package
+between bioregion 1.1.1 (CRAN release 2024-04-19) and the next CRAN release.
+
+* Affinity propagation algorithm added (function nhclu_affprop).
 
 * Added a new method to construct a consensus tree in hclu_hierarclust. This
 method is called Iterative Hierarchical Consensus Tree (IHCT). It conclusively
 solves issues related to the order of sites in the distance matrix and 
 building a consensus hierarchical tree with a meaningful topology.
 
-* Many changes to functions related to hclu_hierarclust due to this major change
+* Many changes to functions related to hclu_hierarclust due to this major change.
 
-* Updated generic functions to provide plot and print for diana
+* Updated generic functions to provide plot and print for diana.
 
-* Function contribution() renamed as site_species_metrics()
+* Function site_species_metrics() added to the package and the workflow.
 
-* Function bioregion_metrics() created
+* Function bioregion_metrics() added to the package and the workflow.
 
-* Function subset_node() renamed site_species_subset()
+* Function subset_node() renamed site_species_subset().
 
-* Indices Cz added to site_species_metrics()
+* Indices Cz added to site_species_metrics().
 
 * Updated install_binaries:
    - Archive bin.zip now stored on GitHub and backed up on NextCloud  
    - Added Infomap version 2.8.0
    - Added argument download_only to only execute the download step  
 &nbsp;
-* Added argument check_install in netclu_infomap, netclu_louvain, and netclu_oslom
+* Added argument check_install in netclu_infomap, netclu_louvain, and netclu_oslom.
 
+* Function betapart_to_bioregion() added to the package.
 
-# bioregion 1.1.2
+* Function compare_bioregionalizations() added to the package.
 
-This is a list of changes made between bioregion 1.1.1 
-(CRAN release 2024-04-19) and bioregion 1.1.2 (CRAN unreleased).
+* Function bioregionalization_metrics() added to the package.
 
-* Affinity propagation algorithm added (function nhclu_affprop)
-
-* Function contribution() added to the package and the workflow.
+* Function bioregion_metrics() added to the package.
 
 # bioregion 1.1.1
 

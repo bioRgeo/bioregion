@@ -11,10 +11,10 @@ similarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 columns.}
 
 \item{metric}{a \code{character} vector indicating which metrics to chose
-(see Details). Available options are \emph{abc}, \emph{ABC}, \emph{Jaccard},
-\emph{Jaccardturn}, \emph{Sorensen}, \emph{Simpson},  \emph{Bray},
-\emph{Brayturn} or \emph{Euclidean}.\cr
-If \code{"all"} is specified, then all metrics will be
+(see Details). Available options are \code{abc}, \code{ABC}, \code{Jaccard},
+\code{Jaccardturn}, \code{Sorensen}, \code{Simpson},  \code{Bray},
+\code{Brayturn} or \code{Euclidean}.\cr
+If \code{all} is specified, then all metrics will be
 calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
 \item{formula}{a \code{character} vector with your own formula(s) based on the
@@ -33,7 +33,7 @@ A \code{data.frame} with additional class
 metric(s) between each pair of sites. The two first columns represent each
 pair of sites.
 One column per similarity metric provided in \code{metric} and
-\code{formula} except for the metric \emph{abc} and \emph{ABC} that are
+\code{formula} except for the metric \code{abc} and \code{ABC} that are
 stored in three columns (one for each letter).
 }
 \description{
@@ -42,25 +42,24 @@ several similarity metric(s) between each pair of sites from a co-occurrence
 \code{matrix} with sites as rows and species as columns.
 }
 \details{
-\loadmathjax
 With \code{a} the number of species shared by a pair of sites, \code{b}
 species only present in the first site and \code{c} species only present in
 the second site.
 
-\mjeqn{Jaccard = 1 - (b + c) / (a + b + c)}{Jaccard = 1 - (b + c) / (a + b + c)}
+Jaccard = 1 - (b + c) / (a + b + c)
 
-\mjeqn{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))}{Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c))} \insertCite{Baselga2012}{bioregion}
+Jaccardturn = 1 - 2min(b, c) / (a + 2min(b, c)) (Baselga, 2012)
 
-\mjeqn{Sorensen = 1 - (b + c) / (2a + b + c)}{Sorensen = 1 - (b + c) / (2a + b + c)}
+Sorensen = 1 - (b + c) / (2a + b + c)
 
-\mjeqn{Simpson = 1 - min(b, c) / (a + min(b, c))}{Simpson = 1 - min(b, c) / (a + min(b, c))}
+Simpson = 1 - min(b, c) / (a + min(b, c))
 
 If abundances data are available, Bray-Curtis and its turnover component can
 also be computed with the following equation:
 
-\mjeqn{Bray = 1 - (B + C) / (2A + B + C)}{Bray = 1 - (B + C) / (2A + B + C)}
+Bray = 1 - (B + C) / (2A + B + C)
 
-\mjeqn{Brayturn = 1 - min(B, C)/(A + min(B, C))}{Brayturn = 1 - min(B, C)/(A + min(B, C))} \insertCite{Baselga2013}{bioregion}
+Brayturn = 1 - min(B, C)/(A + min(B, C)) (Baselga, 2013)
 
 with A the sum of the lesser values for common species shared by a pair of
 sites.
@@ -76,9 +75,9 @@ are \code{numeric} vectors.}
 Euclidean computes the Euclidean similarity between each pair of site
 following this equation:
 
-\mjeqn{Euclidean = 1 / (1 + d_{ij})}{Euclidean = 1 / (1 + d_{ij})}
+Euclidean = 1 / (1 + dij)
 
-Where \mjeqn{d_{ij}}{d_{ij}} is the Euclidean distance between site i and
+Where dij is the Euclidean distance between site i and
 site j in terms of species composition.
 }
 \examples{
@@ -94,9 +93,13 @@ formula = "1 - (b + c) / (a + b + c)")
 
 }
 \references{
-\insertRef{Baselga2012}{bioregion}
+Baselga, A. (2012). "The Relationship between Species Replacement,
+Dissimilarity Derived from Nestedness, and Nestedness."
+\emph{Global Ecology and Biogeography}, \bold{21}(12), 1223--1232.
 
-\insertRef{Baselga2013}{bioregion}
+Baselga, A. (2013). "Separating the two components of abundance-based
+dissimilarity: balanced changes in abundance vs. abundance gradients."
+\emph{Methods in Ecology and Evolution}, \bold{4}(6), 552--557.
 }
 \seealso{
 \link{dissimilarity} \link{dissimilarity_to_similarity}
