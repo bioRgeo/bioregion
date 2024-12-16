@@ -7,24 +7,23 @@
 #' @param comat a co-occurrence `matrix` with sites as rows and species as
 #' columns.
 #' 
-#' @param metric a `character` vector indicating which metrics to chose
-#' (see Details). Available options are `abc`, `ABC`, `Jaccard`,
-#' `Jaccardturn`, `Sorensen`, `Simpson`,  `Bray`,
-#' `Brayturn` or `Euclidean`.\cr
-#' If `all` is specified, then all metrics will be
-#' calculated. Can be set to `NULL` if `formula` is used.
+#' @param metric a `character` vector or a single `character` string indicating
+#' which metrics to chose (see Details). Available options are `"abc"`, `"ABC"`,
+#'  `"Jaccard"`, `"Jaccardturn"`, `"Sorensen"`, `"Simpson"`, `"Bray"`,
+#'  `"Brayturn"` or `"Euclidean"`. If `"all"` is specified, then all metrics
+#'  will be calculated. Can be set to `NULL` if `formula` is used.
 #' 
-#' @param formula a `character` vector with your own formula(s) based on the
-#' `a`, `b`, `c`, `A`, `B`, and `C` quantities
+#' @param formula a `character` vector or a single `character` string with your 
+#' own formula(s) based on the `a`, `b`, `c`, `A`, `B`, and `C` quantities 
 #' (see Details). `formula` is set to `NULL` by default.
 #' 
-#' @param method a string indicating what method should be used to compute
-#' `abc` (see Details).
-#' `method = "prodmat"` by default is more efficient but can be greedy in
-#' memory and `method = "loops"` is less efficient but less greedy in
-#' memory.
+#' @param method a `character` string indicating what method should be used to 
+#' compute `abc` (see Details). `method = "prodmat"` by default is more 
+#' efficient but can be greedy in memory and `method = "loops"` is less 
+#' efficient but less greedy in memory.
 #' 
 #' @details
+#' 
 #' With `a` the number of species shared by a pair of sites, `b`
 #' species only present in the first site and `c` species only present in
 #' the second site.
@@ -42,7 +41,7 @@
 #'
 #' Bray = 1 - (B + C) / (2A + B + C)
 #'
-#' Brayturn = 1 - min(B, C)/(A + min(B, C)) (Baselga, 2013)
+#' Brayturn = 1 - min(B, C) / (A + min(B, C)) (Baselga, 2013)
 #'
 #' with A the sum of the lesser values for common species shared by a pair of
 #' sites.
@@ -52,22 +51,21 @@
 #' `a`, `b`, `c`, `A`, `B`, and `C`. For example
 #' `formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)")`
 #' will compute the Simpson and Bray-Curtis similarity metrics, respectively. 
-#' **Note that pmin is used in the Simpson formula because a, b, c, A, B and C 
-#' are `numeric` vectors.**
+#' Note that pmin is used in the Simpson formula because a, b, c, A, B and C 
+#' are `numeric` vectors.
 #'
 #' Euclidean computes the Euclidean similarity between each pair of site
 #' following this equation:
 #'
-#' Euclidean = 1 / (1 + dij)
+#' Euclidean = 1 / (1 + d_ij)
 #'
-#' Where dij is the Euclidean distance between site i and 
+#' Where d_ij is the Euclidean distance between site i and 
 #' site j in terms of species composition.
 #'
 #' @return A `data.frame` with additional class 
 #' `bioregion.pairwise.metric`, providing one or several similarity
 #' metric(s) between each pair of sites. The two first columns represent each 
-#' pair of sites.
-#' One column per similarity metric provided in `metric` and
+#' pair of sites. One column per similarity metric provided in `metric` and
 #' `formula` except for the metric `abc` and `ABC` that are
 #' stored in three columns (one for each letter).
 #' 
@@ -76,7 +74,7 @@
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}), 
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) &
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
@@ -91,13 +89,13 @@
 #' formula = "1 - (b + c) / (a + b + c)")
 #' 
 #' @references
-#' Baselga, A. (2012). "The Relationship between Species Replacement,
-#' Dissimilarity Derived from Nestedness, and Nestedness."
-#' \emph{Global Ecology and Biogeography}, \bold{21}(12), 1223--1232.
+#' Baselga A (2012) The Relationship between Species Replacement,
+#' Dissimilarity Derived from Nestedness, and Nestedness.
+#' \emph{Global Ecology and Biogeography}, 21(12), 1223--1232.
 #' 
-#' Baselga, A. (2013). "Separating the two components of abundance-based
-#' dissimilarity: balanced changes in abundance vs. abundance gradients."
-#' \emph{Methods in Ecology and Evolution}, \bold{4}(6), 552--557.
+#' Baselga A (2013) Separating the two components of abundance-based
+#' dissimilarity: balanced changes in abundance vs. abundance gradients.
+#' \emph{Methods in Ecology and Evolution}, 4(6), 552--557.
 #' 
 #' @export
 similarity <- function(comat, 

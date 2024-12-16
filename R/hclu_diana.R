@@ -1,10 +1,10 @@
 #' Divisive hierarchical clustering based on dissimilarity or beta-diversity
 #'
 #' This function computes a divisive hierarchical clustering from a
-#' dissimilarity (beta-diversity) `data.frame`, calculates the cophenetic correlation
-#' coefficient, and can get clusters from the tree if requested by the user.
-#' The function implements randomization of the dissimilarity matrix to
-#' generate the tree, with a selection method based on the optimal cophenetic
+#' dissimilarity (beta-diversity) `data.frame`, calculates the cophenetic 
+#' correlation coefficient, and can get clusters from the tree if requested by 
+#' the user. The function implements randomization of the dissimilarity matrix 
+#' to generate the tree, with a selection method based on the optimal cophenetic
 #' correlation coefficient. Typically, the dissimilarity `data.frame` is a
 #' `bioregion.pairwise.metric` object obtained by running `similarity`
 #' or `similarity` and then `similarity_to_dissimilarity`.
@@ -18,9 +18,9 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #'  
-#' @param n_clust an `integer` or an `integer` vector indicating the number of
-#' clusters to be obtained from the hierarchical tree, or the output from
-#' [bioregionalization_metrics]. Should not be used at the same time as
+#' @param n_clust an `integer` vector or a single `integer` indicating the 
+#' number of clusters to be obtained from the hierarchical tree, or the output 
+#' from [bioregionalization_metrics]. Should not be used at the same time as
 #' `cut_height`.
 #' 
 #' @param cut_height a `numeric` vector indicating the height(s) at which the
@@ -37,7 +37,7 @@
 #' 
 #' @details
 #' The function is based on [diana][cluster::diana].
-#' Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
+#' Chapter 6 of Kaufman & Rousseeuw (1990) fully details the functioning of
 #' the diana algorithm.
 #'
 #' To find an optimal number of clusters, see [bioregionalization_metrics()]
@@ -53,11 +53,13 @@
 #' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
 #' @references
-#' \insertRef{Kaufman2009}{bioregion}
+#' Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to 
+#' cluster analysis. In & Sons. JW (ed.), \emph{Finding groups in data: An 
+#' introduction to cluster analysis}.
 #'
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com}) &
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [cut_tree] 

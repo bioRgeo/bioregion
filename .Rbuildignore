@@ -28,8 +28,7 @@
 ^vignettes/a4_3_network_clustering.Rmd
 ^vignettes/a4_4_microbenchmark.Rmd
 ^vignettes/a5_1_visualization.Rmd
-^vignettes/a5_2_compare_partitions.Rmd
-^vignettes/a5_3_contributions.Rmd
-
+^vignettes/a5_2_compare_bioregionalizations.Rmd
+^vignettes/a5_3_summary_metrics.Rmd
 
 LICENSE

@@ -7,17 +7,17 @@
 #' beta-diversity values. This function allows including phylogenetic beta
 #' diversity to compute bioregions with bioregion.
 #'
-#' @param betapart_result An object produced by the betapart package (e.g., 
+#' @param betapart_result an object produced by the betapart package (e.g., 
 #' using `beta.pair` function).
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) 
 #'
 #' @return A dissimilarity object of class `bioregion.pairwise.metric` 
-#' compatible
-#'  with the bioregion package.
+#' compatible with the bioregion package.
+#' 
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 #' prob = 1 / 1:1001), 5, 10)

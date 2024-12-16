@@ -29,7 +29,7 @@
 #'  
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com}) &
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @examples

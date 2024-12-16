@@ -5,40 +5,42 @@
 #' may require the users to provide either a similarity or dissimilarity
 #' matrix, or to provide the initial species-site table.
 #'
-#' @param cluster_object a `bioregion.clusters` object
+#' @param cluster_object a `bioregion.clusters` object.
 #' 
-#' @param eval_metric character string or vector of character strings indicating
-#'  metric(s) to be calculated to investigate the effect of different number
-#'  of clusters. Available options: `"pc_distance"`, `"anosim"`,
-#'  `"avg_endemism"` and `"tot_endemism"`
+#' @param eval_metric a `character` vector or a single `character` string 
+#' indicating metric(s) to be calculated to investigate the effect of different 
+#' number of clusters. Available options are `"pc_distance"`, `"anosim"`,
+#'  `"avg_endemism"` or `"tot_endemism"`.
 #'  
-#' @param dissimilarity a `dist` object or a `bioregion.pairwise.metric` object (output
-#' from [similarity_to_dissimilarity()]). Necessary if `eval_metric`
-#' includes `pc_distance` and `tree` is not a
+#' @param dissimilarity a `dist` object or a `bioregion.pairwise.metric` 
+#' object (output from [similarity_to_dissimilarity()]). Necessary if 
+#' `eval_metric` includes `pc_distance` and `tree` is not a
 #' `bioregion.hierar.tree` object
 #' 
-#' @param dissimilarity_index a character string indicating the dissimilarity
+#' @param dissimilarity_index a `character` string indicating the dissimilarity
 #' (beta-diversity) index to be used in case `dist` is a `data.frame` with
-#' multiple dissimilarity indices
+#' multiple dissimilarity indices.
 #' 
 #' @param net the species-site network (i.e., bipartite network). Should be
-#' provided if `eval_metric` includes `"avg_endemism"` or `"tot_endemism"`
+#' provided as `data.frame± if `eval_metric` includes `"avg_endemism"` or 
+#' `"tot_endemism"`.
 #' 
 #' @param site_col name or number for the column of site nodes (i.e. primary
 #' nodes). Should be provided if `eval_metric` includes `"avg_endemism"` or
-#' `"tot_endemism"`
+#' `"tot_endemism"`.
 #' 
 #' @param species_col name or number for the column of species nodes (i.e.
 #' feature nodes). Should be provided if `eval_metric` includes
-#' `"avg_endemism"` or `"tot_endemism"`
+#' `"avg_endemism"` or `"tot_endemism"`.
 #'
 #' @details
-#' \loadmathjax
 #'
 #' **Evaluation metrics:**
+#' 
 #' \itemize{
+#' 
 #' \item{`pc_distance`: this metric is the method used by
-#' \insertCite{Holt2013}{bioregion}. It is a ratio of the between-cluster sum of
+#' Holt et al. (2013). It is a ratio of the between-cluster sum of
 #' dissimilarity (beta-diversity) versus the total sum of dissimilarity
 #' (beta-diversity) for the full dissimilarity matrix. In other words, it is
 #' calculated on the basis of two elements. First, the total sum of
@@ -52,14 +54,14 @@
 #' dissimilarity by the total sum of dissimilarity.}
 #' 
 #' \item{`anosim`: This metric is the statistic used in Analysis of
-#' Similarities, as suggested in \insertCite{Castro-Insua2018}{bioregion} (see
+#' Similarities, as suggested in Castro-Insua et al. (2018) (see
 #' [vegan::anosim()][vegan::anosim]). It compares the between-cluster
 #' dissimilarities to the within-cluster dissimilarities. It is based based on
 #' the difference of mean ranks between groups and within groups with the
 #' following formula:
-#' \mjeqn{R = (r_B - r_W)/(N (N-1) / 4)}{R = (r_B - r_W)/(N (N-1) / 4)},
-#' where \mjeqn{r_B}{r_B} and \mjeqn{r_W}{r_W} are the average ranks
-#' between and within clusters respectively, and \mjeqn{N}{N} is the total
+#' R = (r_B - r_W)/(N (N-1) / 4),
+#' where r_B and r_W are the average ranks
+#' between and within clusters respectively, and N is the total
 #' number of sites.
 #' Note that the function does not estimate the significance here, it only
 #' computes the statistic - for significance testing see
@@ -67,19 +69,17 @@
 #' 
 #' \item{`avg_endemism`: this metric is the average percentage of
 #' endemism in clusters as
-#' recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
-#' \mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
-#'  where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
-#' \mjeqn{S_i}{Si} is the number of
+#' recommended by Kreft & Jetz (2010). Calculated as follows:
+#' End_mean = sum_i (E_i / S_i)/K
+#' where E_i is the number of endemic species in cluster i, S_i is the number of
 #' species in cluster i, and K the maximum number of clusters.
 #' }
 #' 
 #' \item{`tot_endemism`: this metric is the total endemism across all clusters,
-#' as recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
-#' \mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
-#'
-#' where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
-#' only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
+#' as recommended by Kreft & Jetz (2010). Calculated as follows:
+#' End_tot = E \ C
+#' where E is total the number of endemics (i.e., species found in
+#' only one cluster) and C is the number of non-endemic species.
 #' }
 #' }
 #'
@@ -98,19 +98,21 @@
 #' @import data.table 
 #' 
 #' @references
-#' \insertRef{Castro-Insua2018}{bioregion}
+#' Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity measures 
+#' affected by richness differences yield biased delimitations of biogeographic 
+#' realms. \emph{Nature Communications}, 9(1), 9-11.
 #'
-#' \insertRef{Ficetola2017}{bioregion}
+#' Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P, 
+#' Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ, 
+#' Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of 
+#' the world. \emph{Science}, 339(6115), 74-78.
 #'
-#' \insertRef{Holt2013}{bioregion}
-#'
-#' \insertRef{Kreft2010}{bioregion}
-#'
-#' \insertRef{Langfelder2008}{bioregion}
+#' Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
+#' based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
 #' @seealso [compare_bioregionalizations]

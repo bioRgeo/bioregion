@@ -19,10 +19,10 @@
 #' the third column name of `dissimilarity` is used.
 #' 
 #' @param method name of the hierarchical classification method, as in
-#' [hclust][fastcluster::hclust]. Should be one of "ward.D",
-#' "ward.D2", "single", "complete", "average"
-#' (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or
-#' "centroid" (= UPGMC).
+#' [hclust][fastcluster::hclust]. Should be one of `"ward.D"`,
+#' `"ward.D2"`, `"single"`, `"complete"`, `"average"`
+#' (= UPGMA), `"mcquitty"` (= WPGMA), `"median"` (= WPGMC) or
+#' `"centroid"` (= UPGMC).
 #' 
 #' @param randomize a `boolean` indicating if the dissimilarity matrix should be
 #' randomized, to account for the order of sites in the dissimilarity matrix.
@@ -34,14 +34,14 @@
 #' `dissimilarity` object is large). Note that it cannot be set to `TRUE` if
 #' `optimal_tree_method = "iterative_consensus_tree"`
 #' 
-#' @param optimal_tree_method a `character` indicating how the final tree
+#' @param optimal_tree_method a `character` string indicating how the final tree
 #' should be obtained from all trials. Possible values are 
 #' `iterative_consensus_tree` (default), `best` and `consensus`. 
 #' **We recommend `iterative_consensus_tree`. See details** 
 #' 
-#' @param n_clust an `integer` or an `integer` vector indicating the number of
-#' clusters to be obtained from the hierarchical tree, or the output from
-#' [bioregionalization_metrics]. Should not be used at the same time as
+#' @param n_clust an `integer` vector or a single `integer` indicating the 
+#' number of clusters to be obtained from the hierarchical tree, or the output 
+#' from [bioregionalization_metrics]. Should not be used at the same time as
 #' `cut_height`.
 #' 
 #' @param cut_height a `numeric` vector indicating the height(s) at which the
@@ -69,7 +69,7 @@
 #' The function is based on [hclust][fastcluster::hclust].
 #' The default method for the hierarchical tree is `average`, i.e.
 #' UPGMA as it has been recommended as the best method to generate a tree
-#' from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}.
+#' from beta diversity dissimilarity (Kreft & Jetz, 2010).
 #'
 #' Clusters can be obtained by two methods:
 #' \itemize{
@@ -79,12 +79,13 @@
 #' To find an optimal number of clusters, see [bioregionalization_metrics()]
 #' 
 #' It is important to pay attention to the fact that the order of rows
-#' in the input distance matrix
-#' influences the tree topology as explained in 
-#' \insertCite{Dapporto2013}{bioregion}. To address this, the function generates
-#'  multiple trees by randomizing the distance matrix. 
+#' in the input distance matrix influences the tree topology as explained in 
+#' Dapporto (2013). To address this, the function generates multiple trees by 
+#' randomizing the distance matrix. 
+#' 
 #' Two methods are available to obtain the final tree:
 #' \itemize{
+#' 
 #' \item{`optimal_tree_method = "iterative_consensus_tree"`: The Iterative 
 #' Hierarchical Consensus Tree (IHCT) method reconstructs a consensus tree by 
 #' iteratively splitting the dataset into two subclusters based on the pairwise 
@@ -98,9 +99,11 @@
 #' This approach provides a robust, hierarchical representation of site 
 #' relationships, balancing 
 #' cluster stability and hierarchical constraints.}
+#' 
 #' \item{`optimal_tree_method = "best"`: This method selects one tree among with 
 #' the highest cophenetic correlation coefficient, representing the best fit 
 #' between the hierarchical structure and the original distance matrix. }
+#' 
 #' \item{`optimal_tree_method = "consensus"`: This method constructs a consensus 
 #' tree using phylogenetic methods with the function 
 #' [consensus][ape::consensus].
@@ -116,10 +119,11 @@
 #' tree preserves 
 #' approximate distances among clusters.}
 #' }
+#' 
 #' We recommend using the `"iterative_consensus_tree"` as all the branches of
 #' this tree will always reflect the majority decision among many randomized 
 #' versions of the distance matrix. This method is inspired by 
-#' \insertCite{Dapporto2015}{bioregion}, which also used the majority decision
+#' Dapporto et al. (2015), which also used the majority decision
 #' among many randomized versions of the distance matrix, but it expands it 
 #' to reconstruct the entire topology of the tree iteratively. 
 #' 
@@ -130,7 +134,6 @@
 #' For a fast exploration of the tree, we recommend using the `best` method
 #' which will only select the tree with the highest cophenetic correlation
 #' coefficient among all randomized versions of the distance matrix. 
-#'
 #'
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
@@ -156,12 +159,21 @@
 #' }
 #'
 #' @references
-#' \insertRef{Kreft2010}{bioregion}
-#' \insertRef{Dapporto2013}{bioregion}
-#' \insertRef{Dapporto2015}{bioregion}
+#' Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
+#' based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
+#' 
+#' Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH 
+#' (2013) Recluster: an unbiased clustering procedure for beta-diversity 
+#' turnover. \emph{Ecography}, 36(5), 1070--1075.
+#' 
+#' Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure 
+#' for extrapolating turnover regionalization at mid-small spatial scales, 
+#' tested on British butterflies. \emph{Methods in Ecology and Evolution}, 6(11)
+#' , 1287--1297. 
+#' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) &
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [cut_tree]

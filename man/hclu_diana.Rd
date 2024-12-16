@@ -24,9 +24,9 @@ column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
-clusters to be obtained from the hierarchical tree, or the output from
-\link{bioregionalization_metrics}. Should not be used at the same time as
+\item{n_clust}{an \code{integer} vector or a single \code{integer} indicating the
+number of clusters to be obtained from the hierarchical tree, or the output
+from \link{bioregionalization_metrics}. Should not be used at the same time as
 \code{cut_height}.}
 
 \item{cut_height}{a \code{numeric} vector indicating the height(s) at which the
@@ -53,17 +53,17 @@ clustering procedure, such as original cluster objects}
 }
 \description{
 This function computes a divisive hierarchical clustering from a
-dissimilarity (beta-diversity) \code{data.frame}, calculates the cophenetic correlation
-coefficient, and can get clusters from the tree if requested by the user.
-The function implements randomization of the dissimilarity matrix to
-generate the tree, with a selection method based on the optimal cophenetic
+dissimilarity (beta-diversity) \code{data.frame}, calculates the cophenetic
+correlation coefficient, and can get clusters from the tree if requested by
+the user. The function implements randomization of the dissimilarity matrix
+to generate the tree, with a selection method based on the optimal cophenetic
 correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
 \code{bioregion.pairwise.metric} object obtained by running \code{similarity}
 or \code{similarity} and then \code{similarity_to_dissimilarity}.
 }
 \details{
 The function is based on \link[cluster:diana]{diana}.
-Chapter 6 of Kaufman and Rousseeuw (1990) fully details the functioning of
+Chapter 6 of Kaufman & Rousseeuw (1990) fully details the functioning of
 the diana algorithm.
 
 To find an optimal number of clusters, see \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}
@@ -83,13 +83,15 @@ fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 
 }
 \references{
-\insertRef{Kaufman2009}{bioregion}
+Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to
+cluster analysis. In & Sons. JW (ed.), \emph{Finding groups in data: An
+introduction to cluster analysis}.
 }
 \seealso{
 \link{cut_tree}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Boris Leroy (\email{leroy.boris@gmail.com}) and
+Boris Leroy (\email{leroy.boris@gmail.com}) &
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

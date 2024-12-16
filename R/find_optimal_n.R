@@ -10,47 +10,43 @@
 #' 
 #' @param partitions a `bioregion.partition.metrics` object (output from 
 #' [bioregionalization_metrics()] or a `data.frame` with the first two 
-#' columns named "K" (partition name) and "n_clusters" (number of clusters) and
-#' the following columns containing evaluation metrics (numeric values)
+#' columns named `K` (partition name) and `n_clusters` (number of clusters) 
+#' andthe following columns containing evaluation metrics (numeric values).
 #' 
-#' @param metrics_to_use character string or vector of character strings
+#' @param metrics_to_use `character` vector or a single `character` string
 #' indicating upon which metric(s) in `partitions` the optimal number of
 #' clusters should be calculated. Defaults to `"all"` which means all 
-#' metrics available in `partitions` will be used
+#' metrics available in `partitions` will be used.
 #' 
-#' @param criterion character string indicating the criterion to be used to
+#' @param criterion a `character` string indicating the criterion to be used to
 #' identify optimal number(s) of clusters. Available methods currently include
-#' `"elbow"`,
-#' `"increasing_step"`, `"decreasing_step"`, `"cutoff"`, 
-#' `"breakpoints"`, `"min"` or
-#' `"max"`. Default is `"elbow"`. See details.
+#' `"elbow"`, `"increasing_step"`, `"decreasing_step"`, `"cutoff"`, 
+#' `"breakpoints"`, `"min"` or `"max"`. Default is `"elbow"`. See Details.
 #' 
 #' @param step_quantile if `"increasing_step"` or `"decreasing_step"`,
-#' specify here the quantile
-#' of differences between two consecutive k to be used as the cutoff to
-#' identify the most important steps in `eval_metric`
+#' specify here the quantile of differences between two consecutive k to be used
+#' as the cutoff to identify the most important steps in `eval_metric`.
 #' 
 #' @param step_levels if `"increasing_step"` or `"decreasing_step"`, specify
 #' here the number of largest steps to keep as cutoffs.
 #' 
 #' @param step_round_above a `boolean` indicating if the optimal number of 
 #' clusters should be picked above or below the identified steps. Indeed, each
-#' step will correspond to a sudden increase or decrease between partition X &
+#' step will correspond to a sudden increase or decrease between partition X and
 #' partition X+1: should the optimal partition be X+1 
-#' (`step_round_above = TRUE`) or X (`step_round_above = FALSE`? 
-#' Defaults to `TRUE` 
+#' (`step_round_above = TRUE`) or X (`step_round_above = FALSE`).
+#' Defaults to `TRUE`.
 #' 
 #' @param metric_cutoffs if `criterion = "cutoff"`, specify here the cutoffs
-#' of `eval_metric` at which the number of clusters should be extracted
+#' of `eval_metric` at which the number of clusters should be extracted.
 #' 
 #' @param n_breakpoints specify here the number of breakpoints to look for in
-#' the curve. Defaults to 1 
+#' the curve. Defaults to 1.
 #' 
-#' @param plot a boolean indicating if a plot of the first `eval_metric`
-#' should be drawn with the identified optimal numbers of cutoffs
+#' @param plot a `boolean` indicating if a plot of the first `eval_metric`
+#' should be drawn with the identified optimal numbers of cutoffs.
 #'
 #' @details
-#' \loadmathjax
 #'
 #' This function explores the relationship evaluation metric ~ number of
 #' clusters, and a criterion is applied to search an optimal number of
@@ -70,7 +66,7 @@
 #' bioregionalizations. Using multiple partitions likely avoids this
 #' oversimplification bias and may convey more information.
 #' See, for example, the reanalysis of Holt et al. (2013)
-#' by \insertCite{Ficetola2017}{bioregion}, where they used deep, intermediate
+#' by Ficetola et al. (2017), where they used deep, intermediate
 #' and shallow cuts. 
 #' 
 #' Following this rationale, several of the criteria implemented here can/will
@@ -78,6 +74,7 @@
 #'
 #' **Criteria to find optimal number(s) of clusters**
 #' \itemize{
+#' 
 #' \item{`elbow`:
 #' This method consists in finding one elbow in the evaluation metric curve, as
 #' is commonly done in clustering analyses. The idea is to approximate the
@@ -88,6 +85,7 @@
 #' <https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075>.
 #' The code has been modified to work on both increasing and decreasing
 #' evaluation metrics.}
+#' 
 #' \item{`increasing_step` or `decreasing_step`:
 #' This method consists in identifying clusters at the most important changes,
 #' or steps, in the evaluation metric. The objective can be to either look for
@@ -111,10 +109,11 @@
 #' metrics that are monotonously increasing with the number of clusters (e.g.,
 #' `"pc_distance"`), you should choose `increasing_step`. **
 #' }
+#' 
 #' \item{`cutoffs`:
 #' This method consists in specifying the cutoff value(s) in the evaluation
 #' metric from which the number(s) of clusters should be derived. This is the
-#' method used by \insertCite{Holt2013}{bioregion}. Note, however, that the
+#' method used by Holt et al. (2013). Note, however, that the
 #' cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
 #' relevant at very large spatial scales, and lower cut-offs should be
 #' considered at finer spatial scales.
@@ -130,6 +129,7 @@
 #' Picks the optimal partition(s) respectively at the minimum or maximum value
 #' of the evaluation metric.}
 #' }
+#' 
 #' @return
 #' a `list` of class `bioregion.optimal.n` with three elements:
 #' \itemize{
@@ -152,21 +152,19 @@
 #' bioregionalization.
 #' 
 #' @references
-#' \insertRef{Castro-Insua2018}{bioregion}
-#'
-#' \insertRef{Ficetola2017}{bioregion}
-#'
-#' \insertRef{Holt2013}{bioregion}
-#'
-#' \insertRef{Kreft2010}{bioregion}
-#'
-#' \insertRef{Langfelder2008}{bioregion}
+#' Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P, 
+#' Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ, 
+#' Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of 
+#' the world. \emph{Science}, 339(6115), 74-78.
+#' 
+#' Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of 
+#' zoogeographical boundaries. \emph{Nature Ecology & Evolution}, 1, 0089.
 #' 
 #' @importFrom rlang .data
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
 #' @examples

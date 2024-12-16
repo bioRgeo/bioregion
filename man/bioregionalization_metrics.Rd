@@ -15,32 +15,32 @@ bioregionalization_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{a \code{bioregion.clusters} object}
+\item{cluster_object}{a \code{bioregion.clusters} object.}
 
-\item{dissimilarity}{a \code{dist} object or a \code{bioregion.pairwise.metric} object (output
-from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if \code{eval_metric}
-includes \code{pc_distance} and \code{tree} is not a
+\item{dissimilarity}{a \code{dist} object or a \code{bioregion.pairwise.metric}
+object (output from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if
+\code{eval_metric} includes \code{pc_distance} and \code{tree} is not a
 \code{bioregion.hierar.tree} object}
 
-\item{dissimilarity_index}{a character string indicating the dissimilarity
+\item{dissimilarity_index}{a \code{character} string indicating the dissimilarity
 (beta-diversity) index to be used in case \code{dist} is a \code{data.frame} with
-multiple dissimilarity indices}
+multiple dissimilarity indices.}
 
 \item{net}{the species-site network (i.e., bipartite network). Should be
-provided if \code{eval_metric} includes \code{"avg_endemism"} or \code{"tot_endemism"}}
+provided as \verb{data.frame± if }eval_metric\code{includes}"avg_endemism"\code{or }"tot_endemism"`.}
 
 \item{site_col}{name or number for the column of site nodes (i.e. primary
 nodes). Should be provided if \code{eval_metric} includes \code{"avg_endemism"} or
-\code{"tot_endemism"}}
+\code{"tot_endemism"}.}
 
 \item{species_col}{name or number for the column of species nodes (i.e.
 feature nodes). Should be provided if \code{eval_metric} includes
-\code{"avg_endemism"} or \code{"tot_endemism"}}
+\code{"avg_endemism"} or \code{"tot_endemism"}.}
 
-\item{eval_metric}{character string or vector of character strings indicating
-metric(s) to be calculated to investigate the effect of different number
-of clusters. Available options: \code{"pc_distance"}, \code{"anosim"},
-\code{"avg_endemism"} and \code{"tot_endemism"}}
+\item{eval_metric}{a \code{character} vector or a single \code{character} string
+indicating metric(s) to be calculated to investigate the effect of different
+number of clusters. Available options are \code{"pc_distance"}, \code{"anosim"},
+\code{"avg_endemism"} or \code{"tot_endemism"}.}
 }
 \value{
 a \code{list} of class \code{bioregion.partition.metrics} with two to three elements:
@@ -62,12 +62,12 @@ may require the users to provide either a similarity or dissimilarity
 matrix, or to provide the initial species-site table.
 }
 \details{
-\loadmathjax
-
 \strong{Evaluation metrics:}
+
 \itemize{
+
 \item{\code{pc_distance}: this metric is the method used by
-\insertCite{Holt2013}{bioregion}. It is a ratio of the between-cluster sum of
+Holt et al. (2013). It is a ratio of the between-cluster sum of
 dissimilarity (beta-diversity) versus the total sum of dissimilarity
 (beta-diversity) for the full dissimilarity matrix. In other words, it is
 calculated on the basis of two elements. First, the total sum of
@@ -81,14 +81,14 @@ the dissimilarity matrix, and then the dissimilarity matrix is summed. The
 dissimilarity by the total sum of dissimilarity.}
 
 \item{\code{anosim}: This metric is the statistic used in Analysis of
-Similarities, as suggested in \insertCite{Castro-Insua2018}{bioregion} (see
+Similarities, as suggested in Castro-Insua et al. (2018) (see
 \link[vegan:anosim]{vegan::anosim()}). It compares the between-cluster
 dissimilarities to the within-cluster dissimilarities. It is based based on
 the difference of mean ranks between groups and within groups with the
 following formula:
-\mjeqn{R = (r_B - r_W)/(N (N-1) / 4)}{R = (r_B - r_W)/(N (N-1) / 4)},
-where \mjeqn{r_B}{r_B} and \mjeqn{r_W}{r_W} are the average ranks
-between and within clusters respectively, and \mjeqn{N}{N} is the total
+R = (r_B - r_W)/(N (N-1) / 4),
+where r_B and r_W are the average ranks
+between and within clusters respectively, and N is the total
 number of sites.
 Note that the function does not estimate the significance here, it only
 computes the statistic - for significance testing see
@@ -96,19 +96,17 @@ computes the statistic - for significance testing see
 
 \item{\code{avg_endemism}: this metric is the average percentage of
 endemism in clusters as
-recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
-\mjeqn{End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}}{Pc_endemism_mean = sum(Ei / Si) / K}
-where \mjeqn{E_i}{Ei} is the number of endemic species in cluster i,
-\mjeqn{S_i}{Si} is the number of
+recommended by Kreft & Jetz (2010). Calculated as follows:
+End_mean = sum_i (E_i / S_i)/K
+where E_i is the number of endemic species in cluster i, S_i is the number of
 species in cluster i, and K the maximum number of clusters.
 }
 
 \item{\code{tot_endemism}: this metric is the total endemism across all clusters,
-as recommended by \insertCite{Kreft2010}{bioregion}. Calculated as follows:
-\mjeqn{End_{tot} = \frac{E}{C}}{Endemism_total = E/C}
-
-where \mjeqn{E}{E} is total the number of endemics (i.e., species found in
-only one cluster) and \mjeqn{C}{C} is the number of non-endemic species.
+as recommended by Kreft & Jetz (2010). Calculated as follows:
+End_tot = E \ C
+where E is total the number of endemics (i.e., species found in
+only one cluster) and C is the number of non-endemic species.
 }
 }
 }
@@ -135,21 +133,23 @@ a
 
 }
 \references{
-\insertRef{Castro-Insua2018}{bioregion}
+Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity measures
+affected by richness differences yield biased delimitations of biogeographic
+realms. \emph{Nature Communications}, 9(1), 9-11.
 
-\insertRef{Ficetola2017}{bioregion}
+Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P,
+Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ,
+Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of
+the world. \emph{Science}, 339(6115), 74-78.
 
-\insertRef{Holt2013}{bioregion}
-
-\insertRef{Kreft2010}{bioregion}
-
-\insertRef{Langfelder2008}{bioregion}
+Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
+based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
 }
 \seealso{
 \link{compare_bioregionalizations}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

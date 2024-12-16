@@ -2,7 +2,7 @@
 #'
 #' This function performs semi-hierarchical
 #' clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
-#' Points To Identify the Clustering Structure)
+#' Points To Identify the Clustering Structure).
 #'
 #' @param dissimilarity the output object from [dissimilarity()] or
 #' [similarity_to_dissimilarity()], or a `dist` object. 
@@ -59,7 +59,7 @@
 #' should be explored to understand the clusters and their hierarchical nature,
 #' by running plot on the output of the function 
 #' if `algorithm_in_output = TRUE`: `plot(object$algorithm)`.
-#' We recommend reading \insertCite{Hahsler2019}{bioregion} to grasp the
+#' We recommend reading (Hahsler et al., 2019) to grasp the
 #' algorithm, how it works, and what the clusters mean.
 #'
 #' To extract the clusters, we use the
@@ -68,7 +68,8 @@
 #' [optics][dbscan::optics])
 #'
 #' @references 
-#' \insertRef{Hahsler2019}{bioregion}
+#' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 
+#' clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30. 
 #' 
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
@@ -85,7 +86,7 @@
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) &
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [nhclu_dbscan] 

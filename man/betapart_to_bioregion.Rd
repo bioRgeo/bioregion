@@ -7,13 +7,12 @@
 betapart_to_bioregion(betapart_result)
 }
 \arguments{
-\item{betapart_result}{An object produced by the betapart package (e.g.,
+\item{betapart_result}{an object produced by the betapart package (e.g.,
 using \code{beta.pair} function).}
 }
 \value{
 A dissimilarity object of class \code{bioregion.pairwise.metric}
-compatible
-with the bioregion package.
+compatible with the bioregion package.
 }
 \description{
 This function converts dissimilarity results produced by the betapart package
@@ -36,6 +35,6 @@ betapart_to_bioregion(beta_div)
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

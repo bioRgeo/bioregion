@@ -10,29 +10,26 @@ similarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 \item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{metric}{a \code{character} vector indicating which metrics to chose
-(see Details). Available options are \code{abc}, \code{ABC}, \code{Jaccard},
-\code{Jaccardturn}, \code{Sorensen}, \code{Simpson},  \code{Bray},
-\code{Brayturn} or \code{Euclidean}.\cr
-If \code{all} is specified, then all metrics will be
-calculated. Can be set to \code{NULL} if \code{formula} is used.}
+\item{metric}{a \code{character} vector or a single \code{character} string indicating
+which metrics to chose (see Details). Available options are \code{"abc"}, \code{"ABC"},
+\code{"Jaccard"}, \code{"Jaccardturn"}, \code{"Sorensen"}, \code{"Simpson"}, \code{"Bray"},
+\code{"Brayturn"} or \code{"Euclidean"}. If \code{"all"} is specified, then all metrics
+will be calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
-\item{formula}{a \code{character} vector with your own formula(s) based on the
-\code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
+\item{formula}{a \code{character} vector or a single \code{character} string with your
+own formula(s) based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
 (see Details). \code{formula} is set to \code{NULL} by default.}
 
-\item{method}{a string indicating what method should be used to compute
-\code{abc} (see Details).
-\code{method = "prodmat"} by default is more efficient but can be greedy in
-memory and \code{method = "loops"} is less efficient but less greedy in
-memory.}
+\item{method}{a \code{character} string indicating what method should be used to
+compute \code{abc} (see Details). \code{method = "prodmat"} by default is more
+efficient but can be greedy in memory and \code{method = "loops"} is less
+efficient but less greedy in memory.}
 }
 \value{
 A \code{data.frame} with additional class
 \code{bioregion.pairwise.metric}, providing one or several similarity
 metric(s) between each pair of sites. The two first columns represent each
-pair of sites.
-One column per similarity metric provided in \code{metric} and
+pair of sites. One column per similarity metric provided in \code{metric} and
 \code{formula} except for the metric \code{abc} and \code{ABC} that are
 stored in three columns (one for each letter).
 }
@@ -59,7 +56,7 @@ also be computed with the following equation:
 
 Bray = 1 - (B + C) / (2A + B + C)
 
-Brayturn = 1 - min(B, C)/(A + min(B, C)) (Baselga, 2013)
+Brayturn = 1 - min(B, C) / (A + min(B, C)) (Baselga, 2013)
 
 with A the sum of the lesser values for common species shared by a pair of
 sites.
@@ -69,15 +66,15 @@ B and C are the total number of specimens counted at both sites minus A.
 \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}. For example
 \code{formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)")}
 will compute the Simpson and Bray-Curtis similarity metrics, respectively.
-\strong{Note that pmin is used in the Simpson formula because a, b, c, A, B and C
-are \code{numeric} vectors.}
+Note that pmin is used in the Simpson formula because a, b, c, A, B and C
+are \code{numeric} vectors.
 
 Euclidean computes the Euclidean similarity between each pair of site
 following this equation:
 
-Euclidean = 1 / (1 + dij)
+Euclidean = 1 / (1 + d_ij)
 
-Where dij is the Euclidean distance between site i and
+Where d_ij is the Euclidean distance between site i and
 site j in terms of species composition.
 }
 \examples{
@@ -93,13 +90,13 @@ formula = "1 - (b + c) / (a + b + c)")
 
 }
 \references{
-Baselga, A. (2012). "The Relationship between Species Replacement,
-Dissimilarity Derived from Nestedness, and Nestedness."
-\emph{Global Ecology and Biogeography}, \bold{21}(12), 1223--1232.
+Baselga A (2012) The Relationship between Species Replacement,
+Dissimilarity Derived from Nestedness, and Nestedness.
+\emph{Global Ecology and Biogeography}, 21(12), 1223--1232.
 
-Baselga, A. (2013). "Separating the two components of abundance-based
-dissimilarity: balanced changes in abundance vs. abundance gradients."
-\emph{Methods in Ecology and Evolution}, \bold{4}(6), 552--557.
+Baselga A (2013) Separating the two components of abundance-based
+dissimilarity: balanced changes in abundance vs. abundance gradients.
+\emph{Methods in Ecology and Evolution}, 4(6), 552--557.
 }
 \seealso{
 \link{dissimilarity} \link{dissimilarity_to_similarity}
@@ -107,6 +104,6 @@ dissimilarity: balanced changes in abundance vs. abundance gradients."
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Pierre Denelle (\email{pierre.denelle@gmail.com}) &
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

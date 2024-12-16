@@ -4,8 +4,8 @@
 #'
 #' @format A `data.frame` with 460,878 rows and 3 columns:
 #' \describe{
-#'   \item{Site}{Unique site identifier (corresponding to the field ID of vegesp).}
-#'   \item{Species}{Unique species identifier.}
+#'   \item{Site}{Unique site identifier (corresponding to the field ID of vegesp)}
+#'   \item{Species}{Unique species identifier}
 #'   \item{Abundance}{Species abundance}
 #' }
 #' @source \doi{10.1002/ece3.4718} 
@@ -28,8 +28,8 @@
 #'
 #' @format A
 #' \describe{
-#'   \item{ID}{Unique site identifier.}
-#'   \item{geometry}{Geometry of the site.}
+#'   \item{ID}{Unique site identifier}
+#'   \item{geometry}{Geometry of the site}
 #' }
 #' @source \doi{10.1002/ece3.4718} 
 "vegesf"
@@ -40,8 +40,8 @@
 #'
 #' @format A `data.frame` with 2,703 rows and 3 columns:
 #' \describe{
-#'   \item{Site}{Unique site identifier (corresponding to the field ID of fishsf).}
-#'   \item{Species}{Unique species identifier.}
+#'   \item{Site}{Unique site identifier (corresponding to the field ID of fishsf)}
+#'   \item{Species}{Unique species identifier}
 #'   \item{Abundance}{Species abundance}
 #' }
 "fishdf"
@@ -62,7 +62,7 @@
 #'
 #' @format A
 #' \describe{
-#'   \item{ID}{Unique site identifier.}
-#'   \item{geometry}{Geometry of the site.}
+#'   \item{ID}{Unique site identifier}
+#'   \item{geometry}{Geometry of the site}
 #' }
 "fishsf"

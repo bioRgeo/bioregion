@@ -21,18 +21,18 @@ clustering for all bioregionalizations).}
 
 \item{indices}{\code{NULL} or \code{character}. Indices to compute for the pairwise
 comparison of bioregionalizations. Current available metrics are \code{"rand"}
-and \code{"jaccard"}}
+and \code{"jaccard"}.}
 
-\item{cor_frequency}{a boolean. If \code{TRUE}, then computes the correlation
+\item{cor_frequency}{a \code{boolean}. If \code{TRUE}, then computes the correlation
 between each bioregionalization and the total frequency of co-membership of
 items across all bioregionalizations. Useful to identify which
 bioregionalization(s) is(are) most representative of all the computed
 bioregionalizations.}
 
-\item{store_pairwise_membership}{a boolean. If \code{TRUE}, the pairwise
+\item{store_pairwise_membership}{a \code{boolean}. If \code{TRUE}, the pairwise
 membership of items is stored in the output object.}
 
-\item{store_confusion_matrix}{a boolean. If \code{TRUE}, the confusion matrices
+\item{store_confusion_matrix}{a \code{boolean}. If \code{TRUE}, the confusion matrices
 of pairwise bioregionalization comparisons are stored in the output object.}
 }
 \value{
@@ -68,10 +68,9 @@ the requested \code{indices}.
 }
 \description{
 This function aims at computing pairwise comparisons for several
-bioregionalizations, usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_}
-functions.
-It also provides the confusion matrix from pairwise comparisons, so that
-the user can compute additional comparison metrics.
+bioregionalizations, usually an output from \code{netclu_}, \code{hclu_} or \code{nhclu_}
+functions. It also provides the confusion matrix from pairwise comparisons,
+so that the user can compute additional comparison metrics.
 }
 \details{
 \loadmathjax
@@ -90,13 +89,13 @@ bioregionalizations, the function computes a confusion matrix with four
 elements:
 }
 \itemize{
-\item \emph{a}: number of pairs of items grouped in bioregionalization 1 and in
+\item \code{a} number of pairs of items grouped in bioregionalization 1 and in
 bioregionalization 2
-\item \emph{b}: number of pairs of items grouped in bioregionalization 1 but not in
+\item \code{b} number of pairs of items grouped in bioregionalization 1 but not in
 bioregionalization 2
-\item \emph{c}: number of pairs of items not grouped in bioregionalization 1 but
+\item \code{c} number of pairs of items not grouped in bioregionalization 1 but
 grouped in bioregionalization 2
-\item \emph{d}: number of pairs of items not grouped in both bioregionalization 1
+\item \code{d} number of pairs of items not grouped in both bioregionalization 1
 & 2
 }
 
@@ -107,13 +106,11 @@ Based on the confusion matrices, we can compute a range of indices to
 indicate the agreement among bioregionalizations. As of now, we have
 implemented:
 \itemize{
-\item \emph{Rand index}
-\mjeqn{(a + d)/(a + b + c + d)}{(a + d)/(a + b + c + d)}
+\item \verb{Rand index} (a + d)/(a + b + c + d)
 The Rand index measures agreement among bioregionalizations by accounting
 for both the pairs of sites that are grouped, but also the pairs of sites
 that are not grouped.
-\item \emph{Jaccard index}
-\mjeqn{(a)/(a + b + c)}{(a)/(a + b + c)}
+\item \verb{Jaccard index} a/(a + b + c)
 The Jaccard index measures agreement among bioregionalizations by only
 accounting for pairs of sites that are grouped.
 }
@@ -135,7 +132,7 @@ bioregionalizations is most representative of all bioregionalizations. To
 find it out, we can compare the pairwise membership of each
 bioregionalization with the total frequency of pairwise membership across
 all bioregionalizations. This correlation can be requested with
-\code{cor_frequency = TRUE}
+\code{cor_frequency = TRUE}.
 }
 \examples{
 # A simple case with four bioregionalizations of four items
@@ -156,6 +153,6 @@ compare_bioregionalizations(bioregionalizations,
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

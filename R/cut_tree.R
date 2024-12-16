@@ -6,38 +6,40 @@
 #' number(s) of clusters or selected height(s). It also includes a procedure to
 #' automatically return the height of cut for the chosen number(s) of clusters.
 #'
-#' @param tree a `bioregion.hierar.tree` or a `hclust` object
-#' @param n_clust an integer or a vector of integers indicating the number of
-#' clusters to be obtained from the hierarchical tree, or the output from
-#' [bioregionalization_metrics()]. Should not be used at the same time as `cut_height`
+#' @param tree a `bioregion.hierar.tree` or a `hclust` object.
 #' 
-#' @param cut_height a numeric vector indicating the height(s) at which the
+#' @param n_clust an `integer` vector or a single `integer` indicating the 
+#' number of clusters to be obtained from the hierarchical tree, or the output 
+#' from [bioregionalization_metrics()]. Should not be used at the same time as 
+#' `cut_height`.
+#' 
+#' @param cut_height a `numeric` vector indicating the height(s) at which the
 #' tree should be cut. Should not be used at the same time as `n_clust` or
-#' `optim_method`
+#' `optim_method`.
 #' 
-#' @param find_h a boolean indicating if the height of cut should be found for
-#' the requested `n_clust`
+#' @param find_h a `boolean` indicating if the height of cut should be found for
+#' the requested `n_clust`.
 #' 
-#' @param h_max a numeric indicating the maximum possible tree height for
-#' finding the height of cut when `find_h = TRUE`
+#' @param h_max a `numeric` value indicating the maximum possible tree height 
+#' for finding the height of cut when `find_h = TRUE`.
 #' 
-#' @param h_min a numeric indicating the minimum possible height in the tree
-#' for finding the height of cut when `find_h = TRUE`
+#' @param h_min a `numeric` value indicating the minimum possible height in the 
+#' tree for finding the height of cut when `find_h = TRUE`.
 #' 
-#' @param dynamic_tree_cut a boolean indicating if the dynamic tree cut method
-#' should be used, in which case `n_clust` & `cut_height` are ignored
+#' @param dynamic_tree_cut a `boolean` indicating if the dynamic tree cut method
+#' should be used, in which case `n_clust` and `cut_height` are ignored.
 #' 
-#' @param dynamic_method a character vector indicating the method to be used
+#' @param dynamic_method a `character` string indicating the method to be used
 #' to dynamically cut the tree: either `"tree"` (clusters searched only
 #' in the tree) or `"hybrid"` (clusters searched on both tree and dissimilarity
-#' matrix)
+#' matrix).
 #' 
-#' @param dynamic_minClusterSize an integer indicating the minimum cluster size
-#' to use in the dynamic tree cut method (see
-#' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic])
+#' @param dynamic_minClusterSize an `integer` indicating the minimum cluster 
+#' size to use in the dynamic tree cut method (see
+#' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic]).
 #' 
 #' @param dissimilarity only useful if `dynamic_method = "hybrid"`.
-#' Provide here the dissimilarity `data.frame` used to build the `tree`
+#' Provide here the dissimilarity `data.frame` used to build the `tree`.
 #' 
 #' @param ... further arguments to be passed to
 #' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic] to
@@ -47,7 +49,7 @@
 #' The function can cut the tree with two main methods. First, it can cut
 #' the entire tree at the same height (either specified by `cut_height` or
 #' automatically defined for the chosen `n_clust`). Second, it can use
-#' the dynamic tree cut method \insertCite{Langfelder2008}{bioregion}, in which
+#' the dynamic tree cut method (Langfelder et al., 2008), in which
 #' case clusters are detected with an adaptive method based on the shape of
 #' branches in the tree (thus cuts happen at multiple heights depending on
 #' cluster positions in the tree).
@@ -56,7 +58,7 @@
 #' \itemize{
 #' \item{The tree-based only variant
 #' (`dynamic_method = "tree"`) is a top-down approach which relies only
-#' on the tree and follows the order of clustered objects on it}
+#' on the tree and follows the order of clustered objects on it.}
 #' \item{The hybrid variant
 #' (`dynamic_method = "hybrid"`) is a bottom-up approach which relies on
 #' both the tree and the dissimilarity matrix to build clusters on the basis of
@@ -70,7 +72,7 @@
 #'
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
 #' @return If `tree` is an output from [hclu_hierarclust()], then the same
@@ -79,7 +81,9 @@
 #' returned.
 #' 
 #' @references 
-#' \insertRef{Langfelder2008}{bioregion}
+#' Langfelder P, Zhang B & Horvath S (2008) Defining clusters from a
+#' hierarchical cluster tree: the Dynamic Tree Cut package for R.
+#' \emph{BIOINFORMATICS}, 24(5), 719-720.
 #' 
 #' @seealso [hclu_hierarclust]
 #' 

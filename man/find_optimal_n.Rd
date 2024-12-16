@@ -19,44 +19,41 @@ find_optimal_n(
 \arguments{
 \item{partitions}{a \code{bioregion.partition.metrics} object (output from
 \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}} or a \code{data.frame} with the first two
-columns named "K" (partition name) and "n_clusters" (number of clusters) and
-the following columns containing evaluation metrics (numeric values)}
+columns named \code{K} (partition name) and \code{n_clusters} (number of clusters)
+andthe following columns containing evaluation metrics (numeric values).}
 
-\item{metrics_to_use}{character string or vector of character strings
+\item{metrics_to_use}{\code{character} vector or a single \code{character} string
 indicating upon which metric(s) in \code{partitions} the optimal number of
 clusters should be calculated. Defaults to \code{"all"} which means all
-metrics available in \code{partitions} will be used}
+metrics available in \code{partitions} will be used.}
 
-\item{criterion}{character string indicating the criterion to be used to
+\item{criterion}{a \code{character} string indicating the criterion to be used to
 identify optimal number(s) of clusters. Available methods currently include
-\code{"elbow"},
-\code{"increasing_step"}, \code{"decreasing_step"}, \code{"cutoff"},
-\code{"breakpoints"}, \code{"min"} or
-\code{"max"}. Default is \code{"elbow"}. See details.}
+\code{"elbow"}, \code{"increasing_step"}, \code{"decreasing_step"}, \code{"cutoff"},
+\code{"breakpoints"}, \code{"min"} or \code{"max"}. Default is \code{"elbow"}. See Details.}
 
 \item{step_quantile}{if \code{"increasing_step"} or \code{"decreasing_step"},
-specify here the quantile
-of differences between two consecutive k to be used as the cutoff to
-identify the most important steps in \code{eval_metric}}
+specify here the quantile of differences between two consecutive k to be used
+as the cutoff to identify the most important steps in \code{eval_metric}.}
 
 \item{step_levels}{if \code{"increasing_step"} or \code{"decreasing_step"}, specify
 here the number of largest steps to keep as cutoffs.}
 
 \item{step_round_above}{a \code{boolean} indicating if the optimal number of
 clusters should be picked above or below the identified steps. Indeed, each
-step will correspond to a sudden increase or decrease between partition X &
+step will correspond to a sudden increase or decrease between partition X and
 partition X+1: should the optimal partition be X+1
-(\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}?
-Defaults to \code{TRUE}}
+(\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}).
+Defaults to \code{TRUE}.}
 
 \item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the cutoffs
-of \code{eval_metric} at which the number of clusters should be extracted}
+of \code{eval_metric} at which the number of clusters should be extracted.}
 
 \item{n_breakpoints}{specify here the number of breakpoints to look for in
-the curve. Defaults to 1}
+the curve. Defaults to 1.}
 
-\item{plot}{a boolean indicating if a plot of the first \code{eval_metric}
-should be drawn with the identified optimal numbers of cutoffs}
+\item{plot}{a \code{boolean} indicating if a plot of the first \code{eval_metric}
+should be drawn with the identified optimal numbers of cutoffs.}
 }
 \value{
 a \code{list} of class \code{bioregion.optimal.n} with three elements:
@@ -82,8 +79,6 @@ an increasing or decreasing sequence, or partitions which are not related
 to each other).
 }
 \details{
-\loadmathjax
-
 This function explores the relationship evaluation metric ~ number of
 clusters, and a criterion is applied to search an optimal number of
 clusters.
@@ -102,7 +97,7 @@ datasets, and, for example, ignore the often hierarchical / nested nature of
 bioregionalizations. Using multiple partitions likely avoids this
 oversimplification bias and may convey more information.
 See, for example, the reanalysis of Holt et al. (2013)
-by \insertCite{Ficetola2017}{bioregion}, where they used deep, intermediate
+by Ficetola et al. (2017), where they used deep, intermediate
 and shallow cuts.
 
 Following this rationale, several of the criteria implemented here can/will
@@ -110,6 +105,7 @@ return multiple "optimal" numbers of clusters, depending on user choices.
 
 \strong{Criteria to find optimal number(s) of clusters}
 \itemize{
+
 \item{\code{elbow}:
 This method consists in finding one elbow in the evaluation metric curve, as
 is commonly done in clustering analyses. The idea is to approximate the
@@ -120,6 +116,7 @@ use here is based on code written by Esben Eickhardt available here
 \url{https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075}.
 The code has been modified to work on both increasing and decreasing
 evaluation metrics.}
+
 \item{\code{increasing_step} or \code{decreasing_step}:
 This method consists in identifying clusters at the most important changes,
 or steps, in the evaluation metric. The objective can be to either look for
@@ -143,10 +140,11 @@ should n_clusters, you should choose \code{decreasing_step}. On the contrary, fo
 metrics that are monotonously increasing with the number of clusters (e.g.,
 \code{"pc_distance"}), you should choose \code{increasing_step}. **
 }
+
 \item{\code{cutoffs}:
 This method consists in specifying the cutoff value(s) in the evaluation
 metric from which the number(s) of clusters should be derived. This is the
-method used by \insertCite{Holt2013}{bioregion}. Note, however, that the
+method used by Holt et al. (2013). Note, however, that the
 cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
 relevant at very large spatial scales, and lower cut-offs should be
 considered at finer spatial scales.
@@ -212,18 +210,16 @@ find_optimal_n(a, criterion = "breakpoints")
 
 }
 \references{
-\insertRef{Castro-Insua2018}{bioregion}
+Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P,
+Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ,
+Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of
+the world. \emph{Science}, 339(6115), 74-78.
 
-\insertRef{Ficetola2017}{bioregion}
-
-\insertRef{Holt2013}{bioregion}
-
-\insertRef{Kreft2010}{bioregion}
-
-\insertRef{Langfelder2008}{bioregion}
+Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of
+zoogeographical boundaries. \emph{Nature Ecology & Evolution}, 1, 0089.
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

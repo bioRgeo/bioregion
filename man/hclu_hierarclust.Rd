@@ -32,10 +32,10 @@ column(s) are the dissimilarity indices.}
 the third column name of \code{dissimilarity} is used.}
 
 \item{method}{name of the hierarchical classification method, as in
-\link[fastcluster:hclust]{hclust}. Should be one of "ward.D",
-"ward.D2", "single", "complete", "average"
-(= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or
-"centroid" (= UPGMC).}
+\link[fastcluster:hclust]{hclust}. Should be one of \code{"ward.D"},
+\code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
+(= UPGMA), \code{"mcquitty"} (= WPGMA), \code{"median"} (= WPGMC) or
+\code{"centroid"} (= UPGMC).}
 
 \item{randomize}{a \code{boolean} indicating if the dissimilarity matrix should be
 randomized, to account for the order of sites in the dissimilarity matrix.}
@@ -47,14 +47,14 @@ should be stored in the output object (set to FALSE to save space if your
 \code{dissimilarity} object is large). Note that it cannot be set to \code{TRUE} if
 \code{optimal_tree_method = "iterative_consensus_tree"}}
 
-\item{optimal_tree_method}{a \code{character} indicating how the final tree
+\item{optimal_tree_method}{a \code{character} string indicating how the final tree
 should be obtained from all trials. Possible values are
 \code{iterative_consensus_tree} (default), \code{best} and \code{consensus}.
 \strong{We recommend \code{iterative_consensus_tree}. See details}}
 
-\item{n_clust}{an \code{integer} or an \code{integer} vector indicating the number of
-clusters to be obtained from the hierarchical tree, or the output from
-\link{bioregionalization_metrics}. Should not be used at the same time as
+\item{n_clust}{an \code{integer} vector or a single \code{integer} indicating the
+number of clusters to be obtained from the hierarchical tree, or the output
+from \link{bioregionalization_metrics}. Should not be used at the same time as
 \code{cut_height}.}
 
 \item{cut_height}{a \code{numeric} vector indicating the height(s) at which the
@@ -115,7 +115,7 @@ or \code{similarity} and then \code{similarity_to_dissimilarity}.
 The function is based on \link[fastcluster:hclust]{hclust}.
 The default method for the hierarchical tree is \code{average}, i.e.
 UPGMA as it has been recommended as the best method to generate a tree
-from beta diversity dissimilarity \insertCite{Kreft2010}{bioregion}.
+from beta diversity dissimilarity (Kreft & Jetz, 2010).
 
 Clusters can be obtained by two methods:
 \itemize{
@@ -125,12 +125,13 @@ Clusters can be obtained by two methods:
 To find an optimal number of clusters, see \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}
 
 It is important to pay attention to the fact that the order of rows
-in the input distance matrix
-influences the tree topology as explained in
-\insertCite{Dapporto2013}{bioregion}. To address this, the function generates
-multiple trees by randomizing the distance matrix.
+in the input distance matrix influences the tree topology as explained in
+Dapporto (2013). To address this, the function generates multiple trees by
+randomizing the distance matrix.
+
 Two methods are available to obtain the final tree:
 \itemize{
+
 \item{\code{optimal_tree_method = "iterative_consensus_tree"}: The Iterative
 Hierarchical Consensus Tree (IHCT) method reconstructs a consensus tree by
 iteratively splitting the dataset into two subclusters based on the pairwise
@@ -144,9 +145,11 @@ node heights to produce a coherent tree structure.
 This approach provides a robust, hierarchical representation of site
 relationships, balancing
 cluster stability and hierarchical constraints.}
+
 \item{\code{optimal_tree_method = "best"}: This method selects one tree among with
 the highest cophenetic correlation coefficient, representing the best fit
 between the hierarchical structure and the original distance matrix. }
+
 \item{\code{optimal_tree_method = "consensus"}: This method constructs a consensus
 tree using phylogenetic methods with the function
 \link[ape:consensus]{consensus}.
@@ -162,10 +165,11 @@ based on the initial distance matrix, ensuring that the consensus
 tree preserves
 approximate distances among clusters.}
 }
+
 We recommend using the \code{"iterative_consensus_tree"} as all the branches of
 this tree will always reflect the majority decision among many randomized
 versions of the distance matrix. This method is inspired by
-\insertCite{Dapporto2015}{bioregion}, which also used the majority decision
+Dapporto et al. (2015), which also used the majority decision
 among many randomized versions of the distance matrix, but it expands it
 to reconstruct the entire topology of the tree iteratively.
 
@@ -224,15 +228,23 @@ tree5 <- hclu_hierarclust(dissim,
 
 }
 \references{
-\insertRef{Kreft2010}{bioregion}
-\insertRef{Dapporto2013}{bioregion}
-\insertRef{Dapporto2015}{bioregion}
+Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
+based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
+
+Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH
+(2013) Recluster: an unbiased clustering procedure for beta-diversity
+turnover. \emph{Ecography}, 36(5), 1070--1075.
+
+Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure
+for extrapolating turnover regionalization at mid-small spatial scales,
+tested on British butterflies. \emph{Methods in Ecology and Evolution}, 6(11)
+, 1287--1297.
 }
 \seealso{
 \link{cut_tree}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Pierre Denelle (\email{pierre.denelle@gmail.com}) &
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

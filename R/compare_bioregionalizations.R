@@ -1,32 +1,36 @@
 #' Compare cluster memberships among multiple bioregionalizations
 #' 
 #' This function aims at computing pairwise comparisons for several
-#' bioregionalizations, usually on outputs from `netclu_`, `hclu_` or `nhclu_`
-#' functions.
-#' It also provides the confusion matrix from pairwise comparisons, so that 
-#' the user can compute additional comparison metrics.
+#' bioregionalizations, usually an output from `netclu_`, `hclu_` or `nhclu_`
+#' functions. It also provides the confusion matrix from pairwise comparisons, 
+#' so that the user can compute additional comparison metrics.
 #' 
 #' @param cluster_object a `bioregion.clusters` object or a `data.frame` or a 
 #' list of `data.frame` containing multiple bioregionalizations. At least two
 #' bioregionalizations are required. If a list of `data.frame` is provided,
 #' they should all have the same number of rows (i.e., same items in the
 #' clustering for all bioregionalizations). 
+#' 
 #' @param indices `NULL` or `character`. Indices to compute for the pairwise
 #' comparison of bioregionalizations. Current available metrics are `"rand"`
-#' and `"jaccard"`
-#' @param cor_frequency a boolean. If `TRUE`, then computes the correlation 
+#' and `"jaccard"`.
+#' 
+#' @param cor_frequency a `boolean`. If `TRUE`, then computes the correlation 
 #' between each bioregionalization and the total frequency of co-membership of
 #' items across all bioregionalizations. Useful to identify which
 #' bioregionalization(s) is(are) most representative of all the computed
 #' bioregionalizations.
-#' @param store_pairwise_membership a boolean. If `TRUE`, the pairwise 
+#' 
+#' @param store_pairwise_membership a `boolean`. If `TRUE`, the pairwise 
 #' membership of items is stored in the output object.
-#' @param store_confusion_matrix a boolean. If `TRUE`, the confusion matrices 
+#' 
+#' @param store_confusion_matrix a `boolean`. If `TRUE`, the confusion matrices 
 #' of pairwise bioregionalization comparisons are stored in the output object.
 #' 
 #' @details 
 #' \loadmathjax
 #' This function proceeds in two main steps:
+#' 
 #' 1. The first step is done within each bioregionalization. It will compare
 #' all pairs of items and document if they are clustered together (`TRUE`) or
 #' separately (`FALSE`) in each bioregionalization. For example, if site 1 and
@@ -34,17 +38,18 @@
 #' pairwise membership site1_site2 will be `TRUE`. The output of this first
 #' step is stored in the slot `pairwise_membership` if
 #' `store_pairwise_membership = TRUE`.
+#' 
 #' 2. The second step compares all pairs of bioregionalizations by analysing if
 #' their pairwise memberships are similar or not. To do so, for each pair of 
 #' bioregionalizations, the function computes a confusion matrix with four
 #' elements:
-#'  * _a_: number of pairs of items grouped in bioregionalization 1 and in
+#'  * `a` number of pairs of items grouped in bioregionalization 1 and in
 #'  bioregionalization 2
-#'  * _b_: number of pairs of items grouped in bioregionalization 1 but not in
+#'  * `b` number of pairs of items grouped in bioregionalization 1 but not in
 #'  bioregionalization 2
-#'  * _c_: number of pairs of items not grouped in bioregionalization 1 but
+#'  * `c` number of pairs of items not grouped in bioregionalization 1 but
 #'  grouped in bioregionalization 2
-#'  * _d_: number of pairs of items not grouped in both bioregionalization 1
+#'  * `d` number of pairs of items not grouped in both bioregionalization 1
 #'  & 2
 #'  
 #' The confusion matrix is stored in `confusion_matrix` if 
@@ -54,13 +59,11 @@
 #' Based on the confusion matrices, we can compute a range of indices to 
 #' indicate the agreement among bioregionalizations. As of now, we have
 #' implemented:
-#' * _Rand index_ 
-#' \mjeqn{(a + d)/(a + b + c + d)}{(a + d)/(a + b + c + d)}
+#' * `Rand index` (a + d)/(a + b + c + d)
 #' The Rand index measures agreement among bioregionalizations by accounting
 #' for both the pairs of sites that are grouped, but also the pairs of sites
 #' that are not grouped.
-#' * _Jaccard index_
-#' \mjeqn{(a)/(a + b + c)}{(a)/(a + b + c)}
+#' * `Jaccard index` a/(a + b + c)
 #' The Jaccard index measures agreement among bioregionalizations by only
 #' accounting for pairs of sites that are grouped.
 #' 
@@ -76,14 +79,15 @@
 #' Additional indices can be manually computed by the users on the basis of the
 #' list of confusion matrices.
 #' 
-#' 
 #' In some cases, users may be interested in finding which of the
 #' bioregionalizations is most representative of all bioregionalizations. To
 #' find it out, we can compare the pairwise membership of each
 #' bioregionalization with the total frequency of pairwise membership across
 #' all bioregionalizations. This correlation can be requested with
-#' `cor_frequency = TRUE`
+#' `cor_frequency = TRUE`.
+#' 
 #' @seealso [bioregionalization_metrics]
+#' 
 #' @return 
 #' A `list` with 4 to 7 elements:
 #'  * `args`: arguments provided by the user
@@ -115,7 +119,7 @@
 #'  
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
 #' @examples 
