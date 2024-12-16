@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5.2 Compare bioregionalizations">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5.2 Compare bioregionalizations">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -212,12 +212,8 @@ bioregionalization.</p>
 <div class="section level3">
 <h3 id="pairwise-membership">Pairwise membership<a class="anchor" aria-label="anchor" href="#pairwise-membership"></a>
 </h3>
-<p>The number of pairwise combinations for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-sites equals
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">n(n-1)/2</annotation></semantics></math>.
-So in our case, where we have 715 sites, we do end up with 2.55255^{5}
-pairwise combinations.</p>
+<p>The number of pairwise combinations for <span class="math inline">\(n\)</span> sites equals <span class="math inline">\(n(n-1)/2\)</span>. So in our case, where we have
+715 sites, we do end up with 2.55255^{5} pairwise combinations.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">pairwise_membership</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
@@ -266,19 +262,11 @@ assigned to the same bioregion.</p>
 <p>The confusion matrix allows to compare different bioregionalizations
 by looking at the similarity of their pairwise memberships. To do so,
 the function computes a confusion matrix with four elements:</p>
-<p>.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
-number of pairs of sites grouped in bioregionalization 1 and in
-bioregionalization 2 .
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
-number of pairs of sites grouped in bioregionalization 1 but not in
-bioregionalization 2 .
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
-number of pairs of sites not grouped in bioregionalization 1 but grouped
-in bioregionalization 2 .
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
-number of pairs of sites not grouped in both bioregionalization 1 &amp;
-2</p>
+<p>. <span class="math inline">\(a\)</span> number of pairs of sites
+grouped in bioregionalization 1 and in bioregionalization 2 . <span class="math inline">\(b\)</span> number of pairs of sites grouped in
+bioregionalization 1 but not in bioregionalization 2 . <span class="math inline">\(c\)</span> number of pairs of sites not grouped in
+bioregionalization 1 but grouped in bioregionalization 2 . <span class="math inline">\(d\)</span> number of pairs of sites not grouped in
+both bioregionalization 1 &amp; 2</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">confusion_matrix</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`K_3_hclu%K_3_netclu`</span></span>
@@ -294,14 +282,12 @@ number of pairs of sites not grouped in both bioregionalization 1 &amp;
 <span><span class="co">##  66314  33802  30477 124662</span></span></code></pre>
 <p>Based on the confusion matrices, we can compute a range of indices to
 indicate the agreement among bioregionalizations. As of now, we have
-implemented:<br><br><em>Rand index</em>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>c</mi><mo>+</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">(a+d)/(a+b+c+d)</annotation></semantics></math>
-The Rand index measures agreement among bioregionalizations by
-accounting for both the pairs of sites that are grouped, but also the
-pairs of sites that are not grouped.<br><br><em>Jaccard index </em>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">a/(a+b+c)</annotation></semantics></math>
-The Jaccard index measures agreement among bioregionalizations by only
-accounting for pairs of sites that are grouped.</p>
+implemented:<br><br><em>Rand index</em> <span class="math inline">\((a+d)/(a+b+c+d)\)</span> The Rand index measures
+agreement among bioregionalizations by accounting for both the pairs of
+sites that are grouped, but also the pairs of sites that are not
+grouped.<br><br><em>Jaccard index </em> <span class="math inline">\(a/(a+b+c)\)</span> The Jaccard index measures
+agreement among bioregionalizations by only accounting for pairs of
+sites that are grouped.</p>
 <p>These two metrics are complementary, because the Jaccard index will
 tell if bioregionalizations are similar in their clustering structure,
 whereas the Rand index will tell if bioregionalizations are similar not

@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5.3 Summary metrics">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5.3 Summary metrics">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -163,63 +163,45 @@ to a particular bioregion.</p>
 </h2>
 <p>Different summary statistics are available at the species level.</p>
 <div class="section level3">
-<h3 id="contribution-rho">Contribution
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>)<a class="anchor" aria-label="anchor" href="#contribution-rho"></a>
+<h3 id="contribution-rho">Contribution (<span class="math inline">\(\rho\)</span>)<a class="anchor" aria-label="anchor" href="#contribution-rho"></a>
 </h3>
 <center>
 <img align="bottom" width="70%" height="70%" src="../reference/figures/zscore_scheme.svg">
 </center>
 <p><br></p>
-<p>The contribution index
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>
-is calculated for each species x bioregion combination, following <span class="citation">(Lenormand et al., 2019)</span>. <br> Its formula is
+<p>The contribution index <span class="math inline">\(\rho\)</span> is
+calculated for each species x bioregion combination, following <span class="citation">(Lenormand et al., 2019)</span>. <br> Its formula is
 the following:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>n</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mrow><msub><mi>n</mi><mi>i</mi></msub><msub><mi>n</mi><mi>j</mi></msub></mrow><mi>n</mi></mfrac></mrow><msqrt><mrow><mfrac><mrow><mi>n</mi><mo>−</mo><msub><mi>n</mi><mi>j</mi></msub></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mfrac><msub><mi>n</mi><mi>j</mi></msub><mi>n</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mrow><msub><mi>n</mi><mi>i</mi></msub><msub><mi>n</mi><mi>j</mi></msub></mrow><mi>n</mi></mfrac></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">\rho_{ij} = \frac{n_{ij} - \frac{n_i n_j}{n}}{\sqrt{\frac{n - n_j}{n-1} (1-\frac{n_j}{n}) \frac{n_i n_j}{n}}}</annotation></semantics></math>
-with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-the number of sites,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>i</mi></msub><annotation encoding="application/x-tex">n_i</annotation></semantics></math>
-the number of sites in which species
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-is present,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>j</mi></msub><annotation encoding="application/x-tex">n_j</annotation></semantics></math>
-the number of sites belonging to the bioregion
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>i</mi></msub><mi>j</mi></mrow><annotation encoding="application/x-tex">n_ij</annotation></semantics></math>
-the number of occurrences of species
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-in sites belonging to the bioregion
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>.</p>
+<p><span class="math display">\[\rho_{ij} = \frac{n_{ij} - \frac{n_i
+n_j}{n}}{\sqrt{\frac{n - n_j}{n-1} (1-\frac{n_j}{n}) \frac{n_i
+n_j}{n}}}\]</span> with <span class="math inline">\(n\)</span> the
+number of sites, <span class="math inline">\(n_i\)</span> the number of
+sites in which species <span class="math inline">\(i\)</span> is
+present, <span class="math inline">\(n_j\)</span> the number of sites
+belonging to the bioregion <span class="math inline">\(j\)</span>, <span class="math inline">\(n_ij\)</span> the number of occurrences of species
+<span class="math inline">\(i\)</span> in sites belonging to the
+bioregion <span class="math inline">\(j\)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="individual-contributions">Individual contributions<a class="anchor" aria-label="anchor" href="#individual-contributions"></a>
 </h3>
 <p>Affinity, fidelity and individual contributions describe how species
 are linked to their bioregions. These metrics are presented in <span class="citation">(Bernardo-Madrid et al., 2019)</span>.</p>
-<p>Affinity of species to their region:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>Z</mi></mfrac></mrow><annotation encoding="application/x-tex">A_i = \frac{R_i}{Z}</annotation></semantics></math>
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>i</mi></msub><annotation encoding="application/x-tex">R_i</annotation></semantics></math>
-is the occurrence/range size of species
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-in its associated bioregion, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
-the total size (number of sites) of the bioregion.</p>
+<p>Affinity of species to their region: <span class="math display">\[A_i
+= \frac{R_i}{Z}\]</span> where <span class="math inline">\(R_i\)</span>
+is the occurrence/range size of species <span class="math inline">\(i\)</span> in its associated bioregion, and <span class="math inline">\(Z\)</span> the total size (number of sites) of the
+bioregion.</p>
 <p>A high affinity means that the species is occupying most sites of its
 associated bioregion.</p>
-<p>Fidelity of species to their region:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><msub><mi>D</mi><mi>i</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">F_i = \frac{R_i}{D_i}</annotation></semantics></math>
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>i</mi></msub><annotation encoding="application/x-tex">R_i</annotation></semantics></math>
-is the occurrence/range size of species
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-in its associated bioregion, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>i</mi></msub><annotation encoding="application/x-tex">D_i</annotation></semantics></math>
-is its total occurrence/range size.</p>
+<p>Fidelity of species to their region: <span class="math display">\[F_i
+= \frac{R_i}{D_i}\]</span> where <span class="math inline">\(R_i\)</span> is the occurrence/range size of
+species <span class="math inline">\(i\)</span> in its associated
+bioregion, and <span class="math inline">\(D_i\)</span> is its total
+occurrence/range size.</p>
 <p>A high fidelity means that the species is not present in other
 bioregions than their associated one.</p>
-<p>Indicator Value of species:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>n</mi><mi>d</mi><mi>V</mi><mi>a</mi><mi>l</mi><mo>=</mo><msub><mi>F</mi><mi>i</mi></msub><mo>×</mo><msub><mi>A</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">IndVal = F_i \times A_i</annotation></semantics></math><br></p>
+<p>Indicator Value of species: <span class="math display">\[IndVal = F_i
+\times A_i\]</span> <br></p>
 </div>
 </div>
 <div class="section level2">
@@ -234,42 +216,23 @@ within-bioregion degree <code>z</code>.</p>
 <h3 id="cz-statistics">Cz statistics<a class="anchor" aria-label="anchor" href="#cz-statistics"></a>
 </h3>
 <p><code>Cz</code> metrics are derived from <span class="citation">(Guimerà &amp; Nunes Amaral, 2005)</span>. Their
-respective formula are:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><munderover><mo>∑</mo><mrow><mi>s</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>M</mi></msub></munderover><mrow><mrow><mo stretchy="false" form="prefix">(</mo><mfrac><mrow><msub><mi>k</mi><mi>i</mi></msub><mi>s</mi></mrow><msub><mi>k</mi><mi>i</mi></msub></mfrac></mrow><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mrow><annotation encoding="application/x-tex">C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}</annotation></semantics></math></p>
-<p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mrow><mi>i</mi><mi>s</mi></mrow></msub><annotation encoding="application/x-tex">k_{is}</annotation></semantics></math>
-is the number of links of node (species or site)
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-to nodes in bioregion
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mi>i</mi></msub><annotation encoding="application/x-tex">k_i</annotation></semantics></math>
-is the total degree of node
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
-The participation coefficient of a node is therefore close to 1 if its
-links are uniformly distributed among all the bioregions and 0 if all
-its links are within its own bioregion.</p>
-<p>And:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>−</mo><mover><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub><mo accent="true">¯</mo></mover></mrow><msub><mi>σ</mi><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub></msub></mfrac></mrow><annotation encoding="application/x-tex">z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}</annotation></semantics></math></p>
-<p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mi>i</mi></msub><annotation encoding="application/x-tex">k_i</annotation></semantics></math>
-is the number of links of node (species or site)
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-to other nodes in its bioregion
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_i</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub><mo accent="true">¯</mo></mover><annotation encoding="application/x-tex">\overline{k_{si}}</annotation></semantics></math>
-is the average of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-over all the nodes in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_i</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><msub><mi>k</mi><mrow><mi>s</mi><mi>i</mi></mrow></msub></msub><annotation encoding="application/x-tex">\sigma_{k_{si}}</annotation></semantics></math>
-is the standard deviation of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>i</mi></msub><annotation encoding="application/x-tex">s_i</annotation></semantics></math>.
-The within-bioregion degree z-score measures how well-connected node
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+respective formula are: <span class="math display">\[C_i = 1 -
+\sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}\]</span></p>
+<p>where <span class="math inline">\(k_{is}\)</span> is the number of
+links of node (species or site) <span class="math inline">\(i\)</span>
+to nodes in bioregion <span class="math inline">\(s\)</span>, and <span class="math inline">\(k_i\)</span> is the total degree of node <span class="math inline">\(i\)</span>. The participation coefficient of a
+node is therefore close to 1 if its links are uniformly distributed
+among all the bioregions and 0 if all its links are within its own
+bioregion.</p>
+<p>And: <span class="math display">\[z_i = \frac{k_i -
+\overline{k_{si}}}{\sigma_{k_{si}}}\]</span></p>
+<p>where <span class="math inline">\(k_i\)</span> is the number of links
+of node (species or site) <span class="math inline">\(i\)</span> to
+other nodes in its bioregion <span class="math inline">\(s_i\)</span>,
+<span class="math inline">\(\overline{k_{si}}\)</span> is the average of
+<span class="math inline">\(k\)</span> over all the nodes in <span class="math inline">\(s_i\)</span>, and <span class="math inline">\(\sigma_{k_{si}}\)</span> is the standard deviation
+of <span class="math inline">\(k\)</span> in <span class="math inline">\(s_i\)</span>. The within-bioregion degree z-score
+measures how well-connected node <span class="math inline">\(i\)</span>
 is to other nodes in the bioregion.</p>
 </div>
 <div class="section level3">
@@ -301,10 +264,9 @@ the number of pixels per bioregion with the area of each coherent
 part.</p>
 <p>The spatial coherence is expressed in percentage, and has the
 following formula:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><msub><mi>C</mi><mi>j</mi></msub><mo>=</mo><mn>100</mn><mo>×</mo><mfrac><mrow><mi>L</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi><mi>s</mi><mi>t</mi><mi>P</mi><mi>a</mi><mi>t</mi><mi>c</mi><msub><mi>h</mi><mi>j</mi></msub></mrow><mrow><mi>A</mi><mi>r</mi><mi>e</mi><msub><mi>a</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">SC_j = 100 \times \frac{LargestPatch_j}{Area_j}</annotation></semantics></math></p>
-<p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
-is a bioregion.</p>
+<p><span class="math display">\[SC_j = 100 \times
+\frac{LargestPatch_j}{Area_j}\]</span></p>
+<p>where <span class="math inline">\(j\)</span> is a bioregion.</p>
 <p>Here is an example with the vegetation dataset.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Spatial coherence</span></span>
@@ -337,13 +299,13 @@ is why the spatial coherence is very close to 100 %.</p>
 Bernardo-Madrid, R., Calatayud, J., González‐Suárez, M., Rosvall, M.,
 Lucas, P., Antonelli, A., &amp; Revilla, E. (2019). Human activity is
 altering the world’s zoogeographical regions. <em>Ecology Letters</em>,
-<em>22</em>, 1297–1305. <a href="https://doi.org/10.1111/ele.13321" class="external-link">https://doi.org/10.1111/ele.13321</a>
+<em>22</em>, 1297–1305.
 </div>
 <div id="ref-Divisek2016" class="csl-entry">
 Divíšek, J., Storch, D., Zelený, D., &amp; Culek, M. (2016). Towards the
 spatial coherence of biogeographical regionalizations at subcontinental
 and landscape scales. <em>Journal of Biogeography</em>, <em>43</em>,
-2489–2501. <a href="https://doi.org/10.1111/jbi.12832" class="external-link">https://doi.org/10.1111/jbi.12832</a>
+2489–2501.
 </div>
 <div id="ref-Guimera2005" class="csl-entry">
 Guimerà, R., &amp; Nunes Amaral, L. (2005). Functional cartography of

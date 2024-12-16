@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="4.2 Non-hierarchical clustering">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="4.2 Non-hierarchical clustering">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -140,10 +140,9 @@ compute distance metrics.</p>
 <span><span class="co">## Aa                   1                 1                   1</span></span>
 <span><span class="co">## Abula                0                 0                   0</span></span>
 <span><span class="co">## Acheloos             0                 0                   0</span></span></code></pre>
-<p>We are going to compute the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>s</mi><mi>i</mi><mi>m</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{sim}</annotation></semantics></math>
-diversity metric, which is a presence-absence dissimilarity index. The
-formula is as follows:<br><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mrow><mi>s</mi><mi>i</mi><mi>m</mi></mrow></msub><mo>=</mo><mi>m</mi><mi>i</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>+</mo><mi>m</mi><mi>i</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_{sim} = min(b, c) / (a+min(b, c))</annotation></semantics></math></p>
+<p>We are going to compute the <span class="math inline">\(\beta_{sim}\)</span> diversity metric, which is a
+presence-absence dissimilarity index. The formula is as follows:<br><span class="math inline">\(\beta_{sim} = min(b, c) / (a+min(b,
+c))\)</span></p>
 <p>Where <em>a</em> is the number of species shared by both sites;
 <em>b</em> is the number of species occurring only in the first site;
 and <em>c</em> is the number of species only occurring only in the
@@ -548,7 +547,7 @@ data points. <em>Science</em>, <em>315</em>, 972–976.
 <div id="ref-Hahsler2019" class="csl-entry">
 Hahsler, M., Piekenbrock, M., &amp; Doran, D. (2019). Dbscan: Fast
 density-based clustering with r. <em>Journal of Statistical
-Software</em>, <em>91</em>(1).
+Software</em>, <em>91</em>(1), 1–30.
 </div>
 <div id="ref-Hartigan1979" class="csl-entry">
 Hartigan, J. A., &amp; Wong, M. A. (1979). Algorithm <span>AS</span>
