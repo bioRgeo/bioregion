@@ -110,7 +110,8 @@ $j$.
 
 ## Individual contributions
 Affinity, fidelity and individual contributions describe how species are
-linked to their bioregions.
+linked to their bioregions. These metrics are presented in [@Bernardo2019].
+
 Affinity of species to their region: $$A_i = \frac{R_i}{Z}$$
 where $R_i$ is the occurrence/range size of species $i$ in its
 associated bioregion, and $Z$ the total size (number of sites) of the

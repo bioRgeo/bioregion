@@ -30,7 +30,8 @@
 #' in sites belonging to the bioregion \eqn{j}.
 #' 
 #' Affinity, fidelity and individual contributions describe how species are
-#' linked to their bioregions.
+#' linked to their bioregions. These metrics are described in
+#' \insertRef{Bernardo2019}{bioregion}
 #' Affinity of species to their region, \eqn{A_i = R_i / Z}
 #' where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
 #' associated bioregion, and \eqn{Z} the total size (number of sites) of the
