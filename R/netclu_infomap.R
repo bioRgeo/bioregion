@@ -71,7 +71,7 @@
 #'
 #' @details
 #' Infomap is a network clustering algorithm based on the Map equation proposed
-#' in \insertCite{Rosvall2008}{bioregion} that finds communities in (un)weighted
+#' in Rosvall & Bergstrom (2008) that finds communities in (un)weighted
 #' and (un)directed networks.
 #'
 #' This function is based on the C++ version of Infomap
@@ -129,8 +129,8 @@
 #' }
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
 #' @seealso [install_binaries], [netclu_louvain], [netclu_oslom]
@@ -144,7 +144,9 @@
 #' com <- netclu_infomap(net)
 #'
 #' @references
-#' \insertRef{Rosvall2008}{bioregion}
+#' Rosvall M & Bergstrom CT (2008) Maps of random walks on complex networks 
+#' reveal community structure. \emph{Proceedings of the National Academy of 
+#' Sciences}, 105(4), 1118-1123.
 #'
 #' @export
 netclu_infomap <- function(net,

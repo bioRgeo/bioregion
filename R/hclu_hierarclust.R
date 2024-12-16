@@ -37,7 +37,7 @@
 #' @param optimal_tree_method a `character` string indicating how the final tree
 #' should be obtained from all trials. Possible values are 
 #' `iterative_consensus_tree` (default), `best` and `consensus`. 
-#' **We recommend `iterative_consensus_tree`. See details** 
+#' **We recommend `iterative_consensus_tree`. See Details.** 
 #' 
 #' @param n_clust an `integer` vector or a single `integer` indicating the 
 #' number of clusters to be obtained from the hierarchical tree, or the output 
@@ -172,8 +172,8 @@
 #' , 1287--1297. 
 #' 
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) &
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [cut_tree]

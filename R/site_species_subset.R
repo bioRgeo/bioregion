@@ -7,7 +7,7 @@
 #' @param clusters an object of class `bioregion.clusters`.
 #'
 #' @param node_type a `character` indicating what types of nodes
-#' ("site" or "species") should be extracted
+#' (`"site"` or `"species"`) should be extracted
 #' (`node_type = "site"` by default).
 #'
 #' @return An object of class `bioregion.clusters` with a given node type (sites 
@@ -22,8 +22,8 @@
 #' output and modify the return_node_type accordingly.
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
 #' @examples

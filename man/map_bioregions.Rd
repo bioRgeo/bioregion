@@ -19,7 +19,7 @@ should be added in \code{geometry}.}
 
 \item{plot}{a \code{boolean} indicating if the plot should be drawn.}
 
-\item{...}{further arguments to be passed to \code{sf::plot()}}
+\item{...}{further arguments to be passed to \code{sf::plot()}.}
 }
 \value{
 One or several maps of bioregions if \code{plot = TRUE} and the
@@ -45,7 +45,7 @@ map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
 
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Boris Leroy (\email{leroy.boris@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

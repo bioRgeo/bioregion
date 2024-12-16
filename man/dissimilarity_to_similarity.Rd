@@ -24,7 +24,6 @@ This function converts a \code{data.frame} of dissimilarity metrics (beta divers
 between sites to similarity metrics.
 }
 \note{
-\loadmathjax
 The behavior of this function changes depending on column names. Columns
 \code{Site1} and \code{Site2} are copied identically. If there are columns called
 \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, \code{C} they will also be copied identically. If there
@@ -38,12 +37,12 @@ behavior).
 If a column is called \code{Euclidean}, the similarity will be calculated based
 on the following formula:
 
-\mjeqn{Euclidean similarity = 1 / (1 - Euclidean distance)}{Euclidean similarity = 1 / (1 - Euclidean distance)}
+Euclidean similarity = 1 / (1 - Euclidean distance)
 
 Otherwise, all other columns will be transformed into dissimilarity with the
 following formula:
 
-\mjeqn{similarity = 1 - dissimilarity}{similarity = 1 - dissimilarity}
+similarity = 1 - dissimilarity
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
@@ -62,7 +61,7 @@ similarity
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}} \code{\link[=similarity]{similarity()}} \code{\link[=dissimilarity]{dissimilarity()}}
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Boris Leroy (\email{leroy.boris@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

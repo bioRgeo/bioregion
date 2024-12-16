@@ -17,8 +17,8 @@ host the 'bin' folder containing the binary files (see Details).}
 \item{download_only}{a \code{boolean} indicating whether the function should only
 download the 'bin.zip' file or execute the entire process (see Details).}
 
-\item{infomap_version}{a \code{character} vector indicating the Infomap
-version(s) to install.}
+\item{infomap_version}{a \code{character} vector or a single \code{character} string
+indicating the Infomap version(s) to install.}
 }
 \value{
 No return value
@@ -48,7 +48,7 @@ accordingly in \link{netclu_infomap}, \link{netclu_louvain} and \link{netclu_osl
 Only the Infomap version 2.1.0, 2.6.0, 2.7.1 and 2.8.0 are available for now.
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Boris Leroy (\email{leroy.boris@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

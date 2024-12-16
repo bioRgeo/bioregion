@@ -23,6 +23,7 @@
 #' 
 #' @param site_col name or number for the column of site nodes
 #' (i.e. primary nodes).
+#' 
 #' @param species_col name or number for the column of species nodes
 #' (i.e. feature nodes).
 #' 
@@ -36,7 +37,7 @@
 #'
 #' @details
 #' This function is based on leading eigenvector of the community matrix
-#' \insertCite{Newman2006}{bioregion} as implemented in the
+#' (Newman, 2006) as implemented in the
 #' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_leading_eigen][igraph::cluster_leading_eigen]).
 #'
@@ -68,8 +69,8 @@
 #' find the output of [cluster_leading_eigen][igraph::cluster_leading_eigen].
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
@@ -83,8 +84,9 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_leadingeigen(net_bip, bipartite = TRUE)
 #' 
-#' @references
-#' \insertRef{Newman2006}{bioregion}
+#' @references 
+#' Newman MEJ (2006) Finding community structure in networks using the 
+#' eigenvectors of matrices. \emph{Physical Review E}, 74(3), 036104.
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_leading_eigen
 #' 

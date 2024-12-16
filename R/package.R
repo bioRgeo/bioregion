@@ -4,8 +4,8 @@
 #'
 #' @docType _PACKAGE
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' @useDynLib bioregion, .registration=TRUE
 #' @import mathjaxr Rdpack rmarkdown

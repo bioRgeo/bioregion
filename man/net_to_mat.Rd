@@ -59,7 +59,7 @@ mat <- net_to_mat(net, weight = TRUE)
 \link{mat_to_net}
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

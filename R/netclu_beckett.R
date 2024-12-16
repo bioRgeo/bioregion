@@ -41,7 +41,7 @@
 #' 
 #' @details
 #' This function is based on the modularity optimization algorithm provided by
-#' Stephen Beckett \insertCite{Beckett2016}{bioregion} as implemented in the
+#' Stephen Beckett (Beckett, 2016) as implemented in the
 #' [bipartite](https://cran.r-project.org/package=bipartite)
 #' package ([computeModules][bipartite::computeModules]).
 #'
@@ -71,8 +71,8 @@
 #'  output of [computeModules][bipartite::computeModules].
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @seealso [netclu_infomap], [netclu_oslom]
@@ -86,7 +86,8 @@
 #' com <- netclu_beckett(net)
 #' 
 #' @references
-#' \insertRef{Beckett2016}{bioregion}
+#' Beckett SJ (2016) Improved community detection in weighted bipartite 
+#' networks. \emph{Royal Society Open Science}, 3(1), 140536.
 #' 
 #' @importFrom bipartite computeModules
 #' 

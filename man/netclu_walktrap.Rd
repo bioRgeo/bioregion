@@ -72,7 +72,7 @@ This function finds communities in a (un)weighted undirected network via
 short random walks.
 }
 \details{
-This function is based on random walks \insertCite{Pons2005}{bioregion}
+This function is based on random walks (Pons & Latapy, 2005)
 as implemented in the \href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_walktrap]{cluster_walktrap}).
 }
@@ -102,10 +102,13 @@ clust2 <- netclu_walktrap(net_bip, bipartite = TRUE)
 
 }
 \references{
-\insertRef{Pons2005}{bioregion}
+Pons P & Latapy M (2005) Computing Communities in Large Networks
+Using Random Walks. In Yolum I, Güngör T, Gürgen F, Özturan C (eds.),
+\emph{Computer and Information Sciences - ISCIS 2005}, Lecture Notes in
+Computer Science, 284-293.
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

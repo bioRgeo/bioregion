@@ -11,9 +11,9 @@
 #' using `beta.pair` function).
 #' 
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) 
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #'
 #' @return A dissimilarity object of class `bioregion.pairwise.metric` 
 #' compatible with the bioregion package.

@@ -25,7 +25,7 @@ the third column name of \code{dissimilarity} is used.}
 
 \item{seed}{for the random number generator (NULL for random by default).}
 
-\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
+\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
 requested number(s) of clusters.}
 
 \item{numlocal}{an \code{integer} defining the number of samples to draw.}
@@ -33,8 +33,8 @@ requested number(s) of clusters.}
 \item{maxneighbor}{a positive \code{numeric} defining the sampling rate.}
 
 \item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[fastkmedoids:fastclarans]{fastclarans} should be returned in the output (\code{TRUE} by
-default, see Value).}
+of \link[fastkmedoids:fastclarans]{fastclarans} should be returned in the output
+(\code{TRUE} by default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -75,13 +75,15 @@ eval_metric = "pc_distance")
    
 }
 \references{
-\insertRef{Schubert2019}{bioregion}
+Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the
+PAM, CLARA, and CLARANS Algorithms. \emph{Similarity Search and Applications}
+, 11807, 171-187.
 }
 \seealso{
 \link{nhclu_pam}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Boris Leroy (\email{leroy.boris@gmail.com}), and
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

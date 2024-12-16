@@ -38,7 +38,7 @@
 #' output (`TRUE` by default, see Value).
 #'
 #' @details
-#' This function is based on random walks \insertCite{Pons2005}{bioregion}
+#' This function is based on random walks (Pons & Latapy, 2005)
 #' as implemented in the [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_walktrap][igraph::cluster_walktrap]).
 #'
@@ -71,8 +71,8 @@
 #' [cluster_walktrap][igraph::cluster_walktrap].
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
@@ -86,8 +86,11 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_walktrap(net_bip, bipartite = TRUE)
 #' 
-#' @references
-#' \insertRef{Pons2005}{bioregion}
+#' @references 
+#' Pons P & Latapy M (2005) Computing Communities in Large Networks 
+#' Using Random Walks. In Yolum I, Güngör T, Gürgen F, Özturan C (eds.), 
+#' \emph{Computer and Information Sciences - ISCIS 2005}, Lecture Notes in 
+#' Computer Science, 284-293.
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_walktrap
 #' 

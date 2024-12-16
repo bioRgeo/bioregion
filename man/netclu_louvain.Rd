@@ -116,7 +116,7 @@ on the Louvain algorithm.
 }
 \details{
 Louvain is a network community detection algorithm proposed in
-\insertCite{Blondel2008}{bioregion}. This function proposed two
+(Blondel et al., 2008). This function proposed two
 implementations of the function (parameter \code{lang}): the
 \href{https://cran.r-project.org/package=igraph}{igraph}
 implementation (\link[igraph:cluster_louvain]{cluster_louvain}) and the C++
@@ -180,13 +180,14 @@ com <- netclu_louvain(net, lang = "igraph")
 
 }
 \references{
-\insertRef{Blondel2008}{bioregion}
+Blondel VD, Guillaume JL, Lambiotte R & Mech ELJS (2008) Fast unfolding of
+communities in large networks. \emph{J. Stat. Mech.}, 10(2008), P10008.
 }
 \seealso{
 \code{\link[=install_binaries]{install_binaries()}}, \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=netclu_oslom]{netclu_oslom()}}
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

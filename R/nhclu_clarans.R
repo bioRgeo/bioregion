@@ -14,7 +14,7 @@
 #' 
 #' @param seed for the random number generator (NULL for random by default).
 #' 
-#' @param n_clust an `integer` or an `integer` vector specifying the
+#' @param n_clust an `integer` vector or a single `integer` value specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param numlocal an `integer` defining the number of samples to draw.
@@ -22,8 +22,8 @@
 #' @param maxneighbor a positive `numeric` defining the sampling rate.
 #' 
 #' @param algorithm_in_output a `boolean` indicating if the original output
-#' of [fastclarans][fastkmedoids::fastclarans] should be returned in the output (`TRUE` by 
-#' default, see Value).
+#' of [fastclarans][fastkmedoids::fastclarans] should be returned in the output
+#'  (`TRUE` by default, see Value).
 #' 
 #' @details
 #' Based on [fastkmedoids](https://cran.r-project.org/package=fastkmedoids)
@@ -43,12 +43,14 @@
 #' find the output of
 #' [fastclarans][fastkmedoids::fastclarans].
 #' 
-#' @references
-#' \insertRef{Schubert2019}{bioregion}
+#' @references 
+#' Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the 
+#' PAM, CLARA, and CLARANS Algorithms. \emph{Similarity Search and Applications}
+#' , 11807, 171-187.
 #' 
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}), and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [nhclu_pam] 

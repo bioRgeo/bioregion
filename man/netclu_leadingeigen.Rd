@@ -69,7 +69,7 @@ on leading eigen vector of the community matrix.
 }
 \details{
 This function is based on leading eigenvector of the community matrix
-\insertCite{Newman2006}{bioregion} as implemented in the
+(Newman, 2006) as implemented in the
 \href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_leading_eigen]{cluster_leading_eigen}).
 }
@@ -99,10 +99,11 @@ clust2 <- netclu_leadingeigen(net_bip, bipartite = TRUE)
 
 }
 \references{
-\insertRef{Newman2006}{bioregion}
+Newman MEJ (2006) Finding community structure in networks using the
+eigenvectors of matrices. \emph{Physical Review E}, 74(3), 036104.
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

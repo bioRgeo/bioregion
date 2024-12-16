@@ -96,7 +96,7 @@ on the Leiden algorithm of Traag, van Eck & Waltman.
 }
 \details{
 This function is based on the Leiden algorithm
-\insertCite{Traag2019}{bioregion} as implemented in the
+(Traag et al., 2019) as implemented in the
 \href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_leiden]{cluster_leiden}).
 }
@@ -126,10 +126,11 @@ clust2 <- netclu_leiden(net_bip, bipartite = TRUE)
 
 }
 \references{
-\insertRef{Traag2019}{bioregion}
+Traag VA, Waltman L & Van Eck NJ (2019) From Louvain to Leiden: guaranteeing
+well-connected communities. \emph{Scientific reports}, 9(1), 5233.
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

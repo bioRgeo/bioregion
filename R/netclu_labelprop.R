@@ -39,7 +39,7 @@
 #'
 #' @details
 #' This function is based on propagating labels
-#' \insertCite{Raghavan2007}{bioregion} as implemented in the
+#' (Raghavan et al., 2007) as implemented in the
 #' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_label_prop][igraph::cluster_label_prop]).
 #'
@@ -72,8 +72,8 @@
 #' [cluster_label_prop][igraph::cluster_label_prop].
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
@@ -87,8 +87,10 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_labelprop(net_bip, bipartite = TRUE)
 #' 
-#' @references
-#' \insertRef{Raghavan2007}{bioregion}
+#' @references 
+#' Raghavan UN, Albert R & Kumara S (2007) Near linear time algorithm to detect 
+#' community structures in large-scale networks. \emph{Physical Review E}, 76(3)
+#' , 036106.
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_label_prop
 #' 

@@ -23,13 +23,13 @@ and the next column(s) are the dissimilarity indices.}
 \item{index}{name or number of the dissimilarity column to use. By default,
 the third column name of \code{dissimilarity} is used.}
 
-\item{minPts}{a \code{numeric} value or a \code{numeric} vector
+\item{minPts}{a \code{numeric} vector or a single \code{numeric} value
 specifying the minPts argument of \link[dbscan:dbscan]{dbscan::dbscan()}).
 minPts is the minimum number of points to form a dense region. By default,
 it is set to the natural logarithm of the number of sites in
 \code{dissimilarity}. See details for guidance on choosing this parameter.}
 
-\item{eps}{a \code{numeric} value or a \code{numeric} vector specifying the
+\item{eps}{a \code{numeric} vector or a single \code{numeric} value specifying the
 eps argument of \link[dbscan:dbscan]{dbscan}). eps specifies how
 similar points should be to each other to be considered a part of a cluster.
 See details for guidance on choosing this parameter.}
@@ -61,7 +61,7 @@ find the output of
 \description{
 This function performs non hierarchical clustering on the basis of
 dissimilarity with Density-based Spatial Clustering of Applications with
-Noise (DBSCAN)
+Noise (DBSCAN).
 }
 \details{
 The dbscan (Density-based spatial clustering of
@@ -73,7 +73,7 @@ identify a core, and \code{eps}, which is the radius to find neighbors.
 straightforward.
 We recommend reading the help in \link[dbscan:dbscan]{dbscan})
 to learn how to set these arguments, as well as the paper
-\insertCite{Hahsler2019}{bioregion}. Note that clusters with a value of 0
+(Hahsler et al., 2019). Note that clusters with a value of 0
 are points which were deemed as noise by the algorithm.
 
 By default the function will select values for \code{minPts} and \code{eps}. However,
@@ -109,13 +109,17 @@ clust1 <- nhclu_dbscan(dissim, index = "Simpson")
 clust2 <- nhclu_dbscan(dissim, index = "Simpson", eps = 0.2)
 clust3 <- nhclu_dbscan(dissim, index = "Simpson", minPts = c(5, 10, 15, 20),
      eps = c(.1, .15, .2, .25, .3))
-
+     
+}
+\references{
+Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based
+clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
 }
 \seealso{
 \link{hclu_optics}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

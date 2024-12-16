@@ -11,8 +11,8 @@
 #' @param download_only a `boolean` indicating whether the function should only
 #' download the 'bin.zip' file or execute the entire process (see Details).
 #'
-#' @param infomap_version a `character` vector indicating the Infomap
-#' version(s) to install.
+#' @param infomap_version a `character` vector or a single `character` string 
+#' indicating the Infomap version(s) to install.
 #'
 #' @details By default, the binary files are installed in R's temporary
 #' directory (`binpath = "tempdir"`). In this case the `bin` folder will be
@@ -35,8 +35,8 @@
 #' No return value
 #' 
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #'
 #' @export

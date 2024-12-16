@@ -50,7 +50,7 @@ should be stored in the output object (set to FALSE to save space if your
 \item{optimal_tree_method}{a \code{character} string indicating how the final tree
 should be obtained from all trials. Possible values are
 \code{iterative_consensus_tree} (default), \code{best} and \code{consensus}.
-\strong{We recommend \code{iterative_consensus_tree}. See details}}
+\strong{We recommend \code{iterative_consensus_tree}. See Details.}}
 
 \item{n_clust}{an \code{integer} vector or a single \code{integer} indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
@@ -244,7 +244,7 @@ tested on British butterflies. \emph{Methods in Ecology and Evolution}, 6(11)
 \link{cut_tree}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) &
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

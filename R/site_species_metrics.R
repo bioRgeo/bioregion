@@ -20,8 +20,9 @@
 #' Available options are `rho` and `Cz`.
 #' 
 #' @details 
-#' The \eqn{\rho} metric is derived from \insertRef{Lenormand2019}{bioregion}.
+#' The \eqn{\rho} metric is derived from Lenormand et al. (2019).
 #' Its formula is the following:
+#' 
 #' \eqn{\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
 #' 
 #' with \eqn{n} the number of sites, \eqn{n_i} the number of sites in which
@@ -31,7 +32,7 @@
 #' 
 #' Affinity, fidelity and individual contributions describe how species are
 #' linked to their bioregions. These metrics are described in
-#' \insertRef{Bernardo2019}{bioregion}
+#' Bernardo-Madrid et al. (2019).
 #' Affinity of species to their region, \eqn{A_i = R_i / Z}
 #' where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
 #' associated bioregion, and \eqn{Z} the total size (number of sites) of the
@@ -49,7 +50,7 @@
 #' 
 #' Indicator Value of species, \eqn{IndVal = F_i * A_i}
 #' 
-#' `Cz` metrics are derived from \insertRef{Guimera2005}{bioregion}.
+#' `Cz` metrics are derived from Guimerà & Amaral (2005).
 #' Their respective formula are:
 #' \eqn{C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}}
 #' 
@@ -68,16 +69,29 @@
 #' \eqn{\sigma_{k_{si}}} is the standard deviation of \eqn{k} in \eqn{s_i}.
 #' The within-bioregion degree z-score measures how well-connected node \eqn{i}
 #' is to other nodes in the bioregion.
+#' 
+#' @references
+#' Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P, 
+#' Antonelli A & Revilla E (2019) Human activity is altering the world’s 
+#' zoogeographical regions. \emph{Ecology Letters}, 22, 1297--1305.
+#' 
+#' Guimerà R & Amaral LAN (2005) Functional cartography of complex metabolic 
+#' networks. \emph{Nature}, 433, 895--900.
+#' 
+#' Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S & Luque S (2019)
+#' Biogeographical network analysis of plant species distribution in the 
+#' Mediterranean region. \emph{Ecology and Evolution}, 9, 237--250.
 #'
 #' @seealso [bioregionalization_metrics]
+#' 
 #' @return 
 #' A `data.frame` with the columns Bioregion, Species, and the desired summary
 #' statistics, or a list of `data.frames` if `Cz` and other indices are
 #' selected.
 #'  
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @examples

@@ -37,8 +37,8 @@ data points. If NA, exemplar preferences are initialized according to the
 distribution of non-Inf values in the similarity matrix. How this is done is
 controlled by the parameter q.}
 
-\item{q}{if p=NA, exemplar preferences are initialized according to the
-distribution of non-Inf values in the similarity matrix. If q=NA, exemplar
+\item{q}{if \code{p = NA}, exemplar preferences are initialized according to the
+distribution of non-Inf values in the similarity matrix. If \code{p = NA}, exemplar
 preferences are set to the median of non-Inf values in the similarity
 matrix. If q is a value between 0 and 1, the sample quantile with
 threshold q is used, whereas q=0.5 again results in the median.}
@@ -46,17 +46,17 @@ threshold q is used, whereas q=0.5 again results in the median.}
 \item{maxits}{maximal number of iterations that should be executed}
 
 \item{convits}{the algorithm terminates if the examplars have not changed
-for convits iterations}
+for convits iterations.}
 
 \item{lam}{damping factor; should be a value in the range [0.5, 1);
 higher values correspond to heavy damping which may be needed if
-oscillations occur}
+oscillations occur.}
 
 \item{details}{if TRUE, more detailed information about the algorithm's
-progress is stored in the output object}
+progress is stored in the output object.}
 
 \item{nonoise}{small amount of noise added to the similarity object to
-prevent degenerate cases; disabled when set to TRUE.}
+prevent degenerate cases; disabled when set to \code{TRUE}.}
 
 \item{seed}{seed of the random number generator.}
 
@@ -132,13 +132,14 @@ clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
 
 }
 \references{
-\insertRef{Frey2007}{bioregion}
+Frey B & Dueck D (2007) Clustering by Passing Messages Between Data Points.
+\emph{Science}, 315, 972-976.
 }
 \seealso{
 \link{nhclu_pam}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Boris Leroy (\email{leroy.boris@gmail.com}), and
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

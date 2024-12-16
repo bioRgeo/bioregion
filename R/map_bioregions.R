@@ -15,19 +15,20 @@
 #' 
 #' @param plot a `boolean` indicating if the plot should be drawn.
 #' 
-#' @param ... further arguments to be passed to `sf::plot()`
+#' @param ... further arguments to be passed to `sf::plot()`.
 #' 
 #' @details
 #' The `clusters` and `geometry` site IDs should correspond. They should
 #' have the same type (i.e. `character` is cluster is a 
 #' `bioregion.clusters` object) and the site of `clusters` should be 
 #' included in the sites of `geometry`. 
+#' 
 #' @return  One or several maps of bioregions if `plot = TRUE` and the 
 #' geometry with additional clusters' attributes if `write_clusters = TRUE`. 
 #' 
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #'
 #' @examples

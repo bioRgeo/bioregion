@@ -219,7 +219,7 @@ Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of
 zoogeographical boundaries. \emph{Nature Ecology & Evolution}, 1, 0089.
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

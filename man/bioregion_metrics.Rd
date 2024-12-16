@@ -76,7 +76,7 @@ col_bioregion = 2)
 \link{site_species_metrics}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Boris Leroy (\email{leroy.boris@gmail.com}) &
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

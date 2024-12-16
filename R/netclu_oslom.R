@@ -67,7 +67,7 @@
 #'
 #' @details
 #' OSLOM is a network community detection algorithm proposed in
-#' \insertCite{Lancichinetti2011}{bioregion} that finds statistically significant
+#' Lancichinetti et al. (2011) that finds statistically significant
 #' (overlapping) communities in (un)weighted and (un)directed networks.
 #'
 #' This function is based on the 2.4 C++ version of OSLOM
@@ -128,8 +128,8 @@
 #' }
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
 #' @seealso [install_binaries()], [netclu_infomap()], [netclu_louvain()]
@@ -142,8 +142,10 @@
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_oslom(net)
 #'
-#' @references
-#' \insertRef{Lancichinetti2011}{bioregion}
+#' @references 
+#' Lancichinetti A, Radicchi F, Ramasco JJ & Fortunato S (2011) Finding 
+#' statistically significant communities in networks. \emph{PLOS ONE}, 6(4), 
+#' e18961.
 #'
 #' @export
 netclu_oslom <- function(net,

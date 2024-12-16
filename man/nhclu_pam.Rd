@@ -27,7 +27,7 @@ the third column name of \code{dissimilarity} is used.}
 
 \item{seed}{for the random number generator (NULL for random by default).}
 
-\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
+\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
 requested number(s) of clusters.}
 
 \item{variant}{a \code{character} string specifying the variant of pam to use,
@@ -45,7 +45,7 @@ of \link[cluster:pam]{pam} should be returned in the output (\code{TRUE} by
 default, see Value).}
 
 \item{...}{you can add here further arguments to be passed to \code{pam()}
-(see \link[cluster:pam]{pam})}
+(see \link[cluster:pam]{pam}).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -91,13 +91,15 @@ bioregionalization_metrics(clust2, net = comnet, species_col = "Node2",
    
 }
 \references{
-\insertRef{Kaufman2009}{bioregion}
+Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to
+cluster analysis. In & Sons. JW (ed.), Finding groups in data: An
+introduction to cluster analysis.
 }
 \seealso{
 \link{nhclu_kmeans}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

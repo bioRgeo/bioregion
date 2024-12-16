@@ -29,13 +29,13 @@ the third column name of \code{dissimilarity} is used.}
 
 \item{seed}{for the random number generator (NULL for random by default).}
 
-\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
+\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
 requested number(s) of clusters.}
 
 \item{maxiter}{an \code{integer} defining the maximum number of iterations.}
 
-\item{initializer}{a \code{character}, either 'BUILD' (used in classic PAM
-algorithm) or 'LAB' (linear approximative BUILD).}
+\item{initializer}{a \code{character}, either '"BUILD"' (used in classic PAM
+algorithm) or '"LAB"' (linear approximative BUILD).}
 
 \item{fasttol}{positive \code{numeric} defining the tolerance for fast swapping
 behavior, set to 1 by default.}
@@ -91,13 +91,15 @@ eval_metric = "pc_distance")
    
 }
 \references{
-\insertRef{Schubert2019}{bioregion}
+Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the
+PAM, CLARA, and CLARANS Algorithms. \emph{Similarity Search and Applications}
+, 11807, 171-187.
 }
 \seealso{
 \link{nhclu_pam}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Boris Leroy (\email{leroy.boris@gmail.com}), and
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

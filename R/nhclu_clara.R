@@ -14,13 +14,13 @@
 #' 
 #' @param seed for the random number generator (NULL for random by default).
 #' 
-#' @param n_clust an `integer` or an `integer` vector specifying the
+#' @param n_clust an `integer` vector or a single `integer` value specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param maxiter an `integer` defining the maximum number of iterations.
 #' 
-#' @param initializer a `character`, either 'BUILD' (used in classic PAM
-#' algorithm) or 'LAB' (linear approximative BUILD).
+#' @param initializer a `character`, either '"BUILD"' (used in classic PAM
+#' algorithm) or '"LAB"' (linear approximative BUILD).
 #' 
 #' @param fasttol positive `numeric` defining the tolerance for fast swapping
 #' behavior, set to 1 by default.
@@ -56,11 +56,13 @@
 #' [fastclara][fastkmedoids::fastclara].
 #' 
 #' @references
-#' \insertRef{Schubert2019}{bioregion}
+#' Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the 
+#' PAM, CLARA, and CLARANS Algorithms. \emph{Similarity Search and Applications}
+#' , 11807, 171-187.
 #' 
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Boris Leroy (\email{leroy.boris@gmail.com}), and
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [nhclu_pam] 

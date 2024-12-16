@@ -73,7 +73,6 @@ functions. It also provides the confusion matrix from pairwise comparisons,
 so that the user can compute additional comparison metrics.
 }
 \details{
-\loadmathjax
 This function proceeds in two main steps:
 \enumerate{
 \item The first step is done within each bioregionalization. It will compare
@@ -152,7 +151,7 @@ compare_bioregionalizations(bioregionalizations,
 \link{bioregionalization_metrics}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

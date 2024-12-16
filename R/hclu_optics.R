@@ -85,8 +85,8 @@
 #' find the output of [optics][dbscan::optics].
 #' 
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) &
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [nhclu_dbscan] 

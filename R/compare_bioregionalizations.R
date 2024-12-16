@@ -28,7 +28,6 @@
 #' of pairwise bioregionalization comparisons are stored in the output object.
 #' 
 #' @details 
-#' \loadmathjax
 #' This function proceeds in two main steps:
 #' 
 #' 1. The first step is done within each bioregionalization. It will compare
@@ -118,8 +117,8 @@
 #'  the requested `indices`.
 #'  
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
 #' @examples 

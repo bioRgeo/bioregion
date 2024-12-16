@@ -39,7 +39,7 @@
 #' @export
 #' @details
 #' This function is based on the fast greedy modularity optimization algorithm
-#' \insertCite{Clauset2004}{bioregion} as implemented in the
+#' (Clauset et al., 2004) as implemented in the
 #' [igraph](https://cran.r-project.org/package=igraph)
 #' package ([cluster_fast_greedy][igraph::cluster_fast_greedy]).
 #'
@@ -72,8 +72,8 @@
 #' [cluster_fast_greedy][igraph::cluster_fast_greedy].
 #'
 #' @author
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #' 
 #' @examples
@@ -88,7 +88,8 @@
 #' clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
 #' 
 #' @references
-#' \insertRef{Clauset2004}{bioregion}
+#' Clauset A, Newman MEJ & Moore C (2004) Finding community structure in very 
+#' large networks. \emph{Phys. Rev. E}, 70, 066111.
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_fast_greedy
 #' 

@@ -74,7 +74,7 @@ applying Newman’s modularity measure in a bipartite weighted version to it.
 }
 \details{
 This function is based on the modularity optimization algorithm provided by
-Stephen Beckett \insertCite{Beckett2016}{bioregion} as implemented in the
+Stephen Beckett (Beckett, 2016) as implemented in the
 \href{https://cran.r-project.org/package=bipartite}{bipartite}
 package (\link[bipartite:computeModules]{computeModules}).
 }
@@ -99,13 +99,14 @@ com <- netclu_beckett(net)
 
 }
 \references{
-\insertRef{Beckett2016}{bioregion}
+Beckett SJ (2016) Improved community detection in weighted bipartite
+networks. \emph{Royal Society Open Science}, 3(1), 140536.
 }
 \seealso{
 \link{netclu_infomap}, \link{netclu_oslom}
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

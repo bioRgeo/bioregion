@@ -10,7 +10,7 @@ site_species_subset(clusters, node_type = "site")
 \item{clusters}{an object of class \code{bioregion.clusters}.}
 
 \item{node_type}{a \code{character} indicating what types of nodes
-("site" or "species") should be extracted
+(\code{"site"} or \code{"species"}) should be extracted
 (\code{node_type = "site"} by default).}
 }
 \value{
@@ -43,7 +43,7 @@ clusters_sites <- site_species_subset(clusters, node_type = "site")
 
 }
 \author{
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }

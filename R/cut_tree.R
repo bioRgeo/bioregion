@@ -71,8 +71,8 @@
 #' because heights of cut cannot be estimated in this case.
 #'
 #' @author
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}),
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
 #'
 #' @return If `tree` is an output from [hclu_hierarclust()], then the same

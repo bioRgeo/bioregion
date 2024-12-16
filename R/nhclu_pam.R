@@ -13,7 +13,7 @@
 #' 
 #' @param seed for the random number generator (NULL for random by default).
 #' 
-#' @param n_clust an `integer` or an `integer` vector specifying the
+#' @param n_clust an `integer` vector or a single `integer` value specifying the
 #' requested number(s) of clusters.
 #' 
 #' @param variant a `character` string specifying the variant of pam to use,
@@ -31,7 +31,7 @@
 #' default, see Value).
 #' 
 #' @param ... you can add here further arguments to be passed to `pam()`
-#' (see [pam][cluster::pam])
+#' (see [pam][cluster::pam]).
 #'
 #' @details
 #' This method partitions data into the chosen number of cluster on the basis
@@ -56,11 +56,13 @@
 #' [pam][cluster::pam].
 #' 
 #' @references
-#' \insertRef{Kaufman2009}{bioregion}
+#' Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to 
+#' cluster analysis. In & Sons. JW (ed.), Finding groups in data: An 
+#' introduction to cluster analysis.
 #' 
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [nhclu_kmeans] 

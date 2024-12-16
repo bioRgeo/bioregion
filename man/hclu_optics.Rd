@@ -121,7 +121,7 @@ clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
 \link{nhclu_dbscan}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) &
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

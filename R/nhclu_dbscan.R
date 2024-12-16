@@ -2,7 +2,7 @@
 #'
 #' This function performs non hierarchical clustering on the basis of
 #' dissimilarity with Density-based Spatial Clustering of Applications with
-#' Noise (DBSCAN)
+#' Noise (DBSCAN).
 #'
 #' @param dissimilarity the output object from [dissimilarity()] or
 #' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is
@@ -12,13 +12,13 @@
 #' @param index name or number of the dissimilarity column to use. By default, 
 #' the third column name of `dissimilarity` is used.
 #' 
-#' @param minPts a `numeric` value or a `numeric` vector
+#' @param minPts a `numeric` vector or a single `numeric` value
 #' specifying the minPts argument of [dbscan::dbscan()][dbscan::dbscan]).
 #' minPts is the minimum number of points to form a dense region. By default,
 #' it is set to the natural logarithm of the number of sites in
 #' `dissimilarity`. See details for guidance on choosing this parameter.
 #' 
-#' @param eps a `numeric` value or a `numeric` vector specifying the
+#' @param eps a `numeric` vector or a single `numeric` value specifying the
 #' eps argument of [dbscan][dbscan::dbscan]). eps specifies how
 #' similar points should be to each other to be considered a part of a cluster.
 #' See details for guidance on choosing this parameter.
@@ -43,7 +43,7 @@
 #' straightforward.
 #' We recommend reading the help in [dbscan][dbscan::dbscan])
 #' to learn how to set these arguments, as well as the paper
-#' \insertCite{Hahsler2019}{bioregion}. Note that clusters with a value of 0
+#' (Hahsler et al., 2019). Note that clusters with a value of 0
 #' are points which were deemed as noise by the algorithm.
 #'
 #' By default the function will select values for `minPts` and `eps`. However,
@@ -82,8 +82,8 @@
 #' [dbscan][dbscan::dbscan].
 #'
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso [hclu_optics] 
@@ -100,6 +100,10 @@
 #' clust2 <- nhclu_dbscan(dissim, index = "Simpson", eps = 0.2)
 #' clust3 <- nhclu_dbscan(dissim, index = "Simpson", minPts = c(5, 10, 15, 20),
 #'      eps = c(.1, .15, .2, .25, .3))
+#'      
+#' @references
+#' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 
+#' clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
 #'
 #' @importFrom stats as.dist
 #' @importFrom dbscan kNNdist dbscan

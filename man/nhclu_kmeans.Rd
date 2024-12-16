@@ -26,7 +26,7 @@ the third column name of \code{dissimilarity} is used.}
 
 \item{seed}{for the random number generator (NULL for random by default).}
 
-\item{n_clust}{an \code{integer} or an \code{integer} vector specifying the
+\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
 requested number(s) of clusters}
 
 \item{iter_max}{an \code{integer} specifying the maximum number of
@@ -97,7 +97,7 @@ bioregionalization_metrics(clust2, net = comnet, species_col = "Node2",
 \link{nhclu_pam}
 }
 \author{
-Boris Leroy (\email{leroy.boris@gmail.com}),
-Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
 }

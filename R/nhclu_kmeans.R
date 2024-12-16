@@ -13,7 +13,7 @@
 #' 
 #' @param seed for the random number generator (NULL for random by default).
 #' 
-#' @param n_clust an `integer` or an `integer` vector specifying the
+#' @param n_clust an `integer` vector or a single `integer` value specifying the
 #' requested number(s) of clusters
 #' 
 #' @param iter_max an `integer` specifying the maximum number of
@@ -58,8 +58,8 @@
 #' [kmeans][stats::kmeans].
 #'
 #' @author
-#' Boris Leroy (\email{leroy.boris@gmail.com}),
-#' Pierre Denelle (\email{pierre.denelle@gmail.com}) and
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
 #' @seealso  [nhclu_pam]

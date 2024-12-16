@@ -129,7 +129,7 @@ hierarchical cluster tree: the Dynamic Tree Cut package for R.
 \link{hclu_hierarclust}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}),
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) &
+Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com})
 }
