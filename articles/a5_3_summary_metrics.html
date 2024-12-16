@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2024-12-15</h4>
+            <h4 data-toc-skip class="date">2024-12-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_3_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_summary_metrics.Rmd</code></div>
@@ -159,9 +159,9 @@ to a particular bioregion.</p>
 <span><span class="co">## 3         1         359           2824      407          14.412181</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="sitespecies-metrics">Site/species metrics<a class="anchor" aria-label="anchor" href="#sitespecies-metrics"></a>
+<h2 id="species-metrics">Species metrics<a class="anchor" aria-label="anchor" href="#species-metrics"></a>
 </h2>
-<p>Different indices are available/</p>
+<p>Different summary statistics are available at the species level.</p>
 <div class="section level3">
 <h3 id="contribution-rho">Contribution
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>)<a class="anchor" aria-label="anchor" href="#contribution-rho"></a>
@@ -191,6 +191,44 @@ the number of occurrences of species
 in sites belonging to the bioregion
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>.</p>
 </div>
+<div class="section level3">
+<h3 id="individual-contributions">Individual contributions<a class="anchor" aria-label="anchor" href="#individual-contributions"></a>
+</h3>
+<p>Affinity, fidelity and individual contributions describe how species
+are linked to their bioregions. Affinity of species to their region:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>Z</mi></mfrac></mrow><annotation encoding="application/x-tex">A_i = \frac{R_i}{Z}</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>i</mi></msub><annotation encoding="application/x-tex">R_i</annotation></semantics></math>
+is the occurrence/range size of species
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+in its associated bioregion, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
+the total size (number of sites) of the bioregion.</p>
+<p>A high affinity means that the species is occupying most sites of its
+associated bioregion.</p>
+<p>Fidelity of species to their region:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><msub><mi>D</mi><mi>i</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">F_i = \frac{R_i}{D_i}</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>i</mi></msub><annotation encoding="application/x-tex">R_i</annotation></semantics></math>
+is the occurrence/range size of species
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+in its associated bioregion, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>i</mi></msub><annotation encoding="application/x-tex">D_i</annotation></semantics></math>
+is its total occurrence/range size.</p>
+<p>A high fidelity means that the species is not present in other
+bioregions than their associated one.</p>
+<p>Indicator Value of species:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>n</mi><mi>d</mi><mi>V</mi><mi>a</mi><mi>l</mi><mo>=</mo><msub><mi>F</mi><mi>i</mi></msub><mo>×</mo><msub><mi>A</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">IndVal = F_i \times A_i</annotation></semantics></math><br></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="bipartite-metrics">Bipartite metrics<a class="anchor" aria-label="anchor" href="#bipartite-metrics"></a>
+</h2>
+<p>When running a community detection algorithm on a site x species
+matrix, both sites and species get a bioregion assigned. The degree of
+affinity of both types of nodes can therefore be directly assessed, with
+metrics like the coefficient of participation <code>C</code> or the
+within-bioregion degree <code>z</code>.</p>
 <div class="section level3">
 <h3 id="cz-statistics">Cz statistics<a class="anchor" aria-label="anchor" href="#cz-statistics"></a>
 </h3>
