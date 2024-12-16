@@ -107,8 +107,8 @@ controlled by the parameter q.</p></dd>
 
 
 <dt id="arg-q">q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>
-<dd><p>if p=NA, exemplar preferences are initialized according to the
-distribution of non-Inf values in the similarity matrix. If q=NA, exemplar
+<dd><p>if <code>p = NA</code>, exemplar preferences are initialized according to the
+distribution of non-Inf values in the similarity matrix. If <code>p = NA</code>, exemplar
 preferences are set to the median of non-Inf values in the similarity
 matrix. If q is a value between 0 and 1, the sample quantile with
 threshold q is used, whereas q=0.5 again results in the median.</p></dd>
@@ -120,23 +120,23 @@ threshold q is used, whereas q=0.5 again results in the median.</p></dd>
 
 <dt id="arg-convits">convits<a class="anchor" aria-label="anchor" href="#arg-convits"></a></dt>
 <dd><p>the algorithm terminates if the examplars have not changed
-for convits iterations</p></dd>
+for convits iterations.</p></dd>
 
 
 <dt id="arg-lam">lam<a class="anchor" aria-label="anchor" href="#arg-lam"></a></dt>
 <dd><p>damping factor; should be a value in the range [0.5, 1);
 higher values correspond to heavy damping which may be needed if
-oscillations occur</p></dd>
+oscillations occur.</p></dd>
 
 
 <dt id="arg-details">details<a class="anchor" aria-label="anchor" href="#arg-details"></a></dt>
 <dd><p>if TRUE, more detailed information about the algorithm's
-progress is stored in the output object</p></dd>
+progress is stored in the output object.</p></dd>
 
 
 <dt id="arg-nonoise">nonoise<a class="anchor" aria-label="anchor" href="#arg-nonoise"></a></dt>
 <dd><p>small amount of noise added to the similarity object to
-prevent degenerate cases; disabled when set to TRUE.</p></dd>
+prevent degenerate cases; disabled when set to <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -189,7 +189,8 @@ package (<a href="https://rdrr.io/pkg/apcluster/man/apcluster-methods.html" clas
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Frey2007bioregion</p>
+    <p>Frey B &amp; Dueck D (2007) Clustering by Passing Messages Between Data Points.
+<em>Science</em>, 315, 972-976.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -197,8 +198,8 @@ package (<a href="https://rdrr.io/pkg/apcluster/man/apcluster-methods.html" clas
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>),
-Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>), and
+    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>) <br>
+Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>) <br>
 Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>)</p>
     </div>
 

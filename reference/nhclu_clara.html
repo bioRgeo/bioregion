@@ -102,7 +102,7 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 
 <dt id="arg-n-clust">n_clust<a class="anchor" aria-label="anchor" href="#arg-n-clust"></a></dt>
-<dd><p>an <code>integer</code> or an <code>integer</code> vector specifying the
+<dd><p>an <code>integer</code> vector or a single <code>integer</code> value specifying the
 requested number(s) of clusters.</p></dd>
 
 
@@ -111,8 +111,8 @@ requested number(s) of clusters.</p></dd>
 
 
 <dt id="arg-initializer">initializer<a class="anchor" aria-label="anchor" href="#arg-initializer"></a></dt>
-<dd><p>a <code>character</code>, either 'BUILD' (used in classic PAM
-algorithm) or 'LAB' (linear approximative BUILD).</p></dd>
+<dd><p>a <code>character</code>, either '"BUILD"' (used in classic PAM
+algorithm) or '"LAB"' (linear approximative BUILD).</p></dd>
 
 
 <dt id="arg-fasttol">fasttol<a class="anchor" aria-label="anchor" href="#arg-fasttol"></a></dt>
@@ -159,7 +159,9 @@ package (<a href="https://rdrr.io/pkg/fastkmedoids/man/fastclara.html" class="ex
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Schubert2019bioregion</p>
+    <p>Schubert E &amp; Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the
+PAM, CLARA, and CLARANS Algorithms. <em>Similarity Search and Applications</em>
+, 11807, 171-187.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -167,8 +169,8 @@ package (<a href="https://rdrr.io/pkg/fastkmedoids/man/fastclara.html" class="ex
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>),
-Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>), and
+    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>) <br>
+Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>) <br>
 Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>)</p>
     </div>
 
@@ -193,9 +195,9 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  pc_distance </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      pc_distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.4569126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.4569126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.4569126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.6494731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.6494731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.6494731</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-in"><span></span></span>

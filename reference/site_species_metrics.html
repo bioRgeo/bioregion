@@ -107,16 +107,16 @@ selected.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The \(\rho\) metric is derived from Lenormand2019bioregion.
-Its formula is the following:
-\(\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))\)</p>
+    <p>The \(\rho\) metric is derived from Lenormand et al. (2019).
+Its formula is the following:</p>
+<p>\(\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))\)</p>
 <p>with \(n\) the number of sites, \(n_i\) the number of sites in which
 species \(i\) is present, \(n_j\) the number of sites belonging to the
 bioregion \(j\), \(n_ij\) the number of occurrences of species \(i\)
 in sites belonging to the bioregion \(j\).</p>
 <p>Affinity, fidelity and individual contributions describe how species are
 linked to their bioregions. These metrics are described in
-Bernardo2019bioregion
+Bernardo-Madrid et al. (2019).
 Affinity of species to their region, \(A_i = R_i / Z\)
 where \(R_i\) is the occurrence/range size of species \(i\) in its
 associated bioregion, and \(Z\) the total size (number of sites) of the
@@ -129,7 +129,7 @@ associated bioregion, and \(D_i\) is its total occurrence/range size.</p>
 <p>A high fidelity means that the species is not present in other bioregions
 than their associated one.</p>
 <p>Indicator Value of species, \(IndVal = F_i * A_i\)</p>
-<p><code>Cz</code> metrics are derived from Guimera2005bioregion.
+<p><code>Cz</code> metrics are derived from Guimerà &amp; Amaral (2005).
 Their respective formula are:
 \(C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}\)</p>
 <p>where \(k_{is}\) is the number of links of node (species or site) \(i\)
@@ -147,13 +147,24 @@ The within-bioregion degree z-score measures how well-connected node \(i\)
 is to other nodes in the bioregion.</p>
     </div>
     <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P,
+Antonelli A &amp; Revilla E (2019) Human activity is altering the world’s
+zoogeographical regions. <em>Ecology Letters</em>, 22, 1297–1305.</p>
+<p>Guimerà R &amp; Amaral LAN (2005) Functional cartography of complex metabolic
+networks. <em>Nature</em>, 433, 895–900.</p>
+<p>Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S &amp; Luque S (2019)
+Biogeographical network analysis of plant species distribution in the
+Mediterranean region. <em>Ecology and Evolution</em>, 9, 237–250.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>),
-Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>) and
+    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>) <br>
+Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>) <br>
 Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>)</p>
     </div>
 
