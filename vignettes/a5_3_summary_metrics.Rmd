@@ -87,9 +87,9 @@ bioregion_summary <- bioregion_metrics(cluster_object = vege_nhclu_kmeans,
 bioregion_summary
 ```
 
-# Site/species metrics
+# Species metrics
 
-Different indices are available/
+Different summary statistics are available at the species level.
 
 ## Contribution ($\rho$)
 <center>
@@ -107,6 +107,34 @@ with $n$ the number of sites, $n_i$ the number of sites in which species $i$
 is present, $n_j$ the number of sites belonging to the bioregion $j$, $n_ij$
 the number of occurrences of species $i$ in sites belonging to the bioregion
 $j$.
+
+## Individual contributions
+Affinity, fidelity and individual contributions describe how species are
+linked to their bioregions.
+Affinity of species to their region: $$A_i = \frac{R_i}{Z}$$
+where $R_i$ is the occurrence/range size of species $i$ in its
+associated bioregion, and $Z$ the total size (number of sites) of the
+bioregion.
+
+A high affinity means that the species is occupying most sites of its
+associated bioregion.
+
+Fidelity of species to their region: $$F_i = \frac{R_i}{D_i}$$
+where $R_i$ is the occurrence/range size of species $i$ in its
+associated bioregion, and $D_i$ is its total occurrence/range size.
+
+A high fidelity means that the species is not present in other bioregions
+than their associated one.
+
+Indicator Value of species: $$IndVal = F_i \times A_i$$
+<br>
+
+# Bipartite metrics
+
+When running a community detection algorithm on a site x species matrix, both
+sites and species get a bioregion assigned. The degree of affinity of both
+types of nodes can therefore be directly assessed, with metrics like the
+coefficient of participation `C` or the within-bioregion degree `z`.
 
 ## Cz statistics
 

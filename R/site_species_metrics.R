@@ -33,7 +33,7 @@
 #' linked to their bioregions.
 #' Affinity of species to their region, \eqn{A_i = R_i / Z}
 #' where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
-#' associated cluster, and \eqn{Z} the total size (number of sites) of the
+#' associated bioregion, and \eqn{Z} the total size (number of sites) of the
 #' bioregion.
 #' 
 #' A high affinity means that the species is occupying most sites of its
