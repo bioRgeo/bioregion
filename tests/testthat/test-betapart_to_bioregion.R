@@ -1,6 +1,4 @@
 # Inputs -----------------------------------------------------------------------
-library(betapart)
-
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)
