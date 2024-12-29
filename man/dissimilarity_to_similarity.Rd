@@ -10,18 +10,17 @@ dissimilarity_to_similarity(dissimilarity, include_formula = TRUE)
 \item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}.}
 
-\item{include_formula}{a \code{boolean} indicating if the metrics based on your
-own formula(s) should be converted (see Details). This argument is set to
-\code{TRUE} by default.}
+\item{include_formula}{a \code{boolean} indicating whether metrics based on custom
+formula(s) should also be converted (see Details). The default is \code{TRUE}.}
 }
 \value{
-A \code{data.frame} with additional class
-\code{bioregion.pairwise.metric}, providing similarity
-metric(s) between each pair of sites based on a dissimilarity object.
+A \code{data.frame} with the additional class
+\code{bioregion.pairwise.metric}, providing similarity metrics for each pair of
+sites based on a dissimilarity object.
 }
 \description{
-This function converts a \code{data.frame} of dissimilarity metrics (beta diversity)
-between sites to similarity metrics.
+This function converts a \code{data.frame} of dissimilarity metrics
+(beta diversity) between sites into similarity metrics.
 }
 \note{
 The behavior of this function changes depending on column names. Columns
@@ -58,7 +57,12 @@ similarity
 
 }
 \seealso{
-\code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}} \code{\link[=similarity]{similarity()}} \code{\link[=dissimilarity]{dissimilarity()}}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
+
+Associated functions:
+\link{similarity} \link{dissimilarity_to_similarity}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

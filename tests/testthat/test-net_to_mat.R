@@ -167,9 +167,7 @@ test_that("indalid inputs", {
   
   expect_error(
     net_to_mat(net[,-3], weight = TRUE),
-    "net must be a data.frame with at least three columns if weight equal 
-        TRUE.", 
-    fixed = TRUE)
+    "^net must be a data.frame with at least")
   
   expect_error(
     net_to_mat(net5, weight = TRUE),

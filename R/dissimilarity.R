@@ -1,27 +1,35 @@
 #' Compute dissimilarity metrics (beta-diversity) between sites based on
 #' species composition
-#'
-#' This function creates a `data.frame` where each row provides one or
-#' several dissimilarity metric(s) between each pair of sites from a
+#' 
+#' This function generates a `data.frame` where each row provides one or
+#' several dissimilarity metrics between pairs of sites, based on a 
 #' co-occurrence `matrix` with sites as rows and species as columns.
 #'
-#' @param comat a co-occurrence `matrix` with sites as rows and species
-#' as columns.
+#' @param comat A co-occurrence `matrix` with sites as rows and species as
+#' columns.
 #' 
-#' @param metric a `character` vector or a single `character` string indicating
-#' which metrics to chose (see Details). Available options are `"abc"`, `"ABC"`,
-#'  `"Jaccard"`, `"Jaccardturn"`, `"Sorensen"`, `"Simpson"`, `"Bray"`,
-#'  `"Brayturn"` or `"Euclidean"`. If `"all"` is specified, then all metrics
-#'  will be calculated. Can be set to `NULL` if `formula` is used.
+#' @param metric A `character` vector or a single `character` string specifying
+#' the metrics to compute (see Details). Available options are `"abc"`, `"ABC"`,
+#' `"Jaccard"`, `"Jaccardturn"`, `"Sorensen"`, `"Simpson"`, `"Bray"`,
+#' `"Brayturn"`, and `"Euclidean"`. If `"all"` is specified, all metrics will
+#' be calculated. Can be set to `NULL` if `formula` is used.
 #' 
-#' @param formula a `character` vector or a single `character` string with your 
-#' own formula(s) based on the `a`, `b`, `c`, `A`, `B`, and `C` quantities 
-#' (see Details). `formula` is set to `NULL` by default.
+#' @param formula A `character` vector or a single `character` string specifying 
+#' custom formula(s) based on the `a`, `b`, `c`, `A`, `B`, and `C` quantities 
+#' (see Details). The default is `NULL`.
 #' 
-#' @param method a `character` string indicating what method should be used to 
-#' compute `abc` (see Details). `method = "prodmat"` by default is more 
-#' efficient but can be greedy in memory and `method="loops"` is less efficient 
-#' but less greedy in memory.
+#' @param method A `character` string specifying the method to compute `abc` 
+#' (see Details). The default is `"prodmat"`, which is more efficient but 
+#' memory-intensive. Alternatively, `"loops"` is less memory-intensive but 
+#' slower.
+#' 
+#' @return 
+#' A `data.frame` with the additional class 
+#' `bioregion.pairwise.metric`, containing one or several dissimilarity
+#' metrics between pairs of sites. The first two columns represent the pairs of 
+#' sites. There is one column per similarity metric provided in `metric` and
+#' `formula`, except for the `abc` and `ABC` metrics, which are stored in three 
+#' separate columns (one for each letter).
 #' 
 #' @details
 #' With `a` the number of species shared by a pair of sites, `b` species only
@@ -42,30 +50,26 @@
 #' 
 #' Brayturn = min(B, C)/(A + min(B, C)) (Baselga, 2013)
 #'
-#' with A the sum of the lesser values for common species shared by a pair of
-#' sites. B and C are the total number of specimens counted at both sites minus
-#' A.
+#' with `A` the sum of the lesser values for common species shared by a pair of
+#' sites. `B` and `C` are the total number of specimens counted at both sites 
+#' minus `A`.
 #'
 #' `formula` can be used to compute customized metrics with the terms
 #' `a`, `b`, `c`, `A`, `B`, and `C`. For example
 #' `formula = c("pmin(b,c) / (a + pmin(b,c))", "(B + C) / (2*A + B + C)")`
 #' will compute the Simpson and Bray-Curtis dissimilarity metrics, respectively. 
-#' Note that pmin is used in the Simpson formula because a, b, c, A, B and C 
-#' are `numeric` vectors.
+#' Note that `pmin` is used in the Simpson formula because `a`, `b`, `c`, `A`, 
+#' `B` and `C` are `numeric` vectors.
 #'
 #' Euclidean computes the Euclidean distance between each pair of sites.
-#'
-#' @return 
 #' 
-#' A `data.frame` with additional class `bioregion.pairwise.metric`,
-#' providing one or several dissimilarity
-#' metric(s) between each pair of sites. The two first columns represent each
-#' pair of sites. One column per dissimilarity metric provided in `metric` and 
-#' `formula` except for the metric *abc* and *ABC* that
-#' are stored in three columns (one for each letter).
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
 #' 
-#' @seealso [similarity()] [dissimilarity_to_similarity] 
-#' [similarity_to_dissimilarity]
+#' Associated functions: 
+#' [similarity] [dissimilarity_to_similarity] 
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
@@ -94,14 +98,16 @@
 #' \emph{Methods in Ecology and Evolution}, 4(6), 552--557.
 #' 
 #' @export
-
 dissimilarity <- function(comat, 
                           metric = "Simpson", 
                           formula = NULL,
                           method = "prodmat"){
   
 # Compute similarities
-  res <- similarity(comat, metric = metric, formula = formula, method = method)
+  res <- similarity(comat, 
+                    metric = metric, 
+                    formula = formula, 
+                    method = method)
   
   # Compute dissimilarity
   res <- similarity_to_dissimilarity(res, include_formula = FALSE)

@@ -1,89 +1,92 @@
 # bioregion 1.1.1.9000
 
-This is a list of changes made in the development/GitHub version of the package
+This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.1.1 (CRAN release 2024-04-19) and the next CRAN release.
 
-* Affinity propagation algorithm added (function nhclu_affprop).
+* Added affinity propagation algorithm (`nhclu_affprop()`).
 
-* Added a new method to construct a consensus tree in hclu_hierarclust. This
-method is called Iterative Hierarchical Consensus Tree (IHCT). It conclusively
-solves issues related to the order of sites in the distance matrix and 
-building a consensus hierarchical tree with a meaningful topology.
+* Added a new method in `hclu_hierarclust()` to construct a consensus tree called
+Iterative Hierarchical Consensus Tree (IHCT). This resolves issues related to 
+the order of sites in the distance matrix and builds a consensus hierarchical 
+tree with meaningful topology.
 
-* Many changes to functions related to hclu_hierarclust due to this major change.
+* Made many changes to functions related to `hclu_hierarclust()` due to 
+this major update.
 
-* Updated generic functions to provide plot and print for diana.
+* Updated generic functions to provide `plot` and `print` methods for 
+`hclu_diana()`.
 
-* Function site_species_metrics() added to the package and the workflow.
+* Added `site_species_metrics()` to the package and workflow.
 
-* Function bioregion_metrics() added to the package and the workflow.
+* Added `bioregion_metrics()` to the package and workflow.
 
-* Function subset_node() renamed site_species_subset().
+* Renamed `subset_node()` to `site_species_subset()`.
 
-* Indices Cz added to site_species_metrics().
+* Added indices `Cz` to `site_species_metrics()`.
 
-* Updated install_binaries:
-   - Archive bin.zip now stored on GitHub and backed up on NextCloud  
-   - Added Infomap version 2.8.0
-   - Added argument download_only to only execute the download step  
+* Updated `install_binaries()`:
+  - Archive `bin.zip` now stored on GitHub and backed up on NextCloud.
+  - Added Infomap version 2.8.0.
+  - Added argument `download_only` to execute only the download step.  
 &nbsp;
-* Added argument check_install in netclu_infomap, netclu_louvain, and netclu_oslom.
 
-* Function betapart_to_bioregion() added to the package.
+* Added `check_install` argument to `netclu_infomap()`, `netclu_louvain()`, 
+and `netclu_oslom()`.
 
-* Function compare_bioregionalizations() added to the package.
+* Added `betapart_to_bioregion()` to the package.
 
-* Function bioregionalization_metrics() added to the package.
+* Added `compare_bioregionalizations()` to the package.
 
-* Function bioregion_metrics() added to the package.
+* Added `bioregionalization_metrics()` to the package.
 
+* Updated documentation, vignettes, and tests.
+   
 # bioregion 1.1.1
 
-This is a list of changes made between bioregion 1.1.0 
-(CRAN release 2024-03-19) and bioregion 1.1.1 (CRAN release 2024-04-19).
+This is a list of changes made between **bioregion 1.1.0** 
+(CRAN release 2024-03-19) and **bioregion 1.1.1** (CRAN release 2024-04-19).
 
-* Added hierarchy for Louvain cpp.
+* Added hierarchy support for Louvain (C++).
 
-* Added seed argument to stochastic algorithms (except Louvain cpp).
+* Added `seed` argument to stochastic algorithms (except Louvain C++).
 
-* Added argument cut_weight in netclu_ fonctions.
+* Added `cut_weight` argument to `netclu_*` functions.
 
-* Changed value for sites without cluster (0 -> NA).
+* Changed value for sites without clusters from `0` to `NA`.
 
 * Updated automated tests (code coverage > 60%).
 
-* Controls and outputs/inputs standardization.
- 
-* Fixed a bug in find_optimal_n() in the special case where partition 
-metrics did not vary.
+* Standardized controls, inputs, and outputs.
 
-# bioregion 1.1.0 
+* Fixed a bug in `find_optimal_n()` for cases where partition metrics 
+did not vary.
 
-This is a list of changes made between bioregion 1.0.0 
-(CRAN release 2023-04-15) and bioregion 1.1.0 (CRAN release 2024-03-19).
+# bioregion 1.1.0
 
-* Added the resolution parameter in the igraph Louvain version.
+This is a list of changes made between **bioregion 1.0.0** 
+(CRAN release 2023-04-15) and **bioregion 1.1.0** (CRAN release 2024-03-19).
 
-* Added possibility to remove diagonal and lower triangular matrix in 
-mat_to_net() for squared matrix with argument include_diag and include_lower.
+* Added the `resolution` parameter to the igraph Louvain implementation.
 
-* Added a function to extract a subset of node according to its type (sites or 
-species) from a bioregion.clusters object containing both types of nodes (sites 
-and species).
+* Added options to `mat_to_net()` to exclude diagonal and lower triangular 
+matrices using `include_diag` and `include_lower`.
 
-* Added a generic function to maintain attributes of bioregion.pairwise.metric
-objects + keep track of number of sites and species.
+* Added a function to extract a subset of nodes (sites or species) from 
+`bioregion.clusters` objects containing both types.
 
-* Functions added: nhclu_clara(), nhclu_clarans().  
+* Added a generic function to maintain attributes of `bioregion.pairwise.metric`
+objects and track the number of sites and species.
 
-* The corresponding vignettes are edited to document the new functions.  
+* Added new functions: `nhclu_clara()` and `nhclu_clarans()`.
 
-* Modification of the way 'bioregion.pairwise.metric' object are controlled.
+* Edited vignettes to document new functions.
 
-* Allow to (not) select 'formula metrics' in 
-similarity_dissimilarity_conversion() with the new argument "include_formula".
+* Modified controls for `bioregion.pairwise.metric` objects.
 
-* Allow negative values in similarity() with the Euclidean metric.
+* Added the `include_formula` argument to 
+`similarity_dissimilarity_conversion()` to (not) select formula metrics.
+
+* Allowed negative values in `similarity()` with the Euclidean metric.
 
 # bioregion 1.0.0 
 

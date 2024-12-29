@@ -209,10 +209,7 @@ test_that("invalid inputs", {
   
   expect_error(
     netclu_louvain(dissimil),
-    "net seems to be a dissimilarity object. 
-This function should be applied on similarities, not dissimilarities. 
-Use dissimilarity_to_similarity() before using this function.",
-    fixed = TRUE)
+    "^net seems to be a dissimilarity object")
   
   expect_error(
     netclu_louvain("1"),
@@ -261,9 +258,7 @@ Use dissimilarity_to_similarity() before using this function.",
   
   expect_error(
     netclu_louvain(net[,-3], weight = TRUE),
-    "net must be a data.frame with at least three columns if weight equal 
-        TRUE.", 
-    fixed = TRUE)
+    "^net must be a data.frame with at least three columns if")
   
   expect_error(
     netclu_louvain(net, index = c("zz",1)),
@@ -272,15 +267,11 @@ Use dissimilarity_to_similarity() before using this function.",
   
   expect_error(
     netclu_louvain(net, index = "zz"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be a ")
   
   expect_error(
     netclu_louvain(net, index = "Site1"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should ")
   
   expect_error(
     netclu_louvain(net, index = 0.1),
@@ -289,7 +280,7 @@ Use dissimilarity_to_similarity() before using this function.",
   
   expect_error(
     netclu_louvain(net, index = 2),
-    "index should be stricltly higher than 2.",
+    "index should be strictly higher than 2.",
     fixed = TRUE)
   
   expect_error(
@@ -299,7 +290,7 @@ Use dissimilarity_to_similarity() before using this function.",
   
   expect_error(
     netclu_louvain(simil, index = 1),
-    "index should be stricltly higher than 2.",
+    "index should be strictly higher than 2.",
     fixed = TRUE)
   
   expect_error(
@@ -319,38 +310,27 @@ Use dissimilarity_to_similarity() before using this function.",
   
   expect_error(
     netclu_louvain(net6, weight = TRUE),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_louvain(net6, weight = TRUE, index = 3),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_louvain(net6, weight = TRUE, index = "Weight"),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_louvain(net6, weight = TRUE, index = 5),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_louvain(net6, weight = TRUE, index = "Weight3"),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
-    fixed = TRUE)
-  
-  expect_error(
-    netclu_louvain(net6, weight = TRUE, index = "Weight3"),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(

@@ -109,10 +109,7 @@ test_that("invalid inputs", {
   
   expect_error(
     hclu_optics(dissimilarity = "zz"),
-    "dissimilarity is not a bioregion.pairwise.metric object, 
-a dissimilarity matrix (class dist) or 
-a data.frame with at least 3 columns (site1, site2 and your dissimilarity index).",
-    fixed = TRUE)
+    "^dissimilarity is not a bioregion.pairwise.metric object")
   
   expect_error(
     hclu_optics(dissim2),
@@ -176,15 +173,11 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     hclu_optics(dissim, index = "zz"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be ")
   
   expect_error(
     hclu_optics(dissim, index = "Site1"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be ")
   
   expect_error(
     hclu_optics(dissim, index = 0.1),
@@ -193,7 +186,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     hclu_optics(dissim, index = 2),
-    "index should be stricltly higher than 2.",
+    "index should be strictly higher than 2.",
     fixed = TRUE)
   
   expect_error(

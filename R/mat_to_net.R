@@ -1,34 +1,45 @@
 #' Create a data.frame from a contingency table
 #'
-#' This function creates a two- or three-columns `data.frame` where
-#' each row represents the interaction between two nodes (site and species for
-#' example) and an optional third column indicating the weight of the
-#' interaction (if `weight = TRUE`) from a contingency table (sites as
-#' rows and species as columns for example).
+#' This function generates a two- or three-column `data.frame`, where
+#' each row represents the interaction between two nodes (e.g., site and species) 
+#' and an optional third column indicates the weight of the interaction 
+#' (if `weight = TRUE`). The input is a contingency table, with rows 
+#' representing one set of entities (e.g., site) and columns representing 
+#' another set (e.g., species).
 #'
-#' @param mat a contingency table (i.e. `matrix`).
+#' @param mat A contingency table (i.e., a `matrix`).
 #'
-#' @param weight a `boolean` indicating if the value are weights.
+#' @param weight A `logical` value indicating whether the values in the matrix 
+#' should be interpreted as interaction weights.
 #'
-#' @param remove_zeroes a `boolean` determining whether interactions with
-#' weight equal to 0 should be removed from the output.
+#' @param remove_zeroes A `logical` value determining whether interactions with
+#' a weight equal to 0 should be excluded from the output.
 #'
-#' @param include_diag a `boolean` indicating whether the diagonal
-#' should be included in the output. Only for squared matrix.
+#' @param include_diag A `logical` value indicating whether the diagonal
+#' (self-interactions) should be included in the output. This applies only to 
+#' square matrices.
 #'
-#' @param include_lower a `boolean` indicating whether the lower triangular
-#' matrix should be included in the output. Only for squared matrix.
+#' @param include_lower A `logical` value indicating whether the lower 
+#' triangular part of the `matrix` should be included in the output. This 
+#' applies only to square matrices.
 #'
-#' @return A `data.frame` where each row represents the interaction
-#' between two nodes and an optional third column indicating the weight of the
-#' interaction.
+#' @return 
+#' A `data.frame` where each row represents the interaction
+#' between two nodes. If `weight = TRUE`, the `data.frame` includes a third 
+#' column representing the weight of each interaction.
+#' 
+#' @seealso
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html}.
+#' 
+#' Associated functions: 
+#' [net_to_mat]
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' 
-#' @seealso [net_to_mat]
 #'
 #' @examples
 #' mat <- matrix(sample(1000, 50), 5, 10)
@@ -40,7 +51,6 @@
 #' @importFrom tidyr pivot_longer
 #'
 #' @export
-
 mat_to_net <- function(mat,
                        weight = FALSE,
                        remove_zeroes = TRUE,

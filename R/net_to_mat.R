@@ -1,41 +1,49 @@
 #' Create a contingency table from a data.frame
 #'
-#' This function creates a contingency table from a two- or three-columns
-#' `data.frame` where each row represents the interaction between two
-#' nodes (site and species for example) and an optional third column indicating
+#' This function generates a contingency table from a two- or three-column
+#' `data.frame`, where each row represents the interaction between two
+#' nodes (e.g., site and species) and an optional third column indicates
 #' the weight of the interaction (if `weight = TRUE`).
 #'
-#' @param net a two- or three-columns `data.frame` where each row
-#' represents the interaction between two nodes (site and species for example)
-#' and an optional third column indicating the weight of the interaction.
+#' @param net A two- or three-column `data.frame` where each row
+#' represents the interaction between two nodes (e.g., site and species), 
+#' with an optional third column indicating the weight of the interaction.
 #'
-#' @param weight a `boolean` indicating if the weight should be considered
+#' @param weight A `logical` value indicating whether the weight column 
+#' should be considered.
 #'
-#' @param squared a `boolean` indicating if the output matrix should but
-#' squared (same nodes in rows and columns).
+#' @param squared A `logical` value indicating whether the output matrix 
+#' should be square (i.e., containing the same nodes in rows and columns).
 #'
-#' @param symmetrical a `boolean` indicating if the resulting matrix
-#' should be symmetrical (only if `squared = TRUE`).
-#' Note that different weights associated with two opposite pairs already
-#' present in net will be preserved.
+#' @param symmetrical A `logical` value indicating whether the resulting 
+#' matrix should be symmetrical. This applies only if `squared = TRUE`. 
+#' Note that different weights associated with opposite pairs already present 
+#' in `net` will be preserved.
 #'
-#' @param missing_value the value to assign to the pairs of nodes not present
-#' in net (0 by default).
+#' @param missing_value The value to assign to pairs of nodes not present 
+#' in `net`. Defaults to `0`.
 #'
-#' @return A `matrix` with the first nodes (first column of `net`) as
-#' rows and the second nodes (second column of `net`) as columns. Note
-#' that if `squared = TRUE` the rows and columns have the same number of
-#' elements corresponding to the concatenation of unique objects in
-#' `net`'s first and second columns. If `squared = TRUE` the matrix
-#' can be forced to be symmetrical based on the upper triangular part of the
-#' matrix.
+#' @return 
+#' A `matrix` with the first nodes (from the first column of `net`) 
+#' as rows and the second nodes (from the second column of `net`) as columns. 
+#' If `squared = TRUE`, the rows and columns will have the same number of 
+#' elements, corresponding to the unique union of objects in the first and 
+#' second columns of `net`. If `squared = TRUE` and `symmetrical = TRUE`, 
+#' the matrix will be forced to be symmetrical based on the upper triangular 
+#' part of the matrix.
+#' 
+#' @seealso
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html}.
+#' 
+#' Associated functions: 
+#' [mat_to_net]
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#'
-#' @seealso [mat_to_net]
 #'
 #' @examples
 #' net <- data.frame(

@@ -1,38 +1,43 @@
-#' Download, unzip, check permission and test the bioregion's binary files
+#' Download, unzip, check permissions, and test the bioregion's binary files
 #'
-#' This function downloads and unzips the 'bin' folder needed to run some
-#' functions of bioregion. It also checks if the files have the permissions to
-#' be executed as programs. It finally tests if the binary files
-#' are running properly.
+#' This function downloads and unzips the 'bin' folder required to run certain
+#' functions of the `bioregion` package. It also verifies if the files have the
+#' necessary permissions to be executed as programs. Finally, it tests whether
+#' the binary files are running correctly.
 #'
-#' @param binpath a `character` indicating the path to the folder that will
-#' host the 'bin' folder containing the binary files (see Details).
-#' 
-#' @param download_only a `boolean` indicating whether the function should only
-#' download the 'bin.zip' file or execute the entire process (see Details).
+#' @param binpath A `character` string specifying the path to the folder that
+#' will host the `bin` folder containing the binary files (see Details).
 #'
-#' @param infomap_version a `character` vector or a single `character` string 
-#' indicating the Infomap version(s) to install.
+#' @param download_only A `logical` value indicating whether the function should
+#' only download the `bin.zip` file or perform the entire process (see Details).
 #'
-#' @details By default, the binary files are installed in R's temporary
-#' directory (`binpath = "tempdir"`). In this case the `bin` folder will be
-#' automatically removed at the end of the R session. Alternatively, the binary
-#' files can be installed in the bioregion's package folder 
-#' (`binpath = "pkgfolder"`).
-#' 
-#' Finally, a path to a folder of your choice can be specified. In this case 
-#' , and only in this case, `download_only` can be set to `TRUE`, but you must 
-#' ensure that the files have the necessary permissions to be executed as 
-#' programs.
-#'
-#' **In any case, PLEASE MAKE SURE to update the `binpath` and `check_install` 
-#' accordingly in [netclu_infomap], [netclu_louvain] and [netclu_oslom]).**
-#'
-#' @note
-#' Only the Infomap version 2.1.0, 2.6.0, 2.7.1 and 2.8.0 are available for now.
+#' @param infomap_version A `character` vector or a single `character` string 
+#' specifying the Infomap version(s) to install.
 #'
 #' @return
-#' No return value
+#' No return value.
+#'
+#' @details By default, the binary files are installed in R's temporary
+#' directory (`binpath = "tempdir"`). In this case, the `bin` folder will be
+#' automatically removed at the end of the R session. Alternatively, the binary
+#' files can be installed in the `bioregion` package folder 
+#' (`binpath = "pkgfolder"`).
+#'
+#' A custom folder path can also be specified. In this case, and only in this
+#' case, `download_only` can be set to `TRUE`, but you must ensure that the
+#' files have the required permissions to be executed as programs.
+#'
+#' **In all cases, PLEASE MAKE SURE to update the `binpath` and `check_install` 
+#' parameters accordingly in [netclu_infomap], [netclu_louvain], and 
+#' [netclu_oslom].**
+#'
+#' @note
+#' Currently, only Infomap versions 2.1.0, 2.6.0, 2.7.1, and 2.8.0 are available.
+#'
+#' @seealso
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a1_install_binary_files.html}.
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
@@ -40,7 +45,6 @@
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #'
 #' @export
-
 install_binaries <- function(binpath = "tempdir",
                              download_only = FALSE,
                              infomap_version = c("2.1.0", 
@@ -53,7 +57,8 @@ install_binaries <- function(binpath = "tempdir",
   controls(args <- download_only, data = NULL, type = "boolean")
   if(binpath == "tempdir" | binpath == "pkgfolder"){
     if(download_only){
-      stop("download_only cannot be set to TRUE if binpath is tempdir or pkgfolder!", 
+      stop(paste0("download_only cannot be set to TRUE if binpath is tempdir ",
+                  "or pkgfolder!"), 
            call. = FALSE)
     }
   }
@@ -65,7 +70,10 @@ install_binaries <- function(binpath = "tempdir",
     binpath <- paste0(.libPaths()[1], "/bioregion")
   } else {
     if (!dir.exists(binpath)) {
-      stop(paste0("Impossible to access ", binpath), call. = FALSE)
+      stop(paste0("Impossible to access ", 
+                  binpath,
+                  "."), 
+           call. = FALSE)
     }
   }
   binpath <- normalizePath(binpath)
@@ -77,17 +85,15 @@ install_binaries <- function(binpath = "tempdir",
   infomap_version <- infomap_version[!duplicated(infomap_version)]
 
   if (length(infomap_version) > length(infomap_versiondispo)) {
-    stop(paste0(
-      "Please choose versions of Infomap in the list: ",
-      paste(infomap_versiondispo, collapse = " ")
-    ), call. = FALSE)
+    stop(paste0("Please select a version of Infomap from the list:\n",
+                paste(infomap_versiondispo, collapse = " ")), 
+         call. = FALSE)
   }
 
   if (length(setdiff(infomap_version, infomap_versiondispo)) > 0) {
-    stop(paste0(
-      "Please choose versions of Infomap in the list: ",
-      paste(infomap_versiondispo, collapse = " ")
-    ), call. = FALSE)
+    stop(paste0("Please select a version of Infomap from the list:\n",
+                paste(infomap_versiondispo, collapse = " ")), 
+         call. = FALSE)
   }
   nbversion <- length(infomap_version)
 
@@ -108,18 +114,17 @@ install_binaries <- function(binpath = "tempdir",
   backup <- "https://www.mmmycloud.com/index.php/s/wnyLYFZGESyckW8/download"
   if(httr::HEAD(url)$status_code == 200){
     utils::download.file(url, paste0(binpath, "/bin.zip"), mode = "wb")
-    message(paste0(
-      "The folder has been successfully downloaded to ",
-      binpath, "."
-    ))
+    message(paste0("The folder has been successfully downloaded to ",
+                   binpath, 
+                   "."))
   }else if(httr::HEAD(backup)$status_code == 200){
     utils::download.file(backup, paste0(binpath, "/bin.zip"), mode = "wb")
-    message(paste0(
-      "The folder has been successfully downloaded to ",
-      binpath, "."
-    ))
+    message(paste0("The folder has been successfully downloaded to ",
+                   binpath, 
+                   "."))
   }else{
-    stop(paste0("An error occurred. Check your connection or contact the maintainers."),
+    stop(paste0("An error occurred. ",
+                "Check your connection or contact the maintainers."),
          call. = FALSE)
   }
   
@@ -175,14 +180,16 @@ install_binaries <- function(binpath = "tempdir",
     for (vinf in 1:nbversion) {
       files <- c(
         files,
-        paste0(
-          binpath, "/bin/INFOMAP/", infomap_version[vinf],
-          "/infomap_omp_", osid
-        ),
-        paste0(
-          binpath, "/bin/INFOMAP/", infomap_version[vinf],
-          "/infomap_noomp_", osid
-        )
+        paste0(binpath, 
+               "/bin/INFOMAP/", 
+               infomap_version[vinf],
+               "/infomap_omp_", 
+               osid),
+        paste0(binpath, 
+               "/bin/INFOMAP/", 
+               infomap_version[vinf],
+               "/infomap_noomp_", 
+               osid)
       )
     }
     files <- c(
@@ -208,10 +215,14 @@ install_binaries <- function(binpath = "tempdir",
       file <- files[f]
       perm[f] <- file.access(file, mode = 1)
       if (perm[f] == -1) {
-        message(paste0("Permission to execute ", file, " as program: denied."))
+        message(paste0("Permission to execute ", 
+                       file, 
+                       " as program: denied."))
       } else {
         perm[f] == 10
-        message(paste0("Permission to execute ", file, " as program: granted."))
+        message(paste0("Permission to execute ", 
+                       file, 
+                       " as program: granted."))
       }
     }
     
@@ -234,16 +245,14 @@ install_binaries <- function(binpath = "tempdir",
           }
           perm[f] <- file.access(file, mode = 1)
           if (perm[f] == -1) {
-            message(paste0(
-              "Automatic change of permission of ", file,
-              " failed"
-            ))
+            message(paste0("Automatic change of permission of ", 
+                           file,
+                           " failed."))
           } else {
             perm[f] == 10
-            message(paste0(
-              "Automatic change of permission succeed, ", file,
-              " can now be executed as progam"
-            ))
+            message(paste0("Automatic change of permission succeed, ", 
+                           file,
+                           " can now be executed as progam."))
           }
         }
       }
@@ -262,7 +271,7 @@ install_binaries <- function(binpath = "tempdir",
         }
         
         message(" ")
-        message("Permission to execute the following files as program denied")
+        message("Permission to execute the following files as program denied.")
         message(" ")
         for (file in nopermfiles) {
           message(file)
@@ -270,8 +279,7 @@ install_binaries <- function(binpath = "tempdir",
         
         message(" ")
         ask <- utils::menu(
-          c(
-            "I've just tried to change the permission manually and I want to check the permission again",
+          c("I've just tried to change the permission manually and I want to check the permission again",
             "I would like to continue the execution of the function without checking the permission",
             "I would like to stop the function"
           ),
@@ -293,7 +301,7 @@ install_binaries <- function(binpath = "tempdir",
         } else {
           unlink(paste0(binpath, "/bin"), recursive = TRUE)
           message(" ")
-          stop("Function install_binaries() stopped", call. = FALSE)
+          stop("Function install_binaries() stopped.", call. = FALSE)
         }
       }
     }
@@ -373,35 +381,33 @@ install_binaries <- function(binpath = "tempdir",
       if (!(testopm | testnoopm)) {
         message(" ")
         message("Infomap is not installed...")
-        message("Please have a look at
-      https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
-              for more details")
+        message(paste0("Please have a look at ",
+                       "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                       " for more details."))
       } else {
         if (testopm) {
-          message(
-            "Congratulation, you successfully install the ",
-            version, " OpenMP version of Infomap!"
-          )
+          message(paste0("Congratulation, you successfully install the ",
+                         version, 
+                         " OpenMP version of Infomap!"))
           file.copy(
             paste0(path, files[1]),
             paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
           )
         } else {
           message(" ")
-          message(
-            "Congratulation, you successfully install the ", version,
-            " no OpenMP version of Infomap!"
-          )
+          message(paste0("Congratulation, you successfully install the ", 
+                         version,
+                         " no OpenMP version of Infomap!"))
           file.copy(
             paste0(path, files[2]),
             paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
           )
           message(" ")
-          message("A library is probably missing to install the OpenMP
-                version...")
-          message("Please have a look at 
-https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
-                for more details")
+          message(paste0("A library is probably missing to install the OpenMP ",
+                         "version..."))
+          message(paste0("Please have a look at ",
+                         "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                         " for more details."))
         }
         utils::write.table(1, paste0(path, "check.txt"))
       }
@@ -461,14 +467,13 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
     if (!testlouvain) {
       message(" ")
       message("Louvain is not installed...")
-      message("Please have a look at 
-https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
-            for more details")
+      message(paste0("Please have a look at ",
+                     "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                     " for more details."))
     } else {
-      message(
-        "Congratulation, you successfully install the version ",
-        version, " of Louvain!"
-      )
+      message(paste0("Congratulation, you successfully install the version ",
+                     version, 
+                     " of Louvain!"))
       utils::write.table(1, paste0(path, "check.txt"))
     }
     
@@ -564,9 +569,9 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
     if (!testundir) {
       message(" ")
       message("OSLOM is not installed...")
-      message("Please have a look at 
-https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
-            for more details")
+      message(paste0("Please have a look at ",
+                     "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                     " for more details."))
     } else {
       message(
         "Congratulation, you successfully install the version ", version,
@@ -575,11 +580,11 @@ https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
       utils::write.table(1, paste0(path, "check.txt"))
       
       if (!testdir) {
-        message("Warning: only the undirected version of OSLOM has been
-              installed...")
-        message("Please have a look at 
-https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html
-              for more details")
+        message(paste0("Warning: only the undirected version of OSLOM ",
+                       "has been installed..."))
+        message(paste0("Please have a look at ",
+                       "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                       " for more details."))
       } else {
         utils::write.table(1, paste0(path, "checkdir.txt"))
       }

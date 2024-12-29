@@ -64,6 +64,29 @@
 #' @param verbose a `boolean`. (only if 
 #' `optimal_tree_method = "iterative_consensus_tree"`), Set to `FALSE` if you 
 #' want to disable the progress message 
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: `character` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the clustering process}
+#' \item{**algorithm**: `list` of all objects associated with the
+#'  clustering procedure, such as original cluster objects}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
+#'
+#' In the `algorithm` slot, users can find the following elements:
+#'
+#' \itemize{
+#' \item{`trials`: a list containing all randomization trials. Each trial
+#' contains the dissimilarity matrix, with site order randomized, the
+#' associated tree and the cophenetic correlation coefficient (Spearman) for
+#' that tree}
+#' \item{`final.tree`: a `hclust` object containing the final
+#' hierarchical tree to be used}
+#' \item{`final.tree.coph.cor`: the cophenetic correlation coefficient
+#' between the initial dissimilarity matrix and `final.tree`}
+#' }
 #'  
 #' @details
 #' The function is based on [hclust][fastcluster::hclust].
@@ -135,32 +158,9 @@
 #' which will only select the tree with the highest cophenetic correlation
 #' coefficient among all randomized versions of the distance matrix. 
 #'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, users can find the following elements:
-#'
-#' \itemize{
-#' \item{`trials`: a list containing all randomization trials. Each trial
-#' contains the dissimilarity matrix, with site order randomized, the
-#' associated tree and the cophenetic correlation coefficient (Spearman) for
-#' that tree}
-#' \item{`final.tree`: a `hclust` object containing the final
-#' hierarchical tree to be used}
-#' \item{`final.tree.coph.cor`: the cophenetic correlation coefficient
-#' between the initial dissimilarity matrix and `final.tree`}
-#' }
-#'
 #' @references
 #' Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
-#' based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
+#' based on species distributions. \emph{Journal of Biogeography} 37, 2029-2053.
 #' 
 #' Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH 
 #' (2013) Recluster: an unbiased clustering procedure for beta-diversity 
@@ -168,15 +168,22 @@
 #' 
 #' Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure 
 #' for extrapolating turnover regionalization at mid-small spatial scales, 
-#' tested on British butterflies. \emph{Methods in Ecology and Evolution}, 6(11)
+#' tested on British butterflies. \emph{Methods in Ecology and Evolution} 6
 #' , 1287--1297. 
+#' 
+#' @seealso
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html}.
+#' 
+#' Associated functions: 
+#' [cut_tree]
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso [cut_tree]
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 #' 20, 25)
@@ -226,7 +233,6 @@
 #' @importFrom fastcluster hclust
 #' 
 #' @export
-
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
                              method = "average",
@@ -241,6 +247,7 @@ hclu_hierarclust <- function(dissimilarity,
                              h_min = 0,
                              consensus_p = 0.5,
                              verbose = TRUE){
+  
 # TODO: Add show_hierarchy to hclu_hierarclust AND cut_tree
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")

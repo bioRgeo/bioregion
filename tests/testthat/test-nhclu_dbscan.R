@@ -100,10 +100,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_dbscan(dissimilarity = "zz"),
-    "dissimilarity is not a bioregion.pairwise.metric object, 
-a dissimilarity matrix (class dist) or 
-a data.frame with at least 3 columns (site1, site2 and your dissimilarity index).",
-    fixed = TRUE)
+    "^dissimilarity is not a bioregion.pairwise.metric object")
   
   expect_error(
     nhclu_dbscan(dissim2),
@@ -167,15 +164,11 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_dbscan(dissim, index = "zz"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be a column name")
   
   expect_error(
     nhclu_dbscan(dissim, index = "Site1"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be a column name")
   
   expect_error(
     nhclu_dbscan(dissim, index = 0.1),
@@ -184,7 +177,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_dbscan(dissim, index = 2),
-    "index should be stricltly higher than 2.",
+    "index should be strictly higher than 2.",
     fixed = TRUE)
   
   expect_error(
@@ -199,7 +192,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_dbscan(dissim, minPts = c(1.1,2)),
-    "minPts must be composed of integer(s).",
+    "minPts must be composed of integers.",
     fixed = TRUE)  
   
   expect_error(
@@ -219,7 +212,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_dbscan(dissim, eps = -1),
-    "eps must be composed of value(s) higher than 0.",
+    "eps must be composed of values higher than 0.",
     fixed = TRUE) 
   
   expect_error(

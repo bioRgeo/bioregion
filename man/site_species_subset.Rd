@@ -2,33 +2,33 @@
 % Please edit documentation in R/site_species_subset.R
 \name{site_species_subset}
 \alias{site_species_subset}
-\title{Extract a subset of sites or species from a bioregion.clusters object}
+\title{Extract a subset of sites or species from a \code{bioregion.clusters} object}
 \usage{
 site_species_subset(clusters, node_type = "site")
 }
 \arguments{
-\item{clusters}{an object of class \code{bioregion.clusters}.}
+\item{clusters}{An object of class \code{bioregion.clusters}.}
 
-\item{node_type}{a \code{character} indicating what types of nodes
-(\code{"site"} or \code{"species"}) should be extracted
-(\code{node_type = "site"} by default).}
+\item{node_type}{A \code{character} string indicating the type of nodes to
+extract. Possible values are \code{"site"} or \code{"species"}. The default is
+\code{"site"}.}
 }
 \value{
-An object of class \code{bioregion.clusters} with a given node type (sites
-or species).
+An object of class \code{bioregion.clusters} containing only the specified
+node type (sites or species).
 }
 \description{
-This function extracts a subset of nodes according to its type (sites or
-species) from a bioregion.clusters object containing both types of
+This function extracts a subset of nodes based on their type (\code{"site"} or
+\code{"species"}) from a \code{bioregion.clusters} object, which contains both types of
 nodes (sites and species).
 }
 \note{
-The network clustering functions (prefix \code{netclu_}) may return both types of
-nodes (sites and species) when applied on bipartite networks
-(argument \code{bipartite}). In this case, the type of nodes returned in the
-output can be chosen with the argument \code{return_node_type}. This function
-allows to retrieve a particular type of nodes (sites or species) from the
-output and modify the return_node_type accordingly.
+Network clustering functions (prefixed with \code{netclu_}) may return both types
+of nodes (sites and species) when applied to bipartite networks (using the
+\code{bipartite} argument). In such cases, the type of nodes included in the
+output can be specified with the \code{return_node_type} argument. This function
+allows you to extract a particular type of nodes (sites or species) from the
+output and adjust the \code{return_node_type} attribute accordingly.
 }
 \examples{
 net <- data.frame(

@@ -109,16 +109,10 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_affprop("zz"),
-    "similarity is not a bioregion.pairwise.metric object, 
-a dissimilarity matrix (class dist) or 
-a data.frame with at least 3 columns (site1, site2 and your dissimilarity index).",
-    fixed = TRUE)
+    "^similarity is not a bioregion.pairwise.metric object")
   
   expect_error(
     nhclu_affprop(dissim),
-    "similarity seems to be a dissimilarity object. 
-This function should be applied on similarities, not dissimilarities. 
-Use dissimilarity_to_similarity() before using this function.",
-    fixed = TRUE)
+    "^similarity seems to be a dissimilarity object")
   
 })

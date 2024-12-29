@@ -33,24 +33,19 @@ test_that("valid output", {
 test_that("invalid inputs", {
   
   expect_error(
-    similarity_to_dissimilarity("2", include_formula = TRUE),
-    "similarity should be a bioregion.pairwise.metric object created by 
-similarity() or dissimilarity_to_similarity().",
-    fixed = TRUE)
+    similarity_to_dissimilarity("2", 
+                                include_formula = TRUE),
+    "^similarity should be a bioregion.pairwise.metric object created by")
   
   expect_error(
-    similarity_to_dissimilarity(simil2, include_formula = TRUE),
-    "similarity is a bioregion.pairwise.metric object but it has not 
-been possible to identify the object's type (similarity or dissimilarity) 
-probably because the bioregion.pairwise.metric object has been altered.",
-    fixed = TRUE)
+    similarity_to_dissimilarity(simil2, 
+                                include_formula = TRUE),
+    "^similarity is a bioregion.pairwise.metric object but it has not")
   
   expect_error(
-    similarity_to_dissimilarity(simil3, include_formula = TRUE),
-    "similarity is already composed of 
-dissimilarity metrics. If you want to convert it to similarity, use 
-dissimilarity_to_similarity().",
-    fixed = TRUE)
+    similarity_to_dissimilarity(simil3, 
+                                include_formula = TRUE),
+    "^similarity is already composed of")
   
   expect_error(
     similarity_to_dissimilarity(simil, include_formula = "zz"),

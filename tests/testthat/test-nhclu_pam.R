@@ -117,10 +117,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_pam(dissimilarity = "zz"),
-    "dissimilarity is not a bioregion.pairwise.metric object, 
-a dissimilarity matrix (class dist) or 
-a data.frame with at least 3 columns (site1, site2 and your dissimilarity index).",
-    fixed = TRUE)
+    "^dissimilarity is not a bioregion.pairwise.metric object")
   
   expect_error(
     nhclu_pam(dissim2),
@@ -184,15 +181,11 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_pam(dissim, index = "zz"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be a column name")
   
   expect_error(
     nhclu_pam(dissim, index = "Site1"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be a column name")
   
   expect_error(
     nhclu_pam(dissim, index = 0.1),
@@ -201,7 +194,7 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_pam(dissim, index = 2),
-    "index should be stricltly higher than 2.",
+    "index should be strictly higher than 2.",
     fixed = TRUE)
   
   expect_error(
@@ -241,22 +234,22 @@ a data.frame with at least 3 columns (site1, site2 and your dissimilarity index)
   
   expect_error(
     nhclu_pam(dissim, n_clust = c(1.1,2)),
-    "n_clust must be composed of integer(s).",
+    "n_clust must be composed of integers.",
     fixed = TRUE)  
   
   expect_error(
     nhclu_pam(dissim, n_clust = -1),
-    "n_clust must be composed of value(s) strictly higher than 0.",
+    "n_clust must be composed of values strictly higher than 0.",
     fixed = TRUE) 
   
   expect_error(
     nhclu_pam(dissim, n_clust = c(1,-1)),
-    "n_clust must be composed of value(s) strictly higher than 0.",
+    "n_clust must be composed of values strictly higher than 0.",
     fixed = TRUE) 
   
   expect_error(
     nhclu_pam(dissim, n_clust = 0),
-    "n_clust must be composed of value(s) strictly higher than 0.",
+    "n_clust must be composed of values strictly higher than 0.",
     fixed = TRUE)  
   
   expect_error(

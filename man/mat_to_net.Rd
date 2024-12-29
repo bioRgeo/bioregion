@@ -13,30 +13,34 @@ mat_to_net(
 )
 }
 \arguments{
-\item{mat}{a contingency table (i.e. \code{matrix}).}
+\item{mat}{A contingency table (i.e., a \code{matrix}).}
 
-\item{weight}{a \code{boolean} indicating if the value are weights.}
+\item{weight}{A \code{logical} value indicating whether the values in the matrix
+should be interpreted as interaction weights.}
 
-\item{remove_zeroes}{a \code{boolean} determining whether interactions with
-weight equal to 0 should be removed from the output.}
+\item{remove_zeroes}{A \code{logical} value determining whether interactions with
+a weight equal to 0 should be excluded from the output.}
 
-\item{include_diag}{a \code{boolean} indicating whether the diagonal
-should be included in the output. Only for squared matrix.}
+\item{include_diag}{A \code{logical} value indicating whether the diagonal
+(self-interactions) should be included in the output. This applies only to
+square matrices.}
 
-\item{include_lower}{a \code{boolean} indicating whether the lower triangular
-matrix should be included in the output. Only for squared matrix.}
+\item{include_lower}{A \code{logical} value indicating whether the lower
+triangular part of the \code{matrix} should be included in the output. This
+applies only to square matrices.}
 }
 \value{
 A \code{data.frame} where each row represents the interaction
-between two nodes and an optional third column indicating the weight of the
-interaction.
+between two nodes. If \code{weight = TRUE}, the \code{data.frame} includes a third
+column representing the weight of each interaction.
 }
 \description{
-This function creates a two- or three-columns \code{data.frame} where
-each row represents the interaction between two nodes (site and species for
-example) and an optional third column indicating the weight of the
-interaction (if \code{weight = TRUE}) from a contingency table (sites as
-rows and species as columns for example).
+This function generates a two- or three-column \code{data.frame}, where
+each row represents the interaction between two nodes (e.g., site and species)
+and an optional third column indicates the weight of the interaction
+(if \code{weight = TRUE}). The input is a contingency table, with rows
+representing one set of entities (e.g., site) and columns representing
+another set (e.g., species).
 }
 \examples{
 mat <- matrix(sample(1000, 50), 5, 10)
@@ -47,6 +51,11 @@ net <- mat_to_net(mat, weight = TRUE)
 
 }
 \seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html}.
+
+Associated functions:
 \link{net_to_mat}
 }
 \author{

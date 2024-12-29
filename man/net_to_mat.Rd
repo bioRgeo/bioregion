@@ -13,36 +13,37 @@ net_to_mat(
 )
 }
 \arguments{
-\item{net}{a two- or three-columns \code{data.frame} where each row
-represents the interaction between two nodes (site and species for example)
-and an optional third column indicating the weight of the interaction.}
+\item{net}{A two- or three-column \code{data.frame} where each row
+represents the interaction between two nodes (e.g., site and species),
+with an optional third column indicating the weight of the interaction.}
 
-\item{weight}{a \code{boolean} indicating if the weight should be considered}
+\item{weight}{A \code{logical} value indicating whether the weight column
+should be considered.}
 
-\item{squared}{a \code{boolean} indicating if the output matrix should but
-squared (same nodes in rows and columns).}
+\item{squared}{A \code{logical} value indicating whether the output matrix
+should be square (i.e., containing the same nodes in rows and columns).}
 
-\item{symmetrical}{a \code{boolean} indicating if the resulting matrix
-should be symmetrical (only if \code{squared = TRUE}).
-Note that different weights associated with two opposite pairs already
-present in net will be preserved.}
+\item{symmetrical}{A \code{logical} value indicating whether the resulting
+matrix should be symmetrical. This applies only if \code{squared = TRUE}.
+Note that different weights associated with opposite pairs already present
+in \code{net} will be preserved.}
 
-\item{missing_value}{the value to assign to the pairs of nodes not present
-in net (0 by default).}
+\item{missing_value}{The value to assign to pairs of nodes not present
+in \code{net}. Defaults to \code{0}.}
 }
 \value{
-A \code{matrix} with the first nodes (first column of \code{net}) as
-rows and the second nodes (second column of \code{net}) as columns. Note
-that if \code{squared = TRUE} the rows and columns have the same number of
-elements corresponding to the concatenation of unique objects in
-\code{net}'s first and second columns. If \code{squared = TRUE} the matrix
-can be forced to be symmetrical based on the upper triangular part of the
-matrix.
+A \code{matrix} with the first nodes (from the first column of \code{net})
+as rows and the second nodes (from the second column of \code{net}) as columns.
+If \code{squared = TRUE}, the rows and columns will have the same number of
+elements, corresponding to the unique union of objects in the first and
+second columns of \code{net}. If \code{squared = TRUE} and \code{symmetrical = TRUE},
+the matrix will be forced to be symmetrical based on the upper triangular
+part of the matrix.
 }
 \description{
-This function creates a contingency table from a two- or three-columns
-\code{data.frame} where each row represents the interaction between two
-nodes (site and species for example) and an optional third column indicating
+This function generates a contingency table from a two- or three-column
+\code{data.frame}, where each row represents the interaction between two
+nodes (e.g., site and species) and an optional third column indicates
 the weight of the interaction (if \code{weight = TRUE}).
 }
 \examples{
@@ -56,6 +57,11 @@ mat <- net_to_mat(net, weight = TRUE)
 
 }
 \seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html}.
+
+Associated functions:
 \link{mat_to_net}
 }
 \author{

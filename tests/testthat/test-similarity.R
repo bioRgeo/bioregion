@@ -113,39 +113,39 @@ test_that("valid output", {
 test_that("invalid inputs", {
   
   expect_error(
-    similarity(comat, metric = 1),
+    similarity(comat, 
+               metric = 1),
     "metric must be a character.",
     fixed = TRUE)
   
   expect_error(
-    similarity(comat, method = 1),
+    similarity(comat, 
+               method = 1),
     "method must be a character.",
     fixed = TRUE)
   
   expect_error(
-    similarity(comat, formula = 1),
+    similarity(comat, 
+               formula = 1),
     "formula must be a character.",
     fixed = TRUE)
   
   expect_error(
-    similarity(comat, metric = NULL, formula = NULL),
+    similarity(comat, 
+               metric = NULL, 
+               formula = NULL),
     "metric or formula should be used.",
     fixed = TRUE)
   
   expect_error(
-    similarity(comat, method = "zzz"),
-    "The method is not available.
-     Please chose among the followings:
-         prodmat or loops.",
-    fixed = TRUE)
+    similarity(comat, 
+               method = "zzz"),
+    "^Please choose method from the following:")
   
   expect_error(
-    similarity(comat, metric = "zzz"),
-    "One or several metric(s) chosen is not available.
-     Please chose among the followings:
-         abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, Bray, Brayturn or
-         Euclidean.",
-    fixed = TRUE)
+    similarity(comat,
+               metric = "zzz"),
+    "^One or several metric")
   
   expect_error(
     similarity(comat=1),
@@ -169,9 +169,7 @@ test_that("invalid inputs", {
   
   expect_error(
     similarity(comat4),
-    "comat should contains only positive real: negative
-         value detected!", 
-    fixed = TRUE)
+    "Negative value detected in comat.")
   
   expect_message(
     similarity(comat4, metric = "Euclidean"),

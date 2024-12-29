@@ -7,35 +7,35 @@
 similarity(comat, metric = "Simpson", formula = NULL, method = "prodmat")
 }
 \arguments{
-\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
+\item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{metric}{a \code{character} vector or a single \code{character} string indicating
-which metrics to chose (see Details). Available options are \code{"abc"}, \code{"ABC"},
+\item{metric}{A \code{character} vector or a single \code{character} string specifying
+the metrics to compute (see Details). Available options are \code{"abc"}, \code{"ABC"},
 \code{"Jaccard"}, \code{"Jaccardturn"}, \code{"Sorensen"}, \code{"Simpson"}, \code{"Bray"},
-\code{"Brayturn"} or \code{"Euclidean"}. If \code{"all"} is specified, then all metrics
-will be calculated. Can be set to \code{NULL} if \code{formula} is used.}
+\code{"Brayturn"}, and \code{"Euclidean"}. If \code{"all"} is specified, all metrics will
+be calculated. Can be set to \code{NULL} if \code{formula} is used.}
 
-\item{formula}{a \code{character} vector or a single \code{character} string with your
-own formula(s) based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
-(see Details). \code{formula} is set to \code{NULL} by default.}
+\item{formula}{A \code{character} vector or a single \code{character} string specifying
+custom formula(s) based on the \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C} quantities
+(see Details). The default is \code{NULL}.}
 
-\item{method}{a \code{character} string indicating what method should be used to
-compute \code{abc} (see Details). \code{method = "prodmat"} by default is more
-efficient but can be greedy in memory and \code{method = "loops"} is less
-efficient but less greedy in memory.}
+\item{method}{A \code{character} string specifying the method to compute \code{abc}
+(see Details). The default is \code{"prodmat"}, which is more efficient but
+memory-intensive. Alternatively, \code{"loops"} is less memory-intensive but
+slower.}
 }
 \value{
-A \code{data.frame} with additional class
-\code{bioregion.pairwise.metric}, providing one or several similarity
-metric(s) between each pair of sites. The two first columns represent each
-pair of sites. One column per similarity metric provided in \code{metric} and
-\code{formula} except for the metric \code{abc} and \code{ABC} that are
-stored in three columns (one for each letter).
+A \code{data.frame} with the additional class
+\code{bioregion.pairwise.metric}, containing one or several similarity
+metrics between pairs of sites. The first two columns represent the pairs of
+sites. There is one column per similarity metric provided in \code{metric} and
+\code{formula}, except for the \code{abc} and \code{ABC} metrics, which are stored in three
+separate columns (one for each letter).
 }
 \description{
-This function creates a \code{data.frame} where each row provides one or
-several similarity metric(s) between each pair of sites from a co-occurrence
+This function generates a \code{data.frame} where each row provides one or
+several similarity metrics between pairs of sites, based on a co-occurrence
 \code{matrix} with sites as rows and species as columns.
 }
 \details{
@@ -58,16 +58,16 @@ Bray = 1 - (B + C) / (2A + B + C)
 
 Brayturn = 1 - min(B, C) / (A + min(B, C)) (Baselga, 2013)
 
-with A the sum of the lesser values for common species shared by a pair of
-sites.
-B and C are the total number of specimens counted at both sites minus A.
+with \code{A} the sum of the lesser values for common species shared by a pair of
+sites. \code{B} and \code{C} are the total number of specimens counted at both sites
+minus \code{A}.
 
 \code{formula} can be used to compute customized metrics with the terms
 \code{a}, \code{b}, \code{c}, \code{A}, \code{B}, and \code{C}. For example
 \code{formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)")}
 will compute the Simpson and Bray-Curtis similarity metrics, respectively.
-Note that pmin is used in the Simpson formula because a, b, c, A, B and C
-are \code{numeric} vectors.
+Note that \code{pmin} is used in the Simpson formula because \code{a}, \code{b}, \code{c}, \code{A},
+\code{B} and \code{C} are \code{numeric} vectors.
 
 Euclidean computes the Euclidean similarity between each pair of site
 following this equation:
@@ -92,15 +92,19 @@ formula = "1 - (b + c) / (a + b + c)")
 \references{
 Baselga A (2012) The Relationship between Species Replacement,
 Dissimilarity Derived from Nestedness, and Nestedness.
-\emph{Global Ecology and Biogeography}, 21(12), 1223--1232.
+\emph{Global Ecology and Biogeography} 21, 1223--1232.
 
 Baselga A (2013) Separating the two components of abundance-based
 dissimilarity: balanced changes in abundance vs. abundance gradients.
-\emph{Methods in Ecology and Evolution}, 4(6), 552--557.
+\emph{Methods in Ecology and Evolution} 4, 552--557.
 }
 \seealso{
-\link{dissimilarity} \link{dissimilarity_to_similarity}
-\link{similarity_to_dissimilarity}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
+
+Associated functions:
+\link{dissimilarity} \link{similarity_to_dissimilarity}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

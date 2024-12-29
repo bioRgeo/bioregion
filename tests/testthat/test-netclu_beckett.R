@@ -269,9 +269,7 @@ both, sites or species",
   
   expect_error(
     netclu_beckett(net[,-3], weight = TRUE),
-    "net must be a data.frame with at least three columns if weight equal 
-        TRUE.", 
-    fixed = TRUE)
+    "^net must be a data.frame with at least three columns")
   
   expect_error(
     netclu_beckett(net, index = c("zz",1)),
@@ -280,15 +278,11 @@ both, sites or species",
 
   expect_error(
     netclu_beckett(net, index = "zz"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be a")
   
   expect_error(
     netclu_beckett(net, index = "Site1"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    "^If index is a character, it should be ")
   
   expect_error(
     netclu_beckett(net, index = 0.1),
@@ -297,7 +291,7 @@ both, sites or species",
   
   expect_error(
     netclu_beckett(net, index = 2),
-    "index should be stricltly higher than 2.",
+    "index should be strictly higher than 2.",
     fixed = TRUE)
   
   expect_error(
@@ -317,38 +311,27 @@ both, sites or species",
   
   expect_error(
     netclu_beckett(net6, weight = TRUE),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_beckett(net6, weight = TRUE, index = 3),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_beckett(net6, weight = TRUE, index = "Weight"),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_beckett(net6, weight = TRUE, index = 5),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(
     netclu_beckett(net6, weight = TRUE, index = "Weight3"),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
-    fixed = TRUE)
-  
-  expect_error(
-    netclu_beckett(net6, weight = TRUE, index = "Weight3"),
-    "The weight column should contain only positive reals:
-          negative value(s) detected!", 
+    "The weight column should contain only positive values.", 
     fixed = TRUE)
   
   expect_error(

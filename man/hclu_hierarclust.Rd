@@ -229,7 +229,7 @@ tree5 <- hclu_hierarclust(dissim,
 }
 \references{
 Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
-based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
+based on species distributions. \emph{Journal of Biogeography} 37, 2029-2053.
 
 Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH
 (2013) Recluster: an unbiased clustering procedure for beta-diversity
@@ -237,10 +237,15 @@ turnover. \emph{Ecography}, 36(5), 1070--1075.
 
 Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure
 for extrapolating turnover regionalization at mid-small spatial scales,
-tested on British butterflies. \emph{Methods in Ecology and Evolution}, 6(11)
+tested on British butterflies. \emph{Methods in Ecology and Evolution} 6
 , 1287--1297.
 }
 \seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html}.
+
+Associated functions:
 \link{cut_tree}
 }
 \author{

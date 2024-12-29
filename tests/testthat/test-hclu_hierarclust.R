@@ -82,16 +82,18 @@ test_that("valid output", {
   expect_equal(dim(clust$clusters)[2], 4)
 
   clust <- hclu_hierarclust(dissim,
-                       index = "Euclidean",
-                       n_clust = c(5,10),
-                       find_h = FALSE)
+                            optimal_tree_method = "best",
+                            index = "Euclidean",
+                            n_clust = c(5,10),
+                            find_h = FALSE)
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
 
   clust <- hclu_hierarclust(dissim,
-                       index = "Euclidean",
-                       n_clust = c(10,5),
-                       find_h = FALSE)
+                            optimal_tree_method = "best",
+                            index = "Euclidean",
+                            n_clust = c(10,5),
+                            find_h = FALSE)
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
 
@@ -101,157 +103,198 @@ test_that("valid output", {
 test_that("invalid inputs", {
   
   expect_error(
-    hclu_hierarclust(dissimilarity = "zz"),
-    "dissimilarity is not a bioregion.pairwise.metric object, 
-a dissimilarity matrix (class dist) or 
-a data.frame with at least 3 columns (site1, site2 and your dissimilarity index).",
-    fixed = TRUE)
+    hclu_hierarclust(dissimilarity = "zz",
+                     optimal_tree_method = "best"),
+    "^dissimilarity is not a bioregion.pairwise.metric object")
   
   expect_error(
-    hclu_hierarclust(dissim2),
+    hclu_hierarclust(dissim2,
+                     optimal_tree_method = "best"),
     "dissimilarity must be a data.frame with at least three columns.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(uni[,-3]),
+    hclu_hierarclust(uni[,-3],
+                     optimal_tree_method = "best"),
     "dissimilarity must be a data.frame with at least three columns.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(unina1),
+    hclu_hierarclust(unina1,
+                     optimal_tree_method = "best"),
     "NA(s) detected in dissimilarity.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(unina2),
+    hclu_hierarclust(unina2,
+                     optimal_tree_method = "best"),
     "NA(s) detected in dissimilarity.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(uni4),
+    hclu_hierarclust(uni4,
+                     optimal_tree_method = "best"),
     "The first two columns of dissimilarity contain duplicated pairs of sites!",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(uni3),
+    hclu_hierarclust(uni3,
+                     optimal_tree_method = "best"),
     "The first two columns of dissimilarity contain (unordered) duplicated pairs of sites!",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(uni2),
+    hclu_hierarclust(uni2,
+                     optimal_tree_method = "best"),
     "dissimilarity contains rows with the same site on both columns!",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(unichar),
+    hclu_hierarclust(unichar,
+                     optimal_tree_method = "best"),
     "The weight column must be numeric.",
     fixed = TRUE)
 
   expect_message(
-    hclu_hierarclust(d2),
+    hclu_hierarclust(d2,
+                     optimal_tree_method = "best"),
     "No labels detected, they have been assigned automatically.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(d3),
+    hclu_hierarclust(d3,
+                     optimal_tree_method = "best"),
     "dissimilarity must be numeric.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(d4),
+    hclu_hierarclust(d4,
+                     optimal_tree_method = "best"),
     "NA(s) detected in dissimilarity.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, index = c("zz",1)),
+    hclu_hierarclust(dissim, 
+                     index = c("zz",1),
+                     optimal_tree_method = "best"),
     "index must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, index = "zz"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    hclu_hierarclust(dissim, 
+                     index = "zz",
+                     optimal_tree_method = "best"),
+    "^If index is a character, it should be ")
 
   expect_error(
-    hclu_hierarclust(dissim, index = "Site1"),
-    "If index is a character, it should be a column name (and not the
-                    first or second column).",
-    fixed = TRUE)
+    hclu_hierarclust(dissim, 
+                     index = "Site1",
+                     optimal_tree_method = "best"),
+    "^If index is a character, it should be ")
 
   expect_error(
-    hclu_hierarclust(dissim, index = 0.1),
+    hclu_hierarclust(dissim, 
+                     index = 0.1,
+                     optimal_tree_method = "best"),
     "If index is numeric, it should be an integer.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, index = 2),
-    "index should be stricltly higher than 2.",
+    hclu_hierarclust(dissim, 
+                     index = 2,
+                     optimal_tree_method = "best"),
+    "index should be strictly higher than 2.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(uni, index = 4),
+    hclu_hierarclust(uni, 
+                     index = 4,
+                     optimal_tree_method = "best"),
     "index should be lower or equal to 3.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, method = c(1,"z")),
+    hclu_hierarclust(dissim, 
+                     method = c(1,"z"),
+                     optimal_tree_method = "best"),
     "method must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, method = 1),
+    hclu_hierarclust(dissim, 
+                     method = 1,
+                     optimal_tree_method = "best"),
     "method must be a character.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, method = "zz"),
+    hclu_hierarclust(dissim, 
+                     method = "zz",
+                     optimal_tree_method = "best"),
     "Please choose method among the followings values:
 ward.D, ward.D2, single, complete, average, mcquitty, median or centroid",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, randomize = 1),
+    hclu_hierarclust(dissim, 
+                     randomize = 1,
+                     optimal_tree_method = "best"),
     "randomize must be a boolean.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, randomize = c("zz","zz")),
+    hclu_hierarclust(dissim, 
+                     randomize = c("zz","zz"),
+                     optimal_tree_method = "best"),
     "randomize must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_runs =  c("zz","zz")),
+    hclu_hierarclust(dissim, 
+                     n_runs =  c("zz","zz"),
+                     optimal_tree_method = "best"),
     "n_runs must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_runs = "zz"),
+    hclu_hierarclust(dissim, ,
+                     optimal_tree_method = "best",
+                     n_runs = "zz"),
     "n_runs must be numeric.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_runs = 1.1),
+    hclu_hierarclust(dissim, 
+                     n_runs = 1.1,
+                     optimal_tree_method = "best"),
     "n_runs must be an integer.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_runs = -1),
+    hclu_hierarclust(dissim, 
+                     n_runs = -1,
+                     optimal_tree_method = "best"),
     "n_runs must be strictly higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_runs = 0),
+    hclu_hierarclust(dissim, 
+                     n_runs = 0,
+                     optimal_tree_method = "best"),
     "n_runs must be strictly higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, keep_trials = 1),
+    hclu_hierarclust(dissim, 
+                     keep_trials = 1,
+                     optimal_tree_method = "best"),
     "keep_trials must be a boolean.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, keep_trials = c("zz","zz")),
+    hclu_hierarclust(dissim, 
+                     keep_trials = c("zz","zz"),
+                     optimal_tree_method = "best"),
     "keep_trials must be of length 1.",
     fixed = TRUE)
 
@@ -272,7 +315,9 @@ iterative_consensus_tree, best, consensus",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = "zz"),
+    hclu_hierarclust(dissim, 
+                     n_clust = "zz",
+                     optimal_tree_method = "best"),
     "n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
@@ -280,78 +325,111 @@ iterative_consensus_tree, best, consensus",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = c(1.1,2)),
-    "n_clust must be composed of integer(s).",
+    hclu_hierarclust(dissim, 
+                     n_clust = c(1.1,2),
+                     optimal_tree_method = "best"),
+    "n_clust must be composed of integers.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = -1),
-    "n_clust must be composed of value(s) strictly higher than 0.",
+    hclu_hierarclust(dissim, 
+                     n_clust = -1,
+                     optimal_tree_method = "best"),
+    "n_clust must be composed of values strictly higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = c(1,-1)),
-    "n_clust must be composed of value(s) strictly higher than 0.",
+    hclu_hierarclust(dissim, 
+                     n_clust = c(1,-1),
+                     optimal_tree_method = "best"),
+    "n_clust must be composed of values strictly higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = 0),
-    "n_clust must be composed of value(s) strictly higher than 0.",
+    hclu_hierarclust(dissim, 
+                     n_clust = 0,
+                     optimal_tree_method = "best"),
+    "n_clust must be composed of values strictly higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = 1, cut_height = 1),
+    hclu_hierarclust(dissim, 
+                     n_clust = 1, 
+                     cut_height = 1,
+                     optimal_tree_method = "best"),
     "Please provide either n_clust or cut_height, but not both at the
            same time.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = NULL, cut_height = "zz"),
+    hclu_hierarclust(dissim, 
+                     n_clust = NULL, 
+                     cut_height = "zz",
+                     optimal_tree_method = "best"),
     "cut_height must be numeric.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, n_clust = NULL, cut_height = -1),
-    "cut_height must be composed of value(s) higher than 0.",
+    hclu_hierarclust(dissim, 
+                     n_clust = NULL, 
+                     cut_height = -1,
+                     optimal_tree_method = "best"),
+    "cut_height must be composed of values higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, find_h = 1),
+    hclu_hierarclust(dissim, 
+                     find_h = 1,
+                     optimal_tree_method = "best"),
     "find_h must be a boolean.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, find_h = c("zz","zz")),
+    hclu_hierarclust(dissim, 
+                     find_h = c("zz","zz"),
+                     optimal_tree_method = "best"),
     "find_h must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, h_min =  c("zz","zz")),
+    hclu_hierarclust(dissim, 
+                     h_min =  c("zz","zz"),
+                     optimal_tree_method = "best"),
     "h_min must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, h_min = "zz"),
+    hclu_hierarclust(dissim, 
+                     h_min = "zz",
+                     optimal_tree_method = "best"),
     "h_min must be numeric.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, h_min = -1),
+    hclu_hierarclust(dissim, 
+                     h_min = -1,
+                     optimal_tree_method = "best"),
     "h_min must be higher than 0.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, h_max =  c("zz","zz")),
+    hclu_hierarclust(dissim, 
+                     h_max =  c("zz","zz"),
+                     optimal_tree_method = "best"),
     "h_max must be of length 1.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, h_max = "zz"),
+    hclu_hierarclust(dissim, 
+                     h_max = "zz",
+                     optimal_tree_method = "best"),
     "h_max must be numeric.",
     fixed = TRUE)
 
   expect_error(
-    hclu_hierarclust(dissim, h_max = -1),
+    hclu_hierarclust(dissim, 
+                     h_max = -1,
+                     optimal_tree_method = "best"),
     "h_max must be higher than 0.",
     fixed = TRUE)
 
