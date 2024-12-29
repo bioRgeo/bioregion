@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,50 +56,50 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1.9000" id="bioregion-1119000">bioregion 1.1.1.9000<a class="anchor" aria-label="anchor" href="#bioregion-1119000"></a></h2>
 <p>This is a list of changes made in the development/GitHub version of the package between bioregion 1.1.1 (CRAN release 2024-04-19) and the next CRAN release.</p>
-<ul><li><p>Affinity propagation algorithm added (function nhclu_affprop).</p></li>
-<li><p>Added a new method to construct a consensus tree in hclu_hierarclust. This method is called Iterative Hierarchical Consensus Tree (IHCT). It conclusively solves issues related to the order of sites in the distance matrix and building a consensus hierarchical tree with a meaningful topology.</p></li>
-<li><p>Many changes to functions related to hclu_hierarclust due to this major change.</p></li>
-<li><p>Updated generic functions to provide plot and print for diana.</p></li>
-<li><p>Function site_species_metrics() added to the package and the workflow.</p></li>
-<li><p>Function bioregion_metrics() added to the package and the workflow.</p></li>
-<li><p>Function subset_node() renamed site_species_subset().</p></li>
-<li><p>Indices Cz added to site_species_metrics().</p></li>
+<ul><li><p>Added affinity propagation algorithm (<code><a href="../reference/nhclu_affprop.html">nhclu_affprop()</a></code>).</p></li>
+<li><p>Added a new method in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> to construct a consensus tree called Iterative Hierarchical Consensus Tree (IHCT). This resolves issues related to the order of sites in the distance matrix and builds a consensus hierarchical tree with meaningful topology.</p></li>
+<li><p>Made many changes to functions related to <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> due to this major update.</p></li>
+<li><p>Updated generic functions to provide <code>plot</code> and <code>print</code> methods for <code><a href="../reference/hclu_diana.html">hclu_diana()</a></code>.</p></li>
+<li><p>Added <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> to the package and workflow.</p></li>
+<li><p>Added <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code> to the package and workflow.</p></li>
+<li><p>Renamed <code>subset_node()</code> to <code><a href="../reference/site_species_subset.html">site_species_subset()</a></code>.</p></li>
+<li><p>Added indices <code>Cz</code> to <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>.</p></li>
 <li>
-<p>Updated install_binaries:</p>
-<ul><li>Archive bin.zip now stored on GitHub and backed up on NextCloud<br></li>
-<li>Added Infomap version 2.8.0</li>
-<li>Added argument download_only to only execute the download step<br>
+<p>Updated <code><a href="../reference/install_binaries.html">install_binaries()</a></code>:</p>
+<ul><li>Archive <code>bin.zip</code> now stored on GitHub and backed up on NextCloud.</li>
+<li>Added Infomap version 2.8.0.</li>
+<li>Added argument <code>download_only</code> to execute only the download step.<br>
  </li>
 </ul></li>
-<li><p>Added argument check_install in netclu_infomap, netclu_louvain, and netclu_oslom.</p></li>
-<li><p>Function betapart_to_bioregion() added to the package.</p></li>
-<li><p>Function compare_bioregionalizations() added to the package.</p></li>
-<li><p>Function bioregionalization_metrics() added to the package.</p></li>
-<li><p>Function bioregion_metrics() added to the package.</p></li>
+<li><p>Added <code>check_install</code> argument to <code><a href="../reference/netclu_infomap.html">netclu_infomap()</a></code>, <code><a href="../reference/netclu_louvain.html">netclu_louvain()</a></code>, and <code><a href="../reference/netclu_oslom.html">netclu_oslom()</a></code>.</p></li>
+<li><p>Added <code><a href="../reference/betapart_to_bioregion.html">betapart_to_bioregion()</a></code> to the package.</p></li>
+<li><p>Added <code><a href="../reference/compare_bioregionalizations.html">compare_bioregionalizations()</a></code> to the package.</p></li>
+<li><p>Added <code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> to the package.</p></li>
+<li><p>Updated documentation, vignettes, and tests.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="bioregion-111">bioregion 1.1.1<a class="anchor" aria-label="anchor" href="#bioregion-111"></a></h2>
-<p>This is a list of changes made between bioregion 1.1.0 (CRAN release 2024-03-19) and bioregion 1.1.1 (CRAN release 2024-04-19).</p>
-<ul><li><p>Added hierarchy for Louvain cpp.</p></li>
-<li><p>Added seed argument to stochastic algorithms (except Louvain cpp).</p></li>
-<li><p>Added argument cut_weight in netclu_ fonctions.</p></li>
-<li><p>Changed value for sites without cluster (0 -&gt; NA).</p></li>
+<p>This is a list of changes made between <strong>bioregion 1.1.0</strong> (CRAN release 2024-03-19) and <strong>bioregion 1.1.1</strong> (CRAN release 2024-04-19).</p>
+<ul><li><p>Added hierarchy support for Louvain (C++).</p></li>
+<li><p>Added <code>seed</code> argument to stochastic algorithms (except Louvain C++).</p></li>
+<li><p>Added <code>cut_weight</code> argument to <code>netclu_*</code> functions.</p></li>
+<li><p>Changed value for sites without clusters from <code>0</code> to <code>NA</code>.</p></li>
 <li><p>Updated automated tests (code coverage &gt; 60%).</p></li>
-<li><p>Controls and outputs/inputs standardization.</p></li>
-<li><p>Fixed a bug in find_optimal_n() in the special case where partition metrics did not vary.</p></li>
+<li><p>Standardized controls, inputs, and outputs.</p></li>
+<li><p>Fixed a bug in <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> for cases where partition metrics did not vary.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="bioregion-110">bioregion 1.1.0<a class="anchor" aria-label="anchor" href="#bioregion-110"></a></h2>
-<p>This is a list of changes made between bioregion 1.0.0 (CRAN release 2023-04-15) and bioregion 1.1.0 (CRAN release 2024-03-19).</p>
-<ul><li><p>Added the resolution parameter in the igraph Louvain version.</p></li>
-<li><p>Added possibility to remove diagonal and lower triangular matrix in mat_to_net() for squared matrix with argument include_diag and include_lower.</p></li>
-<li><p>Added a function to extract a subset of node according to its type (sites or species) from a bioregion.clusters object containing both types of nodes (sites and species).</p></li>
-<li><p>Added a generic function to maintain attributes of bioregion.pairwise.metric objects + keep track of number of sites and species.</p></li>
-<li><p>Functions added: nhclu_clara(), nhclu_clarans().</p></li>
-<li><p>The corresponding vignettes are edited to document the new functions.</p></li>
-<li><p>Modification of the way ‘bioregion.pairwise.metric’ object are controlled.</p></li>
-<li><p>Allow to (not) select ‘formula metrics’ in similarity_dissimilarity_conversion() with the new argument “include_formula”.</p></li>
-<li><p>Allow negative values in similarity() with the Euclidean metric.</p></li>
+<p>This is a list of changes made between <strong>bioregion 1.0.0</strong> (CRAN release 2023-04-15) and <strong>bioregion 1.1.0</strong> (CRAN release 2024-03-19).</p>
+<ul><li><p>Added the <code>resolution</code> parameter to the igraph Louvain implementation.</p></li>
+<li><p>Added options to <code><a href="../reference/mat_to_net.html">mat_to_net()</a></code> to exclude diagonal and lower triangular matrices using <code>include_diag</code> and <code>include_lower</code>.</p></li>
+<li><p>Added a function to extract a subset of nodes (sites or species) from <code>bioregion.clusters</code> objects containing both types.</p></li>
+<li><p>Added a generic function to maintain attributes of <code>bioregion.pairwise.metric</code> objects and track the number of sites and species.</p></li>
+<li><p>Added new functions: <code><a href="../reference/nhclu_clara.html">nhclu_clara()</a></code> and <code><a href="../reference/nhclu_clarans.html">nhclu_clarans()</a></code>.</p></li>
+<li><p>Edited vignettes to document new functions.</p></li>
+<li><p>Modified controls for <code>bioregion.pairwise.metric</code> objects.</p></li>
+<li><p>Added the <code>include_formula</code> argument to <code>similarity_dissimilarity_conversion()</code> to (not) select formula metrics.</p></li>
+<li><p>Allowed negative values in <code><a href="../reference/similarity.html">similarity()</a></code> with the Euclidean metric.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="bioregion-100">bioregion 1.0.0<a class="anchor" aria-label="anchor" href="#bioregion-100"></a></h2>

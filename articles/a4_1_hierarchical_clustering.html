@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2024-12-16</h4>
+            <h4 data-toc-skip class="date">2024-12-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -117,9 +117,11 @@ matrix.</p>
 <p>In the example below, we use the vegetation dataset from the package
 to compute distance metrics.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/bioRgeo/bioregion" class="external-link">"bioregion"</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Work with the vegetation dataset we include in the package</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/bioRgeo/bioregion" class="external-link">"bioregion"</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Work with the vegetation dataset we include in the package</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># This is an abundance matrix where sites are in rows and species in columns</span></span>
@@ -152,7 +154,7 @@ Bray-Curtis turnover index <span class="citation">(Baselga,
 2013)</span>. The choice of the distance metric is very important for
 the outcome of the clustering procedure, so we recommend that you choose
 carefully depending on your research question.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span></code></pre></div>
@@ -198,7 +200,7 @@ illustrates the divisive method.</p>
 <h3 id="basic-usage">2.1 Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h3>
 <p>The basic use of the function is as follows:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
@@ -215,7 +217,7 @@ among all the trials selected the tree with the highest cophenetic
 correlation coefficient, with a value of 0.69.</p>
 <p>We can see type the name of the object in the console to see more
 information:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span></span></code></pre></div>
 <pre><code><span><span class="co">## Clustering results for algorithm : hclu_hierarclust </span></span>
 <span><span class="co">##  (hierarchical clustering based on a dissimilarity matrix)</span></span>
@@ -230,7 +232,7 @@ information:</p>
 incomplete: the tree has been built, but it has not yet been cut - so
 there are no clusters in the object yet.</p>
 <p>To cut the tree, we can use the <code><a href="../reference/cut_tree.html">cut_tree()</a></code> function:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ask for 3 clusters</span></span>
 <span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree1</span>,</span>
 <span>                  n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -238,7 +240,7 @@ there are no clusters in the object yet.</p>
 <pre><code><span><span class="co">## --&gt; 0.5625</span></span></code></pre>
 <p>Here, we asked for 3 clusters, and the algorithm automatically finds
 the height at which 3 clusters are found (h = 0.562).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span></span></code></pre></div>
 <pre><code><span><span class="co">## Clustering results for algorithm : hclu_hierarclust </span></span>
 <span><span class="co">##  (hierarchical clustering based on a dissimilarity matrix)</span></span>
@@ -269,16 +271,16 @@ case the outcome will be indicated.</li>
 at which we can obtain 4 clusters in our tree.</li>
 </ul>
 <p>We can make a quick plot of our partitioned tree with</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We reduced the size of text labels with cex = .2, because there are too many sites</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-7-1.png" width="1152"></p>
 <p>Let’s see how it looks like on a map:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegesf</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"K_3"</span><span class="op">)</span><span class="op">]</span>, <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>Now, this is a hierarchical tree, and cutting it only once (= only 1
@@ -288,7 +290,7 @@ shallow cuts to the tree, likewise to <span class="citation">Ficetola et
 al. (2017)</span>, which would allow us to see broad- to fine-scale
 relationships among sites in our tree.</p>
 <p>We can specify, e.g. 4, 10 and 20 clusters:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ask for 4, 10 and 20 clusters</span></span>
 <span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree1</span>,</span>
 <span>                  n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -298,13 +300,13 @@ relationships among sites in our tree.</p>
 <pre><code><span><span class="co">## --&gt; 0.5625</span></span></code></pre>
 <pre><code><span><span class="co">## Determining the cut height to reach 12 groups...</span></span></code></pre>
 <pre><code><span><span class="co">## --&gt; 0.4453125</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-9-1.png" width="1152">
 However, it may be more useful to choose the heights of cut, rather than
 the number of clusters. We could, for example, cut the tree at heights
 0.4 (shallow cut), 0.5 (intermediate cut) and 0.6 (deep cut):</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree1</span>,</span>
 <span>                  cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.5</span>, <span class="fl">.6</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -312,7 +314,7 @@ the number of clusters. We could, for example, cut the tree at heights
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-10-1.png" width="1152"></p>
 <p>The plot is not easy to read because of the large number of sites. We
 can rather extract the information directly from the object:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span></span></code></pre></div>
 <pre><code><span><span class="co">## Clustering results for algorithm : hclu_hierarclust </span></span>
 <span><span class="co">##  (hierarchical clustering based on a dissimilarity matrix)</span></span>
@@ -333,7 +335,7 @@ can rather extract the information directly from the object:</p>
 have 6 clusters and for the shallow cut partition (h = 0.4) we have 23
 clusters.</p>
 <p>Here is how the maps look like:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">i</span><span class="op">)</span><span class="op">]</span>, <span class="va">vegesf</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -347,7 +349,7 @@ clusters.</p>
 </h3>
 <p>To explore the object, you can use <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">str()</a></code> to see the
 object structure:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 6</span></span>
 <span><span class="co">##  $ name        : chr "hclu_hierarclust"</span></span>
@@ -423,7 +425,7 @@ other columns are the partitions.</li>
 depending on your choices; for example, in my case, it looks like
 this:</li>
 </ul>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span><span class="op">$</span><span class="va">cluster_info</span></span></code></pre></div>
 <pre><code><span><span class="co">##       partition_name n_clust requested_cut_height</span></span>
 <span><span class="co">## h_0.6            K_2       2                  0.6</span></span>
@@ -441,18 +443,18 @@ and the cut height I initially requested.</p>
 </h4>
 <p>The order of sites in the distance matrix influences the outcome of
 the hierarchical tree. Let’s see that with an example:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the tree without randomizing the distance matrix</span></span>
 <span><span class="va">tree2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span>,</span>
 <span>                          randomize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Output tree has a 0.6849 cophenetic correlation coefficient with the initial</span></span>
 <span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree2</span>, cex <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-15-1.png" width="768"></p>
 <p>This is how the tree looks like when the matrix is not randomized.
 Now let’s randomize it and regenerate the tree:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This line randomizes the order of rows in the distance matrix</span></span>
 <span><span class="va">dissim_random</span> <span class="op">&lt;-</span> <span class="va">dissim</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
@@ -461,7 +463,7 @@ Now let’s randomize it and regenerate the tree:</p>
 <span>                          randomize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Output tree has a 0.6778 cophenetic correlation coefficient with the initial</span></span>
 <span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree3</span>, cex <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-16-1.png" width="768"></p>
 <p>See how the tree looks different? This is problematic because it
@@ -497,7 +499,7 @@ cophenetic correlation coefficient among all trials.</p>
 <p>Let’s see an example of <code>optimal_tree_method = "best"</code>. We
 can also ask the function to keep all individual trees for further
 exploration (<code>keep_trials = TRUE</code>).</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree_best</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim_random</span>,</span>
 <span>                              randomize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                              optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span>
@@ -512,7 +514,7 @@ all the trials. However, we generally do not recommend constructing a
 consensus tree, because the topology of simple consensus trees can be
 very problematic if there are a lot of ties in the distance matrix.
 Let’s see it in action here:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree_consensus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim_random</span>,</span>
 <span>                                   randomize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                   optimal_tree_method <span class="op">=</span> <span class="st">"consensus"</span>,</span>
@@ -526,7 +528,7 @@ is terrible compared to the IHCT and best tree ?</p>
 <p>This consensus tree has almost no correlation with our initial
 distance matrix. This is because its topology is terribly wrong, see how
 the tree looks like:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree_consensus</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-19-1.png" width="768"></p>
 <p>Booo, this is just a large rake, not a tree!!!</p>
@@ -601,12 +603,12 @@ group into a splinter group. The result is that the large cluster is
 split into two clusters.</p>
 <p>The function <code>hclu_diana</code> performs the Diana divisive
 clustering.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the tree with the Diana algorithm</span></span>
 <span><span class="va">tree_diana</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_diana.html">hclu_diana</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Output tree has a 0.41 cophenetic correlation coefficient with the initial</span></span>
 <span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree_diana</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-20-1.png" width="768"></p>
 </div>
@@ -639,7 +641,7 @@ dissimilarity of the distance matrix (sum of all distances) with the
 inter-cluster dissimilarity (sum of distances between clusters). Then we
 will choose the optimal number of clusters as the elbow of the
 evaluation plot.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calculate dissimilarities</span></span>
@@ -656,7 +658,7 @@ evaluation plot.</p>
 <span><span class="co">##                          for k = 4. Closest number found: 5</span></span></code></pre>
 <pre><code><span><span class="co">## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The requested number of cluster could not be found</span></span>
 <span><span class="co">##                          for k = 67. Closest number found: 66</span></span></code></pre>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 3. Calculate the same evaluation metric as Holt et al. 2013</span></span>
 <span><span class="va">eval_tree4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span></span>
 <span>  <span class="va">tree4</span>, </span>
@@ -664,7 +666,7 @@ evaluation plot.</p>
 <span>  eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Computing similarity-based metrics...</span></span></code></pre>
 <pre><code><span><span class="co">##   - pc_distance OK</span></span></code></pre>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 4. Find the optimal number of clusters</span></span>
 <span><span class="va">opti_n_tree4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "pc_distance"</span></span></code></pre>
@@ -674,7 +676,7 @@ evaluation plot.</p>
 <pre><code><span><span class="co">## pc_distance 19</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-22-1.png" width="768"></p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opti_n_tree4</span></span></code></pre></div>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
@@ -685,7 +687,7 @@ evaluation plot.</p>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
 <span><span class="co">## pc_distance - 19</span></span></code></pre>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 5. Extract the optimal number of clusters</span></span>
 <span><span class="co"># We get the name of the correct partition in the next line</span></span>
 <span><span class="va">K_name</span> <span class="op">&lt;-</span> <span class="va">opti_n_tree4</span><span class="op">$</span><span class="va">evaluation_df</span><span class="op">$</span><span class="va">K</span><span class="op">[</span><span class="va">opti_n_tree4</span><span class="op">$</span><span class="va">evaluation_df</span><span class="op">$</span><span class="va">optimal_n_pc_distance</span><span class="op">]</span></span>
@@ -698,7 +700,7 @@ evaluation plot.</p>
 <span><span class="co">## 1006 1006    1</span></span>
 <span><span class="co">## 1007 1007    1</span></span>
 <span><span class="co">## 1008 1008    1</span></span></code></pre>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make a map of the clusters</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vegesf"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-spatial.github.io/sf/" class="external-link">"sf"</a></span><span class="op">)</span></span>
@@ -748,7 +750,7 @@ need to provide your species-site network to the argument
 We have a function to make the conversion).</p>
 <p>Let’s see that in practice. Depending on the size of your dataset,
 computing endemism-based metrics can take a while.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate pc_distance and anosim</span></span>
 <span><span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree4</span>, </span>
 <span>                           dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span>
@@ -767,7 +769,7 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## Max    0.9823024 0.8669999</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span></code></pre>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate avg_endemism and tot_endemism</span></span>
 <span><span class="co"># I have an abundance matrix, I need to convert it into network format first:</span></span>
 <span><span class="va">vegenet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
@@ -816,7 +818,7 @@ value of the metrics, or by finding break points in the curve with a
 segmented model.</p>
 <p>Before we look at these different methods, we will compute all the
 evaluation metrics and store them in <code>eval_tree4</code>:</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vegenet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span><span class="va">eval_tree4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree4</span>, </span>
 <span>                                         dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span>
@@ -844,7 +846,7 @@ metric.</em></p>
 <p>The elbow method is the default method in
 <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code>. There are no parameters to adjust it. If
 the curve is not elbow-shaped, it may give spurious results.</p>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "pc_distance"  "anosim"       "avg_endemism" "tot_endemism"</span></span></code></pre>
 <pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
@@ -896,7 +898,7 @@ increasing metrics (<code>pc_distance</code>) and
 <code>anosim</code> values can either increase or decrease depending on
 your dataset, so you would have to explore both ways.</p>
 <p>By default, the function selects the top 1% steps:</p>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span><span class="op">)</span></span></code></pre></div>
@@ -917,7 +919,7 @@ your dataset, so you would have to explore both ways.</p>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
 <span><span class="co">## anosim - 19</span></span>
 <span><span class="co">## pc_distance - 12</span></span></code></pre>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"decreasing_step"</span><span class="op">)</span></span></code></pre></div>
@@ -941,7 +943,7 @@ your dataset, so you would have to explore both ways.</p>
 <p>However, you can adjust it in two different ways. First, choose a
 number of steps to select, e.g. to select the largest 3 steps, use
 <code>step_levels = 3</code>:</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span>,</span>
@@ -969,7 +971,7 @@ hierarchical nature of the tree.</p>
 <p>Second, you can set a quantile of steps to select, e.g. to select the
 5% largest steps set the quantile to 0.95
 (<code>step_quantile = 0.95</code>):</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span>,</span>
@@ -998,7 +1000,7 @@ with 4 clusters, or the partition with 5 clusters?</p>
 <p>By default, the function keeps the partition with <span class="math inline">\(N + 1\)</span> (5 clusters in our example above).
 You can change this by setting
 <code>step_round_above = FALSE</code>:</p>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span>
@@ -1053,7 +1055,7 @@ allow you to use higher cutoffs.</p></li>
 <p>For example, in our case, a regional-scale study on vegetation, we
 can use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and
 0.9 (shallow cutoff).</p>
-<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="st">"pc_distance"</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"cutoff"</span>,</span>
@@ -1093,7 +1095,7 @@ the number of breaks to be identified on the curve. Note that such a
 model is likely to require a minimum number of points to find an
 appropriate number of clusters. In our example here, we make 100 cuts in
 the tree to have enough values.</p>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree4</span>,</span>
 <span>                  cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">tree4</span><span class="op">$</span><span class="va">algorithm</span><span class="op">$</span><span class="va">final.tree</span><span class="op">$</span><span class="va">height</span><span class="op">)</span>, </span>
 <span>                                   length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> </span>
@@ -1109,7 +1111,7 @@ the tree to have enough values.</p>
 <pre><code><span><span class="co">## Computing composition-based metrics...</span></span></code></pre>
 <pre><code><span><span class="co">##   - avg_endemism OK</span></span></code></pre>
 <pre><code><span><span class="co">##   - tot_endemism OK</span></span></code></pre>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "pc_distance"  "anosim"       "avg_endemism" "tot_endemism"</span></span></code></pre>
@@ -1137,7 +1139,7 @@ the tree to have enough values.</p>
 <ul>
 <li>2 breaks</li>
 </ul>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span>,</span>
 <span>               n_breakpoints <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -1165,7 +1167,7 @@ the tree to have enough values.</p>
 <ul>
 <li>3 breaks</li>
 </ul>
-<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span>,</span>
 <span>               n_breakpoints <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -1210,7 +1212,7 @@ OPTICS clusters, and read the related publication to further understand
 this method <span class="citation">(Hahsler et al., 2019)</span>.</p>
 <p>To run the optics algorithm, use the <code><a href="../reference/hclu_optics.html">hclu_optics()</a></code>
 function:</p>
-<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calculate dissimilarities</span></span>
