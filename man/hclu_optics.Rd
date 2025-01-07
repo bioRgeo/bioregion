@@ -17,68 +17,68 @@ hclu_optics(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\item{dissimilarity}{The output object from \code{\link[=dissimilarity]{dissimilarity()}} or
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object.
 If a \code{data.frame} is used, the first two columns represent pairs of
-sites (or any pair of nodes), and the next column(s) are the dissimilarity
-indices.}
+sites (or any pair of nodes), and the subsequent column(s) contain the
+dissimilarity indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of \code{dissimilarity} is used.}
+\item{index}{The name or number of the dissimilarity column to use. By
+default, the third column name of \code{dissimilarity} is used.}
 
-\item{minPts}{a \code{numeric} value specifying the minPts argument of
-\link[dbscan:dbscan]{dbscan}). minPts is the minimum number of
-points to form a dense region. By default, it is set to the natural
-logarithm of the number of sites in \code{dissimilarity}.}
+\item{minPts}{A \code{numeric} value specifying the minPts argument of
+\link[dbscan:dbscan]{dbscan}. minPts is the minimum number of points required
+to form a dense region. By default, it is set to the natural logarithm
+of the number of sites in \code{dissimilarity}.}
 
-\item{eps}{a \code{numeric} value specifying the eps argument of
-\link[dbscan:optics]{optics}). It is the upper limit of the size
+\item{eps}{A \code{numeric} value specifying the eps argument of
+\link[dbscan:optics]{optics}. It defines the upper limit of the size
 of the epsilon neighborhood. Limiting the neighborhood size improves
 performance and has no or very little impact on the ordering as long as it
 is not set too low. If not specified (default behavior), the largest
-minPts-distance in the data set is used which gives the same result as
+minPts-distance in the dataset is used, which gives the same result as
 infinity.}
 
-\item{xi}{a \code{numeric} value specifying the steepness threshold to
+\item{xi}{A \code{numeric} value specifying the steepness threshold to
 identify clusters hierarchically using the Xi method
 (see \link[dbscan:optics]{optics}).}
 
-\item{minimum}{a \code{boolean} specifying if the hierarchy should be pruned
-out from the output to only keep clusters at the "minimal" level, i.e.
+\item{minimum}{A \code{boolean} specifying whether the hierarchy should be pruned
+from the output to only retain clusters at the "minimal" level, i.e.,
 only leaf / non-overlapping clusters.
-If \code{TRUE}, then argument \code{show_hierarchy} should be \code{FALSE}.}
+If \code{TRUE}, then the argument \code{show_hierarchy} should be set to \code{FALSE}.}
 
-\item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of
+\item{show_hierarchy}{A \code{boolean} specifying whether the hierarchy of
 clusters should be included in the output. By default, the hierarchy is not
-visible in the clusters obtained from OPTICS - it can only be visualized by
-visualising the plot of the OPTICS object. If \code{show_hierarchy = TRUE},
-then the output cluster \code{data.frame} will contain additional columns
+visible in the clusters obtained from OPTICS; it can only be visualized by
+plotting the OPTICS object. If \code{show_hierarchy = TRUE},
+the output cluster \code{data.frame} will contain additional columns
 showing the hierarchy of clusters.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+\item{algorithm_in_output}{A \code{boolean} indicating whether the original output
 of \link[dbscan:dbscan]{dbscan} should be returned in the output (\code{TRUE} by
 default, see Value).}
 
-\item{...}{you can add here further arguments to be passed to \code{optics()}
+\item{...}{Additional arguments to be passed to \code{optics()}
 (see \link[dbscan:optics]{optics}).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} string containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} describing the characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} containing all objects associated with the
+clustering procedure, such as the original cluster objects.}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
 find the output of \link[dbscan:optics]{optics}.
 }
 \description{
-This function performs semi-hierarchical
-clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
-Points To Identify the Clustering Structure).
+This function performs semi-hierarchical clustering based on dissimilarity
+using the OPTICS algorithm (Ordering Points To Identify the
+Clustering Structure).
 }
 \details{
 The OPTICS (Ordering points to identify the clustering structure) is a
@@ -115,9 +115,14 @@ clust1
 }
 \references{
 Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based
-clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
+clustering with R. \emph{Journal of Statistical Software} 91, 1--30.
 }
 \seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html}.
+
+Associated functions:
 \link{nhclu_dbscan}
 }
 \author{

@@ -179,22 +179,7 @@ BUILD or LAB", call. = FALSE)
   outputs$clusters$name <- labels(dist.obj)
   
   # CLARA algorithm
-  if(is.null(seed)){
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclara(rdist = dist.obj,
-                                       n = nrow(dist.obj),
-                                       k = x,
-                                       maxiter = maxiter,
-                                       initializer = initializer,
-                                       fasttol = fasttol,
-                                       numsamples = numsamples,
-                                       sampling = sampling,
-                                       independent = independent,
-                                       seed = as.numeric(as.POSIXct(
-                                         Sys.time())) + sample(-10:10, 1)))
-  }else{
+  if(!is.null(seed)){
     outputs$algorithm <-
       lapply(n_clust,
              function(x)
@@ -208,7 +193,22 @@ BUILD or LAB", call. = FALSE)
                                        sampling = sampling,
                                        independent = independent,
                                        seed = seed))
+  }else{
+    outputs$algorithm <-
+      lapply(n_clust,
+             function(x)
+               fastkmedoids::fastclara(rdist = dist.obj,
+                                       n = nrow(dist.obj),
+                                       k = x,
+                                       maxiter = maxiter,
+                                       initializer = initializer,
+                                       fasttol = fasttol,
+                                       numsamples = numsamples,
+                                       sampling = sampling,
+                                       independent = independent,
+                                       seed = seedrng()))
   }
+
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(

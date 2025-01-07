@@ -1,53 +1,66 @@
 #' OPTICS hierarchical clustering algorithm
 #'
-#' This function performs semi-hierarchical
-#' clustering on the basis of dissimilarity with the OPTICS algorithm (Ordering
-#' Points To Identify the Clustering Structure).
+#' This function performs semi-hierarchical clustering based on dissimilarity 
+#' using the OPTICS algorithm (Ordering Points To Identify the 
+#' Clustering Structure).
 #'
-#' @param dissimilarity the output object from [dissimilarity()] or
+#' @param dissimilarity The output object from [dissimilarity()] or
 #' [similarity_to_dissimilarity()], or a `dist` object. 
 #' If a `data.frame` is used, the first two columns represent pairs of
-#' sites (or any pair of nodes), and the next column(s) are the dissimilarity
-#' indices.
+#' sites (or any pair of nodes), and the subsequent column(s) contain the 
+#' dissimilarity indices.
 #'  
-#' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of `dissimilarity` is used.
+#' @param index The name or number of the dissimilarity column to use. By 
+#' default, the third column name of `dissimilarity` is used.
 #' 
-#' @param minPts a `numeric` value specifying the minPts argument of
-#' [dbscan][dbscan::dbscan]). minPts is the minimum number of
-#' points to form a dense region. By default, it is set to the natural
-#' logarithm of the number of sites in `dissimilarity`.
+#' @param minPts A `numeric` value specifying the minPts argument of
+#' [dbscan][dbscan::dbscan]. minPts is the minimum number of points required
+#' to form a dense region. By default, it is set to the natural logarithm 
+#' of the number of sites in `dissimilarity`.
 #' 
-#' @param eps a `numeric` value specifying the eps argument of
-#' [optics][dbscan::optics]). It is the upper limit of the size
+#' @param eps A `numeric` value specifying the eps argument of
+#' [optics][dbscan::optics]. It defines the upper limit of the size
 #' of the epsilon neighborhood. Limiting the neighborhood size improves
 #' performance and has no or very little impact on the ordering as long as it
 #' is not set too low. If not specified (default behavior), the largest
-#' minPts-distance in the data set is used which gives the same result as
+#' minPts-distance in the dataset is used, which gives the same result as
 #' infinity.
 #' 
-#' @param xi a `numeric` value specifying the steepness threshold to
+#' @param xi A `numeric` value specifying the steepness threshold to
 #' identify clusters hierarchically using the Xi method
 #' (see [optics][dbscan::optics]).
 #' 
-#' @param minimum a `boolean` specifying if the hierarchy should be pruned
-#' out from the output to only keep clusters at the "minimal" level, i.e.
+#' @param minimum A `boolean` specifying whether the hierarchy should be pruned
+#' from the output to only retain clusters at the "minimal" level, i.e.,
 #' only leaf / non-overlapping clusters.
-#' If `TRUE`, then argument `show_hierarchy` should be `FALSE`.
+#' If `TRUE`, then the argument `show_hierarchy` should be set to `FALSE`.
 #' 
-#' @param show_hierarchy a `boolean` specifying if the hierarchy of
+#' @param show_hierarchy A `boolean` specifying whether the hierarchy of
 #' clusters should be included in the output. By default, the hierarchy is not
-#' visible in the clusters obtained from OPTICS - it can only be visualized by
-#' visualising the plot of the OPTICS object. If `show_hierarchy = TRUE`,
-#' then the output cluster `data.frame` will contain additional columns
+#' visible in the clusters obtained from OPTICS; it can only be visualized by
+#' plotting the OPTICS object. If `show_hierarchy = TRUE`,
+#' the output cluster `data.frame` will contain additional columns
 #' showing the hierarchy of clusters.
 #' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
+#' @param algorithm_in_output A `boolean` indicating whether the original output
 #' of [dbscan][dbscan::dbscan] should be returned in the output (`TRUE` by 
 #' default, see Value).
 #' 
-#' @param ... you can add here further arguments to be passed to `optics()`
+#' @param ... Additional arguments to be passed to `optics()`
 #' (see [optics][dbscan::optics]).
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: A `character` string containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` describing the characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` containing all objects associated with the
+#'  clustering procedure, such as the original cluster objects.}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
+#' find the output of [optics][dbscan::optics].
 #'
 #' @details
 #' The OPTICS (Ordering points to identify the clustering structure) is a
@@ -69,27 +82,21 @@
 #'
 #' @references 
 #' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 
-#' clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30. 
+#' clustering with R. \emph{Journal of Statistical Software} 91, 1--30. 
 #' 
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of [optics][dbscan::optics].
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html}.
+#' 
+#' Associated functions: 
+#' [nhclu_dbscan] 
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso [nhclu_dbscan] 
 #' @examples
 #' dissim <- dissimilarity(fishmat, metric = "all")
 #'   

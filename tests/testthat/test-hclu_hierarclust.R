@@ -14,7 +14,6 @@ d3[1] <- "1"
 d4 <- d
 d4[1] <- NA
 
-
 uni <- data.frame(
   Site1 = c("c", "b", "a"),
   Site2 = c("a", "c", "b"),
@@ -80,6 +79,11 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, TRUE)
   expect_equal(dim(clust$clusters)[2], 4)
+  
+  clust <- hclu_hierarclust(d,
+                            optimal_tree_method = "best",)
+  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
+  expect_equal(clust$name, "hclu_hierarclust")
 
   clust <- hclu_hierarclust(dissim,
                             optimal_tree_method = "best",
@@ -231,9 +235,7 @@ test_that("invalid inputs", {
     hclu_hierarclust(dissim, 
                      method = "zz",
                      optimal_tree_method = "best"),
-    "Please choose method among the followings values:
-ward.D, ward.D2, single, complete, average, mcquitty, median or centroid",
-    fixed = TRUE)
+    "^Please choose method from")
 
   expect_error(
     hclu_hierarclust(dissim, 
@@ -310,19 +312,13 @@ ward.D, ward.D2, single, complete, average, mcquitty, median or centroid",
 
   expect_error(
     hclu_hierarclust(dissim, optimal_tree_method = "zz"),
-    "Please choose optimal_tree_method among the followings values:
-iterative_consensus_tree, best, consensus",
-    fixed = TRUE)
+    "^Please choose optimal_tree_method from the following")
 
   expect_error(
     hclu_hierarclust(dissim, 
                      n_clust = "zz",
                      optimal_tree_method = "best"),
-    "n_clust must be one of those:
-        * an integer determining the number of clusters
-        * a vector of integers determining the numbers of clusters for each cut
-        * the output from bioregionalization_metrics()",
-    fixed = TRUE)
+    "^n_clust must be one of those:")
 
   expect_error(
     hclu_hierarclust(dissim, 
@@ -357,9 +353,7 @@ iterative_consensus_tree, best, consensus",
                      n_clust = 1, 
                      cut_height = 1,
                      optimal_tree_method = "best"),
-    "Please provide either n_clust or cut_height, but not both at the
-           same time.",
-    fixed = TRUE)
+    "^Please provide either n_clust or cut_height")
 
   expect_error(
     hclu_hierarclust(dissim, 
@@ -431,6 +425,67 @@ iterative_consensus_tree, best, consensus",
                      h_max = -1,
                      optimal_tree_method = "best"),
     "h_max must be higher than 0.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     h_min = 1,
+                     h_max = 0,
+                     optimal_tree_method = "best"),
+    "h_min must be inferior to h_max.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     consensus_p =  c("zz","zz"),
+                     optimal_tree_method = "best"),
+    "consensus_p must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     consensus_p = "zz",
+                     optimal_tree_method = "best"),
+    "consensus_p must be numeric.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     consensus_p = -1,
+                     optimal_tree_method = "best"),
+    "consensus_p must be higher than 0.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     consensus_p = 0.4,
+                     optimal_tree_method = "best"),
+    "consensus_p must be between 0.5 and 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     consensus_p = 1.1,
+                     optimal_tree_method = "best"),
+    "consensus_p must be between 0.5 and 1.",
+    fixed = TRUE)
+  
+  expect_message(
+    hclu_hierarclust(dissim, 
+                     optimal_tree_method = "iterative_consensus_tree"),
+    "^Building the iterative")
+  
+  expect_warning(
+    hclu_hierarclust(dissim, 
+                     method = "mcquitty",
+                     optimal_tree_method = "iterative_consensus_tree"),
+    "^mcquitty")
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     optimal_tree_method = "consensus",
+                     n_runs = 1),
+    "At least two trees are required to calculate a consensus.",
     fixed = TRUE)
 
 })

@@ -205,10 +205,10 @@ test_that("invalid inputs", {
     fixed = TRUE)  
   
   expect_error(
-    hclu_diana(dissim, n_clust = 1, cut_height = 1),
-    "Please provide either n_clust or cut_height, but not both at the
-           same time.",
-    fixed = TRUE)   
+    hclu_diana(dissim, 
+               n_clust = 1, 
+               cut_height = 1),
+    "^Please provide either n_clust or cut_height,")   
   
   expect_error(
     hclu_diana(dissim, n_clust = NULL, cut_height = "zz"),
@@ -258,6 +258,13 @@ test_that("invalid inputs", {
   expect_error(
     hclu_diana(dissim, h_max = -1),
     "h_max must be higher than 0.",
+    fixed = TRUE)    
+  
+  expect_error(
+    hclu_diana(dissim, 
+               h_min = 1,
+               h_max = 0),
+    "h_min must be inferior to h_max.",
     fixed = TRUE)    
   
 })

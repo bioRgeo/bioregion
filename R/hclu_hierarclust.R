@@ -1,91 +1,93 @@
-#' Hierarchical clustering based on dissimilarity or beta-diversity
+#' Hierarchical Clustering Based on Dissimilarity or Beta-Diversity
 #'
 #' This function generates a hierarchical tree from a dissimilarity
 #' (beta-diversity) `data.frame`, calculates the cophenetic correlation
-#' coefficient, and can get clusters from the tree if requested by the user.
-#' The function implements randomization of the dissimilarity matrix to
-#' generate the tree, with two different methods to generate the final tree.
-#' Typically, the dissimilarity `data.frame` is a
-#' `bioregion.pairwise.metric` object obtained by running `similarity`
-#' or `similarity` and then `similarity_to_dissimilarity`.
+#' coefficient, and optionally retrieves clusters from the tree upon user 
+#' request. The function includes a randomization process for the dissimilarity 
+#' matrix to generate the tree, with two methods available for constructing the 
+#' final tree. Typically, the dissimilarity `data.frame` is a
+#' `bioregion.pairwise.metric` object obtained by running `similarity`,
+#' or by running `similarity` followed by `similarity_to_dissimilarity`.
 #'
-#' @param dissimilarity the output object from [dissimilarity()] or
+#' @param dissimilarity The output object from [dissimilarity()] or
 #'  [similarity_to_dissimilarity()], or a `dist` object. 
-#'  If a `data.frame` is used, the first two 
-#' columns represent pairs of sites (or any pair of nodes), and the next
-#' column(s) are the dissimilarity indices.
+#'  If a `data.frame` is used, the first two columns represent pairs of sites 
+#'  (or any pair of nodes), and the subsequent column(s) contain the 
+#'  dissimilarity indices.
 #' 
-#' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of `dissimilarity` is used.
+#' @param index The name or number of the dissimilarity column to use. By 
+#' default, the third column name of `dissimilarity` is used.
 #' 
-#' @param method name of the hierarchical classification method, as in
+#' @param method The name of the hierarchical classification method, as in
 #' [hclust][fastcluster::hclust]. Should be one of `"ward.D"`,
 #' `"ward.D2"`, `"single"`, `"complete"`, `"average"`
-#' (= UPGMA), `"mcquitty"` (= WPGMA), `"median"` (= WPGMC) or
+#' (= UPGMA), `"mcquitty"` (= WPGMA), `"median"` (= WPGMC), or
 #' `"centroid"` (= UPGMC).
 #' 
-#' @param randomize a `boolean` indicating if the dissimilarity matrix should be
-#' randomized, to account for the order of sites in the dissimilarity matrix.
+#' @param randomize A `boolean` indicating whether the dissimilarity matrix 
+#' should be randomized to account for the order of sites in the dissimilarity
+#'  matrix.
 #' 
-#' @param n_runs number of trials to randomize the dissimilarity matrix.
+#' @param n_runs The number of trials for randomizing the dissimilarity matrix.
 #' 
-#' @param keep_trials a `boolean` indicating if all random trial results.
-#' should be stored in the output object (set to FALSE to save space if your
-#' `dissimilarity` object is large). Note that it cannot be set to `TRUE` if
-#' `optimal_tree_method = "iterative_consensus_tree"`
+#' @param keep_trials A `boolean` indicating whether all random trial results
+#' should be stored in the output object. Set to `FALSE` to save space if your
+#' `dissimilarity` object is large. Note that this cannot be set to `TRUE` if
+#' `optimal_tree_method = "iterative_consensus_tree"`.
 #' 
-#' @param optimal_tree_method a `character` string indicating how the final tree
+#' @param optimal_tree_method A `character` string indicating how the final tree
 #' should be obtained from all trials. Possible values are 
-#' `iterative_consensus_tree` (default), `best` and `consensus`. 
-#' **We recommend `iterative_consensus_tree`. See Details.** 
+#' `"iterative_consensus_tree"` (default), `"best"`, and `"consensus"`. 
+#' **We recommend `"iterative_consensus_tree"`. See Details.** 
 #' 
-#' @param n_clust an `integer` vector or a single `integer` indicating the 
+#' @param n_clust An `integer` vector or a single `integer` indicating the 
 #' number of clusters to be obtained from the hierarchical tree, or the output 
-#' from [bioregionalization_metrics]. Should not be used at the same time as
-#' `cut_height`.
+#' from [bioregionalization_metrics]. This parameter should not be used 
+#' simultaneously with `cut_height`.
 #' 
-#' @param cut_height a `numeric` vector indicating the height(s) at which the
-#' tree should be cut. Should not be used at the same time as `n_clust`.
+#' @param cut_height A `numeric` vector indicating the height(s) at which the
+#' tree should be cut. This parameter should not be used simultaneously with 
+#' `n_clust`.
 #' 
-#' @param find_h a `boolean` indicating if the height of cut should be found for
-#' the requested `n_clust`.
+#' @param find_h A `boolean` indicating whether the height of the cut should be 
+#' found for the requested `n_clust`.
 #' 
-#' @param h_max a `numeric` indicating the maximum possible tree height for
-#' the chosen `index`.
-#' 
-#' @param h_min a `numeric` indicating the minimum possible height in the tree
+#' @param h_max A `numeric` value indicating the maximum possible tree height 
 #' for the chosen `index`.
 #' 
-#' @param consensus_p a `numeric`, (only if 
-#' `optimal_tree_method = "consensus"`), 
-#' indicating the threshold proportion of trees that must 
-#' support a region/cluster for it to be included in the final consensus tree.
+#' @param h_min A `numeric` value indicating the minimum possible height in the
+#'  tree for the chosen `index`.
+#' 
+#' @param consensus_p A `numeric` value (applicable only if 
+#' `optimal_tree_method = "consensus"`) indicating the threshold proportion of 
+#' trees that must support a region/cluster for it to be included in the final 
+#' consensus tree.
 #'  
-#' @param verbose a `boolean`. (only if 
-#' `optimal_tree_method = "iterative_consensus_tree"`), Set to `FALSE` if you 
-#' want to disable the progress message 
+#' @param verbose A `boolean` (applicable only if 
+#' `optimal_tree_method = "iterative_consensus_tree"`) indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
 #' 
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
+#' \item{**name**: A `character` string containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` describing the characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` containing all objects associated with the
+#'  clustering procedure, such as the original cluster objects.}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
 #'
 #' In the `algorithm` slot, users can find the following elements:
 #'
 #' \itemize{
-#' \item{`trials`: a list containing all randomization trials. Each trial
-#' contains the dissimilarity matrix, with site order randomized, the
-#' associated tree and the cophenetic correlation coefficient (Spearman) for
-#' that tree}
-#' \item{`final.tree`: a `hclust` object containing the final
-#' hierarchical tree to be used}
-#' \item{`final.tree.coph.cor`: the cophenetic correlation coefficient
-#' between the initial dissimilarity matrix and `final.tree`}
+#' \item{`trials`: A list containing all randomization trials. Each trial
+#' includes the dissimilarity matrix with randomized site order, the
+#' associated tree, and the cophenetic correlation coefficient (Spearman) for
+#' that tree.}
+#' \item{`final.tree`: An `hclust` object representing the final
+#' hierarchical tree to be used.}
+#' \item{`final.tree.coph.cor`: The cophenetic correlation coefficient
+#' between the initial dissimilarity matrix and the `final.tree`.}
 #' }
 #'  
 #' @details
@@ -164,7 +166,7 @@
 #' 
 #' Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH 
 #' (2013) Recluster: an unbiased clustering procedure for beta-diversity 
-#' turnover. \emph{Ecography}, 36(5), 1070--1075.
+#' turnover. \emph{Ecography} 36, 1070--1075.
 #' 
 #' Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure 
 #' for extrapolating turnover regionalization at mid-small spatial scales, 
@@ -286,8 +288,9 @@ hclu_hierarclust <- function(dissimilarity,
   controls(args = method, data = NULL, type = "character")
   if(!(method %in% c("ward.D", "ward.D2", "single", "complete", "average",
                           "mcquitty", "median", "centroid" ))){
-    stop("Please choose method among the followings values:
-ward.D, ward.D2, single, complete, average, mcquitty, median or centroid", 
+    stop(paste0("Please choose method from the following:\n",
+                "ward.D, ward.D2, single, complete, average, mcquitty, median ", 
+                "or centroid"), 
          call. = FALSE)
   }
   controls(args = randomize, data = NULL, type = "boolean")
@@ -296,21 +299,23 @@ ward.D, ward.D2, single, complete, average, mcquitty, median or centroid",
   controls(args = optimal_tree_method, data = NULL, type = "character")
   if(!(optimal_tree_method %in% c("iterative_consensus_tree",
                                   "best", "consensus"))){
-    stop("Please choose optimal_tree_method among the followings values:
-iterative_consensus_tree, best, consensus", 
+    stop(paste0("Please choose optimal_tree_method from the following:\n",
+                "iterative_consensus_tree, best or consensus"), 
     call. = FALSE)
   }
 
   if(!is.null(n_clust)) {
     if(is.numeric(n_clust)) {
-        controls(args = n_clust, data = NULL, 
+        controls(args = n_clust, 
+                 data = NULL, 
                  type = "strict_positive_integer_vector")
     } else if(inherits(n_clust, "bioregion.partition.metrics")){
       if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {
-        stop("n_clust does not have an optimal number of clusters. Did you
-        specify partition_optimisation = TRUE in bioregionalization_metrics()?", 
+        stop(paste0("n_clust does not have an optimal number of clusters. ",
+                    "Did you specify partition_optimisation = TRUE in ",
+                    "bioregionalization_metrics()?"), 
              call. = FALSE)
       }
     } else{
@@ -321,8 +326,8 @@ iterative_consensus_tree, best, consensus",
            call. = FALSE)
     }
     if(!is.null(cut_height)){
-      stop("Please provide either n_clust or cut_height, but not both at the
-           same time.", 
+      stop(paste0("Please provide either n_clust or cut_height, ",
+                  "but not both at the same time."), 
            call. = FALSE)
     }
   }
@@ -330,14 +335,18 @@ iterative_consensus_tree, best, consensus",
     controls(args = cut_height, data = NULL, type = "positive_numeric_vector")
   }
   controls(args = find_h, data = NULL, type = "boolean")
-  controls(args = h_min, data = NULL, type = "positive_numeric")
-  controls(args = h_max, data = NULL, type = "positive_numeric")
-  if(h_min > h_max){
-    stop("h_min must be inferior to h_max.")
+  if(find_h){
+    controls(args = h_min, data = NULL, type = "positive_numeric")
+    controls(args = h_max, data = NULL, type = "positive_numeric")
+    if(h_min > h_max){
+      stop("h_min must be inferior to h_max.",
+           call. = FALSE)
+    }
   }
   controls(args = consensus_p, data = NULL, type = "positive_numeric")
   if(consensus_p < 0.5 | consensus_p > 1) {
-    stop("consensus_p must be between 0.5 and 1")
+    stop("consensus_p must be between 0.5 and 1.",
+         call. = FALSE)
   }
   
   # 2. Function ---------------------------------------------------------------
@@ -417,7 +426,8 @@ iterative_consensus_tree, best, consensus",
       
 
     } else {
-      message(paste0("Randomizing the dissimilarity matrix with ", n_runs,
+      message(paste0("Randomizing the dissimilarity matrix with ", 
+                     n_runs,
                      " trials"))
       
       results <- vector("list", n_runs)
@@ -440,15 +450,21 @@ iterative_consensus_tree, best, consensus",
       if (optimal_tree_method == "best") {
         coph.coeffs <- sapply(results, function(x) x$cophcor)
         
-        message(paste0(" -- range of cophenetic correlation coefficients among trials: ",
-                       round(min(coph.coeffs), 4), " - ", round(max(coph.coeffs), 4)))
+        message(paste0(" -- range of cophenetic correlation coefficients ",
+                       "among trials: ",
+                       round(min(coph.coeffs), 4), 
+                       " - ", 
+                       round(max(coph.coeffs), 4)))
 
         best.run <- which.max(coph.coeffs)
         final.tree <- results[[best.run]]$hierartree
         final.tree.metrics <- results[[best.run]]
         
       } else if (optimal_tree_method == "consensus") {
-        if (n_runs < 2) stop("At least two trees are required to calculate a consensus.")
+        if (n_runs < 2) {
+          stop("At least two trees are required to calculate a consensus.",
+               call. = FALSE)
+        }
 
         trees <- lapply(results, function(trial) ape::as.phylo(trial$hierartree))
 
@@ -474,11 +490,10 @@ iterative_consensus_tree, best, consensus",
     }
 
     
-    message(paste0(
-      "\nFinal tree has a ",
-      round(outputs$algorithm$final.tree.coph.cor, 4),
-      " cophenetic correlation coefficient with the initial dissimilarity
-      matrix\n"))
+    message(paste0("\nFinal tree has a ",
+                   round(outputs$algorithm$final.tree.coph.cor, 4),
+                   " cophenetic correlation coefficient with the initial ",
+                   "dissimilarity matrix\n"))
     
   } else  {
     outputs$algorithm$final.tree <- fastcluster::hclust(dist.obj,

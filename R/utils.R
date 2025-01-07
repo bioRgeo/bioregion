@@ -863,3 +863,13 @@ make.unique.2 <- function(x, sep = ".") {
     }
   })
 }
+
+# seedrng
+seedrng <- function() {
+  # as.numeric(as.POSIXct(Sys.time())) + sample(-10:10, 1)
+  #sample(1:(.Machine$integer.max), 1)
+  sample(1:1000000, 1)
+}
+
+
+

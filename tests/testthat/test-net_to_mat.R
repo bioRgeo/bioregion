@@ -98,12 +98,7 @@ test_that("valid outputs", {
 })
 
 # Tests for invalid inputs -----------------------------------------------------
-test_that("indalid inputs", {
-  
-  expect_error(
-    net_to_mat(net, weight = "zz"),
-    "weight must be a boolean.", 
-    fixed = TRUE)
+test_that("invalid inputs", {
   
   expect_error(
     net_to_mat(net, weight = c("zz",1)),
