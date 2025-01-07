@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2024-12-29</h4>
+            <h4 data-toc-skip class="date">2025-01-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -204,8 +204,7 @@ illustrates the divisive method.</p>
 <code class="sourceCode R"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Final tree has a 0.6863 cophenetic correlation coefficient with the initial dissimilarity</span></span>
-<span><span class="co">##       matrix</span></span></code></pre>
+<span><span class="co">## Final tree has a 0.6863 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
 <p>The function gives us some information as it proceeds. Notably, it
 talks about a randomization of the dissimilarity matrix - this is a very
 important feature because hierarchical clustering is strongly influenced
@@ -507,8 +506,7 @@ exploration (<code>keep_trials = TRUE</code>).</p>
 <pre><code><span><span class="co">## Randomizing the dissimilarity matrix with 100 trials</span></span></code></pre>
 <pre><code><span><span class="co">##  -- range of cophenetic correlation coefficients among trials: 0.6669 - 0.6974</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Final tree has a 0.6974 cophenetic correlation coefficient with the initial dissimilarity</span></span>
-<span><span class="co">##       matrix</span></span></code></pre>
+<span><span class="co">## Final tree has a 0.6974 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
 <p>Another possible approach is to build a simple consensus tree among
 all the trials. However, we generally do not recommend constructing a
 consensus tree, because the topology of simple consensus trees can be
@@ -521,8 +519,7 @@ Let’s see it in action here:</p>
 <span>                                   keep_trials <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Randomizing the dissimilarity matrix with 100 trials</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Final tree has a 0.202 cophenetic correlation coefficient with the initial dissimilarity</span></span>
-<span><span class="co">##       matrix</span></span></code></pre>
+<span><span class="co">## Final tree has a 0.202 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
 <p>See how the cophenetic correlation coefficient for the consensus tree
 is terrible compared to the IHCT and best tree ?</p>
 <p>This consensus tree has almost no correlation with our initial
@@ -606,8 +603,7 @@ clustering.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the tree with the Diana algorithm</span></span>
 <span><span class="va">tree_diana</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_diana.html">hclu_diana</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Output tree has a 0.41 cophenetic correlation coefficient with the initial</span></span>
-<span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
+<pre><code><span><span class="co">## Output tree has a 0.41 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree_diana</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-20-1.png" width="768"></p>
@@ -652,12 +648,13 @@ evaluation plot.</p>
 <span>                          n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Final tree has a 0.6842 cophenetic correlation coefficient with the initial dissimilarity</span></span>
-<span><span class="co">##       matrix</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The requested number of cluster could not be found</span></span>
-<span><span class="co">##                          for k = 4. Closest number found: 5</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The requested number of cluster could not be found</span></span>
-<span><span class="co">##                          for k = 67. Closest number found: 66</span></span></code></pre>
+<span><span class="co">## Final tree has a 0.6842 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The</span></span>
+<span><span class="co">## requested number of cluster could not be found for k = 4. Closest number found:</span></span>
+<span><span class="co">## 5</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The</span></span>
+<span><span class="co">## requested number of cluster could not be found for k = 67. Closest number</span></span>
+<span><span class="co">## found: 66</span></span></code></pre>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 3. Calculate the same evaluation metric as Holt et al. 2013</span></span>
 <span><span class="va">eval_tree4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span></span>
