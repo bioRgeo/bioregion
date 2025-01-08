@@ -91,181 +91,181 @@ on the Louvain algorithm.</p>
 
 
 <dl><dt id="arg-net">net<a class="anchor" aria-label="anchor" href="#arg-net"></a></dt>
-<dd><p>the output object from <code><a href="similarity.html">similarity()</a></code> or
+<dd><p>The output object from <code><a href="similarity.html">similarity()</a></code> or
 <code><a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity()</a></code>.
 If a <code>data.frame</code> is used, the first two columns represent pairs of sites
 (or any pair of nodes), and the next column(s) are the similarity indices.</p></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the weights should be considered
+<dd><p>A <code>boolean</code> indicating if the weights should be considered
 if there are more than two columns.</p></dd>
 
 
 <dt id="arg-cut-weight">cut_weight<a class="anchor" aria-label="anchor" href="#arg-cut-weight"></a></dt>
-<dd><p>a minimal weight value. If <code>weight</code> is TRUE, the links
+<dd><p>A minimal weight value. If <code>weight</code> is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).</p></dd>
+considered (<code>0</code> by default).</p></dd>
 
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
-<dd><p>name or number of the column to use as weight. By default,
+<dd><p>The name or number of the column to use as weight. By default,
 the third column name of <code>net</code> is used.</p></dd>
 
 
 <dt id="arg-lang">lang<a class="anchor" aria-label="anchor" href="#arg-lang"></a></dt>
-<dd><p>a string indicating what version of Louvain should be used
-(<code>igraph</code> or <code>cpp</code>, see Details).</p></dd>
+<dd><p>A string indicating which version of Louvain should be used
+(<code>"igraph"</code> or <code>"cpp"</code>, see Details).</p></dd>
 
 
 <dt id="arg-resolution">resolution<a class="anchor" aria-label="anchor" href="#arg-resolution"></a></dt>
-<dd><p>a resolution parameter to adjust the modularity
+<dd><p>A resolution parameter to adjust the modularity
 (1 is chosen by default, see Details).</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>for the random number generator (only when <code>lang = "igraph"</code>,
+<dd><p>The random number generator seed (only when <code>lang = "igraph"</code>,
 NULL for random by default).</p></dd>
 
 
 <dt id="arg-q">q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>
-<dd><p>the quality function used to compute partition of the graph
+<dd><p>The quality function used to compute the partition of the graph
 (modularity is chosen by default, see Details).</p></dd>
 
 
 <dt id="arg-c">c<a class="anchor" aria-label="anchor" href="#arg-c"></a></dt>
-<dd><p>the parameter for the Owsinski-Zadrozny quality function
+<dd><p>The parameter for the Owsinski-Zadrozny quality function
 (between 0 and 1, 0.5 is chosen by default).</p></dd>
 
 
 <dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>the kappa_min value for the Shi-Malik quality function
+<dd><p>The kappa_min value for the Shi-Malik quality function
 (it must be &gt; 0, 1 is chosen by default).</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
-<dd><p>a boolean indicating if the network is bipartite
+<dd><p>A <code>boolean</code> indicating if the network is bipartite
 (see Details).</p></dd>
 
 
 <dt id="arg-site-col">site_col<a class="anchor" aria-label="anchor" href="#arg-site-col"></a></dt>
-<dd><p>name or number for the column of site nodes
-(i.e. primary nodes).</p></dd>
+<dd><p>The name or number for the column of site nodes
+(i.e., primary nodes).</p></dd>
 
 
 <dt id="arg-species-col">species_col<a class="anchor" aria-label="anchor" href="#arg-species-col"></a></dt>
-<dd><p>name or number for the column of species nodes
-(i.e. feature nodes).</p></dd>
+<dd><p>The name or number for the column of species nodes
+(i.e., feature nodes).</p></dd>
 
 
 <dt id="arg-return-node-type">return_node_type<a class="anchor" aria-label="anchor" href="#arg-return-node-type"></a></dt>
-<dd><p>a <code>character</code> indicating what types of nodes
-(<code>site</code>, <code>species</code> or <code>both</code>) should be returned in the output
-(<code>return_node_type = "both"</code> by default).</p></dd>
+<dd><p>A <code>character</code> indicating what types of nodes
+(<code>"site"</code>, <code>"species"</code>, or <code>"both"</code>) should be returned in the output
+(<code>"both"</code> by default).</p></dd>
 
 
 <dt id="arg-binpath">binpath<a class="anchor" aria-label="anchor" href="#arg-binpath"></a></dt>
-<dd><p>a <code>character</code> indicating the path to the bin folder
+<dd><p>A <code>character</code> indicating the path to the bin folder
 (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
 <dt id="arg-check-install">check_install<a class="anchor" aria-label="anchor" href="#arg-check-install"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the function should check that
-the Louvain as been properly installed (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
+<dd><p>A <code>boolean</code> indicating if the function should check that
+Louvain has been properly installed (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
 <dt id="arg-path-temp">path_temp<a class="anchor" aria-label="anchor" href="#arg-path-temp"></a></dt>
-<dd><p>a <code>character</code> indicating the path to the temporary folder
+<dd><p>A <code>character</code> indicating the path to the temporary folder
 (see Details).</p></dd>
 
 
 <dt id="arg-delete-temp">delete_temp<a class="anchor" aria-label="anchor" href="#arg-delete-temp"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the temporary folder should
+<dd><p>A <code>boolean</code> indicating if the temporary folder should
 be removed (see Details).</p></dd>
 
 
 <dt id="arg-algorithm-in-output">algorithm_in_output<a class="anchor" aria-label="anchor" href="#arg-algorithm-in-output"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the original output
+<dd><p>A <code>boolean</code> indicating if the original output
 of <a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a> should be returned in the
 output (<code>TRUE</code> by default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
-<li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
-<li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
-<li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
+    <p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: A <code>character</code> containing the name of the algorithm.</p></li>
+<li><p><strong>args</strong>: A <code>list</code> of input arguments as provided by the user.</p></li>
+<li><p><strong>inputs</strong>: A <code>list</code> of characteristics of the clustering process.</p></li>
+<li><p><strong>algorithm</strong>: A <code>list</code> of all objects associated with the
 clustering procedure, such as original cluster objects (only if
-<code>algorithm_in_output = TRUE</code>)</p></li>
-<li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
-</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can find an
-the output of <a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a>
-if <code>lang = "igraph"</code> and the following element if <code>lang = "cpp"</code>:</p>
-<ul><li><p><code>cmd</code>: the command line use to run Louvain</p></li>
-<li><p><code>version</code>: the Louvain version</p></li>
-<li><p><code>web</code>: Louvain's website</p></li>
-</ul><p>.</p>
-    </div>
+<code>algorithm_in_output = TRUE</code>).</p></li>
+<li><p><strong>clusters</strong>: A <code>data.frame</code> containing the clustering results.</p></li>
+</ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
+find the output of <a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a> if
+<code>lang = "igraph"</code> and the following element if <code>lang = "cpp"</code>:</p>
+<ul><li><p><code>cmd</code>: The command line used to run Louvain.</p></li>
+<li><p><code>version</code>: The Louvain version.</p></li>
+<li><p><code>web</code>: The Louvain's website.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Louvain is a network community detection algorithm proposed in
-(Blondel et al., 2008). This function proposed two
-implementations of the function (parameter <code>lang</code>): the
-<a href="https://cran.r-project.org/package=igraph" class="external-link">igraph</a>
+(Blondel et al., 2008). This function offers two
+implementations of the Louvain algorithm (controlled by the <code>lang</code> parameter):
+the <a href="https://cran.r-project.org/package=igraph" class="external-link">igraph</a>
 implementation (<a href="https://r.igraph.org/reference/cluster_louvain.html" class="external-link">cluster_louvain</a>) and the C++
 implementation (<a href="https://sourceforge.net/projects/louvain/" class="external-link">https://sourceforge.net/projects/louvain/</a>, version 0.3).</p>
 <p>The <a href="https://cran.r-project.org/package=igraph" class="external-link">igraph</a>
-implementation offers the possibility to adjust the resolution parameter of
-the modularity function (<code>resolution</code> argument) that the algorithm uses
-internally. Lower values typically yield fewer, larger clusters. The original
+implementation allows adjustment of the resolution parameter of
+the modularity function (<code>resolution</code> argument) used internally by the
+algorithm. Lower values typically yield fewer, larger clusters. The original
 definition of modularity is recovered when the resolution parameter
 is set to 1 (by default).</p>
-<p>The C++ implementation offers the possibility to choose among several
-quality functions,
-<code>q = 0</code> for the classical Newman-Girvan criterion (also called
-"Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
-Owsinski-Zadrozny criterion (you should specify the value of the parameter
-with the <code>c</code> argument), 3 for the Goldberg Density criterion, 4 for the
-A-weighted Condorcet criterion, 5 for the Deviation to Indetermination
-criterion, 6 for the Deviation to Uniformity criterion, 7 for the Profile
-Difference criterion, 8 for the Shi-Malik criterion (you should specify the
-value of kappa_min with <code>k</code> argument) and 9 for the Balanced Modularity
+<p>The C++ implementation provides several quality functions:
+<code>q = 0</code> for the classical Newman-Girvan criterion (Modularity),
+<code>q = 1</code> for the Zahn-Condorcet criterion, <code>q = 2</code> for the Owsinski-Zadrozny
+criterion (parameterized by <code>c</code>), <code>q = 3</code> for the Goldberg Density criterion,
+<code>q = 4</code> for the A-weighted Condorcet criterion, <code>q = 5</code> for the Deviation to
+Indetermination criterion, <code>q = 6</code> for the Deviation to Uniformity criterion,
+<code>q = 7</code> for the Profile Difference criterion, <code>q = 8</code> for the Shi-Malik
+criterion (parameterized by <code>k</code>), and <code>q = 9</code> for the Balanced Modularity
 criterion.</p>
-<p>The C++ version of Louvain is based on the version 0.3
-(<a href="https://sourceforge.net/projects/louvain/" class="external-link">https://sourceforge.net/projects/louvain/</a>). This function needs
-binary files to run. They can be installed with
-<a href="install_binaries.html">install_binaries</a>.</p>
+<p>The C++ version is based on version 0.3
+(<a href="https://sourceforge.net/projects/louvain/" class="external-link">https://sourceforge.net/projects/louvain/</a>). Binary files are required to run it,
+and can be installed with <a href="install_binaries.html">install_binaries</a>.</p>
 <p><strong>If you changed the default path to the <code>bin</code> folder
-while running <a href="install_binaries.html">install_binaries</a> PLEASE MAKE SURE to set <code>binpath</code>
+while running <a href="install_binaries.html">install_binaries</a>, PLEASE MAKE SURE to set <code>binpath</code>
 accordingly.</strong></p>
-<p><strong>If you did not used <a href="install_binaries.html">install_binaries</a> to change the permissions and test
-the binary files PLEASE MAKE SURE to set <code>check_install</code> accordingly.</strong></p>
-<p>The C++ version of Louvain generates temporary folders and/or files that are
-stored in the <code>path_temp</code> folder ("louvain_temp" with an unique timestamp
-located in the bin folder in <code>binpath</code> by default). This temporary folder
-is removed by default (<code>delete_temp = TRUE</code>).</p>
+<p><strong>If you did not use <a href="install_binaries.html">install_binaries</a> to change the permissions or test
+the binary files, PLEASE MAKE SURE to set <code>check_install</code> accordingly.</strong></p>
+<p>The C++ version generates temporary folders and/or files in the <code>path_temp</code>
+folder ("louvain_temp" with a unique timestamp located in the bin folder in
+<code>binpath</code> by default). This temporary folder is removed by default
+(<code>delete_temp = TRUE</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Although this algorithm was not primarily designed to deal with bipartite
-network, it is possible to consider the bipartite network as unipartite
+networks, it is possible to consider the bipartite network as a unipartite
 network (<code>bipartite = TRUE</code>).</p>
 <p>Do not forget to indicate which of the first two columns is dedicated to the
-site nodes (i.e. primary nodes) and species nodes (i.e. feature nodes) using
+site nodes (i.e., primary nodes) and species nodes (i.e., feature nodes) using
 the arguments <code>site_col</code> and <code>species_col</code>. The type of nodes returned in
 the output can be chosen with the argument <code>return_node_type</code> equal to
-<code>both</code> to keep both types of nodes, <code>sites</code> to preserve only the sites
-nodes and <code>species</code> to preserve only the species nodes.</p>
+<code>"both"</code> to keep both types of nodes, <code>"site"</code> to preserve only the site
+nodes, and <code>"species"</code> to preserve only the species nodes.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Blondel VD, Guillaume JL, Lambiotte R &amp; Mech ELJS (2008) Fast unfolding of
-communities in large networks. <em>J. Stat. Mech.</em>, 10(2008), P10008.</p>
+communities in large networks. <em>J. Stat. Mech.</em> 10, P10008.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="install_binaries.html">install_binaries()</a></code>, <code><a href="netclu_infomap.html">netclu_infomap()</a></code>, <code><a href="netclu_oslom.html">netclu_oslom()</a></code></p></div>
+    <div class="dont-index"><p>For more details illustrated with a practical example,
+see the vignette:
+<a href="https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html</a>.</p>
+<p>Associated functions:
+<a href="netclu_infomap.html">netclu_infomap</a> <a href="netclu_greedy.html">netclu_greedy</a> <a href="netclu_oslom.html">netclu_oslom</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

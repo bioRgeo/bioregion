@@ -81,7 +81,7 @@ greedy optimization of modularity.</p>
 
 
 <dl><dt id="arg-net">net<a class="anchor" aria-label="anchor" href="#arg-net"></a></dt>
-<dd><p>the output object from <code><a href="similarity.html">similarity()</a></code> or
+<dd><p>The output object from <code><a href="similarity.html">similarity()</a></code> or
 <code><a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity()</a></code>.
 If a <code>data.frame</code> is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
@@ -89,44 +89,44 @@ indices.</p></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the weights should be considered
+<dd><p>A <code>boolean</code> indicating if the weights should be considered
 if there are more than two columns.</p></dd>
 
 
 <dt id="arg-cut-weight">cut_weight<a class="anchor" aria-label="anchor" href="#arg-cut-weight"></a></dt>
-<dd><p>a minimal weight value. If <code>weight</code> is TRUE, the links
+<dd><p>A minimal weight value. If <code>weight</code> is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).</p></dd>
+considered (0 by default).</p></dd>
 
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
-<dd><p>name or number of the column to use as weight. By default,
+<dd><p>The name or number of the column to use as weight. By default,
 the third column name of <code>net</code> is used.</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the network is bipartite
+<dd><p>A <code>boolean</code> indicating if the network is bipartite
 (see Details).</p></dd>
 
 
 <dt id="arg-site-col">site_col<a class="anchor" aria-label="anchor" href="#arg-site-col"></a></dt>
-<dd><p>name or number for the column of site nodes
+<dd><p>The name or number for the column of site nodes
 (i.e. primary nodes).</p></dd>
 
 
 <dt id="arg-species-col">species_col<a class="anchor" aria-label="anchor" href="#arg-species-col"></a></dt>
-<dd><p>name or number for the column of species nodes
+<dd><p>The name or number for the column of species nodes
 (i.e. feature nodes).</p></dd>
 
 
 <dt id="arg-return-node-type">return_node_type<a class="anchor" aria-label="anchor" href="#arg-return-node-type"></a></dt>
-<dd><p>a <code>character</code> indicating what types of nodes
+<dd><p>A <code>character</code> indicating what types of nodes
 (<code>site</code>, <code>species</code> or <code>both</code>) should be returned in the output
 (<code>return_node_type = "both"</code> by default).</p></dd>
 
 
 <dt id="arg-algorithm-in-output">algorithm_in_output<a class="anchor" aria-label="anchor" href="#arg-algorithm-in-output"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the original output
+<dd><p>A <code>boolean</code> indicating if the original output
 of <a href="https://r.igraph.org/reference/cluster_fast_greedy.html" class="external-link">cluster_fast_greedy</a> should be returned in
 the output (<code>TRUE</code> by default, see Value).</p></dd>
 
@@ -167,7 +167,15 @@ preserve only the species nodes.</p>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Clauset A, Newman MEJ &amp; Moore C (2004) Finding community structure in very
-large networks. <em>Phys. Rev. E</em>, 70, 066111.</p>
+large networks. <em>Phys. Rev. E</em> 70, 066111.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>For more details illustrated with a practical example,
+see the vignette:
+<a href="https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html</a>.</p>
+<p>Associated functions:
+<a href="netclu_infomap.html">netclu_infomap</a> <a href="netclu_louvain.html">netclu_louvain</a> <a href="netclu_oslom.html">netclu_oslom</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

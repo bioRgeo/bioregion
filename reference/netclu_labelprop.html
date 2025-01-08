@@ -82,68 +82,69 @@ on propagating labels.</p>
 
 
 <dl><dt id="arg-net">net<a class="anchor" aria-label="anchor" href="#arg-net"></a></dt>
-<dd><p>the output object from <code><a href="similarity.html">similarity()</a></code> or
+<dd><p>The output object from <code><a href="similarity.html">similarity()</a></code> or
 <code><a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity()</a></code>. If a <code>data.frame</code> is used, the first two
 columns represent pairs of sites (or any pair of nodes), and the next
 column(s) are the similarity indices.</p></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the weights should be considered
+<dd><p>A <code>boolean</code> indicating if the weights should be considered
 if there are more than two columns.</p></dd>
 
 
 <dt id="arg-cut-weight">cut_weight<a class="anchor" aria-label="anchor" href="#arg-cut-weight"></a></dt>
-<dd><p>a minimal weight value. If <code>weight</code> is TRUE, the links
+<dd><p>A minimal weight value. If <code>weight</code> is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).</p></dd>
+considered (<code>0</code> by default).</p></dd>
 
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
-<dd><p>name or number of the column to use as weight. By default,
+<dd><p>The name or number of the column to use as weight. By default,
 the third column name of <code>net</code> is used.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>for the random number generator (NULL for random by default).</p></dd>
+<dd><p>The seed for the random number generator (<code>NULL</code> for random
+by default).</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the network is bipartite
+<dd><p>A <code>boolean</code> indicating if the network is bipartite
 (see Details).</p></dd>
 
 
 <dt id="arg-site-col">site_col<a class="anchor" aria-label="anchor" href="#arg-site-col"></a></dt>
-<dd><p>name or number for the column of site nodes
+<dd><p>The name or number for the column of site nodes
 (i.e. primary nodes).</p></dd>
 
 
 <dt id="arg-species-col">species_col<a class="anchor" aria-label="anchor" href="#arg-species-col"></a></dt>
-<dd><p>name or number for the column of species nodes
+<dd><p>The name or number for the column of species nodes
 (i.e. feature nodes).</p></dd>
 
 
 <dt id="arg-return-node-type">return_node_type<a class="anchor" aria-label="anchor" href="#arg-return-node-type"></a></dt>
-<dd><p>a <code>character</code> indicating what types of nodes
-(<code>site</code>, <code>species</code> or <code>both</code>) should be returned in the output
-(<code>return_node_type = "both"</code> by default).</p></dd>
+<dd><p>A <code>character</code> indicating what types of nodes
+(<code>"site"</code>, <code>"species"</code>, or <code>"both"</code>) should be returned in the output
+(<code>"both"</code> by default).</p></dd>
 
 
 <dt id="arg-algorithm-in-output">algorithm_in_output<a class="anchor" aria-label="anchor" href="#arg-algorithm-in-output"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the original output
+<dd><p>A <code>boolean</code> indicating if the original output
 of <a href="https://r.igraph.org/reference/cluster_label_prop.html" class="external-link">cluster_label_prop</a> should be returned in the
 output (<code>TRUE</code> by default, see Value).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
-<li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
-<li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
-<li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
+    <p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: A <code>character</code> containing the name of the algorithm.</p></li>
+<li><p><strong>args</strong>: A <code>list</code> of input arguments as provided by the user.</p></li>
+<li><p><strong>inputs</strong>: A <code>list</code> of characteristics of the clustering process.</p></li>
+<li><p><strong>algorithm</strong>: A <code>list</code> of all objects associated with the
 clustering procedure, such as original cluster objects (only if
-<code>algorithm_in_output = TRUE</code>)</p></li>
-<li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
+<code>algorithm_in_output = TRUE</code>).</p></li>
+<li><p><strong>clusters</strong>: A <code>data.frame</code> containing the clustering results.</p></li>
 </ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
 find a "communities" object, output of
 <a href="https://r.igraph.org/reference/cluster_label_prop.html" class="external-link">cluster_label_prop</a>.</p>
@@ -158,21 +159,29 @@ package (<a href="https://r.igraph.org/reference/cluster_label_prop.html" class=
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Although this algorithm was not primarily designed to deal with bipartite
-network, it is possible to consider the bipartite network as unipartite
+networks, it is possible to consider the bipartite network as a unipartite
 network (<code>bipartite = TRUE</code>).</p>
 <p>Do not forget to indicate which of the first two columns is
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+dedicated to the site nodes (i.e., primary nodes) and species nodes (i.e.
 feature nodes) using the arguments <code>site_col</code> and <code>species_col</code>.
 The type of nodes returned in the output can be chosen with the argument
-<code>return_node_type</code> equal to <code>both</code> to keep both types of nodes,
-<code>sites</code> to preserve only the sites nodes and <code>species</code> to
+<code>return_node_type</code> equal to <code>"both"</code> to keep both types of nodes,
+<code>"site"</code> to preserve only the site nodes, and <code>"species"</code> to
 preserve only the species nodes.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Raghavan UN, Albert R &amp; Kumara S (2007) Near linear time algorithm to detect
-community structures in large-scale networks. <em>Physical Review E</em>, 76(3)
-, 036106.</p>
+community structures in large-scale networks. <em>Physical Review E</em> 76,
+036106.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>For more details illustrated with a practical example,
+see the vignette:
+<a href="https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html</a>.</p>
+<p>Associated functions:
+<a href="netclu_infomap.html">netclu_infomap</a> <a href="netclu_louvain.html">netclu_louvain</a> <a href="netclu_oslom.html">netclu_oslom</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -192,7 +201,6 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">net_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">comat</span>, weight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clust2</span> <span class="op">&lt;-</span> <span class="fu">netclu_labelprop</span><span class="op">(</span><span class="va">net_bip</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -93,7 +93,7 @@ on the Infomap algorithm (<a href="https://github.com/mapequation/infomap" class
 
 
 <dl><dt id="arg-net">net<a class="anchor" aria-label="anchor" href="#arg-net"></a></dt>
-<dd><p>the output object from <code><a href="similarity.html">similarity()</a></code> or
+<dd><p>The output object from <code><a href="similarity.html">similarity()</a></code> or
 <code><a href="dissimilarity_to_similarity.html">dissimilarity_to_similarity()</a></code>.
 If a <code>data.frame</code> is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
@@ -101,117 +101,118 @@ indices.</p></dd>
 
 
 <dt id="arg-weight">weight<a class="anchor" aria-label="anchor" href="#arg-weight"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the weights should be considered
+<dd><p>A <code>boolean</code> indicating if the weights should be considered
 if there are more than two columns.</p></dd>
 
 
 <dt id="arg-cut-weight">cut_weight<a class="anchor" aria-label="anchor" href="#arg-cut-weight"></a></dt>
-<dd><p>a minimal weight value. If <code>weight</code> is TRUE, the links
+<dd><p>A minimal weight value. If <code>weight</code> is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).</p></dd>
+considered (<code>0</code> by default).</p></dd>
 
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
-<dd><p>name or number of the column to use as weight. By default,
+<dd><p>The name or number of the column to use as weight. By default,
 the third column name of <code>net</code> is used.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>for the random number generator (NULL for random by default).</p></dd>
+<dd><p>The seed for the random number generator (<code>NULL</code> for random by
+default).</p></dd>
 
 
 <dt id="arg-nbmod">nbmod<a class="anchor" aria-label="anchor" href="#arg-nbmod"></a></dt>
-<dd><p>penalize solutions the more they differ from this number (0 by
+<dd><p>Penalize solutions the more they differ from this number (<code>0</code> by
 default for no preferred number of modules).</p></dd>
 
 
 <dt id="arg-markovtime">markovtime<a class="anchor" aria-label="anchor" href="#arg-markovtime"></a></dt>
-<dd><p>scales link flow to change the cost of moving between
-modules, higher values results in fewer modules (default is 1).</p></dd>
+<dd><p>Scales link flow to change the cost of moving between
+modules, higher values result in fewer modules (<code>1</code> by default).</p></dd>
 
 
 <dt id="arg-numtrials">numtrials<a class="anchor" aria-label="anchor" href="#arg-numtrials"></a></dt>
-<dd><p>for the number of trials before picking up the best
+<dd><p>For the number of trials before picking up the best
 solution.</p></dd>
 
 
 <dt id="arg-twolevel">twolevel<a class="anchor" aria-label="anchor" href="#arg-twolevel"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the algorithm should optimize a
-two-level partition of the network (default is multi-level).</p></dd>
+<dd><p>A <code>boolean</code> indicating if the algorithm should optimize a
+two-level partition of the network (<code>FALSE</code> by default for multi-level).</p></dd>
 
 
 <dt id="arg-show-hierarchy">show_hierarchy<a class="anchor" aria-label="anchor" href="#arg-show-hierarchy"></a></dt>
-<dd><p>a <code>boolean</code> specifying if the hierarchy of community
-should be identifiable in the outputs (FALSE by default).</p></dd>
+<dd><p>A <code>boolean</code> specifying if the hierarchy of community
+should be identifiable in the outputs (<code>FALSE</code> by default).</p></dd>
 
 
 <dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the network is directed (from
+<dd><p>A <code>boolean</code> indicating if the network is directed (from
 column 1 to column 2).</p></dd>
 
 
 <dt id="arg-bipartite-version">bipartite_version<a class="anchor" aria-label="anchor" href="#arg-bipartite-version"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the bipartite version of
+<dd><p>A <code>boolean</code> indicating if the bipartite version of
 Infomap should be used (see Note).</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the network is bipartite
+<dd><p>A <code>boolean</code> indicating if the network is bipartite
 (see Note).</p></dd>
 
 
 <dt id="arg-site-col">site_col<a class="anchor" aria-label="anchor" href="#arg-site-col"></a></dt>
-<dd><p>name or number for the column of site nodes
+<dd><p>The name or number for the column of site nodes
 (i.e. primary nodes).</p></dd>
 
 
 <dt id="arg-species-col">species_col<a class="anchor" aria-label="anchor" href="#arg-species-col"></a></dt>
-<dd><p>name or number for the column of species nodes
+<dd><p>The name or number for the column of species nodes
 (i.e. feature nodes).</p></dd>
 
 
 <dt id="arg-return-node-type">return_node_type<a class="anchor" aria-label="anchor" href="#arg-return-node-type"></a></dt>
-<dd><p>a <code>character</code> indicating what types of nodes
-(<code>site</code>, <code>species</code> or <code>both</code>) should be returned in the output
-(<code>return_node_type = "both"</code> by default).</p></dd>
+<dd><p>A <code>character</code> indicating what types of nodes
+(<code>"site"</code>, <code>"species"</code>, or <code>"both"</code>) should be returned in the output
+(<code>"both"</code> by default).</p></dd>
 
 
 <dt id="arg-version">version<a class="anchor" aria-label="anchor" href="#arg-version"></a></dt>
-<dd><p>a <code>character</code> indicating the Infomap version to use.</p></dd>
+<dd><p>A <code>character</code> indicating the Infomap version to use.</p></dd>
 
 
 <dt id="arg-binpath">binpath<a class="anchor" aria-label="anchor" href="#arg-binpath"></a></dt>
-<dd><p>a <code>character</code> indicating the path to the bin folder
+<dd><p>A <code>character</code> indicating the path to the bin folder
 (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
 <dt id="arg-check-install">check_install<a class="anchor" aria-label="anchor" href="#arg-check-install"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the function should check that
-the Infomap as been properly installed (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
+<dd><p>A <code>boolean</code> indicating if the function should check that
+the Infomap has been properly installed (see <a href="install_binaries.html">install_binaries</a> and Details).</p></dd>
 
 
 <dt id="arg-path-temp">path_temp<a class="anchor" aria-label="anchor" href="#arg-path-temp"></a></dt>
-<dd><p>a <code>character</code> indicating the path to the temporary folder
+<dd><p>A <code>character</code> indicating the path to the temporary folder
 (see Details).</p></dd>
 
 
 <dt id="arg-delete-temp">delete_temp<a class="anchor" aria-label="anchor" href="#arg-delete-temp"></a></dt>
-<dd><p>a <code>boolean</code> indicating if the temporary folder should
+<dd><p>A <code>boolean</code> indicating if the temporary folder should
 be removed (see Details).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: <code>character</code> containing the name of the algorithm</p></li>
-<li><p><strong>args</strong>: <code>list</code> of input arguments as provided by the user</p></li>
-<li><p><strong>inputs</strong>: <code>list</code> of characteristics of the clustering process</p></li>
-<li><p><strong>algorithm</strong>: <code>list</code> of all objects associated with the
-clustering procedure, such as original cluster objects</p></li>
-<li><p><strong>clusters</strong>: <code>data.frame</code> containing the clustering results</p></li>
+    <p>A <code>list</code> of class <code>bioregion.clusters</code> with five slots:</p><ol><li><p><strong>name</strong>: A <code>character</code> containing the name of the algorithm.</p></li>
+<li><p><strong>args</strong>: A <code>list</code> of input arguments as provided by the user.</p></li>
+<li><p><strong>inputs</strong>: A <code>list</code> of characteristics of the clustering process.</p></li>
+<li><p><strong>algorithm</strong>: A <code>list</code> of all objects associated with the
+clustering procedure, such as original cluster objects.</p></li>
+<li><p><strong>clusters</strong>: A <code>data.frame</code> containing the clustering results.</p></li>
 </ol><p>In the <code>algorithm</code> slot, users can find the following elements:</p>
-<ul><li><p><code>cmd</code>: the command line use to run Infomap</p></li>
-<li><p><code>version</code>: the Infomap version</p></li>
-<li><p><code>web</code>: Infomap's GitHub repository</p></li>
+<ul><li><p><code>cmd</code>: The command line used to run Infomap.</p></li>
+<li><p><code>version</code>: The Infomap version.</p></li>
+<li><p><code>web</code>: Infomap's GitHub repository.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -225,40 +226,44 @@ with <a href="install_binaries.html">install_binaries</a>.</p>
 <p><strong>If you changed the default path to the <code>bin</code> folder
 while running <a href="install_binaries.html">install_binaries</a> PLEASE MAKE SURE to set <code>binpath</code>
 accordingly.</strong></p>
-<p><strong>If you did not used <a href="install_binaries.html">install_binaries</a> to change the permissions and test
+<p><strong>If you did not use <a href="install_binaries.html">install_binaries</a> to change the permissions and test
 the binary files PLEASE MAKE SURE to set <code>check_install</code> accordingly.</strong></p>
 <p>The C++ version of Infomap generates temporary folders and/or files that are
-stored in the <code>path_temp</code> folder ("infomap_temp" with an unique timestamp
+stored in the <code>path_temp</code> folder ("infomap_temp" with a unique timestamp
 located in the bin folder in <code>binpath</code> by default). This temporary folder is
 removed by default (<code>delete_temp = TRUE</code>).</p>
-<p>Several version of Infomap are available in the package. See
+<p>Several versions of Infomap are available in the package. See
 <a href="install_binaries.html">install_binaries</a> for more details.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Infomap has been designed to deal with bipartite networks. To use this
-functionality set the <code>bipartite_version</code> argument to TRUE in order to
+functionality, set the <code>bipartite_version</code> argument to TRUE in order to
 approximate a two-step random walker (see
 <a href="https://www.mapequation.org/infomap/" class="external-link">https://www.mapequation.org/infomap/</a> for more information). Note that
-a bipartite network can also be considered as unipartite network
+a bipartite network can also be considered as a unipartite network
 (<code>bipartite = TRUE</code>).</p>
-<p>In both cases do not forget to indicate which of the first two columns is
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+<p>In both cases, do not forget to indicate which of the first two columns is
+dedicated to the site nodes (i.e., primary nodes) and species nodes (i.e.
 feature nodes) using the arguments <code>site_col</code> and <code>species_col</code>.
 The type of nodes returned in the output can be chosen with the argument
-<code>return_node_type</code> equal to <code>both</code> to keep both types of nodes, <code>sites</code>
-to preserve only the sites nodes and <code>species</code> to preserve only the
+<code>return_node_type</code> equal to <code>"both"</code> to keep both types of nodes, <code>"site"</code>
+to preserve only the site nodes, and <code>"species"</code> to preserve only the
 species nodes.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Rosvall M &amp; Bergstrom CT (2008) Maps of random walks on complex networks
 reveal community structure. <em>Proceedings of the National Academy of
-Sciences</em>, 105(4), 1118-1123.</p>
+Sciences</em> 105, 1118-1123.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="install_binaries.html">install_binaries</a>, <a href="netclu_louvain.html">netclu_louvain</a>, <a href="netclu_oslom.html">netclu_oslom</a></p></div>
+    <div class="dont-index"><p>For more details illustrated with a practical example,
+see the vignette:
+<a href="https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html</a>.</p>
+<p>Associated functions:
+<a href="netclu_greedy.html">netclu_greedy</a> <a href="netclu_louvain.html">netclu_louvain</a> <a href="netclu_oslom.html">netclu_oslom</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -275,10 +280,8 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity.html">similarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">com</span> <span class="op">&lt;-</span> <span class="fu">netclu_infomap</span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Infomap 2.8.0 is not installed... Please have a look at</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     for more details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/Rtmpl0NHbL/bin/INFOMAP/2.8.0/</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Infomap 2.8.0 is not installed... Please have a look at https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html for more details.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> It should be located in /tmp/Rtmp3JQlRr/bin/INFOMAP/2.8.0/</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
