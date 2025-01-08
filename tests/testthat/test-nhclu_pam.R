@@ -146,8 +146,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_pam(uni3),
-    "The first two columns of dissimilarity contain (unordered) duplicated pairs of sites!",
-    fixed = TRUE) 
+    "^The first two columns of dissimilarity contain") 
   
   expect_error(
     nhclu_pam(uni2),
@@ -259,9 +258,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_pam(dissim, variant = "zz"),
-    "Please choose variant among the followings values:
-original, o_1, o_2, f_3, f_4, f_5 or faster",
-    fixed = TRUE)
+    "^Please choose variant from the following:")
 
   expect_error(
     nhclu_pam(dissim, nstart =  c("zz","zz")),

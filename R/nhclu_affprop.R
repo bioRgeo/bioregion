@@ -1,86 +1,90 @@
-#' Non hierarchical clustering: Affinity Propagation
+#' Non-hierarchical clustering: Affinity Propagation
 #'
-#' This function performs non hierarchical
-#' clustering on the Affinity Propagation algorithm.
+#' This function performs non-hierarchical clustering using the Affinity 
+#' Propagation algorithm.
 #'
-#' @param similarity the output object from [similarity()] or
-#' [dissimilarity_to_similarity()], or a `dist` object. If a `data.frame` is
-#' used, the first two columns represent pairs of sites (or any pair of nodes),
-#' and the next column(s) are the dissimilarity indices.
+#' @param similarity The output object from [similarity()] or 
+#' [dissimilarity_to_similarity()], or a `dist` object. If a `data.frame` is 
+#' used, the first two columns should represent pairs of sites (or any pair of 
+#' nodes), and the subsequent column(s) should contain the similarity indices.
 #'
-#' @param index name or number of the similarity column to use. By default, 
+#' @param index The name or number of the similarity column to use. By default, 
 #' the third column name of `similarity` is used.
-#' 
-#' @param p input preference; can be a vector that specifies individual
-#' preferences for each data point. If scalar, the same value is used for all
-#' data points. If NA, exemplar preferences are initialized according to the
-#' distribution of non-Inf values in the similarity matrix. How this is done is
-#' controlled by the parameter q.
-#' 
-#' @param q if `p = NA`, exemplar preferences are initialized according to the
-#' distribution of non-Inf values in the similarity matrix. If `p = NA`, exemplar
-#' preferences are set to the median of non-Inf values in the similarity
-#' matrix. If q is a value between 0 and 1, the sample quantile with
-#' threshold q is used, whereas q=0.5 again results in the median.
-#' 
-#' @param maxits maximal number of iterations that should be executed
-#' 
-#' @param convits the algorithm terminates if the examplars have not changed
-#' for convits iterations.
-#' 
-#' @param lam damping factor; should be a value in the range [0.5, 1);
-#' higher values correspond to heavy damping which may be needed if
-#' oscillations occur.
-#' 
-#' @param details if TRUE, more detailed information about the algorithm's
-#' progress is stored in the output object.
-#' 
-#' @param nonoise small amount of noise added to the similarity object to
-#' prevent degenerate cases; disabled when set to `TRUE`.
-#' 
-#' @param seed seed of the random number generator.
-#' 
-#' @param K desired number of clusters. If not null, then the function
+#'
+#' @param p Input preference, which can be a vector specifying individual 
+#' preferences for each data point. If scalar, the same value is used for all 
+#' data points. If `NA`, exemplar preferences are initialized based on the 
+#' distribution of non-Inf values in the similarity matrix, controlled by `q`.
+#'
+#' @param q If `p = NA`, exemplar preferences are initialized according to the 
+#' distribution of non-Inf values in the similarity matrix. By default, the 
+#' median is used. A value between 0 and 1 specifies the sample quantile, 
+#' where `q = 0.5` results in the median.
+#'
+#' @param maxits The maximum number of iterations to execute.
+#'
+#' @param convits The algorithm terminates if the exemplars do not change for 
+#' `convits` iterations.
+#'
+#' @param lam The damping factor, a value in the range [0.5, 1). Higher values 
+#' correspond to heavier damping, which may help prevent oscillations.
+#'
+#' @param details If `TRUE`, detailed information about the algorithm's progress 
+#' is stored in the output object.
+#'
+#' @param nonoise If `TRUE`, disables the addition of a small amount of noise to 
+#' the similarity object, which prevents degenerate cases.
+#'
+#' @param seed The seed for the random number generator.
+#'
+#' @param K The desired number of clusters. If not `NULL`, the function 
 #' [apcluster][apcluster::apclusterK] is called.
-#' 
-#' @param prc argument needed when K is not null. The algorithm stops if the
-#' number of clusters does not deviate more than prc percent from desired value
-#' K; set to 0 if you want to have exactly K clusters.
-#' 
-#' @param bimaxit argument needed when K is not null. maximum number of
-#' bisection steps to perform; note that no warning is issued if the number of
-#' clusters is still not in the desired range.
-#' 
-#' @param exact flag indicating whether or not to compute the initial
-#' preference range exactly.
-#' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
-#' of [apcluster][apcluster::apcluster] should be returned in the output
-#' (`TRUE` by default, see Value).
-#' 
-#' @details
-#' Based on [apcluster](https://cran.r-project.org/package=apcluster)
-#' package ([apcluster][apcluster::apcluster]).
-#' 
+#'
+#' @param prc A parameter needed when `K` is not `NULL`. The algorithm stops if 
+#' the number of clusters deviates by less than `prc` percent from the desired 
+#' value `K`. Set to 0 to enforce exactly `K` clusters.
+#'
+#' @param bimaxit A parameter needed when `K` is not `NULL`. Specifies the 
+#' maximum number of bisection steps to perform. No warning is issued if the 
+#' number of clusters remains outside the desired range.
+#'
+#' @param exact A flag indicating whether to compute the initial preference 
+#' range exactly.
+#'
+#' @param algorithm_in_output A `boolean` indicating whether to include the 
+#' original output of [apcluster][apcluster::apcluster] in the result. Defaults 
+#' to `TRUE`.
+#'
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
+#' \item{**name**: A `character` string containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` describing the characteristics of the clustering 
+#' process.}
+#' \item{**algorithm**: A `list` of objects associated with the clustering 
+#' procedure, such as original cluster objects (if `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' If `algorithm_in_output = TRUE`, the `algorithm` slot includes the output of 
+#' [apcluster][apcluster::apcluster].
+#'
+#' @details
+#' This function is based on the [apcluster](https://cran.r-project.org/package=apcluster) 
+#' package ([apcluster][apcluster::apcluster]).
 #' 
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of [apcluster][apcluster::apcluster].
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+#' 
+#' Associated functions: 
+#' [nhclu_clara] [nhclu_clarans] [nhclu_dbscan] [nhclu_kmeans] [nhclu_affprop] 
 #'
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
-#' 
-#' @seealso  [nhclu_pam]
 #' 
 #' @examples
 #' comat_1 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
@@ -120,12 +124,21 @@
 #' @importFrom apcluster apcluster apclusterK
 #'         
 #' @export
-
-nhclu_affprop <- function(similarity, index = names(similarity)[3],
-                          p = NA, q = NA, maxits = 1000, convits = 100,
-                          lam = 0.9, # includeSim = FALSE,
-                          details = FALSE, nonoise = FALSE, seed = NULL,
-                          K = NULL, prc = NULL, bimaxit = NULL, exact = NULL,
+nhclu_affprop <- function(similarity, 
+                          index = names(similarity)[3],
+                          seed = NULL,
+                          p = NA, 
+                          q = NA, 
+                          maxits = 1000, 
+                          convits = 100,
+                          lam = 0.9, 
+                          # includeSim = FALSE,
+                          details = FALSE, 
+                          nonoise = FALSE, 
+                          K = NULL, 
+                          prc = NULL, 
+                          bimaxit = NULL, 
+                          exact = NULL,
                           algorithm_in_output = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
@@ -155,97 +168,94 @@ nhclu_affprop <- function(similarity, index = names(similarity)[3],
     }
   }
   
-  # Control other arguments
-  controls(args = NULL, data = similarity,
-           type = "input_conversion_similarity")
+  #controls(args = NULL, data = similarity,
+  #        type = "input_conversion_similarity")
+	
+  if(!is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   
-  if(!is.na(q)){
-    if (length(q) > 1) {
-      stop("q should be a numeric value in the range [0, 1]")
-    }
-    if (!is.numeric(q)) {
-      stop("q should be a numeric value in the range [0, 1]")
-    } else if (q < 0.5) {
-      stop("q should be a numeric value in the range [0, 1]")
+  if(length(p) == 1){
+    if(!is.na(p)){
+      if(!is.null(p)){
+        controls(args = p, data = NULL, type = "numeric")
+      }
+    }  
+  }else{
+    controls(args = p, data = NULL, type = "numeric_vector")
+    if(length(p) != length(unique(c(similarity[, 1], similarity[, 2])))){
+      stop(paste0("If p is a vector, its length should be equal to the ",
+                  "number of sites."), 
+           call. = FALSE)
     }
   }
   
-  if(!is.na(p)){
-    if(!is.null(p)){
-      if (!is.numeric(p)) {
-        stop("p should be a number or a vector")
-      }
-      if (length(p) > 1) {
-        if(length(p) != length(unique(c(sim[, 1], sim[, 2])))){
-          stop("vector 'p' is shorter than number of sites.")
-        }
-      }
+  if(length(q) > 1){
+    stop("q must be of length 1.", call. = FALSE)
+  }
+  if(!is.na(q)){
+    controls(args = q, data = NULL, type = "positive_numeric")
+    if(q < 0 | q > 1){
+      stop("q should be in the interval [0, 1].", call. = FALSE)
     }
   }
   
   controls(args = maxits, data = NULL, type = "positive_integer")
   controls(args = convits, data = NULL, type = "positive_integer")
-  if (length(lam) > 1) {
-    stop("lam should be a numeric value in the range [0.5, 1)")
+  
+  controls(args = lam, data = NULL, type = "positive_numeric")
+  if(lam < 0.5 | lam >= 1){
+    stop("lam should be in the interval [0.5, 1).", call. = FALSE)
   }
-  if (!is.numeric(lam)) {
-    stop("lam should be a numeric value in the range [0.5, 1)")
-  } else if (lam < 0.5) {
-    stop("lam should be a numeric value in the range [0.5, 1)")
-  }
+  
   # controls(args = includeSim, data = NULL, type = "boolean")
   controls(args = details, data = NULL, type = "boolean")
   controls(args = nonoise, data = NULL, type = "boolean")
-  if(!is.null(seed)){
-    controls(args = seed, data = NULL, type = "strict_positive_integer")
-  }
   
   # Argument for desired number of clusters: positive integer, if not null
   # (default value) then we call apcluter::apclusterK() (with argument K)
   if(!is.null(K)){
     controls(args = K, data = NULL, type = "strict_positive_integer")
     if(is.null(prc)){
-      stop("When K is not NULL, you need to define prc. prc is a percentage
-           value.")
+      stop(paste0("When K is not NULL, you need to define prc. ",
+                  "prc is a percentage value."), call. = FALSE)
     }
     if(is.null(bimaxit)){
-      stop("When K is not NULL, you need to define bimaxit.")
+      stop("When K is not NULL, you need to define bimaxit.", call. = FALSE)
     }
     if(is.null(exact)){
-      stop("When K is not NULL, you need to define exact.")
+      stop("When K is not NULL, you need to define exact.", call. = FALSE)
     }
   }
   
   if(!is.null(prc)){
     if(is.null(K)){
-      warning("The prc argument will be considered only if K is not set to
-            NULL.")
+      message(paste0("prc argument will be considered only if K is not ",
+                     "set to NULL."))
     }
-    if (length(prc) > 1) {
-      stop("prc should be a numeric value in the range [0, 100]")
-    }
-    if (!is.numeric(prc)) {
-      stop("prc should be a numeric value in the range [0, 100]")
-    } else if (prc < 0 | prc > 100) {
-      stop("frac should be a numeric value in the range [0, 100]")
+    controls(args = prc, data = NULL, type = "positive_numeric")
+    if (prc < 0 | prc > 100) {
+      stop("prc should be in the interval [0, 100].")
     }
   }
   
   if(!is.null(bimaxit)){
     if(is.null(K)){
-      warning("The bimaxit argument will be considered only if K is not set to
-            NULL.")
+      message(paste0("bimaxit argument will be considered only if K is not ",
+                     "set to NULL."))
     }
     controls(args = bimaxit, data = NULL, type = "strict_positive_integer")
   }
   
   if(!is.null(exact)){
     if(is.null(K)){
-      warning("The exact argument will be considered only if K is not set to
-            NULL.")
+      message(paste0("exact argument will be considered only if K is not ",
+                     "set to NULL."))
     }
     controls(args = exact, data = NULL, type = "boolean")
   }
+  
+  controls(args = algorithm_in_output, data = NULL, type = "boolean")
   
   sim <- NULL
   
@@ -253,6 +263,7 @@ nhclu_affprop <- function(similarity, index = names(similarity)[3],
   outputs <- list(name = "nhclu_affprop")
   
   outputs$args <- list(index = index,
+                       seed = seed,
                        p = p,
                        q = q,
                        maxits = maxits,
@@ -261,13 +272,16 @@ nhclu_affprop <- function(similarity, index = names(similarity)[3],
                        # includeSim = includeSim,
                        details = details,
                        nonoise = nonoise,
-                       seed = seed,
+                       K = K,
+                       prc = prc,
+                       bimaxit = bimaxit,
+                       exact = exact,
                        algorithm_in_output = algorithm_in_output)
   
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
+                         pairwise_metric = ifelse(!inherits(similarity, 
                                                             "dist"), 
                                                   ifelse(is.numeric(index), 
                                                          names(net)[3], index), 
@@ -286,7 +300,9 @@ nhclu_affprop <- function(similarity, index = names(similarity)[3],
   outputs$clusters$name <- labels(dist.obj)
   
   # Square similarity matrix
-  sim_square <- net_to_mat(similarity, weight = TRUE, squared = TRUE,
+  sim_square <- net_to_mat(similarity, 
+                           weight = TRUE, 
+                           squared = TRUE,
                            symmetrical = TRUE)
   
   ## 2.1. apclusterK ----------------------------------------------------------
@@ -311,8 +327,6 @@ nhclu_affprop <- function(similarity, index = names(similarity)[3],
                                                  prc = prc,
                                                  bimaxit = bimaxit,
                                                  exact = FALSE,
-                                                 p = p,
-                                                 q = q,
                                                  maxits = maxits,
                                                  convits = convits,
                                                  lam = lam,

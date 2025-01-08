@@ -1,71 +1,80 @@
-#' Non hierarchical clustering: CLARA
+#' Non-hierarchical clustering: CLARA
 #'
-#' This function performs non hierarchical clustering on the basis of
-#' dissimilarity with partitioning around medoids, using the Clustering Large
-#' Applications (CLARA) algorithm.
+#' This function performs non-hierarchical clustering based on
+#' dissimilarity using partitioning around medoids, implemented via
+#' the Clustering Large Applications (CLARA) algorithm.
 #'
-#' @param dissimilarity the output object from [dissimilarity()] or
+#' @param dissimilarity The output object from [dissimilarity()] or
 #' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is
-#' used, the first two columns represent pairs of sites (or any pair of nodes),
-#' and the next column(s) are the dissimilarity indices.
-#' 
-#' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of `dissimilarity` is used.
-#' 
-#' @param seed for the random number generator (NULL for random by default).
-#' 
-#' @param n_clust an `integer` vector or a single `integer` value specifying the
-#' requested number(s) of clusters.
-#' 
-#' @param maxiter an `integer` defining the maximum number of iterations.
-#' 
-#' @param initializer a `character`, either '"BUILD"' (used in classic PAM
-#' algorithm) or '"LAB"' (linear approximative BUILD).
-#' 
-#' @param fasttol positive `numeric` defining the tolerance for fast swapping
-#' behavior, set to 1 by default.
-#' 
-#' @param numsamples positive `integer` defining the number of samples to draw.
-#' 
-#' @param sampling positive `numeric` defining the sampling rate.
-#' 
-#' @param independent a `boolean` indicating that the previous
-#' medoids are not kept in the next sample (FALSE by default).
-#' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
-#' of [fastclara][fastkmedoids::fastclara] should be returned in the output 
-#' (`TRUE` by default, see Value).
+#' used, the first two columns should represent pairs of sites (or any pair of 
+#' nodes), and the subsequent column(s) should contain the dissimilarity 
+#' indices.
+#'
+#' @param index The name or number of the dissimilarity column to use. By 
+#' default, the third column name of `dissimilarity` is used.
+#'
+#' @param seed A value for the random number generator (set to `NULL` for random
+#'  initialization by default).
+#'
+#' @param n_clust An `integer` vector or a single `integer` specifying the
+#' desired number(s) of clusters.
+#'
+#' @param maxiter An `integer` defining the maximum number of iterations.
+#'
+#' @param initializer A `character` string, either `"BUILD"` (used in the 
+#' classic PAM algorithm) or `"LAB"` (Linear Approximate BUILD).
+#'
+#' @param fasttol A positive `numeric` value defining the tolerance for fast 
+#' swapping behavior. Defaults to 1.
+#'
+#' @param numsamples A positive `integer` specifying the number of samples to 
+#' draw.
+#'
+#' @param sampling A positive `numeric` value defining the sampling rate.
+#'
+#' @param independent A `boolean` indicating whether the previous
+#' medoids are excluded in the next sample. Defaults to `FALSE`.
+#'
+#' @param algorithm_in_output A `boolean` indicating whether the original output
+#' of [fastclara][fastkmedoids::fastclara] should be included in the output.
+#' Defaults to `TRUE` (see Value).
+#'
+#' @return
+#' A `list` of class `bioregion.clusters` with five components:
+#' \enumerate{
+#' \item{**name**: A `character` string containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the
+#' clustering procedure, such as original cluster objects (only if
+#' `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' If `algorithm_in_output = TRUE`, the `algorithm` slot includes the output of
+#' [fastclara][fastkmedoids::fastclara].
 #' 
 #' @details
 #' Based on [fastkmedoids](https://cran.r-project.org/package=fastkmedoids)
 #' package ([fastclara][fastkmedoids::fastclara]).
-#'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects (only if
-#'  `algorithm_in_output = TRUE`)}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#' 
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of
-#' [fastclara][fastkmedoids::fastclara].
 #' 
 #' @references
 #' Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the 
 #' PAM, CLARA, and CLARANS Algorithms. \emph{Similarity Search and Applications}
-#' , 11807, 171-187.
+#' 11807, 171-187.
+#' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+#' 
+#' Associated functions: 
+#' [nhclu_clarans] [nhclu_dbscan] [nhclu_kmeans] [nhclu_pam] [nhclu_affprop] 
 #' 
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso [nhclu_pam] 
 #' 
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -128,13 +137,15 @@ nhclu_clara <- function(dissimilarity,
   if(!is.null(seed)){
     controls(args = seed, data = NULL, type = "strict_positive_integer")
   }
+  
   controls(args = n_clust, data = NULL, 
              type = "strict_positive_integer_vector")
   controls(args = maxiter, data = NULL, type = "positive_integer")
   controls(args = initializer, data = NULL, type = "character")
   if(!(initializer %in% c("BUILD", "LAB"))){
-    stop("Please choose initializer among the followings values:
-BUILD or LAB", call. = FALSE)
+    stop(paste0("Please choose initializer from the following:\n",
+                "BUILD or LAB."),
+         call. = FALSE)
   }
   controls(args = fasttol, data = NULL, type = "positive_numeric")
   controls(args = numsamples, data = NULL, type = "positive_integer")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nhclu_kmeans.R
 \name{nhclu_kmeans}
 \alias{nhclu_kmeans}
-\title{Non hierarchical clustering: k-means analysis}
+\title{Non-hierarchical clustering: k-means analysis}
 \usage{
 nhclu_kmeans(
   dissimilarity,
@@ -16,63 +16,64 @@ nhclu_kmeans(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\item{dissimilarity}{The output object from \code{\link[=dissimilarity]{dissimilarity()}} or
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
-used, the first two columns represent pairs of sites (or any pair of nodes),
-and the next column(s) are the dissimilarity indices.}
+used, the first two columns should represent pairs of sites (or any pair of
+nodes), and the subsequent column(s) should contain the dissimilarity indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of \code{dissimilarity} is used.}
+\item{index}{The name or number of the dissimilarity column to use. By
+default, the third column name of \code{dissimilarity} is used.}
 
-\item{seed}{for the random number generator (NULL for random by default).}
+\item{seed}{A value for the random number generator (\code{NULL} for random by
+default).}
 
-\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
-requested number(s) of clusters}
+\item{n_clust}{An \code{integer} vector or a single \code{integer} value specifying
+the requested number(s) of clusters.}
 
-\item{iter_max}{an \code{integer} specifying the maximum number of
-iterations for the kmeans method (see \link[stats:kmeans]{kmeans})}
+\item{iter_max}{An \code{integer} specifying the maximum number of iterations for
+the k-means method (see \link[stats:kmeans]{kmeans}).}
 
-\item{nstart}{an \code{integer} specifying how many random sets of
-\code{n_clust} should be selected as starting points for the kmeans analysis
-(see \link[stats:kmeans]{kmeans})}
+\item{nstart}{An \code{integer} specifying how many random sets of \code{n_clust}
+should be selected as starting points for the k-means analysis
+(see \link[stats:kmeans]{kmeans}).}
 
-\item{algorithm}{a \code{character} specifying the algorithm to use for
-kmean (see \link[stats:kmeans]{kmeans}). Available options are
-Hartigan-Wong, Lloyd, Forgy and MacQueen.}
+\item{algorithm}{A \code{character} specifying the algorithm to use for k-means
+(see \link[stats:kmeans]{kmeans}). Available options are Hartigan-Wong, Lloyd,
+Forgy, and MacQueen.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[stats:kmeans]{kmeans} should be returned in the output (\code{TRUE} by
-default, see Value).}
+\item{algorithm_in_output}{A \code{boolean} indicating whether the original
+output of \link[stats:kmeans]{kmeans} should be included in the output. Defaults
+to \code{TRUE} (see Value).}
 }
 \value{
-A \code{list} of class \code{bioregion.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five components:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} string containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the clustering
+procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find the output of
+If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
 \link[stats:kmeans]{kmeans}.
 }
 \description{
-This function performs non hierarchical
-clustering on the basis of dissimilarity with a k-means analysis.
+This function performs non-hierarchical clustering based on dissimilarity
+using a k-means analysis.
 }
 \details{
-This method partitions the data into k groups
-such that that the sum of squares of euclidean distances from points to the
-assigned cluster centers is minimized. k-means cannot be applied directly
-on dissimilarity/beta-diversity metrics, because these distances are not
-euclidean. Therefore, it requires first to transform the dissimilarity
-matrix with a Principal Coordinate Analysis (using the function
-\link[ape:pcoa]{pcoa}), and then applying k-means on the coordinates
-of points in the PCoA. Because this makes an additional transformation of
-the initial matrix of dissimilarity, the partitioning around medoids method
-should be preferred (\link{nhclu_pam})
+This method partitions data into k groups such that the sum of squares of
+Euclidean distances from points to the assigned cluster centers is minimized.
+K-means cannot be applied directly to dissimilarity or beta-diversity metrics
+because these distances are not Euclidean. Therefore, it first requires
+transforming the dissimilarity matrix using Principal Coordinate Analysis
+(PCoA) with \link[ape:pcoa]{pcoa}, and then applying k-means to the coordinates
+of points in the PCoA.
+
+Because this additional transformation alters the initial dissimilarity
+matrix, the partitioning around medoids method (\link{nhclu_pam}) is preferred.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -94,7 +95,12 @@ bioregionalization_metrics(clust2, net = comnet, species_col = "Node2",
 
 }
 \seealso{
-\link{nhclu_pam}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+
+Associated functions:
+\link{nhclu_clara} \link{nhclu_clarans} \link{nhclu_dbscan} \link{nhclu_pam} \link{nhclu_affprop}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

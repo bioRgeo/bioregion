@@ -2,11 +2,12 @@
 % Please edit documentation in R/nhclu_affprop.R
 \name{nhclu_affprop}
 \alias{nhclu_affprop}
-\title{Non hierarchical clustering: Affinity Propagation}
+\title{Non-hierarchical clustering: Affinity Propagation}
 \usage{
 nhclu_affprop(
   similarity,
   index = names(similarity)[3],
+  seed = NULL,
   p = NA,
   q = NA,
   maxits = 1000,
@@ -14,7 +15,6 @@ nhclu_affprop(
   lam = 0.9,
   details = FALSE,
   nonoise = FALSE,
-  seed = NULL,
   K = NULL,
   prc = NULL,
   bimaxit = NULL,
@@ -23,80 +23,78 @@ nhclu_affprop(
 )
 }
 \arguments{
-\item{similarity}{the output object from \code{\link[=similarity]{similarity()}} or
+\item{similarity}{The output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}, or a \code{dist} object. If a \code{data.frame} is
-used, the first two columns represent pairs of sites (or any pair of nodes),
-and the next column(s) are the dissimilarity indices.}
+used, the first two columns should represent pairs of sites (or any pair of
+nodes), and the subsequent column(s) should contain the similarity indices.}
 
-\item{index}{name or number of the similarity column to use. By default,
+\item{index}{The name or number of the similarity column to use. By default,
 the third column name of \code{similarity} is used.}
 
-\item{p}{input preference; can be a vector that specifies individual
+\item{seed}{The seed for the random number generator.}
+
+\item{p}{Input preference, which can be a vector specifying individual
 preferences for each data point. If scalar, the same value is used for all
-data points. If NA, exemplar preferences are initialized according to the
-distribution of non-Inf values in the similarity matrix. How this is done is
-controlled by the parameter q.}
+data points. If \code{NA}, exemplar preferences are initialized based on the
+distribution of non-Inf values in the similarity matrix, controlled by \code{q}.}
 
-\item{q}{if \code{p = NA}, exemplar preferences are initialized according to the
-distribution of non-Inf values in the similarity matrix. If \code{p = NA}, exemplar
-preferences are set to the median of non-Inf values in the similarity
-matrix. If q is a value between 0 and 1, the sample quantile with
-threshold q is used, whereas q=0.5 again results in the median.}
+\item{q}{If \code{p = NA}, exemplar preferences are initialized according to the
+distribution of non-Inf values in the similarity matrix. By default, the
+median is used. A value between 0 and 1 specifies the sample quantile,
+where \code{q = 0.5} results in the median.}
 
-\item{maxits}{maximal number of iterations that should be executed}
+\item{maxits}{The maximum number of iterations to execute.}
 
-\item{convits}{the algorithm terminates if the examplars have not changed
-for convits iterations.}
+\item{convits}{The algorithm terminates if the exemplars do not change for
+\code{convits} iterations.}
 
-\item{lam}{damping factor; should be a value in the range [0.5, 1);
-higher values correspond to heavy damping which may be needed if
-oscillations occur.}
+\item{lam}{The damping factor, a value in the range [0.5, 1). Higher values
+correspond to heavier damping, which may help prevent oscillations.}
 
-\item{details}{if TRUE, more detailed information about the algorithm's
-progress is stored in the output object.}
+\item{details}{If \code{TRUE}, detailed information about the algorithm's progress
+is stored in the output object.}
 
-\item{nonoise}{small amount of noise added to the similarity object to
-prevent degenerate cases; disabled when set to \code{TRUE}.}
+\item{nonoise}{If \code{TRUE}, disables the addition of a small amount of noise to
+the similarity object, which prevents degenerate cases.}
 
-\item{seed}{seed of the random number generator.}
-
-\item{K}{desired number of clusters. If not null, then the function
+\item{K}{The desired number of clusters. If not \code{NULL}, the function
 \link[apcluster:apclusterK-methods]{apcluster} is called.}
 
-\item{prc}{argument needed when K is not null. The algorithm stops if the
-number of clusters does not deviate more than prc percent from desired value
-K; set to 0 if you want to have exactly K clusters.}
+\item{prc}{A parameter needed when \code{K} is not \code{NULL}. The algorithm stops if
+the number of clusters deviates by less than \code{prc} percent from the desired
+value \code{K}. Set to 0 to enforce exactly \code{K} clusters.}
 
-\item{bimaxit}{argument needed when K is not null. maximum number of
-bisection steps to perform; note that no warning is issued if the number of
-clusters is still not in the desired range.}
+\item{bimaxit}{A parameter needed when \code{K} is not \code{NULL}. Specifies the
+maximum number of bisection steps to perform. No warning is issued if the
+number of clusters remains outside the desired range.}
 
-\item{exact}{flag indicating whether or not to compute the initial
-preference range exactly.}
+\item{exact}{A flag indicating whether to compute the initial preference
+range exactly.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[apcluster:apcluster-methods]{apcluster} should be returned in the output
-(\code{TRUE} by default, see Value).}
+\item{algorithm_in_output}{A \code{boolean} indicating whether to include the
+original output of \link[apcluster:apcluster-methods]{apcluster} in the result. Defaults
+to \code{TRUE}.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} string containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} describing the characteristics of the clustering
+process.}
+\item{\strong{algorithm}: A \code{list} of objects associated with the clustering
+procedure, such as original cluster objects (if \code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find the output of \link[apcluster:apcluster-methods]{apcluster}.
+If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
+\link[apcluster:apcluster-methods]{apcluster}.
 }
 \description{
-This function performs non hierarchical
-clustering on the Affinity Propagation algorithm.
+This function performs non-hierarchical clustering using the Affinity
+Propagation algorithm.
 }
 \details{
-Based on \href{https://cran.r-project.org/package=apcluster}{apcluster}
+This function is based on the \href{https://cran.r-project.org/package=apcluster}{apcluster}
 package (\link[apcluster:apcluster-methods]{apcluster}).
 }
 \examples{
@@ -136,7 +134,12 @@ Frey B & Dueck D (2007) Clustering by Passing Messages Between Data Points.
 \emph{Science}, 315, 972-976.
 }
 \seealso{
-\link{nhclu_pam}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+
+Associated functions:
+\link{nhclu_clara} \link{nhclu_clarans} \link{nhclu_dbscan} \link{nhclu_kmeans} \link{nhclu_affprop}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr

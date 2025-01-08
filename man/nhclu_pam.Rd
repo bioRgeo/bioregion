@@ -2,7 +2,7 @@
 % Please edit documentation in R/nhclu_pam.R
 \name{nhclu_pam}
 \alias{nhclu_pam}
-\title{Non hierarchical clustering: partitioning around medoids}
+\title{Non-hierarchical clustering: partitioning around medoids}
 \usage{
 nhclu_pam(
   dissimilarity,
@@ -17,61 +17,62 @@ nhclu_pam(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\item{dissimilarity}{The output object from \code{\link[=dissimilarity]{dissimilarity()}} or
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
-used, the first two columns represent pairs of sites (or any pair of nodes),
-and the next column(s) are the dissimilarity indices.}
+used, the first two columns should represent pairs of sites (or any pair of
+nodes), and the subsequent column(s) should contain the dissimilarity indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of \code{dissimilarity} is used.}
+\item{index}{The name or number of the dissimilarity column to use. By
+default, the third column name of \code{dissimilarity} is used.}
 
-\item{seed}{for the random number generator (NULL for random by default).}
+\item{seed}{A value for the random number generator (\code{NULL} for random by
+default).}
 
-\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
-requested number(s) of clusters.}
+\item{n_clust}{An \code{integer} vector or a single \code{integer} value specifying
+the requested number(s) of clusters.}
 
-\item{variant}{a \code{character} string specifying the variant of pam to use,
-by default \code{faster}. Available options are \code{original}, \code{o_1}, \code{o_2}, \code{f_3},
-\code{f_4}, \code{f_5} or \code{faster}. See \link[cluster:pam]{pam} for more details.}
+\item{variant}{A \code{character} string specifying the PAM variant to use.
+Defaults to \code{faster}. Available options are \code{original}, \code{o_1}, \code{o_2}, \code{f_3},
+\code{f_4}, \code{f_5}, or \code{faster}. See \link[cluster:pam]{pam} for more details.}
 
-\item{nstart}{an \code{integer} specifying the number of random start for the
-pam algorithm. By default, 1 (for the \code{faster} variant).}
+\item{nstart}{An \code{integer} specifying the number of random starts for the PAM
+algorithm. Defaults to 1 (for the \code{faster} variant).}
 
-\item{cluster_only}{a \code{boolean} specifying if only the clustering should be
-returned from the \link[cluster:pam]{pam} function (more efficient).}
+\item{cluster_only}{A \code{boolean} specifying whether only the clustering
+results should be returned from the \link[cluster:pam]{pam} function. Setting
+this to \code{TRUE} makes the function more efficient.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[cluster:pam]{pam} should be returned in the output (\code{TRUE} by
-default, see Value).}
+\item{algorithm_in_output}{A \code{boolean} indicating whether the original output
+of \link[cluster:pam]{pam} should be included in the result. Defaults to \code{TRUE}
+(see Value).}
 
-\item{...}{you can add here further arguments to be passed to \code{pam()}
-(see \link[cluster:pam]{pam}).}
+\item{...}{Additional arguments to pass to \code{pam()} (see \link[cluster:pam]{pam}).}
 }
 \value{
-A \code{list} of class \code{bioregion.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five components:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} string containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the clustering
+procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find the output of
+If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
 \link[cluster:pam]{pam}.
 }
 \description{
-This function performs non hierarchical clustering on the basis of
-dissimilarity with partitioning around medoids.
+This function performs non-hierarchical clustering based on dissimilarity
+using partitioning around medoids (PAM).
 }
 \details{
-This method partitions data into the chosen number of cluster on the basis
-of the input dissimilarity matrix. It is more robust than k-means because it
-minimizes the sum of dissimilarity between cluster centres and points
-assigned to the cluster - whereas the k-means approach minimizes the sum of
-squared euclidean distances (thus k-means cannot be applied directly on the
-input dissimilarity matrix if the distances are not euclidean).
+This method partitions the data into the chosen number of clusters based on
+the input dissimilarity matrix. It is more robust than k-means because it
+minimizes the sum of dissimilarities between cluster centers (medoids) and
+points assigned to the cluster. In contrast, k-means minimizes the sum of
+squared Euclidean distances, which makes it unsuitable for dissimilarity
+matrices that are not based on Euclidean distances.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -96,7 +97,12 @@ cluster analysis. In & Sons. JW (ed.), Finding groups in data: An
 introduction to cluster analysis.
 }
 \seealso{
-\link{nhclu_kmeans}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+
+Associated functions:
+\link{nhclu_clara} \link{nhclu_clarans} \link{nhclu_dbscan} \link{nhclu_kmeans} \link{nhclu_affprop}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

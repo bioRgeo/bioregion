@@ -69,6 +69,15 @@
 #' Where d_ij is the Euclidean distance between site i and 
 #' site j in terms of species composition.
 #' 
+#' @references
+#' Baselga A (2012) The Relationship between Species Replacement,
+#' Dissimilarity Derived from Nestedness, and Nestedness.
+#' \emph{Global Ecology and Biogeography} 21, 1223--1232.
+#' 
+#' Baselga A (2013) Separating the two components of abundance-based
+#' dissimilarity: balanced changes in abundance vs. abundance gradients.
+#' \emph{Methods in Ecology and Evolution} 4, 552--557.
+#' 
 #' @seealso 
 #' For more details illustrated with a practical example, 
 #' see the vignette: 
@@ -92,15 +101,6 @@
 #'
 #' sim <- similarity(comat, metric = "all",
 #' formula = "1 - (b + c) / (a + b + c)")
-#' 
-#' @references
-#' Baselga A (2012) The Relationship between Species Replacement,
-#' Dissimilarity Derived from Nestedness, and Nestedness.
-#' \emph{Global Ecology and Biogeography} 21, 1223--1232.
-#' 
-#' Baselga A (2013) Separating the two components of abundance-based
-#' dissimilarity: balanced changes in abundance vs. abundance gradients.
-#' \emph{Methods in Ecology and Evolution} 4, 552--557.
 #' 
 #' @export
 similarity <- function(comat, 

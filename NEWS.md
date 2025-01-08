@@ -40,6 +40,9 @@ and `netclu_oslom()`.
 * Added `bioregionalization_metrics()` to the package.
 
 * Updated documentation, vignettes, and tests.
+
+* Modified the way seeds are generated for `nhclu_clara()` and 
+`nhclu_clarans()`.
    
 # bioregion 1.1.1
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nhclu_clara.R
 \name{nhclu_clara}
 \alias{nhclu_clara}
-\title{Non hierarchical clustering: CLARA}
+\title{Non-hierarchical clustering: CLARA}
 \usage{
 nhclu_clara(
   dissimilarity,
@@ -19,57 +19,59 @@ nhclu_clara(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\item{dissimilarity}{The output object from \code{\link[=dissimilarity]{dissimilarity()}} or
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
-used, the first two columns represent pairs of sites (or any pair of nodes),
-and the next column(s) are the dissimilarity indices.}
+used, the first two columns should represent pairs of sites (or any pair of
+nodes), and the subsequent column(s) should contain the dissimilarity
+indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of \code{dissimilarity} is used.}
+\item{index}{The name or number of the dissimilarity column to use. By
+default, the third column name of \code{dissimilarity} is used.}
 
-\item{seed}{for the random number generator (NULL for random by default).}
+\item{seed}{A value for the random number generator (set to \code{NULL} for random
+initialization by default).}
 
-\item{n_clust}{an \code{integer} vector or a single \code{integer} value specifying the
-requested number(s) of clusters.}
+\item{n_clust}{An \code{integer} vector or a single \code{integer} specifying the
+desired number(s) of clusters.}
 
-\item{maxiter}{an \code{integer} defining the maximum number of iterations.}
+\item{maxiter}{An \code{integer} defining the maximum number of iterations.}
 
-\item{initializer}{a \code{character}, either '"BUILD"' (used in classic PAM
-algorithm) or '"LAB"' (linear approximative BUILD).}
+\item{initializer}{A \code{character} string, either \code{"BUILD"} (used in the
+classic PAM algorithm) or \code{"LAB"} (Linear Approximate BUILD).}
 
-\item{fasttol}{positive \code{numeric} defining the tolerance for fast swapping
-behavior, set to 1 by default.}
+\item{fasttol}{A positive \code{numeric} value defining the tolerance for fast
+swapping behavior. Defaults to 1.}
 
-\item{numsamples}{positive \code{integer} defining the number of samples to draw.}
+\item{numsamples}{A positive \code{integer} specifying the number of samples to
+draw.}
 
-\item{sampling}{positive \code{numeric} defining the sampling rate.}
+\item{sampling}{A positive \code{numeric} value defining the sampling rate.}
 
-\item{independent}{a \code{boolean} indicating that the previous
-medoids are not kept in the next sample (FALSE by default).}
+\item{independent}{A \code{boolean} indicating whether the previous
+medoids are excluded in the next sample. Defaults to \code{FALSE}.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[fastkmedoids:fastclara]{fastclara} should be returned in the output
-(\code{TRUE} by default, see Value).}
+\item{algorithm_in_output}{A \code{boolean} indicating whether the original output
+of \link[fastkmedoids:fastclara]{fastclara} should be included in the output.
+Defaults to \code{TRUE} (see Value).}
 }
 \value{
-A \code{list} of class \code{bioregion.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five components:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
+\item{\strong{name}: A \code{character} string containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects (only if
-\code{algorithm_in_output = TRUE})}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find the output of
+If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
 \link[fastkmedoids:fastclara]{fastclara}.
 }
 \description{
-This function performs non hierarchical clustering on the basis of
-dissimilarity with partitioning around medoids, using the Clustering Large
-Applications (CLARA) algorithm.
+This function performs non-hierarchical clustering based on
+dissimilarity using partitioning around medoids, implemented via
+the Clustering Large Applications (CLARA) algorithm.
 }
 \details{
 Based on \href{https://cran.r-project.org/package=fastkmedoids}{fastkmedoids}
@@ -93,10 +95,15 @@ eval_metric = "pc_distance")
 \references{
 Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the
 PAM, CLARA, and CLARANS Algorithms. \emph{Similarity Search and Applications}
-, 11807, 171-187.
+11807, 171-187.
 }
 \seealso{
-\link{nhclu_pam}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+
+Associated functions:
+\link{nhclu_clarans} \link{nhclu_dbscan} \link{nhclu_kmeans} \link{nhclu_pam} \link{nhclu_affprop}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr

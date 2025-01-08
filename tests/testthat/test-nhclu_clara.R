@@ -176,8 +176,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_clara(uni3),
-    "The first two columns of dissimilarity contain (unordered) duplicated pairs of sites!",
-    fixed = TRUE) 
+    "^The first two columns of dissimilarity contain") 
   
   expect_error(
     nhclu_clara(uni2),
@@ -284,9 +283,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_clara(dissim, initializer = "zz"),
-    "Please choose initializer among the followings values:
-BUILD or LAB",
-    fixed = TRUE)
+    "^Please choose initializer from the following")
   
   expect_error(
     nhclu_clara(dissim, fasttol =  c("zz","zz")),

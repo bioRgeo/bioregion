@@ -1,92 +1,86 @@
-#' dbscan clustering
+#' Non-hierarchical clustering: DBSCAN
 #'
-#' This function performs non hierarchical clustering on the basis of
-#' dissimilarity with Density-based Spatial Clustering of Applications with
-#' Noise (DBSCAN).
+#' This function performs non-hierarchical clustering based on dissimilarity 
+#' using the Density-Based Spatial Clustering of Applications with Noise 
+#' (DBSCAN) algorithm.
 #'
-#' @param dissimilarity the output object from [dissimilarity()] or
-#' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is
-#' used, the first two columns represent pairs of sites (or any pair of nodes),
-#' and the next column(s) are the dissimilarity indices.
-#' 
-#' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of `dissimilarity` is used.
-#' 
-#' @param minPts a `numeric` vector or a single `numeric` value
-#' specifying the minPts argument of [dbscan::dbscan()][dbscan::dbscan]).
-#' minPts is the minimum number of points to form a dense region. By default,
-#' it is set to the natural logarithm of the number of sites in
-#' `dissimilarity`. See details for guidance on choosing this parameter.
-#' 
-#' @param eps a `numeric` vector or a single `numeric` value specifying the
-#' eps argument of [dbscan][dbscan::dbscan]). eps specifies how
-#' similar points should be to each other to be considered a part of a cluster.
-#' See details for guidance on choosing this parameter.
-#' 
-#' @param plot a `boolean` indicating if the  k-nearest neighbor distance plot
-#' should be plotted.
-#' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
-#' of [dbscan][dbscan::dbscan] should be returned in the output (`TRUE` by 
-#' default, see Value).
-#' 
-#' @param ... you can add here further arguments to be passed to `dbscan()`
-#' (see [dbscan][dbscan::dbscan]).
-#' 
-#' @details
-#' The dbscan (Density-based spatial clustering of
-#' applications with noise) clustering algorithm clusters points on the basis
-#' of the density of neighbours around each data points. It necessitates two
-#' main arguments, `minPts`, which stands for the minimum number of points to
-#' identify a core, and `eps`, which is the radius to find neighbors.
-#' `minPts` and `eps` should be defined by the user, which is not
-#' straightforward.
-#' We recommend reading the help in [dbscan][dbscan::dbscan])
-#' to learn how to set these arguments, as well as the paper
-#' (Hahsler et al., 2019). Note that clusters with a value of 0
-#' are points which were deemed as noise by the algorithm.
+#' @param dissimilarity The output object from [dissimilarity()] or 
+#' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is 
+#' used, the first two columns should represent pairs of sites (or any pair of 
+#' nodes), and the subsequent column(s) should contain the dissimilarity indices.
 #'
-#' By default the function will select values for `minPts` and `eps`. However,
-#' these values can be inadequate and the users is advised to tune these values
-#' by running the function multiple times.
+#' @param index The name or number of the dissimilarity column to use. By 
+#' default, the third column name of `dissimilarity` is used.
 #'
-#' **Choosing minPts:** how many points should be necessary to make a cluster?
-#' i.e., what is the minimum number of sites you expect in a bioregion? Set a
-#' value sufficiently large for your dataset and your expectations.
+#' @param minPts A `numeric` vector or a single `numeric` value specifying the 
+#' `minPts` argument of [dbscan::dbscan()]. `minPts` is the minimum number of 
+#' points to form a dense region. By default, it is set to the natural logarithm 
+#' of the number of sites in `dissimilarity`. See Details for guidance on 
+#' choosing this parameter.
 #'
-#' **Choosing eps:** how similar should sites be in a cluster?  If `eps` is
-#' too small, then a majority of points will be considered too distinct and
-#' will not be clustered at all (i.e., considered as noise)? If the value is
-#' too high, then clusters will merge together.
-#' The value of `eps` depends on the `minPts` argument, and the literature
-#' recommends to choose `eps` by identifying a knee in the k-nearest neighbor
-#' distance plot. By default
-#' the function will try to automatically find a knee in that curve, but the
-#' result is uncertain, and so the user should inspect the graph and modify
-#' `dbscan_eps` accordingly. To explore `eps` values, follow the
-#' recommendation by the function when you launch it a first time without
-#' defining `eps`. Then, adjust depending on your clustering results.
+#' @param eps A `numeric` vector or a single `numeric` value specifying the `eps` 
+#' argument of [dbscan::dbscan()]. `eps` specifies how similar points should be 
+#' to each other to be considered part of a cluster. See Details for guidance on 
+#' choosing this parameter.
+#'
+#' @param plot A `boolean` indicating whether the k-nearest neighbor distance 
+#' plot should be displayed.
+#'
+#' @param algorithm_in_output A `boolean` indicating whether the original output 
+#' of [dbscan::dbscan] should be included in the output. Defaults to `TRUE` (see 
+#' Value).
+#'
+#' @param ... Additional arguments to be passed to `dbscan()` (see 
+#' [dbscan::dbscan]).
 #'
 #' @return
-#' A `list` of class `bioregion.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five components:
 #' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#' 
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of
-#' [dbscan][dbscan::dbscan].
+#' \item{**name**: A `character` string containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the clustering 
+#' procedure, such as original cluster objects (only if 
+#' `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' If `algorithm_in_output = TRUE`, the `algorithm` slot includes the output of 
+#' [dbscan::dbscan].
+#'
+#' @details
+#' The DBSCAN (Density-Based Spatial Clustering of Applications with Noise) 
+#' algorithm clusters points based on the density of neighbors around each 
+#' data point. It requires two main arguments: `minPts`, the minimum number of 
+#' points to identify a core, and `eps`, the radius used to find neighbors.
+#'
+#' **Choosing minPts:** This determines how many points are necessary to form a 
+#' cluster. For example, what is the minimum number of sites expected in a 
+#' bioregion? Choose a value sufficiently large for your dataset and expectations.
+#'
+#' **Choosing eps:** This determines how similar sites should be to form a 
+#' cluster. If `eps` is too small, most points will be considered too distinct 
+#' and marked as noise. If `eps` is too large, clusters may merge. The value of 
+#' `eps` depends on `minPts`. It is recommended to choose `eps` by identifying 
+#' a knee in the k-nearest neighbor distance plot.
+#'
+#' By default, the function attempts to find a knee in this curve 
+#' automatically, but the result is uncertain. Users should inspect the graph 
+#' and modify `eps` accordingly. To explore `eps` values, run the function 
+#' initially without defining `eps`, review the recommendations, and adjust 
+#' as needed based on clustering results.
 #'
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
 #' 
-#' @seealso [hclu_optics] 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+#' 
+#' Associated functions: 
+#' [nhclu_clara] [nhclu_clarans] [nhclu_kmeans] [nhclu_pam] [nhclu_affprop] 
 #'
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),

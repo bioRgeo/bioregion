@@ -1,71 +1,78 @@
-#' Non hierarchical clustering: partitioning around medoids
+#' Non-hierarchical clustering: partitioning around medoids
 #'
-#' This function performs non hierarchical clustering on the basis of
-#' dissimilarity with partitioning around medoids.
+#' This function performs non-hierarchical clustering based on dissimilarity 
+#' using partitioning around medoids (PAM).
 #'
-#' @param dissimilarity the output object from [dissimilarity()] or
-#' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is
-#' used, the first two columns represent pairs of sites (or any pair of nodes),
-#' and the next column(s) are the dissimilarity indices.
-#' 
-#' @param index name or number of the dissimilarity column to use. By default, 
-#' the third column name of `dissimilarity` is used.
-#' 
-#' @param seed for the random number generator (NULL for random by default).
-#' 
-#' @param n_clust an `integer` vector or a single `integer` value specifying the
-#' requested number(s) of clusters.
-#' 
-#' @param variant a `character` string specifying the variant of pam to use,
-#' by default `faster`. Available options are `original`, `o_1`, `o_2`, `f_3`, 
-#' `f_4`, `f_5` or `faster`. See [pam][cluster::pam] for more details.
-#' 
-#' @param nstart an `integer` specifying the number of random start for the
-#' pam algorithm. By default, 1 (for the `faster` variant).
-#' 
-#' @param cluster_only a `boolean` specifying if only the clustering should be
-#' returned from the [pam][cluster::pam] function (more efficient).
-#' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
-#' of [pam][cluster::pam] should be returned in the output (`TRUE` by 
-#' default, see Value).
-#' 
-#' @param ... you can add here further arguments to be passed to `pam()`
-#' (see [pam][cluster::pam]).
+#' @param dissimilarity The output object from [dissimilarity()] or 
+#' [similarity_to_dissimilarity()], or a `dist` object. If a `data.frame` is 
+#' used, the first two columns should represent pairs of sites (or any pair of 
+#' nodes), and the subsequent column(s) should contain the dissimilarity indices.
 #'
-#' @details
-#' This method partitions data into the chosen number of cluster on the basis
-#' of the input dissimilarity matrix. It is more robust than k-means because it
-#' minimizes the sum of dissimilarity between cluster centres and points
-#' assigned to the cluster - whereas the k-means approach minimizes the sum of
-#' squared euclidean distances (thus k-means cannot be applied directly on the
-#' input dissimilarity matrix if the distances are not euclidean).
+#' @param index The name or number of the dissimilarity column to use. By 
+#' default, the third column name of `dissimilarity` is used.
+#'
+#' @param seed A value for the random number generator (`NULL` for random by 
+#' default).
+#'
+#' @param n_clust An `integer` vector or a single `integer` value specifying 
+#' the requested number(s) of clusters.
+#'
+#' @param variant A `character` string specifying the PAM variant to use. 
+#' Defaults to `faster`. Available options are `original`, `o_1`, `o_2`, `f_3`, 
+#' `f_4`, `f_5`, or `faster`. See [pam][cluster::pam] for more details.
+#'
+#' @param nstart An `integer` specifying the number of random starts for the PAM 
+#' algorithm. Defaults to 1 (for the `faster` variant).
+#'
+#' @param cluster_only A `boolean` specifying whether only the clustering 
+#' results should be returned from the [pam][cluster::pam] function. Setting 
+#' this to `TRUE` makes the function more efficient.
+#'
+#' @param algorithm_in_output A `boolean` indicating whether the original output 
+#' of [pam][cluster::pam] should be included in the result. Defaults to `TRUE` 
+#' (see Value).
+#'
+#' @param ... Additional arguments to pass to `pam()` (see [pam][cluster::pam]).
 #'
 #' @return
-#' A `list` of class `bioregion.clusters` with five slots:
+#' A `list` of class `bioregion.clusters` with five components:
 #' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#' 
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of
+#' \item{**name**: A `character` string containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the clustering 
+#' procedure, such as original cluster objects (only if 
+#' `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' If `algorithm_in_output = TRUE`, the `algorithm` slot includes the output of 
 #' [pam][cluster::pam].
+#'
+#' @details
+#' This method partitions the data into the chosen number of clusters based on 
+#' the input dissimilarity matrix. It is more robust than k-means because it 
+#' minimizes the sum of dissimilarities between cluster centers (medoids) and 
+#' points assigned to the cluster. In contrast, k-means minimizes the sum of 
+#' squared Euclidean distances, which makes it unsuitable for dissimilarity 
+#' matrices that are not based on Euclidean distances.
 #' 
 #' @references
 #' Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to 
 #' cluster analysis. In & Sons. JW (ed.), Finding groups in data: An 
 #' introduction to cluster analysis.
+#'
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+#' 
+#' Associated functions: 
+#' [nhclu_clara] [nhclu_clarans] [nhclu_dbscan] [nhclu_kmeans] [nhclu_affprop] 
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
-#' 
-#' @seealso [nhclu_kmeans] 
 #' 
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -87,7 +94,6 @@
 #' @importFrom cluster pam    
 #'                    
 #' @export
-
 nhclu_pam <- function(dissimilarity,
                       index = names(dissimilarity)[3],
                       seed = NULL,
@@ -106,6 +112,7 @@ nhclu_pam <- function(dissimilarity,
              type = "input_data_frame_nhandhclu")
     controls(args = index, data = dissimilarity, type = "input_net_index")
     net <- dissimilarity
+    
     # Convert tibble into dataframe
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
@@ -133,8 +140,9 @@ nhclu_pam <- function(dissimilarity,
   controls(args = variant, data = NULL, type = "character")
   if(!(variant %in% c("original", "o_1", "o_2", "f_3", "f_4", "f_5",
                           "faster"))){
-    stop("Please choose variant among the followings values:
-original, o_1, o_2, f_3, f_4, f_5 or faster", call. = FALSE)
+    stop(paste0("Please choose variant from the following:\n",
+                "original, o_1, o_2, f_3, f_4, f_5 or faster."),
+         call. = FALSE)
   }
   controls(args = nstart, data = NULL, type = "strict_positive_integer")
   controls(args = cluster_only, data = NULL, type = "boolean")

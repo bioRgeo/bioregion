@@ -145,8 +145,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_kmeans(uni3),
-    "The first two columns of dissimilarity contain (unordered) duplicated pairs of sites!",
-    fixed = TRUE) 
+    "^The first two columns of dissimilarity contain") 
   
   expect_error(
     nhclu_kmeans(uni2),
@@ -278,9 +277,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_kmeans(dissim, algorithm = "zz"),
-    "Please choose algorithm among the followings values:
-Hartigan-Wong, Lloyd, Forgy or MacQueen",
-    fixed = TRUE)
+    "^Please choose algorithm from the following:")
   
   expect_error(
     nhclu_kmeans(dissim, nstart =  c("zz","zz")),

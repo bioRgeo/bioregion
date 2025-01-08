@@ -2,7 +2,7 @@
 % Please edit documentation in R/nhclu_dbscan.R
 \name{nhclu_dbscan}
 \alias{nhclu_dbscan}
-\title{dbscan clustering}
+\title{Non-hierarchical clustering: DBSCAN}
 \usage{
 nhclu_dbscan(
   dissimilarity,
@@ -15,87 +15,75 @@ nhclu_dbscan(
 )
 }
 \arguments{
-\item{dissimilarity}{the output object from \code{\link[=dissimilarity]{dissimilarity()}} or
+\item{dissimilarity}{The output object from \code{\link[=dissimilarity]{dissimilarity()}} or
 \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}, or a \code{dist} object. If a \code{data.frame} is
-used, the first two columns represent pairs of sites (or any pair of nodes),
-and the next column(s) are the dissimilarity indices.}
+used, the first two columns should represent pairs of sites (or any pair of
+nodes), and the subsequent column(s) should contain the dissimilarity indices.}
 
-\item{index}{name or number of the dissimilarity column to use. By default,
-the third column name of \code{dissimilarity} is used.}
+\item{index}{The name or number of the dissimilarity column to use. By
+default, the third column name of \code{dissimilarity} is used.}
 
-\item{minPts}{a \code{numeric} vector or a single \code{numeric} value
-specifying the minPts argument of \link[dbscan:dbscan]{dbscan::dbscan()}).
-minPts is the minimum number of points to form a dense region. By default,
-it is set to the natural logarithm of the number of sites in
-\code{dissimilarity}. See details for guidance on choosing this parameter.}
+\item{minPts}{A \code{numeric} vector or a single \code{numeric} value specifying the
+\code{minPts} argument of \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. \code{minPts} is the minimum number of
+points to form a dense region. By default, it is set to the natural logarithm
+of the number of sites in \code{dissimilarity}. See Details for guidance on
+choosing this parameter.}
 
-\item{eps}{a \code{numeric} vector or a single \code{numeric} value specifying the
-eps argument of \link[dbscan:dbscan]{dbscan}). eps specifies how
-similar points should be to each other to be considered a part of a cluster.
-See details for guidance on choosing this parameter.}
+\item{eps}{A \code{numeric} vector or a single \code{numeric} value specifying the \code{eps}
+argument of \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. \code{eps} specifies how similar points should be
+to each other to be considered part of a cluster. See Details for guidance on
+choosing this parameter.}
 
-\item{plot}{a \code{boolean} indicating if the  k-nearest neighbor distance plot
-should be plotted.}
+\item{plot}{A \code{boolean} indicating whether the k-nearest neighbor distance
+plot should be displayed.}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[dbscan:dbscan]{dbscan} should be returned in the output (\code{TRUE} by
-default, see Value).}
+\item{algorithm_in_output}{A \code{boolean} indicating whether the original output
+of \link[dbscan:dbscan]{dbscan::dbscan} should be included in the output. Defaults to \code{TRUE} (see
+Value).}
 
-\item{...}{you can add here further arguments to be passed to \code{dbscan()}
-(see \link[dbscan:dbscan]{dbscan}).}
+\item{...}{Additional arguments to be passed to \code{dbscan()} (see
+\link[dbscan:dbscan]{dbscan::dbscan}).}
 }
 \value{
-A \code{list} of class \code{bioregion.clusters} with five slots:
+A \code{list} of class \code{bioregion.clusters} with five components:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} string containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the clustering
+procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
-find the output of
-\link[dbscan:dbscan]{dbscan}.
+If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
+\link[dbscan:dbscan]{dbscan::dbscan}.
 }
 \description{
-This function performs non hierarchical clustering on the basis of
-dissimilarity with Density-based Spatial Clustering of Applications with
-Noise (DBSCAN).
+This function performs non-hierarchical clustering based on dissimilarity
+using the Density-Based Spatial Clustering of Applications with Noise
+(DBSCAN) algorithm.
 }
 \details{
-The dbscan (Density-based spatial clustering of
-applications with noise) clustering algorithm clusters points on the basis
-of the density of neighbours around each data points. It necessitates two
-main arguments, \code{minPts}, which stands for the minimum number of points to
-identify a core, and \code{eps}, which is the radius to find neighbors.
-\code{minPts} and \code{eps} should be defined by the user, which is not
-straightforward.
-We recommend reading the help in \link[dbscan:dbscan]{dbscan})
-to learn how to set these arguments, as well as the paper
-(Hahsler et al., 2019). Note that clusters with a value of 0
-are points which were deemed as noise by the algorithm.
+The DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
+algorithm clusters points based on the density of neighbors around each
+data point. It requires two main arguments: \code{minPts}, the minimum number of
+points to identify a core, and \code{eps}, the radius used to find neighbors.
 
-By default the function will select values for \code{minPts} and \code{eps}. However,
-these values can be inadequate and the users is advised to tune these values
-by running the function multiple times.
+\strong{Choosing minPts:} This determines how many points are necessary to form a
+cluster. For example, what is the minimum number of sites expected in a
+bioregion? Choose a value sufficiently large for your dataset and expectations.
 
-\strong{Choosing minPts:} how many points should be necessary to make a cluster?
-i.e., what is the minimum number of sites you expect in a bioregion? Set a
-value sufficiently large for your dataset and your expectations.
+\strong{Choosing eps:} This determines how similar sites should be to form a
+cluster. If \code{eps} is too small, most points will be considered too distinct
+and marked as noise. If \code{eps} is too large, clusters may merge. The value of
+\code{eps} depends on \code{minPts}. It is recommended to choose \code{eps} by identifying
+a knee in the k-nearest neighbor distance plot.
 
-\strong{Choosing eps:} how similar should sites be in a cluster?  If \code{eps} is
-too small, then a majority of points will be considered too distinct and
-will not be clustered at all (i.e., considered as noise)? If the value is
-too high, then clusters will merge together.
-The value of \code{eps} depends on the \code{minPts} argument, and the literature
-recommends to choose \code{eps} by identifying a knee in the k-nearest neighbor
-distance plot. By default
-the function will try to automatically find a knee in that curve, but the
-result is uncertain, and so the user should inspect the graph and modify
-\code{dbscan_eps} accordingly. To explore \code{eps} values, follow the
-recommendation by the function when you launch it a first time without
-defining \code{eps}. Then, adjust depending on your clustering results.
+By default, the function attempts to find a knee in this curve
+automatically, but the result is uncertain. Users should inspect the graph
+and modify \code{eps} accordingly. To explore \code{eps} values, run the function
+initially without defining \code{eps}, review the recommendations, and adjust
+as needed based on clustering results.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -116,7 +104,12 @@ Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based
 clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
 }
 \seealso{
-\link{hclu_optics}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html}.
+
+Associated functions:
+\link{nhclu_clara} \link{nhclu_clarans} \link{nhclu_kmeans} \link{nhclu_pam} \link{nhclu_affprop}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr
