@@ -3,151 +3,158 @@
 #' This function finds communities in a (un)weighted undirected network based
 #' on the Louvain algorithm.
 #'
-#' @param net the output object from [similarity()] or
+#' @param net The output object from [similarity()] or
 #' [dissimilarity_to_similarity()].
 #' If a `data.frame` is used, the first two columns represent pairs of sites
 #' (or any pair of nodes), and the next column(s) are the similarity indices.
 #'
-#' @param weight a `boolean` indicating if the weights should be considered
+#' @param weight A `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #'
-#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' @param cut_weight A minimal weight value. If `weight` is TRUE, the links 
 #' between sites with a weight strictly lower than this value will not be 
-#' considered (O by default).
+#' considered (`0` by default).
 #'
-#' @param index name or number of the column to use as weight. By default,
+#' @param index The name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #'
-#' @param lang a string indicating what version of Louvain should be used
-#' (`igraph` or `cpp`, see Details).
+#' @param lang A string indicating which version of Louvain should be used
+#' (`"igraph"` or `"cpp"`, see Details).
 #' 
-#' @param resolution a resolution parameter to adjust the modularity 
+#' @param resolution A resolution parameter to adjust the modularity 
 #' (1 is chosen by default, see Details).
 #' 
-#' @param seed for the random number generator (only when `lang = "igraph"`, 
+#' @param seed The random number generator seed (only when `lang = "igraph"`, 
 #' NULL for random by default).
 #'
-#' @param q the quality function used to compute partition of the graph
+#' @param q The quality function used to compute the partition of the graph
 #' (modularity is chosen by default, see Details).
 #'
-#' @param c the parameter for the Owsinski-Zadrozny quality function
+#' @param c The parameter for the Owsinski-Zadrozny quality function
 #' (between 0 and 1, 0.5 is chosen by default).
 #'
-#' @param k the kappa_min value for the Shi-Malik quality function
+#' @param k The kappa_min value for the Shi-Malik quality function
 #' (it must be > 0, 1 is chosen by default).
 #'
-#' @param bipartite a boolean indicating if the network is bipartite
+#' @param bipartite A `boolean` indicating if the network is bipartite
 #' (see Details).
 #'
-#' @param site_col name or number for the column of site nodes
-#' (i.e. primary nodes).
+#' @param site_col The name or number for the column of site nodes
+#' (i.e., primary nodes).
 #'
-#' @param species_col name or number for the column of species nodes
-#' (i.e. feature nodes).
+#' @param species_col The name or number for the column of species nodes
+#' (i.e., feature nodes).
 #'
-#' @param return_node_type a `character` indicating what types of nodes
-#' (`site`, `species` or `both`) should be returned in the output
-#' (`return_node_type = "both"` by default).
+#' @param return_node_type A `character` indicating what types of nodes
+#' (`"site"`, `"species"`, or `"both"`) should be returned in the output
+#' (`"both"` by default).
 #'
-#' @param binpath a `character` indicating the path to the bin folder
+#' @param binpath A `character` indicating the path to the bin folder
 #' (see [install_binaries] and Details).
 #' 
-#' @param check_install a `boolean` indicating if the function should check that
-#' the Louvain as been properly installed (see [install_binaries] and Details).
+#' @param check_install A `boolean` indicating if the function should check that
+#' Louvain has been properly installed (see [install_binaries] and Details).
 #'
-#' @param path_temp a `character` indicating the path to the temporary folder
+#' @param path_temp A `character` indicating the path to the temporary folder
 #' (see Details).
 #'
-#' @param delete_temp a `boolean` indicating if the temporary folder should
+#' @param delete_temp A `boolean` indicating if the temporary folder should
 #' be removed (see Details).
 #'
-#' @param algorithm_in_output a `boolean` indicating if the original output
+#' @param algorithm_in_output A `boolean` indicating if the original output
 #' of [cluster_louvain][igraph::cluster_louvain] should be returned in the 
 #' output (`TRUE` by default, see Value). 
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: A `character` containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can 
+#' find the output of [cluster_louvain][igraph::cluster_louvain] if 
+#' `lang = "igraph"` and the following element if `lang = "cpp"`:
+#'
+#' \itemize{
+#' \item{`cmd`: The command line used to run Louvain.}
+#' \item{`version`: The Louvain version.}
+#' \item{`web`: The Louvain's website.}
+#' }
 #'
 #' @details
 #' Louvain is a network community detection algorithm proposed in
-#' (Blondel et al., 2008). This function proposed two
-#' implementations of the function (parameter `lang`): the
-#' [igraph](https://cran.r-project.org/package=igraph)
+#' (Blondel et al., 2008). This function offers two
+#' implementations of the Louvain algorithm (controlled by the `lang` parameter):
+#' the [igraph](https://cran.r-project.org/package=igraph)
 #' implementation ([cluster_louvain][igraph::cluster_louvain]) and the C++
 #' implementation (<https://sourceforge.net/projects/louvain/>, version 0.3).
 #' 
 #' The [igraph](https://cran.r-project.org/package=igraph)
-#' implementation offers the possibility to adjust the resolution parameter of 
-#' the modularity function (`resolution` argument) that the algorithm uses 
-#' internally. Lower values typically yield fewer, larger clusters. The original
+#' implementation allows adjustment of the resolution parameter of 
+#' the modularity function (`resolution` argument) used internally by the 
+#' algorithm. Lower values typically yield fewer, larger clusters. The original
 #' definition of modularity is recovered when the resolution parameter 
 #' is set to 1 (by default).
 #' 
-#' The C++ implementation offers the possibility to choose among several 
-#' quality functions,
-#' `q = 0` for the classical Newman-Girvan criterion (also called
-#' "Modularity"), 1 for the Zahn-Condorcet criterion, 2 for the
-#' Owsinski-Zadrozny criterion (you should specify the value of the parameter
-#' with the `c` argument), 3 for the Goldberg Density criterion, 4 for the
-#' A-weighted Condorcet criterion, 5 for the Deviation to Indetermination
-#' criterion, 6 for the Deviation to Uniformity criterion, 7 for the Profile
-#' Difference criterion, 8 for the Shi-Malik criterion (you should specify the
-#' value of kappa_min with `k` argument) and 9 for the Balanced Modularity
+#' The C++ implementation provides several quality functions:
+#' `q = 0` for the classical Newman-Girvan criterion (Modularity),
+#' `q = 1` for the Zahn-Condorcet criterion, `q = 2` for the Owsinski-Zadrozny 
+#' criterion (parameterized by `c`), `q = 3` for the Goldberg Density criterion, 
+#' `q = 4` for the A-weighted Condorcet criterion, `q = 5` for the Deviation to 
+#' Indetermination criterion, `q = 6` for the Deviation to Uniformity criterion, 
+#' `q = 7` for the Profile Difference criterion, `q = 8` for the Shi-Malik 
+#' criterion (parameterized by `k`), and `q = 9` for the Balanced Modularity 
 #' criterion.
 #'
-#' The C++ version of Louvain is based on the version 0.3
-#' (<https://sourceforge.net/projects/louvain/>). This function needs
-#'  binary files to run. They can be installed with
-#' [install_binaries]. 
+#' The C++ version is based on version 0.3
+#' (<https://sourceforge.net/projects/louvain/>). Binary files are required to run it,
+#' and can be installed with [install_binaries]. 
 #' 
 #' **If you changed the default path to the `bin` folder
-#' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
+#' while running [install_binaries], PLEASE MAKE SURE to set `binpath` 
 #' accordingly.**
 #' 
-#' **If you did not used [install_binaries] to change the permissions and test 
-#' the binary files PLEASE MAKE SURE to set `check_install` accordingly.**
+#' **If you did not use [install_binaries] to change the permissions or test 
+#' the binary files, PLEASE MAKE SURE to set `check_install` accordingly.**
 #' 
-#' The C++ version of Louvain generates temporary folders and/or files that are
-#' stored in the `path_temp` folder ("louvain_temp" with an unique timestamp
-#' located in the bin folder in `binpath` by default). This temporary folder
-#' is removed by default (`delete_temp = TRUE`).
+#' The C++ version generates temporary folders and/or files in the `path_temp`
+#' folder ("louvain_temp" with a unique timestamp located in the bin folder in 
+#' `binpath` by default). This temporary folder is removed by default 
+#' (`delete_temp = TRUE`).
 #'
 #' @note
 #' Although this algorithm was not primarily designed to deal with bipartite
-#' network, it is possible to consider the bipartite network as unipartite
+#' networks, it is possible to consider the bipartite network as a unipartite
 #' network (`bipartite = TRUE`).
 #'
 #' Do not forget to indicate which of the first two columns is dedicated to the
-#' site nodes (i.e. primary nodes) and species nodes (i.e. feature nodes) using
+#' site nodes (i.e., primary nodes) and species nodes (i.e., feature nodes) using
 #' the arguments `site_col` and `species_col`. The type of nodes returned in
 #' the output can be chosen with the argument `return_node_type` equal to
-#' `both` to keep both types of nodes, `sites` to preserve only the sites
-#' nodes and `species` to preserve only the species nodes.
+#' `"both"` to keep both types of nodes, `"site"` to preserve only the site
+#' nodes, and `"species"` to preserve only the species nodes.
+#' 
+#' @references 
+#' Blondel VD, Guillaume JL, Lambiotte R & Mech ELJS (2008) Fast unfolding of 
+#' communities in large networks. \emph{J. Stat. Mech.} 10, P10008.
 #'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects (only if
-#'  `algorithm_in_output = TRUE`)}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find an
-#' the output of [cluster_louvain][igraph::cluster_louvain]
-#' if `lang = "igraph"` and the following element if `lang = "cpp"`:
-#'
-#' \itemize{
-#' \item{`cmd`: the command line use to run Louvain}
-#' \item{`version`: the Louvain version}
-#' \item{`web`: Louvain's website}
-#' }.
-#'
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+#' 
+#' Associated functions: 
+#' [netclu_infomap] [netclu_greedy] [netclu_oslom]
+#' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#'
-#' @seealso [install_binaries()], [netclu_infomap()], [netclu_oslom()]
 #'
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
@@ -156,10 +163,6 @@
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_louvain(net, lang = "igraph")
-#'
-#' @references 
-#' Blondel VD, Guillaume JL, Lambiotte R & Mech ELJS (2008) Fast unfolding of 
-#' communities in large networks. \emph{J. Stat. Mech.}, 10(2008), P10008.
 #'
 #' @importFrom igraph graph_from_data_frame cluster_louvain
 #'
@@ -218,8 +221,9 @@ netclu_louvain <- function(net,
     controls(args = species_col, data = net, type = "input_net_bip_col")
     controls(args = return_node_type, data = NULL, type = "character")
     if (!(return_node_type %in% c("both", "site", "species"))) {
-      stop("Please choose return_node_type among the followings values:
-both, sites or species", call. = FALSE)
+      stop(paste0("Please choose return_node_type from the following:\n",
+                  "both, sites or species."), 
+           call. = FALSE)   
     }
   }
 
@@ -230,8 +234,9 @@ both, sites or species", call. = FALSE)
   # Control parameters LOUVAIN
   controls(args = lang, data = NULL, type = "character")
   if (!(lang %in% c("cpp", "igraph"))) {
-    stop("Please choose lang among the following values:
-cpp or igraph", call. = FALSE)
+    stop(paste0("Please choose lang from the following:\n",
+                "cpp or igraph."), 
+         call. = FALSE)  
   }
   controls(args = resolution, data = NULL, type = "strict_positive_numeric")
   if(!is.null(seed)){
@@ -345,8 +350,10 @@ cpp or igraph", call. = FALSE)
     
     # Control empty network
     if(dim(netemp)[1]==0){
-      stop("The network is empty. 
-         Please check your data or choose an appropriate cut_weight value.")
+      stop(paste0("The network is empty. ",
+                  "Please check your data or choose an ",
+                  "appropriate cut_weight value."),
+           call. = FALSE)
     }
     
     # Control and set binpath
@@ -371,13 +378,13 @@ cpp or igraph", call. = FALSE)
     # Check if LOUVAIN has successfully been installed
     if (check_install &
         !file.exists(paste0(binpath, "/bin/LOUVAIN/check.txt"))) {
-      message(
-        "Louvain is not installed... Please have a look at
-              https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
-              for more details.\n",
-        "It should be located in ",
-        paste0(binpath, "/bin/LOUVAIN/")
-      )
+      message(paste0("Louvain is not installed... ",
+                     "Please have a look at ",
+                     "https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html",
+                     "for more details.\n",
+                     "It should be located in ",
+                     binpath, 
+                     "/bin/LOUVAIN/"))
     } else {
       # Control temp folder + create temp folder
       if (path_temp == "louvain_temp") {

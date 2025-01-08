@@ -345,9 +345,7 @@ test_that("invalid inputs", {
   
   expect_error(
     netclu_louvain(net, bipartite = TRUE, return_node_type = "zz"),
-    "Please choose return_node_type among the followings values:
-both, sites or species",
-    fixed = TRUE)
+    "^Please choose return_node_type from the following:")
   
   expect_error(
     netclu_louvain(net, bipartite = TRUE, site_col = "Weight", 
@@ -412,9 +410,7 @@ both, sites or species",
   
   expect_error(
     netclu_louvain(net, lang = "zz"),
-    "Please choose lang among the following values:
-cpp or igraph",
-    fixed = TRUE)
+    "^Please choose lang from the following:")
   
   expect_error(
     netclu_louvain(net, resolution =  c("zz","zz")),
@@ -538,9 +534,7 @@ cpp or igraph",
   
   expect_error(
     netclu_louvain(net, cut_weight = 100, lang = "cpp"),
-    "The network is empty. 
-         Please check your data or choose an appropriate cut_weight value.", 
-    fixed = TRUE)
+    "^The network is empty.")
   
   expect_error(
     netclu_louvain(net, lang="cpp", binpath = 1),

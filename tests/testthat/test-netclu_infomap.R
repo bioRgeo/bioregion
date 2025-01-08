@@ -572,9 +572,7 @@ test_that("invalid inputs", {
   
   expect_error(
     netclu_infomap(net, bipartite = TRUE, return_node_type = "zz"),
-    "Please choose return_node_type among the followings values:
-both, sites or species",
-    fixed = TRUE)
+    "^Please choose return_node_type from the following:")
   
   expect_error(
     netclu_infomap(net, bipartite = TRUE, site_col = "Weight", 
@@ -644,8 +642,6 @@ both, sites or species",
   
   expect_error(
     netclu_infomap(net, cut_weight = 100),
-    "The network is empty. 
-         Please check your data or choose an appropriate cut_weight value.", 
-    fixed = TRUE)
+    "^The network is empty. ")
   
 })

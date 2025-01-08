@@ -2,7 +2,7 @@
 % Please edit documentation in R/netclu_oslom.R
 \name{netclu_oslom}
 \alias{netclu_oslom}
-\title{OSLOM community finding}
+\title{OsloM Community Finding}
 \usage{
 netclu_oslom(
   net,
@@ -27,89 +27,90 @@ netclu_oslom(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\item{net}{The output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
 
-\item{weight}{a \code{boolean} indicating if the weights should be considered
+\item{weight}{A \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
-\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+\item{cut_weight}{A minimal weight value. If \code{weight} is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).}
+considered (0 by default).}
 
-\item{index}{name or number of the column to use as weight. By default,
+\item{index}{Name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{seed}{for the random number generator (NULL for random by default).}
+\item{seed}{For the random number generator (NULL for random by default).}
 
-\item{reassign}{a \code{character} indicating if the nodes belonging to several
-community should be reassign and what method should be used (see Note).}
+\item{reassign}{A \code{character} indicating if the nodes belonging to several
+community should be reassigned and what method should be used (see Note).}
 
-\item{r}{the number of runs for the first hierarchical level
+\item{r}{The number of runs for the first hierarchical level
 (10 by default).}
 
-\item{hr}{the number of runs for the higher hierarchical level (50 by
+\item{hr}{The number of runs for the higher hierarchical level (50 by
 default, 0 if you are not interested in hierarchies).}
 
-\item{t}{the p-value, the default value is 0.10, increase this value you to
-get more modules.}
+\item{t}{The p-value, the default value is 0.10. Increase this value if you want
+more modules.}
 
-\item{cp}{kind of resolution parameter used to decide between taking some
-modules or their union (default value is 0.5, bigger value leads to bigger
+\item{cp}{Kind of resolution parameter used to decide between taking some
+modules or their union (default value is 0.5; a bigger value leads to bigger
 clusters).}
 
-\item{directed}{a \code{boolean} indicating if the network is directed (from
+\item{directed}{A \code{boolean} indicating if the network is directed (from
 column 1 to column 2).}
 
-\item{bipartite}{a \code{boolean} indicating if the network is bipartite
+\item{bipartite}{A \code{boolean} indicating if the network is bipartite
 (see Details).}
 
-\item{site_col}{name or number for the column of site nodes
+\item{site_col}{Name or number for the column of site nodes
 (i.e. primary nodes).}
 
-\item{species_col}{name or number for the column of species nodes
+\item{species_col}{Name or number for the column of species nodes
 (i.e. feature nodes).}
 
-\item{return_node_type}{a \code{character} indicating what types of nodes
-(\code{site}, \code{species} or \code{both}) should be returned in the output
+\item{return_node_type}{A \code{character} indicating what types of nodes
+(\code{site}, \code{species}, or \code{both}) should be returned in the output
 (\code{return_node_type = "both"} by default).}
 
-\item{binpath}{a \code{character} indicating the path to the bin folder
+\item{binpath}{A \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
 
-\item{check_install}{a \code{boolean} indicating if the function should check that
-the OSLOM as been properly installed (see \link{install_binaries} and Details).}
+\item{check_install}{A \code{boolean} indicating if the function should check that
+the OSLOM has been properly installed (see \link{install_binaries} and Details).}
 
-\item{path_temp}{a \code{character} indicating the path to the temporary folder
+\item{path_temp}{A \code{character} indicating the path to the temporary folder
 (see Details).}
 
-\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
+\item{delete_temp}{A \code{boolean} indicating if the temporary folder should
 be removed (see Details).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects (only if
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
 In the \code{algorithm} slot, users can find the following elements:
 
 \itemize{
-\item{\code{cmd}: the command line use to run OSLOM}
-\item{\code{version}: the OSLOM version}
-\item{\code{web}: the OSLOM's web site}
+\item{\code{cmd}: The command line used to run OSLOM.}
+\item{\code{version}: The OSLOM version.}
+\item{\code{web}: The OSLOM's web site.}
 }
 }
 \description{
 This function finds communities in a (un)weighted (un)directed network based
-on the OSLOM algorithm (\url{http://oslom.org/}, version 2.4).
+on the OsloM algorithm (\url{http://oslom.org/}, version 2.4).
 }
 \details{
 OSLOM is a network community detection algorithm proposed in
@@ -121,39 +122,39 @@ This function is based on the 2.4 C++ version of OSLOM
 to run. They can be installed with \link{install_binaries}.
 
 \strong{If you changed the default path to the \code{bin} folder
-while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
+while running \link{install_binaries}, PLEASE MAKE SURE to set \code{binpath}
 accordingly.}
 
-\strong{If you did not used \link{install_binaries} to change the permissions and test
-the binary files PLEASE MAKE SURE to set \code{check_install} accordingly.}
+\strong{If you did not use \link{install_binaries} to change the permissions and test
+the binary files, PLEASE MAKE SURE to set \code{check_install} accordingly.}
 
 The C++ version of OSLOM generates temporary folders and/or files that are
-stored in the \code{path_temp} folder (folder "oslom_temp" with an unique timestamp
+stored in the \code{path_temp} folder (folder "oslom_temp" with a unique timestamp
 located in the bin folder in \code{binpath} by default). This temporary folder is
 removed by default (\code{delete_temp = TRUE}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite
-network, it is possible to consider the bipartite network as unipartite
+networks, it is possible to consider the bipartite network as unipartite
 network (\code{bipartite = TRUE}). Do not forget to indicate which of the
 first two columns is dedicated to the site nodes (i.e. primary nodes) and
-species nodes (i.e.feature nodes) using the arguments \code{site_col} and
+species nodes (i.e. feature nodes) using the arguments \code{site_col} and
 \code{species_col}. The type of nodes returned in the output can be chosen
 with the argument \code{return_node_type} equal to \code{both} to keep both
-types of nodes, \code{sites} to preserve only the sites nodes and
+types of nodes, \code{sites} to preserve only the sites nodes, and
 \code{species} to preserve only the species nodes.
 
-Since OSLOM potentially returns overlapping communities we propose two
-methods to reassign the 'overlapping' nodes randomly \code{reassign = "random"}
-or based on the closest candidate community \code{reassign = "simil"} (only for
+Since OSLOM potentially returns overlapping communities, we propose two
+methods to reassign the 'overlapping' nodes: randomly (\code{reassign = "random"})
+or based on the closest candidate community (\code{reassign = "simil"}) (only for
 weighted networks, in this case the closest candidate community is
-determined with the average similarity). By default \code{reassign = "no"} and
+determined with the average similarity). By default, \code{reassign = "no"} and
 all the information will be provided. The number of partitions will depend
 on the number of overlapping modules (up to three). The suffix \verb{_semel},
-\verb{_bis} and \verb{_ter} are added to the column names. The first partition
+\verb{_bis}, and \verb{_ter} are added to the column names. The first partition
 (\verb{_semel}) assigns a module to each node. A value of \code{NA} in the second
 (\verb{_bis}) and third (\verb{_ter}) columns indicates that no overlapping module
-were found for this node (i.e. non-overlapping nodes).
+was found for this node (i.e. non-overlapping nodes).
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
@@ -166,11 +167,16 @@ com <- netclu_oslom(net)
 }
 \references{
 Lancichinetti A, Radicchi F, Ramasco JJ & Fortunato S (2011) Finding
-statistically significant communities in networks. \emph{PLOS ONE}, 6(4),
+statistically significant communities in networks. \emph{PLOS ONE} 6,
 e18961.
 }
 \seealso{
-\code{\link[=install_binaries]{install_binaries()}}, \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=netclu_louvain]{netclu_louvain()}}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+
+Associated functions:
+\link{netclu_greedy} \link{netclu_infomap} \link{netclu_louvain}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

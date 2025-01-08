@@ -29,88 +29,89 @@ netclu_infomap(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\item{net}{The output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
 
-\item{weight}{a \code{boolean} indicating if the weights should be considered
+\item{weight}{A \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
-\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+\item{cut_weight}{A minimal weight value. If \code{weight} is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).}
+considered (\code{0} by default).}
 
-\item{index}{name or number of the column to use as weight. By default,
+\item{index}{The name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{seed}{for the random number generator (NULL for random by default).}
+\item{seed}{The seed for the random number generator (\code{NULL} for random by
+default).}
 
-\item{nbmod}{penalize solutions the more they differ from this number (0 by
+\item{nbmod}{Penalize solutions the more they differ from this number (\code{0} by
 default for no preferred number of modules).}
 
-\item{markovtime}{scales link flow to change the cost of moving between
-modules, higher values results in fewer modules (default is 1).}
+\item{markovtime}{Scales link flow to change the cost of moving between
+modules, higher values result in fewer modules (\code{1} by default).}
 
-\item{numtrials}{for the number of trials before picking up the best
+\item{numtrials}{For the number of trials before picking up the best
 solution.}
 
-\item{twolevel}{a \code{boolean} indicating if the algorithm should optimize a
-two-level partition of the network (default is multi-level).}
+\item{twolevel}{A \code{boolean} indicating if the algorithm should optimize a
+two-level partition of the network (\code{FALSE} by default for multi-level).}
 
-\item{show_hierarchy}{a \code{boolean} specifying if the hierarchy of community
-should be identifiable in the outputs (FALSE by default).}
+\item{show_hierarchy}{A \code{boolean} specifying if the hierarchy of community
+should be identifiable in the outputs (\code{FALSE} by default).}
 
-\item{directed}{a \code{boolean} indicating if the network is directed (from
+\item{directed}{A \code{boolean} indicating if the network is directed (from
 column 1 to column 2).}
 
-\item{bipartite_version}{a \code{boolean} indicating if the bipartite version of
+\item{bipartite_version}{A \code{boolean} indicating if the bipartite version of
 Infomap should be used (see Note).}
 
-\item{bipartite}{a \code{boolean} indicating if the network is bipartite
+\item{bipartite}{A \code{boolean} indicating if the network is bipartite
 (see Note).}
 
-\item{site_col}{name or number for the column of site nodes
+\item{site_col}{The name or number for the column of site nodes
 (i.e. primary nodes).}
 
-\item{species_col}{name or number for the column of species nodes
+\item{species_col}{The name or number for the column of species nodes
 (i.e. feature nodes).}
 
-\item{return_node_type}{a \code{character} indicating what types of nodes
-(\code{site}, \code{species} or \code{both}) should be returned in the output
-(\code{return_node_type = "both"} by default).}
+\item{return_node_type}{A \code{character} indicating what types of nodes
+(\code{"site"}, \code{"species"}, or \code{"both"}) should be returned in the output
+(\code{"both"} by default).}
 
-\item{version}{a \code{character} indicating the Infomap version to use.}
+\item{version}{A \code{character} indicating the Infomap version to use.}
 
-\item{binpath}{a \code{character} indicating the path to the bin folder
+\item{binpath}{A \code{character} indicating the path to the bin folder
 (see \link{install_binaries} and Details).}
 
-\item{check_install}{a \code{boolean} indicating if the function should check that
-the Infomap as been properly installed (see \link{install_binaries} and Details).}
+\item{check_install}{A \code{boolean} indicating if the function should check that
+the Infomap has been properly installed (see \link{install_binaries} and Details).}
 
-\item{path_temp}{a \code{character} indicating the path to the temporary folder
+\item{path_temp}{A \code{character} indicating the path to the temporary folder
 (see Details).}
 
-\item{delete_temp}{a \code{boolean} indicating if the temporary folder should
+\item{delete_temp}{A \code{boolean} indicating if the temporary folder should
 be removed (see Details).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
-clustering procedure, such as original cluster objects}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\item{\strong{name}: A \code{character} containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the
+clustering procedure, such as original cluster objects.}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
 In the \code{algorithm} slot, users can find the following elements:
 
 \itemize{
-\item{\code{cmd}: the command line use to run Infomap}
-\item{\code{version}: the Infomap version}
-\item{\code{web}: Infomap's GitHub repository}
+\item{\code{cmd}: The command line used to run Infomap.}
+\item{\code{version}: The Infomap version.}
+\item{\code{web}: Infomap's GitHub repository.}
 }
 }
 \description{
@@ -131,31 +132,31 @@ with \link{install_binaries}.
 while running \link{install_binaries} PLEASE MAKE SURE to set \code{binpath}
 accordingly.}
 
-\strong{If you did not used \link{install_binaries} to change the permissions and test
+\strong{If you did not use \link{install_binaries} to change the permissions and test
 the binary files PLEASE MAKE SURE to set \code{check_install} accordingly.}
 
 The C++ version of Infomap generates temporary folders and/or files that are
-stored in the \code{path_temp} folder ("infomap_temp" with an unique timestamp
+stored in the \code{path_temp} folder ("infomap_temp" with a unique timestamp
 located in the bin folder in \code{binpath} by default). This temporary folder is
 removed by default (\code{delete_temp = TRUE}).
 
-Several version of Infomap are available in the package. See
+Several versions of Infomap are available in the package. See
 \link{install_binaries} for more details.
 }
 \note{
 Infomap has been designed to deal with bipartite networks. To use this
-functionality set the \code{bipartite_version} argument to TRUE in order to
+functionality, set the \code{bipartite_version} argument to TRUE in order to
 approximate a two-step random walker (see
 \url{https://www.mapequation.org/infomap/} for more information). Note that
-a bipartite network can also be considered as unipartite network
+a bipartite network can also be considered as a unipartite network
 (\code{bipartite = TRUE}).
 
-In both cases do not forget to indicate which of the first two columns is
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+In both cases, do not forget to indicate which of the first two columns is
+dedicated to the site nodes (i.e., primary nodes) and species nodes (i.e.
 feature nodes) using the arguments \code{site_col} and \code{species_col}.
 The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{both} to keep both types of nodes, \code{sites}
-to preserve only the sites nodes and \code{species} to preserve only the
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes, \code{"site"}
+to preserve only the site nodes, and \code{"species"} to preserve only the
 species nodes.
 }
 \examples{
@@ -170,10 +171,15 @@ com <- netclu_infomap(net)
 \references{
 Rosvall M & Bergstrom CT (2008) Maps of random walks on complex networks
 reveal community structure. \emph{Proceedings of the National Academy of
-Sciences}, 105(4), 1118-1123.
+Sciences} 105, 1118-1123.
 }
 \seealso{
-\link{install_binaries}, \link{netclu_louvain}, \link{netclu_oslom}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+
+Associated functions:
+\link{netclu_greedy} \link{netclu_louvain} \link{netclu_oslom}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

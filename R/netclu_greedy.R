@@ -3,40 +3,54 @@
 #' This function finds communities in a (un)weighted undirected network via
 #' greedy optimization of modularity.
 #'
-#' @param net the output object from [similarity()] or
+#' @param net The output object from [similarity()] or
 #' [dissimilarity_to_similarity()].
 #' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
 #' 
-#' @param weight a `boolean` indicating if the weights should be considered
+#' @param weight A `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' 
-#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' @param cut_weight A minimal weight value. If `weight` is TRUE, the links 
 #' between sites with a weight strictly lower than this value will not be 
-#' considered (O by default).
+#' considered (0 by default).
 #' 
-#' @param index name or number of the column to use as weight. By default,
+#' @param index The name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #' 
-#' @param bipartite a `boolean` indicating if the network is bipartite
+#' @param bipartite A `boolean` indicating if the network is bipartite
 #' (see Details).
 #' 
-#' @param site_col name or number for the column of site nodes
+#' @param site_col The name or number for the column of site nodes
 #' (i.e. primary nodes).
 #' 
-#' @param species_col name or number for the column of species nodes
+#' @param species_col The name or number for the column of species nodes
 #' (i.e. feature nodes).
 #' 
-#' @param return_node_type a `character` indicating what types of nodes
+#' @param return_node_type A `character` indicating what types of nodes
 #' (`site`, `species` or `both`) should be returned in the output
 #' (`return_node_type = "both"` by default).
 #' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
+#' @param algorithm_in_output A `boolean` indicating if the original output
 #' of [cluster_fast_greedy][igraph::cluster_fast_greedy] should be returned in 
 #' the output (`TRUE` by default, see Value).
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: `character` containing the name of the algorithm}
+#' \item{**args**: `list` of input arguments as provided by the user}
+#' \item{**inputs**: `list` of characteristics of the clustering process}
+#' \item{**algorithm**: `list` of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  `algorithm_in_output = TRUE`)}
+#' \item{**clusters**: `data.frame` containing the clustering results}}
 #'
-#' @export
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
+#' find the output of
+#' [cluster_fast_greedy][igraph::cluster_fast_greedy].
+#'
 #' @details
 #' This function is based on the fast greedy modularity optimization algorithm
 #' (Clauset et al., 2004) as implemented in the
@@ -55,21 +69,18 @@
 #' `return_node_type` equal to `both` to keep both types of nodes,
 #' `sites` to preserve only the sites nodes and `species` to
 #' preserve only the species nodes.
-#'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects (only if
-#'  `algorithm_in_output = TRUE`)}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of
-#' [cluster_fast_greedy][igraph::cluster_fast_greedy].
+#' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+#' 
+#' Associated functions: 
+#' [netclu_infomap] [netclu_louvain] [netclu_oslom]
+#' 
+#' @references
+#' Clauset A, Newman MEJ & Moore C (2004) Finding community structure in very 
+#' large networks. \emph{Phys. Rev. E} 70, 066111.
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
@@ -87,14 +98,9 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
 #' 
-#' @references
-#' Clauset A, Newman MEJ & Moore C (2004) Finding community structure in very 
-#' large networks. \emph{Phys. Rev. E}, 70, 066111.
-#' 
 #' @importFrom igraph graph_from_data_frame cluster_fast_greedy
 #' 
 #' @export
-
 netclu_greedy <- function(net,
                           weight = TRUE,
                           cut_weight = 0,
@@ -138,8 +144,9 @@ netclu_greedy <- function(net,
     controls(args = species_col, data = net, type = "input_net_bip_col")
     controls(args = return_node_type, data = NULL, type = "character")
     if (!(return_node_type %in% c("both", "site", "species"))) {
-      stop("Please choose return_node_type among the followings values:
-both, sites or species", call. = FALSE)
+      stop(paste0("Please choose return_node_type from the following:\n",
+                  "both, sites or species."), 
+           call. = FALSE)
     }
   }
 

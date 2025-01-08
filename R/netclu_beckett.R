@@ -1,43 +1,58 @@
-#' Community structure detection in weighted bipartite network via modularity
+#' Community structure detection in weighted bipartite networks via modularity 
 #' optimization
 #'
 #' This function takes a bipartite weighted graph and computes modules by
-#' applying Newman’s modularity measure in a bipartite weighted version to it.
+#' applying Newman’s modularity measure in a bipartite weighted version.
 #'
-#' @param net a `data.frame` representing a bipartite network with the two
-#' first columns as undirected links between pair of nodes and and the next
-#' column(s) are the weight of the links.
+#' @param net A `data.frame` representing a bipartite network with the first
+#' two columns representing undirected links between pairs of nodes, and the
+#' next column(s) representing the weights of the links.
 #' 
-#' @param weight a `boolean` indicating if the weights should be considered
+#' @param weight A `boolean` indicating whether weights should be considered
 #' if there are more than two columns (see Note).
 #' 
-#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
-#' between sites with a weight strictly lower than this value will not be 
-#' considered (O by default).
+#' @param cut_weight A minimal weight value. If `weight` is TRUE, links 
+#' with weights strictly lower than this value will not be considered 
+#' (`0` by default).
 #' 
-#' @param index name or number of the column to use as weight. By default,
+#' @param index The name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #' 
-#' @param seed for the random number generator (NULL for random by default). 
+#' @param seed The seed for the random number generator (`NULL` for random 
+#' by default). 
 #' 
-#' @param forceLPA a `boolean` indicating if the even faster pure
-#' LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
-#' likely to get trapped in a local minimum, but is slightly slower. Defaults
-#' to FALSE.
+#' @param forceLPA A `boolean` indicating whether the even faster pure
+#' LPA-algorithm of Beckett should be used. DIRT-LPA (the default) is less
+#' likely to get trapped in a local minimum but is slightly slower. Defaults
+#' to `FALSE`.
 #' 
-#' @param site_col name or number for the column of site nodes (i.e. primary
-#' nodes).
+#' @param site_col The name or number of the column for site nodes 
+#' (i.e., primary nodes).
 #' 
-#' @param species_col name or number for the column of species nodes (i.e.
-#' feature nodes).
+#' @param species_col The name or number of the column for species nodes 
+#' (i.e., feature nodes).
 #' 
-#' @param return_node_type a `character` indicating what types of nodes
-#' (`site`, `species` or `both`) should be returned in the output
-#' (`return_node_type = "both"` by default).
+#' @param return_node_type A `character` indicating which types of nodes 
+#' (`"site"`, `"species"`, or `"both"`) should be returned in the output
+#' (`"both"` by default).
 #' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
-#' of [computeModules][bipartite::computeModules] should be returned in the 
-#' output (`TRUE` by default, see Value).
+#' @param algorithm_in_output A `boolean` indicating whether the original 
+#' output of [computeModules][bipartite::computeModules] should be returned 
+#' in the output (`TRUE` by default, see Value).
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: A `character` containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' If `algorithm_in_output = TRUE`, users can find the output of
+#' [computeModules][bipartite::computeModules] in the `algorithm` slot.
 #' 
 #' @details
 #' This function is based on the modularity optimization algorithm provided by
@@ -46,36 +61,32 @@
 #' package ([computeModules][bipartite::computeModules]).
 #'
 #' @note
-#' Beckett has been designed to deal with weighted bipartite networks. Note
-#' that if `weight = FALSE`, a weight of 1 will be assigned to each pair of
-#' nodes. Do not forget to indicate which of the first two columns is
-#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-#' feature nodes) using the arguments `site_col` and `species_col`. The type of
-#' nodes returned in the output can be chosen with the argument
-#' `return_node_type` equal to `both` to keep both types of nodes,`sites`
-#' to preserve only the sites nodes and `species` to preserve only the
-#' species nodes.
-#'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects (only if
-#'  `algorithm_in_output = TRUE`)}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find the
-#'  output of [computeModules][bipartite::computeModules].
+#' Beckett's algorithm is designed to handle weighted bipartite networks. If 
+#' `weight = FALSE`, a weight of 1 will be assigned to each pair of nodes. 
+#' Ensure that the `site_col` and `species_col` arguments correctly identify 
+#' the respective columns for site nodes (primary nodes) and species nodes 
+#' (feature nodes). The type of nodes returned in the output can be selected 
+#' using the `return_node_type` argument: `"both"` to include both node types, 
+#' `"site"` to return only site nodes, or `"species"` to return only species 
+#' nodes.
+
+#' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+#' 
+#' Associated functions: 
+#' [netclu_infomap] [netclu_louvain] [netclu_oslom]
+#' 
+#' @references
+#' Beckett SJ (2016) Improved community detection in weighted bipartite 
+#' networks. \emph{Royal Society Open Science} 3, 140536.
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#' 
-#' @seealso [netclu_infomap], [netclu_oslom]
 #' 
 #' @examples
 #' net <- data.frame(
@@ -84,10 +95,6 @@
 #'   Weight = c(10, 100, 1, 20, 50, 10, 20))
 #'
 #' com <- netclu_beckett(net)
-#' 
-#' @references
-#' Beckett SJ (2016) Improved community detection in weighted bipartite 
-#' networks. \emph{Royal Society Open Science}, 3(1), 140536.
 #' 
 #' @importFrom bipartite computeModules
 #' 
@@ -119,8 +126,10 @@ netclu_beckett <- function(net,
   controls(args = species_col, data = net, type = "input_net_bip_col")
   controls(args = return_node_type, data = NULL, type = "character")
   if(!(return_node_type %in% c("both", "site", "species"))) {
-    stop("Please choose return_node_type among the followings values:
-both, sites or species", call. = FALSE)}
+    stop(paste0("Please choose return_node_type from the following:\n",
+                "both, sites or species."), 
+         call. = FALSE)
+    }
   
   # Convert tibble into dataframe
   if(inherits(net, "tbl_df")){
@@ -186,8 +195,9 @@ both, sites or species", call. = FALSE)}
   comat <- net_to_mat(netemp, weight = weight)
   
   if(dim(comat)[1]<2 | dim(comat)[2]<2){
-    stop("At least two species and two sites are needed to run this algorithm. 
-         Please check your data or choose an appropriate cut_weight value.", 
+    stop(paste0("At least two species and two sites are needed to run ",
+                "this algorithm. Please check your data or choose an ",
+                "appropriate cut_weight value."), 
          .call = FALSE)
   }
   

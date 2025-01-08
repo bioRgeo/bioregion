@@ -131,7 +131,7 @@ clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
 }
 \references{
 Frey B & Dueck D (2007) Clustering by Passing Messages Between Data Points.
-\emph{Science}, 315, 972-976.
+\emph{Science} 315, 972-976.
 }
 \seealso{
 For more details illustrated with a practical example,

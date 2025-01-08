@@ -2,7 +2,7 @@
 % Please edit documentation in R/netclu_leadingeigen.R
 \name{netclu_leadingeigen}
 \alias{netclu_leadingeigen}
-\title{Finding communities based on leading eigen vector of the community matrix}
+\title{Finding communities based on the leading eigenvector of the community matrix}
 \usage{
 netclu_leadingeigen(
   net,
@@ -17,73 +17,73 @@ netclu_leadingeigen(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\item{net}{The output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}. If a \code{data.frame} is used, the first two
 columns represent pairs of sites (or any pair of nodes), and the next
 column(s) are the similarity indices.}
 
-\item{weight}{a \code{boolean} indicating if the weights should be considered
+\item{weight}{A \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
-\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+\item{cut_weight}{A minimal weight value. If \code{weight} is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).}
+considered (\code{0} by default).}
 
-\item{index}{name or number of the column to use as weight. By default,
+\item{index}{The name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{bipartite}{a \code{boolean} indicating if the network is bipartite
+\item{bipartite}{A \code{boolean} indicating if the network is bipartite
 (see Details).}
 
-\item{site_col}{name or number for the column of site nodes
-(i.e. primary nodes).}
+\item{site_col}{The name or number for the column of site nodes
+(i.e., primary nodes).}
 
-\item{species_col}{name or number for the column of species nodes
-(i.e. feature nodes).}
+\item{species_col}{The name or number for the column of species nodes
+(i.e., feature nodes).}
 
-\item{return_node_type}{a \code{character} indicating what types of nodes
-(\code{site}, \code{species} or \code{both}) should be returned in the output
-(\code{return_node_type = "both"} by default).}
+\item{return_node_type}{A \code{character} indicating what types of nodes
+(\code{"site"}, \code{"species"}, or \code{"both"}) should be returned in the output
+(\code{"both"} by default).}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+\item{algorithm_in_output}{A \code{boolean} indicating if the original output
 of \link[igraph:cluster_leading_eigen]{cluster_leading_eigen} should be returned
 in the output (\code{TRUE} by default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
+\item{\strong{name}: A \code{character} containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects (only if
-\code{algorithm_in_output = TRUE})}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
 In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can
 find the output of \link[igraph:cluster_leading_eigen]{cluster_leading_eigen}.
 }
 \description{
 This function finds communities in a (un)weighted undirected network based
-on leading eigen vector of the community matrix.
+on the leading eigenvector of the community matrix.
 }
 \details{
-This function is based on leading eigenvector of the community matrix
+This function is based on the leading eigenvector of the community matrix
 (Newman, 2006) as implemented in the
 \href{https://cran.r-project.org/package=igraph}{igraph}
 package (\link[igraph:cluster_leading_eigen]{cluster_leading_eigen}).
 }
 \note{
 Although this algorithm was not primarily designed to deal with bipartite
-network, it is possible to consider the bipartite network as unipartite
+networks, it is possible to consider the bipartite network as a unipartite
 network (\code{bipartite = TRUE}).
 
 Do not forget to indicate which of the first two columns is
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+dedicated to the site nodes (i.e., primary nodes) and species nodes (i.e.
 feature nodes) using the arguments \code{site_col} and \code{species_col}.
 The type of nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{both} to keep both types of nodes,
-\code{sites} to preserve only the sites nodes and \code{species} to
+\code{return_node_type} equal to \code{"both"} to keep both types of nodes,
+\code{"site"} to preserve only the site nodes, and \code{"species"} to
 preserve only the species nodes.
 }
 \examples{
@@ -100,7 +100,15 @@ clust2 <- netclu_leadingeigen(net_bip, bipartite = TRUE)
 }
 \references{
 Newman MEJ (2006) Finding community structure in networks using the
-eigenvectors of matrices. \emph{Physical Review E}, 74(3), 036104.
+eigenvectors of matrices. \emph{Physical Review E} 74, 036104.
+}
+\seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+
+Associated functions:
+\link{netclu_infomap} \link{netclu_louvain} \link{netclu_oslom}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

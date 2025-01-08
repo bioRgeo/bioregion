@@ -2,7 +2,7 @@
 % Please edit documentation in R/netclu_beckett.R
 \name{netclu_beckett}
 \alias{netclu_beckett}
-\title{Community structure detection in weighted bipartite network via modularity
+\title{Community structure detection in weighted bipartite networks via modularity
 optimization}
 \usage{
 netclu_beckett(
@@ -19,58 +19,59 @@ netclu_beckett(
 )
 }
 \arguments{
-\item{net}{a \code{data.frame} representing a bipartite network with the two
-first columns as undirected links between pair of nodes and and the next
-column(s) are the weight of the links.}
+\item{net}{A \code{data.frame} representing a bipartite network with the first
+two columns representing undirected links between pairs of nodes, and the
+next column(s) representing the weights of the links.}
 
-\item{weight}{a \code{boolean} indicating if the weights should be considered
+\item{weight}{A \code{boolean} indicating whether weights should be considered
 if there are more than two columns (see Note).}
 
-\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
-between sites with a weight strictly lower than this value will not be
-considered (O by default).}
+\item{cut_weight}{A minimal weight value. If \code{weight} is TRUE, links
+with weights strictly lower than this value will not be considered
+(\code{0} by default).}
 
-\item{index}{name or number of the column to use as weight. By default,
+\item{index}{The name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{seed}{for the random number generator (NULL for random by default).}
+\item{seed}{The seed for the random number generator (\code{NULL} for random
+by default).}
 
-\item{forceLPA}{a \code{boolean} indicating if the even faster pure
-LPA-algorithm of Beckett should be used? DIRT-LPA, the default, is less
-likely to get trapped in a local minimum, but is slightly slower. Defaults
-to FALSE.}
+\item{forceLPA}{A \code{boolean} indicating whether the even faster pure
+LPA-algorithm of Beckett should be used. DIRT-LPA (the default) is less
+likely to get trapped in a local minimum but is slightly slower. Defaults
+to \code{FALSE}.}
 
-\item{site_col}{name or number for the column of site nodes (i.e. primary
-nodes).}
+\item{site_col}{The name or number of the column for site nodes
+(i.e., primary nodes).}
 
-\item{species_col}{name or number for the column of species nodes (i.e.
-feature nodes).}
+\item{species_col}{The name or number of the column for species nodes
+(i.e., feature nodes).}
 
-\item{return_node_type}{a \code{character} indicating what types of nodes
-(\code{site}, \code{species} or \code{both}) should be returned in the output
-(\code{return_node_type = "both"} by default).}
+\item{return_node_type}{A \code{character} indicating which types of nodes
+(\code{"site"}, \code{"species"}, or \code{"both"}) should be returned in the output
+(\code{"both"} by default).}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
-of \link[bipartite:computeModules]{computeModules} should be returned in the
-output (\code{TRUE} by default, see Value).}
+\item{algorithm_in_output}{A \code{boolean} indicating whether the original
+output of \link[bipartite:computeModules]{computeModules} should be returned
+in the output (\code{TRUE} by default, see Value).}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
 \enumerate{
-\item{\strong{name}: \code{character} containing the name of the algorithm}
-\item{\strong{args}: \code{list} of input arguments as provided by the user}
-\item{\strong{inputs}: \code{list} of characteristics of the clustering process}
-\item{\strong{algorithm}: \code{list} of all objects associated with the
+\item{\strong{name}: A \code{character} containing the name of the algorithm.}
+\item{\strong{args}: A \code{list} of input arguments as provided by the user.}
+\item{\strong{inputs}: A \code{list} of characteristics of the clustering process.}
+\item{\strong{algorithm}: A \code{list} of all objects associated with the
 clustering procedure, such as original cluster objects (only if
-\code{algorithm_in_output = TRUE})}
-\item{\strong{clusters}: \code{data.frame} containing the clustering results}}
+\code{algorithm_in_output = TRUE}).}
+\item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
-In the \code{algorithm} slot, if \code{algorithm_in_output = TRUE}, users can find the
-output of \link[bipartite:computeModules]{computeModules}.
+If \code{algorithm_in_output = TRUE}, users can find the output of
+\link[bipartite:computeModules]{computeModules} in the \code{algorithm} slot.
 }
 \description{
 This function takes a bipartite weighted graph and computes modules by
-applying Newman’s modularity measure in a bipartite weighted version to it.
+applying Newman’s modularity measure in a bipartite weighted version.
 }
 \details{
 This function is based on the modularity optimization algorithm provided by
@@ -79,15 +80,14 @@ Stephen Beckett (Beckett, 2016) as implemented in the
 package (\link[bipartite:computeModules]{computeModules}).
 }
 \note{
-Beckett has been designed to deal with weighted bipartite networks. Note
-that if \code{weight = FALSE}, a weight of 1 will be assigned to each pair of
-nodes. Do not forget to indicate which of the first two columns is
-dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
-feature nodes) using the arguments \code{site_col} and \code{species_col}. The type of
-nodes returned in the output can be chosen with the argument
-\code{return_node_type} equal to \code{both} to keep both types of nodes,\code{sites}
-to preserve only the sites nodes and \code{species} to preserve only the
-species nodes.
+Beckett's algorithm is designed to handle weighted bipartite networks. If
+\code{weight = FALSE}, a weight of 1 will be assigned to each pair of nodes.
+Ensure that the \code{site_col} and \code{species_col} arguments correctly identify
+the respective columns for site nodes (primary nodes) and species nodes
+(feature nodes). The type of nodes returned in the output can be selected
+using the \code{return_node_type} argument: \code{"both"} to include both node types,
+\code{"site"} to return only site nodes, or \code{"species"} to return only species
+nodes.
 }
 \examples{
 net <- data.frame(
@@ -100,10 +100,15 @@ com <- netclu_beckett(net)
 }
 \references{
 Beckett SJ (2016) Improved community detection in weighted bipartite
-networks. \emph{Royal Society Open Science}, 3(1), 140536.
+networks. \emph{Royal Society Open Science} 3, 140536.
 }
 \seealso{
-\link{netclu_infomap}, \link{netclu_oslom}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+
+Associated functions:
+\link{netclu_infomap} \link{netclu_louvain} \link{netclu_oslom}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

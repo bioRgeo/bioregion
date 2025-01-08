@@ -3,57 +3,71 @@
 #' This function finds communities in a (un)weighted undirected network based
 #' on the Leiden algorithm of Traag, van Eck & Waltman.
 #'
-#' @param net the output object from [similarity()] or
+#' @param net The output object from [similarity()] or
 #' [dissimilarity_to_similarity()]. If a `data.frame` is used, the first two
 #' columns represent pairs of sites (or any pair of nodes), and the next
 #' column(s) are the similarity indices.
 #' 
-#' @param weight a `boolean` indicating if the weights should be considered
+#' @param weight A `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' 
-#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' @param cut_weight A minimal weight value. If `weight` is TRUE, the links 
 #' between sites with a weight strictly lower than this value will not be 
-#' considered (O by default).
+#' considered (`0` by default).
 #' 
-#' @param index name or number of the column to use as weight. By default,
+#' @param index The name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #' 
-#' @param seed for the random number generator (NULL for random by default).
+#' @param seed The random number generator seed (NULL for random by default).
 #'
-#' @param objective_function a string indicating the objective function to use,
-#' the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).
+#' @param objective_function A string indicating the objective function to use,
+#' either the Constant Potts Model ("CPM") or "modularity" ("CPM" by default).
 #'
-#' @param resolution_parameter the resolution parameter to use. Higher
-#' resolutions lead to more smaller communities, while lower resolutions lead
-#' to fewer larger communities.
+#' @param resolution_parameter The resolution parameter to use. Higher
+#' resolutions lead to smaller communities, while lower resolutions lead
+#' to larger communities.
 #'
-#' @param beta parameter affecting the randomness in the Leiden algorithm. This
+#' @param beta A parameter affecting the randomness in the Leiden algorithm. This
 #' affects only the refinement step of the algorithm.
 #'
-#' @param n_iterations the number of iterations to iterate the Leiden
-#' algorithm. Each iteration may improve the partition further.
+#' @param n_iterations The number of iterations for the Leiden
+#' algorithm. Each iteration may further improve the partition.
 #'
-#' @param vertex_weights the vertex weights used in the Leiden algorithm. If
-#' this is not provided, it will be automatically determined on the basis of
-#' the objective_function. Please see the details of this function how to
-#' interpret the vertex weights.
+#' @param vertex_weights The vertex weights used in the Leiden algorithm. If
+#' not provided, they will be automatically determined based on the
+#' objective_function. Please see the details of this function to understand how
+#' to interpret the vertex weights.
 #'
-#' @param bipartite a `boolean` indicating if the network is bipartite
+#' @param bipartite A `boolean` indicating if the network is bipartite
 #' (see Details).
 #' 
-#' @param site_col name or number for the column of site nodes
-#' (i.e. primary nodes).
+#' @param site_col The name or number for the column of site nodes
+#' (i.e., primary nodes).
 #' 
-#' @param species_col name or number for the column of species nodes
-#' (i.e. feature nodes).
+#' @param species_col The name or number for the column of species nodes
+#' (i.e., feature nodes).
 #' 
-#' @param return_node_type a `character` indicating what types of nodes
-#' ("site", "species" or "both") should be returned in the output
-#' (`return_node_type = "both"` by default).
+#' @param return_node_type A `character` indicating what types of nodes
+#' ("site", "species", or "both") should be returned in the output
+#' (`"both"` by default).
 #' 
-#' @param algorithm_in_output a `boolean` indicating if the original output
+#' @param algorithm_in_output A `boolean` indicating if the original output
 #' of [cluster_leiden][igraph::cluster_leiden] should be returned in the 
 #' output (`TRUE` by default, see Value).
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: A `character` containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the
+#'  clustering procedure, such as original cluster objects (only if
+#'  `algorithm_in_output = TRUE`).}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
+#'
+#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
+#' find the output of [cluster_leiden][igraph::cluster_leiden].
 #'
 #' @details
 #' This function is based on the Leiden algorithm
@@ -63,31 +77,28 @@
 #'
 #' @note
 #' Although this algorithm was not primarily designed to deal with bipartite
-#' network, it is possible to consider the bipartite network as unipartite
+#' networks, it is possible to consider the bipartite network as a unipartite
 #' network (`bipartite = TRUE`).
 #'
 #' Do not forget to indicate which of the first two columns is
-#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+#' dedicated to the site nodes (i.e., primary nodes) and species nodes (i.e.
 #' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
 #' `return_node_type` equal to `"both"` to keep both types of nodes,
-#' `"site"` to preserve only the sites nodes and `"species"` to
+#' `"site"` to preserve only the site nodes, and `"species"` to
 #' preserve only the species nodes.
-#'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects (only if
-#'  `algorithm_in_output = TRUE`)}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can
-#' find the output of
-#' [cluster_leiden][igraph::cluster_leiden].
+#' 
+#' @references 
+#' Traag VA, Waltman L & Van Eck NJ (2019) From Louvain to Leiden: guaranteeing 
+#' well-connected communities. \emph{Scientific reports} 9, 5233. 
+#' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+#' 
+#' Associated functions: 
+#' [netclu_infomap] [netclu_louvain] [netclu_oslom]
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
@@ -104,10 +115,6 @@
 #' 
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_leiden(net_bip, bipartite = TRUE)
-#' 
-#' @references 
-#' Traag VA, Waltman L & Van Eck NJ (2019) From Louvain to Leiden: guaranteeing 
-#' well-connected communities. \emph{Scientific reports}, 9(1), 5233. 
 #' 
 #' @importFrom igraph graph_from_data_frame cluster_leiden
 #' 
@@ -162,8 +169,9 @@ netclu_leiden <- function(net,
     controls(args = species_col, data = net, type = "input_net_bip_col")
     controls(args = return_node_type, data = NULL, type = "character")
     if (!(return_node_type %in% c("both", "site", "species"))) {
-      stop("Please choose return_node_type among the followings values:
-both, sites or species", call. = FALSE)
+      stop(paste0("Please choose return_node_type from the following:\n",
+                  "both, sites or species."), 
+           call. = FALSE)     
     }
   }
   

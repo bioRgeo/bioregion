@@ -17,36 +17,36 @@ netclu_greedy(
 )
 }
 \arguments{
-\item{net}{the output object from \code{\link[=similarity]{similarity()}} or
+\item{net}{The output object from \code{\link[=similarity]{similarity()}} or
 \code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.
 If a \code{data.frame} is used, the first two columns represent pairs of
 sites (or any pair of nodes), and the next column(s) are the similarity
 indices.}
 
-\item{weight}{a \code{boolean} indicating if the weights should be considered
+\item{weight}{A \code{boolean} indicating if the weights should be considered
 if there are more than two columns.}
 
-\item{cut_weight}{a minimal weight value. If \code{weight} is TRUE, the links
+\item{cut_weight}{A minimal weight value. If \code{weight} is TRUE, the links
 between sites with a weight strictly lower than this value will not be
-considered (O by default).}
+considered (0 by default).}
 
-\item{index}{name or number of the column to use as weight. By default,
+\item{index}{The name or number of the column to use as weight. By default,
 the third column name of \code{net} is used.}
 
-\item{bipartite}{a \code{boolean} indicating if the network is bipartite
+\item{bipartite}{A \code{boolean} indicating if the network is bipartite
 (see Details).}
 
-\item{site_col}{name or number for the column of site nodes
+\item{site_col}{The name or number for the column of site nodes
 (i.e. primary nodes).}
 
-\item{species_col}{name or number for the column of species nodes
+\item{species_col}{The name or number for the column of species nodes
 (i.e. feature nodes).}
 
-\item{return_node_type}{a \code{character} indicating what types of nodes
+\item{return_node_type}{A \code{character} indicating what types of nodes
 (\code{site}, \code{species} or \code{both}) should be returned in the output
 (\code{return_node_type = "both"} by default).}
 
-\item{algorithm_in_output}{a \code{boolean} indicating if the original output
+\item{algorithm_in_output}{A \code{boolean} indicating if the original output
 of \link[igraph:cluster_fast_greedy]{cluster_fast_greedy} should be returned in
 the output (\code{TRUE} by default, see Value).}
 }
@@ -102,7 +102,15 @@ clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
 }
 \references{
 Clauset A, Newman MEJ & Moore C (2004) Finding community structure in very
-large networks. \emph{Phys. Rev. E}, 70, 066111.
+large networks. \emph{Phys. Rev. E} 70, 066111.
+}
+\seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+
+Associated functions:
+\link{netclu_infomap} \link{netclu_louvain} \link{netclu_oslom}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

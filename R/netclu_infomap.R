@@ -3,72 +3,91 @@
 #' This function finds communities in a (un)weighted (un)directed network based
 #' on the Infomap algorithm (<https://github.com/mapequation/infomap>).
 #'
-#' @param net the output object from [similarity()] or
+#' @param net The output object from [similarity()] or
 #' [dissimilarity_to_similarity()].
 #' If a `data.frame` is used, the first two columns represent pairs of
 #' sites (or any pair of nodes), and the next column(s) are the similarity
 #' indices.
 #'
-#' @param weight a `boolean` indicating if the weights should be considered
+#' @param weight A `boolean` indicating if the weights should be considered
 #' if there are more than two columns.
 #' 
-#' @param cut_weight a minimal weight value. If `weight` is TRUE, the links 
+#' @param cut_weight A minimal weight value. If `weight` is TRUE, the links 
 #' between sites with a weight strictly lower than this value will not be 
-#' considered (O by default).
+#' considered (`0` by default).
 #'
-#' @param index name or number of the column to use as weight. By default,
+#' @param index The name or number of the column to use as weight. By default,
 #' the third column name of `net` is used.
 #' 
-#' @param seed for the random number generator (NULL for random by default).
+#' @param seed The seed for the random number generator (`NULL` for random by 
+#' default).
 #'
-#' @param nbmod penalize solutions the more they differ from this number (0 by
+#' @param nbmod Penalize solutions the more they differ from this number (`0` by
 #' default for no preferred number of modules).
 #'
-#' @param markovtime scales link flow to change the cost of moving between
-#' modules, higher values results in fewer modules (default is 1).
+#' @param markovtime Scales link flow to change the cost of moving between
+#' modules, higher values result in fewer modules (`1` by default).
 #'
-#' @param numtrials for the number of trials before picking up the best
+#' @param numtrials For the number of trials before picking up the best
 #' solution.
 #'
-#' @param twolevel a `boolean` indicating if the algorithm should optimize a
-#' two-level partition of the network (default is multi-level).
+#' @param twolevel A `boolean` indicating if the algorithm should optimize a
+#' two-level partition of the network (`FALSE` by default for multi-level).
 #'
-#' @param show_hierarchy a `boolean` specifying if the hierarchy of community
-#' should be identifiable in the outputs (FALSE by default).
+#' @param show_hierarchy A `boolean` specifying if the hierarchy of community
+#' should be identifiable in the outputs (`FALSE` by default).
 #'
-#' @param directed a `boolean` indicating if the network is directed (from
+#' @param directed A `boolean` indicating if the network is directed (from
 #' column 1 to column 2).
 #'
-#' @param bipartite a `boolean` indicating if the network is bipartite
+#' @param bipartite A `boolean` indicating if the network is bipartite
 #' (see Note).
 #'
-#' @param bipartite_version a `boolean` indicating if the bipartite version of
+#' @param bipartite_version A `boolean` indicating if the bipartite version of
 #' Infomap should be used (see Note).
 #'
-#' @param site_col name or number for the column of site nodes
+#' @param site_col The name or number for the column of site nodes
 #' (i.e. primary nodes).
 #'
-#' @param species_col name or number for the column of species nodes
+#' @param species_col The name or number for the column of species nodes
 #' (i.e. feature nodes).
 #'
-#' @param return_node_type a `character` indicating what types of nodes
-#' (`site`, `species` or `both`) should be returned in the output
-#' (`return_node_type = "both"` by default).
+#' @param return_node_type A `character` indicating what types of nodes
+#' (`"site"`, `"species"`, or `"both"`) should be returned in the output
+#' (`"both"` by default).
 #'
-#' @param version a `character` indicating the Infomap version to use.
+#' @param version A `character` indicating the Infomap version to use.
 #'
-#' @param binpath a `character` indicating the path to the bin folder
+#' @param binpath A `character` indicating the path to the bin folder
 #' (see [install_binaries] and Details).
 #' 
-#' @param check_install a `boolean` indicating if the function should check that
-#' the Infomap as been properly installed (see [install_binaries] and Details).
+#' @param check_install A `boolean` indicating if the function should check that
+#' the Infomap has been properly installed (see [install_binaries] and Details).
 #'
-#' @param path_temp a `character` indicating the path to the temporary folder
+#' @param path_temp A `character` indicating the path to the temporary folder
 #' (see Details).
 #'
-#' @param delete_temp a `boolean` indicating if the temporary folder should
+#' @param delete_temp A `boolean` indicating if the temporary folder should
 #' be removed (see Details).
+#' 
+#' @return
+#' A `list` of class `bioregion.clusters` with five slots:
+#' \enumerate{
+#' \item{**name**: A `character` containing the name of the algorithm.}
+#' \item{**args**: A `list` of input arguments as provided by the user.}
+#' \item{**inputs**: A `list` of characteristics of the clustering process.}
+#' \item{**algorithm**: A `list` of all objects associated with the
+#'  clustering procedure, such as original cluster objects.}
+#' \item{**clusters**: A `data.frame` containing the clustering results.}}
 #'
+#' In the `algorithm` slot, users can find the following elements:
+#'
+#' \itemize{
+#' \item{`cmd`: The command line used to run Infomap.}
+#' \item{`version`: The Infomap version.}
+#' \item{`web`: Infomap's GitHub repository.}
+#' }
+#' 
 #' @details
 #' Infomap is a network clustering algorithm based on the Map equation proposed
 #' in Rosvall & Bergstrom (2008) that finds communities in (un)weighted
@@ -83,57 +102,50 @@
 #' while running [install_binaries] PLEASE MAKE SURE to set `binpath` 
 #' accordingly.**
 #' 
-#' **If you did not used [install_binaries] to change the permissions and test 
+#' **If you did not use [install_binaries] to change the permissions and test 
 #' the binary files PLEASE MAKE SURE to set `check_install` accordingly.**
 #'
 #' The C++ version of Infomap generates temporary folders and/or files that are
-#' stored in the `path_temp` folder ("infomap_temp" with an unique timestamp
+#' stored in the `path_temp` folder ("infomap_temp" with a unique timestamp
 #' located in the bin folder in `binpath` by default). This temporary folder is
 #' removed by default (`delete_temp = TRUE`).
 #'
-#' Several version of Infomap are available in the package. See
+#' Several versions of Infomap are available in the package. See
 #' [install_binaries] for more details.
 #'
 #' @note
 #' Infomap has been designed to deal with bipartite networks. To use this
-#' functionality set the `bipartite_version` argument to TRUE in order to
+#' functionality, set the `bipartite_version` argument to TRUE in order to
 #' approximate a two-step random walker (see
 #' <https://www.mapequation.org/infomap/> for more information). Note that
-#' a bipartite network can also be considered as unipartite network
+#' a bipartite network can also be considered as a unipartite network
 #' (`bipartite = TRUE`).
 #'
-#' In both cases do not forget to indicate which of the first two columns is
-#' dedicated to the site nodes (i.e. primary nodes) and species nodes (i.e.
+#' In both cases, do not forget to indicate which of the first two columns is
+#' dedicated to the site nodes (i.e., primary nodes) and species nodes (i.e.
 #' feature nodes) using the arguments `site_col` and `species_col`.
 #' The type of nodes returned in the output can be chosen with the argument
-#' `return_node_type` equal to `both` to keep both types of nodes, `sites`
-#' to preserve only the sites nodes and `species` to preserve only the
+#' `return_node_type` equal to `"both"` to keep both types of nodes, `"site"`
+#' to preserve only the site nodes, and `"species"` to preserve only the
 #' species nodes.
+#' 
+#' @references
+#' Rosvall M & Bergstrom CT (2008) Maps of random walks on complex networks 
+#' reveal community structure. \emph{Proceedings of the National Academy of 
+#' Sciences} 105, 1118-1123.
 #'
-#' @return
-#' A `list` of class `bioregion.clusters` with five slots:
-#' \enumerate{
-#' \item{**name**: `character` containing the name of the algorithm}
-#' \item{**args**: `list` of input arguments as provided by the user}
-#' \item{**inputs**: `list` of characteristics of the clustering process}
-#' \item{**algorithm**: `list` of all objects associated with the
-#'  clustering procedure, such as original cluster objects}
-#' \item{**clusters**: `data.frame` containing the clustering results}}
-#'
-#' In the `algorithm` slot, users can find the following elements:
-#'
-#' \itemize{
-#' \item{`cmd`: the command line use to run Infomap}
-#' \item{`version`: the Infomap version}
-#' \item{`web`: Infomap's GitHub repository}
-#' }
-#'
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_3_network_clustering.html}.
+#' 
+#' Associated functions: 
+#' [netclu_greedy] [netclu_louvain] [netclu_oslom]
+#' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com})
-#'
-#' @seealso [install_binaries], [netclu_louvain], [netclu_oslom]
 #'
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
@@ -142,11 +154,6 @@
 #'
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_infomap(net)
-#'
-#' @references
-#' Rosvall M & Bergstrom CT (2008) Maps of random walks on complex networks 
-#' reveal community structure. \emph{Proceedings of the National Academy of 
-#' Sciences}, 105(4), 1118-1123.
 #'
 #' @export
 netclu_infomap <- function(net,
@@ -196,13 +203,16 @@ netclu_infomap <- function(net,
   # Check if INFOMAP has successfully been installed
   if (check_install &
       !file.exists(paste0(binpath, "/bin/INFOMAP/", version, "/check.txt"))) {
-    message(paste0(
-      "Infomap ", version, " is not installed... Please have a look at
-    https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html
-    for more details.\n",
-      "It should be located in ",
-      paste0(binpath, "/bin/INFOMAP/", version, "/")
-    ))
+    message(paste0("Infomap ", 
+                   version, 
+                   " is not installed... Please have a look at ",
+                   "https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html ",
+                   "for more details.\n",
+                    "It should be located in ",
+                   binpath, 
+                   "/bin/INFOMAP/", 
+                   version, 
+                   "/"))
   } else {
     # Control parameters INFOMAP
     if(!is.null(seed)){
@@ -251,8 +261,9 @@ netclu_infomap <- function(net,
       controls(args = species_col, data = net, type = "input_net_bip_col")
       controls(args = return_node_type, data = NULL, type = "character")
       if (!(return_node_type %in% c("both", "site", "species"))) {
-        stop("Please choose return_node_type among the followings values:
-both, sites or species", call. = FALSE)
+        stop(paste0("Please choose return_node_type from the following:\n",
+                    "both, sites or species."), 
+             call. = FALSE)     
       }
     }
 
@@ -279,9 +290,10 @@ both, sites or species", call. = FALSE)
       )
     } else {
       if (dir.exists(path_temp)) {
-        stop(paste0(path_temp, " already exists. Please rename it or remove it."),
-          call. = FALSE
-        )
+        stop(paste0(path_temp, 
+                    " already exists. ",
+                    "Please rename it or remove it."),
+          call. = FALSE)
       }
     }
     path_temp <- normalizePath(path_temp, mustWork = FALSE)
@@ -336,8 +348,10 @@ both, sites or species", call. = FALSE)
     }
     
     if(dim(netemp)[1]==0){
-      stop("The network is empty. 
-         Please check your data or choose an appropriate cut_weight value.")
+      stop(paste0("The network is empty. ",
+                  "Please check your data or choose an ", 
+                  "appropriate cut_weight value."),
+           call. = FALSE)
     }
 
     # Class preparation
@@ -426,19 +440,24 @@ both, sites or species", call. = FALSE)
       if(check_install){
         cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_lin ", cmd)
       }else{
-        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_lin ", cmd)
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_lin ", 
+                      cmd)
       }
     } else if (os == "Windows") {
       if(check_install){
-        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", cmd)
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_win.exe ", 
+                      cmd)
       }else{
-        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_win.exe ", cmd)
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_win.exe ", 
+                      cmd)
       }
     } else if (os == "Darwin") {
       if(check_install){
-        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", cmd)
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_mac ", 
+                      cmd)
       }else{
-        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_mac ", cmd)
+        cmd <- paste0(binpath, "/bin/INFOMAP/", version, "/infomap_noomp_mac ", 
+                      cmd)
       }
     } else {
       stop("Linux, Windows or Mac distributions only.", call. = FALSE)

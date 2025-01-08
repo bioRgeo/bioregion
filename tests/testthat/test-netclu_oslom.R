@@ -274,9 +274,7 @@ test_that("invalid inputs", {
   
   expect_error(
     netclu_oslom(net, reassign = "zz"),
-    "Please choose reassign among the following values: 
-no, random or simil",
-    fixed = TRUE)
+    "^Please choose reassign from the following:")
   
   expect_error(
     netclu_oslom(net, r =  c("zz","zz")),
@@ -544,9 +542,7 @@ no, random or simil",
   
   expect_error(
     netclu_oslom(net, weight = FALSE, reassign = "simil"),
-    "A reassignement based on similarity should not be use when weight
-           equal FALSE", 
-    fixed = TRUE)
+    "^A reassignement based on similarity should not be use when")
   
   expect_error(
     netclu_oslom(uni, bipartite = TRUE),
@@ -560,9 +556,7 @@ no, random or simil",
   
   expect_error(
     netclu_oslom(net, bipartite = TRUE, return_node_type = "zz"),
-    "Please choose return_node_type among the followings values:
-both, sites or species",
-    fixed = TRUE)
+    "^Please choose return_node_type from the following:")
   
   expect_error(
     netclu_oslom(net, bipartite = TRUE, site_col = "Weight", 

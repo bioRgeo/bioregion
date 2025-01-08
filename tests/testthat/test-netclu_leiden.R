@@ -358,9 +358,7 @@ test_that("invalid inputs", {
   
   expect_error(
     netclu_leiden(net, bipartite = TRUE, return_node_type = "zz"),
-    "Please choose return_node_type among the followings values:
-both, sites or species",
-    fixed = TRUE)
+    "^Please choose return_node_type from the following:")
   
   expect_error(
     netclu_leiden(net, bipartite = TRUE, site_col = "Weight", 
