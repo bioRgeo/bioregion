@@ -1,4 +1,4 @@
-#' Non-hierarchical clustering: partitioning around medoids
+#' Non-hierarchical clustering: Partitioning Around Medoids
 #'
 #' This function performs non-hierarchical clustering based on dissimilarity 
 #' using partitioning around medoids (PAM).

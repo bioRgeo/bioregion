@@ -1,27 +1,8 @@
 # Inputs -----------------------------------------------------------------------
-comat_1 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
-                         prob = 1/1:1001), 10, 12)
-rownames(comat_1) <- paste0("Site", 1:10)
-colnames(comat_1) <- paste0("Species", 1:12)
-comat_1 <- cbind(comat_1,
-                 matrix(0, 10, 8,
-                        dimnames = list(paste0("Site", 1:10),
-                                        paste0("Species", 13:20))))
-
-comat_2 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
-                         prob = 1/1:1001), 10, 12)
-rownames(comat_2) <- paste0("Site", 11:20)
-colnames(comat_2) <- paste0("Species", 9:20)
-comat_2 <- cbind(matrix(0, 10, 8,
-                        dimnames = list(paste0("Site", 11:20),
-                                        paste0("Species", 1:8))),
-                 comat_2)
-
-comat <- rbind(comat_1, comat_2)
-
-dissim <- dissimilarity(comat, metric = "Simpson")
-sim <- dissimilarity_to_similarity(dissim)
-
+sim <- similarity(fishmat, 
+                  metric = "Simpson")
+dissim <- similarity_to_dissimilarity(sim)
+                  
 df <- data.frame(ID1 = sim$Site1, ID2 = sim$Site2, W = sim$Simpson)
 
 d <- dist(fishmat)
@@ -98,12 +79,30 @@ test_that("valid output", {
   expect_equal(clust$inputs$pairwise, TRUE)
   expect_equal(clust$inputs$pairwise_metric, "Simpson")
   expect_equal(clust$inputs$dissimilarity, FALSE)
-  expect_equal(clust$inputs$nb_sites, 20)
+  expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
   
   clust <- nhclu_affprop(sim,
                          index = "Simpson",
-                         seed = 1,
+                         seed = NULL,
+                         p = NA,
+                         q = NA,
+                         maxits = 1000,
+                         convits = 100,
+                         lam = 0.9,
+                         details = FALSE,
+                         nonoise = TRUE,
+                         K = NULL,
+                         prc = NULL,
+                         bimaxit = NULL,
+                         exact = NULL,
+                         algorithm_in_output = TRUE)
+  expect_equal(clust$cluster_info[1,1], "K_16")
+  expect_equal(clust$cluster_info[1,2], 16)
+  
+  clust <- nhclu_affprop(sim,
+                         index = "Simpson",
+                         seed = 2,
                          p = NA,
                          q = NA,
                          maxits = 1000,
@@ -116,12 +115,48 @@ test_that("valid output", {
                          bimaxit = NULL,
                          exact = NULL,
                          algorithm_in_output = TRUE)
-  #expect_equal(clust$cluster_info[1,1], "K_2")
-  #expect_equal(clust$cluster_info[1,2], 2)
+  expect_equal(clust$cluster_info[1,1], "K_16")
+  expect_equal(clust$cluster_info[1,2], 16)
   
-  clust <- nhclu_affprop(sim,
+  clust <- nhclu_affprop(d,
+                         index = "Simpson",
+                         seed = 2,
+                         p = NA,
+                         q = NA,
+                         maxits = 1000,
+                         convits = 100,
+                         lam = 0.9,
+                         details = FALSE,
+                         nonoise = FALSE,
+                         K = NULL,
+                         prc = NULL,
+                         bimaxit = NULL,
+                         exact = NULL,
+                         algorithm_in_output = TRUE)
+  expect_equal(clust$cluster_info[1,1], "K_2")
+  expect_equal(clust$cluster_info[1,2], 2)
+  
+  clust1 <- nhclu_affprop(sim,
+                         index = "Simpson",
+                         seed = 2,
+                         p = NA,
+                         q = NA,
+                         maxits = 1000,
+                         convits = 100,
+                         lam = 0.9,
+                         details = FALSE,
+                         nonoise = FALSE,
+                         K = 6,
+                         prc = 1,
+                         bimaxit = 5,
+                         exact = TRUE,
+                         algorithm_in_output = FALSE)
+  expect_equal(clust1$cluster_info[1,1], "K_6")
+  expect_equal(clust1$cluster_info[1,2], 6)
+  
+  clust2 <- nhclu_affprop(sim,
                           index = "Simpson",
-                          seed = 1,
+                          seed = 2,
                           p = NA,
                           q = NA,
                           maxits = 1000,
@@ -129,13 +164,15 @@ test_that("valid output", {
                           lam = 0.9,
                           details = FALSE,
                           nonoise = FALSE,
-                          K = 2,
+                          K = 6,
                           prc = 1,
-                          bimaxit = 1,
+                          bimaxit = 5,
                           exact = TRUE,
-                          algorithm_in_output = TRUE)
-  #expect_equal(clust$cluster_info[1,1], "K_2")
-  #expect_equal(clust$cluster_info[1,2], 2)
+                          algorithm_in_output = FALSE)
+  expect_equal(clust2$cluster_info[1,1], "K_6")
+  expect_equal(clust2$cluster_info[1,2], 6)
+  
+  expect_equal(sum(clust1$clusters$K_6==clust2$clusters$K_6), 338)
   
   clust <- nhclu_affprop(sim,
                          index = "Simpson",
@@ -146,13 +183,15 @@ test_that("valid output", {
                          convits = 100,
                          lam = 0.9,
                          details = FALSE,
-                         nonoise = FALSE,
-                         K = 2,
+                         nonoise = TRUE,
+                         K = 6,
                          prc = 1,
-                         bimaxit = 1,
+                         bimaxit = 5,
                          exact = TRUE,
-                         algorithm_in_output = TRUE)
-
+                         algorithm_in_output = FALSE)
+  expect_equal(clust$cluster_info[1,1], "K_6")
+  expect_equal(clust$cluster_info[1,2], 6)
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -205,10 +244,10 @@ test_that("invalid inputs", {
     "The weight column must be numeric.",
     fixed = TRUE)  
   
-  #expect_message(
-  #  nhclu_affprop(d2),
-  #  "No labels detected, they have been assigned automatically.",
-  #  fixed = TRUE) 
+  expect_message(
+    nhclu_affprop(d2),
+    "No labels detected, they have been assigned automatically.",
+    fixed = TRUE) 
   
   expect_error(
     nhclu_affprop(d3),
@@ -392,6 +431,12 @@ test_that("invalid inputs", {
                   nonoise = c("zz","zz")),
     "nonoise must be of length 1.",
     fixed = TRUE)
+  
+  expect_message(
+    nhclu_affprop(sim,
+                  seed = 1,
+                  nonoise = TRUE),
+    "^A random number generator")
   
   expect_error(
     nhclu_affprop(sim,  

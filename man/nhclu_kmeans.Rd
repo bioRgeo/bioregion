@@ -2,7 +2,7 @@
 % Please edit documentation in R/nhclu_kmeans.R
 \name{nhclu_kmeans}
 \alias{nhclu_kmeans}
-\title{Non-hierarchical clustering: k-means analysis}
+\title{Non-hierarchical clustering: K-means analysis}
 \usage{
 nhclu_kmeans(
   dissimilarity,

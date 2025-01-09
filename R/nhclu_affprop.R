@@ -10,6 +10,9 @@
 #'
 #' @param index The name or number of the similarity column to use. By default, 
 #' the third column name of `similarity` is used.
+#' 
+#' @param seed The seed for the random number generator used when 
+#' `nonoise = FALSE`. 
 #'
 #' @param p Input preference, which can be a vector specifying individual 
 #' preferences for each data point. If scalar, the same value is used for all 
@@ -35,10 +38,8 @@
 #' @param nonoise If `TRUE`, disables the addition of a small amount of noise to 
 #' the similarity object, which prevents degenerate cases.
 #'
-#' @param seed The seed for the random number generator.
-#'
 #' @param K The desired number of clusters. If not `NULL`, the function 
-#' [apcluster][apcluster::apclusterK] is called.
+#' [apclusterK][apcluster::apclusterK] is called.
 #'
 #' @param prc A parameter needed when `K` is not `NULL`. The algorithm stops if 
 #' the number of clusters deviates by less than `prc` percent from the desired 
@@ -63,14 +64,16 @@
 #' \item{**inputs**: A `list` describing the characteristics of the clustering 
 #' process.}
 #' \item{**algorithm**: A `list` of objects associated with the clustering 
-#' procedure, such as original cluster objects (if `algorithm_in_output = TRUE`).}
+#' procedure, such as original cluster objects 
+#' (if `algorithm_in_output = TRUE`).}
 #' \item{**clusters**: A `data.frame` containing the clustering results.}}
 #'
 #' If `algorithm_in_output = TRUE`, the `algorithm` slot includes the output of 
 #' [apcluster][apcluster::apcluster].
 #'
 #' @details
-#' This function is based on the [apcluster](https://cran.r-project.org/package=apcluster) 
+#' This function is based on the 
+#' [apcluster](https://cran.r-project.org/package=apcluster) 
 #' package ([apcluster][apcluster::apcluster]).
 #' 
 #' @references
@@ -99,26 +102,29 @@
 #'                  matrix(0, 10, 8,
 #'                         dimnames = list(paste0("Site", 1:10),
 #'                                         paste0("Species", 13:20))))
-#' 
-#' comat_2 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
-#'                          prob = 1/1:1001), 10, 12)
+#'                                         
+#' comat_2 <- matrix(sample(0:1000, 
+#'                          size = 10*12, 
+#'                          replace = TRUE, 
+#'                          prob = 1/1:1001), 
+#'                   10, 12)
 #' rownames(comat_2) <- paste0("Site", 11:20)
 #' colnames(comat_2) <- paste0("Species", 9:20)
-#' comat_2 <- cbind(matrix(0, 10, 8,
+#' comat_2 <- cbind(matrix(0, 10, 8, 
 #'                         dimnames = list(paste0("Site", 11:20),
 #'                                         paste0("Species", 1:8))),
 #'                  comat_2)
-#' 
+#'                  
 #' comat <- rbind(comat_1, comat_2)
-#'
+#' 
 #' dissim <- dissimilarity(comat, metric = "Simpson")
 #' sim <- dissimilarity_to_similarity(dissim)
 #' 
 #' clust1 <- nhclu_affprop(sim)
 #' 
 #' clust2 <- nhclu_affprop(sim, q = 1)
-#'
-#' # Fixed number of clusters
+#' 
+#' # Fixed number of clusters 
 #' clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
 #' 
 #' @importFrom apcluster apcluster apclusterK
@@ -158,7 +164,9 @@ nhclu_affprop <- function(similarity,
     controls(args = NULL, data = net, type = "input_net_index_value")
     dist.obj <- stats::as.dist(
       net_to_mat(net,
-                 weight = TRUE, squared = TRUE, symmetrical = TRUE))
+                 weight = TRUE, 
+                 squared = TRUE, 
+                 symmetrical = TRUE))
   } else {
     controls(args = NULL, data = similarity, type = "input_dist")
     dist.obj <- similarity
@@ -168,9 +176,6 @@ nhclu_affprop <- function(similarity,
     }
   }
   
-  #controls(args = NULL, data = similarity,
-  #        type = "input_conversion_similarity")
-	
   if(!is.null(seed)){
     controls(args = seed, data = NULL, type = "strict_positive_integer")
   }
@@ -211,6 +216,11 @@ nhclu_affprop <- function(similarity,
   # controls(args = includeSim, data = NULL, type = "boolean")
   controls(args = details, data = NULL, type = "boolean")
   controls(args = nonoise, data = NULL, type = "boolean")
+  
+  if(nonoise & !is.null(seed)){
+    message(paste0("A random number generator is used only when ",
+                   "noise is added (nonoise = FALSE)."))
+  }
   
   # Argument for desired number of clusters: positive integer, if not null
   # (default value) then we call apcluter::apclusterK() (with argument K)
@@ -300,10 +310,11 @@ nhclu_affprop <- function(similarity,
   outputs$clusters$name <- labels(dist.obj)
   
   # Square similarity matrix
-  sim_square <- net_to_mat(similarity, 
-                           weight = TRUE, 
-                           squared = TRUE,
-                           symmetrical = TRUE)
+  #sim_square <- net_to_mat(similarity, 
+  #                         weight = TRUE, 
+  #                         squared = TRUE,
+  #                         symmetrical = TRUE)
+  sim_square <- as.matrix(dist.obj)
   
   ## 2.1. apclusterK ----------------------------------------------------------
   if(!is.null(K)){
@@ -321,7 +332,6 @@ nhclu_affprop <- function(similarity,
                                                  nonoise = nonoise,
                                                  seed = NA)
     }else{
-      set.seed(seed)
       outputs$algorithm <- apcluster::apclusterK(s = sim_square,
                                                  K = K,
                                                  prc = prc,
@@ -332,8 +342,8 @@ nhclu_affprop <- function(similarity,
                                                  lam = lam,
                                                  includeSim = FALSE,
                                                  details = details,
-                                                 nonoise = nonoise)
-      rm(.Random.seed, envir=globalenv())
+                                                 nonoise = nonoise,
+                                                 seed = seed)
     }
   }
   ## 2.2. apcluster -----------------------------------------------------------
@@ -350,7 +360,6 @@ nhclu_affprop <- function(similarity,
                                                 nonoise = nonoise,
                                                 seed = NA)
     }else{
-      set.seed(seed)
       outputs$algorithm <- apcluster::apcluster(s = sim_square,
                                                 p = p,
                                                 q = q,
@@ -359,8 +368,8 @@ nhclu_affprop <- function(similarity,
                                                 lam = lam,
                                                 includeSim = FALSE,
                                                 details = details,
-                                                nonoise = nonoise)
-      rm(.Random.seed, envir=globalenv())
+                                                nonoise = nonoise,
+                                                seed = seed)
     }
   }
   
@@ -378,7 +387,8 @@ nhclu_affprop <- function(similarity,
   colnames(outputs_df) <- c("Site",
                             paste0("K_", length(outputs$algorithm@clusters)))
   
-  outputs$clusters <- as.data.frame(outputs_df) #data.frame(outputs$clusters,
+  outputs$clusters <- as.data.frame(outputs_df) 
+  #data.frame(outputs$clusters,
   # outputs_df)
   
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)

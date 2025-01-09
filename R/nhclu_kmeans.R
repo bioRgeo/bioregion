@@ -1,4 +1,4 @@
-#' Non-hierarchical clustering: k-means analysis
+#' Non-hierarchical clustering: K-means analysis
 #'
 #' This function performs non-hierarchical clustering based on dissimilarity 
 #' using a k-means analysis.

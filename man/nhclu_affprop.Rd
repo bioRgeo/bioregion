@@ -31,7 +31,8 @@ nodes), and the subsequent column(s) should contain the similarity indices.}
 \item{index}{The name or number of the similarity column to use. By default,
 the third column name of \code{similarity} is used.}
 
-\item{seed}{The seed for the random number generator.}
+\item{seed}{The seed for the random number generator used when
+\code{nonoise = FALSE}.}
 
 \item{p}{Input preference, which can be a vector specifying individual
 preferences for each data point. If scalar, the same value is used for all
@@ -58,7 +59,7 @@ is stored in the output object.}
 the similarity object, which prevents degenerate cases.}
 
 \item{K}{The desired number of clusters. If not \code{NULL}, the function
-\link[apcluster:apclusterK-methods]{apcluster} is called.}
+\link[apcluster:apclusterK-methods]{apclusterK} is called.}
 
 \item{prc}{A parameter needed when \code{K} is not \code{NULL}. The algorithm stops if
 the number of clusters deviates by less than \code{prc} percent from the desired
@@ -83,7 +84,8 @@ A \code{list} of class \code{bioregion.clusters} with five slots:
 \item{\strong{inputs}: A \code{list} describing the characteristics of the clustering
 process.}
 \item{\strong{algorithm}: A \code{list} of objects associated with the clustering
-procedure, such as original cluster objects (if \code{algorithm_in_output = TRUE}).}
+procedure, such as original cluster objects
+(if \code{algorithm_in_output = TRUE}).}
 \item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
 If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
@@ -94,7 +96,8 @@ This function performs non-hierarchical clustering using the Affinity
 Propagation algorithm.
 }
 \details{
-This function is based on the \href{https://cran.r-project.org/package=apcluster}{apcluster}
+This function is based on the
+\href{https://cran.r-project.org/package=apcluster}{apcluster}
 package (\link[apcluster:apcluster-methods]{apcluster}).
 }
 \examples{
@@ -106,16 +109,19 @@ comat_1 <- cbind(comat_1,
                  matrix(0, 10, 8,
                         dimnames = list(paste0("Site", 1:10),
                                         paste0("Species", 13:20))))
-
-comat_2 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
-                         prob = 1/1:1001), 10, 12)
+                                        
+comat_2 <- matrix(sample(0:1000, 
+                         size = 10*12, 
+                         replace = TRUE, 
+                         prob = 1/1:1001), 
+                  10, 12)
 rownames(comat_2) <- paste0("Site", 11:20)
 colnames(comat_2) <- paste0("Species", 9:20)
-comat_2 <- cbind(matrix(0, 10, 8,
+comat_2 <- cbind(matrix(0, 10, 8, 
                         dimnames = list(paste0("Site", 11:20),
                                         paste0("Species", 1:8))),
                  comat_2)
-
+                 
 comat <- rbind(comat_1, comat_2)
 
 dissim <- dissimilarity(comat, metric = "Simpson")
@@ -125,7 +131,7 @@ clust1 <- nhclu_affprop(sim)
 
 clust2 <- nhclu_affprop(sim, q = 1)
 
-# Fixed number of clusters
+# Fixed number of clusters 
 clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
 
 }

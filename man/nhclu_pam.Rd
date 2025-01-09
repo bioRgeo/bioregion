@@ -2,7 +2,7 @@
 % Please edit documentation in R/nhclu_pam.R
 \name{nhclu_pam}
 \alias{nhclu_pam}
-\title{Non-hierarchical clustering: partitioning around medoids}
+\title{Non-hierarchical clustering: Partitioning Around Medoids}
 \usage{
 nhclu_pam(
   dissimilarity,
