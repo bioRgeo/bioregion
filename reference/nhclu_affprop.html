@@ -99,7 +99,8 @@ the third column name of <code>similarity</code> is used.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>The seed for the random number generator.</p></dd>
+<dd><p>The seed for the random number generator used when
+<code>nonoise = FALSE</code>.</p></dd>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
@@ -142,7 +143,7 @@ the similarity object, which prevents degenerate cases.</p></dd>
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
 <dd><p>The desired number of clusters. If not <code>NULL</code>, the function
-<a href="https://rdrr.io/pkg/apcluster/man/apclusterK-methods.html" class="external-link">apcluster</a> is called.</p></dd>
+<a href="https://rdrr.io/pkg/apcluster/man/apclusterK-methods.html" class="external-link">apclusterK</a> is called.</p></dd>
 
 
 <dt id="arg-prc">prc<a class="anchor" aria-label="anchor" href="#arg-prc"></a></dt>
@@ -175,14 +176,16 @@ to <code>TRUE</code>.</p></dd>
 <li><p><strong>inputs</strong>: A <code>list</code> describing the characteristics of the clustering
 process.</p></li>
 <li><p><strong>algorithm</strong>: A <code>list</code> of objects associated with the clustering
-procedure, such as original cluster objects (if <code>algorithm_in_output = TRUE</code>).</p></li>
+procedure, such as original cluster objects
+(if <code>algorithm_in_output = TRUE</code>).</p></li>
 <li><p><strong>clusters</strong>: A <code>data.frame</code> containing the clustering results.</p></li>
 </ol><p>If <code>algorithm_in_output = TRUE</code>, the <code>algorithm</code> slot includes the output of
 <a href="https://rdrr.io/pkg/apcluster/man/apcluster-methods.html" class="external-link">apcluster</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function is based on the <a href="https://cran.r-project.org/package=apcluster" class="external-link">apcluster</a>
+    <p>This function is based on the
+<a href="https://cran.r-project.org/package=apcluster" class="external-link">apcluster</a>
 package (<a href="https://rdrr.io/pkg/apcluster/man/apcluster-methods.html" class="external-link">apcluster</a>).</p>
     </div>
     <div class="section level2">
@@ -215,16 +218,19 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">8</span>,</span></span>
 <span class="r-in"><span>                        dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fl">13</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">comat_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1000</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">*</span><span class="fl">12</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                         prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">1</span><span class="op">:</span><span class="fl">1001</span><span class="op">)</span>, <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                        </span></span>
+<span class="r-in"><span><span class="va">comat_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1000</span>, </span></span>
+<span class="r-in"><span>                         size <span class="op">=</span> <span class="fl">10</span><span class="op">*</span><span class="fl">12</span>, </span></span>
+<span class="r-in"><span>                         replace <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
+<span class="r-in"><span>                         prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">1</span><span class="op">:</span><span class="fl">1001</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>                  <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat_2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="fl">11</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat_2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fl">9</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">comat_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">8</span>,</span></span>
+<span class="r-in"><span><span class="va">comat_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">8</span>, </span></span>
 <span class="r-in"><span>                        dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="fl">11</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                 <span class="va">comat_2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span>                 </span></span>
 <span class="r-in"><span><span class="va">comat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">comat_1</span>, <span class="va">comat_2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
@@ -234,7 +240,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">clust2</span> <span class="op">&lt;-</span> <span class="fu">nhclu_affprop</span><span class="op">(</span><span class="va">sim</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Fixed number of clusters</span></span></span>
+<span class="r-in"><span><span class="co"># Fixed number of clusters </span></span></span>
 <span class="r-in"><span><span class="va">clust3</span> <span class="op">&lt;-</span> <span class="fu">nhclu_affprop</span><span class="op">(</span><span class="va">sim</span>, K <span class="op">=</span> <span class="fl">2</span>, prc <span class="op">=</span> <span class="fl">10</span>, bimaxit <span class="op">=</span> <span class="fl">20</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.993402 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
