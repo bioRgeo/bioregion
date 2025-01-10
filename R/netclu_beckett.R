@@ -129,7 +129,7 @@ netclu_beckett <- function(net,
     stop(paste0("Please choose return_node_type from the following:\n",
                 "both, sites or species."), 
          call. = FALSE)
-    }
+  }
   
   # Convert tibble into dataframe
   if(inherits(net, "tbl_df")){

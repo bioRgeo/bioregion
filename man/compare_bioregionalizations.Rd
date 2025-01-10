@@ -13,141 +13,126 @@ compare_bioregionalizations(
 )
 }
 \arguments{
-\item{cluster_object}{a \code{bioregion.clusters} object or a \code{data.frame} or a
-list of \code{data.frame} containing multiple bioregionalizations. At least two
-bioregionalizations are required. If a list of \code{data.frame} is provided,
-they should all have the same number of rows (i.e., same items in the
-clustering for all bioregionalizations).}
+\item{cluster_object}{A \code{bioregion.clusters} object, a \code{data.frame}, or a
+list of \code{data.frame} objects containing multiple bioregionalizations. At
+least two bioregionalizations are required. If a list of \code{data.frame} is
+provided, all \code{data.frame} objects must have the same number of rows (i.e.,
+the same items in the clustering for all bioregionalizations).}
 
 \item{indices}{\code{NULL} or \code{character}. Indices to compute for the pairwise
-comparison of bioregionalizations. Current available metrics are \code{"rand"}
+comparison of bioregionalizations. Currently available metrics are \code{"rand"}
 and \code{"jaccard"}.}
 
-\item{cor_frequency}{a \code{boolean}. If \code{TRUE}, then computes the correlation
+\item{cor_frequency}{A \code{boolean}. If \code{TRUE}, computes the correlation
 between each bioregionalization and the total frequency of co-membership of
-items across all bioregionalizations. Useful to identify which
-bioregionalization(s) is(are) most representative of all the computed
+items across all bioregionalizations. This is useful for identifying which
+bioregionalization(s) is(are) most representative of all computed
 bioregionalizations.}
 
-\item{store_pairwise_membership}{a \code{boolean}. If \code{TRUE}, the pairwise
-membership of items is stored in the output object.}
+\item{store_pairwise_membership}{A \code{boolean}. If \code{TRUE}, stores the pairwise
+membership of items in the output object.}
 
-\item{store_confusion_matrix}{a \code{boolean}. If \code{TRUE}, the confusion matrices
-of pairwise bioregionalization comparisons are stored in the output object.}
+\item{store_confusion_matrix}{A \code{boolean}. If \code{TRUE}, stores the confusion
+matrices of pairwise bioregionalization comparisons in the output object.}
 }
 \value{
-A \code{list} with 4 to 7 elements:
-\itemize{
-\item \code{args}: arguments provided by the user
-\item \code{inputs}: information on the input bioregionalizations, such as the
-number of items being clustered
-\item (facultative) \code{pairwise_membership}: only if
-\code{store_pairwise_membership = TRUE}. This
-element contains the pairwise memberships of all items for each
-bioregionalization, in the form of a \verb{boolean matrix} where \code{TRUE} means
-that two items are in the same cluster, and \code{FALSE} means that two items
-are not in the same cluster
-\item \code{freq_item_pw_membership}: A \verb{numeric vector}
-containing the number of times each pair of items are clustered together.
-It corresponds to the sum of rows of the table in \code{pairwise_membership}
-\item (facultative) \code{bioregionalization_freq_cor}:  only if
-\code{cor_frequency = TRUE}.
-A \verb{numeric vector} indicating the correlation between individual
-bioregionalizations and the total frequency of pairwise membership across
-all bioregionalizations. It corresponds to the correlation between
-individual columns in \code{pairwise_membership} and \code{freq_item_pw_membership}
-\item (facultative) \code{confusion_matrix}: only if
-\code{store_confusion_matrix = TRUE}.
-A \code{list} containing all confusion matrices between each pair of
-bioregionalizations.
-\item \code{bioregionalization_comparison}: a \code{data.frame} containing the results
-of the comparison of bioregionalizations, where the first column indicates
-which bioregionalizations are compared, and the next columns correspond to
-the requested \code{indices}.
-}
+A \code{list} containing 4 to 7 elements:
+
+\enumerate{
+\item{\strong{args}: A \code{list} of user-provided arguments.}
+\item{\strong{inputs}: A \code{list} containing information on the input
+bioregionalizations, such as the number of items clustered.}
+\item{\strong{pairwise_membership} (optional): If \code{store_pairwise_membership = TRUE},
+a \verb{boolean matrix} where \code{TRUE} indicates two items are in the same cluster,
+and \code{FALSE} indicates they are not.}
+\item{\strong{freq_item_pw_membership}: A \verb{numeric vector} containing the number of
+times each item pair is clustered together, corresponding to the sum of rows
+in \code{pairwise_membership}.}
+\item{\strong{bioregionalization_freq_cor} (optional): If \code{cor_frequency = TRUE},
+a \verb{numeric vector} of correlations between individual bioregionalizations
+and the total frequency of pairwise membership.}
+\item{\strong{confusion_matrix} (optional): If \code{store_confusion_matrix = TRUE},
+a \code{list} of confusion matrices for each pair of bioregionalizations.}
+\item{\strong{bioregionalization_comparison}: A \code{data.frame} containing comparison
+results, where the first column indicates the bioregionalizations compared,
+and the remaining columns contain the requested \code{indices}.}}
 }
 \description{
-This function aims at computing pairwise comparisons for several
-bioregionalizations, usually an output from \code{netclu_}, \code{hclu_} or \code{nhclu_}
+This function computes pairwise comparisons for several
+bioregionalizations, usually outputs from \code{netclu_}, \code{hclu_}, or \code{nhclu_}
 functions. It also provides the confusion matrix from pairwise comparisons,
-so that the user can compute additional comparison metrics.
+enabling the user to compute additional comparison metrics.
 }
 \details{
-This function proceeds in two main steps:
+This function operates in two main steps:
 \enumerate{
-\item The first step is done within each bioregionalization. It will compare
-all pairs of items and document if they are clustered together (\code{TRUE}) or
-separately (\code{FALSE}) in each bioregionalization. For example, if site 1 and
-site 2 are clustered in the same cluster in bioregionalization 1, then the
-pairwise membership site1_site2 will be \code{TRUE}. The output of this first
-step is stored in the slot \code{pairwise_membership} if
+\item Within each bioregionalization, the function compares all pairs of items
+and documents whether they are clustered together (\code{TRUE}) or separately
+(\code{FALSE}). For example, if site 1 and site 2 are clustered in the same
+cluster in bioregionalization 1, their pairwise membership \code{site1_site2}
+will be \code{TRUE}. This output is stored in the \code{pairwise_membership} slot if
 \code{store_pairwise_membership = TRUE}.
-\item The second step compares all pairs of bioregionalizations by analysing if
-their pairwise memberships are similar or not. To do so, for each pair of
-bioregionalizations, the function computes a confusion matrix with four
-elements:
+\item Across all bioregionalizations, the function compares their pairwise
+memberships to determine similarity. For each pair of bioregionalizations,
+it computes a confusion matrix with the following elements:
 }
 \itemize{
-\item \code{a} number of pairs of items grouped in bioregionalization 1 and in
-bioregionalization 2
-\item \code{b} number of pairs of items grouped in bioregionalization 1 but not in
-bioregionalization 2
-\item \code{c} number of pairs of items not grouped in bioregionalization 1 but
-grouped in bioregionalization 2
-\item \code{d} number of pairs of items not grouped in both bioregionalization 1
-& 2
+\item \code{a}: Number of item pairs grouped in both bioregionalizations.
+\item \code{b}: Number of item pairs grouped in the first but not in the second
+bioregionalization.
+\item \code{c}: Number of item pairs grouped in the second but not in the first
+bioregionalization.
+\item \code{d}: Number of item pairs not grouped in either bioregionalization.
 }
 
 The confusion matrix is stored in \code{confusion_matrix} if
 \code{store_confusion_matrix = TRUE}.
 
-Based on the confusion matrices, we can compute a range of indices to
-indicate the agreement among bioregionalizations. As of now, we have
-implemented:
+Based on these confusion matrices, various indices can be computed to
+measure agreement among bioregionalizations. The currently implemented
+indices are:
 \itemize{
-\item \verb{Rand index} (a + d)/(a + b + c + d)
-The Rand index measures agreement among bioregionalizations by accounting
-for both the pairs of sites that are grouped, but also the pairs of sites
-that are not grouped.
-\item \verb{Jaccard index} a/(a + b + c)
-The Jaccard index measures agreement among bioregionalizations by only
-accounting for pairs of sites that are grouped.
+\item \strong{Rand index}: \code{(a + d) / (a + b + c + d)}
+Measures agreement by considering both grouped and ungrouped item pairs.
+\item \strong{Jaccard index}: \code{a / (a + b + c)}
+Measures agreement based only on grouped item pairs.
 }
 
-These two metrics are complementary, because the Jaccard index will tell
-if bioregionalizations are similar in their clustering structure, whereas
-the Rand index will tell if bioregionalizations are similar not only in the
-pairs of items clustered together, but also in terms of the pairs of sites
-that are not clustered together. For example, take two bioregionalizations
-which never group together the same pairs of sites. Their Jaccard index will
-be 0, whereas the Rand index can be > 0 due to the sites that are not
-grouped together.
+These indices are complementary: the Jaccard index evaluates clustering
+similarity, while the Rand index considers both clustering and separation.
+For example, if two bioregionalizations never group the same pairs, their
+Jaccard index will be 0, but their Rand index may be > 0 due to ungrouped
+pairs.
 
-Additional indices can be manually computed by the users on the basis of the
-list of confusion matrices.
+Users can compute additional indices manually using the list of confusion
+matrices.
 
-In some cases, users may be interested in finding which of the
-bioregionalizations is most representative of all bioregionalizations. To
-find it out, we can compare the pairwise membership of each
-bioregionalization with the total frequency of pairwise membership across
-all bioregionalizations. This correlation can be requested with
-\code{cor_frequency = TRUE}.
+To identify which bioregionalization is most representative of the others,
+the function can compute the correlation between the pairwise membership of
+each bioregionalization and the total frequency of pairwise membership across
+all bioregionalizations. This is enabled by setting \code{cor_frequency = TRUE}.
 }
 \examples{
 # A simple case with four bioregionalizations of four items
-bioregionalizations <- data.frame(matrix(nr = 4, nc = 4, 
-                                c(1,2,1,1,1,2,2,1,2,1,3,1,2,1,4,2),
-                                byrow = TRUE))
+bioregionalizations <- data.frame(matrix(nr = 4, 
+                                         nc = 4, 
+                                         c(1,2,1,1,1,2,2,1,2,1,3,1,2,1,4,2),
+                                         byrow = TRUE))
 bioregionalizations
+
 compare_bioregionalizations(bioregionalizations)
 
 # Find out which bioregionalizations are most representative
 compare_bioregionalizations(bioregionalizations,
-                   cor_frequency = TRUE)
+                            cor_frequency = TRUE)
                                 
-
 }
 \seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html}.
+
+Associated functions:
 \link{bioregionalization_metrics}
 }
 \author{

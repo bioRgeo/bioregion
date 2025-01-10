@@ -1,149 +1,79 @@
 #' Search for an optimal number of clusters in a list of partitions 
 #'
-#' This function aims at optimizing one or several criteria on a set of 
-#' ordered partitions. It is usually applied to find one (or several) optimal
-#' number(s) of clusters on, for example, a hierarchical tree to cut, or a 
-#' range of partitions obtained from k-means or PAM. Users are advised to be 
-#' careful if applied in other cases (e.g., partitions which are not ordered in 
-#' an increasing or decreasing sequence, or partitions which are not related
-#' to each other).
+#' This function aims to optimize one or several criteria on a set of 
+#' ordered partitions. It is typically used to find one or more optimal 
+#' cluster counts on hierarchical trees to cut or ranges of partitions 
+#' from k-means or PAM. Users should exercise caution in other cases 
+#' (e.g., unordered partitions or unrelated partitions).
 #' 
-#' @param partitions a `bioregion.partition.metrics` object (output from 
-#' [bioregionalization_metrics()] or a `data.frame` with the first two 
-#' columns named `K` (partition name) and `n_clusters` (number of clusters) 
-#' andthe following columns containing evaluation metrics (numeric values).
+#' @param partitions A `bioregion.partition.metrics` object (output from 
+#' [bioregionalization_metrics()]) or a `data.frame` with the first two 
+#' columns named `K` (partition name) and `n_clusters` (number of clusters), 
+#' followed by columns with numeric evaluation metrics.
 #' 
-#' @param metrics_to_use `character` vector or a single `character` string
-#' indicating upon which metric(s) in `partitions` the optimal number of
-#' clusters should be calculated. Defaults to `"all"` which means all 
-#' metrics available in `partitions` will be used.
+#' @param metrics_to_use A `character` vector or single string specifying 
+#' metrics in `partitions` for calculating optimal clusters. Defaults to 
+#' `"all"` (uses all metrics).
 #' 
-#' @param criterion a `character` string indicating the criterion to be used to
-#' identify optimal number(s) of clusters. Available methods currently include
-#' `"elbow"`, `"increasing_step"`, `"decreasing_step"`, `"cutoff"`, 
-#' `"breakpoints"`, `"min"` or `"max"`. Default is `"elbow"`. See Details.
+#' @param criterion A `character` string specifying the criterion to identify 
+#' optimal clusters. Options include `"elbow"`, `"increasing_step"`, 
+#' `"decreasing_step"`, `"cutoff"`, `"breakpoints"`, `"min"`, or `"max"`. 
+#' Defaults to `"elbow"`. See Details.
 #' 
-#' @param step_quantile if `"increasing_step"` or `"decreasing_step"`,
-#' specify here the quantile of differences between two consecutive k to be used
-#' as the cutoff to identify the most important steps in `eval_metric`.
+#' @param step_quantile For `"increasing_step"` or `"decreasing_step"`, 
+#' specifies the quantile of differences between consecutive partitions as 
+#' the cutoff to identify significant steps in `eval_metric`.
 #' 
-#' @param step_levels if `"increasing_step"` or `"decreasing_step"`, specify
-#' here the number of largest steps to keep as cutoffs.
+#' @param step_levels For `"increasing_step"` or `"decreasing_step"`, specifies 
+#' the number of largest steps to retain as cutoffs.
 #' 
-#' @param step_round_above a `boolean` indicating if the optimal number of 
-#' clusters should be picked above or below the identified steps. Indeed, each
-#' step will correspond to a sudden increase or decrease between partition X and
-#' partition X+1: should the optimal partition be X+1 
-#' (`step_round_above = TRUE`) or X (`step_round_above = FALSE`).
-#' Defaults to `TRUE`.
+#' @param step_round_above A `boolean` indicating whether the optimal clusters 
+#' are above (`TRUE`) or below (`FALSE`) identified steps. Defaults to `TRUE`.
 #' 
-#' @param metric_cutoffs if `criterion = "cutoff"`, specify here the cutoffs
-#' of `eval_metric` at which the number of clusters should be extracted.
+#' @param metric_cutoffs For `criterion = "cutoff"`, specifies the cutoffs 
+#' of `eval_metric` to extract cluster counts.
 #' 
-#' @param n_breakpoints specify here the number of breakpoints to look for in
-#' the curve. Defaults to 1.
+#' @param n_breakpoints Specifies the number of breakpoints to find in the 
+#' curve. Defaults to 1.
 #' 
-#' @param plot a `boolean` indicating if a plot of the first `eval_metric`
-#' should be drawn with the identified optimal numbers of cutoffs.
+#' @param plot A `boolean` indicating if a plot of the first `eval_metric` 
+#' with identified optimal clusters should be drawn.
+#'
+#' @return
+#' A `list` of class `bioregion.optimal.n` with these elements:
+#' \itemize{
+#' \item{`args`: Input arguments.}
+#' \item{`evaluation_df`: The input evaluation `data.frame`, appended with 
+#' `boolean` columns for optimal cluster counts.}
+#' \item{`optimal_nb_clusters`: A `list` with optimal cluster counts for each 
+#' metric in `"metrics_to_use"`, based on the chosen `criterion`.}
+#' \item{`plot`: The plot (if requested).}}
 #'
 #' @details
+#' This function explores evaluation metric ~ cluster relationships, applying 
+#' criteria to find optimal cluster counts.
 #'
-#' This function explores the relationship evaluation metric ~ number of
-#' clusters, and a criterion is applied to search an optimal number of
-#' clusters.
-#'
-#' **Please read the note section about the following criteria.**
-#'
-#' Foreword: 
+#' **Note on criteria:** Several criteria can return multiple optimal cluster 
+#' counts, emphasizing hierarchical or nested bioregionalizations. This 
+#' approach aligns with modern recommendations for biological datasets, as seen 
+#' in Ficetola et al. (2017)'s reanalysis of Holt et al. (2013).
 #' 
-#' Here we implemented a set of criteria commonly found in the literature or
-#' recommended in the bioregionalization literature. Nevertheless, we also
-#' advocate to move
-#' beyond the "Search one optimal number of clusters" paradigm, and consider
-#' investigating "multiple optimal numbers of clusters". Indeed, using only one
-#' optimal number of clusters may simplify the natural complexity of biological
-#' datasets, and, for example, ignore the often hierarchical / nested nature of
-#' bioregionalizations. Using multiple partitions likely avoids this
-#' oversimplification bias and may convey more information.
-#' See, for example, the reanalysis of Holt et al. (2013)
-#' by Ficetola et al. (2017), where they used deep, intermediate
-#' and shallow cuts. 
-#' 
-#' Following this rationale, several of the criteria implemented here can/will
-#' return multiple "optimal" numbers of clusters, depending on user choices.
-#'
-#' **Criteria to find optimal number(s) of clusters**
+#' **Criteria for optimal clusters:** 
 #' \itemize{
+#' \item{`elbow`: Identifies the "elbow" point in the evaluation metric curve, 
+#' where incremental improvements diminish. Based on a method to find the 
+#' maximum distance from a straight line linking curve endpoints.}
+#' \item{`increasing_step` or `decreasing_step`: Highlights significant 
+#' increases or decreases in metrics by analyzing pairwise differences between 
+#' partitions. Users specify `step_quantile` or `step_levels`.}
+#' \item{`cutoffs`: Derives clusters from specified metric cutoffs, e.g., as in 
+#' Holt et al. (2013). Adjust cutoffs based on spatial scale.}
+#' \item{`breakpoints`: Uses segmented regression to find breakpoints. Requires 
+#' specifying `n_breakpoints`.}
+#' \item{`min` & `max`: Selects clusters at minimum or maximum metric values.}}
 #' 
-#' \item{`elbow`:
-#' This method consists in finding one elbow in the evaluation metric curve, as
-#' is commonly done in clustering analyses. The idea is to approximate the
-#' number of clusters at which the evaluation metric no longer increments.It is
-#' based on a fast method finding the maximum distance between the curve and a
-#' straight line linking the minimum and maximum number of points. The code we
-#' use here is based on code written by Esben Eickhardt available here
-#' <https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075>.
-#' The code has been modified to work on both increasing and decreasing
-#' evaluation metrics.}
-#' 
-#' \item{`increasing_step` or `decreasing_step`:
-#' This method consists in identifying clusters at the most important changes,
-#' or steps, in the evaluation metric. The objective can be to either look for
-#' largest increases (`increasing_step`) or largest decreases
-#' `decreasing_step`. Steps are calculated based on the pairwise differences
-#' between partitions. Therefore, this is relative to the distribution of
-#' differences in the evaluation metric over the tested partitions. Specify
-#' `step_quantile` as the quantile cutoff above which steps will be selected as
-#' most important (by default, 0.99, i.e. the largest 1\% steps will be
-#' selected).Alternatively, you can also choose to specify the number of top
-#' steps to keep, e.g. to keep the largest three steps, specify
-#' `step_level = 3`. Basically this method will emphasize the most important
-#' changes in the evaluation metric as a first approximation of where important
-#' cuts can be chosen.
-#' 
-#' **Please note that you should choose between `increasing_step` and
-#' `decreasing_step` depending on the nature of your evaluation metrics. For
-#' example, for metrics that are monotonously decreasing (e.g., endemism
-#' metrics `"avg_endemism" & "tot_endemism"`) with the number of clusters
-#' should n_clusters, you should choose `decreasing_step`. On the contrary, for
-#' metrics that are monotonously increasing with the number of clusters (e.g.,
-#' `"pc_distance"`), you should choose `increasing_step`. **
-#' }
-#' 
-#' \item{`cutoffs`:
-#' This method consists in specifying the cutoff value(s) in the evaluation
-#' metric from which the number(s) of clusters should be derived. This is the
-#' method used by Holt et al. (2013). Note, however, that the
-#' cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
-#' relevant at very large spatial scales, and lower cut-offs should be
-#' considered at finer spatial scales.
-#' }
-#' \item{`breakpoints`:
-#' This method consists in finding break points in the curve using a segmented
-#' regression. Users have to specify the number of expected break points in
-#' `n_breakpoints` (defaults to 1). Note that since this method relies on a 
-#' regression model, it should probably not be applied with a low number of
-#' partitions.}
-#'
-#' \item{`min` & `max`:
-#' Picks the optimal partition(s) respectively at the minimum or maximum value
-#' of the evaluation metric.}
-#' }
-#' 
-#' @return
-#' a `list` of class `bioregion.optimal.n` with three elements:
-#' \itemize{
-#' \item{`args`: input arguments
-#' }
-#' \item{`evaluation_df`: the input evaluation data.frame appended with
-#' `boolean` columns identifying the optimal numbers of clusters
-#' }
-#' \item{`optimal_nb_clusters`: a list containing the optimal number(s)
-#' of cluster(s) for each metric specified in `"metrics_to_use"`, based on
-#' the chosen `criterion`
-#' }
-#' \item{`plot`: if requested, the plot will be stored in this slot}}
-#' @note Please note that finding the optimal number of clusters is a procedure
+#' @note 
+#' Please note that finding the optimal number of clusters is a procedure
 #' which normally requires decisions from the users, and as such can hardly be
 #' fully automatized. Users are strongly advised to read the references
 #' indicated below to look for guidance on how to choose their optimal
@@ -155,12 +85,18 @@
 #' Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P, 
 #' Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ, 
 #' Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of 
-#' the world. \emph{Science}, 339(6115), 74-78.
+#' the world. \emph{Science} 339, 74-78.
 #' 
 #' Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of 
-#' zoogeographical boundaries. \emph{Nature Ecology & Evolution}, 1, 0089.
+#' zoogeographical boundaries. \emph{Nature Ecology & Evolution} 1, 0089.
 #' 
-#' @importFrom rlang .data
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html#optimaln}.
+#' 
+#' Associated functions: 
+#' [hclu_hierarclust]
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
@@ -209,56 +145,67 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes_string geom_line facet_wrap geom_vline
 #' @importFrom ggplot2 theme_bw
+#' @importFrom rlang .data
 #' 
 #' @export
-
-find_optimal_n <- function(
-    partitions,
-    metrics_to_use = "all",
-    criterion = "elbow", 
-    step_quantile = .99,
-    step_levels = NULL,
-    step_round_above = TRUE,
-    metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
-    n_breakpoints = 1,
-    plot = TRUE){
+find_optimal_n <- function(partitions,
+                           metrics_to_use = "all",
+                           criterion = "elbow", 
+                           step_quantile = .99,
+                           step_levels = NULL,
+                           step_round_above = TRUE,
+                           metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
+                           n_breakpoints = 1,
+                           plot = TRUE){
   
   if(!inherits(partitions, "bioregion.partition.metrics")){
     if(!inherits(partitions, "data.frame")){
-      stop("partitions should be the output object from bioregionalization_metrics()",
-           "or a data.frame")
+      stop(paste0("partitions should be the output object from ", 
+                  "bioregionalization_metrics() ",
+                  "or a data.frame"), 
+           call. = FALSE) 
     } else {
       if(all(colnames(partitions)[1:2] == c("K", "n_clusters")) &
          ncol(partitions) > 2) {
         if(all(sapply(partitions[, 3:ncol(partitions)],
                       is.numeric))) {
           partitions <- list(
-            args = list(eval_metric =
-                          colnames(partitions)[3: ncol(partitions)]),
-            evaluation_df = partitions)
+            args = list(eval_metric = colnames(partitions)[3: ncol(partitions)]),
+                        evaluation_df = partitions)
         } else {
-          stop("Your partition data.frame contains non numeric columns. ", 
-               "Only numeric columns are expected after the first two columns")
+          stop(paste0("Your partition data.frame contains non numeric ",
+                      "columns. Only numeric columns are expected after the ",
+                      "first two columns"), 
+               call. = FALSE) 
         }
         
       } else {
-        stop(
-          "partitions should be the output object from bioregionalization_metrics() ",
-          "or a data.frame with the first two columns named as 'K' & ",
-          "'n_clusters' and the following columns being the evaluation ",
-          "metrics")
+        stop(paste0("partitions should be the output object from ",
+                    "bioregionalization_metrics() ",
+                    "or a data.frame with the first two columns named as ",
+                    "'K' & 'n_clusters' and the following columns being the ",
+                    "evaluation metrics"), 
+             call. = FALSE) 
+        
       }
     }
   }
   
-  if(length(criterion) > 1) {
-    stop("Please choose only one criterion")
-  }
-  
+  controls(args = metrics_to_use, data = NULL, type = "character_vector")
   if("all" %in% metrics_to_use) {
     metrics_to_use <- partitions$args$eval_metric
   } else if(any(!(metrics_to_use %in% colnames(partitions$evaluation_df)))) {
-    stop("metrics_to_use should exist in the evaluation table")
+    stop(paste0("metrics_to_use should exist in the evaluation table."),
+         call. = FALSE)
+  }
+  
+  controls(args = criterion, data = NULL, type = "character")
+  if (!(criterion %in% c("elbow", "increasing_step", "decreasing_step", 
+                                "cutoff", "breakpoints", "min", "max"))) {
+    stop(paste0("Please choose criterion from the following:\n",
+                "elbow, increasing_step, decreasing_step, cutoff, breakpoints,",
+                " min or max"), 
+         call. = FALSE)   
   }
   
   # Verifying that metrics vary, otherwise we remove them
@@ -283,16 +230,21 @@ find_optimal_n <- function(
     metrics_to_use <- metrics_to_use[-which(metrics_to_use %in% 
                                               exclude_metrics)]
   }
-  if(!(length(metrics_to_use))) {
-    stop("The selected partition metrics did not vary sufficiently in input. ",
-         "Please check your partition metrics or increase your ",
-         "range of partitions when computing bioregionalization_metrics()")
-  }
+  #if(!(length(metrics_to_use))) {
+  #  stop(paste0("The selected partition metrics did not vary sufficiently ",
+  #              "in input. Please check your partition metrics or increase ",
+  #              "your range of partitions when computing ",
+  #              "bioregionalization_metrics()"), 
+  #       call. = FALSE)
+  #}
   
-  print(metrics_to_use)
+  #print(metrics_to_use)
+  
   if(nrow(partitions$evaluation_df) <= 4){
-    stop("The number of partitions is too low (<=4) for this function to work
-         properly")
+    stop(paste0("The number of partitions is too low (<=4) ",
+                "for this function to work properly"),
+         call. = FALSE) 
+         
   } else{
     message(paste0("Number of partitions: ",
                    nrow(partitions$evaluation_df), "\n"))
@@ -300,45 +252,39 @@ find_optimal_n <- function(
     if(criterion %in% c("elbow", "increasing_step", "decreasing_step",
                         "breakpoints")) {
       if(nrow(partitions$evaluation_df) <= 8) {
-        message(paste0(
-          "...Caveat: be cautious with the interpretation of metric analyses
-          with such a low number of partitions"))
+        message(paste0("...Caveat: be cautious with the interpretation of ",
+                       "metric analyses with such a low number of partitions"))
       }
-    } else if(!(criterion %in% c("min", "max", "cutoff"))) {
-      stop("criterion must be one of elbow, increasing_step, decreasing_step,
-           min, max, cutoff or breakpoints")
-    }
+    } 
+    #else if(!(criterion %in% c("min", "max", "cutoff"))) {
+    #  stop("criterion must be one of elbow, increasing_step, decreasing_step,
+    #       min, max, cutoff or breakpoints")
+    #}
     
     if(criterion %in% c("increasing_step", "decreasing_step")){
-      if(!is.numeric(step_quantile) || step_quantile <= 0 ||
-         step_quantile >= 1){
-        stop(
-          "step_quantile must be a numeric in the ]0,1[ interval. See help of
-           the function.")
-      }
-    }
-    
-    if(criterion %in% c("increasing_step", "decreasing_step")){
-      if(!is.logical(step_round_above)){
-        stop("step_round_above must be a boolean. See help of the function.")
+      controls(args=step_quantile, type="strict_positive_numeric")
+      if(step_quantile >= 1){
+        stop(paste0("step_quantile must be in the ]0,1[ interval."), 
+                    call. = FALSE)
       }
     }
     
     if(criterion %in% c("increasing_step", "decreasing_step")){
-      if(!is.null(step_levels) && (!is.numeric(step_levels) ||
-                                   step_levels < 0)){
-        stop("step_levels must be a positive integer. See help of the
-             function.")
+      controls(args=step_round_above, type="boolean")
+    }
+    
+    if(criterion %in% c("increasing_step", "decreasing_step")){
+      if(!is.null(step_levels)){
+        controls(args = step_levels, type = "positive_integer") 
       }
     }
     
-    if(!is.logical(plot)){
-      stop("plot should be a Boolean.")
-    }
+    controls(args = plot, type = "boolean")
     
-    message(paste0(
-      "Searching for potential optimal number(s) of clusters based on the ",
-      criterion, " method"))
+    message(paste0("Searching for potential optimal number(s) of clusters ",
+                   "based on the ",
+                   criterion, 
+                   " method"))
     
     partitions$evaluation_df <- data.frame(
       partitions$evaluation_df,
@@ -521,13 +467,14 @@ find_optimal_n <- function(
       message(" - Cutoff method")
       
       if(length(metrics_to_use) > 1) {
-        stop("Criterion 'cutoff' should probably be used with only one ",
+        stop(paste0("Criterion 'cutoff' should probably be used with only one ",
              "evaluation metric (you have ",
              length(metrics_to_use),
              " evaluation metrics in 'partitions'). Indeed, metrics have ",
              "distinct orders of magnitude, and so the 'metric_cutoffs' you ",
              " chose are likely to be",
-             " appropriate for only one of the metrics, but no the others.")
+             " appropriate for only one of the metrics, but no the others."), 
+             call. = FALSE)
       }
       
       optim_index <- sapply(metric_cutoffs,

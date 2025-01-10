@@ -17,149 +17,78 @@ find_optimal_n(
 )
 }
 \arguments{
-\item{partitions}{a \code{bioregion.partition.metrics} object (output from
-\code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}} or a \code{data.frame} with the first two
-columns named \code{K} (partition name) and \code{n_clusters} (number of clusters)
-andthe following columns containing evaluation metrics (numeric values).}
+\item{partitions}{A \code{bioregion.partition.metrics} object (output from
+\code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}) or a \code{data.frame} with the first two
+columns named \code{K} (partition name) and \code{n_clusters} (number of clusters),
+followed by columns with numeric evaluation metrics.}
 
-\item{metrics_to_use}{\code{character} vector or a single \code{character} string
-indicating upon which metric(s) in \code{partitions} the optimal number of
-clusters should be calculated. Defaults to \code{"all"} which means all
-metrics available in \code{partitions} will be used.}
+\item{metrics_to_use}{A \code{character} vector or single string specifying
+metrics in \code{partitions} for calculating optimal clusters. Defaults to
+\code{"all"} (uses all metrics).}
 
-\item{criterion}{a \code{character} string indicating the criterion to be used to
-identify optimal number(s) of clusters. Available methods currently include
-\code{"elbow"}, \code{"increasing_step"}, \code{"decreasing_step"}, \code{"cutoff"},
-\code{"breakpoints"}, \code{"min"} or \code{"max"}. Default is \code{"elbow"}. See Details.}
+\item{criterion}{A \code{character} string specifying the criterion to identify
+optimal clusters. Options include \code{"elbow"}, \code{"increasing_step"},
+\code{"decreasing_step"}, \code{"cutoff"}, \code{"breakpoints"}, \code{"min"}, or \code{"max"}.
+Defaults to \code{"elbow"}. See Details.}
 
-\item{step_quantile}{if \code{"increasing_step"} or \code{"decreasing_step"},
-specify here the quantile of differences between two consecutive k to be used
-as the cutoff to identify the most important steps in \code{eval_metric}.}
+\item{step_quantile}{For \code{"increasing_step"} or \code{"decreasing_step"},
+specifies the quantile of differences between consecutive partitions as
+the cutoff to identify significant steps in \code{eval_metric}.}
 
-\item{step_levels}{if \code{"increasing_step"} or \code{"decreasing_step"}, specify
-here the number of largest steps to keep as cutoffs.}
+\item{step_levels}{For \code{"increasing_step"} or \code{"decreasing_step"}, specifies
+the number of largest steps to retain as cutoffs.}
 
-\item{step_round_above}{a \code{boolean} indicating if the optimal number of
-clusters should be picked above or below the identified steps. Indeed, each
-step will correspond to a sudden increase or decrease between partition X and
-partition X+1: should the optimal partition be X+1
-(\code{step_round_above = TRUE}) or X (\code{step_round_above = FALSE}).
-Defaults to \code{TRUE}.}
+\item{step_round_above}{A \code{boolean} indicating whether the optimal clusters
+are above (\code{TRUE}) or below (\code{FALSE}) identified steps. Defaults to \code{TRUE}.}
 
-\item{metric_cutoffs}{if \code{criterion = "cutoff"}, specify here the cutoffs
-of \code{eval_metric} at which the number of clusters should be extracted.}
+\item{metric_cutoffs}{For \code{criterion = "cutoff"}, specifies the cutoffs
+of \code{eval_metric} to extract cluster counts.}
 
-\item{n_breakpoints}{specify here the number of breakpoints to look for in
-the curve. Defaults to 1.}
+\item{n_breakpoints}{Specifies the number of breakpoints to find in the
+curve. Defaults to 1.}
 
-\item{plot}{a \code{boolean} indicating if a plot of the first \code{eval_metric}
-should be drawn with the identified optimal numbers of cutoffs.}
+\item{plot}{A \code{boolean} indicating if a plot of the first \code{eval_metric}
+with identified optimal clusters should be drawn.}
 }
 \value{
-a \code{list} of class \code{bioregion.optimal.n} with three elements:
+A \code{list} of class \code{bioregion.optimal.n} with these elements:
 \itemize{
-\item{\code{args}: input arguments
-}
-\item{\code{evaluation_df}: the input evaluation data.frame appended with
-\code{boolean} columns identifying the optimal numbers of clusters
-}
-\item{\code{optimal_nb_clusters}: a list containing the optimal number(s)
-of cluster(s) for each metric specified in \code{"metrics_to_use"}, based on
-the chosen \code{criterion}
-}
-\item{\code{plot}: if requested, the plot will be stored in this slot}}
+\item{\code{args}: Input arguments.}
+\item{\code{evaluation_df}: The input evaluation \code{data.frame}, appended with
+\code{boolean} columns for optimal cluster counts.}
+\item{\code{optimal_nb_clusters}: A \code{list} with optimal cluster counts for each
+metric in \code{"metrics_to_use"}, based on the chosen \code{criterion}.}
+\item{\code{plot}: The plot (if requested).}}
 }
 \description{
-This function aims at optimizing one or several criteria on a set of
-ordered partitions. It is usually applied to find one (or several) optimal
-number(s) of clusters on, for example, a hierarchical tree to cut, or a
-range of partitions obtained from k-means or PAM. Users are advised to be
-careful if applied in other cases (e.g., partitions which are not ordered in
-an increasing or decreasing sequence, or partitions which are not related
-to each other).
+This function aims to optimize one or several criteria on a set of
+ordered partitions. It is typically used to find one or more optimal
+cluster counts on hierarchical trees to cut or ranges of partitions
+from k-means or PAM. Users should exercise caution in other cases
+(e.g., unordered partitions or unrelated partitions).
 }
 \details{
-This function explores the relationship evaluation metric ~ number of
-clusters, and a criterion is applied to search an optimal number of
-clusters.
+This function explores evaluation metric ~ cluster relationships, applying
+criteria to find optimal cluster counts.
 
-\strong{Please read the note section about the following criteria.}
+\strong{Note on criteria:} Several criteria can return multiple optimal cluster
+counts, emphasizing hierarchical or nested bioregionalizations. This
+approach aligns with modern recommendations for biological datasets, as seen
+in Ficetola et al. (2017)'s reanalysis of Holt et al. (2013).
 
-Foreword:
-
-Here we implemented a set of criteria commonly found in the literature or
-recommended in the bioregionalization literature. Nevertheless, we also
-advocate to move
-beyond the "Search one optimal number of clusters" paradigm, and consider
-investigating "multiple optimal numbers of clusters". Indeed, using only one
-optimal number of clusters may simplify the natural complexity of biological
-datasets, and, for example, ignore the often hierarchical / nested nature of
-bioregionalizations. Using multiple partitions likely avoids this
-oversimplification bias and may convey more information.
-See, for example, the reanalysis of Holt et al. (2013)
-by Ficetola et al. (2017), where they used deep, intermediate
-and shallow cuts.
-
-Following this rationale, several of the criteria implemented here can/will
-return multiple "optimal" numbers of clusters, depending on user choices.
-
-\strong{Criteria to find optimal number(s) of clusters}
+\strong{Criteria for optimal clusters:}
 \itemize{
-
-\item{\code{elbow}:
-This method consists in finding one elbow in the evaluation metric curve, as
-is commonly done in clustering analyses. The idea is to approximate the
-number of clusters at which the evaluation metric no longer increments.It is
-based on a fast method finding the maximum distance between the curve and a
-straight line linking the minimum and maximum number of points. The code we
-use here is based on code written by Esben Eickhardt available here
-\url{https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve/42810075#42810075}.
-The code has been modified to work on both increasing and decreasing
-evaluation metrics.}
-
-\item{\code{increasing_step} or \code{decreasing_step}:
-This method consists in identifying clusters at the most important changes,
-or steps, in the evaluation metric. The objective can be to either look for
-largest increases (\code{increasing_step}) or largest decreases
-\code{decreasing_step}. Steps are calculated based on the pairwise differences
-between partitions. Therefore, this is relative to the distribution of
-differences in the evaluation metric over the tested partitions. Specify
-\code{step_quantile} as the quantile cutoff above which steps will be selected as
-most important (by default, 0.99, i.e. the largest 1\\% steps will be
-selected).Alternatively, you can also choose to specify the number of top
-steps to keep, e.g. to keep the largest three steps, specify
-\code{step_level = 3}. Basically this method will emphasize the most important
-changes in the evaluation metric as a first approximation of where important
-cuts can be chosen.
-
-**Please note that you should choose between \code{increasing_step} and
-\code{decreasing_step} depending on the nature of your evaluation metrics. For
-example, for metrics that are monotonously decreasing (e.g., endemism
-metrics \code{"avg_endemism" & "tot_endemism"}) with the number of clusters
-should n_clusters, you should choose \code{decreasing_step}. On the contrary, for
-metrics that are monotonously increasing with the number of clusters (e.g.,
-\code{"pc_distance"}), you should choose \code{increasing_step}. **
-}
-
-\item{\code{cutoffs}:
-This method consists in specifying the cutoff value(s) in the evaluation
-metric from which the number(s) of clusters should be derived. This is the
-method used by Holt et al. (2013). Note, however, that the
-cut-offs suggested by Holt et al. (0.9, 0.95, 0.99, 0.999) may be only
-relevant at very large spatial scales, and lower cut-offs should be
-considered at finer spatial scales.
-}
-\item{\code{breakpoints}:
-This method consists in finding break points in the curve using a segmented
-regression. Users have to specify the number of expected break points in
-\code{n_breakpoints} (defaults to 1). Note that since this method relies on a
-regression model, it should probably not be applied with a low number of
-partitions.}
-
-\item{\code{min} & \code{max}:
-Picks the optimal partition(s) respectively at the minimum or maximum value
-of the evaluation metric.}
-}
+\item{\code{elbow}: Identifies the "elbow" point in the evaluation metric curve,
+where incremental improvements diminish. Based on a method to find the
+maximum distance from a straight line linking curve endpoints.}
+\item{\code{increasing_step} or \code{decreasing_step}: Highlights significant
+increases or decreases in metrics by analyzing pairwise differences between
+partitions. Users specify \code{step_quantile} or \code{step_levels}.}
+\item{\code{cutoffs}: Derives clusters from specified metric cutoffs, e.g., as in
+Holt et al. (2013). Adjust cutoffs based on spatial scale.}
+\item{\code{breakpoints}: Uses segmented regression to find breakpoints. Requires
+specifying \code{n_breakpoints}.}
+\item{\code{min} & \code{max}: Selects clusters at minimum or maximum metric values.}}
 }
 \note{
 Please note that finding the optimal number of clusters is a procedure
@@ -213,10 +142,18 @@ find_optimal_n(a, criterion = "breakpoints")
 Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P,
 Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ,
 Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of
-the world. \emph{Science}, 339(6115), 74-78.
+the world. \emph{Science} 339, 74-78.
 
 Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of
-zoogeographical boundaries. \emph{Nature Ecology & Evolution}, 1, 0089.
+zoogeographical boundaries. \emph{Nature Ecology & Evolution} 1, 0089.
+}
+\seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html#optimaln}.
+
+Associated functions:
+\link{hclu_hierarclust}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr
