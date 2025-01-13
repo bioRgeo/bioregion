@@ -1,7 +1,6 @@
-# Preamble code ----------------------------------------------------------------
+# Inputs -----------------------------------------------------------------------
 dissim <- dissimilarity(fishmat, metric = "all")
 
-# User-defined number of clusters
 set.seed(1)
 tree1 <- hclu_hierarclust(dissim, 
                           n_clust = 2:48, 
@@ -47,6 +46,11 @@ partdf3 <- data.frame(K = c(3,5,6,2,3),
                      metric1 = c(NA,0.2,0.6,0.7,13),
                      metric2 = rep(1,5))
 
+partdf4 <- data.frame(K = c(3,5,6,2,3), 
+                      n_clusters = c(3,5,6,23,6),
+                      metric1 = rep(1,5),
+                      metric2 = rep(1,5))
+
 a2 <- a
 a2$evaluation_df$tot_endemism <- c(2, rep(1, dim(a2$evaluation_df)[1]-1))
 
@@ -87,8 +91,8 @@ test_that("valid output", {
 
 })
 
-# Tests for invalid inputs ----------------------------------------------------
-test_that("error messages with wrong inputs", {
+# Tests for invalid inputs -----------------------------------------------------
+test_that("invalid inputs", {
   
   expect_error(
     find_optimal_n("zz"),
@@ -141,22 +145,25 @@ test_that("error messages with wrong inputs", {
     "^Metrics metric2")
   
   expect_warning(
+    expect_error(
+      find_optimal_n(partdf4,
+                     plot = FALSE),
+      "^The selected partition metrics"),
+    "^Metrics metric1")
+  
+  expect_warning(
    find_optimal_n(a2,
                   criterion = "breakpoints",
                   plot = FALSE),
    "^Metrics tot_endemism")
   
-  #expect_message(
-  #  find_optimal_n(a3,
-  #                 criterion = "increasing_step",
-  #                 plot = FALSE),
-  #  "^...Caveat: be cautious with the interpretation of")
-  
-  expect_warning(
-    find_optimal_n(a3,
-                   criterion = "increasing_step",
-                   plot = FALSE),
-    "^Criterion 'increasing_step' cannot work properly with ")
+  expect_message(
+    expect_warning(
+      find_optimal_n(a3,
+                     criterion = "increasing_step",
+                     plot = FALSE),
+      "^Criterion 'increasing_step' cannot work properly with "),
+   "^...Caveat: be cautious with the interpretation of")
   
   expect_warning(
     find_optimal_n(a3,

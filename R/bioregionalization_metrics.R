@@ -1,121 +1,112 @@
 #' Calculate metrics for one or several partitions
 #' 
-#' This function aims at calculating metrics for one or several partitions, 
-#' usually on outputs from `netclu_`, `hclu_` or `nhclu_` functions. Metrics
-#' may require the users to provide either a similarity or dissimilarity
-#' matrix, or to provide the initial species-site table.
+#' This function calculates metrics for one or several partitions, 
+#' typically based on outputs from `netclu_`, `hclu_`, or `nhclu_` functions. 
+#' Some metrics may require users to provide either a similarity or dissimilarity 
+#' matrix, or the initial species-site table.
 #'
-#' @param cluster_object a `bioregion.clusters` object.
+#' @param cluster_object A `bioregion.clusters` object.
 #' 
-#' @param eval_metric a `character` vector or a single `character` string 
-#' indicating metric(s) to be calculated to investigate the effect of different 
-#' number of clusters. Available options are `"pc_distance"`, `"anosim"`,
-#'  `"avg_endemism"` or `"tot_endemism"`.
+#' @param eval_metric A `character` vector or a single `character` string 
+#' indicating the metric(s) to be calculated to assess the effect of different 
+#' numbers of clusters. Available options are `"pc_distance"`, `"anosim"`,
+#' `"avg_endemism"`, or `"tot_endemism"`. If `"all"` is specified, all metrics
+#'  will be calculated.
 #'  
-#' @param dissimilarity a `dist` object or a `bioregion.pairwise.metric` 
-#' object (output from [similarity_to_dissimilarity()]). Necessary if 
-#' `eval_metric` includes `pc_distance` and `tree` is not a
-#' `bioregion.hierar.tree` object
+#' @param dissimilarity A `dist` object or a `bioregion.pairwise.metric` 
+#' object (output from [similarity_to_dissimilarity()]). Required if 
+#' `eval_metric` includes `"pc_distance"` and `tree` is not a
+#' `bioregion.hierar.tree` object.
 #' 
-#' @param dissimilarity_index a `character` string indicating the dissimilarity
-#' (beta-diversity) index to be used in case `dist` is a `data.frame` with
+#' @param dissimilarity_index A `character` string indicating the dissimilarity
+#' (beta-diversity) index to use if dissimilarity is a `data.frame` with
 #' multiple dissimilarity indices.
 #' 
-#' @param net the species-site network (i.e., bipartite network). Should be
-#' provided as `data.frame± if `eval_metric` includes `"avg_endemism"` or 
+#' @param net The site-species network (i.e., bipartite network). Should be
+#' provided as a `data.frame` if `eval_metric` includes `"avg_endemism"` or 
 #' `"tot_endemism"`.
 #' 
-#' @param site_col name or number for the column of site nodes (i.e. primary
-#' nodes). Should be provided if `eval_metric` includes `"avg_endemism"` or
-#' `"tot_endemism"`.
-#' 
-#' @param species_col name or number for the column of species nodes (i.e.
-#' feature nodes). Should be provided if `eval_metric` includes
+#' @param site_col The name or index of the column representing site nodes 
+#' (i.e., primary nodes). Should be provided if `eval_metric` includes 
 #' `"avg_endemism"` or `"tot_endemism"`.
+#' 
+#' @param species_col The name or index of the column representing species nodes 
+#' (i.e., feature nodes). Should be provided if `eval_metric` includes
+#' `"avg_endemism"` or `"tot_endemism"`.
+#' 
+#' @return A `list` of class `bioregion.partition.metrics` with two to three elements:
+#' \itemize{
+#' \item{`args`: Input arguments.}
+#' \item{`evaluation_df`: A `data.frame` containing the `eval_metric`
+#' values for all explored numbers of clusters.}
+#' \item{`endemism_results`: If endemism calculations are requested, a list
+#' with the endemism results for each partition.}
+#' }
 #'
 #' @details
-#'
 #' **Evaluation metrics:**
 #' 
 #' \itemize{
 #' 
-#' \item{`pc_distance`: this metric is the method used by
-#' Holt et al. (2013). It is a ratio of the between-cluster sum of
-#' dissimilarity (beta-diversity) versus the total sum of dissimilarity
-#' (beta-diversity) for the full dissimilarity matrix. In other words, it is
-#' calculated on the basis of two elements. First, the total sum of
-#' dissimilarity is calculated by summing the entire dissimilarity matrix
-#' (`dist`). Second, the between-cluster sum of dissimilarity is calculated as
-#' follows: for a given number of cluster, the dissimilarity is only summed
-#' between clusters, not within clusters. To do that efficiently, all pairs of
-#' sites within the same clusters have their dissimilarity set to zero in
-#' the dissimilarity matrix, and then the dissimilarity matrix is summed. The
-#' `pc_distance` ratio is obtained by dividing the between-cluster sum of
-#' dissimilarity by the total sum of dissimilarity.}
+#' \item{`pc_distance`: This metric, as used by Holt et al. (2013), is the 
+#' ratio of the between-cluster sum of dissimilarities (beta-diversity) to the 
+#' total sum of dissimilarities for the full dissimilarity matrix. It is calculated 
+#' in two steps: 
+#' - Compute the total sum of dissimilarities by summing all elements of the 
+#' dissimilarity matrix.
+#' - Compute the between-cluster sum of dissimilarities by setting within-cluster 
+#' dissimilarities to zero and summing the matrix. 
+#' The `pc_distance` ratio is obtained by dividing the between-cluster sum of 
+#' dissimilarities by the total sum of dissimilarities.}
 #' 
-#' \item{`anosim`: This metric is the statistic used in Analysis of
-#' Similarities, as suggested in Castro-Insua et al. (2018) (see
-#' [vegan::anosim()][vegan::anosim]). It compares the between-cluster
-#' dissimilarities to the within-cluster dissimilarities. It is based based on
-#' the difference of mean ranks between groups and within groups with the
-#' following formula:
-#' R = (r_B - r_W)/(N (N-1) / 4),
-#' where r_B and r_W are the average ranks
-#' between and within clusters respectively, and N is the total
-#' number of sites.
-#' Note that the function does not estimate the significance here, it only
-#' computes the statistic - for significance testing see
-#' [vegan::anosim()][vegan::anosim]}.
+#' \item{`anosim`: This metric is the statistic used in the Analysis of 
+#' Similarities, as described in Castro-Insua et al. (2018). It compares 
+#' between-cluster and within-cluster dissimilarities. The statistic is computed as: 
+#' R = (r_B - r_W) / (N (N-1) / 4), 
+#' where r_B and r_W are the average ranks of between-cluster and within-cluster 
+#' dissimilarities, respectively, and N is the total number of sites. 
+#' Note: This function does not estimate significance; for significance testing, 
+#' use [vegan::anosim()][vegan::anosim].}
 #' 
-#' \item{`avg_endemism`: this metric is the average percentage of
-#' endemism in clusters as
-#' recommended by Kreft & Jetz (2010). Calculated as follows:
-#' End_mean = sum_i (E_i / S_i)/K
-#' where E_i is the number of endemic species in cluster i, S_i is the number of
-#' species in cluster i, and K the maximum number of clusters.
-#' }
+#' \item{`avg_endemism`: This metric is the average percentage of 
+#' endemism in clusters, as recommended by Kreft & Jetz (2010). It is calculated as: 
+#' End_mean = sum_i (E_i / S_i) / K, 
+#' where E_i is the number of endemic species in cluster i, S_i is the number of 
+#' species in cluster i, and K is the total number of clusters.}
 #' 
-#' \item{`tot_endemism`: this metric is the total endemism across all clusters,
-#' as recommended by Kreft & Jetz (2010). Calculated as follows:
-#' End_tot = E \ C
-#' where E is total the number of endemics (i.e., species found in
-#' only one cluster) and C is the number of non-endemic species.
+#' \item{`tot_endemism`: This metric is the total endemism across all clusters, 
+#' as recommended by Kreft & Jetz (2010). It is calculated as: 
+#' End_tot = E / C, 
+#' where E is the total number of endemic species (i.e., species found in only one 
+#' cluster) and C is the number of non-endemic species.}
 #' }
-#' }
-#'
-#' @return
-#' a `list` of class `bioregion.partition.metrics` with two to three elements:
-#' \itemize{
-#' \item{`args`: input arguments
-#' }
-#' \item{`evaluation_df`: the data.frame containing `eval_metric`
-#' for all explored numbers of clusters
-#' }
-#' \item{`endemism_results`: if endemism calculations were requested, a list
-#' with the endemism results for each partition
-#' }
-#' }
-#' @import data.table 
 #' 
 #' @references
 #' Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity measures 
 #' affected by richness differences yield biased delimitations of biogeographic 
-#' realms. \emph{Nature Communications}, 9(1), 9-11.
+#' realms. \emph{Nature Communications} 9, 9-11.
 #'
 #' Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P, 
 #' Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ, 
 #' Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of 
-#' the world. \emph{Science}, 339(6115), 74-78.
+#' the world. \emph{Science} 339, 74-78.
 #'
 #' Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
-#' based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
+#' based on species distributions. \emph{Journal of Biogeography} 37, 2029-2053.
+#' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html#optimaln}.
+#' 
+#' Associated functions: 
+#' [compare_bioregionalizations] [find_optimal_n]
 #' 
 #' @author
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' 
-#' @seealso [compare_bioregionalizations]
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 #' 20, 25)
@@ -128,58 +119,95 @@
 #' 
 #' # User-defined number of clusters
 #' tree1 <- hclu_hierarclust(dissim, 
-#'                           n_clust = 2:20, index = "Simpson")
+#'                           n_clust = 10:15, 
+#'                           index = "Simpson")
 #' tree1
 #' 
-#' a <- bioregionalization_metrics(tree1, dissimilarity = dissim, net = comnet,
-#'                        site_col = "Node1", species_col = "Node2",
-#'                        eval_metric = c("tot_endemism", "avg_endemism",
-#'                                       "pc_distance", "anosim"))
+#' a <- bioregionalization_metrics(tree1, 
+#'                                 dissimilarity = dissim, 
+#'                                 net = comnet,
+#'                                 site_col = "Node1", 
+#'                                 species_col = "Node2",
+#'                                 eval_metric = c("tot_endemism", 
+#'                                                 "avg_endemism",
+#'                                                 "pc_distance", 
+#'                                                 "anosim"))
 #' a
 #'
 #' @importFrom stats as.dist
 #' @importFrom data.table chmatch as.data.table
+#' @import data.table 
 #'
 #'@export
-
-bioregionalization_metrics <- function(
-    cluster_object, dissimilarity = NULL,
-    dissimilarity_index = NULL, 
-    net = NULL,
-    site_col = 1, species_col = 2,
-    eval_metric = c("pc_distance", "anosim", "avg_endemism", "tot_endemism")){
-  dissimilarity_based_metrics <- c("pc_distance", "anosim")
-  compo_based_metrics <- c("avg_endemism", "tot_endemism")
+bioregionalization_metrics <- function(cluster_object, 
+                                       dissimilarity = NULL,
+                                       dissimilarity_index = NULL, 
+                                       net = NULL,
+                                       site_col = 1, 
+                                       species_col = 2,
+                                       eval_metric = "all"){
   
-  # 1. Does input object contains partitions? ---------------------------------
+  dissimilarity_based_metrics <- c("pc_distance", 
+                                    "anosim")
+  compo_based_metrics <- c("avg_endemism", 
+                           "tot_endemism")
+  
+  # Control cluster_object
   if (inherits(cluster_object, "bioregion.clusters")) {
     if (inherits(cluster_object$clusters, "data.frame")) {
       has.clusters <- TRUE # To remove? Does not seem relevant anymore
     } else {
-      if (cluster_object$name == "hierarchical_clustering") {
-        stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using bioregionalization_metrics()
-        See ?hclu_hierarclust or ?cut_tree")
+      if (cluster_object$name == "hclu_hierarclust") {
+        stop(paste0("No clusters have been generated for your hierarchical ",
+                    "tree, please extract clusters from the tree before using ",
+                    "bioregionalization_metrics().\n",
+                    "See ?hclu_hierarclust or ?cut_tree"), 
+             call. = FALSE)
       } else {
-        stop(
-          "cluster_object does not have the expected type of 'clusters' slot")
+        stop(paste0("cluster_object does not have the expected type of ",
+                    "'clusters' slot"), 
+             call. = FALSE)
       }
     }
   } else {
-    stop("This function is designed to work  on bioregion.clusters objects
-         (outputs from clustering functions)")
+    stop(paste0("This function is designed to work on bioregion.clusters ",
+                "objects (outputs from clustering functions)"), 
+         call. = FALSE)
     # Add here the possibility to work on data.frame / matrices of clusters
     # directly
   } 
   
+  # Control eval_metrics
+  controls(args = eval_metric, data = NULL, type = "character_vector")
+  if ("all" %in% eval_metric) {
+    eval_metric <- c(dissimilarity_based_metrics, 
+                     compo_based_metrics)
+  }
+  if (length(intersect(c(dissimilarity_based_metrics, compo_based_metrics), 
+                       eval_metric)) != length(eval_metric)) {
+    stop(paste0("One or several metric(s) chosen are not", 
+                " available.\n",
+                "Please choose from the following:\n",
+                "pc_distance, anosim, avg_endemism or tot_endemism."),
+         call. = FALSE)
+    
+    
+  }
+
+  # Control dissimilarity_index
+  if(!is.null(dissimilarity_index)){
+    controls(args = dissimilarity_index, type = "character")
+  }
+  
+  # Control dissimilarity
   if (is.null(dissimilarity)) {
     has.dissimilarity <- FALSE
     if(any(eval_metric %in% dissimilarity_based_metrics)){
-      warning(paste0("No dissimilarity matrix provided, so metrics ",
+      warning(paste0("No dissimilarity oject provided, so metrics ",
                      paste(eval_metric[which(eval_metric %in%
-                                               dissimilarity_based_metrics)],
+                                             dissimilarity_based_metrics)],
                            collapse = ", "),
-                     " will not be computed\n"))
+                     " will not be computed.\n"))
       eval_metric <-
         eval_metric[-which(eval_metric %in% dissimilarity_based_metrics)]
     }
@@ -188,8 +216,9 @@ bioregionalization_metrics <- function(
       if(is.null(dissimilarity_index)) {
         dissimilarity_index <- cluster_object$args$index
       } else if(!(dissimilarity_index %in% colnames(dissimilarity))) {
-        stop("dissimilarity_index does not exist in the dissimilarity object.
-             Did you misspecify the metric name?")
+        stop(paste0("dissimilarity_index does not exist in the dissimilarity ",
+                    "object. Did you misspecify the metric name?"),
+             call. = FALSE)
       }
       dist_object <- stats::as.dist(
         net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2],
@@ -197,43 +226,65 @@ bioregionalization_metrics <- function(
                    weight = TRUE, squared = TRUE, symmetrical = TRUE))
       has.dissimilarity <- TRUE
     } else{
-      stop("dissimilarity must be an object containing dissimilarity indices
-           from dissimilarity() or similarity_to_dissimilarity(), or an object
-           of class dist")
+      stop(paste0("dissimilarity must be an object containing dissimilarity ",
+                  "indices from dissimilarity() or ",
+                  "similarity_to_dissimilarity(), or an object of class dist."),
+           call. = FALSE)
     }
   } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
                  inherits(dissimilarity, "dist"))){
-    if(is.numeric(dissimilarity_index)){
-      dissimilarity_index <- names(dissimilarity)[dissimilarity_index]
-    }
-    dist_object <- stats::as.dist(
-      net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2],
-                                   dissimilarity_index)],
-                 weight = TRUE, squared = TRUE, symmetrical = TRUE))
-    has.dissimilarity <- TRUE
+    #if(is.numeric(dissimilarity_index)){
+    #  dissimilarity_index <- names(dissimilarity)[dissimilarity_index]
+    #}
+    #dist_object <- stats::as.dist(
+    #  net_to_mat(dissimilarity[, c(colnames(dissimilarity)[1:2],
+    #                               dissimilarity_index)],
+    #             weight = TRUE, squared = TRUE, symmetrical = TRUE))
+    #has.dissimilarity <- TRUE
+    #
+    #if(!(dissimilarity_index %in% colnames(dissimilarity))){
+    #  stop(paste0("dissimilarity is not a bioregion.pairwise.metric object, ",
+    #              "a dissimilarity matrix (class dist) or a data.frame with ",
+    #              "at least 3 columns (site1, site2, and your dissimilarity ",
+    #              "index)"),
+    #       call. = FALSE)
+    #}
     
-    if(!(dissimilarity_index %in% colnames(dissimilarity))){
-      stop("dissimilarity is not a bioregion.pairwise.metric object, a
-           dissimilarity matrix (class dist) or a data.frame with at least 3
-           columns (site1, site2, and your dissimilarity index)")
+    stop(paste0("dissimilarity must be a bioregion.pairwise.metric object or ",
+                "a dissimilarity matrix (class dist)."),
+        call. = FALSE)
+  }
+  
+  if(has.dissimilarity){
+    if(attr(dist_object, "Size") != cluster_object$inputs$nb_sites){
+      stop(paste0("cluster_object and dissimilarity have different ",
+                  "number of sites."),
+           call. = FALSE)
     }
   }
   
   if (is.null(net)) {
     has.contin <- FALSE
     if(any(eval_metric %in% compo_based_metrics)){
-      warning(paste0("No species-site network provided, so metrics ",
+      warning(paste0("No site-species network provided, so metrics ",
                      paste(eval_metric[which(eval_metric %in%
                                                compo_based_metrics)],
-                           collapse = ", "), " will not be computed\n"))
+                           collapse = ", "), 
+                     " will not be computed\n"))
       eval_metric <- eval_metric[-which(eval_metric %in% compo_based_metrics)]
     }
   } else {
+    if(site_col == species_col){
+      stop("site_col and species_col should not be the same.", call. = FALSE)
+    }
+    controls(args = site_col, data = net, type = "input_net_bip_col")
+    controls(args = species_col, data = net, type = "input_net_bip_col")
     if(has.clusters){
       if(any(!(cluster_object$clusters$ID %in% c(net[, site_col],
                                                  net[, species_col])))) {
-        stop("Some elements of the cluster table (column ID) cannot be found in
-             the network")
+        stop(paste0("Some elements of the cluster table (column ID) cannot be ",
+                    "found in net."),
+             call. = FALSE)
       }
     } 
     if(is.numeric(site_col)){
@@ -250,8 +301,9 @@ bioregionalization_metrics <- function(
   }
   
   if(!length(eval_metric)){
-    stop("No evaluation metric can be computed because of missing arguments.
-         Check arguments dissimilarity and sp_site_table")
+    stop(paste0("No evaluation metric can be computed because of missing ",
+                "arguments. Check arguments dissimilarity and sp_site_table"), 
+                call. = FALSE)
   }
   
   nb_sites <- cluster_object$inputs$nb_sites

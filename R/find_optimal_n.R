@@ -230,13 +230,13 @@ find_optimal_n <- function(partitions,
     metrics_to_use <- metrics_to_use[-which(metrics_to_use %in% 
                                               exclude_metrics)]
   }
-  #if(!(length(metrics_to_use))) {
-  #  stop(paste0("The selected partition metrics did not vary sufficiently ",
-  #              "in input. Please check your partition metrics or increase ",
-  #              "your range of partitions when computing ",
-  #              "bioregionalization_metrics()"), 
-  #       call. = FALSE)
-  #}
+  if(!(length(metrics_to_use))) {
+    stop(paste0("The selected partition metrics did not vary sufficiently ",
+                "in input. Please check your partition metrics or increase ",
+                "your range of partitions when computing ",
+                "bioregionalization_metrics()"), 
+         call. = FALSE)
+  }
   
   #print(metrics_to_use)
   

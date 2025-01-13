@@ -11,103 +11,93 @@ bioregionalization_metrics(
   net = NULL,
   site_col = 1,
   species_col = 2,
-  eval_metric = c("pc_distance", "anosim", "avg_endemism", "tot_endemism")
+  eval_metric = "all"
 )
 }
 \arguments{
-\item{cluster_object}{a \code{bioregion.clusters} object.}
+\item{cluster_object}{A \code{bioregion.clusters} object.}
 
-\item{dissimilarity}{a \code{dist} object or a \code{bioregion.pairwise.metric}
-object (output from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Necessary if
-\code{eval_metric} includes \code{pc_distance} and \code{tree} is not a
-\code{bioregion.hierar.tree} object}
+\item{dissimilarity}{A \code{dist} object or a \code{bioregion.pairwise.metric}
+object (output from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Required if
+\code{eval_metric} includes \code{"pc_distance"} and \code{tree} is not a
+\code{bioregion.hierar.tree} object.}
 
-\item{dissimilarity_index}{a \code{character} string indicating the dissimilarity
-(beta-diversity) index to be used in case \code{dist} is a \code{data.frame} with
+\item{dissimilarity_index}{A \code{character} string indicating the dissimilarity
+(beta-diversity) index to use if dissimilarity is a \code{data.frame} with
 multiple dissimilarity indices.}
 
-\item{net}{the species-site network (i.e., bipartite network). Should be
-provided as \verb{data.frame± if }eval_metric\code{includes}"avg_endemism"\code{or }"tot_endemism"`.}
-
-\item{site_col}{name or number for the column of site nodes (i.e. primary
-nodes). Should be provided if \code{eval_metric} includes \code{"avg_endemism"} or
+\item{net}{The site-species network (i.e., bipartite network). Should be
+provided as a \code{data.frame} if \code{eval_metric} includes \code{"avg_endemism"} or
 \code{"tot_endemism"}.}
 
-\item{species_col}{name or number for the column of species nodes (i.e.
-feature nodes). Should be provided if \code{eval_metric} includes
+\item{site_col}{The name or index of the column representing site nodes
+(i.e., primary nodes). Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}.}
 
-\item{eval_metric}{a \code{character} vector or a single \code{character} string
-indicating metric(s) to be calculated to investigate the effect of different
-number of clusters. Available options are \code{"pc_distance"}, \code{"anosim"},
+\item{species_col}{The name or index of the column representing species nodes
+(i.e., feature nodes). Should be provided if \code{eval_metric} includes
 \code{"avg_endemism"} or \code{"tot_endemism"}.}
+
+\item{eval_metric}{A \code{character} vector or a single \code{character} string
+indicating the metric(s) to be calculated to assess the effect of different
+numbers of clusters. Available options are \code{"pc_distance"}, \code{"anosim"},
+\code{"avg_endemism"}, or \code{"tot_endemism"}. If \code{"all"} is specified, all metrics
+will be calculated.}
 }
 \value{
-a \code{list} of class \code{bioregion.partition.metrics} with two to three elements:
+A \code{list} of class \code{bioregion.partition.metrics} with two to three elements:
 \itemize{
-\item{\code{args}: input arguments
-}
-\item{\code{evaluation_df}: the data.frame containing \code{eval_metric}
-for all explored numbers of clusters
-}
-\item{\code{endemism_results}: if endemism calculations were requested, a list
-with the endemism results for each partition
-}
+\item{\code{args}: Input arguments.}
+\item{\code{evaluation_df}: A \code{data.frame} containing the \code{eval_metric}
+values for all explored numbers of clusters.}
+\item{\code{endemism_results}: If endemism calculations are requested, a list
+with the endemism results for each partition.}
 }
 }
 \description{
-This function aims at calculating metrics for one or several partitions,
-usually on outputs from \code{netclu_}, \code{hclu_} or \code{nhclu_} functions. Metrics
-may require the users to provide either a similarity or dissimilarity
-matrix, or to provide the initial species-site table.
+This function calculates metrics for one or several partitions,
+typically based on outputs from \code{netclu_}, \code{hclu_}, or \code{nhclu_} functions.
+Some metrics may require users to provide either a similarity or dissimilarity
+matrix, or the initial species-site table.
 }
 \details{
 \strong{Evaluation metrics:}
 
 \itemize{
 
-\item{\code{pc_distance}: this metric is the method used by
-Holt et al. (2013). It is a ratio of the between-cluster sum of
-dissimilarity (beta-diversity) versus the total sum of dissimilarity
-(beta-diversity) for the full dissimilarity matrix. In other words, it is
-calculated on the basis of two elements. First, the total sum of
-dissimilarity is calculated by summing the entire dissimilarity matrix
-(\code{dist}). Second, the between-cluster sum of dissimilarity is calculated as
-follows: for a given number of cluster, the dissimilarity is only summed
-between clusters, not within clusters. To do that efficiently, all pairs of
-sites within the same clusters have their dissimilarity set to zero in
-the dissimilarity matrix, and then the dissimilarity matrix is summed. The
-\code{pc_distance} ratio is obtained by dividing the between-cluster sum of
-dissimilarity by the total sum of dissimilarity.}
+\item{\code{pc_distance}: This metric, as used by Holt et al. (2013), is the
+ratio of the between-cluster sum of dissimilarities (beta-diversity) to the
+total sum of dissimilarities for the full dissimilarity matrix. It is calculated
+in two steps:
+\itemize{
+\item Compute the total sum of dissimilarities by summing all elements of the
+dissimilarity matrix.
+\item Compute the between-cluster sum of dissimilarities by setting within-cluster
+dissimilarities to zero and summing the matrix.
+The \code{pc_distance} ratio is obtained by dividing the between-cluster sum of
+dissimilarities by the total sum of dissimilarities.}
+}
 
-\item{\code{anosim}: This metric is the statistic used in Analysis of
-Similarities, as suggested in Castro-Insua et al. (2018) (see
-\link[vegan:anosim]{vegan::anosim()}). It compares the between-cluster
-dissimilarities to the within-cluster dissimilarities. It is based based on
-the difference of mean ranks between groups and within groups with the
-following formula:
-R = (r_B - r_W)/(N (N-1) / 4),
-where r_B and r_W are the average ranks
-between and within clusters respectively, and N is the total
-number of sites.
-Note that the function does not estimate the significance here, it only
-computes the statistic - for significance testing see
-\link[vegan:anosim]{vegan::anosim()}}.
+\item{\code{anosim}: This metric is the statistic used in the Analysis of
+Similarities, as described in Castro-Insua et al. (2018). It compares
+between-cluster and within-cluster dissimilarities. The statistic is computed as:
+R = (r_B - r_W) / (N (N-1) / 4),
+where r_B and r_W are the average ranks of between-cluster and within-cluster
+dissimilarities, respectively, and N is the total number of sites.
+Note: This function does not estimate significance; for significance testing,
+use \link[vegan:anosim]{vegan::anosim()}.}
 
-\item{\code{avg_endemism}: this metric is the average percentage of
-endemism in clusters as
-recommended by Kreft & Jetz (2010). Calculated as follows:
-End_mean = sum_i (E_i / S_i)/K
+\item{\code{avg_endemism}: This metric is the average percentage of
+endemism in clusters, as recommended by Kreft & Jetz (2010). It is calculated as:
+End_mean = sum_i (E_i / S_i) / K,
 where E_i is the number of endemic species in cluster i, S_i is the number of
-species in cluster i, and K the maximum number of clusters.
-}
+species in cluster i, and K is the total number of clusters.}
 
-\item{\code{tot_endemism}: this metric is the total endemism across all clusters,
-as recommended by Kreft & Jetz (2010). Calculated as follows:
-End_tot = E \ C
-where E is total the number of endemics (i.e., species found in
-only one cluster) and C is the number of non-endemic species.
-}
+\item{\code{tot_endemism}: This metric is the total endemism across all clusters,
+as recommended by Kreft & Jetz (2010). It is calculated as:
+End_tot = E / C,
+where E is the total number of endemic species (i.e., species found in only one
+cluster) and C is the number of non-endemic species.}
 }
 }
 \examples{
@@ -122,31 +112,42 @@ dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
 tree1 <- hclu_hierarclust(dissim, 
-                          n_clust = 2:20, index = "Simpson")
+                          n_clust = 10:15, 
+                          index = "Simpson")
 tree1
 
-a <- bioregionalization_metrics(tree1, dissimilarity = dissim, net = comnet,
-                       site_col = "Node1", species_col = "Node2",
-                       eval_metric = c("tot_endemism", "avg_endemism",
-                                      "pc_distance", "anosim"))
+a <- bioregionalization_metrics(tree1, 
+                                dissimilarity = dissim, 
+                                net = comnet,
+                                site_col = "Node1", 
+                                species_col = "Node2",
+                                eval_metric = c("tot_endemism", 
+                                                "avg_endemism",
+                                                "pc_distance", 
+                                                "anosim"))
 a
 
 }
 \references{
 Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity measures
 affected by richness differences yield biased delimitations of biogeographic
-realms. \emph{Nature Communications}, 9(1), 9-11.
+realms. \emph{Nature Communications} 9, 9-11.
 
 Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D, Fabre P,
 Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z, Whittaker RJ,
 Fjeldså J & Rahbek C (2013) An update of Wallace's zoogeographic regions of
-the world. \emph{Science}, 339(6115), 74-78.
+the world. \emph{Science} 339, 74-78.
 
 Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
-based on species distributions. \emph{Journal of Biogeography}, 37, 2029-2053.
+based on species distributions. \emph{Journal of Biogeography} 37, 2029-2053.
 }
 \seealso{
-\link{compare_bioregionalizations}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html#optimaln}.
+
+Associated functions:
+\link{compare_bioregionalizations} \link{find_optimal_n}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

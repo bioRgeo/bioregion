@@ -58,12 +58,12 @@ reference:
 - title: Clustering analysis
   desc: ~
   contents:
-  - compare_bioregionalizations
-  - find_optimal_n
-  - bioregionalization_metrics
   - site_species_metrics
   - bioregion_metrics
-
+  - bioregionalization_metrics
+  - find_optimal_n
+  - compare_bioregionalizations
+  
 - title: Visualisation
   desc: ~
   contents: map_bioregions
