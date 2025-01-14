@@ -7,32 +7,32 @@
 map_bioregions(clusters, geometry, write_clusters = FALSE, plot = TRUE, ...)
 }
 \arguments{
-\item{clusters}{an object of class \code{bioregion.clusters} or a \code{data.frame}. If
-a \code{data.frame} is used, the first column should represent the sites' ID, and
-the next column(s) the clusters.}
+\item{clusters}{An object of class \code{bioregion.clusters} or a \code{data.frame}.
+If a \code{data.frame} is used, the first column should represent the sites'
+ID, and the subsequent column(s) should represent the clusters.}
 
-\item{geometry}{a spatial object that can be handled by the \code{sf} package.
+\item{geometry}{A spatial object that can be handled by the \code{sf} package.
 The first attribute should correspond to the sites' ID (see Details).}
 
-\item{write_clusters}{a \code{boolean} indicating if the \code{clusters}
-should be added in \code{geometry}.}
+\item{write_clusters}{A \code{boolean} indicating if the \code{clusters} should be
+added to the \code{geometry}.}
 
-\item{plot}{a \code{boolean} indicating if the plot should be drawn.}
+\item{plot}{A \code{boolean} indicating if the plot should be drawn.}
 
-\item{...}{further arguments to be passed to \code{sf::plot()}.}
+\item{...}{Further arguments to be passed to \code{sf::plot()}.}
 }
 \value{
 One or several maps of bioregions if \code{plot = TRUE} and the
 geometry with additional clusters' attributes if \code{write_clusters = TRUE}.
 }
 \description{
-This plot function can be used to visualise bioregions based on a
-bioregion.clusters object combined with a geometry (sf objects).
+This plot function can be used to visualize bioregions based on a
+\code{bioregion.clusters} object combined with a geometry (\code{sf} objects).
 }
 \details{
 The \code{clusters} and \code{geometry} site IDs should correspond. They should
-have the same type (i.e. \code{character} is cluster is a
-\code{bioregion.clusters} object) and the site of \code{clusters} should be
+have the same type (i.e., \code{character} if \code{clusters} is a
+\code{bioregion.clusters} object) and the sites of \code{clusters} should be
 included in the sites of \code{geometry}.
 }
 \examples{

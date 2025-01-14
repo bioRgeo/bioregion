@@ -1,93 +1,93 @@
 #' Calculate contribution metrics of sites and species
 #' 
-#' This function calculates metrics that assess the contribution of a given
+#' This function calculates metrics to assess the contribution of a given
 #' species or site to its bioregion.
 #' 
-#' @param cluster_object a `bioregion.clusters` object or a `data.frame` or a 
-#' list of `data.frame` containing multiple partitions. At least two partitions
-#' are required. If a list of `data.frame` is provided, they should all have
-#' the same number of rows (i.e., same items in the clustering for all
-#' partitions). 
+#' @param cluster_object A `bioregion.clusters` object, a `data.frame`, or a 
+#' list of `data.frame`s containing multiple partitions. At least two 
+#' partitions are required. If a list of `data.frame`s is provided, they must 
+#' all have the same number of rows (i.e., the same items in the clustering).
 #' 
-#' @param comat a co-occurrence `matrix` with sites as rows and species as
+#' @param comat A co-occurrence `matrix` with sites as rows and species as 
 #' columns. 
 #' 
-#' @param bipartite_link `NULL` by default. Needed for `Cz` indices. A
-#' `data.frame` where each row represents the interaction between two nodes
-#'  and an optional third column indicating the weight of the interaction.  
+#' @param bipartite_link `NULL` by default. Required for `Cz` indices. A 
+#' `data.frame` where each row represents an interaction between two nodes 
+#' and an optional third column indicating the interaction's weight.  
 #' 
-#' @param indices a `character` specifying the contribution metric to compute.
+#' @param indices A `character` specifying the contribution metric to compute. 
 #' Available options are `rho` and `Cz`.
 #' 
+#' @return 
+#' A `data.frame` with columns `Bioregion`, `Species`, and the desired summary 
+#' statistics, or a list of `data.frame`s if `Cz` and other indices are 
+#' selected.
+#' 
 #' @details 
-#' The \eqn{\rho} metric is derived from Lenormand et al. (2019).
-#' Its formula is the following:
+#' The \eqn{\rho} metric is derived from Lenormand et al. (2019) with the 
+#' following formula:
 #' 
-#' \eqn{\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
+#' \eqn{\rho_{ij} = \frac{n_{ij} - \frac{n_i n_j}{n}}{\sqrt{\left(\frac{n - n_j}{
+#' n-1}\right) \left(1-\frac{n_j}{n}\right) \frac{n_i n_j}{n}}}}
 #' 
-#' with \eqn{n} the number of sites, \eqn{n_i} the number of sites in which
-#' species \eqn{i} is present, \eqn{n_j} the number of sites belonging to the
-#' bioregion \eqn{j}, \eqn{n_ij} the number of occurrences of species \eqn{i}
-#' in sites belonging to the bioregion \eqn{j}.
+#' where \eqn{n} is the number of sites, \eqn{n_i} is the number of sites in 
+#' which species \eqn{i} is present, \eqn{n_j} is the number of sites in 
+#' bioregion \eqn{j}, and \eqn{n_{ij}} is the number of occurrences of species 
+#' \eqn{i} in sites of bioregion \eqn{j}.
 #' 
-#' Affinity, fidelity and individual contributions describe how species are
-#' linked to their bioregions. These metrics are described in
-#' Bernardo-Madrid et al. (2019).
-#' Affinity of species to their region, \eqn{A_i = R_i / Z}
-#' where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
-#' associated bioregion, and \eqn{Z} the total size (number of sites) of the
-#' bioregion.
+#' Affinity, fidelity, and individual contributions describe how species are 
+#' linked to their bioregions. These metrics are described in Bernardo-Madrid 
+#' et al. (2019):
 #' 
-#' A high affinity means that the species is occupying most sites of its
-#' associated bioregion.
+#' - Affinity of species to their region: 
+#'   \eqn{A_i = \frac{R_i}{Z}}, where \eqn{R_i} is the occurrence/range size 
+#'   of species \eqn{i} in its associated bioregion, and \eqn{Z} is the total 
+#'   size (number of sites) of the bioregion. High affinity indicates that the 
+#'   species occupies most sites in its bioregion.
 #' 
-#' Fidelity of species to their region, \eqn{F_i = R_i / D_i}
-#' where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
-#' associated bioregion, and \eqn{D_i} is its total occurrence/range size.
+#' - Fidelity of species to their region: 
+#'   \eqn{F_i = \frac{R_i}{D_i}}, where \eqn{R_i} is the occurrence/range size 
+#'   of species \eqn{i} in its bioregion, and \eqn{D_i} is its total range size. 
+#'   High fidelity indicates that the species is not present in other regions.
 #' 
-#' A high fidelity means that the species is not present in other bioregions
-#' than their associated one.
+#' - Indicator Value of species: 
+#'   \eqn{IndVal = F_i \cdot A_i}.
 #' 
-#' Indicator Value of species, \eqn{IndVal = F_i * A_i}
+#' `Cz` metrics are derived from Guimerà & Amaral (2005):
 #' 
-#' `Cz` metrics are derived from Guimerà & Amaral (2005).
-#' Their respective formula are:
-#' \eqn{C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}}
+#' - Participation coefficient: 
+#'   \eqn{C_i = 1 - \sum_{s=1}^{N_M}{\left(\frac{k_{is}}{k_i}\right)^2}}, where 
+#'   \eqn{k_{is}} is the number of links of node \eqn{i} to nodes in bioregion 
+#'   \eqn{s}, and \eqn{k_i} is the total degree of node \eqn{i}. A high value 
+#'   means links are uniformly distributed; a low value means links are within 
+#'   the node's bioregion.
 #' 
-#' where \eqn{k_{is}} is the number of links of node (species or site) \eqn{i}
-#' to nodes in bioregion \eqn{s}, and \eqn{k_i} is the total degree of node
-#' \eqn{i}. The participation coefficient of a node is therefore close to 1 if
-#' its links are uniformly distributed among all the bioregions and 0 if all
-#' its links are within its own bioregion.
-#' 
-#' And:
-#' \eqn{z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}}
-#' 
-#' where \eqn{k_i} is the number of links of node (species or site) \eqn{i} to
-#' other nodes in its bioregion \eqn{s_i}, \eqn{\overline{k_{si}}} is the
-#' average of \eqn{k} over all the nodes in \eqn{s_i}, and
-#' \eqn{\sigma_{k_{si}}} is the standard deviation of \eqn{k} in \eqn{s_i}.
-#' The within-bioregion degree z-score measures how well-connected node \eqn{i}
-#' is to other nodes in the bioregion.
+#' - Within-bioregion degree z-score: 
+#'   \eqn{z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}}, where 
+#'   \eqn{k_i} is the number of links of node \eqn{i} to nodes in its bioregion 
+#'   \eqn{s_i}, \eqn{\overline{k_{si}}} is the average degree of nodes in 
+#'   \eqn{s_i}, and \eqn{\sigma_{k_{si}}} is the standard deviation of degrees 
+#'   in \eqn{s_i}.
 #' 
 #' @references
 #' Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P, 
 #' Antonelli A & Revilla E (2019) Human activity is altering the world’s 
-#' zoogeographical regions. \emph{Ecology Letters}, 22, 1297--1305.
+#' zoogeographical regions. \emph{Ecology Letters} 22, 1297--1305.
 #' 
 #' Guimerà R & Amaral LAN (2005) Functional cartography of complex metabolic 
-#' networks. \emph{Nature}, 433, 895--900.
+#' networks. \emph{Nature} 433, 895--900.
 #' 
 #' Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S & Luque S (2019)
 #' Biogeographical network analysis of plant species distribution in the 
-#' Mediterranean region. \emph{Ecology and Evolution}, 9, 237--250.
+#' Mediterranean region. \emph{Ecology and Evolution} 9, 237--250.
 #'
-#' @seealso [bioregionalization_metrics]
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html}.
 #' 
-#' @return 
-#' A `data.frame` with the columns Bioregion, Species, and the desired summary
-#' statistics, or a list of `data.frames` if `Cz` and other indices are
-#' selected.
+#' Associated functions: 
+#' [bioregion_metrics] [bioregionalization_metrics]
 #'  
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
@@ -129,6 +129,7 @@ site_species_metrics <- function(cluster_object,
                                  comat,
                                  indices = c("rho"),
                                  bipartite_link = NULL){
+  
   # 1. Controls ---------------------------------------------------------------
   # input can be of format bioregion.clusters
   if (inherits(cluster_object, "bioregion.clusters")) {
@@ -137,48 +138,51 @@ site_species_metrics <- function(cluster_object,
       clusters <- cluster_object$clusters
       
       if(ncol(clusters) > 2) {
-        stop("This function is designed to be applied on a single partition.",
-             "Your cluster_object has multiple partitions (select only one).")
+        stop(paste0("This function is designed to be applied on a single ",
+                    "partition. Your cluster_object has multiple partitions ",
+                    "(select only one)."), 
+             call. = FALSE)
       }
       
     } else {
-      if (cluster_object$name == "hierarchical_clustering") {
-        stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using bioregionalization_metrics()
-        See ?hclu_hierarclust or ?cut_tree")
+      if (cluster_object$name == "hclu_hierarclust") {
+        stop(paste0("No clusters have been generated for your hierarchical ",
+                    "tree, please extract clusters from the tree before using ",
+                    "bioregionalization_metrics().\n",
+                    "See ?hclu_hierarclust or ?cut_tree."), 
+             call. = FALSE)
       } else {
-        stop(
-          "cluster_object does not have the expected type of 'clusters' slot")
+        stop(paste0("cluster_object does not have the expected type of ",
+                    "'clusters' slot."), 
+             call. = FALSE)
       }
     }
   } else {
-    stop("This function is designed to work on bioregion.clusters objects and
-         on a site x species matrix.")
+    stop(paste0("This function is designed to work on bioregion.clusters ",
+                "objects and on a site x species matrix."), 
+         call. = FALSE)
   }
   
   controls(args = NULL, data = comat, type = "input_matrix")
   
-  # controls(args = indices, data = NULL, type = "character")
-  if (!is.character(indices)) {
-    stop(paste0(deparse(substitute(indices)),
-                " must be a character or a vector of characters."),
-         call. = FALSE
-    )
-  }
+  controls(args = indices, data = NULL, type = "character_vector")
   
   if(!isTRUE(unique(indices %in% c("rho", "Cz", "affinity", "fidelity",
                                    "indicator_value")))){
-    stop("Please choose algorithm among the followings values:
-    rho, affinity, fidelity, indicator_value or Cz.", call. = FALSE)
+    stop(paste0("Please choose indices from the following:\n",
+                "rho, affinity, fidelity, indicator_value or Cz."),
+         call. = FALSE)
   }
   
   if("Cz" %in% indices && is.null(bipartite_link)){
-    stop("bipartite_link is needed to compute Cz indices.")
+    stop("bipartite_link is needed to compute Cz indices.",
+         call. = FALSE)
   }
   
   if("Cz" %in% indices && cluster_object$inputs$bipartite == FALSE){
-    stop("Cz metrics can only be computed for a bipartite partition (where
-         both sites and species are assigned to a bioregion.")
+    stop(paste0("Cz metrics can only be computed for a bipartite partition ",
+                "(where both sites and species are assigned to a bioregion."),
+         call. = FALSE)
   }
   
   # Add controls for bipartite_link

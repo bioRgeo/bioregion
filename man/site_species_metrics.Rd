@@ -12,81 +12,74 @@ site_species_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{a \code{bioregion.clusters} object or a \code{data.frame} or a
-list of \code{data.frame} containing multiple partitions. At least two partitions
-are required. If a list of \code{data.frame} is provided, they should all have
-the same number of rows (i.e., same items in the clustering for all
-partitions).}
+\item{cluster_object}{A \code{bioregion.clusters} object, a \code{data.frame}, or a
+list of \code{data.frame}s containing multiple partitions. At least two
+partitions are required. If a list of \code{data.frame}s is provided, they must
+all have the same number of rows (i.e., the same items in the clustering).}
 
-\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
+\item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{indices}{a \code{character} specifying the contribution metric to compute.
+\item{indices}{A \code{character} specifying the contribution metric to compute.
 Available options are \code{rho} and \code{Cz}.}
 
-\item{bipartite_link}{\code{NULL} by default. Needed for \code{Cz} indices. A
-\code{data.frame} where each row represents the interaction between two nodes
-and an optional third column indicating the weight of the interaction.}
+\item{bipartite_link}{\code{NULL} by default. Required for \code{Cz} indices. A
+\code{data.frame} where each row represents an interaction between two nodes
+and an optional third column indicating the interaction's weight.}
 }
 \value{
-A \code{data.frame} with the columns Bioregion, Species, and the desired summary
-statistics, or a list of \code{data.frames} if \code{Cz} and other indices are
+A \code{data.frame} with columns \code{Bioregion}, \code{Species}, and the desired summary
+statistics, or a list of \code{data.frame}s if \code{Cz} and other indices are
 selected.
 }
 \description{
-This function calculates metrics that assess the contribution of a given
+This function calculates metrics to assess the contribution of a given
 species or site to its bioregion.
 }
 \details{
-The \eqn{\rho} metric is derived from Lenormand et al. (2019).
-Its formula is the following:
+The \eqn{\rho} metric is derived from Lenormand et al. (2019) with the
+following formula:
 
-\eqn{\rho_{ij} = (n_ij - ((n_i n_j)/n))/(sqrt(((n - n_j)/(n-1)) (1-(n_j/n)) ((n_i n_j)/n)))}
+\eqn{\rho_{ij} = \frac{n_{ij} - \frac{n_i n_j}{n}}{\sqrt{\left(\frac{n - n_j}{
+n-1}\right) \left(1-\frac{n_j}{n}\right) \frac{n_i n_j}{n}}}}
 
-with \eqn{n} the number of sites, \eqn{n_i} the number of sites in which
-species \eqn{i} is present, \eqn{n_j} the number of sites belonging to the
-bioregion \eqn{j}, \eqn{n_ij} the number of occurrences of species \eqn{i}
-in sites belonging to the bioregion \eqn{j}.
+where \eqn{n} is the number of sites, \eqn{n_i} is the number of sites in
+which species \eqn{i} is present, \eqn{n_j} is the number of sites in
+bioregion \eqn{j}, and \eqn{n_{ij}} is the number of occurrences of species
+\eqn{i} in sites of bioregion \eqn{j}.
 
-Affinity, fidelity and individual contributions describe how species are
-linked to their bioregions. These metrics are described in
-Bernardo-Madrid et al. (2019).
-Affinity of species to their region, \eqn{A_i = R_i / Z}
-where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
-associated bioregion, and \eqn{Z} the total size (number of sites) of the
-bioregion.
+Affinity, fidelity, and individual contributions describe how species are
+linked to their bioregions. These metrics are described in Bernardo-Madrid
+et al. (2019):
+\itemize{
+\item Affinity of species to their region:
+\eqn{A_i = \frac{R_i}{Z}}, where \eqn{R_i} is the occurrence/range size
+of species \eqn{i} in its associated bioregion, and \eqn{Z} is the total
+size (number of sites) of the bioregion. High affinity indicates that the
+species occupies most sites in its bioregion.
+\item Fidelity of species to their region:
+\eqn{F_i = \frac{R_i}{D_i}}, where \eqn{R_i} is the occurrence/range size
+of species \eqn{i} in its bioregion, and \eqn{D_i} is its total range size.
+High fidelity indicates that the species is not present in other regions.
+\item Indicator Value of species:
+\eqn{IndVal = F_i \cdot A_i}.
+}
 
-A high affinity means that the species is occupying most sites of its
-associated bioregion.
-
-Fidelity of species to their region, \eqn{F_i = R_i / D_i}
-where \eqn{R_i} is the occurrence/range size of species \eqn{i} in its
-associated bioregion, and \eqn{D_i} is its total occurrence/range size.
-
-A high fidelity means that the species is not present in other bioregions
-than their associated one.
-
-Indicator Value of species, \eqn{IndVal = F_i * A_i}
-
-\code{Cz} metrics are derived from Guimerà & Amaral (2005).
-Their respective formula are:
-\eqn{C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}}
-
-where \eqn{k_{is}} is the number of links of node (species or site) \eqn{i}
-to nodes in bioregion \eqn{s}, and \eqn{k_i} is the total degree of node
-\eqn{i}. The participation coefficient of a node is therefore close to 1 if
-its links are uniformly distributed among all the bioregions and 0 if all
-its links are within its own bioregion.
-
-And:
-\eqn{z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}}
-
-where \eqn{k_i} is the number of links of node (species or site) \eqn{i} to
-other nodes in its bioregion \eqn{s_i}, \eqn{\overline{k_{si}}} is the
-average of \eqn{k} over all the nodes in \eqn{s_i}, and
-\eqn{\sigma_{k_{si}}} is the standard deviation of \eqn{k} in \eqn{s_i}.
-The within-bioregion degree z-score measures how well-connected node \eqn{i}
-is to other nodes in the bioregion.
+\code{Cz} metrics are derived from Guimerà & Amaral (2005):
+\itemize{
+\item Participation coefficient:
+\eqn{C_i = 1 - \sum_{s=1}^{N_M}{\left(\frac{k_{is}}{k_i}\right)^2}}, where
+\eqn{k_{is}} is the number of links of node \eqn{i} to nodes in bioregion
+\eqn{s}, and \eqn{k_i} is the total degree of node \eqn{i}. A high value
+means links are uniformly distributed; a low value means links are within
+the node's bioregion.
+\item Within-bioregion degree z-score:
+\eqn{z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}}, where
+\eqn{k_i} is the number of links of node \eqn{i} to nodes in its bioregion
+\eqn{s_i}, \eqn{\overline{k_{si}}} is the average degree of nodes in
+\eqn{s_i}, and \eqn{\sigma_{k_{si}}} is the standard deviation of degrees
+in \eqn{s_i}.
+}
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)
@@ -121,17 +114,22 @@ bipartite_link = net_bip, indices = "Cz")
 \references{
 Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P,
 Antonelli A & Revilla E (2019) Human activity is altering the world’s
-zoogeographical regions. \emph{Ecology Letters}, 22, 1297--1305.
+zoogeographical regions. \emph{Ecology Letters} 22, 1297--1305.
 
 Guimerà R & Amaral LAN (2005) Functional cartography of complex metabolic
-networks. \emph{Nature}, 433, 895--900.
+networks. \emph{Nature} 433, 895--900.
 
 Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S & Luque S (2019)
 Biogeographical network analysis of plant species distribution in the
-Mediterranean region. \emph{Ecology and Evolution}, 9, 237--250.
+Mediterranean region. \emph{Ecology and Evolution} 9, 237--250.
 }
 \seealso{
-\link{bioregionalization_metrics}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html}.
+
+Associated functions:
+\link{bioregion_metrics} \link{bioregionalization_metrics}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr

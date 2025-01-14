@@ -71,7 +71,8 @@ vignettes can be slow to generate.
 
 ``` r
 remotes::install_github("bioRgeo/bioregion",
-                        dependencies = TRUE, upgrade = "ask", 
+                        dependencies = TRUE, 
+                        upgrade = "ask", 
                         build_vignettes = TRUE)
 
 vignette("bioregion")

@@ -1,31 +1,37 @@
 #' Calculate contribution metrics for bioregions
 #' 
 #' This function calculates the number of sites per bioregion, as well as the
-#' the number of species these sites have, the number of endemic species and 
-#' the proportion of endemism.
+#' number of species these sites have, the number of endemic species, and the 
+#' proportion of endemism.
 #' 
-#' @param cluster_object a `bioregion.clusters` object or a `data.frame` or a 
-#' list of `data.frame` containing multiple partitions. At least two partitions
-#' are required. If a list of `data.frame` is provided, they should all have
-#' the same number of rows (i.e., same items in the clustering for all
-#' partitions). 
+#' @param cluster_object A `bioregion.clusters` object, a `data.frame`, or a 
+#' list of `data.frame`s containing multiple partitions. At least two 
+#' partitions are required. If a list of `data.frame`s is provided, they must 
+#' all have the same number of rows (i.e., same items in the clustering).
 #' 
-#' @param comat a co-occurrence `matrix` with sites as rows and species as
+#' @param comat A co-occurrence `matrix` with sites as rows and species as 
 #' columns. 
 #' 
-#' @param map a spatial `sf data.frame` with sites and bioregions. It is the
+#' @param map A spatial `sf data.frame` with sites and bioregions. It is the 
 #' output of the function `map_bioregions`. `NULL` by default.
 #'
-#' @param col_bioregion an `integer` specifying the column position of the
+#' @param col_bioregion An `integer` specifying the column position of the 
 #' bioregion.
+#' 
+#' @return 
+#' A `data.frame` with 5 columns, or 6 if spatial coherence is computed.
 #'
 #' @details 
-#' Endemic species are species only found in the sites belonging to one
+#' Endemic species are species found only in the sites belonging to one 
 #' bioregion.
 #'
-#' @seealso [site_species_metrics]
-#' @return 
-#' A `data.frame` with 5 columns, or 6 if the spatial coherence is computed.
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html}.
+#' 
+#' Associated functions: 
+#' [site_species_metrics] [bioregionalization_metrics]
 #'  
 #' @author
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
@@ -70,9 +76,11 @@
 #' col_bioregion = 2) 
 #' 
 #' @export
-
-bioregion_metrics <- function(cluster_object, comat,
-                              map = NULL, col_bioregion = NULL){
+bioregion_metrics <- function(cluster_object, 
+                              comat,
+                              map = NULL, 
+                              col_bioregion = NULL){
+  
   # 1. Controls ---------------------------------------------------------------
   # input can be of format bioregion.clusters
   if (inherits(cluster_object, "bioregion.clusters")) {
@@ -81,57 +89,74 @@ bioregion_metrics <- function(cluster_object, comat,
       clusters <- cluster_object$clusters
       
       if(ncol(clusters) > 2) {
-        stop("This function is designed to be applied on a single partition.",
-             "Your cluster_object has multiple partitions (select only one).")
+        stop(paste0("This function is designed to be applied on a single ",
+                    "partition. Your cluster_object has multiple partitions ",
+                    "(select only one)."), 
+             call. = FALSE)
       }
       
     } else {
-      if (cluster_object$name == "hierarchical_clustering") {
-        stop("No clusters have been generated for your hierarchical tree,
-        please extract clusters from the tree before using bioregionalization_metrics()
-        See ?hclu_hierarclust or ?cut_tree")
+      if (cluster_object$name == "hclu_hierarclust") {
+        stop(paste0("No clusters have been generated for your hierarchical ",
+                    "tree, please extract clusters from the tree before using ",
+                    "bioregionalization_metrics().\n",
+                    "See ?hclu_hierarclust or ?cut_tree."), 
+             call. = FALSE)
       } else {
-        stop(
-          "cluster_object does not have the expected type of 'clusters' slot")
+        stop(paste0("cluster_object does not have the expected type of ",
+                    "'clusters' slot."), 
+             call. = FALSE)
       }
     }
   } else {
-    stop("This function is designed to work on bioregion.clusters objects and
-         on a site x species matrix.")
+    stop(paste0("This function is designed to work on bioregion.clusters ",
+                "objects and on a site x species matrix."), 
+         call. = FALSE)
   }
   
   controls(args = NULL, data = comat, type = "input_matrix")
   
   if(!is.null(map)){
     if(!("sf" %in% class(map))){
-      stop("map must be a 'sf' spatial data.frame with bioregions and sites.")
+      stop(paste0("map must be a 'sf' spatial data.frame with bioregions ",
+                  "and sites."), 
+           call. = FALSE)
     }
     if(!("data.frame" %in% class(map))){
-      stop("map must be a 'sf' spatial data.frame with bioregions and sites.")
+      stop(paste0("map must be a 'sf' spatial data.frame with bioregions ",
+                  "and sites."), 
+           call. = FALSE)
     }
     if(ncol(map) < 3){
-      stop("map must have at least 3 columns: sites, bioregions and geometry.")
+      stop(paste0("map must have at least 3 columns: sites, bioregions and ",
+                  "geometry."), 
+           call. = FALSE)
     }
     if(is.null(col_bioregion)){
-      stop("col_bioregion must be defined, it is the column position of the
-           bioregion.")
+      stop(paste0("col_bioregion must be defined ", 
+                  "it is the column position ",
+                  "of the bioregion."), 
+           call. = FALSE)
     }
   }
   
   if(!is.null(col_bioregion)){
     if(is.null(map)){
-      warning("col_bioregion is defined but is not considered since map is set
-              to NULL.")
+      warning(paste0("col_bioregion is defined but is not considered since ",
+                     "map is set to NULL."))
+    }else{
+      controls(args = col_bioregion, 
+               data = NULL, 
+               type = "strict_positive_integer")
+      
+      map_test <- map
+      sf::st_geometry(map_test) <- NULL
+      if(inherits(map_test[, col_bioregion], "logical")){
+        stop("There is no bioregion in the Bioregion column.", 
+             call. = FALSE)
+      }
+      rm(map_test)
     }
-    
-    controls(args = col_bioregion, data = NULL, type = "positive_integer")
-    
-    map_test <- map
-    sf::st_geometry(map_test) <- NULL
-    if(inherits(map_test[, col_bioregion], "logical")){
-      stop("There is no bioregion in the Bioregion column.")
-    }
-    rm(map_test)
   }
   
   bioregion_df <- geometry <- NULL
@@ -215,7 +240,8 @@ bioregion_metrics <- function(cluster_object, comat,
       bioregion_df <- dplyr::left_join(bioregion_df, spatial_coherence_df,
                                        by = "Bioregion")
     } else{
-      stop("There is no bioregion in the Bioregion column.")
+      stop("There is no bioregion in the Bioregion column.", 
+           call. = FALSE)
     }
   }
   

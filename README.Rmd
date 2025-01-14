@@ -69,7 +69,8 @@ slow to generate.
 
 ```{r, eval = FALSE}
 remotes::install_github("bioRgeo/bioregion",
-                        dependencies = TRUE, upgrade = "ask", 
+                        dependencies = TRUE, 
+                        upgrade = "ask", 
                         build_vignettes = TRUE)
 
 vignette("bioregion")

@@ -19,29 +19,44 @@ multi_clust <- nhclu_kmeans(dissim, n_clust = 3:4, index = "Simpson")
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 
+clust_h <- hclu_hierarclust(dissim,
+                            optimal_tree_method = "best",
+                            n_clust = NULL,
+                            cut_height = NULL)
+
+simil <- dissimilarity_to_similarity(dissim)
+clust_louv <- netclu_louvain(simil)
+clust_louv$clusters <- NULL
+
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  rho <- site_species_metrics(cluster_object = clust1, comat = comat,
+  rho <- site_species_metrics(cluster_object = clust1, 
+                              comat = comat,
                               indices = "rho")
-  
   expect_equal(inherits(rho, "data.frame"), TRUE)
   expect_equal(dim(rho)[1], 75)
   expect_equal(dim(rho)[2], 3)
   
-  rho2 <- site_species_metrics(cluster_object = com, comat = comat,
+  rho2 <- site_species_metrics(cluster_object = com, 
+                               comat = comat,
                                indices = "rho")
-  
   expect_equal(inherits(rho2, "data.frame"), TRUE)
   expect_equal(dim(rho2)[1], 50)
   expect_equal(dim(rho2)[2], 3)
   
   suppressWarnings({
-    rho3 <- site_species_metrics(cluster_object = clust_bip, comat = comat,
+    rho3 <- site_species_metrics(cluster_object = clust_bip, 
+                                 comat = comat,
                                  bipartite_link = net_bip,
                                  indices = c("rho", "Cz"))
   })
   expect_equal(inherits(rho3, "list"), TRUE)
+  
+  #aff <- site_species_metrics(cluster_object = clust_bip, 
+  #                               comat = comat,
+  #                               indices = "affinity")
+
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -49,35 +64,51 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics("zz"),
-    "This function is designed to work on bioregion.clusters objects and
-         on a site x species matrix.",
-    fixed = TRUE)
+    "^This function is designed to work on bioregion.clusters objects ")
   
   expect_error(
-    site_species_metrics(multi_clust, comat = comat, indices = "rho"),
-    "This function is designed to be applied on a single partition.Your cluster_object has multiple partitions (select only one).",
-    fixed = TRUE)
+    site_species_metrics(multi_clust, 
+                         comat = comat, 
+                         indices = "rho"),
+    "^This function is designed to be applied on a single partition.")
   
   expect_error(
-    site_species_metrics(com, comat = "zz"),
+    site_species_metrics(clust_h),
+    "^No clusters have been generated for your hierarchical")
+  
+  expect_error(
+    site_species_metrics(clust_louv),
+    "^cluster_object does not have the expected type of")
+  
+  expect_error(
+    site_species_metrics(com, 
+                         comat = "zz"),
     "comat must be a matrix.",
     fixed = TRUE)
   
   expect_error(
-    site_species_metrics(com, comat = comat, indices = "zz"),
-    "Please choose algorithm among the followings values:
-    rho, affinity, fidelity, indicator_value or Cz.",
+    site_species_metrics(com, 
+                         comat = comat,
+                         indices = c(1,2)),
+    "indices must be a character.",
     fixed = TRUE)
   
   expect_error(
-    site_species_metrics(com, comat = comat, bipartite_link = "zz",
+    site_species_metrics(com, 
+                         comat = comat, 
+                         indices = "zz"),
+    "^Please choose indices from the following")
+  
+  expect_error(
+    site_species_metrics(com, comat = comat, 
+                         bipartite_link = "zz",
                          indices = "Cz"),
-    "Cz metrics can only be computed for a bipartite partition (where
-         both sites and species are assigned to a bioregion.",
-    fixed = TRUE)
+    "^Cz metrics can only be computed for a bipartite partition")
   
   expect_error(
-    site_species_metrics(com, comat = comat, bipartite_link = NULL,
+    site_species_metrics(com, 
+                         comat = comat, 
+                         bipartite_link = NULL,
                          indices = "Cz"),
     "bipartite_link is needed to compute Cz indices.",
     fixed = TRUE)

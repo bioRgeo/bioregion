@@ -7,31 +7,30 @@
 bioregion_metrics(cluster_object, comat, map = NULL, col_bioregion = NULL)
 }
 \arguments{
-\item{cluster_object}{a \code{bioregion.clusters} object or a \code{data.frame} or a
-list of \code{data.frame} containing multiple partitions. At least two partitions
-are required. If a list of \code{data.frame} is provided, they should all have
-the same number of rows (i.e., same items in the clustering for all
-partitions).}
+\item{cluster_object}{A \code{bioregion.clusters} object, a \code{data.frame}, or a
+list of \code{data.frame}s containing multiple partitions. At least two
+partitions are required. If a list of \code{data.frame}s is provided, they must
+all have the same number of rows (i.e., same items in the clustering).}
 
-\item{comat}{a co-occurrence \code{matrix} with sites as rows and species as
+\item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{map}{a spatial \verb{sf data.frame} with sites and bioregions. It is the
+\item{map}{A spatial \verb{sf data.frame} with sites and bioregions. It is the
 output of the function \code{map_bioregions}. \code{NULL} by default.}
 
-\item{col_bioregion}{an \code{integer} specifying the column position of the
+\item{col_bioregion}{An \code{integer} specifying the column position of the
 bioregion.}
 }
 \value{
-A \code{data.frame} with 5 columns, or 6 if the spatial coherence is computed.
+A \code{data.frame} with 5 columns, or 6 if spatial coherence is computed.
 }
 \description{
 This function calculates the number of sites per bioregion, as well as the
-the number of species these sites have, the number of endemic species and
-the proportion of endemism.
+number of species these sites have, the number of endemic species, and the
+proportion of endemism.
 }
 \details{
-Endemic species are species only found in the sites belonging to one
+Endemic species are species found only in the sites belonging to one
 bioregion.
 }
 \examples{
@@ -73,7 +72,12 @@ col_bioregion = 2)
 
 }
 \seealso{
-\link{site_species_metrics}
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html}.
+
+Associated functions:
+\link{site_species_metrics} \link{bioregionalization_metrics}
 }
 \author{
 Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr

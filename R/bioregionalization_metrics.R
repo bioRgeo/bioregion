@@ -190,8 +190,6 @@ bioregionalization_metrics <- function(cluster_object,
                 "Please choose from the following:\n",
                 "pc_distance, anosim, avg_endemism or tot_endemism."),
          call. = FALSE)
-    
-    
   }
 
   # Control dissimilarity_index
