@@ -67,7 +67,9 @@ species or site to its bioregion.</p>
 <span>  <span class="va">cluster_object</span>,</span>
 <span>  <span class="va">comat</span>,</span>
 <span>  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rho"</span><span class="op">)</span>,</span>
-<span>  bipartite_link <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  net <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  site_col <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  species_col <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,10 +78,7 @@ species or site to its bioregion.</p>
 
 
 <dl><dt id="arg-cluster-object">cluster_object<a class="anchor" aria-label="anchor" href="#arg-cluster-object"></a></dt>
-<dd><p>A <code>bioregion.clusters</code> object, a <code>data.frame</code>, or a
-list of <code>data.frame</code>s containing multiple partitions. At least two
-partitions are required. If a list of <code>data.frame</code>s is provided, they must
-all have the same number of rows (i.e., the same items in the clustering).</p></dd>
+<dd><p>A <code>bioregion.clusters</code> object.</p></dd>
 
 
 <dt id="arg-comat">comat<a class="anchor" aria-label="anchor" href="#arg-comat"></a></dt>
@@ -89,13 +88,24 @@ columns.</p></dd>
 
 <dt id="arg-indices">indices<a class="anchor" aria-label="anchor" href="#arg-indices"></a></dt>
 <dd><p>A <code>character</code> specifying the contribution metric to compute.
-Available options are <code>rho</code> and <code>Cz</code>.</p></dd>
+Available options are <code>rho</code>, <code>affinity</code>, <code>fidelity</code>, <code>indicator_value</code> and
+<code>Cz</code>.</p></dd>
 
 
-<dt id="arg-bipartite-link">bipartite_link<a class="anchor" aria-label="anchor" href="#arg-bipartite-link"></a></dt>
+<dt id="arg-net">net<a class="anchor" aria-label="anchor" href="#arg-net"></a></dt>
 <dd><p><code>NULL</code> by default. Required for <code>Cz</code> indices. A
 <code>data.frame</code> where each row represents an interaction between two nodes
 and an optional third column indicating the interaction's weight.</p></dd>
+
+
+<dt id="arg-site-col">site_col<a class="anchor" aria-label="anchor" href="#arg-site-col"></a></dt>
+<dd><p>A number indicating the position of the column containing
+the sites in <code>net</code>. 1 by default.</p></dd>
+
+
+<dt id="arg-species-col">species_col<a class="anchor" aria-label="anchor" href="#arg-species-col"></a></dt>
+<dd><p>A number indicating the position of the column
+containing the species in <code>net</code>. 2 by default.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,9 +124,9 @@ n-1}\right) \left(1-\frac{n_j}{n}\right) \frac{n_i n_j}{n}}}\)</p>
 which species \(i\) is present, \(n_j\) is the number of sites in
 bioregion \(j\), and \(n_{ij}\) is the number of occurrences of species
 \(i\) in sites of bioregion \(j\).</p>
-<p>Affinity, fidelity, and individual contributions describe how species are
-linked to their bioregions. These metrics are described in Bernardo-Madrid
-et al. (2019):</p><ul><li><p>Affinity of species to their region:
+<p>Affinity \(A\), fidelity \(F\), and individual contributions
+\(IndVal\) describe how species are linked to their bioregions. These
+metrics are described in Bernardo-Madrid et al. (2019):</p><ul><li><p>Affinity of species to their region:
 \(A_i = \frac{R_i}{Z}\), where \(R_i\) is the occurrence/range size
 of species \(i\) in its associated bioregion, and \(Z\) is the total
 size (number of sites) of the bioregion. High affinity indicates that the
@@ -321,11 +331,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span><span class="va">net_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">comat</span>, weight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clust_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">net_bip</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">site_species_metrics</span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">clust_bip</span>, comat <span class="op">=</span> <span class="va">comat</span>, </span></span>
-<span class="r-in"><span>bipartite_link <span class="op">=</span> <span class="va">net_bip</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Column 'Node1' has been renamed 'Sites'. If this column does not</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>             correspond to sites, rename it before running the function.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Column 'Node2' has been renamed 'Species'. If this column does not</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>             correspond to species, rename it before running the function.</span>
+<span class="r-in"><span>net <span class="op">=</span> <span class="va">net_bip</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         Node Bioregion Category         C          z</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      Site1         1     site 0.8163265  1.1547005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      Site2         1     site 0.8199446 -1.1547005</span>

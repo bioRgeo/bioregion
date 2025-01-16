@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-01-14</h4>
+            <h4 data-toc-skip class="date">2025-01-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_3_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_summary_metrics.Rmd</code></div>
@@ -251,7 +251,7 @@ is to other nodes in the bioregion.</p>
 <span><span class="co"># Cz indices</span></span>
 <span><span class="va">clust_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">vegedf</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">cz_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">clust_bip</span>,  comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
-<span>                                  bipartite_link <span class="op">=</span> <span class="va">vegedf</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></code></pre></div>
+<span>                                  net <span class="op">=</span> <span class="va">vegedf</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> outputs <code>data.frame</code>
 with the contribution metrics available at the species level.</p>
 </div>
