@@ -13,11 +13,8 @@ compare_bioregionalizations(
 )
 }
 \arguments{
-\item{cluster_object}{A \code{bioregion.clusters} object, a \code{data.frame}, or a
-list of \code{data.frame} objects containing multiple bioregionalizations. At
-least two bioregionalizations are required. If a list of \code{data.frame} is
-provided, all \code{data.frame} objects must have the same number of rows (i.e.,
-the same items in the clustering for all bioregionalizations).}
+\item{cluster_object}{A \code{data.frame} object where each row corresponds to
+a site, and each column to a bioregionalization.}
 
 \item{indices}{\code{NULL} or \code{character}. Indices to compute for the pairwise
 comparison of bioregionalizations. Currently available metrics are \code{"rand"}

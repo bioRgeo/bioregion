@@ -5,11 +5,8 @@
 #' functions. It also provides the confusion matrix from pairwise comparisons, 
 #' enabling the user to compute additional comparison metrics.
 #' 
-#' @param cluster_object A `bioregion.clusters` object, a `data.frame`, or a 
-#' list of `data.frame` objects containing multiple bioregionalizations. At 
-#' least two bioregionalizations are required. If a list of `data.frame` is 
-#' provided, all `data.frame` objects must have the same number of rows (i.e., 
-#' the same items in the clustering for all bioregionalizations).
+#' @param cluster_object A `data.frame` object where each row corresponds to
+#' a site, and each column to a bioregionalization.
 #' 
 #' @param indices `NULL` or `character`. Indices to compute for the pairwise
 #' comparison of bioregionalizations. Currently available metrics are `"rand"`
