@@ -4,10 +4,7 @@
 #' number of species these sites have, the number of endemic species, and the 
 #' proportion of endemism.
 #' 
-#' @param cluster_object A `bioregion.clusters` object, a `data.frame`, or a 
-#' list of `data.frame`s containing multiple partitions. At least two 
-#' partitions are required. If a list of `data.frame`s is provided, they must 
-#' all have the same number of rows (i.e., same items in the clustering).
+#' @param cluster_object A `bioregion.clusters` object.
 #' 
 #' @param comat A co-occurrence `matrix` with sites as rows and species as 
 #' columns. 

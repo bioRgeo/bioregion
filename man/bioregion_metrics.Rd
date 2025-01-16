@@ -7,10 +7,7 @@
 bioregion_metrics(cluster_object, comat, map = NULL, col_bioregion = NULL)
 }
 \arguments{
-\item{cluster_object}{A \code{bioregion.clusters} object, a \code{data.frame}, or a
-list of \code{data.frame}s containing multiple partitions. At least two
-partitions are required. If a list of \code{data.frame}s is provided, they must
-all have the same number of rows (i.e., same items in the clustering).}
+\item{cluster_object}{A \code{bioregion.clusters} object.}
 
 \item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
