@@ -48,7 +48,7 @@ test_that("valid output", {
   suppressWarnings({
     rho3 <- site_species_metrics(cluster_object = clust_bip, 
                                  comat = comat,
-                                 bipartite_link = net_bip,
+                                 net = net_bip,
                                  indices = c("rho", "Cz"))
   })
   expect_equal(inherits(rho3, "list"), TRUE)
@@ -56,7 +56,7 @@ test_that("valid output", {
   #aff <- site_species_metrics(cluster_object = clust_bip, 
   #                               comat = comat,
   #                               indices = "affinity")
-
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -101,16 +101,61 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(com, comat = comat, 
-                         bipartite_link = "zz",
+                         net = "zz",
                          indices = "Cz"),
     "^Cz metrics can only be computed for a bipartite partition")
   
   expect_error(
     site_species_metrics(com, 
                          comat = comat, 
-                         bipartite_link = NULL,
+                         net = NULL,
                          indices = "Cz"),
-    "bipartite_link is needed to compute Cz indices.",
+    "net is needed to compute Cz indices.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(com, 
+                         comat = comat, 
+                         net = "zz"),
+    "net should be a data.frame with at least two columns,
+           corresponding to the sites and species. By default, sites are
+           considered to be in the first column, and species in the second.
+           This can be changed with the arguments 'site_col' and
+           'species_col'.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(com, 
+                         comat = comat, 
+                         net = net_bip,
+                         site_col = "zz"),
+    "site_col must be numeric.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(com, 
+                         comat = comat, 
+                         net = net_bip,
+                         species_col = "zz"),
+    "species_col must be numeric.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(clust_bip, 
+                         comat = comat, 
+                         net = net_bip,
+                         indices = "Cz",
+                         site_col = 30),
+    "The site column ('site_col') is incorrect.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(clust_bip, 
+                         comat = comat, 
+                         net = net_bip,
+                         indices = "Cz",
+                         species_col = 30),
+    "The species column ('species_col') is incorrect.",
     fixed = TRUE)
   
 })

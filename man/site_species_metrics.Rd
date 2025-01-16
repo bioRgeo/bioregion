@@ -8,24 +8,30 @@ site_species_metrics(
   cluster_object,
   comat,
   indices = c("rho"),
-  bipartite_link = NULL
+  net = NULL,
+  site_col = 1,
+  species_col = 2
 )
 }
 \arguments{
-\item{cluster_object}{A \code{bioregion.clusters} object, a \code{data.frame}, or a
-list of \code{data.frame}s containing multiple partitions. At least two
-partitions are required. If a list of \code{data.frame}s is provided, they must
-all have the same number of rows (i.e., the same items in the clustering).}
+\item{cluster_object}{A \code{bioregion.clusters} object.}
 
 \item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
 \item{indices}{A \code{character} specifying the contribution metric to compute.
-Available options are \code{rho} and \code{Cz}.}
+Available options are \code{rho}, \code{affinity}, \code{fidelity}, \code{indicator_value} and
+\code{Cz}.}
 
-\item{bipartite_link}{\code{NULL} by default. Required for \code{Cz} indices. A
+\item{net}{\code{NULL} by default. Required for \code{Cz} indices. A
 \code{data.frame} where each row represents an interaction between two nodes
 and an optional third column indicating the interaction's weight.}
+
+\item{site_col}{A number indicating the position of the column containing
+the sites in \code{net}. 1 by default.}
+
+\item{species_col}{A number indicating the position of the column
+containing the species in \code{net}. 2 by default.}
 }
 \value{
 A \code{data.frame} with columns \code{Bioregion}, \code{Species}, and the desired summary
@@ -48,9 +54,9 @@ which species \eqn{i} is present, \eqn{n_j} is the number of sites in
 bioregion \eqn{j}, and \eqn{n_{ij}} is the number of occurrences of species
 \eqn{i} in sites of bioregion \eqn{j}.
 
-Affinity, fidelity, and individual contributions describe how species are
-linked to their bioregions. These metrics are described in Bernardo-Madrid
-et al. (2019):
+Affinity \eqn{A}, fidelity \eqn{F}, and individual contributions
+\eqn{IndVal} describe how species are linked to their bioregions. These
+metrics are described in Bernardo-Madrid et al. (2019):
 \itemize{
 \item Affinity of species to their region:
 \eqn{A_i = \frac{R_i}{Z}}, where \eqn{R_i} is the occurrence/range size
@@ -108,7 +114,7 @@ indices = c("rho", "affinity", "fidelity", "indicator_value"))
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 site_species_metrics(cluster_object = clust_bip, comat = comat, 
-bipartite_link = net_bip, indices = "Cz")
+net = net_bip, indices = "Cz")
 
 }
 \references{

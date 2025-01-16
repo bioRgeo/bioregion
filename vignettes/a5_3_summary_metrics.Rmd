@@ -174,7 +174,7 @@ contrib_netclu <- site_species_metrics(vege_netclu_walktrap, vegemat,
 # Cz indices
 clust_bip <- netclu_greedy(vegedf, bipartite = TRUE)
 cz_netclu <- site_species_metrics(cluster_object = clust_bip,  comat = vegemat,
-                                  bipartite_link = vegedf, indices = "Cz")
+                                  net = vegedf, indices = "Cz")
 ```
 
 `site_species_metrics()` outputs `data.frame` with the contribution metrics available

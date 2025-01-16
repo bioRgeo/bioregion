@@ -3,20 +3,24 @@
 #' This function calculates metrics to assess the contribution of a given
 #' species or site to its bioregion.
 #' 
-#' @param cluster_object A `bioregion.clusters` object, a `data.frame`, or a 
-#' list of `data.frame`s containing multiple partitions. At least two 
-#' partitions are required. If a list of `data.frame`s is provided, they must 
-#' all have the same number of rows (i.e., the same items in the clustering).
+#' @param cluster_object A `bioregion.clusters` object.
 #' 
 #' @param comat A co-occurrence `matrix` with sites as rows and species as 
 #' columns. 
 #' 
-#' @param bipartite_link `NULL` by default. Required for `Cz` indices. A 
+#' @param indices A `character` specifying the contribution metric to compute. 
+#' Available options are `rho`, `affinity`, `fidelity`, `indicator_value` and
+#' `Cz`.
+#' 
+#' @param net `NULL` by default. Required for `Cz` indices. A 
 #' `data.frame` where each row represents an interaction between two nodes 
 #' and an optional third column indicating the interaction's weight.  
 #' 
-#' @param indices A `character` specifying the contribution metric to compute. 
-#' Available options are `rho` and `Cz`.
+#' @param site_col A number indicating the position of the column containing
+#' the sites in `net`. 1 by default.
+#' 
+#' @param species_col A number indicating the position of the column
+#' containing the species in `net`. 2 by default.
 #' 
 #' @return 
 #' A `data.frame` with columns `Bioregion`, `Species`, and the desired summary 
@@ -35,9 +39,9 @@
 #' bioregion \eqn{j}, and \eqn{n_{ij}} is the number of occurrences of species 
 #' \eqn{i} in sites of bioregion \eqn{j}.
 #' 
-#' Affinity, fidelity, and individual contributions describe how species are 
-#' linked to their bioregions. These metrics are described in Bernardo-Madrid 
-#' et al. (2019):
+#' Affinity \eqn{A}, fidelity \eqn{F}, and individual contributions
+#' \eqn{IndVal} describe how species are linked to their bioregions. These
+#' metrics are described in Bernardo-Madrid et al. (2019):
 #' 
 #' - Affinity of species to their region: 
 #'   \eqn{A_i = \frac{R_i}{Z}}, where \eqn{R_i} is the occurrence/range size 
@@ -121,14 +125,16 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 #' site_species_metrics(cluster_object = clust_bip, comat = comat, 
-#' bipartite_link = net_bip, indices = "Cz")
+#' net = net_bip, indices = "Cz")
 #' 
 #' @export
 
 site_species_metrics <- function(cluster_object,
                                  comat,
                                  indices = c("rho"),
-                                 bipartite_link = NULL){
+                                 net = NULL,
+                                 site_col = 1,
+                                 species_col = 2){
   
   # 1. Controls ---------------------------------------------------------------
   # input can be of format bioregion.clusters
@@ -174,8 +180,8 @@ site_species_metrics <- function(cluster_object,
          call. = FALSE)
   }
   
-  if("Cz" %in% indices && is.null(bipartite_link)){
-    stop("bipartite_link is needed to compute Cz indices.",
+  if("Cz" %in% indices && is.null(net)){
+    stop("net is needed to compute Cz indices.",
          call. = FALSE)
   }
   
@@ -185,7 +191,25 @@ site_species_metrics <- function(cluster_object,
          call. = FALSE)
   }
   
-  # Add controls for bipartite_link
+  if(!is.null(net)){
+    if(!is.data.frame(net)){
+      stop("net should be a data.frame with at least two columns,
+           corresponding to the sites and species. By default, sites are
+           considered to be in the first column, and species in the second.
+           This can be changed with the arguments 'site_col' and
+           'species_col'.")
+    }
+    controls(args = site_col, data = NULL, type = "strict_positive_numeric")
+    controls(args = species_col, data = NULL, type = "strict_positive_numeric")
+    
+    if(site_col > ncol(net)){
+      stop("The site column ('site_col') is incorrect.")
+    }
+    
+    if(species_col > ncol(net)){
+      stop("The species column ('species_col') is incorrect.")
+    }
+  }
   
   rho_df <- affinity_df <- fidelity_df <- indval_df <- NULL
   
@@ -193,29 +217,17 @@ site_species_metrics <- function(cluster_object,
   ## 2.1. Cz ------------------------------------------------------------------
   # only for bipartite cases; not implemented yet
   if("Cz" %in% indices){
-    # cluster_object <- clust2 # remove
-    # bipartite_link <- net_bip # remove
-    
     # Needs two data frames as inputs:
-    # bipartite_link is a data.frame of the links between nodes containing four
+    # net is a data.frame of the links between nodes containing four
     # columns: site, species, bioregion_site and bioregion_species 
     # 
     # bipartite_df contains three columns: node, bioregion and cat which
     # respectively stand for the name of the node, its bioregion and its
     # bipartite category
     
-    # Rename columns Node1 as Sites and Node2 as Species, and throw warning if
-    # this is the case
-    if("Node1" %in% colnames(bipartite_link)){
-      colnames(bipartite_link)[colnames(bipartite_link) == "Node1"] <- "Site"
-      warning("Column 'Node1' has been renamed 'Sites'. If this column does not
-            correspond to sites, rename it before running the function.")
-    }
-    if("Node2" %in% colnames(bipartite_link)){
-      colnames(bipartite_link)[colnames(bipartite_link) == "Node2"] <- "Species"
-      warning("Column 'Node2' has been renamed 'Species'. If this column does not
-            correspond to species, rename it before running the function.")
-    }
+    # Rename site and species columns as Sites and Species
+    colnames(net)[site_col] <- "Site"
+    colnames(net)[species_col] <- "Species"
     
     bipartite_df <- cluster_object$clusters
     # Add a column category (site or species) to bipartite_df
@@ -223,21 +235,21 @@ site_species_metrics <- function(cluster_object,
     colnames(bipartite_df) <- c("Node", "Bioregion", "Category")
     
     # Add bioregions of the sites to the bipartite data.frame
-    bipartite_link$Site <- as.character(bipartite_link$Site)
+    net$Site <- as.character(net$Site)
     bipartite_df$Node <- as.character(bipartite_df$Node)
-    bipartite_link <- dplyr::left_join(bipartite_link,
-                                       bipartite_df[, c("Node", "Bioregion")],
-                                       by = c("Site" = "Node"))
-    colnames(bipartite_link)[colnames(bipartite_link) == "Bioregion"] <-
+    net <- dplyr::left_join(net,
+                            bipartite_df[, c("Node", "Bioregion")],
+                            by = c("Site" = "Node"))
+    colnames(net)[colnames(net) == "Bioregion"] <-
       "Bioregion_site"
     
     # Add bioregions of the species to the bipartite data.frame
-    bipartite_link$Species <- as.character(bipartite_link$Species)
+    net$Species <- as.character(net$Species)
     bipartite_df$Node <- as.character(bipartite_df$Node)
-    bipartite_link <- dplyr::left_join(bipartite_link,
-                                       bipartite_df[, c("Node", "Bioregion")],
-                                       by = c("Species" = "Node"))
-    colnames(bipartite_link)[colnames(bipartite_link) == "Bioregion"] <-
+    net <- dplyr::left_join(net,
+                            bipartite_df[, c("Node", "Bioregion")],
+                            by = c("Species" = "Node"))
+    colnames(net)[colnames(net) == "Bioregion"] <-
       "Bioregion_species"
     
     
@@ -246,8 +258,8 @@ site_species_metrics <- function(cluster_object,
     dat_com <- bipartite_df[which(bipartite_df$Category == "site"), ]
     for(i in 1:nrow(dat_com)){
       tmp <-
-        table(bipartite_link[which(bipartite_link$Site == dat_com[i, "Node"]),
-                             "Bioregion_species"])
+        table(net[which(net$Site == dat_com[i, "Node"]),
+                  "Bioregion_species"])
       C_site <- rbind(C_site,
                       data.frame(Node = dat_com[i, "Node"],
                                  C = 1 - sum((tmp/sum(tmp))^2),
@@ -258,8 +270,8 @@ site_species_metrics <- function(cluster_object,
     dat_sp <- bipartite_df[which(bipartite_df$Category == "species"), ]
     for(i in 1:nrow(dat_sp)){
       tmp <-
-        table(bipartite_link[which(bipartite_link$Species == dat_sp[i, "Node"]),
-                             "Bioregion_site"])
+        table(net[which(net$Species == dat_sp[i, "Node"]),
+                  "Bioregion_site"])
       C_sp <- rbind(C_sp,
                     data.frame(Node = dat_sp[i, "Node"],
                                C = 1 - sum((tmp/sum(tmp))^2),
@@ -275,13 +287,13 @@ site_species_metrics <- function(cluster_object,
     bipartite_df$n_link_bioregion <- NA
     for(i in 1:nrow(bipartite_df)){
       if(bipartite_df[i, "Category"] == "site"){
-        tmp <- bipartite_link[which(bipartite_link$Site == 
-                                      bipartite_df[i, "Node"]), ]
+        tmp <- net[which(net$Site == 
+                           bipartite_df[i, "Node"]), ]
         bipartite_df[i, "n_link_bioregion"] <-
           nrow(tmp[which(tmp$Bioregion_site == tmp$Bioregion_species), ])
       } else{
-        tmp <- bipartite_link[which(bipartite_link$Species ==
-                                      bipartite_df[i, "Node"]), ]
+        tmp <- net[which(net$Species ==
+                           bipartite_df[i, "Node"]), ]
         bipartite_df[i, "n_link_bioregion"] <-
           nrow(tmp[which(tmp$Bioregion_site == tmp$Bioregion_species), ])
       }
@@ -380,7 +392,7 @@ site_species_metrics <- function(cluster_object,
         # Affinity of species i to bioregion j
         affinity_df <- rbind(affinity_df,
                              data.frame(Bioregion = focal_j,
-                                        Species = names(p_ij),
+                                        Species = names(n_ij),
                                         affinity = n_ij/n_j))
       }
       
@@ -388,7 +400,7 @@ site_species_metrics <- function(cluster_object,
         # Fidelity of species i to bioregion j
         fidelity_df <- rbind(fidelity_df,
                              data.frame(Bioregion = focal_j,
-                                        Species = names(p_ij),
+                                        Species = names(n_ij),
                                         fidelity = n_ij/n_i))
       }
       
@@ -396,7 +408,7 @@ site_species_metrics <- function(cluster_object,
         # Individual contribution of species i to bioregion j
         indval_df <- rbind(indval_df,
                            data.frame(Bioregion = focal_j,
-                                      Species = names(p_ij),
+                                      Species = names(n_ij),
                                       indval = (n_ij/n_j)*(n_ij/n_i)))
       }
     }
