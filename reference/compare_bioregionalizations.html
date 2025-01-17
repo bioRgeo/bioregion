@@ -186,23 +186,32 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A simple case with four bioregionalizations of four items</span></span></span>
-<span class="r-in"><span><span class="va">bioregionalizations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nr <span class="op">=</span> <span class="fl">4</span>, </span></span>
-<span class="r-in"><span>                                         nc <span class="op">=</span> <span class="fl">4</span>, </span></span>
-<span class="r-in"><span>                                         <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                         byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">bioregionalizations</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   X1 X2 X3 X4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1  2  1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  2  2  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2  1  3  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2  1  4  2</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># We here compare three different bioregionalizations</span></span></span>
+<span class="r-in"><span><span class="va">comat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1000</span>, size <span class="op">=</span> <span class="fl">500</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">1</span><span class="op">:</span><span class="fl">1001</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fl">20</span>, <span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">bioregionalizations</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.035685 - Computing pairwise membership comparisons for each bioregionalization...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.036229 - Comparing memberships among bioregionalizations...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.03686 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.037244 - Computing Jaccard index...</span>
+<span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bioregion1</span> <span class="op">&lt;-</span> <span class="fu"><a href="nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity.html">similarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bioregion2</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bioregion3</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_walktrap.html">netclu_walktrap</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Make one single data.frame with the bioregionalizations to compare</span></span></span>
+<span class="r-in"><span><span class="va">compare_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">bioregion1</span><span class="op">$</span><span class="va">clusters</span>, <span class="va">bioregion2</span><span class="op">$</span><span class="va">clusters</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">compare_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">compare_df</span>, <span class="va">bioregion3</span><span class="op">$</span><span class="va">clusters</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">compare_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="st">"Hclu"</span>, <span class="st">"Greedy"</span>, <span class="st">"Walktrap"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">compare_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">compare_df</span><span class="op">$</span><span class="va">Site</span></span></span>
+<span class="r-in"><span><span class="va">compare_df</span> <span class="op">&lt;-</span> <span class="va">compare_df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Hclu"</span>, <span class="st">"Greedy"</span>, <span class="st">"Walktrap"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Running the function</span></span></span>
+<span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">compare_df</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.135108 - Computing pairwise membership comparisons for each bioregionalization...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.136667 - Comparing memberships among bioregionalizations...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.137351 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.137721 - Computing Jaccard index...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args$indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rand"    "jaccard"</span>
@@ -219,68 +228,265 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $inputs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               number_items number_bioregionalizations </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          4                          4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         20                          3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pairwise_membership</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        X1    X2    X3    X4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_2  TRUE  TRUE FALSE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_3 FALSE FALSE FALSE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_4 FALSE FALSE FALSE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2_3 FALSE FALSE FALSE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2_4 FALSE FALSE FALSE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3_4  TRUE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Hclu Greedy Walktrap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_2   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_3   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_4   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_5   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_6   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_8   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_10   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_11   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_13   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_18   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_19   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_20   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_3   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_4    TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_5   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_6   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_7    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_8   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_9    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_15   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_4   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_5    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_6    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_8    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_5   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_6   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_7    TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_8   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_9    TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_10  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_11  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_12  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_13  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_14  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_15   TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_16  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_17  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_18  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_19  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_20  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_6    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_8    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_8    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_8   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_9    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_15   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_15   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_11  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_12 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_13  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_14 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_18  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_12 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_13  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_14 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_18  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_13 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_14  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_16  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_17  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_14 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_18  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_16  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_17  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_17  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19_20  TRUE   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $freq_item_pw_membership</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_2 1_3 1_4 2_3 2_4 3_4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3   1   0   1   0   2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1_2   1_3   1_4   1_5   1_6   1_7   1_8   1_9  1_10  1_11  1_12  1_13  1_14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     1     2     2     2     2     2     3     3     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1_15  1_16  1_17  1_18  1_19  1_20   2_3   2_4   2_5   2_6   2_7   2_8   2_9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     3     3     3     2     2     2     2     3     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2_10  2_11  2_12  2_13  2_14  2_15  2_16  2_17  2_18  2_19  2_20   3_4   3_5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     2     2     3     2     2     2     2     2     1     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3_6   3_7   3_8   3_9  3_10  3_11  3_12  3_13  3_14  3_15  3_16  3_17  3_18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     2     3     2     2     2     3     2     3     2     3     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3_19  3_20   4_5   4_6   4_7   4_8   4_9  4_10  4_11  4_12  4_13  4_14  4_15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     1     1     2     1     2     1     1     1     1     1     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4_16  4_17  4_18  4_19  4_20   5_6   5_7   5_8   5_9  5_10  5_11  5_12  5_13 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1     1     1     1     1     3     2     3     2     2     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5_14  5_15  5_16  5_17  5_18  5_19  5_20   6_7   6_8   6_9  6_10  6_11  6_12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     2     3     3     2     2     2     2     3     2     2     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6_13  6_14  6_15  6_16  6_17  6_18  6_19  6_20   7_8   7_9  7_10  7_11  7_12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     3     2     3     3     2     2     2     2     3     2     2     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7_13  7_14  7_15  7_16  7_17  7_18  7_19  7_20   8_9  8_10  8_11  8_12  8_13 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     3     2     2     2     2     2     2     2     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8_14  8_15  8_16  8_17  8_18  8_19  8_20  9_10  9_11  9_12  9_13  9_14  9_15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     2     3     3     2     2     2     2     2     2     2     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9_16  9_17  9_18  9_19  9_20 10_11 10_12 10_13 10_14 10_15 10_16 10_17 10_18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     2     2     3     2     3     2     2     2     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_19 10_20 11_12 11_13 11_14 11_15 11_16 11_17 11_18 11_19 11_20 12_13 12_14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     3     2     3     2     2     2     2     3     3     3     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_15 12_16 12_17 12_18 12_19 12_20 13_14 13_15 13_16 13_17 13_18 13_19 13_20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     3     3     2     2     2     2     2     2     2     3     3     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_15 14_16 14_17 14_18 14_19 14_20 15_16 15_17 15_18 15_19 15_20 16_17 16_18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     3     3     2     2     2     2     2     2     2     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_19 16_20 17_18 17_19 17_20 18_19 18_20 19_20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     2     2     3     3     3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X1%X2`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0 0 4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`Hclu%Greedy`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a   b   c   d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  55   4 116  15 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X1%X3`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0 2 0 4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`Hclu%Walktrap`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a   b   c   d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  59   0 131   0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X1%X4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 2 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X2%X3`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0 2 0 4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X2%X4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 2 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X3%X4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0 0 3 3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`Greedy%Walktrap`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a   b   c   d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171   0  19   0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bioregionalization_comparison</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   bioregionalization_comparison      rand jaccard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                         X1%X2 1.0000000    1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                         X1%X3 0.6666667    0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                         X1%X4 0.5000000    0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                         X2%X3 0.6666667    0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                         X2%X4 0.5000000    0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                         X3%X4 0.5000000    0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bioregionalization_comparison      rand   jaccard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                   Hclu%Greedy 0.3684211 0.3142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 Hclu%Walktrap 0.3105263 0.3105263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               Greedy%Walktrap 0.9000000 0.9000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "bioregion.bioregionalization.comparison"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2] "list"                                   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Find out which bioregionalizations are most representative</span></span></span>
-<span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">bioregionalizations</span>,</span></span>
+<span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">compare_df</span>,</span></span>
 <span class="r-in"><span>                            cor_frequency <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.038988 - Computing pairwise membership comparisons for each bioregionalization...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.039476 - Comparing memberships among bioregionalizations...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.040053 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.040401 - Computing Jaccard index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:07:24.040714 - Computing the correlation between each bioregionalization and the vector of frequency of pairwise membership...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.141203 - Computing pairwise membership comparisons for each bioregionalization...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.142715 - Comparing memberships among bioregionalizations...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.143345 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.143678 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-17 10:28:45.143987 - Computing the correlation between each bioregionalization and the vector of frequency of pairwise membership...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args$indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rand"    "jaccard"</span>
@@ -297,59 +503,256 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $inputs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               number_items number_bioregionalizations </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          4                          4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         20                          3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pairwise_membership</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        X1    X2    X3    X4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_2  TRUE  TRUE FALSE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_3 FALSE FALSE FALSE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_4 FALSE FALSE FALSE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2_3 FALSE FALSE FALSE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2_4 FALSE FALSE FALSE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3_4  TRUE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Hclu Greedy Walktrap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_2   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_3   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_4   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_5   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_6   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_8   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_10   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_11   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_13   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_18   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_19   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1_20   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_3   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_4    TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_5   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_6   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_7    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_8   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_9    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_15   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_4   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_5    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_6    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_8    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_5   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_6   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_7    TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_8   FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_9    TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_10  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_11  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_12  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_13  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_14  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_15   TRUE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_16  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_17  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_18  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_19  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4_20  FALSE  FALSE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_6    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_8    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_7   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_8    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_8   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_9    TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_15   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_9   FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_12   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_14   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_15  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_16   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_17   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_10  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_11  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_12  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_13  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_14  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_15   TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_16  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_17  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_18  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_19  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9_20  FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_11  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_12 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_13  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_14 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_18  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_12 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_13  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_14 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_18  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_13 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_14  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_16  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_17  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_14 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_18  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_15 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_16  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_17  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_16 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_17 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_17  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17_18 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17_19 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17_20 FALSE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18_19  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18_20  TRUE   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19_20  TRUE   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $freq_item_pw_membership</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1_2 1_3 1_4 2_3 2_4 3_4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3   1   0   1   0   2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1_2   1_3   1_4   1_5   1_6   1_7   1_8   1_9  1_10  1_11  1_12  1_13  1_14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     1     2     2     2     2     2     3     3     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1_15  1_16  1_17  1_18  1_19  1_20   2_3   2_4   2_5   2_6   2_7   2_8   2_9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     3     3     3     2     2     2     2     3     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2_10  2_11  2_12  2_13  2_14  2_15  2_16  2_17  2_18  2_19  2_20   3_4   3_5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     2     2     3     2     2     2     2     2     1     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3_6   3_7   3_8   3_9  3_10  3_11  3_12  3_13  3_14  3_15  3_16  3_17  3_18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     2     3     2     2     2     3     2     3     2     3     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3_19  3_20   4_5   4_6   4_7   4_8   4_9  4_10  4_11  4_12  4_13  4_14  4_15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     1     1     2     1     2     1     1     1     1     1     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4_16  4_17  4_18  4_19  4_20   5_6   5_7   5_8   5_9  5_10  5_11  5_12  5_13 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1     1     1     1     1     3     2     3     2     2     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5_14  5_15  5_16  5_17  5_18  5_19  5_20   6_7   6_8   6_9  6_10  6_11  6_12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     2     3     3     2     2     2     2     3     2     2     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6_13  6_14  6_15  6_16  6_17  6_18  6_19  6_20   7_8   7_9  7_10  7_11  7_12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     3     2     3     3     2     2     2     2     3     2     2     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7_13  7_14  7_15  7_16  7_17  7_18  7_19  7_20   8_9  8_10  8_11  8_12  8_13 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     3     2     2     2     2     2     2     2     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8_14  8_15  8_16  8_17  8_18  8_19  8_20  9_10  9_11  9_12  9_13  9_14  9_15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     2     3     3     2     2     2     2     2     2     2     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9_16  9_17  9_18  9_19  9_20 10_11 10_12 10_13 10_14 10_15 10_16 10_17 10_18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     2     2     3     2     3     2     2     2     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10_19 10_20 11_12 11_13 11_14 11_15 11_16 11_17 11_18 11_19 11_20 12_13 12_14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3     3     2     3     2     2     2     2     3     3     3     2     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12_15 12_16 12_17 12_18 12_19 12_20 13_14 13_15 13_16 13_17 13_18 13_19 13_20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     3     3     2     2     2     2     2     2     2     3     3     3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14_15 14_16 14_17 14_18 14_19 14_20 15_16 15_17 15_18 15_19 15_20 16_17 16_18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     3     3     2     2     2     2     2     2     2     2     3     2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16_19 16_20 17_18 17_19 17_20 18_19 18_20 19_20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     2     2     2     2     2     3     3     3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bioregionalization_freq_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        X1        X2        X3        X4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.8834522 0.8834522 0.0000000 0.4685213 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Hclu    Greedy  Walktrap </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.8507343 0.5855169 0.0000000 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X1%X2`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0 0 4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`Hclu%Greedy`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a   b   c   d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  55   4 116  15 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X1%X3`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0 2 0 4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`Hclu%Walktrap`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a   b   c   d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  59   0 131   0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X1%X4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 2 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X2%X3`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0 2 0 4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X2%X4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 2 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`X3%X4`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b c d </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0 0 3 3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix$`Greedy%Walktrap`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a   b   c   d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171   0  19   0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bioregionalization_comparison</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   bioregionalization_comparison      rand jaccard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                         X1%X2 1.0000000    1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                         X1%X3 0.6666667    0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                         X1%X4 0.5000000    0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                         X2%X3 0.6666667    0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                         X2%X4 0.5000000    0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                         X3%X4 0.5000000    0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bioregionalization_comparison      rand   jaccard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                   Hclu%Greedy 0.3684211 0.3142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 Hclu%Walktrap 0.3105263 0.3105263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               Greedy%Walktrap 0.9000000 0.9000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "bioregion.bioregionalization.comparison"</span>
