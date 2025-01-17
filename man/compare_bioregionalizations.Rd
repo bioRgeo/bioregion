@@ -110,17 +110,31 @@ each bioregionalization and the total frequency of pairwise membership across
 all bioregionalizations. This is enabled by setting \code{cor_frequency = TRUE}.
 }
 \examples{
-# A simple case with four bioregionalizations of four items
-bioregionalizations <- data.frame(matrix(nr = 4, 
-                                         nc = 4, 
-                                         c(1,2,1,1,1,2,2,1,2,1,3,1,2,1,4,2),
-                                         byrow = TRUE))
-bioregionalizations
+# We here compare three different bioregionalizations
+comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
+20, 25)
+rownames(comat) <- paste0("Site",1:20)
+colnames(comat) <- paste0("Species",1:25)
 
-compare_bioregionalizations(bioregionalizations)
+dissim <- dissimilarity(comat, metric = "Simpson")
+bioregion1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
+
+net <- similarity(comat, metric = "Simpson")
+bioregion2 <- netclu_greedy(net)
+bioregion3 <- netclu_walktrap(net)
+
+# Make one single data.frame with the bioregionalizations to compare
+compare_df <- merge(bioregion1$clusters, bioregion2$clusters, by = "ID")
+compare_df <- merge(compare_df, bioregion3$clusters, by = "ID")
+colnames(compare_df) <- c("Site", "Hclu", "Greedy", "Walktrap")
+rownames(compare_df) <- compare_df$Site
+compare_df <- compare_df[, c("Hclu", "Greedy", "Walktrap")]
+
+# Running the function
+compare_bioregionalizations(compare_df)
 
 # Find out which bioregionalizations are most representative
-compare_bioregionalizations(bioregionalizations,
+compare_bioregionalizations(compare_df,
                             cor_frequency = TRUE)
                                 
 }
