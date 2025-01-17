@@ -180,9 +180,14 @@ nhclu_kmeans <- function(dissimilarity,
   # kmeans only works on Euclidean distances, so the dissimilarity matrix needs
   # to be transformed into a multivariate space with euclidean distances
   # with a Principal Coordinate Analysis
-  if(length(unique(dist.obj)) == 1 && unique(dist.obj) == 0){
-    stop("All sites are completely dissimilar.")
+  if(length(unique(as.numeric(dist.obj))) == 1 &&
+     unique(as.numeric(dist.obj)) == 0){
+    stop("All sites are completely similar.")
   } else{
+    if(length(unique(as.numeric(dist.obj))) == 1 &&
+       unique(as.numeric(dist.obj)) == 1){
+      warning("All sites are completely dissimilar.")
+    }
     outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)
   }
   
