@@ -71,11 +71,7 @@
 #'
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
-#' clust1 <- nhclu_clarans(dissim, index = "Simpson", n_clust = 5)
-#' 
-#' bioregionalization_metrics(clust1, dissimilarity = dissim,
-#' eval_metric = "pc_distance")
-#' 
+#' #clust <- nhclu_clarans(dissim, index = "Simpson", n_clust = 5)
 #'    
 #' @importFrom stats as.dist
 #' @importFrom fastkmedoids fastclarans    

@@ -14,7 +14,7 @@
 #' default, the third column name of `dissimilarity` is used.
 #'
 #' @param seed A value for the random number generator (set to `NULL` for random
-#'  initialization by default).
+#' initialization by default).
 #'
 #' @param n_clust An `integer` vector or a single `integer` specifying the
 #' desired number(s) of clusters.
@@ -84,11 +84,7 @@
 #'
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
-#' clust1 <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
-#' 
-#' bioregionalization_metrics(clust1, dissimilarity = dissim,
-#' eval_metric = "pc_distance")
-#' 
+#' #clust <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
 #'    
 #' @importFrom stats as.dist
 #' @importFrom fastkmedoids fastclara    

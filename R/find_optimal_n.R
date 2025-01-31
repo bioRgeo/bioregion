@@ -110,37 +110,21 @@
 #' rownames(comat) <- paste0("Site",1:20)
 #' colnames(comat) <- paste0("Species",1:25)
 #' 
-#' comnet <- mat_to_net(comat)
-#' 
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' # User-defined number of clusters
-#' tree1 <- hclu_hierarclust(dissim,
-#'                           n_clust = 2:15)
-#' tree1
+#' tree <- hclu_hierarclust(dissim,
+#'                           optimal_tree_method = "best",
+#'                           n_clust = 5:10)
+#' tree
 #' 
-#' a <- bioregionalization_metrics(tree1,
-#'                    dissimilarity = dissim,
-#'                    net = comnet,
-#'                    species_col = "Node2",
-#'                    site_col = "Node1",
-#'                    eval_metric = c("tot_endemism",
-#'                                    "avg_endemism",
-#'                                    "pc_distance",
-#'                                    "anosim"))
+#' a <- bioregionalization_metrics(tree,
+#'                                 dissimilarity = dissim,
+#'                                 species_col = "Node2",
+#'                                 site_col = "Node1",
+#'                                 eval_metric = "anosim")
 #'                                    
-#' find_optimal_n(a)
-#' find_optimal_n(a, criterion = "increasing_step")
-#' find_optimal_n(a, criterion = "decreasing_step")
-#' find_optimal_n(a, criterion = "decreasing_step",
-#'                step_levels = 3) 
-#' find_optimal_n(a, criterion = "decreasing_step",
-#'                step_quantile = .9) 
-#' find_optimal_n(a, criterion = "decreasing_step",
-#'                step_levels = 3) 
-#' find_optimal_n(a, criterion = "decreasing_step",
-#'                step_levels = 3)                 
-#' find_optimal_n(a, criterion = "breakpoints")             
+#' find_optimal_n(a, criterion = 'increasing_step', plot = FALSE)
 #'
 #' @importFrom stats predict quantile
 #' @importFrom tidyr pivot_longer

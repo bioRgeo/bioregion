@@ -80,6 +80,8 @@ reference:
   
 news:
   releases:
+  - text: "Version 1.2.0"
+    href: https://github.com/bioRgeo/bioregion/releases/tag/v1.2.0
   - text: "Version 1.1.1"
     href: https://github.com/bioRgeo/bioregion/releases/tag/v1.1.1
   - text: "Version 1.1.0"

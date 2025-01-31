@@ -85,13 +85,7 @@ comnet <- mat_to_net(comat)
 
 dissim <- dissimilarity(comat, metric = "all")
 
-clust1 <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")
-clust2 <- nhclu_kmeans(dissim, n_clust = 2:15, index = "Simpson")
-bioregionalization_metrics(clust2, dissimilarity = dissim,
-                  eval_metric = "pc_distance")
-
-bioregionalization_metrics(clust2, net = comnet, species_col = "Node2",
-                  site_col = "Node1", eval_metric = "avg_endemism")
+clust <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")
 
 }
 \seealso{

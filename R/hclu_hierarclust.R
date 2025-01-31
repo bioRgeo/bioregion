@@ -218,19 +218,6 @@
 #' tree3$cluster_info
 #' plot(tree3)
 #' 
-#' # Recut the tree afterwards
-#' tree3.1 <- cut_tree(tree3, n = 5)
-#' 
-#' # Make multiple cuts
-#' tree4 <- hclu_hierarclust(dissim, 
-#'                           n_clust = 1:19)
-#' 
-#' # Change the method to get the final tree 
-#' tree5 <- hclu_hierarclust(dissim,
-#'                           optimal_tree_method = "best",
-#'                           n_clust = 10)
-#' 
-#' 
 #' @importFrom stats as.dist cophenetic cor
 #' @importFrom fastcluster hclust
 #' 

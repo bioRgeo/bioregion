@@ -85,11 +85,7 @@ colnames(comat) <- paste0("Species",1:25)
 
 dissim <- dissimilarity(comat, metric = "all")
 
-clust1 <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
-
-bioregionalization_metrics(clust1, dissimilarity = dissim,
-eval_metric = "pc_distance")
-
+#clust <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
    
 }
 \references{

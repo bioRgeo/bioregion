@@ -31,41 +31,15 @@ Endemic species are species found only in the sites belonging to one
 bioregion.
 }
 \examples{
-comat_1 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
-prob = 1/1:1001), 10, 12)
-rownames(comat_1) <- paste0("Site", 1:10)
-colnames(comat_1) <- paste0("Species", 1:12)
-comat_1 <- cbind(comat_1,
-                 matrix(0, 10, 8,
-                        dimnames = list(paste0("Site", 1:10),
-                                        paste0("Species", 13:20))))
-
-comat_2 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
-                         prob = 1/1:1001), 10, 12)
-rownames(comat_2) <- paste0("Site", 11:20)
-colnames(comat_2) <- paste0("Species", 9:20)
-comat_2 <- cbind(matrix(0, 10, 8,
-                        dimnames = list(paste0("Site", 11:20),
-                                        paste0("Species", 1:8))),
-                 comat_2)
-
-comat <- rbind(comat_1, comat_2)
-
-dissim <- dissimilarity(comat, metric = "Simpson")
-clust1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
+comat <- matrix(sample(1000, 50), 5, 10)
+rownames(comat) <- paste0("Site", 1:5)
+colnames(comat) <- paste0("Species", 1:10)
 
 net <- similarity(comat, metric = "Simpson")
-com <- netclu_greedy(net)
+clust <- netclu_louvain(net)
 
-bioregion_metrics(bioregionalization = clust1, comat = comat) 
-
-# Spatial coherence
-vegedissim <- dissimilarity(vegemat)
-hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
-vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
-
-bioregion_metrics(bioregionalization = hclu, comat = vegemat, map = vegemap,
-col_bioregion = 2) 
+bioregion_metrics(bioregionalization = clust, 
+                  comat = comat) 
 
 }
 \seealso{
