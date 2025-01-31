@@ -55,7 +55,7 @@ reference:
   - netclu_oslom
   - netclu_walktrap
   
-- title: Clustering analysis
+- title: Bioregionalization analysis
   desc: ~
   contents:
   - site_species_metrics

@@ -352,8 +352,8 @@ print.bioregion.partition.comparison <- function(x, ...)
 }
 
 #' @export
-#' @method print bioregion.partition.metrics
-print.bioregion.partition.metrics <- function(x, ...)
+#' @method print bioregion.bioregionalization.metrics
+print.bioregion.bioregionalization.metrics <- function(x, ...)
 {
   cat("Partition metrics:\n")
   cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
@@ -372,7 +372,7 @@ print.bioregion.partition.metrics <- function(x, ...)
   
   cat("\nAccess the data.frame of metrics with your_object$evaluation_df\n")
   if("endemism_results" %in% names(x)) {
-    cat("Details of endemism % for each partition are available in 
+    cat("Details of endemism % for each bioregionalization are available in 
         your_object$endemism_results\n")
   }
 }

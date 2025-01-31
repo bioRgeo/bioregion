@@ -54,13 +54,13 @@ class(vegenodf) <- "sf"
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
 
-  #test_output <- bioregion_metrics(cluster_object = clust1, 
+  #test_output <- bioregion_metrics(bioregionalization = clust1, 
   #                                 comat = comat)
   #expect_equal(inherits(test_output, "data.frame"), TRUE)
   #expect_equal(dim(test_output)[1], 3)
   #expect_equal(dim(test_output)[2], 5)
 
-  test_output2 <- bioregion_metrics(cluster_object = hclu, 
+  test_output2 <- bioregion_metrics(bioregionalization = hclu, 
                                     comat = vegemat,
                                     map = vegemap, 
                                     col_bioregion = 2)
@@ -79,7 +79,7 @@ test_that("invalid inputs", {
 
   expect_error(
     bioregion_metrics(multi_clust, comat = comat),
-    "^This function is designed to be applied on a single partition.")
+    "^This function is designed to be applied on a single")
   
   expect_error(
     bioregion_metrics(clust_h),
@@ -87,7 +87,7 @@ test_that("invalid inputs", {
   
   expect_error(
     bioregion_metrics(clust_louv),
-    "^cluster_object does not have the expected type of")
+    "^bioregionalization does not have the expected type of")
 
   expect_error(
     bioregion_metrics(com, 

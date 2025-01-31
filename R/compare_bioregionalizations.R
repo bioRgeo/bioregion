@@ -5,7 +5,7 @@
 #' functions. It also provides the confusion matrix from pairwise comparisons, 
 #' enabling the user to compute additional comparison metrics.
 #' 
-#' @param cluster_object A `data.frame` object where each row corresponds to
+#' @param bioregionalizations A `data.frame` object where each row corresponds to
 #' a site, and each column to a bioregionalization.
 #' 
 #' @param indices `NULL` or `character`. Indices to compute for the pairwise
@@ -135,49 +135,49 @@
 #'                             cor_frequency = TRUE)
 #'                                 
 #' @export
-compare_bioregionalizations <- function(cluster_object,
+compare_bioregionalizations <- function(bioregionalizations,
                                         indices = c("rand", "jaccard"),
                                         cor_frequency = FALSE,
                                         store_pairwise_membership = TRUE,
                                         store_confusion_matrix = TRUE){
   
   # input can be of format bioregion.clusters
-  if (inherits(cluster_object, "bioregion.clusters")) {
-    if (inherits(cluster_object$clusters, "data.frame")) {
+  if (inherits(bioregionalizations, "bioregion.clusters")) {
+    if (inherits(bioregionalizations$clusters, "data.frame")) {
       has.clusters <- TRUE
-      clusters <- cluster_object$clusters
+      clusters <- bioregionalizations$clusters
     } else {
-      if (cluster_object$name == "hclu_hierarclust") {
+      if (bioregionalizations$name == "hclu_hierarclust") {
         stop(paste0("No clusters have been generated for your hierarchical ",
                     "tree, please extract clusters from the tree before using ",
                     "bioregionalization_metrics().\n",
                     "See ?hclu_hierarclust or ?cut_tree"), 
              call. = FALSE)
       } else {
-        stop(paste0("cluster_object does not have the expected type of ",
+        stop(paste0("bioregionalizations does not have the expected type of ",
                     "'clusters' slot"), 
              call. = FALSE)
       }
     }
     # or data.frame (next row)
-  } else if (inherits(cluster_object, "data.frame")) {
-    controls(data = cluster_object, type = "input_data_frame")
-    clusters <- cluster_object
+  } else if (inherits(bioregionalizations, "data.frame")) {
+    controls(data = bioregionalizations, type = "input_data_frame")
+    clusters <- bioregionalizations
     # or list of data.frames
-  } else if (inherits(cluster_object, "list")) {
+  } else if (inherits(bioregionalizations, "list")) {
     # test that all elements of the list are data.frames
-    test <- lapply(cluster_object, FUN = function(x) {
+    test <- lapply(bioregionalizations, FUN = function(x) {
       try(controls(data = x, type = "input_data_frame"), silent = TRUE)})
     if (any(vapply(test, function(x) inherits(x, "try-error"),
                    FUN.VALUE = logical(1)))) {
-      stop(paste0("All elements in cluster_object should be ",
+      stop(paste0("All elements in bioregionalizations should be ",
                   "of data.frame format"), 
                   call. = FALSE)
       # ensure that the number of rows are identical among df of the list
-    } else if (length(unique(vapply(cluster_object,
+    } else if (length(unique(vapply(bioregionalizations,
                                     nrow,
                                     FUN.VALUE = numeric(1)))) == 1){
-      clusters <- data.frame(cluster_object)
+      clusters <- data.frame(bioregionalizations)
     }
     # if none of the above then stop
   }  else {
@@ -189,8 +189,7 @@ compare_bioregionalizations <- function(cluster_object,
   
   if(ncol(clusters) == 1) {
     stop(paste0("This function is designed to be applied on multiple ",
-                "bioregionalizations. Your cluster_object only has a single ",
-                "bioregionalization (one column)."), 
+                "bioregionalizations."), 
          call. = FALSE)
   }
   

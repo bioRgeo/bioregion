@@ -2,7 +2,7 @@
 % Please edit documentation in R/hclu_hierarclust.R
 \name{hclu_hierarclust}
 \alias{hclu_hierarclust}
-\title{Hierarchical Clustering Based on Dissimilarity or Beta-Diversity}
+\title{Hierarchical clustering based on dissimilarity or beta-diversity}
 \usage{
 hclu_hierarclust(
   dissimilarity,

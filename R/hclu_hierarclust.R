@@ -1,4 +1,4 @@
-#' Hierarchical Clustering Based on Dissimilarity or Beta-Diversity
+#' Hierarchical clustering based on dissimilarity or beta-diversity
 #'
 #' This function generates a hierarchical tree from a dissimilarity
 #' (beta-diversity) `data.frame`, calculates the cophenetic correlation

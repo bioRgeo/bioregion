@@ -2,10 +2,10 @@
 % Please edit documentation in R/bioregionalization_metrics.R
 \name{bioregionalization_metrics}
 \alias{bioregionalization_metrics}
-\title{Calculate metrics for one or several partitions}
+\title{Calculate metrics for one or several bioregionalizations}
 \usage{
 bioregionalization_metrics(
-  cluster_object,
+  bioregionalization,
   dissimilarity = NULL,
   dissimilarity_index = NULL,
   net = NULL,
@@ -15,7 +15,7 @@ bioregionalization_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{A \code{bioregion.clusters} object.}
+\item{bioregionalization}{A \code{bioregion.clusters} object.}
 
 \item{dissimilarity}{A \code{dist} object or a \code{bioregion.pairwise.metric}
 object (output from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Required if
@@ -45,17 +45,17 @@ numbers of clusters. Available options are \code{"pc_distance"}, \code{"anosim"}
 will be calculated.}
 }
 \value{
-A \code{list} of class \code{bioregion.partition.metrics} with two to three elements:
+A \code{list} of class \code{bioregion.bioregionalization.metrics} with two to three elements:
 \itemize{
 \item{\code{args}: Input arguments.}
 \item{\code{evaluation_df}: A \code{data.frame} containing the \code{eval_metric}
 values for all explored numbers of clusters.}
 \item{\code{endemism_results}: If endemism calculations are requested, a list
-with the endemism results for each partition.}
+with the endemism results for each bioregionalization.}
 }
 }
 \description{
-This function calculates metrics for one or several partitions,
+This function calculates metrics for one or several bioregionalizations,
 typically based on outputs from \code{netclu_}, \code{hclu_}, or \code{nhclu_} functions.
 Some metrics may require users to provide either a similarity or dissimilarity
 matrix, or the initial species-site table.

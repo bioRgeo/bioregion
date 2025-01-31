@@ -1,11 +1,11 @@
-#' Calculate metrics for one or several partitions
+#' Calculate metrics for one or several bioregionalizations
 #' 
-#' This function calculates metrics for one or several partitions, 
+#' This function calculates metrics for one or several bioregionalizations, 
 #' typically based on outputs from `netclu_`, `hclu_`, or `nhclu_` functions. 
 #' Some metrics may require users to provide either a similarity or dissimilarity 
 #' matrix, or the initial species-site table.
 #'
-#' @param cluster_object A `bioregion.clusters` object.
+#' @param bioregionalization A `bioregion.clusters` object.
 #' 
 #' @param eval_metric A `character` vector or a single `character` string 
 #' indicating the metric(s) to be calculated to assess the effect of different 
@@ -34,13 +34,13 @@
 #' (i.e., feature nodes). Should be provided if `eval_metric` includes
 #' `"avg_endemism"` or `"tot_endemism"`.
 #' 
-#' @return A `list` of class `bioregion.partition.metrics` with two to three elements:
+#' @return A `list` of class `bioregion.bioregionalization.metrics` with two to three elements:
 #' \itemize{
 #' \item{`args`: Input arguments.}
 #' \item{`evaluation_df`: A `data.frame` containing the `eval_metric`
 #' values for all explored numbers of clusters.}
 #' \item{`endemism_results`: If endemism calculations are requested, a list
-#' with the endemism results for each partition.}
+#' with the endemism results for each bioregionalization.}
 #' }
 #'
 #' @details
@@ -139,7 +139,7 @@
 #' @import data.table 
 #'
 #'@export
-bioregionalization_metrics <- function(cluster_object, 
+bioregionalization_metrics <- function(bioregionalization, 
                                        dissimilarity = NULL,
                                        dissimilarity_index = NULL, 
                                        net = NULL,
@@ -152,19 +152,19 @@ bioregionalization_metrics <- function(cluster_object,
   compo_based_metrics <- c("avg_endemism", 
                            "tot_endemism")
   
-  # Control cluster_object
-  if (inherits(cluster_object, "bioregion.clusters")) {
-    if (inherits(cluster_object$clusters, "data.frame")) {
+  # Control bioregionalization
+  if (inherits(bioregionalization, "bioregion.clusters")) {
+    if (inherits(bioregionalization$clusters, "data.frame")) {
       has.clusters <- TRUE # To remove? Does not seem relevant anymore
     } else {
-      if (cluster_object$name == "hclu_hierarclust") {
+      if (bioregionalization$name == "hclu_hierarclust") {
         stop(paste0("No clusters have been generated for your hierarchical ",
                     "tree, please extract clusters from the tree before using ",
                     "bioregionalization_metrics().\n",
                     "See ?hclu_hierarclust or ?cut_tree"), 
              call. = FALSE)
       } else {
-        stop(paste0("cluster_object does not have the expected type of ",
+        stop(paste0("bioregionalization does not have the expected type of ",
                     "'clusters' slot"), 
              call. = FALSE)
       }
@@ -212,7 +212,7 @@ bioregionalization_metrics <- function(cluster_object,
   } else if (inherits(dissimilarity, "bioregion.pairwise.metric")) {
     if (attr(dissimilarity, "type") == "dissimilarity") {
       if(is.null(dissimilarity_index)) {
-        dissimilarity_index <- cluster_object$args$index
+        dissimilarity_index <- bioregionalization$args$index
       } else if(!(dissimilarity_index %in% colnames(dissimilarity))) {
         stop(paste0("dissimilarity_index does not exist in the dissimilarity ",
                     "object. Did you misspecify the metric name?"),
@@ -254,8 +254,8 @@ bioregionalization_metrics <- function(cluster_object,
   }
   
   if(has.dissimilarity){
-    if(attr(dist_object, "Size") != cluster_object$inputs$nb_sites){
-      stop(paste0("cluster_object and dissimilarity have different ",
+    if(attr(dist_object, "Size") != bioregionalization$inputs$nb_sites){
+      stop(paste0("bioregionalization and dissimilarity have different ",
                   "number of sites."),
            call. = FALSE)
     }
@@ -278,7 +278,7 @@ bioregionalization_metrics <- function(cluster_object,
     controls(args = site_col, data = net, type = "input_net_bip_col")
     controls(args = species_col, data = net, type = "input_net_bip_col")
     if(has.clusters){
-      if(any(!(cluster_object$clusters$ID %in% c(net[, site_col],
+      if(any(!(bioregionalization$clusters$ID %in% c(net[, site_col],
                                                  net[, species_col])))) {
         stop(paste0("Some elements of the cluster table (column ID) cannot be ",
                     "found in net."),
@@ -304,7 +304,7 @@ bioregionalization_metrics <- function(cluster_object,
                 call. = FALSE)
   }
   
-  nb_sites <- cluster_object$inputs$nb_sites
+  nb_sites <- bioregionalization$inputs$nb_sites
   
   # 2. Calculate metrics ------------------------------------------------------
   
@@ -327,17 +327,17 @@ bioregionalization_metrics <- function(cluster_object,
   
   # Prepare evaluation data.frame
   evaluation_df <- data.frame(matrix(
-    nrow = ncol(cluster_object$clusters) - 1,
+    nrow = ncol(bioregionalization$clusters) - 1,
     ncol = 2 + length(eval_metric),
     dimnames = list(colnames(
-      cluster_object$clusters)[2:ncol(cluster_object$clusters)],
+      bioregionalization$clusters)[2:ncol(bioregionalization$clusters)],
       c("K", "n_clusters", eval_metric))))
   
   evaluation_df$K <-
-    colnames(cluster_object$clusters)[2:ncol(cluster_object$clusters)]
+    colnames(bioregionalization$clusters)[2:ncol(bioregionalization$clusters)]
   
   evaluation_df$n_clusters <- apply(
-    cluster_object$clusters[, 2:(ncol(cluster_object$clusters)), drop = FALSE],
+    bioregionalization$clusters[, 2:(ncol(bioregionalization$clusters)), drop = FALSE],
     2,
     function (x) length(unique(x)))
   
@@ -351,8 +351,8 @@ bioregionalization_metrics <- function(cluster_object,
   #                rep("species", length(unique(net[, species_col])))))
   # net_long <- data.frame(
   #   net_long,
-  #   cluster_object$clusters[match(net_long$ID,
-  #                                 cluster_object$clusters$ID), -1])
+  #   bioregionalization$clusters[match(net_long$ID,
+  #                                 bioregionalization$clusters$ID), -1])
   
   if(has.dissimilarity & any(c("pc_distance", "anosim") %in% eval_metric)){
     message("Computing similarity-based metrics...")
@@ -361,28 +361,28 @@ bioregionalization_metrics <- function(cluster_object,
     # clusters
     dissimilarity <- data.frame(
       dissimilarity,
-      cluster_object$clusters[data.table::chmatch(dissimilarity$Site1,
-                                                  cluster_object$clusters$ID), 
-                              cluster_object$cluster_info$partition_name,
+      bioregionalization$clusters[data.table::chmatch(dissimilarity$Site1,
+                                                  bioregionalization$clusters$ID), 
+                              bioregionalization$cluster_info$partition_name,
                               drop = FALSE],
-      cluster_object$clusters[data.table::chmatch(dissimilarity$Site2,
-                                                  cluster_object$clusters$ID), 
-                              cluster_object$cluster_info$partition_name,
+      bioregionalization$clusters[data.table::chmatch(dissimilarity$Site2,
+                                                  bioregionalization$clusters$ID), 
+                              bioregionalization$cluster_info$partition_name,
                               drop = FALSE])
     
-    dissimilarity[, cluster_object$cluster_info$partition_name] <- 
-      dissimilarity[, cluster_object$cluster_info$partition_name] ==
-      dissimilarity[, paste0(cluster_object$cluster_info$partition_name, ".1")]
+    dissimilarity[, bioregionalization$cluster_info$partition_name] <- 
+      dissimilarity[, bioregionalization$cluster_info$partition_name] ==
+      dissimilarity[, paste0(bioregionalization$cluster_info$partition_name, ".1")]
     
     dissimilarity <-
       dissimilarity[,
                     -which(colnames(dissimilarity) %in%
-                             paste0(cluster_object$cluster_info$partition_name,
+                             paste0(bioregionalization$cluster_info$partition_name,
                                     ".1"))]
     
     if("pc_distance" %in% eval_metric) {
       evaluation_df$pc_distance <-
-        vapply(cluster_object$cluster_info$partition_name,
+        vapply(bioregionalization$cluster_info$partition_name,
                FUN = function(x, dist., index.) {
                  sum(dist.[!dist.[, x], index.]) / sum(dist.[, index.])
                },
@@ -398,7 +398,7 @@ bioregionalization_metrics <- function(cluster_object,
       
       # Fast calculation of the anosim for all clusters
       evaluation_df$anosim <- vapply(
-        cluster_object$cluster_info$partition_name,
+        bioregionalization$cluster_info$partition_name,
         FUN = function(x, dist., denom.) {
           # Testing if there is only one cluster
           if(all(dist.[, x])){
@@ -419,16 +419,16 @@ bioregionalization_metrics <- function(cluster_object,
     message("Computing composition-based metrics...")
     net <- data.frame(
       net, 
-      cluster_object$clusters[data.table::chmatch(net[, site_col],
-                                                  cluster_object$clusters$ID),
+      bioregionalization$clusters[data.table::chmatch(net[, site_col],
+                                                  bioregionalization$clusters$ID),
                               -1])
     
     # Correcting column names when there is only one clustering
-    if("cluster_object.clusters.data.table..chmatch.net...site_col..." %in%
+    if("bioregionalization.clusters.data.table..chmatch.net...site_col..." %in%
        colnames(net)){
       colnames(net)[colnames(net) ==
-                      "cluster_object.clusters.data.table..chmatch.net...site_col..."] <-
-        colnames(cluster_object$clusters)[2]
+                      "bioregionalization.clusters.data.table..chmatch.net...site_col..."] <-
+        colnames(bioregionalization$clusters)[2]
     }
 
     # Visible binding for global variable
@@ -436,7 +436,7 @@ bioregionalization_metrics <- function(cluster_object,
     
     # Fast calculation of endemism per cluster
     endemism_results <- lapply(
-      cluster_object$cluster_info$partition_name,
+      bioregionalization$cluster_info$partition_name,
       function(x, network., species_col.) {
         # Create species per cluster network in data.table format for faster
         # calculations
@@ -465,12 +465,12 @@ bioregionalization_metrics <- function(cluster_object,
         return(rich_clusters)
       }, network. = net, species_col. = species_col
     )
-    names(endemism_results) <- cluster_object$cluster_info$partition_name
+    names(endemism_results) <- bioregionalization$cluster_info$partition_name
     
     # Average endemism per cluster
     if("avg_endemism" %in% eval_metric){
       evaluation_df$avg_endemism <- vapply(
-        cluster_object$cluster_info$partition_name,
+        bioregionalization$cluster_info$partition_name,
         FUN = function(x, end_list) {
           mean(end_list[[x]]$pc_endemism)
         },
@@ -483,7 +483,7 @@ bioregionalization_metrics <- function(cluster_object,
     if("tot_endemism" %in% eval_metric){
       nb_sp <- length(unique(net[, species_col])) 
       evaluation_df$tot_endemism <- vapply(
-        cluster_object$cluster_info$partition_name,
+        bioregionalization$cluster_info$partition_name,
         FUN = function(x, end_list) {
           sum(end_list[[x]]$end_richness)
         },
@@ -501,6 +501,7 @@ bioregionalization_metrics <- function(cluster_object,
     outputs$endemism_results <- endemism_results
   }
   
-  class(outputs) <- append("bioregion.partition.metrics", class(outputs))
+  class(outputs) <- append("bioregion.bioregionalization.metrics", 
+                           class(outputs))
   return(outputs)
 }

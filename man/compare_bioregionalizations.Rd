@@ -5,7 +5,7 @@
 \title{Compare cluster memberships among multiple bioregionalizations}
 \usage{
 compare_bioregionalizations(
-  cluster_object,
+  bioregionalizations,
   indices = c("rand", "jaccard"),
   cor_frequency = FALSE,
   store_pairwise_membership = TRUE,
@@ -13,7 +13,7 @@ compare_bioregionalizations(
 )
 }
 \arguments{
-\item{cluster_object}{A \code{data.frame} object where each row corresponds to
+\item{bioregionalizations}{A \code{data.frame} object where each row corresponds to
 a site, and each column to a bioregionalization.}
 
 \item{indices}{\code{NULL} or \code{character}. Indices to compute for the pairwise

@@ -39,7 +39,7 @@ test_that("invalid inputs", {
   
   expect_error(
     compare_bioregionalizations(clu3),
-    "^cluster_object does not have the expected type of ")
+    "^bioregionalizations does not have the expected type of ")
   
   expect_error(
     compare_bioregionalizations(df),
@@ -47,7 +47,7 @@ test_that("invalid inputs", {
   
   expect_error(
     compare_bioregionalizations(ldf),
-    "^All elements in cluster_object should be")
+    "^All elements in bioregionalizations should be")
   
   expect_error(
     compare_bioregionalizations(1),

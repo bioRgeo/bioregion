@@ -31,14 +31,14 @@ clust_louv$clusters <- NULL
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  rho <- site_species_metrics(cluster_object = clust1, 
+  rho <- site_species_metrics(bioregionalization = clust1, 
                               comat = comat,
                               indices = "rho")
   expect_equal(inherits(rho, "data.frame"), TRUE)
   expect_equal(dim(rho)[1], 75)
   expect_equal(dim(rho)[2], 3)
   
-  rho2 <- site_species_metrics(cluster_object = com, 
+  rho2 <- site_species_metrics(bioregionalization = com, 
                                comat = comat,
                                indices = "rho")
   expect_equal(inherits(rho2, "data.frame"), TRUE)
@@ -46,14 +46,14 @@ test_that("valid output", {
   expect_equal(dim(rho2)[2], 3)
   
   suppressWarnings({
-    rho3 <- site_species_metrics(cluster_object = clust_bip, 
+    rho3 <- site_species_metrics(bioregionalization = clust_bip, 
                                  comat = comat,
                                  net = net_bip,
                                  indices = c("rho", "Cz"))
   })
   expect_equal(inherits(rho3, "list"), TRUE)
   
-  #aff <- site_species_metrics(cluster_object = clust_bip, 
+  #aff <- site_species_metrics(bioregionalization = clust_bip, 
   #                               comat = comat,
   #                               indices = "affinity")
   
@@ -70,7 +70,7 @@ test_that("invalid inputs", {
     site_species_metrics(multi_clust, 
                          comat = comat, 
                          indices = "rho"),
-    "^This function is designed to be applied on a single partition.")
+    "^This function is designed to be applied on a single")
   
   expect_error(
     site_species_metrics(clust_h),
@@ -78,7 +78,7 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(clust_louv),
-    "^cluster_object does not have the expected type of")
+    "^bioregionalization does not have the expected type of")
   
   expect_error(
     site_species_metrics(com, 
@@ -103,7 +103,7 @@ test_that("invalid inputs", {
     site_species_metrics(com, comat = comat, 
                          net = "zz",
                          indices = "Cz"),
-    "^Cz metrics can only be computed for a bipartite partition")
+    "^Cz metrics can only be computed for a bipartite")
   
   expect_error(
     site_species_metrics(com, 

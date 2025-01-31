@@ -2,10 +2,10 @@
 % Please edit documentation in R/find_optimal_n.R
 \name{find_optimal_n}
 \alias{find_optimal_n}
-\title{Search for an optimal number of clusters in a list of partitions}
+\title{Search for an optimal number of clusters in a list of bioregionalizations}
 \usage{
 find_optimal_n(
-  partitions,
+  bioregionalizations,
   metrics_to_use = "all",
   criterion = "elbow",
   step_quantile = 0.99,
@@ -17,14 +17,15 @@ find_optimal_n(
 )
 }
 \arguments{
-\item{partitions}{A \code{bioregion.partition.metrics} object (output from
+\item{bioregionalizations}{A \code{bioregion.bioregionalization.metrics} object
+(output from
 \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}) or a \code{data.frame} with the first two
-columns named \code{K} (partition name) and \code{n_clusters} (number of clusters),
+columns named \code{K} (bioregionalization name) and \code{n_clusters} (number of clusters),
 followed by columns with numeric evaluation metrics.}
 
 \item{metrics_to_use}{A \code{character} vector or single string specifying
-metrics in \code{partitions} for calculating optimal clusters. Defaults to
-\code{"all"} (uses all metrics).}
+metrics in \code{bioregionalizations} for calculating optimal clusters. Defaults
+to \code{"all"} (uses all metrics).}
 
 \item{criterion}{A \code{character} string specifying the criterion to identify
 optimal clusters. Options include \code{"elbow"}, \code{"increasing_step"},
@@ -32,7 +33,7 @@ optimal clusters. Options include \code{"elbow"}, \code{"increasing_step"},
 Defaults to \code{"elbow"}. See Details.}
 
 \item{step_quantile}{For \code{"increasing_step"} or \code{"decreasing_step"},
-specifies the quantile of differences between consecutive partitions as
+specifies the quantile of differences between consecutive bioregionalizations as
 the cutoff to identify significant steps in \code{eval_metric}.}
 
 \item{step_levels}{For \code{"increasing_step"} or \code{"decreasing_step"}, specifies
@@ -62,10 +63,10 @@ metric in \code{"metrics_to_use"}, based on the chosen \code{criterion}.}
 }
 \description{
 This function aims to optimize one or several criteria on a set of
-ordered partitions. It is typically used to find one or more optimal
-cluster counts on hierarchical trees to cut or ranges of partitions
+ordered bioregionalizations. It is typically used to find one or more optimal
+cluster counts on hierarchical trees to cut or ranges of bioregionalizations
 from k-means or PAM. Users should exercise caution in other cases
-(e.g., unordered partitions or unrelated partitions).
+(e.g., unordered bioregionalizations or unrelated bioregionalizations).
 }
 \details{
 This function explores evaluation metric ~ cluster relationships, applying
@@ -83,7 +84,7 @@ where incremental improvements diminish. Based on a method to find the
 maximum distance from a straight line linking curve endpoints.}
 \item{\code{increasing_step} or \code{decreasing_step}: Highlights significant
 increases or decreases in metrics by analyzing pairwise differences between
-partitions. Users specify \code{step_quantile} or \code{step_levels}.}
+bioregionalizations. Users specify \code{step_quantile} or \code{step_levels}.}
 \item{\code{cutoffs}: Derives clusters from specified metric cutoffs, e.g., as in
 Holt et al. (2013). Adjust cutoffs based on spatial scale.}
 \item{\code{breakpoints}: Uses segmented regression to find breakpoints. Requires

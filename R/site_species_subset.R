@@ -20,7 +20,7 @@
 #' `bipartite` argument). In such cases, the type of nodes included in the 
 #' output can be specified with the `return_node_type` argument. This function 
 #' allows you to extract a particular type of nodes (sites or species) from the
-#'  output and adjust the `return_node_type` attribute accordingly.
+#' output and adjust the `return_node_type` attribute accordingly.
 #'
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

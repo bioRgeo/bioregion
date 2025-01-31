@@ -5,7 +5,7 @@
 \title{Calculate contribution metrics of sites and species}
 \usage{
 site_species_metrics(
-  cluster_object,
+  bioregionalization,
   comat,
   indices = c("rho"),
   net = NULL,
@@ -14,7 +14,7 @@ site_species_metrics(
 )
 }
 \arguments{
-\item{cluster_object}{A \code{bioregion.clusters} object.}
+\item{bioregionalization}{A \code{bioregion.clusters} object.}
 
 \item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
@@ -99,17 +99,17 @@ clust1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_greedy(net)
 
-site_species_metrics(cluster_object = clust1, comat = comat,
+site_species_metrics(bioregionalization = clust1, comat = comat,
 indices = "rho")
 
 # Contribution metrics
-site_species_metrics(cluster_object = com, comat = comat,
+site_species_metrics(bioregionalization = com, comat = comat,
 indices = c("rho", "affinity", "fidelity", "indicator_value"))
 
 # Cz indices
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
-site_species_metrics(cluster_object = clust_bip, comat = comat, 
+site_species_metrics(bioregionalization = clust_bip, comat = comat, 
 net = net_bip, indices = "Cz")
 
 }

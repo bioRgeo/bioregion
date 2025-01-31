@@ -4,10 +4,10 @@
 \alias{bioregion_metrics}
 \title{Calculate contribution metrics for bioregions}
 \usage{
-bioregion_metrics(cluster_object, comat, map = NULL, col_bioregion = NULL)
+bioregion_metrics(bioregionalization, comat, map = NULL, col_bioregion = NULL)
 }
 \arguments{
-\item{cluster_object}{A \code{bioregion.clusters} object.}
+\item{bioregionalization}{A \code{bioregion.clusters} object.}
 
 \item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
@@ -57,14 +57,14 @@ clust1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_greedy(net)
 
-bioregion_metrics(cluster_object = clust1, comat = comat) 
+bioregion_metrics(bioregionalization = clust1, comat = comat) 
 
 # Spatial coherence
 vegedissim <- dissimilarity(vegemat)
 hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
 vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 
-bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
+bioregion_metrics(bioregionalization = hclu, comat = vegemat, map = vegemap,
 col_bioregion = 2) 
 
 }

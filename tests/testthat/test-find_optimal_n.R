@@ -96,19 +96,19 @@ test_that("invalid inputs", {
   
   expect_error(
     find_optimal_n("zz"),
-    "^partitions should be the output object from")
+    "^bioregionalizations should be the output object from")
   
   expect_error(
     find_optimal_n(partdf),
-    "^Your partition data.frame contains non numeric")
+    "^Your bioregionalization data.frame contains non numeric")
   
   expect_error(
     find_optimal_n(partdf1),
-    "^partitions should be the output object from")
+    "^bioregionalizations should be the output object from")
   
   expect_error(
     find_optimal_n(partdf2),
-    "^The number of partitions is too low")
+    "^The number of bioregionalizations is too low")
   
   expect_error(
     find_optimal_n(a,
@@ -148,7 +148,7 @@ test_that("invalid inputs", {
     expect_error(
       find_optimal_n(partdf4,
                      plot = FALSE),
-      "^The selected partition metrics"),
+      "^The selected bioregionalization metrics"),
     "^Metrics metric1")
   
   expect_warning(

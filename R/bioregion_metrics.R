@@ -4,7 +4,7 @@
 #' number of species these sites have, the number of endemic species, and the 
 #' proportion of endemism.
 #' 
-#' @param cluster_object A `bioregion.clusters` object.
+#' @param bioregionalization A `bioregion.clusters` object.
 #' 
 #' @param comat A co-occurrence `matrix` with sites as rows and species as 
 #' columns. 
@@ -62,45 +62,44 @@
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_greedy(net)
 #' 
-#' bioregion_metrics(cluster_object = clust1, comat = comat) 
+#' bioregion_metrics(bioregionalization = clust1, comat = comat) 
 #' 
 #' # Spatial coherence
 #' vegedissim <- dissimilarity(vegemat)
 #' hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
 #' vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 #' 
-#' bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
+#' bioregion_metrics(bioregionalization = hclu, comat = vegemat, map = vegemap,
 #' col_bioregion = 2) 
 #' 
 #' @export
-bioregion_metrics <- function(cluster_object, 
+bioregion_metrics <- function(bioregionalization, 
                               comat,
                               map = NULL, 
                               col_bioregion = NULL){
   
   # 1. Controls ---------------------------------------------------------------
   # input can be of format bioregion.clusters
-  if (inherits(cluster_object, "bioregion.clusters")) {
-    if (inherits(cluster_object$clusters, "data.frame")) {
+  if (inherits(bioregionalization, "bioregion.clusters")) {
+    if (inherits(bioregionalization$clusters, "data.frame")) {
       has.clusters <- TRUE
-      clusters <- cluster_object$clusters
+      clusters <- bioregionalization$clusters
       
       if(ncol(clusters) > 2) {
         stop(paste0("This function is designed to be applied on a single ",
-                    "partition. Your cluster_object has multiple partitions ",
-                    "(select only one)."), 
+                    "bioregionalization."), 
              call. = FALSE)
       }
       
     } else {
-      if (cluster_object$name == "hclu_hierarclust") {
+      if (bioregionalization$name == "hclu_hierarclust") {
         stop(paste0("No clusters have been generated for your hierarchical ",
                     "tree, please extract clusters from the tree before using ",
                     "bioregionalization_metrics().\n",
                     "See ?hclu_hierarclust or ?cut_tree."), 
              call. = FALSE)
       } else {
-        stop(paste0("cluster_object does not have the expected type of ",
+        stop(paste0("bioregionalization does not have the expected type of ",
                     "'clusters' slot."), 
              call. = FALSE)
       }
@@ -160,14 +159,14 @@ bioregion_metrics <- function(cluster_object,
   
   # 2. Function ---------------------------------------------------------------
   # If it is a bipartite object, we can directly count the species
-  if(cluster_object$inputs$bipartite == TRUE){
+  if(bioregionalization$inputs$bipartite == TRUE){
     clusters <- clusters[which(attributes(clusters)$node_type == "site"), ]
   }
   
   bioregion_df <- data.frame()
   
   # Loop over bioregions
-  for(j in 1:cluster_object$cluster_info$n_clust){
+  for(j in 1:bioregionalization$cluster_info$n_clust){
     focal_j <- unique(clusters[, 2])[j] # bioregion j
     
     # Sites belonging to bioregion j
@@ -195,7 +194,7 @@ bioregion_metrics <- function(cluster_object,
   
   # Test if all bioregions are in the output
   if(length(unique(bioregion_df$Bioregion)) !=
-     cluster_object$cluster_info$n_clust){
+     bioregionalization$cluster_info$n_clust){
     warning("Not all bioregions are in the output.")
   }
   

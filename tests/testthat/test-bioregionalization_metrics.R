@@ -44,7 +44,7 @@ test_that("valid output", {
                                          "avg_endemism",
                                          "pc_distance",
                                          "anosim"))
-  expect_identical(class(a)[1], "bioregion.partition.metrics")
+  expect_identical(class(a)[1], "bioregion.bioregionalization.metrics")
   expect_identical(class(a)[2], "list")
 
 })
@@ -58,7 +58,7 @@ test_that("invalid inputs", {
   
   expect_error(
     bioregionalization_metrics(clu3),
-    "^cluster_object does not have the expected type of ")
+    "^bioregionalization does not have the expected type of ")
   
   expect_error(
     bioregionalization_metrics(NULL),
@@ -121,7 +121,7 @@ test_that("invalid inputs", {
                                dissimilarity = dissim2,
                                dissimilarity_index = "Sorensen",
                                eval_metric = "all"),
-    "cluster_object and dissimilarity have different number of sites.")
+    "bioregionalization and dissimilarity have different number of sites.")
   
   expect_error(
     bioregionalization_metrics(clu1,
