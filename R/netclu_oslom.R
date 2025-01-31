@@ -1,7 +1,7 @@
-#' OsloM Community Finding
+#' OSLOM community finding
 #'
 #' This function finds communities in a (un)weighted (un)directed network based
-#' on the OsloM algorithm (<http://oslom.org/>, version 2.4).
+#' on the OSLOM algorithm (<http://oslom.org/>, version 2.4).
 #'
 #' @param net The output object from [similarity()] or
 #' [dissimilarity_to_similarity()].

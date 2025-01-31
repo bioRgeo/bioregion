@@ -2,7 +2,7 @@
 % Please edit documentation in R/netclu_oslom.R
 \name{netclu_oslom}
 \alias{netclu_oslom}
-\title{OsloM Community Finding}
+\title{OSLOM community finding}
 \usage{
 netclu_oslom(
   net,
@@ -110,7 +110,7 @@ In the \code{algorithm} slot, users can find the following elements:
 }
 \description{
 This function finds communities in a (un)weighted (un)directed network based
-on the OsloM algorithm (\url{http://oslom.org/}, version 2.4).
+on the OSLOM algorithm (\url{http://oslom.org/}, version 2.4).
 }
 \details{
 OSLOM is a network community detection algorithm proposed in

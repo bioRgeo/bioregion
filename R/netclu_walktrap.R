@@ -1,4 +1,4 @@
-#' Community Structure Detection via Short Random Walks
+#' Community structure detection via short random walks
 #'
 #' This function finds communities in a (un)weighted undirected network via
 #' short random walks.

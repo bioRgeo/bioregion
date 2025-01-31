@@ -309,7 +309,7 @@ hclu_hierarclust <- function(dissimilarity,
         controls(args = n_clust, 
                  data = NULL, 
                  type = "strict_positive_integer_vector")
-    } else if(inherits(n_clust, "bioregion.partition.metrics")){
+    } else if(inherits(n_clust, "bioregion.bioregionalization.metrics")){
       if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
         n_clust <- n_clust$algorithm$optimal_nb_clusters
       } else {

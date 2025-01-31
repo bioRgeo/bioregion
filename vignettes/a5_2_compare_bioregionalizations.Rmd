@@ -94,7 +94,7 @@ We can now run the function `compare_bioregionalizations()`.
 
 ```{r}
 hclu_vs_netclu <- compare_bioregionalizations(
-  cluster_object = comp[, c("K_3_hclu", "K_3_netclu", "K_3_nhclu")],
+  bioregionalizations = comp[, c("K_3_hclu", "K_3_netclu", "K_3_nhclu")],
   store_pairwise_membership = TRUE,
   cor_frequency = TRUE,
   store_confusion_matrix = TRUE)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/netclu_walktrap.R
 \name{netclu_walktrap}
 \alias{netclu_walktrap}
-\title{Community Structure Detection via Short Random Walks}
+\title{Community structure detection via short random walks}
 \usage{
 netclu_walktrap(
   net,

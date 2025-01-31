@@ -82,7 +82,7 @@ Endemic species are species only present in sites assigned to a particular
 bioregion.
 
 ```{r}
-bioregion_summary <- bioregion_metrics(cluster_object = vege_nhclu_kmeans,
+bioregion_summary <- bioregion_metrics(bioregionalization = vege_nhclu_kmeans,
                                        comat = vegemat)
 bioregion_summary
 ```
@@ -173,7 +173,7 @@ contrib_netclu <- site_species_metrics(vege_netclu_walktrap, vegemat,
 
 # Cz indices
 clust_bip <- netclu_greedy(vegedf, bipartite = TRUE)
-cz_netclu <- site_species_metrics(cluster_object = clust_bip,  comat = vegemat,
+cz_netclu <- site_species_metrics(bioregionalization = clust_bip,  comat = vegemat,
                                   net = vegedf, indices = "Cz")
 ```
 
@@ -200,7 +200,7 @@ vegedissim <- dissimilarity(vegemat)
 hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
 vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
 
-bioregion_metrics(cluster_object = hclu, comat = vegemat, map = vegemap,
+bioregion_metrics(bioregionalization = hclu, comat = vegemat, map = vegemap,
 col_bioregion = 2) 
 ```
 
