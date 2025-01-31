@@ -9,7 +9,7 @@ Propagation algorithm."><meta property="og:image" content="https://bioRgeo.githu
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,7 @@ Propagation algorithm."><meta property="og:image" content="https://bioRgeo.githu
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.2.0">Version 1.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.1">Version 1.1.1</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.0">Version 1.1.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.0.0">Version 1.0.0</a></li>
@@ -52,7 +53,7 @@ Propagation algorithm."><meta property="og:image" content="https://bioRgeo.githu
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Non-hierarchical clustering: Affinity Propagation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/R/nhclu_affprop.R" class="external-link"><code>R/nhclu_affprop.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/v1.2.0/R/nhclu_affprop.R" class="external-link"><code>R/nhclu_affprop.R</code></a></small>
       <div class="d-none name"><code>nhclu_affprop.Rd</code></div>
     </div>
 
@@ -242,14 +243,30 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fixed number of clusters </span></span></span>
 <span class="r-in"><span><span class="va">clust3</span> <span class="op">&lt;-</span> <span class="fu">nhclu_affprop</span><span class="op">(</span><span class="va">sim</span>, K <span class="op">=</span> <span class="fl">2</span>, prc <span class="op">=</span> <span class="fl">10</span>, bimaxit <span class="op">=</span> <span class="fl">20</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9934488 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9344877 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.3448773 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9933566 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9966783 (bisection step no. 1 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9983391 (bisection step no. 2 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9991696 (bisection step no. 3 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9995848 (bisection step no. 4 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9997924 (bisection step no. 5 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9998962 (bisection step no. 6 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9999481 (bisection step no. 7 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.999974 (bisection step no. 8 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.999987 (bisection step no. 9 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trying p = 0.9999935 (bisection step no. 10 )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Number of clusters: 2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of clusters: 2 for p = 0.3448773 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of clusters: 2 for p = 0.9999935 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

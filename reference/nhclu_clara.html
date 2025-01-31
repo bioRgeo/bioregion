@@ -11,7 +11,7 @@ the Clustering Large Applications (CLARA) algorithm."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,7 @@ the Clustering Large Applications (CLARA) algorithm."><meta property="og:image" 
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.2.0">Version 1.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.1">Version 1.1.1</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.0">Version 1.1.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.0.0">Version 1.0.0</a></li>
@@ -54,7 +55,7 @@ the Clustering Large Applications (CLARA) algorithm."><meta property="og:image" 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Non-hierarchical clustering: CLARA</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/R/nhclu_clara.R" class="external-link"><code>R/nhclu_clara.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/v1.2.0/R/nhclu_clara.R" class="external-link"><code>R/nhclu_clara.R</code></a></small>
       <div class="d-none name"><code>nhclu_clara.Rd</code></div>
     </div>
 
@@ -189,24 +190,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">clust1</span> <span class="op">&lt;-</span> <span class="fu">nhclu_clara</span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">clust1</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
-<span class="r-in"><span>eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing similarity-based metrics...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   - pc_distance OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Partition metrics:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 1  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  5  to  5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  pc_distance </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      pc_distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min    0.4639792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean   0.4639792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max    0.4639792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#clust &lt;- nhclu_clara(dissim, index = "Simpson", n_clust = 5)</span></span></span>
 <span class="r-in"><span>   </span></span>
 </code></pre></div>
     </div>

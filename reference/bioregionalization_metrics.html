@@ -13,7 +13,7 @@ matrix, or the initial species-site table."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@ matrix, or the initial species-site table."><meta property="og:image" content="h
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.2.0">Version 1.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.1">Version 1.1.1</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.0">Version 1.1.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.0.0">Version 1.0.0</a></li>
@@ -56,7 +57,7 @@ matrix, or the initial species-site table."><meta property="og:image" content="h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Calculate metrics for one or several bioregionalizations</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/R/bioregionalization_metrics.R" class="external-link"><code>R/bioregionalization_metrics.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/v1.2.0/R/bioregionalization_metrics.R" class="external-link"><code>R/bioregionalization_metrics.R</code></a></small>
       <div class="d-none name"><code>bioregionalization_metrics.Rd</code></div>
     </div>
 
@@ -212,19 +213,19 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5241 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5026 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0625</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 11 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0546875</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 12 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.048828125</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 13 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.046875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 11 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0458984375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 12 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.044921875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 13 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.04296875</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 14 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0361328125</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 15 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.03125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 15 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.015625</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -233,13 +234,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Iterative consensus hierarchical tree </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.524 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.503 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  6 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  10 11 12 13 14 15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.062 0.055 0.049 0.047 0.036 0.031 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.047 0.046 0.045 0.043 0.031 0.016 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">bioregionalization_metrics</span><span class="op">(</span><span class="va">tree1</span>, </span></span>
 <span class="r-in"><span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span></span>
@@ -263,9 +264,9 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      tot_endemism avg_endemism pc_distance    anosim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min             0            0   0.9414979 0.6917989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean            0            0   0.9801454 0.8057402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max             0            0   1.0000000 0.9565217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min             0            0   0.9569718 0.7279354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean            0            0   0.9771741 0.8195701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max             0            0   1.0000000 0.9725275</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each bioregionalization are available in </span>

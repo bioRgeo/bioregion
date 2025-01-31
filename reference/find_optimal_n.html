@@ -15,7 +15,7 @@ from k-means or PAM. Users should exercise caution in other cases
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,7 @@ from k-means or PAM. Users should exercise caution in other cases
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.2.0">Version 1.2.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.1">Version 1.1.1</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.1.0">Version 1.1.0</a></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.0.0">Version 1.0.0</a></li>
@@ -58,7 +59,7 @@ from k-means or PAM. Users should exercise caution in other cases
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Search for an optimal number of clusters in a list of bioregionalizations</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/R/find_optimal_n.R" class="external-link"><code>R/find_optimal_n.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/v1.2.0/R/find_optimal_n.R" class="external-link"><code>R/find_optimal_n.R</code></a></small>
       <div class="d-none name"><code>find_optimal_n.Rd</code></div>
     </div>
 
@@ -211,218 +212,67 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">comnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># User-defined number of clusters</span></span></span>
-<span class="r-in"><span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span>,</span></span>
-<span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
+<span class="r-in"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span>,</span></span>
+<span class="r-in"><span>                          optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span></span>
+<span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 100 trials</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among trials: 0.755 - 0.7803</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.7975 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
-<span class="r-in"><span><span class="va">tree1</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.7803 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.234375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 6 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.21875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 7 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.2109375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 8 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.205078125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 9 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1796875</span>
+<span class="r-in"><span><span class="va">tree</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of sites:  20 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Jaccard </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Iterative consensus hierarchical tree </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.798 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  2 3 4 5 6 7 8 9 10 11 ... (with 4 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.78 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  6 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  2 3 4 5 6 7 8 9 10 11 ... (with 4 more values) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.266 0.25 0.234 0.219 0.217 0.215 0.188 0.164 0.156 0.141 ... (with 4 more values) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  5 6 7 8 9 10 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.234 0.219 0.211 0.205 0.188 0.18 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree1</span>,</span></span>
-<span class="r-in"><span>                   dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
-<span class="r-in"><span>                   net <span class="op">=</span> <span class="va">comnet</span>,</span></span>
-<span class="r-in"><span>                   species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
-<span class="r-in"><span>                   site_col <span class="op">=</span> <span class="st">"Node1"</span>,</span></span>
-<span class="r-in"><span>                   eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>,</span></span>
-<span class="r-in"><span>                                   <span class="st">"avg_endemism"</span>,</span></span>
-<span class="r-in"><span>                                   <span class="st">"pc_distance"</span>,</span></span>
-<span class="r-in"><span>                                   <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree</span>,</span></span>
+<span class="r-in"><span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
+<span class="r-in"><span>                                species_col <span class="op">=</span> <span class="st">"Node2"</span>,</span></span>
+<span class="r-in"><span>                                site_col <span class="op">=</span> <span class="st">"Node1"</span>,</span></span>
+<span class="r-in"><span>                                eval_metric <span class="op">=</span> <span class="st">"anosim"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing similarity-based metrics...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   - pc_distance OK</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - anosim OK</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing composition-based metrics...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   - avg_endemism OK</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   - tot_endemism OK</span>
 <span class="r-in"><span>                                   </span></span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the elbow method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>    * elbow found at:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> tot_endemism 3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> avg_endemism 3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> pc_distance 10</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> anosim 8</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The elbow method is likely not suitable for the ANOSIM metric. You should rather look for leaps in the curve (see criterion = 'increasing_step' or decreasing_step)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  elbow </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 8</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"increasing_step"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
+<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">'increasing_step'</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ...Caveat: be cautious with the interpretation of metric analyses with such a low number of bioregionalizations</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the increasing_step method</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - Step method</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Criterion 'increasing_step' cannot work properly with metric 'tot_endemism', because this metric is usually monotonously decreasing. Consider using criterion = 'decreasing_step' instead.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - 6  partition(s) evaluated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  5  to  10 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  anosim </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  increasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 3</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the decreasing_step method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Step method</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Criterion 'decreasing_step' cannot work properly with metrics 'pc_distance' or 'avg_endemism', because these metrics are usually monotonously decreasing. Consider using criterion = 'increasing_step' instead.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-3.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 9</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
-<span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the decreasing_step method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Step method</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Criterion 'decreasing_step' cannot work properly with metrics 'pc_distance' or 'avg_endemism', because these metrics are usually monotonously decreasing. Consider using criterion = 'increasing_step' instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of optimal N for method 'tot_endemism' is suspiciously high, consider switching between 'increasing_step' and 'decreasing_step'</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of optimal N for method 'avg_endemism' is suspiciously high, consider switching between 'increasing_step' and 'decreasing_step'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-4.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 6 9 13</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
-<span class="r-in"><span>               step_quantile <span class="op">=</span> <span class="fl">.9</span><span class="op">)</span> </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the decreasing_step method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Step method</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Criterion 'decreasing_step' cannot work properly with metrics 'pc_distance' or 'avg_endemism', because these metrics are usually monotonously decreasing. Consider using criterion = 'increasing_step' instead.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-5.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.9  (i.e., only the top 10 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6 13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 6 9</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
-<span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the decreasing_step method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Step method</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Criterion 'decreasing_step' cannot work properly with metrics 'pc_distance' or 'avg_endemism', because these metrics are usually monotonously decreasing. Consider using criterion = 'increasing_step' instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of optimal N for method 'tot_endemism' is suspiciously high, consider switching between 'increasing_step' and 'decreasing_step'</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of optimal N for method 'avg_endemism' is suspiciously high, consider switching between 'increasing_step' and 'decreasing_step'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-6.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 6 9 13</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span></span>
-<span class="r-in"><span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>                 </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the decreasing_step method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Step method</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Criterion 'decreasing_step' cannot work properly with metrics 'pc_distance' or 'avg_endemism', because these metrics are usually monotonously decreasing. Consider using criterion = 'increasing_step' instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of optimal N for method 'tot_endemism' is suspiciously high, consider switching between 'increasing_step' and 'decreasing_step'</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of optimal N for method 'avg_endemism' is suspiciously high, consider switching between 'increasing_step' and 'decreasing_step'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-plt img"><img src="find_optimal_n-7.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  decreasing_step </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tot_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> avg_endemism - 3 4 5 6 7 8 9 10 11 12 13 14 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 6 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 6 9 13</span>
-<span class="r-in"><span><span class="fu">find_optimal_n</span><span class="op">(</span><span class="va">a</span>, criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span>             </span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Metrics tot_endemism, avg_endemism do not vary sufficiently to use breakpoints, so they were removed.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of bioregionalizations: 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Searching for potential optimal number(s) of clusters based on the breakpoints method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting results...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>    (the red line is the prediction from the segmented regression)</span>
-<span class="r-plt img"><img src="find_optimal_n-8.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Search for an optimal number of clusters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 14  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  2  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Evaluated metric(s):  pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Potential optimal partition(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  breakpoints </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pc_distance - 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 10</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
