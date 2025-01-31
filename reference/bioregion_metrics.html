@@ -66,14 +66,14 @@ proportion of endemism.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bioregion_metrics</span><span class="op">(</span><span class="va">cluster_object</span>, <span class="va">comat</span>, map <span class="op">=</span> <span class="cn">NULL</span>, col_bioregion <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bioregion_metrics</span><span class="op">(</span><span class="va">bioregionalization</span>, <span class="va">comat</span>, map <span class="op">=</span> <span class="cn">NULL</span>, col_bioregion <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-cluster-object">cluster_object<a class="anchor" aria-label="anchor" href="#arg-cluster-object"></a></dt>
+<dl><dt id="arg-bioregionalization">bioregionalization<a class="anchor" aria-label="anchor" href="#arg-bioregionalization"></a></dt>
 <dd><p>A <code>bioregion.clusters</code> object.</p></dd>
 
 
@@ -144,7 +144,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity.html">similarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">com</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">bioregion_metrics</span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">clust1</span>, comat <span class="op">=</span> <span class="va">comat</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="fu">bioregion_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust1</span>, comat <span class="op">=</span> <span class="va">comat</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Bioregion Site_number Species_number Endemics Percentage_Endemic</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         2          10             12        8           66.66667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2         1           8             12        0            0.00000</span>
@@ -155,7 +155,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span><span class="va">hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">vegemap</span> <span class="op">&lt;-</span> <span class="fu"><a href="map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">hclu</span>, <span class="va">vegesf</span>, write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">bioregion_metrics</span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">hclu</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, map <span class="op">=</span> <span class="va">vegemap</span>,</span></span>
+<span class="r-in"><span><span class="fu">bioregion_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">hclu</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, map <span class="op">=</span> <span class="va">vegemap</span>,</span></span>
 <span class="r-in"><span>col_bioregion <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Bioregion Site_number Species_number Endemics Percentage_Endemic Coherence</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         2         128           2527       90           3.561535  49.21875</span>

@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-01-17</h4>
+            <h4 data-toc-skip class="date">2025-01-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_3_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_summary_metrics.Rmd</code></div>
@@ -150,7 +150,7 @@ sites contain. Number of endemic and proportion of endemism are also
 calculated. Endemic species are species only present in sites assigned
 to a particular bioregion.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">vege_nhclu_kmeans</span>,</span>
+<code class="sourceCode R"><span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu_kmeans</span>,</span>
 <span>                                       comat <span class="op">=</span> <span class="va">vegemat</span><span class="op">)</span></span>
 <span><span class="va">bioregion_summary</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Bioregion Site_number Species_number Endemics Percentage_Endemic</span></span>
@@ -250,7 +250,7 @@ is to other nodes in the bioregion.</p>
 <span></span>
 <span><span class="co"># Cz indices</span></span>
 <span><span class="va">clust_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">vegedf</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">cz_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">clust_bip</span>,  comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
+<span><span class="va">cz_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust_bip</span>,  comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                                  net <span class="op">=</span> <span class="va">vegedf</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> outputs <code>data.frame</code>
 with the contribution metrics available at the species level.</p>
@@ -274,7 +274,7 @@ following formula:</p>
 <span><span class="va">hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="va">vegemap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">hclu</span>, <span class="va">vegesf</span>, write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>cluster_object <span class="op">=</span> <span class="va">hclu</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, map <span class="op">=</span> <span class="va">vegemap</span>,</span>
+<span><span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">hclu</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, map <span class="op">=</span> <span class="va">vegemap</span>,</span>
 <span>col_bioregion <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> </span></code></pre></div>
 <pre><code><span><span class="co">##   Bioregion Site_number Species_number Endemics Percentage_Endemic Coherence</span></span>
 <span><span class="co">## 1         2         128           2527       90           3.561535  49.21875</span></span>

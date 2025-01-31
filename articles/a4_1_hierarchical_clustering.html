@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-01-17</h4>
+            <h4 data-toc-skip class="date">2025-01-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -664,7 +664,7 @@ evaluation plot.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 4. Find the optimal number of clusters</span></span>
 <span><span class="va">opti_n_tree4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
 <pre><code><span><span class="co">## pc_distance 19</span></span></code></pre>
@@ -785,7 +785,7 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## Max   0.181513150   0.31539086</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span>
-<span><span class="co">## Details of endemism % for each partition are available in </span></span>
+<span><span class="co">## Details of endemism % for each bioregionalization are available in </span></span>
 <span><span class="co">##         your_object$endemism_results</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -842,7 +842,7 @@ metric.</em></p>
 the curve is not elbow-shaped, it may give spurious results.</p>
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
 <pre><code><span><span class="co">## pc_distance 19</span></span>
@@ -894,7 +894,7 @@ your dataset, so you would have to explore both ways.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the increasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
@@ -914,7 +914,7 @@ your dataset, so you would have to explore both ways.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"decreasing_step"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the decreasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
@@ -938,7 +938,7 @@ number of steps to select, e.g. to select the largest 3 steps, use
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span>,</span>
 <span>               step_levels <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the increasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
@@ -965,7 +965,7 @@ hierarchical nature of the tree.</p>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span>,</span>
 <span>               step_quantile <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the increasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
@@ -993,7 +993,7 @@ You can change this by setting
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span>
 <span>               step_round_above <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the decreasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
@@ -1047,7 +1047,7 @@ can use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and
 <span>               metrics_to_use <span class="op">=</span> <span class="st">"pc_distance"</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"cutoff"</span>,</span>
 <span>               metric_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.6</span>, <span class="fl">.8</span>, <span class="fl">.9</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 99</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the cutoff method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Cutoff method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
@@ -1100,9 +1100,9 @@ the tree to have enough values.</p>
 <div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 100</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 100</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the breakpoints method</span></span></code></pre>
-<pre><code><span><span class="co">## Exact break point not in the list of partitions: finding the closest partition...</span></span></code></pre>
+<pre><code><span><span class="co">## Exact break point not in the list of bioregionalizations: finding the closest bioregionalization...</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
 <pre><code><span><span class="co">##    (the red line is the prediction from the segmented regression)</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
@@ -1128,9 +1128,9 @@ the tree to have enough values.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span>,</span>
 <span>               n_breakpoints <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 100</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 100</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the breakpoints method</span></span></code></pre>
-<pre><code><span><span class="co">## Exact break point not in the list of partitions: finding the closest partition...</span></span></code></pre>
+<pre><code><span><span class="co">## Exact break point not in the list of bioregionalizations: finding the closest bioregionalization...</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
 <pre><code><span><span class="co">##    (the red line is the prediction from the segmented regression)</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
@@ -1155,9 +1155,9 @@ the tree to have enough values.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span>,</span>
 <span>               n_breakpoints <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of partitions: 100</span></span></code></pre>
+<pre><code><span><span class="co">## Number of bioregionalizations: 100</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the breakpoints method</span></span></code></pre>
-<pre><code><span><span class="co">## Exact break point not in the list of partitions: finding the closest partition...</span></span></code></pre>
+<pre><code><span><span class="co">## Exact break point not in the list of bioregionalizations: finding the closest bioregionalization...</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
 <pre><code><span><span class="co">##    (the red line is the prediction from the segmented regression)</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
