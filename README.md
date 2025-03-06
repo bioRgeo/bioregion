@@ -96,3 +96,10 @@ try to get to it as soon as we can!
 `ggplot2`, `grDevices`, `httr`, `igraph`, `mathjaxr`, `Matrix`,
 `phangorn`, `Rdpack`, `rlang`, `rmarkdown`, `segmented`,`sf`, `stats`,
 `tidyr` and `utils`.
+
+## Citation
+
+Denelle P, Leroy B & Lenormand M (2025) [Bioregionalization analyses
+with the bioregion R
+package.](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14496)
+*Methods in Ecology and Evolution* 16, 496-506.
