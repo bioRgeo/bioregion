@@ -57,7 +57,7 @@ enabling the user to compute additional comparison metrics."><meta property="og:
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Compare cluster memberships among multiple bioregionalizations</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/v1.2.0/R/compare_bioregionalizations.R" class="external-link"><code>R/compare_bioregionalizations.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/R/compare_bioregionalizations.R" class="external-link"><code>R/compare_bioregionalizations.R</code></a></small>
       <div class="d-none name"><code>compare_bioregionalizations.Rd</code></div>
     </div>
 
@@ -209,10 +209,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Running the function</span></span></span>
 <span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">compare_df</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.981206 - Computing pairwise membership comparisons for each bioregionalization...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.982828 - Comparing memberships among bioregionalizations...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.983551 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.98397 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.710059 - Computing pairwise membership comparisons for each bioregionalization...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.711757 - Comparing memberships among bioregionalizations...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.712404 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.712765 - Computing Jaccard index...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args$indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rand"    "jaccard"</span>
@@ -483,11 +483,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="co"># Find out which bioregionalizations are most representative</span></span></span>
 <span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">compare_df</span>,</span></span>
 <span class="r-in"><span>                            cor_frequency <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.987576 - Computing pairwise membership comparisons for each bioregionalization...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.989172 - Comparing memberships among bioregionalizations...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.989895 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.990258 - Computing Jaccard index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-01-31 16:59:44.990602 - Computing the correlation between each bioregionalization and the vector of frequency of pairwise membership...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.716222 - Computing pairwise membership comparisons for each bioregionalization...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.717719 - Comparing memberships among bioregionalizations...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.718329 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.718651 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-03-06 08:47:29.718945 - Computing the correlation between each bioregionalization and the vector of frequency of pairwise membership...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args$indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rand"    "jaccard"</span>
