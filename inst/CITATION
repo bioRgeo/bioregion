@@ -1,0 +1,11 @@
+bibentry(
+  bibtype = "Article",
+  textVersion = "Denelle P, Leroy B & Lenormand M (2025) Bioregionalization analyses with the bioregion R package. Methods in Ecology and Evolution 16, 496-506.",
+  author = "Denelle, P. and Leroy, B. and Lenormand, M.",
+  title = "Bioregionalization analyses with the bioregion R package",
+  journal = "Methods in Ecology and Evolution",
+  year = "2025",
+  pages   = "496-506",
+  volume  = "16",
+  doi = "10.1111/2041-210X.14496"
+)
