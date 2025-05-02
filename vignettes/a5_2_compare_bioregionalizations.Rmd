@@ -202,7 +202,7 @@ the total frequency of pairwise membership across all bioregionalizations.
 This correlation can be requested with `cor_frequency = TRUE`.
 
 ```{r}
-hclu_vs_netclu$partition_freq_cor
+hclu_vs_netclu$bioregionalization_freq_cor
 ```
 
 Here the third bioregionalization is the most representative of all
