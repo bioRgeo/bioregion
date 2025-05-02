@@ -112,7 +112,7 @@ Let's first look at pairwise membership within bioregionalization.
 ## Pairwise membership
 The number of pairwise combinations for $n$ sites equals $n(n-1)/2$.
 So in our case, where we have `r nrow(comp)` sites, we do end up with
-`r nrow(comp)*(nrow(comp)-1)/2` pairwise combinations.
+`r sprintf("%d", nrow(comp)*(nrow(comp)-1)/2)` pairwise combinations.
 
 ```{r}
 nrow(hclu_vs_netclu$pairwise_membership) == nrow(comp)*(nrow(comp)-1)/2
