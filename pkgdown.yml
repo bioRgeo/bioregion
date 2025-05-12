@@ -13,7 +13,8 @@ articles:
   a5_2_compare_bioregionalizations: a5_2_compare_bioregionalizations.html
   a5_3_summary_metrics: a5_3_summary_metrics.html
   bioregion: bioregion.html
-last_built: 2025-05-02T08:39Z
+  citations: citations.html
+last_built: 2025-05-12T11:18Z
 urls:
   reference: https://bioRgeo.github.io/bioregion/reference
   article: https://bioRgeo.github.io/bioregion/articles
