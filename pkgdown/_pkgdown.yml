@@ -3,7 +3,49 @@ url: https://bioRgeo.github.io/bioregion/
 template:
   bootstrap: 5
   math-rendering: mathjax
-
+  
+navbar:
+  structure:
+    left:
+      - home
+      - getting-started
+      - reference
+      - tutorials
+      - applications
+      - news
+  components:
+    getting-started:
+      text: "Get started"
+      href: articles/bioregion.html
+    tutorials:
+      text: "Tutorials"
+      menu:
+        - text: "1. Installation of the binary files"
+          href: articles/a1_install_binary_files.html      
+        - text: "2. Matrix and network formats"
+          href: articles/a2_matrix_and_network_formats.html
+        - text: "3. Pairwise similarity/dissimilarity metrics"
+          href: articles/a3_pairwise_metrics.html
+        - text: "4.1 Hierarchical clustering"
+          href: articles/a4_1_hierarchical_clustering.html
+        - text: "4.2 Non-hierarchical clustering"
+          href: articles/a4_2_non_hierarchical_clustering.html
+        - text: "4.3 Network clustering"
+          href: articles/a4_3_network_clustering.html
+        - text: "4.4 Microbenchmark"
+          href: articles/a4_4_microbenchmark.html
+        - text: "5.1 Visualization"
+          href: articles/a5_1_visualization.html
+        - text: "5.2 Compare bioregionalizations"
+          href: articles/a5_2_compare_bioregionalizations.html
+        - text: "5.3 Summary metrics"
+          href: articles/a5_3_summary_metrics.html  
+    applications:
+      text: "Applications"
+      menu:
+        - text: "Citing articles"
+          href: articles/citations.html
+          
 toc:
   depth: 1
   
@@ -77,6 +119,24 @@ reference:
   - vegedf
   - vegemat
   - vegesf
+  
+articles:
+  - title: "Tutorials"
+    contents:
+      - a1_install_binary_files
+      - a2_matrix_and_network_formats
+      - a3_pairwise_metrics
+      - a4_1_hierarchical_clustering
+      - a4_2_non_hierarchical_clustering
+      - a4_3_network_clustering
+      - a4_4_microbenchmark
+      - a5_1_visualization
+      - a5_2_compare_bioregionalizations
+      - a5_3_summary_metrics
+
+  - title: "Applications"
+    contents:
+      - citations 
   
 news:
   releases:
