@@ -61,7 +61,7 @@
 #' Note that `pmin` is used in the Simpson formula because `a`, `b`, `c`, `A`, 
 #' `B` and `C` are `numeric` vectors.
 #'
-#' Euclidean computes the Euclidean similarity between each pair of site
+#' Euclidean computes the Euclidean similarity between each pair of sites
 #' following this equation:
 #'
 #' Euclidean = 1 / (1 + d_ij)

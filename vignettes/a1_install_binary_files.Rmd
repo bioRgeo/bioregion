@@ -50,7 +50,7 @@ downloads and unzips the `bin` folder needed to run these functions. It
 also checks if the files have the permissions to be executed as
 programs. It finally tests if the binary files are running properly.
 
-### Run install_binaries()
+# Run install_binaries()
 
 The function
 [install_binaries](https://bioRgeo.github.io/bioregion/reference/install_binaries.html)
@@ -145,7 +145,7 @@ com <- netclu_infomap(net,
                       check_install = TRUE)
 ```
 
-### Known issues
+# Known issues
 
 -   The OpenMP versions of Infomap require `libomp-dev` on Ubuntu
     (`sudo apt-get install libomp-dev`) and `libomp` on macOS (install

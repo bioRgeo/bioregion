@@ -28,7 +28,7 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-## Load data
+# Load data
 
 The `bioregion`'s package contains as example dataset the spatial distribution of 
 Mediterranean vegetation. This dataset has been analyzed in 
@@ -58,11 +58,13 @@ dim(vegemat)
 and [vegesf](https://bioRgeo.github.io/bioregion/reference/vegesf.html) a spatial
 object containing the geometry of the 715 sites. 
 
-## From matrix to network
+# From matrix to network
 
 The function [mat_to_net](https://bioRgeo.github.io/bioregion/reference/mat_to_net.html) 
 transforms a co-occurrence `matrix` such as `vegemat` into a network represented 
-by a `data.frame` (such as `vegedf` in this case). If `weight = TRUE` a third 
+by a `data.frame` (such as 
+[vegedf](https://bioRgeo.github.io/bioregion/reference/vegedf.html) in this case). 
+If `weight = TRUE` a third 
 column is added with the values contained in the `matrix`.  
 
 ``` {r mat_to_net_1}
@@ -89,11 +91,14 @@ head(net)
 dim(net)
 ```
 
-## From network to matrix
+# From network to matrix
 
 The function [net_to_mat](https://bioRgeo.github.io/bioregion/reference/net_to_mat.html)
 does the opposite. It transforms a network represented by a two- or a three-columns
-`data.frame` (such as `vegedf`) into a co-occurrence `matrix` (such as `vegemat` 
+`data.frame` (such as 
+[vegedf](https://bioRgeo.github.io/bioregion/reference/vegedf.html)) into a 
+co-occurrence `matrix` (such as 
+[vegemat](https://bioRgeo.github.io/bioregion/reference/vegemat.html) 
 in this case). 
 
 ``` {r net_to_mat_1}

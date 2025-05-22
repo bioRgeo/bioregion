@@ -69,7 +69,7 @@ will compute the Simpson and Bray-Curtis similarity metrics, respectively.
 Note that \code{pmin} is used in the Simpson formula because \code{a}, \code{b}, \code{c}, \code{A},
 \code{B} and \code{C} are \code{numeric} vectors.
 
-Euclidean computes the Euclidean similarity between each pair of site
+Euclidean computes the Euclidean similarity between each pair of sites
 following this equation:
 
 Euclidean = 1 / (1 + d_ij)

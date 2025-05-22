@@ -3,7 +3,8 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
-* 
+* Added a comparison with other R packages for the computation of dissimilarity
+  metrics in tutorial 3 (Pairwise similarity/dissimilarity metrics).
 
 # bioregion 1.2.0
 
