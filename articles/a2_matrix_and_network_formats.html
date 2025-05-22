@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-05-12</h4>
+            <h4 data-toc-skip class="date">2025-05-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a2_matrix_and_network_formats.Rmd" class="external-link"><code>vignettes/a2_matrix_and_network_formats.Rmd</code></a></small>
       <div class="d-none name"><code>a2_matrix_and_network_formats.Rmd</code></div>
@@ -164,9 +164,9 @@ a spatial object containing the geometry of the 715 sites.</p>
 <p>The function <a href="https://bioRgeo.github.io/bioregion/reference/mat_to_net.html">mat_to_net</a>
 transforms a co-occurrence <code>matrix</code> such as
 <code>vegemat</code> into a network represented by a
-<code>data.frame</code> (such as <code>vegedf</code> in this case). If
-<code>weight = TRUE</code> a third column is added with the values
-contained in the <code>matrix</code>.</p>
+<code>data.frame</code> (such as <a href="https://bioRgeo.github.io/bioregion/reference/vegedf.html">vegedf</a>
+in this case). If <code>weight = TRUE</code> a third column is added
+with the values contained in the <code>matrix</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">vegemat</span>, weight <span class="op">=</span> <span class="cn">TRUE</span>, remove_zeroes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>In line with the network format, the two first columns are named
@@ -205,9 +205,9 @@ equal to 0 will be removed from the output.</p>
 </h2>
 <p>The function <a href="https://bioRgeo.github.io/bioregion/reference/net_to_mat.html">net_to_mat</a>
 does the opposite. It transforms a network represented by a two- or a
-three-columns <code>data.frame</code> (such as <code>vegedf</code>) into
-a co-occurrence <code>matrix</code> (such as <code>vegemat</code> in
-this case).</p>
+three-columns <code>data.frame</code> (such as <a href="https://bioRgeo.github.io/bioregion/reference/vegedf.html">vegedf</a>)
+into a co-occurrence <code>matrix</code> (such as <a href="https://bioRgeo.github.io/bioregion/reference/vegemat.html">vegemat</a>
+in this case).</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_to_mat.html">net_to_mat</a></span><span class="op">(</span><span class="va">vegedf</span>, weight <span class="op">=</span> <span class="cn">TRUE</span>, squared <span class="op">=</span> <span class="cn">FALSE</span>, symmetrical <span class="op">=</span> <span class="cn">FALSE</span>, missing_value <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
