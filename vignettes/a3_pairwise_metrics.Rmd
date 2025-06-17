@@ -459,14 +459,13 @@ dissim2[1:10,]
 
 ```
 
-but also outputs from several functions provided by the packages 
+but also outputs from 10 functions provided by the packages 
 [adespatial](https://cran.r-project.org/package=adespatial), 
 [betapart](https://cran.r-project.org/package=betapart), 
 [ecodist](https://cran.r-project.org/package=ecodist) and 
 [vegan](https://cran.r-project.org/package=vegan) described above.
 
-This includes the outputs of `beta.div` and `beta.div.comp` from the 
-[adespatial](https://cran.r-project.org/package=adespatial) package.
+## 5.1 adespatial::beta.div
 
 ``` {r adespatial 1}
 dissim1 <- dissimilarity(comat, 
@@ -481,6 +480,8 @@ dissim2[1:10,]
 
 ```
 
+## 5.2 adespatial::beta.div.comp
+
 ``` {r adespatial 2}
 dissim1 <- dissimilarity(comatbin, 
                          metric = c("Jaccard","abc"))
@@ -493,8 +494,7 @@ dissim2[1:10,]
 
 ```
 
-`beta.pair`, `beta.pair.abund`, `betapart.core` and `betapart.core.abund` from 
-the [betapart](https://cran.r-project.org/package=betapart) package.
+## 5.3 betapart::beta.pair
 
 ``` {r betapart 1}
 dissim1 <- dissimilarity(comatbin, 
@@ -508,6 +508,8 @@ dissim2[1:10,]
 
 ```
 
+## 5.4 betapart::beta.pair.abund
+
 ``` {r betapart 2}
 dissim1 <- dissimilarity(comat, 
                          metric = c("Brayturn","Bray"))
@@ -519,6 +521,8 @@ dissim2 <- as_bioregion_pairwise(beta.pair.abund(comat,
 dissim2[1:10,]
 
 ```
+
+## 5.5 betapart::betapart.core
 
 ``` {r betapart 3}
 dissim1 <- dissimilarity(comatbin, 
@@ -532,6 +536,7 @@ dissim2[1:10,]
 
 ```
 
+## 5.6 betapart::betapart.core.abund
 
 ``` {r betapart 4}
 dissim1 <- dissimilarity(comat, 
@@ -545,8 +550,7 @@ dissim2[1:10,]
 
 ```
 
-`distance` and `bcdist` from the 
-[ecodist](https://cran.r-project.org/package=ecodist) package.
+## 5.7 ecodist::distance
 
 ``` {r ecodist 1}
 dissim1 <- dissimilarity(comatbin, 
@@ -560,6 +564,8 @@ dissim2[1:10,]
 
 ```
 
+## 5.8 ecodist::bcdist
+
 ``` {r ecodist 2}
 dissim1 <- dissimilarity(comat, 
                          metric = "Bray")
@@ -571,8 +577,7 @@ dissim2[1:10,]
 
 ```
 
-and finally `vegdist` and `designdist` from 
-[vegan](https://cran.r-project.org/package=ecodist).
+## 5.9 vegan::vegdist
 
 ``` {r vegan 1}
 dissim1 <- dissimilarity(comatbin, 
@@ -585,6 +590,8 @@ dissim2 <- as_bioregion_pairwise(vegdist(comatbin,
 dissim2[1:10,]
 
 ```
+
+## 5.10 vegan::designdist
 
 ``` {r vegan 2}
 dissim1 <- dissimilarity(comat, 
@@ -607,4 +614,4 @@ dissim2[1:10,]
 -->
   
 
-# 5. Reference
+# 6. Reference
