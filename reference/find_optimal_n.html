@@ -229,21 +229,21 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span></span>
 <span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 100 trials</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among trials: 0.755 - 0.7803</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among trials: 0.8084 - 0.8097</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.7803 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.8097 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.234375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.2734375</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 6 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.21875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.265625</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 7 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.2109375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 8 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.205078125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.21875</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 9 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1953125</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1796875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
 <span class="r-in"><span><span class="va">tree</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -252,13 +252,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.78 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.81 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  6 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  5 6 7 8 9 10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.234 0.219 0.211 0.205 0.188 0.18 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.273 0.266 0.25 0.219 0.195 0.188 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree</span>,</span></span>
 <span class="r-in"><span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
@@ -282,7 +282,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  increasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 8</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -295,7 +295,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

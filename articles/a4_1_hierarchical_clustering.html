@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-05-22</h4>
+            <h4 data-toc-skip class="date">2025-06-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -295,9 +295,9 @@ at which we can obtain 4 clusters in our tree.</li>
 <p>Now, this is a hierarchical tree, and cutting it only once (= only 1
 partition) oversimplifies the result of the tree. Why not cut it
 multiple times? For example, we could make deep, intermediate, and
-shallow cuts to the tree, likewise to <span class="citation">Ficetola et
-al. (2017)</span>, which would allow us to see broad- to fine-scale
-relationships among sites in our tree.</p>
+shallow cuts to the tree, likewise to <span class="citation">Ficetola
+<em>et al.</em> (2017)</span>, which would allow us to see broad- to
+fine-scale relationships among sites in our tree.</p>
 <p>We can specify, e.g. 4, 10 and 20 clusters:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ask for 4, 10 and 20 clusters</span></span>
@@ -642,10 +642,10 @@ object.</strong></p></li>
 <div class="section level3">
 <h3 id="a-practical-example">3.1 A practical example<a class="anchor" aria-label="anchor" href="#a-practical-example"></a>
 </h3>
-<p>In this example we will compute the evaluation metric used by <span class="citation">Holt et al. (2013)</span>, which compares the total
-dissimilarity of the distance matrix (sum of all distances) with the
-inter-cluster dissimilarity (sum of distances between clusters). Then we
-will choose the optimal number of clusters as the elbow of the
+<p>In this example we will compute the evaluation metric used by <span class="citation">Holt <em>et al.</em> (2013)</span>, which compares the
+total dissimilarity of the distance matrix (sum of all distances) with
+the inter-cluster dissimilarity (sum of distances between clusters).
+Then we will choose the optimal number of clusters as the elbow of the
 evaluation plot.</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
@@ -723,12 +723,13 @@ your tree at the identified optimal number of cut-offs with
 package:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>pc_distance</code>: <span class="math inline">\(\sum{between-cluster\beta_{sim }} /
-\sum{\beta_{sim}}\)</span> This metric is the metric computed in <span class="citation">Holt et al. (2013)</span>.</p></li>
+\sum{\beta_{sim}}\)</span> This metric is the metric computed in <span class="citation">Holt <em>et al.</em> (2013)</span>.</p></li>
 <li><p><code>anosim</code>: this the statistic used in Analysis of
-Similarities, as suggested in <span class="citation">Castro-Insua et al.
-(2018)</span>. It compares the between-cluster dissimilarities to the
-within-cluster dissimilarities. It is based on the difference of mean
-ranks between groups and within groups with the following formula: <span class="math inline">\(R=(r_B-r_W)/(N(N-1)/4)\)</span> where <span class="math inline">\(r_B\)</span> and <span class="math inline">\(r_W\)</span> are the average ranks between and
+Similarities, as suggested in <span class="citation">Castro-Insua <em>et
+al.</em> (2018)</span>. It compares the between-cluster dissimilarities
+to the within-cluster dissimilarities. It is based on the difference of
+mean ranks between groups and within groups with the following formula:
+<span class="math inline">\(R=(r_B-r_W)/(N(N-1)/4)\)</span> where <span class="math inline">\(r_B\)</span> and <span class="math inline">\(r_W\)</span> are the average ranks between and
 within clusters respectively, and <span class="math inline">\(N\)</span>
 is the total number of sites.</p></li>
 <li><p><code>avg_endemism</code>: it is the average percentage of
@@ -1027,21 +1028,21 @@ You can change this by setting
 </h4>
 <p>The idea of this method is to select specific metric values at which
 the number of clusters should be used. For example, in their study,
-<span class="citation">Holt et al. (2013)</span> used different cutoffs
-for <code>pc_distance</code> to find the global biogeographic regions:
-0.90, 0.95, 0.99, 0.999. The higher the value, the more -diversity is
-explained, but also the more clusters there are. Therefore, the choice
-is a trade-off between the total -diversity explained and the number of
-clusters.</p>
+<span class="citation">Holt <em>et al.</em> (2013)</span> used different
+cutoffs for <code>pc_distance</code> to find the global biogeographic
+regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more
+-diversity is explained, but also the more clusters there are.
+Therefore, the choice is a trade-off between the total -diversity
+explained and the number of clusters.</p>
 <p>Eventually, the choice of these values depends on different
 factors:</p>
 <ol style="list-style-type: decimal">
 <li><p>The geographic scope of your study. A global scale study can use
-large cutoffs like <span class="citation">Holt et al. (2013)</span> and
-end up with a reasonable number of clusters, whereas in regional to
-local scale studies with less endemism and more taxa shared among
-clusters, these values are too high, and other cutoffs should be
-explored, such as 0.5 and 0.75.</p></li>
+large cutoffs like <span class="citation">Holt <em>et al.</em>
+(2013)</span> and end up with a reasonable number of clusters, whereas
+in regional to local scale studies with less endemism and more taxa
+shared among clusters, these values are too high, and other cutoffs
+should be explored, such as 0.5 and 0.75.</p></li>
 <li><p>The characteristics of your study which will increase or decrease
 the degree of endemism among clusters: dispersal capacities of your
 taxonomic group, the connectivity/barriers in your study area, etc. Use
@@ -1204,7 +1205,8 @@ hierarchical nature of clusters is not directly provided by the
 algorithm in a tree-like output. Hence, users should explore the
 ‘reachability plot’ to understand the hierarchical nature of their
 OPTICS clusters, and read the related publication to further understand
-this method <span class="citation">(Hahsler et al., 2019)</span>.</p>
+this method <span class="citation">(Hahsler <em>et al.</em>,
+2019)</span>.</p>
 <p>To run the optics algorithm, use the <code><a href="../reference/hclu_optics.html">hclu_optics()</a></code>
 function:</p>
 <div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
@@ -1223,58 +1225,53 @@ function:</p>
 <span><span class="co">##  - Number of clusters:  9</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">5. References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="1">
 <div id="ref-Baselga2012" class="csl-entry">
-Baselga, A. (2012). The relationship between species replacement,
+Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. <em>Global
-Ecology and Biogeography</em>, <em>21</em>(12), 1223–1232.
+Ecology and Biogeography</em> 21, 1223–1232.
 </div>
 <div id="ref-Baselga2013" class="csl-entry">
-Baselga, A. (2013). Separating the two components of abundance-based
+Baselga A (2013) Separating the two components of abundance-based
 dissimilarity: Balanced changes in abundance vs. Abundance gradients.
-<em>Methods in Ecology and Evolution</em>, <em>4</em>(6), 552–557.
+<em>Methods in Ecology and Evolution</em> 4, 552–557.
 </div>
 <div id="ref-Castro-Insua2018" class="csl-entry">
-Castro-Insua, A., Gómez-Rodríguez, C., &amp; Baselga, A. (2018). <span class="nocase">Dissimilarity measures affected by richness differences
+Castro-Insua A, Gómez-Rodríguez C &amp; Baselga A (2018) <span class="nocase">Dissimilarity measures affected by richness differences
 yield biased delimitations of biogeographic realms</span>. <em>Nature
-Communications</em>, <em>9</em>(1), 9–11.
+Communications</em> 9, 9–11.
 </div>
 <div id="ref-Ficetola2017" class="csl-entry">
-Ficetola, G. F., Mazel, F., &amp; Thuiller, W. (2017). <span class="nocase">Global determinants of zoogeographical boundaries</span>.
-<em>Nature Ecology &amp; Evolution</em>, <em>1</em>, 0089.
+Ficetola GF, Mazel F &amp; Thuiller W (2017) <span class="nocase">Global
+determinants of zoogeographical boundaries</span>. <em>Nature Ecology
+&amp; Evolution</em> 1, 0089.
 </div>
 <div id="ref-Hahsler2019" class="csl-entry">
-Hahsler, M., Piekenbrock, M., &amp; Doran, D. (2019). Dbscan: Fast
-density-based clustering with r. <em>Journal of Statistical
-Software</em>, <em>91</em>(1), 1–30.
+Hahsler M, Piekenbrock M &amp; Doran D (2019) Dbscan: Fast density-based
+clustering with r. <em>Journal of Statistical Software</em> 91, 1–30.
 </div>
 <div id="ref-Holt2013" class="csl-entry">
-Holt, B. G., Lessard, J.-P., Borregaard, M. K., Fritz, S. A., Araújo, M.
-B., Dimitrov, D., Fabre, P.-H., Graham, C. H., Graves, G. R., Jønsson,
-K. a., Nogués-Bravo, D., Wang, Z., Whittaker, R. J., Fjeldså, J., &amp;
-Rahbek, C. (2013). <span class="nocase">An update of Wallace’s
-zoogeographic regions of the world</span>. <em>Science</em>,
-<em>339</em>(6115), 74–78.
+Holt BG, Lessard J-P, Borregaard MK <em>et al.</em> (2013) <span class="nocase">An update of Wallace’s zoogeographic regions of the
+world</span>. <em>Science</em> 339, 74–78.
 </div>
 <div id="ref-Kaufman2009" class="csl-entry">
-Kaufman, L., &amp; Rousseeuw, P. J. (2009). Finding groups in data: An
-introduction to cluster analysis. In J. W. &amp; Sons. (Ed.),
-<em>Finding groups in data: An introduction to cluster analysis.</em>
-John Wiley &amp; Sons.
+Kaufman L &amp; Rousseeuw PJ (2009) Finding groups in data: An
+introduction to cluster analysis. In: <em>Finding groups in data: An
+introduction to cluster analysis.</em> (ed JW &amp; Sons.). John Wiley
+&amp; Sons.
 </div>
 <div id="ref-Kreft2010" class="csl-entry">
-Kreft, H., &amp; Jetz, W. (2010). <span class="nocase">A framework for
+Kreft H &amp; Jetz W (2010) <span class="nocase">A framework for
 delineating biogeographical regions based on species
-distributions</span>. <em>Journal of Biogeography</em>, <em>37</em>,
-2029–2053.
+distributions</span>. <em>Journal of Biogeography</em> 37, 2029–2053.
 </div>
 <div id="ref-Leprieur2014" class="csl-entry">
-Leprieur, F., &amp; Oikonomou, A. (2014). <span class="nocase">The need
-for richness-independent measures of turnover when delineating
-biogeographical regions</span>. <em>Journal of Biogeography</em>,
-<em>41</em>, 417–420.
+Leprieur F &amp; Oikonomou A (2014) <span class="nocase">The need for
+richness-independent measures of turnover when delineating
+biogeographical regions</span>. <em>Journal of Biogeography</em> 41,
+417–420.
 </div>
 </div>
 </div>
@@ -1289,7 +1286,7 @@ biogeographical regions</span>. <em>Journal of Biogeography</em>,
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

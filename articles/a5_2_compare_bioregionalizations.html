@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-05-22</h4>
+            <h4 data-toc-skip class="date">2025-06-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_2_compare_bioregionalizations.Rmd" class="external-link"><code>vignettes/a5_2_compare_bioregionalizations.Rmd</code></a></small>
       <div class="d-none name"><code>a5_2_compare_bioregionalizations.Rmd</code></div>
@@ -109,7 +109,7 @@ Boris Leroy and Maxime Lenormand</h4>
 different bioregions across multiple bioregionalizations, using the
 function <code><a href="../reference/compare_bioregionalizations.html">compare_bioregionalizations()</a></code>.</p>
 <div class="section level2">
-<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+<h2 id="data">1. Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h2>
 <p>We use the vegetation dataset that comes with
 <code>bioregion</code>.</p>
@@ -122,7 +122,7 @@ function <code><a href="../reference/compare_bioregionalizations.html">compare_b
 <span><span class="va">vegesim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="bioregionalization">Bioregionalization<a class="anchor" aria-label="anchor" href="#bioregionalization"></a>
+<h2 id="bioregionalization">2. Bioregionalization<a class="anchor" aria-label="anchor" href="#bioregionalization"></a>
 </h2>
 <p>We use the same three bioregionalization algorithms as in the <a href="https://biorgeo.github.io/bioregion/articles/a5_visualization.html" class="external-link">visualization
 vignette</a>, i.e. a non-hierarchical, hierarchical and network
@@ -154,7 +154,7 @@ bioregionalizations. <br></p>
 <span><span class="co">## K_3            K_3       3</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="compare-the-bioregionalizations">Compare the bioregionalizations<a class="anchor" aria-label="anchor" href="#compare-the-bioregionalizations"></a>
+<h2 id="compare-the-bioregionalizations">3. Compare the bioregionalizations<a class="anchor" aria-label="anchor" href="#compare-the-bioregionalizations"></a>
 </h2>
 <p>Before comparing the bioregionalizations, we build a common
 <code>data.frame</code> containing the three distinct
@@ -222,7 +222,7 @@ they produce similar pairwise memberships</p>
 <p>Let’s first look at pairwise membership within
 bioregionalization.</p>
 <div class="section level3">
-<h3 id="pairwise-membership">Pairwise membership<a class="anchor" aria-label="anchor" href="#pairwise-membership"></a>
+<h3 id="pairwise-membership">3.1 Pairwise membership<a class="anchor" aria-label="anchor" href="#pairwise-membership"></a>
 </h3>
 <p>The number of pairwise combinations for <span class="math inline">\(n\)</span> sites equals <span class="math inline">\(n(n-1)/2\)</span>. So in our case, where we have
 715 sites, we do end up with 2.55255^{5} pairwise combinations.</p>
@@ -269,7 +269,7 @@ frequencies:</p>
 assigned to the same bioregion.</p>
 </div>
 <div class="section level3">
-<h3 id="confusion-matrix">Confusion matrix<a class="anchor" aria-label="anchor" href="#confusion-matrix"></a>
+<h3 id="confusion-matrix">3.2 Confusion matrix<a class="anchor" aria-label="anchor" href="#confusion-matrix"></a>
 </h3>
 <p>The confusion matrix allows to compare different bioregionalizations
 by looking at the similarity of their pairwise memberships. To do so,
@@ -335,7 +335,7 @@ bioregionalizations.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

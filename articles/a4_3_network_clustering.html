@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-05-22</h4>
+            <h4 data-toc-skip class="date">2025-06-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_3_network_clustering.Rmd" class="external-link"><code>vignettes/a4_3_network_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_3_network_clustering.Rmd</code></div>
@@ -156,10 +156,10 @@ associated <code>bioregion</code> function works. For this purpose, we
 use the European freshwater fish dataset that comes with
 <code>bioregion</code>.</p>
 <div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<h2 id="introduction">1 Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <div class="section level3">
-<h3 id="input-data">Input data<a class="anchor" aria-label="anchor" href="#input-data"></a>
+<h3 id="input-data">1.1 Input data<a class="anchor" aria-label="anchor" href="#input-data"></a>
 </h3>
 <p>All network algorithms work with the network format, i.e. a
 <code>data.frame</code> with 3 columns: sites, species and the abundance
@@ -178,7 +178,7 @@ pair of sites.</p>
 <span><span class="va">fish_simil</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity.html">similarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="main-arguments">Main arguments<a class="anchor" aria-label="anchor" href="#main-arguments"></a>
+<h3 id="main-arguments">1.2 Main arguments<a class="anchor" aria-label="anchor" href="#main-arguments"></a>
 </h3>
 <p>Each of the algorithms presented here has some specific parameters
 that can be tweaked but some arguments are common for all the
@@ -208,12 +208,12 @@ folder</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="binary-files">Binary files<a class="anchor" aria-label="anchor" href="#binary-files"></a>
+<h2 id="binary-files">2. Binary files<a class="anchor" aria-label="anchor" href="#binary-files"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>binpath <span class="op">=</span> <span class="st">"tempdir"</span>, infomap_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2.1.0"</span>, <span class="st">"2.6.0"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="infomap">Infomap<a class="anchor" aria-label="anchor" href="#infomap"></a>
+<h3 id="infomap">2.1 Infomap<a class="anchor" aria-label="anchor" href="#infomap"></a>
 </h3>
 <p><span class="citation">Rosvall &amp; Bergstrom (2008)</span></p>
 <ul>
@@ -271,11 +271,11 @@ community should be identifiable in the outputs (FALSE by default).</li>
 <span><span class="co">## 290  14  23   9   2</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="oslom">OSLOM<a class="anchor" aria-label="anchor" href="#oslom"></a>
+<h3 id="oslom">2.2 OSLOM<a class="anchor" aria-label="anchor" href="#oslom"></a>
 </h3>
 <p>OSLOM stands for Order Statistics Local Optimization Method.</p>
 <p><em>Similarity-based</em> algorithm.</p>
-<p><span class="citation">Lancichinetti et al. (2011)</span>
+<p><span class="citation">Lancichinetti <em>et al.</em> (2011)</span>
 <code>reassign</code> a string indicating if the nodes belonging to
 several community should be reassign and what method should be used (see
 Note).<br>
@@ -313,9 +313,9 @@ leads to bigger clusters).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_oslom</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_338</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="louvain">Louvain<a class="anchor" aria-label="anchor" href="#louvain"></a>
+<h3 id="louvain">2.3 Louvain<a class="anchor" aria-label="anchor" href="#louvain"></a>
 </h3>
-<p><span class="citation">Blondel et al. (2008)</span></p>
+<p><span class="citation">Blondel <em>et al.</em> (2008)</span></p>
 <ul>
 <li>
 <code>q</code> the quality function used to compute partition of the
@@ -349,12 +349,12 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="functions-from-the-igraph-package">Functions from the igraph package<a class="anchor" aria-label="anchor" href="#functions-from-the-igraph-package"></a>
+<h2 id="functions-from-the-igraph-package">3. Functions from the igraph package<a class="anchor" aria-label="anchor" href="#functions-from-the-igraph-package"></a>
 </h2>
 <div class="section level3">
-<h3 id="fastgreedy">Fastgreedy<a class="anchor" aria-label="anchor" href="#fastgreedy"></a>
+<h3 id="fastgreedy">3.1 Fastgreedy<a class="anchor" aria-label="anchor" href="#fastgreedy"></a>
 </h3>
-<p><span class="citation">Clauset et al. (2004)</span></p>
+<p><span class="citation">Clauset <em>et al.</em> (2004)</span></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">ex_greedy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">fishdf</span>,</span>
@@ -371,9 +371,9 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <span><span class="co">## 138  61 144 132  58</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="label-propagation">Label propagation<a class="anchor" aria-label="anchor" href="#label-propagation"></a>
+<h3 id="label-propagation">3.2 Label propagation<a class="anchor" aria-label="anchor" href="#label-propagation"></a>
 </h3>
-<p><span class="citation">Raghavan et al. (2007)</span></p>
+<p><span class="citation">Raghavan <em>et al.</em> (2007)</span></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">ex_labelprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_labelprop.html">netclu_labelprop</a></span><span class="op">(</span><span class="va">fishdf</span>,</span>
@@ -388,9 +388,9 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="leiden-algorithm">Leiden algorithm<a class="anchor" aria-label="anchor" href="#leiden-algorithm"></a>
+<h3 id="leiden-algorithm">3.3 Leiden algorithm<a class="anchor" aria-label="anchor" href="#leiden-algorithm"></a>
 </h3>
-<p><span class="citation">Traag et al. (2019)</span></p>
+<p><span class="citation">Traag <em>et al.</em> (2019)</span></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">ex_leiden</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_leiden.html">netclu_leiden</a></span><span class="op">(</span><span class="va">fishdf</span>,</span>
@@ -410,7 +410,7 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <pre><code><span><span class="co">## [1] 0</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="leading-eigenvector">Leading eigenvector<a class="anchor" aria-label="anchor" href="#leading-eigenvector"></a>
+<h3 id="leading-eigenvector">3.4 Leading eigenvector<a class="anchor" aria-label="anchor" href="#leading-eigenvector"></a>
 </h3>
 <p><span class="citation">Newman (2006)</span></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -427,7 +427,7 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="walktrap">Walktrap<a class="anchor" aria-label="anchor" href="#walktrap"></a>
+<h3 id="walktrap">3.5 Walktrap<a class="anchor" aria-label="anchor" href="#walktrap"></a>
 </h3>
 <p><span class="citation">Pons &amp; Latapy (2005)</span></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -448,10 +448,10 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="function-from-the-bipartite-package">Function from the bipartite package<a class="anchor" aria-label="anchor" href="#function-from-the-bipartite-package"></a>
+<h2 id="function-from-the-bipartite-package">4 Function from the bipartite package<a class="anchor" aria-label="anchor" href="#function-from-the-bipartite-package"></a>
 </h2>
 <div class="section level3">
-<h3 id="beckett">Beckett<a class="anchor" aria-label="anchor" href="#beckett"></a>
+<h3 id="beckett">4.1 Beckett<a class="anchor" aria-label="anchor" href="#beckett"></a>
 </h3>
 <p>Update of the QuanBiMo algorithm developed by Dormann &amp; Strauss
 (2014).</p>
@@ -506,57 +506,52 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 </div>
 </div>
 <div class="section level2">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">5. References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="1">
 <div id="ref-Beckett2016" class="csl-entry">
-Beckett, S. J. (2016). Improved community detection in weighted
-bipartite networks. <em>Royal Society Open Science</em>, <em>3</em>(1),
-140536.
+Beckett SJ (2016) Improved community detection in weighted bipartite
+networks. <em>Royal Society Open Science</em> 3, 140536.
 </div>
 <div id="ref-Blondel2008" class="csl-entry">
-Blondel, V. D., Guillaume, J. L., Lambiotte, R., &amp; Mech, E. L. J. S.
-(2008). <span class="nocase">Fast unfolding of communities in large
-networks</span>. <em>J. Stat. Mech</em>, <em>2008</em>(10), P10008.
+Blondel VD, Guillaume JL, Lambiotte R &amp; Mech ELJS (2008) <span class="nocase">Fast unfolding of communities in large networks</span>.
+<em>J. Stat. Mech</em> 2008, P10008.
 </div>
 <div id="ref-Clauset2004" class="csl-entry">
-Clauset, A., Newman, M. E. J., &amp; Moore, C. (2004). Finding community
-structure in very large networks. <em>Phys. Rev. E</em>, <em>70</em>,
-066111.
+Clauset A, Newman MEJ &amp; Moore C (2004) Finding community structure
+in very large networks. <em>Phys. Rev. E</em> 70, 066111.
 </div>
 <div id="ref-Lancichinetti2011" class="csl-entry">
-Lancichinetti, A., Radicchi, F., Ramasco, J. J., &amp; Fortunato, S.
-(2011). Finding statistically significant communities in networks.
-<em>PLOS ONE</em>, <em>6</em>(4), e18961.
+Lancichinetti A, Radicchi F, Ramasco JJ &amp; Fortunato S (2011) Finding
+statistically significant communities in networks. <em>PLOS ONE</em> 6,
+e18961.
 </div>
 <div id="ref-Newman2006" class="csl-entry">
-Newman, M. E. J. (2006). Finding community structure in networks using
-the eigenvectors of matrices. <em>Physical Review E</em>,
-<em>74</em>(3), 036104.
+Newman MEJ (2006) Finding community structure in networks using the
+eigenvectors of matrices. <em>Physical Review E</em> 74, 036104.
 </div>
 <div id="ref-Pons2005" class="csl-entry">
-Pons, P., &amp; Latapy, M. (2005). Computing <span>Communities</span> in
+Pons P &amp; Latapy M (2005) Computing <span>Communities</span> in
 <span>Large</span> <span>Networks</span> <span>Using</span>
-<span>Random</span> <span>Walks</span>. In I. Yolum, T. Güngör, F.
-Gürgen, &amp; C. Özturan (Eds.), <em>Computer and
+<span>Random</span> <span>Walks</span>. In: <em>Computer and
 <span>Information</span> <span>Sciences</span> - <span>ISCIS</span>
-2005</em> (pp. 284–293). Springer.
+2005</em> (eds I Yolum, T Güngör, F Gürgen &amp; C Özturan) pp. 284–293.
+Springer, Berlin, Heidelberg.
 </div>
 <div id="ref-Raghavan2007" class="csl-entry">
-Raghavan, U. N., Albert, R., &amp; Kumara, S. (2007). Near linear time
-algorithm to detect community structures in large-scale networks.
-<em>Physical Review E</em>, <em>76</em>(3), 036106.
+Raghavan UN, Albert R &amp; Kumara S (2007) Near linear time algorithm
+to detect community structures in large-scale networks. <em>Physical
+Review E</em> 76, 036106.
 </div>
 <div id="ref-Rosvall2008" class="csl-entry">
-Rosvall, M., &amp; Bergstrom, C. T. (2008). <span class="nocase">Maps of
-random walks on complex networks reveal community structure</span>.
-<em>Proceedings of the National Academy of Sciences</em>,
-<em>105</em>(4), 1118–1123.
+Rosvall M &amp; Bergstrom CT (2008) <span class="nocase">Maps of random
+walks on complex networks reveal community structure</span>.
+<em>Proceedings of the National Academy of Sciences</em> 105, 1118–1123.
 </div>
 <div id="ref-Traag2019" class="csl-entry">
-Traag, V. A., Waltman, L., &amp; Van Eck, N. J. (2019). From
-<span>Louvain</span> to <span>Leiden</span>: Guaranteeing well-connected
-communities. <em>Scientific Reports</em>, <em>9</em>(1), 5233.
+Traag VA, Waltman L &amp; Van Eck NJ (2019) From <span>Louvain</span> to
+<span>Leiden</span>: Guaranteeing well-connected communities.
+<em>Scientific reports</em> 9, 5233.
 </div>
 </div>
 </div>
@@ -571,7 +566,7 @@ communities. <em>Scientific Reports</em>, <em>9</em>(1), 5233.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

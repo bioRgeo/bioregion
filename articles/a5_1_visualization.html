@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-05-22</h4>
+            <h4 data-toc-skip class="date">2025-06-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_1_visualization.Rmd" class="external-link"><code>vignettes/a5_1_visualization.Rmd</code></a></small>
       <div class="d-none name"><code>a5_1_visualization.Rmd</code></div>
@@ -111,7 +111,7 @@ identified with the diferent algorithms available in
 <code>bioregion</code>, we show three strategies to plot your
 results.</p>
 <div class="section level2">
-<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+<h2 id="data">1. Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h2>
 <p>For this vignette, we rely on the dataset describing the distribution
 of vascular plants in the Mediterranean part of France. We first load
@@ -133,11 +133,11 @@ of it and also load the data.frame format of the data.</p>
 <span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
+<h2 id="plots">2. Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
 </h2>
 <p>In this section, we show three ways to plot your results. <br></p>
 <div class="section level3">
-<h3 id="map_bioregions">map_bioregions()<a class="anchor" aria-label="anchor" href="#map_bioregions"></a>
+<h3 id="map_bioregions">2.1 map_bioregions()<a class="anchor" aria-label="anchor" href="#map_bioregions"></a>
 </h3>
 <p>The first possibility is to use the function
 <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> from the package. This function can
@@ -156,7 +156,7 @@ sites, stored in <code>fishsf</code>.</p>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 </div>
 <div class="section level3">
-<h3 id="custom-plot">Custom plot<a class="anchor" aria-label="anchor" href="#custom-plot"></a>
+<h3 id="custom-plot">2.2 Custom plot<a class="anchor" aria-label="anchor" href="#custom-plot"></a>
 </h3>
 <p>If you want to customize yourself the plot and not simply rely on the
 default option, <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> gives you the possibility
@@ -197,7 +197,7 @@ For this purpose, you can set the arguments like in the chunk below:</p>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 </div>
 <div class="section level3">
-<h3 id="plot-with-facets">Plot with facets<a class="anchor" aria-label="anchor" href="#plot-with-facets"></a>
+<h3 id="plot-with-facets">2.3 Plot with facets<a class="anchor" aria-label="anchor" href="#plot-with-facets"></a>
 </h3>
 <p>Finally, you can be interested in plotting several
 bioregionalizations at once. For this purpose, we can build a single
@@ -355,7 +355,7 @@ can take advantage of the facets implemented in
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

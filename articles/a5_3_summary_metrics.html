@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-05-22</h4>
+            <h4 data-toc-skip class="date">2025-06-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_3_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_summary_metrics.Rmd</code></div>
@@ -109,7 +109,7 @@ Boris Leroy and Maxime Lenormand</h4>
 species to each bioregion, using the function
 <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>.</p>
 <div class="section level2">
-<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+<h2 id="data">1. Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h2>
 <p>We use the vegetation dataset that comes with
 <code>bioregion</code>.</p>
@@ -122,7 +122,7 @@ species to each bioregion, using the function
 <span><span class="va">vegesim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="bioregionalization">Bioregionalization<a class="anchor" aria-label="anchor" href="#bioregionalization"></a>
+<h2 id="bioregionalization">2. Bioregionalization<a class="anchor" aria-label="anchor" href="#bioregionalization"></a>
 </h2>
 <p>We use the same three bioregionalization algorithms as in the <a href="https://biorgeo.github.io/bioregion/articles/a5_visualization.html" class="external-link">visualization
 vignette</a>, i.e. a non-hierarchical, hierarchical and network
@@ -155,7 +155,7 @@ bioregionalizations. <br></p>
 <span><span class="co">## K_3            K_3       3</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="bioregion-metrics">Bioregion metrics<a class="anchor" aria-label="anchor" href="#bioregion-metrics"></a>
+<h2 id="bioregion-metrics">3. Bioregion metrics<a class="anchor" aria-label="anchor" href="#bioregion-metrics"></a>
 </h2>
 <p>Number of sites belonging to a bioregion, how many species do these
 sites contain. Number of endemic and proportion of endemism are also
@@ -171,19 +171,19 @@ to a particular bioregion.</p>
 <span><span class="co">## 3         1         359           2824      407          14.412181</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="species-metrics">Species metrics<a class="anchor" aria-label="anchor" href="#species-metrics"></a>
+<h2 id="species-metrics">4. Species metrics<a class="anchor" aria-label="anchor" href="#species-metrics"></a>
 </h2>
 <p>Different summary statistics are available at the species level.</p>
 <div class="section level3">
-<h3 id="contribution-rho">Contribution (<span class="math inline">\(\rho\)</span>)<a class="anchor" aria-label="anchor" href="#contribution-rho"></a>
+<h3 id="contribution-rho">4.1 Contribution (<span class="math inline">\(\rho\)</span>)<a class="anchor" aria-label="anchor" href="#contribution-rho"></a>
 </h3>
 <center>
 <img align="bottom" width="70%" height="70%" src="../reference/figures/zscore_scheme.svg">
 </center>
 <p><br></p>
 <p>The contribution index <span class="math inline">\(\rho\)</span> is
-calculated for each species x bioregion combination, following <span class="citation">(Lenormand et al., 2019)</span>. <br> Its formula is
-the following:</p>
+calculated for each species x bioregion combination, following <span class="citation">(Lenormand <em>et al.</em>, 2019)</span>. <br> Its
+formula is the following:</p>
 <p><span class="math display">\[\rho_{ij} = \frac{n_{ij} - \frac{n_i
 n_j}{n}}{\sqrt{\frac{n - n_j}{n-1} (1-\frac{n_j}{n}) \frac{n_i
 n_j}{n}}}\]</span> with <span class="math inline">\(n\)</span> the
@@ -195,10 +195,10 @@ belonging to the bioregion <span class="math inline">\(j\)</span>, <span class="
 bioregion <span class="math inline">\(j\)</span>.</p>
 </div>
 <div class="section level3">
-<h3 id="individual-contributions">Individual contributions<a class="anchor" aria-label="anchor" href="#individual-contributions"></a>
+<h3 id="individual-contributions">4.2 Individual contributions<a class="anchor" aria-label="anchor" href="#individual-contributions"></a>
 </h3>
 <p>Affinity, fidelity and individual contributions describe how species
-are linked to their bioregions. These metrics are presented in <span class="citation">(Bernardo-Madrid et al., 2019)</span>.</p>
+are linked to their bioregions. These metrics are presented in <span class="citation">(Bernardo-Madrid <em>et al.</em>, 2019)</span>.</p>
 <p>Affinity of species to their region: <span class="math display">\[A_i
 = \frac{R_i}{Z}\]</span> where <span class="math inline">\(R_i\)</span>
 is the occurrence/range size of species <span class="math inline">\(i\)</span> in its associated bioregion, and <span class="math inline">\(Z\)</span> the total size (number of sites) of the
@@ -217,7 +217,7 @@ bioregions than their associated one.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="bipartite-metrics">Bipartite metrics<a class="anchor" aria-label="anchor" href="#bipartite-metrics"></a>
+<h2 id="bipartite-metrics">5. Bipartite metrics<a class="anchor" aria-label="anchor" href="#bipartite-metrics"></a>
 </h2>
 <p>When running a community detection algorithm on a site x species
 matrix, both sites and species get a bioregion assigned. The degree of
@@ -225,7 +225,7 @@ affinity of both types of nodes can therefore be directly assessed, with
 metrics like the coefficient of participation <code>C</code> or the
 within-bioregion degree <code>z</code>.</p>
 <div class="section level3">
-<h3 id="cz-statistics">Cz statistics<a class="anchor" aria-label="anchor" href="#cz-statistics"></a>
+<h3 id="cz-statistics">5.1 Cz statistics<a class="anchor" aria-label="anchor" href="#cz-statistics"></a>
 </h3>
 <p><code>Cz</code> metrics are derived from <span class="citation">(Guimerà &amp; Amaral, 2005)</span>. Their respective
 formula are: <span class="math display">\[C_i = 1 -
@@ -248,7 +248,7 @@ measures how well-connected node <span class="math inline">\(i\)</span>
 is to other nodes in the bioregion.</p>
 </div>
 <div class="section level3">
-<h3 id="running-the-site_species_metrics-function">Running the site_species_metrics function<a class="anchor" aria-label="anchor" href="#running-the-site_species_metrics-function"></a>
+<h3 id="running-the-site_species_metrics-function">5.2 Running the site_species_metrics function<a class="anchor" aria-label="anchor" href="#running-the-site_species_metrics-function"></a>
 </h3>
 <p>We can now run the function <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>.
 <br></p>
@@ -269,11 +269,11 @@ with the contribution metrics available at the species level.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="spatial-coherence">Spatial coherence<a class="anchor" aria-label="anchor" href="#spatial-coherence"></a>
+<h2 id="spatial-coherence">6. Spatial coherence<a class="anchor" aria-label="anchor" href="#spatial-coherence"></a>
 </h2>
-<p>We use the metric of spatial coherence as in <span class="citation">(Divíšek et al., 2016)</span>, except that we replace
-the number of pixels per bioregion with the area of each coherent
-part.</p>
+<p>We use the metric of spatial coherence as in <span class="citation">(Divíšek <em>et al.</em>, 2016)</span>, except that we
+replace the number of pixels per bioregion with the area of each
+coherent part.</p>
 <p>The spatial coherence is expressed in percentage, and has the
 following formula:</p>
 <p><span class="math display">\[SC_j = 100 \times
@@ -304,30 +304,27 @@ is why the spatial coherence is very close to 100 %.</p>
 <p><img src="a5_3_summary_metrics_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 </div>
 <div class="section level2">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">7. References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="1">
 <div id="ref-Bernardo2019" class="csl-entry">
-Bernardo-Madrid, R., Calatayud, J., González‐Suárez, M., Rosvall, M.,
-Lucas, P., Antonelli, A., &amp; Revilla, E. (2019). Human activity is
-altering the world’s zoogeographical regions. <em>Ecology Letters</em>,
-<em>22</em>, 1297–1305.
+Bernardo-Madrid R, Calatayud J, González‐Suárez M <em>et al.</em> (2019)
+Human activity is altering the world’s zoogeographical regions.
+<em>Ecology letters</em> 22, 1297–1305.
 </div>
 <div id="ref-Divisek2016" class="csl-entry">
-Divíšek, J., Storch, D., Zelený, D., &amp; Culek, M. (2016). Towards the
-spatial coherence of biogeographical regionalizations at subcontinental
-and landscape scales. <em>Journal of Biogeography</em>, <em>43</em>,
-2489–2501.
+Divíšek J, Storch D, Zelený D &amp; Culek M (2016) Towards the spatial
+coherence of biogeographical regionalizations at subcontinental and
+landscape scales. <em>Journal of biogeography</em> 43, 2489–2501.
 </div>
 <div id="ref-Guimera2005" class="csl-entry">
-Guimerà, R., &amp; Amaral, L. A. N. (2005). Functional cartography of
-complex metabolic networks. <em>Nature</em>, <em>433</em>, 895–900.
+Guimerà R &amp; Amaral LAN (2005) Functional cartography of complex
+metabolic networks. <em>Nature</em> 433, 895–900.
 </div>
 <div id="ref-Lenormand2019" class="csl-entry">
-Lenormand, M., Papuga, G., Argagnon, O., Soubeyrand, M., Alleaume, S.,
-&amp; Luque, S. (2019). Biogeographical network analysis of plant
-species distribution in the mediterranean region. <em>Ecology and
-Evolution</em>, <em>9</em>, 237–250.
+Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S &amp; Luque
+S (2019) Biogeographical network analysis of plant species distribution
+in the mediterranean region. <em>Ecology and evolution</em> 9, 237–250.
 </div>
 </div>
 </div>
@@ -342,7 +339,7 @@ Evolution</em>, <em>9</em>, 237–250.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
