@@ -540,21 +540,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 278.361300 282.417925 284.298731 284.549580 285.318104</span></span>
-<span><span class="co">##        betapart   1.690182   1.858807   1.931732   1.917421   1.953393</span></span>
-<span><span class="co">##       bioregion   9.720939  10.328312  15.670676  15.468984  16.662715</span></span>
-<span><span class="co">##    ecodist_dist 128.795487 140.296275 178.942631 158.144101 169.140758</span></span>
-<span><span class="co">##  ecodist_bcdist   3.353584   3.562975   3.569997   3.600143   3.619380</span></span>
-<span><span class="co">##       vegan_veg   1.220436   1.319902   1.945842   2.315764   2.319255</span></span>
-<span><span class="co">##    vegan_design   1.265480   1.309703   1.402998   1.363172   1.465303</span></span>
+<span><span class="co">##      adespatial 278.337306 286.605829 288.323208 288.943293 290.632299</span></span>
+<span><span class="co">##        betapart   1.838059   1.888572   1.982922   1.935434   1.957832</span></span>
+<span><span class="co">##       bioregion  14.578182  14.739223  16.798650  15.470060  16.157477</span></span>
+<span><span class="co">##    ecodist_dist 140.356588 153.266429 183.832501 161.871949 170.811194</span></span>
+<span><span class="co">##  ecodist_bcdist   3.550943   3.576161   3.601542   3.592796   3.633748</span></span>
+<span><span class="co">##       vegan_veg   1.295928   1.311967   1.995840   2.288769   2.299690</span></span>
+<span><span class="co">##    vegan_design   1.267424   1.277934   1.380142   1.351631   1.369054</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  289.475436    10</span></span>
-<span><span class="co">##    2.326809    10</span></span>
-<span><span class="co">##   30.425983    10</span></span>
-<span><span class="co">##  401.860850    10</span></span>
-<span><span class="co">##    3.655207    10</span></span>
-<span><span class="co">##    2.355874    10</span></span>
-<span><span class="co">##    1.740887    10</span></span></code></pre>
+<span><span class="co">##  299.548680    10</span></span>
+<span><span class="co">##    2.456993    10</span></span>
+<span><span class="co">##   29.637591    10</span></span>
+<span><span class="co">##  404.731015    10</span></span>
+<span><span class="co">##    3.655869    10</span></span>
+<span><span class="co">##    2.375060    10</span></span>
+<span><span class="co">##    1.856313    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -641,21 +641,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 278.313571 282.195981 286.878285 286.685649 290.191452</span></span>
-<span><span class="co">##        betapart 310.581959 315.747072 343.248173 331.987705 362.278036</span></span>
-<span><span class="co">##       bioregion  10.120624  10.488972  11.224555  10.602408  10.974026</span></span>
-<span><span class="co">##    ecodist_dist  84.219526  94.783447 106.637512  99.443281 126.623456</span></span>
-<span><span class="co">##  ecodist_bcdist   5.988960   6.009608   6.099689   6.103248   6.189293</span></span>
-<span><span class="co">##       vegan_veg   1.210778   1.244550   1.678732   1.296292   2.319004</span></span>
-<span><span class="co">##    vegan_design   1.267815   1.316666   1.462292   1.387653   1.662831</span></span>
+<span><span class="co">##      adespatial 280.826799 287.663521 293.023057 295.005756 297.315745</span></span>
+<span><span class="co">##        betapart 312.632214 318.781323 343.837411 336.448052 363.655114</span></span>
+<span><span class="co">##       bioregion  10.271619  10.445003  11.240219  10.664202  11.176216</span></span>
+<span><span class="co">##    ecodist_dist  84.984717  92.729212 104.732920  97.328114 127.217932</span></span>
+<span><span class="co">##  ecodist_bcdist   6.019067   6.036089   6.101255   6.089558   6.169398</span></span>
+<span><span class="co">##       vegan_veg   1.210017   1.253107   1.673598   1.298016   2.295602</span></span>
+<span><span class="co">##    vegan_design   1.282442   1.328709   1.461073   1.412494   1.658503</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  294.072319    10</span></span>
-<span><span class="co">##  421.239420    10</span></span>
-<span><span class="co">##   13.859187    10</span></span>
-<span><span class="co">##  131.488129    10</span></span>
-<span><span class="co">##    6.198580    10</span></span>
-<span><span class="co">##    2.336427    10</span></span>
-<span><span class="co">##    1.751406    10</span></span></code></pre>
+<span><span class="co">##  302.488413    10</span></span>
+<span><span class="co">##  403.054603    10</span></span>
+<span><span class="co">##   13.938969    10</span></span>
+<span><span class="co">##  131.729317    10</span></span>
+<span><span class="co">##    6.189295    10</span></span>
+<span><span class="co">##    2.309538    10</span></span>
+<span><span class="co">##    1.674764    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.
@@ -749,11 +749,11 @@ function.</p>
 <span><span class="co">## 9     35    87 2039.7632</span></span>
 <span><span class="co">## 10    35    88 2239.1117</span></span>
 <span><span class="co">## 11    35    89  226.8237</span></span></code></pre>
-<p>but also outputs from several functions provided by the packages <a href="https://cran.r-project.org/package=adespatial" class="external-link">adespatial</a>, <a href="https://cran.r-project.org/package=betapart" class="external-link">betapart</a>, <a href="https://cran.r-project.org/package=ecodist" class="external-link">ecodist</a> and <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> described
+<p>but also outputs from 10 functions provided by the packages <a href="https://cran.r-project.org/package=adespatial" class="external-link">adespatial</a>, <a href="https://cran.r-project.org/package=betapart" class="external-link">betapart</a>, <a href="https://cran.r-project.org/package=ecodist" class="external-link">ecodist</a> and <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> described
 above.</p>
-<p>This includes the outputs of <code>beta.div</code> and
-<code>beta.div.comp</code> from the <a href="https://cran.r-project.org/package=adespatial" class="external-link">adespatial</a>
-package.</p>
+<div class="section level3">
+<h3 id="adespatialbeta-div">5.1 adespatial::beta.div<a class="anchor" aria-label="anchor" href="#adespatialbeta-div"></a>
+</h3>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"Euclidean"</span><span class="op">)</span></span>
@@ -800,6 +800,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9  5.548479</span></span>
 <span><span class="co">## 10    s1   s10  6.362439</span></span>
 <span><span class="co">## 11    s1   s11  6.001393</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="adespatialbeta-div-comp">5.2 adespatial::beta.div.comp<a class="anchor" aria-label="anchor" href="#adespatialbeta-div-comp"></a>
+</h3>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Jaccard"</span>,<span class="st">"abc"</span><span class="op">)</span><span class="op">)</span></span>
@@ -845,10 +849,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9              0.8105263 18 41 36</span></span>
 <span><span class="co">## 10    s1   s10              0.8842105 11 48 36</span></span>
 <span><span class="co">## 11    s1   s11              0.8666667 14 45 46</span></span></code></pre>
-<p><code>beta.pair</code>, <code>beta.pair.abund</code>,
-<code>betapart.core</code> and <code>betapart.core.abund</code> from the
-<a href="https://cran.r-project.org/package=betapart" class="external-link">betapart</a>
-package.</p>
+</div>
+<div class="section level3">
+<h3 id="betapartbeta-pair">5.3 betapart::beta.pair<a class="anchor" aria-label="anchor" href="#betapartbeta-pair"></a>
+</h3>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Jaccard"</span>,<span class="st">"Jaccardturn"</span><span class="op">)</span><span class="op">)</span></span>
@@ -894,6 +898,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9 0.8000000 0.010526316 0.8105263</span></span>
 <span><span class="co">## 10    s1   s10 0.8674699 0.016740647 0.8842105</span></span>
 <span><span class="co">## 11    s1   s11 0.8653846 0.001282051 0.8666667</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="betapartbeta-pair-abund">5.4 betapart::beta.pair.abund<a class="anchor" aria-label="anchor" href="#betapartbeta-pair-abund"></a>
+</h3>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Brayturn"</span>,<span class="st">"Bray"</span><span class="op">)</span><span class="op">)</span></span>
@@ -939,6 +947,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9     0.3143748   0.004093053 0.3184678</span></span>
 <span><span class="co">## 10    s1   s10     0.3617546   0.039969771 0.4017243</span></span>
 <span><span class="co">## 11    s1   s11     0.3505070   0.001815369 0.3523224</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="betapartbetapart-core">5.5 betapart::betapart.core<a class="anchor" aria-label="anchor" href="#betapartbetapart-core"></a>
+</h3>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"abc"</span>,</span>
@@ -984,6 +996,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9 18 41 36       36       41       77</span></span>
 <span><span class="co">## 10    s1   s10 11 48 36       36       48       84</span></span>
 <span><span class="co">## 11    s1   s11 14 45 46       45       46       91</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="betapartbetapart-core-abund">5.6 betapart::betapart.core.abund<a class="anchor" aria-label="anchor" href="#betapartbetapart-core-abund"></a>
+</h3>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"ABC"</span>,</span>
@@ -1029,8 +1045,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9 67.46550 30.93447 32.11639 63.05086</span></span>
 <span><span class="co">## 10    s1   s10 56.06630 31.77812 43.51559 75.29371</span></span>
 <span><span class="co">## 11    s1   s11 64.31719 34.70958 35.26470 69.97427</span></span></code></pre>
-<p><code>distance</code> and <code>bcdist</code> from the <a href="https://cran.r-project.org/package=ecodist" class="external-link">ecodist</a>
-package.</p>
+</div>
+<div class="section level3">
+<h3 id="ecodistdistance">5.7 ecodist::distance<a class="anchor" aria-label="anchor" href="#ecodistdistance"></a>
+</h3>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"Jaccard"</span><span class="op">)</span></span>
@@ -1076,6 +1094,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9 0.8105263</span></span>
 <span><span class="co">## 10    s1   s10 0.8842105</span></span>
 <span><span class="co">## 11    s1   s11 0.8666667</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="ecodistbcdist">5.8 ecodist::bcdist<a class="anchor" aria-label="anchor" href="#ecodistbcdist"></a>
+</h3>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"Bray"</span><span class="op">)</span></span>
@@ -1120,7 +1142,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9   0.3184678</span></span>
 <span><span class="co">## 10    s1   s10   0.4017243</span></span>
 <span><span class="co">## 11    s1   s11   0.3523224</span></span></code></pre>
-<p>and finally <code>vegdist</code> and <code>designdist</code> from <a href="https://cran.r-project.org/package=ecodist" class="external-link">vegan</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="veganvegdist">5.9 vegan::vegdist<a class="anchor" aria-label="anchor" href="#veganvegdist"></a>
+</h3>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"Jaccard"</span><span class="op">)</span></span>
@@ -1166,6 +1191,10 @@ package.</p>
 <span><span class="co">## 9     s1    s9 0.8105263</span></span>
 <span><span class="co">## 10    s1   s10 0.8842105</span></span>
 <span><span class="co">## 11    s1   s11 0.8666667</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="vegandesigndist">5.10 vegan::designdist<a class="anchor" aria-label="anchor" href="#vegandesigndist"></a>
+</h3>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                         metric <span class="op">=</span> <span class="st">"Bray"</span>,</span>
@@ -1219,8 +1248,9 @@ package.</p>
   Work in progress
 -->
 </div>
+</div>
 <div class="section level2">
-<h2 class="unnumbered" id="reference">5. Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+<h2 class="unnumbered" id="reference">6. Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="1">
 <div id="ref-Baselga2012" class="csl-entry">
