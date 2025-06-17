@@ -257,7 +257,7 @@ which corresponds to the Euclidean distance (i.e. <span class="math inline">\(d
 <span><span class="co">## 11    35    89 0.5532995               0.5532995</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="from-similarity-to-dissimilarity-and-back-again">3. From similarity to dissimilarity (and back again)<a class="anchor" aria-label="anchor" href="#from-similarity-to-dissimilarity-and-back-again"></a>
+<h2 id="from-similarity-to-dissimilarity-and-vice-versa">3. From similarity to dissimilarity (and vice versa)<a class="anchor" aria-label="anchor" href="#from-similarity-to-dissimilarity-and-vice-versa"></a>
 </h2>
 <p>The functions <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">similarity_to_dissimilarity</a>
 and <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a>
@@ -442,6 +442,7 @@ co-occurrence <code>matrix</code>.</p>
 <code class="sourceCode R"><span><span class="va">nbsite</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">nbsp</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
 <span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">comat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nbsite</span><span class="op">*</span><span class="va">nbsp</span><span class="op">)</span>, <span class="va">nbsite</span>, <span class="va">nbsp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nbsite</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sp"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nbsp</span><span class="op">)</span></span>
@@ -476,43 +477,43 @@ We also use the two available functions, <code>vegdist</code> and
 <span>                               samp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                               nperm <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                               save.D <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
-<span>                 <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">D</span><span class="op">)</span></span>
-<span>                 <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">*</span><span class="va">d</span></span>
-<span>                 <span class="va">dissim</span><span class="op">$</span><span class="va">adespatial</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">D</span><span class="op">)</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">*</span><span class="va">d</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">adespatial</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
 <span>  </span>
 <span>  betapart <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">beta.pair</span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                              index.family <span class="op">=</span> <span class="st">"jaccard"</span><span class="op">)</span></span>
-<span>               <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">beta.jac</span><span class="op">)</span></span>
-<span>               <span class="va">dissim</span><span class="op">$</span><span class="va">betapart</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">beta.jac</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">betapart</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
 <span>  </span>
 <span>  bioregion <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                                   metric <span class="op">=</span> <span class="st">"Jaccard"</span><span class="op">)</span></span>
-<span>                <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_to_mat.html">net_to_mat</a></span><span class="op">(</span><span class="va">d</span>,   </span>
-<span>                                weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                squared <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                symmetrical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>                     <span class="va">dissim</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_to_mat.html">net_to_mat</a></span><span class="op">(</span><span class="va">d</span>,   </span>
+<span>                  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                  squared <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                  symmetrical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  ecodist_dist <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">distance</span><span class="op">(</span><span class="va">comatbin</span>, </span>
 <span>                                 method <span class="op">=</span> <span class="st">"jaccard"</span><span class="op">)</span></span>
-<span>                   <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                   <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_dist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_dist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  ecodist_bcdist <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">bcdist</span><span class="op">(</span><span class="va">comatbin</span><span class="op">)</span></span>
-<span>                     <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                     <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_bcdist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_bcdist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  vegan_veg <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">vegdist</span><span class="op">(</span><span class="va">comatbin</span>,</span>
 <span>                             method <span class="op">=</span> <span class="st">"jaccard"</span><span class="op">)</span></span>
-<span>                <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_veg</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_veg</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  vegan_design <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">designdist</span><span class="op">(</span><span class="va">comatbin</span>,</span>
 <span>                                   method <span class="op">=</span> <span class="st">"(A+B-2*J)/(A+B-J)"</span>,</span>
 <span>                                   terms <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span>                   <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                   <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_design</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
-<span>                      </span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_design</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  </span>
 <span>  times <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>After ensuring that all the functions return the same dissimilarity
@@ -539,21 +540,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 267.152710 269.239106 273.471210 272.975170 274.528330</span></span>
-<span><span class="co">##        betapart   1.775625   1.829716   1.900348   1.868424   1.893125</span></span>
-<span><span class="co">##       bioregion  14.425102  14.589579  15.453830  15.419413  16.001414</span></span>
-<span><span class="co">##    ecodist_dist 154.581411 156.956264 211.235082 160.094404 172.645286</span></span>
-<span><span class="co">##  ecodist_bcdist   3.335637   3.574703   3.577964   3.609178   3.631931</span></span>
-<span><span class="co">##       vegan_veg   1.290750   1.310226   2.052994   2.313780   2.338626</span></span>
-<span><span class="co">##    vegan_design   1.239605   1.310788   1.420178   1.343964   1.419160</span></span>
+<span><span class="co">##      adespatial 278.361300 282.417925 284.298731 284.549580 285.318104</span></span>
+<span><span class="co">##        betapart   1.690182   1.858807   1.931732   1.917421   1.953393</span></span>
+<span><span class="co">##       bioregion   9.720939  10.328312  15.670676  15.468984  16.662715</span></span>
+<span><span class="co">##    ecodist_dist 128.795487 140.296275 178.942631 158.144101 169.140758</span></span>
+<span><span class="co">##  ecodist_bcdist   3.353584   3.562975   3.569997   3.600143   3.619380</span></span>
+<span><span class="co">##       vegan_veg   1.220436   1.319902   1.945842   2.315764   2.319255</span></span>
+<span><span class="co">##    vegan_design   1.265480   1.309703   1.402998   1.363172   1.465303</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  284.335901    10</span></span>
-<span><span class="co">##    2.260801    10</span></span>
-<span><span class="co">##   16.943373    10</span></span>
-<span><span class="co">##  416.384243    10</span></span>
-<span><span class="co">##    3.768596    10</span></span>
-<span><span class="co">##    2.702455    10</span></span>
-<span><span class="co">##    2.129385    10</span></span></code></pre>
+<span><span class="co">##  289.475436    10</span></span>
+<span><span class="co">##    2.326809    10</span></span>
+<span><span class="co">##   30.425983    10</span></span>
+<span><span class="co">##  401.860850    10</span></span>
+<span><span class="co">##    3.655207    10</span></span>
+<span><span class="co">##    2.355874    10</span></span>
+<span><span class="co">##    1.740887    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -577,43 +578,43 @@ dissimilarity metric, based on the <code>comat</code> defined above.</p>
 <span>                               samp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                               nperm <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                               save.D <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
-<span>                 <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">D</span><span class="op">)</span></span>
-<span>                 <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">*</span><span class="va">d</span></span>
-<span>                 <span class="va">dissim</span><span class="op">$</span><span class="va">adespatial</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">D</span><span class="op">)</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">*</span><span class="va">d</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">adespatial</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
 <span>  </span>
 <span>  betapart <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">beta.pair.abund</span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                                    index.family <span class="op">=</span> <span class="st">"bray"</span><span class="op">)</span></span>
-<span>               <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">beta.bray</span><span class="op">)</span></span>
-<span>               <span class="va">dissim</span><span class="op">$</span><span class="va">betapart</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">beta.bray</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">betapart</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">}</span>,</span>
 <span>  </span>
 <span>  bioregion <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
-<span>                                    metric <span class="op">=</span> <span class="st">"Bray"</span><span class="op">)</span></span>
-<span>                 <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_to_mat.html">net_to_mat</a></span><span class="op">(</span><span class="va">d</span>,   </span>
-<span>                                 weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                 squared <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                 symmetrical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>                 <span class="va">dissim</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>                                   metric <span class="op">=</span> <span class="st">"Bray"</span><span class="op">)</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_to_mat.html">net_to_mat</a></span><span class="op">(</span><span class="va">d</span>,   </span>
+<span>                  weight <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                  squared <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                  symmetrical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  ecodist_dist <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">distance</span><span class="op">(</span><span class="va">comat</span>, </span>
 <span>                                 method <span class="op">=</span> <span class="st">"bray-curtis"</span><span class="op">)</span></span>
-<span>                   <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                   <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_dist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_dist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  ecodist_bcdist <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">bcdist</span><span class="op">(</span><span class="va">comat</span><span class="op">)</span></span>
-<span>                     <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                     <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_bcdist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">ecodist_bcdist</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  vegan_veg <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">vegdist</span><span class="op">(</span><span class="va">comatbin</span>,</span>
 <span>                             method <span class="op">=</span> <span class="st">"bray"</span><span class="op">)</span></span>
-<span>                <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_veg</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_veg</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
 <span>  </span>
 <span>  vegan_design <span class="op">=</span> <span class="op">{</span> <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">designdist</span><span class="op">(</span><span class="va">comat</span>,</span>
 <span>                                   method <span class="op">=</span> <span class="st">"(A+B-2*J)/(A+B)"</span>,</span>
 <span>                                   terms <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span></span>
-<span>                   <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span>                   <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_design</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
-<span>                      </span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span>  <span class="va">dissim</span><span class="op">$</span><span class="va">vegan_design</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">}</span>,</span>
+<span>  </span>
 <span>  times <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Here again after ensuring that all the functions return the same
@@ -640,21 +641,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 268.958742 272.720144 276.558764 276.906586 280.235606</span></span>
-<span><span class="co">##        betapart 305.629777 317.372319 332.253732 322.850893 356.117917</span></span>
-<span><span class="co">##       bioregion  10.290963  10.500935  11.519045  10.767578  13.173444</span></span>
-<span><span class="co">##    ecodist_dist  82.719085  93.818799 107.580572 100.506871 129.168305</span></span>
-<span><span class="co">##  ecodist_bcdist   6.004581   6.008227   6.088983   6.057595   6.178696</span></span>
-<span><span class="co">##       vegan_veg   1.268338   1.291471   1.784147   1.775085   2.282862</span></span>
-<span><span class="co">##    vegan_design   1.346714   1.377442   1.489102   1.460226   1.572646</span></span>
+<span><span class="co">##      adespatial 278.313571 282.195981 286.878285 286.685649 290.191452</span></span>
+<span><span class="co">##        betapart 310.581959 315.747072 343.248173 331.987705 362.278036</span></span>
+<span><span class="co">##       bioregion  10.120624  10.488972  11.224555  10.602408  10.974026</span></span>
+<span><span class="co">##    ecodist_dist  84.219526  94.783447 106.637512  99.443281 126.623456</span></span>
+<span><span class="co">##  ecodist_bcdist   5.988960   6.009608   6.099689   6.103248   6.189293</span></span>
+<span><span class="co">##       vegan_veg   1.210778   1.244550   1.678732   1.296292   2.319004</span></span>
+<span><span class="co">##    vegan_design   1.267815   1.316666   1.462292   1.387653   1.662831</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  284.297028    10</span></span>
-<span><span class="co">##  358.129923    10</span></span>
-<span><span class="co">##   13.818729    10</span></span>
-<span><span class="co">##  133.493610    10</span></span>
-<span><span class="co">##    6.186871    10</span></span>
-<span><span class="co">##    2.290957    10</span></span>
-<span><span class="co">##    1.666220    10</span></span></code></pre>
+<span><span class="co">##  294.072319    10</span></span>
+<span><span class="co">##  421.239420    10</span></span>
+<span><span class="co">##   13.859187    10</span></span>
+<span><span class="co">##  131.488129    10</span></span>
+<span><span class="co">##    6.198580    10</span></span>
+<span><span class="co">##    2.336427    10</span></span>
+<span><span class="co">##    1.751406    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.
@@ -690,17 +691,533 @@ compute.</p>
 <center>
 <img align="bottom" width="100%" height="100%" src="../reference/figures/comparison_Bray-Curtis.png">
 </center>
-<!--
-# Converting other R objects into bioregion dissimilarity objects
-
-Work in progress
-
-# Enrich a similarity/dissimilarity object
-
-Work in progress
--->
-<hr>
 </div>
+</div>
+<div class="section level2">
+<h2 id="importing-pairwise-dissimilarity-metrics-from-other-packages-into-bioregion">5. Importing pairwise (dis)similarity metrics from other packages
+into bioregion<a class="anchor" aria-label="anchor" href="#importing-pairwise-dissimilarity-metrics-from-other-packages-into-bioregion"></a>
+</h2>
+<p>To enable the conversion of (dis)similarity metrics stored in base R
+objects<br>
+or outputs from other packages into a
+<code>bioregion.pairwise.metric</code> object<br>
+compatible with the <code>bioregion</code> package, we developed the <a href="https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html"><code>as_bioregion_pairwise()</code></a>
+function.</p>
+<p>This function can take as input <code>matrix</code>, a
+<code>dist</code> object, or a <code>list</code> of these</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"Euclidean"</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  3697 </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 Euclidean</span></span>
+<span><span class="co">## 2     35    36 3262.6011</span></span>
+<span><span class="co">## 3     35    37 1378.7897</span></span>
+<span><span class="co">## 4     35    38 1275.4031</span></span>
+<span><span class="co">## 5     35    39  485.7993</span></span>
+<span><span class="co">## 6     35    84   66.2948</span></span>
+<span><span class="co">## 7     35    85  354.5885</span></span>
+<span><span class="co">## 8     35    86 2311.7883</span></span>
+<span><span class="co">## 9     35    87 2039.7632</span></span>
+<span><span class="co">## 10    35    88 2239.1117</span></span>
+<span><span class="co">## 11    35    89  226.8237</span></span></code></pre>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span>,</span>
+<span>                                 metric_name <span class="op">=</span> <span class="st">"Euclidean"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  715 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  255255 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 Euclidean</span></span>
+<span><span class="co">## 2     35    36 3262.6011</span></span>
+<span><span class="co">## 3     35    37 1378.7897</span></span>
+<span><span class="co">## 4     35    38 1275.4031</span></span>
+<span><span class="co">## 5     35    39  485.7993</span></span>
+<span><span class="co">## 6     35    84   66.2948</span></span>
+<span><span class="co">## 7     35    85  354.5885</span></span>
+<span><span class="co">## 8     35    86 2311.7883</span></span>
+<span><span class="co">## 9     35    87 2039.7632</span></span>
+<span><span class="co">## 10    35    88 2239.1117</span></span>
+<span><span class="co">## 11    35    89  226.8237</span></span></code></pre>
+<p>but also outputs from several functions provided by the packages <a href="https://cran.r-project.org/package=adespatial" class="external-link">adespatial</a>, <a href="https://cran.r-project.org/package=betapart" class="external-link">betapart</a>, <a href="https://cran.r-project.org/package=ecodist" class="external-link">ecodist</a> and <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> described
+above.</p>
+<p>This includes the outputs of <code>beta.div</code> and
+<code>beta.div.comp</code> from the <a href="https://cran.r-project.org/package=adespatial" class="external-link">adespatial</a>
+package.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"Euclidean"</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 Euclidean</span></span>
+<span><span class="co">## 2     s1    s2  5.663259</span></span>
+<span><span class="co">## 3     s1    s3  6.174723</span></span>
+<span><span class="co">## 4     s1    s4  6.273630</span></span>
+<span><span class="co">## 5     s1    s5  6.143276</span></span>
+<span><span class="co">## 6     s1    s6  5.545510</span></span>
+<span><span class="co">## 7     s1    s7  6.024138</span></span>
+<span><span class="co">## 8     s1    s8  6.124431</span></span>
+<span><span class="co">## 9     s1    s9  5.548479</span></span>
+<span><span class="co">## 10    s1   s10  6.362439</span></span>
+<span><span class="co">## 11    s1   s11  6.001393</span></span></code></pre>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">beta.div</span><span class="op">(</span><span class="va">comat</span>,</span>
+<span>                                          method <span class="op">=</span> <span class="st">"euclidean"</span>,</span>
+<span>                                          save.D <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"adespatial"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 euclidean</span></span>
+<span><span class="co">## 2     s1    s2  5.663259</span></span>
+<span><span class="co">## 3     s1    s3  6.174723</span></span>
+<span><span class="co">## 4     s1    s4  6.273630</span></span>
+<span><span class="co">## 5     s1    s5  6.143276</span></span>
+<span><span class="co">## 6     s1    s6  5.545510</span></span>
+<span><span class="co">## 7     s1    s7  6.024138</span></span>
+<span><span class="co">## 8     s1    s8  6.124431</span></span>
+<span><span class="co">## 9     s1    s9  5.548479</span></span>
+<span><span class="co">## 10    s1   s10  6.362439</span></span>
+<span><span class="co">## 11    s1   s11  6.001393</span></span></code></pre>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Jaccard"</span>,<span class="st">"abc"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2   Jaccard  a  b  c</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333 22 37 37</span></span>
+<span><span class="co">## 3     s1    s3 0.8666667 14 45 46</span></span>
+<span><span class="co">## 4     s1    s4 0.8679245 14 45 47</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689 15 44 44</span></span>
+<span><span class="co">## 6     s1    s6 0.7843137 22 37 43</span></span>
+<span><span class="co">## 7     s1    s7 0.8392857 18 41 53</span></span>
+<span><span class="co">## 8     s1    s8 0.8256881 19 40 50</span></span>
+<span><span class="co">## 9     s1    s9 0.8105263 18 41 36</span></span>
+<span><span class="co">## 10    s1   s10 0.8842105 11 48 36</span></span>
+<span><span class="co">## 11    s1   s11 0.8666667 14 45 46</span></span></code></pre>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">beta.div.comp</span><span class="op">(</span><span class="va">comatbin</span>,</span>
+<span>                                               save.abc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"adespatial"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 Podani family, Jaccard  a  b  c</span></span>
+<span><span class="co">## 2     s1    s2              0.7708333 22 37 37</span></span>
+<span><span class="co">## 3     s1    s3              0.8666667 14 45 46</span></span>
+<span><span class="co">## 4     s1    s4              0.8679245 14 45 47</span></span>
+<span><span class="co">## 5     s1    s5              0.8543689 15 44 44</span></span>
+<span><span class="co">## 6     s1    s6              0.7843137 22 37 43</span></span>
+<span><span class="co">## 7     s1    s7              0.8392857 18 41 53</span></span>
+<span><span class="co">## 8     s1    s8              0.8256881 19 40 50</span></span>
+<span><span class="co">## 9     s1    s9              0.8105263 18 41 36</span></span>
+<span><span class="co">## 10    s1   s10              0.8842105 11 48 36</span></span>
+<span><span class="co">## 11    s1   s11              0.8666667 14 45 46</span></span></code></pre>
+<p><code>beta.pair</code>, <code>beta.pair.abund</code>,
+<code>betapart.core</code> and <code>betapart.core.abund</code> from the
+<a href="https://cran.r-project.org/package=betapart" class="external-link">betapart</a>
+package.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Jaccard"</span>,<span class="st">"Jaccardturn"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2   Jaccard Jaccardturn</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333   0.7708333</span></span>
+<span><span class="co">## 3     s1    s3 0.8666667   0.8653846</span></span>
+<span><span class="co">## 4     s1    s4 0.8679245   0.8653846</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689   0.8543689</span></span>
+<span><span class="co">## 6     s1    s6 0.7843137   0.7708333</span></span>
+<span><span class="co">## 7     s1    s7 0.8392857   0.8200000</span></span>
+<span><span class="co">## 8     s1    s8 0.8256881   0.8080808</span></span>
+<span><span class="co">## 9     s1    s9 0.8105263   0.8000000</span></span>
+<span><span class="co">## 10    s1   s10 0.8842105   0.8674699</span></span>
+<span><span class="co">## 11    s1   s11 0.8666667   0.8653846</span></span></code></pre>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">beta.pair</span><span class="op">(</span><span class="va">comatbin</span>,</span>
+<span>                                           index.family <span class="op">=</span> <span class="st">"jaccard"</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"betapart"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2  beta.jtu    beta.jne  beta.jac</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333 0.000000000 0.7708333</span></span>
+<span><span class="co">## 3     s1    s3 0.8653846 0.001282051 0.8666667</span></span>
+<span><span class="co">## 4     s1    s4 0.8653846 0.002539913 0.8679245</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689 0.000000000 0.8543689</span></span>
+<span><span class="co">## 6     s1    s6 0.7708333 0.013480392 0.7843137</span></span>
+<span><span class="co">## 7     s1    s7 0.8200000 0.019285714 0.8392857</span></span>
+<span><span class="co">## 8     s1    s8 0.8080808 0.017607265 0.8256881</span></span>
+<span><span class="co">## 9     s1    s9 0.8000000 0.010526316 0.8105263</span></span>
+<span><span class="co">## 10    s1   s10 0.8674699 0.016740647 0.8842105</span></span>
+<span><span class="co">## 11    s1   s11 0.8653846 0.001282051 0.8666667</span></span></code></pre>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Brayturn"</span>,<span class="st">"Bray"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2      Bray  Brayturn</span></span>
+<span><span class="co">## 1     s1    s2 0.3109486 0.2907499</span></span>
+<span><span class="co">## 2     s1    s3 0.3551275 0.3484112</span></span>
+<span><span class="co">## 3     s1    s4 0.3662292 0.3527945</span></span>
+<span><span class="co">## 4     s1    s5 0.3644193 0.3607606</span></span>
+<span><span class="co">## 5     s1    s6 0.3053786 0.3002943</span></span>
+<span><span class="co">## 6     s1    s7 0.3455313 0.3324551</span></span>
+<span><span class="co">## 7     s1    s8 0.3469113 0.3299002</span></span>
+<span><span class="co">## 8     s1    s9 0.3184678 0.3143748</span></span>
+<span><span class="co">## 9     s1   s10 0.4017243 0.3617546</span></span>
+<span><span class="co">## 10    s1   s11 0.3523224 0.3505070</span></span></code></pre>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">beta.pair.abund</span><span class="op">(</span><span class="va">comat</span>,</span>
+<span>                                                 index.family <span class="op">=</span> <span class="st">"bray"</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"betapart"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 beta.bray.bal beta.bray.gra beta.bray</span></span>
+<span><span class="co">## 2     s1    s2     0.2907499   0.020198660 0.3109486</span></span>
+<span><span class="co">## 3     s1    s3     0.3484112   0.006716346 0.3551275</span></span>
+<span><span class="co">## 4     s1    s4     0.3527945   0.013434676 0.3662292</span></span>
+<span><span class="co">## 5     s1    s5     0.3607606   0.003658700 0.3644193</span></span>
+<span><span class="co">## 6     s1    s6     0.3002943   0.005084275 0.3053786</span></span>
+<span><span class="co">## 7     s1    s7     0.3324551   0.013076199 0.3455313</span></span>
+<span><span class="co">## 8     s1    s8     0.3299002   0.017011065 0.3469113</span></span>
+<span><span class="co">## 9     s1    s9     0.3143748   0.004093053 0.3184678</span></span>
+<span><span class="co">## 10    s1   s10     0.3617546   0.039969771 0.4017243</span></span>
+<span><span class="co">## 11    s1   s11     0.3505070   0.001815369 0.3523224</span></span></code></pre>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"abc"</span>,</span>
+<span>                         formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pmin(b,c)"</span>,<span class="st">"pmax(b,c)"</span>,<span class="st">"b+c"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2  a  b  c pmin(b,c) pmax(b,c) b+c</span></span>
+<span><span class="co">## 2     s1    s2 22 37 37        37        37  74</span></span>
+<span><span class="co">## 3     s1    s3 14 45 46        45        46  91</span></span>
+<span><span class="co">## 4     s1    s4 14 45 47        45        47  92</span></span>
+<span><span class="co">## 5     s1    s5 15 44 44        44        44  88</span></span>
+<span><span class="co">## 6     s1    s6 22 37 43        37        43  80</span></span>
+<span><span class="co">## 7     s1    s7 18 41 53        41        53  94</span></span>
+<span><span class="co">## 8     s1    s8 19 40 50        40        50  90</span></span>
+<span><span class="co">## 9     s1    s9 18 41 36        36        41  77</span></span>
+<span><span class="co">## 10    s1   s10 11 48 36        36        48  84</span></span>
+<span><span class="co">## 11    s1   s11 14 45 46        45        46  91</span></span></code></pre>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">betapart.core</span><span class="op">(</span><span class="va">comatbin</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"betapart"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2  a  b  c min(b,c) max(b,c) sum(b,c)</span></span>
+<span><span class="co">## 2     s1    s2 22 37 37       37       37       74</span></span>
+<span><span class="co">## 3     s1    s3 14 45 46       45       46       91</span></span>
+<span><span class="co">## 4     s1    s4 14 45 47       45       47       92</span></span>
+<span><span class="co">## 5     s1    s5 15 44 44       44       44       88</span></span>
+<span><span class="co">## 6     s1    s6 22 37 43       37       43       80</span></span>
+<span><span class="co">## 7     s1    s7 18 41 53       41       53       94</span></span>
+<span><span class="co">## 8     s1    s8 19 40 50       40       50       90</span></span>
+<span><span class="co">## 9     s1    s9 18 41 36       36       41       77</span></span>
+<span><span class="co">## 10    s1   s10 11 48 36       36       48       84</span></span>
+<span><span class="co">## 11    s1   s11 14 45 46       45       46       91</span></span></code></pre>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"ABC"</span>,</span>
+<span>                         formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pmin(B,C)"</span>,<span class="st">"pmax(B,C)"</span>,<span class="st">"B+C"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2        A        B        C pmin(B,C) pmax(B,C)      B+C</span></span>
+<span><span class="co">## 2     s1    s2 70.62846 28.95342 34.79166  28.95342  34.79166 63.74508</span></span>
+<span><span class="co">## 3     s1    s3 64.88645 34.69544 36.76973  34.69544  36.76973 71.46517</span></span>
+<span><span class="co">## 4     s1    s4 64.44994 35.13194 39.35382  35.13194  39.35382 74.48576</span></span>
+<span><span class="co">## 5     s1    s5 62.93214 36.64975 35.51632  35.51632  36.64975 72.16607</span></span>
+<span><span class="co">## 6     s1    s6 69.67801 29.90388 31.36165  29.90388  31.36165 61.26553</span></span>
+<span><span class="co">## 7     s1    s7 66.47538 33.10650 37.08577  33.10650  37.08577 70.19227</span></span>
+<span><span class="co">## 8     s1    s8 66.72980 32.85209 38.03973  32.85209  38.03973 70.89181</span></span>
+<span><span class="co">## 9     s1    s9 67.46550 32.11639 30.93447  30.93447  32.11639 63.05086</span></span>
+<span><span class="co">## 10    s1   s10 56.06630 43.51559 31.77812  31.77812  43.51559 75.29371</span></span>
+<span><span class="co">## 11    s1   s11 64.31719 35.26470 34.70958  34.70958  35.26470 69.97427</span></span></code></pre>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">betapart.core.abund</span><span class="op">(</span><span class="va">comat</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"betapart"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2        A min(B,C) max(B,C) sum(B,C)</span></span>
+<span><span class="co">## 2     s1    s2 70.62846 28.95342 34.79166 63.74508</span></span>
+<span><span class="co">## 3     s1    s3 64.88645 34.69544 36.76973 71.46517</span></span>
+<span><span class="co">## 4     s1    s4 64.44994 35.13194 39.35382 74.48576</span></span>
+<span><span class="co">## 5     s1    s5 62.93214 35.51632 36.64975 72.16607</span></span>
+<span><span class="co">## 6     s1    s6 69.67801 29.90388 31.36165 61.26553</span></span>
+<span><span class="co">## 7     s1    s7 66.47538 33.10650 37.08577 70.19227</span></span>
+<span><span class="co">## 8     s1    s8 66.72980 32.85209 38.03973 70.89181</span></span>
+<span><span class="co">## 9     s1    s9 67.46550 30.93447 32.11639 63.05086</span></span>
+<span><span class="co">## 10    s1   s10 56.06630 31.77812 43.51559 75.29371</span></span>
+<span><span class="co">## 11    s1   s11 64.31719 34.70958 35.26470 69.97427</span></span></code></pre>
+<p><code>distance</code> and <code>bcdist</code> from the <a href="https://cran.r-project.org/package=ecodist" class="external-link">ecodist</a>
+package.</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"Jaccard"</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2   Jaccard</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333</span></span>
+<span><span class="co">## 3     s1    s3 0.8666667</span></span>
+<span><span class="co">## 4     s1    s4 0.8679245</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689</span></span>
+<span><span class="co">## 6     s1    s6 0.7843137</span></span>
+<span><span class="co">## 7     s1    s7 0.8392857</span></span>
+<span><span class="co">## 8     s1    s8 0.8256881</span></span>
+<span><span class="co">## 9     s1    s9 0.8105263</span></span>
+<span><span class="co">## 10    s1   s10 0.8842105</span></span>
+<span><span class="co">## 11    s1   s11 0.8666667</span></span></code></pre>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">distance</span><span class="op">(</span><span class="va">comatbin</span>,</span>
+<span>                                          method<span class="op">=</span><span class="st">"jaccard"</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"ecodist"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2   jaccard</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333</span></span>
+<span><span class="co">## 3     s1    s3 0.8666667</span></span>
+<span><span class="co">## 4     s1    s4 0.8679245</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689</span></span>
+<span><span class="co">## 6     s1    s6 0.7843137</span></span>
+<span><span class="co">## 7     s1    s7 0.8392857</span></span>
+<span><span class="co">## 8     s1    s8 0.8256881</span></span>
+<span><span class="co">## 9     s1    s9 0.8105263</span></span>
+<span><span class="co">## 10    s1   s10 0.8842105</span></span>
+<span><span class="co">## 11    s1   s11 0.8666667</span></span></code></pre>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"Bray"</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2      Bray</span></span>
+<span><span class="co">## 1     s1    s2 0.3109486</span></span>
+<span><span class="co">## 2     s1    s3 0.3551275</span></span>
+<span><span class="co">## 3     s1    s4 0.3662292</span></span>
+<span><span class="co">## 4     s1    s5 0.3644193</span></span>
+<span><span class="co">## 5     s1    s6 0.3053786</span></span>
+<span><span class="co">## 6     s1    s7 0.3455313</span></span>
+<span><span class="co">## 7     s1    s8 0.3469113</span></span>
+<span><span class="co">## 8     s1    s9 0.3184678</span></span>
+<span><span class="co">## 9     s1   s10 0.4017243</span></span>
+<span><span class="co">## 10    s1   s11 0.3523224</span></span></code></pre>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">bcdist</span><span class="op">(</span><span class="va">comat</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"ecodist"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 bray-curtis</span></span>
+<span><span class="co">## 2     s1    s2   0.3109486</span></span>
+<span><span class="co">## 3     s1    s3   0.3551275</span></span>
+<span><span class="co">## 4     s1    s4   0.3662292</span></span>
+<span><span class="co">## 5     s1    s5   0.3644193</span></span>
+<span><span class="co">## 6     s1    s6   0.3053786</span></span>
+<span><span class="co">## 7     s1    s7   0.3455313</span></span>
+<span><span class="co">## 8     s1    s8   0.3469113</span></span>
+<span><span class="co">## 9     s1    s9   0.3184678</span></span>
+<span><span class="co">## 10    s1   s10   0.4017243</span></span>
+<span><span class="co">## 11    s1   s11   0.3523224</span></span></code></pre>
+<p>and finally <code>vegdist</code> and <code>designdist</code> from <a href="https://cran.r-project.org/package=ecodist" class="external-link">vegan</a>.</p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comatbin</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"Jaccard"</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2   Jaccard</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333</span></span>
+<span><span class="co">## 3     s1    s3 0.8666667</span></span>
+<span><span class="co">## 4     s1    s4 0.8679245</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689</span></span>
+<span><span class="co">## 6     s1    s6 0.7843137</span></span>
+<span><span class="co">## 7     s1    s7 0.8392857</span></span>
+<span><span class="co">## 8     s1    s8 0.8256881</span></span>
+<span><span class="co">## 9     s1    s9 0.8105263</span></span>
+<span><span class="co">## 10    s1   s10 0.8842105</span></span>
+<span><span class="co">## 11    s1   s11 0.8666667</span></span></code></pre>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">vegdist</span><span class="op">(</span><span class="va">comatbin</span>,</span>
+<span>                                         method<span class="op">=</span><span class="st">"jaccard"</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"vegan"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2   jaccard</span></span>
+<span><span class="co">## 2     s1    s2 0.7708333</span></span>
+<span><span class="co">## 3     s1    s3 0.8666667</span></span>
+<span><span class="co">## 4     s1    s4 0.8679245</span></span>
+<span><span class="co">## 5     s1    s5 0.8543689</span></span>
+<span><span class="co">## 6     s1    s6 0.7843137</span></span>
+<span><span class="co">## 7     s1    s7 0.8392857</span></span>
+<span><span class="co">## 8     s1    s8 0.8256881</span></span>
+<span><span class="co">## 9     s1    s9 0.8105263</span></span>
+<span><span class="co">## 10    s1   s10 0.8842105</span></span>
+<span><span class="co">## 11    s1   s11 0.8666667</span></span></code></pre>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, </span>
+<span>                         metric <span class="op">=</span> <span class="st">"Bray"</span>,</span>
+<span>                         formula <span class="op">=</span> <span class="st">"(B + C) / (2*A + B + C)"</span><span class="op">)</span></span>
+<span><span class="va">dissim1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  200 </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  2 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2      Bray (B + C) / (2*A + B + C)</span></span>
+<span><span class="co">## 1     s1    s2 0.3109486               0.3109486</span></span>
+<span><span class="co">## 2     s1    s3 0.3551275               0.3551275</span></span>
+<span><span class="co">## 3     s1    s4 0.3662292               0.3662292</span></span>
+<span><span class="co">## 4     s1    s5 0.3644193               0.3644193</span></span>
+<span><span class="co">## 5     s1    s6 0.3053786               0.3053786</span></span>
+<span><span class="co">## 6     s1    s7 0.3455313               0.3455313</span></span>
+<span><span class="co">## 7     s1    s8 0.3469113               0.3469113</span></span>
+<span><span class="co">## 8     s1    s9 0.3184678               0.3184678</span></span>
+<span><span class="co">## 9     s1   s10 0.4017243               0.4017243</span></span>
+<span><span class="co">## 10    s1   s11 0.3523224               0.3523224</span></span></code></pre>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dissim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a></span><span class="op">(</span><span class="fu">designdist</span><span class="op">(</span><span class="va">comat</span>,</span>
+<span>                                            method <span class="op">=</span> <span class="st">"(A+B-2*J)/(A+B)"</span>,</span>
+<span>                                            terms <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span>,</span>
+<span>                                 pkg <span class="op">=</span> <span class="st">"vegan"</span><span class="op">)</span></span>
+<span><span class="va">dissim2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## Data.frame of dissimilarity between sites</span></span>
+<span><span class="co">##  - Total number of sites:  100 </span></span>
+<span><span class="co">##  - Total number of species:  NA </span></span>
+<span><span class="co">##  - Number of rows:  4950 </span></span>
+<span><span class="co">##  - Number of dissimilarity metrics:  1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Site1 Site2 minimum (A+B-2*J)/(A+B)</span></span>
+<span><span class="co">## 2     s1    s2               0.3109486</span></span>
+<span><span class="co">## 3     s1    s3               0.3551275</span></span>
+<span><span class="co">## 4     s1    s4               0.3662292</span></span>
+<span><span class="co">## 5     s1    s5               0.3644193</span></span>
+<span><span class="co">## 6     s1    s6               0.3053786</span></span>
+<span><span class="co">## 7     s1    s7               0.3455313</span></span>
+<span><span class="co">## 8     s1    s8               0.3469113</span></span>
+<span><span class="co">## 9     s1    s9               0.3184678</span></span>
+<span><span class="co">## 10    s1   s10               0.4017243</span></span>
+<span><span class="co">## 11    s1   s11               0.3523224</span></span></code></pre>
+<!--
+# 6. Combine and enrich (dis)similarity objects
+  
+  Work in progress
+-->
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="reference">5. Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
