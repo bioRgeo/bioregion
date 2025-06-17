@@ -12,7 +12,7 @@ output:
     smooth_scroll: false
     toc_depth: 2
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl
+csl: style_citation.csl
 vignette: >
   %\VignetteIndexEntry{4.3 Network clustering}
   \usepackage[utf8]{inputenc}
@@ -90,8 +90,9 @@ This vignette aims at briefly explaining how each algorithm and its associated
 For this purpose, we use the European freshwater fish dataset that comes with
 `bioregion`.
 
-# Introduction
-## Input data
+# 1 Introduction
+
+## 1.1 Input data
 
 All network algorithms work with the network format, i.e. a `data.frame` with
 3 columns: sites, species and the abundance of a given species in a given site.
@@ -114,7 +115,8 @@ data("fishmat")
 fish_simil <- similarity(fishmat, metric = "Simpson")
 ```
 
-## Main arguments
+## 1.2 Main arguments
+
 Each of the algorithms presented here has some specific parameters that can
 be tweaked but some arguments are common for all the functions.  
 
@@ -137,13 +139,13 @@ arguments are needed:
 * `path_temp` a character indicating the path to the temporary folder  
 * `binpath`	a character indicating the path to the bin folder  
 
-# Binary files
+# 2. Binary files
 
 ```{r}
 install_binaries(binpath = "tempdir", infomap_version = c("2.1.0", "2.6.0"))
 ```
 
-## Infomap
+## 2.1 Infomap
 
 @Rosvall2008
 
@@ -183,7 +185,8 @@ ex_infomap <- netclu_infomap(fish_simil,
 table(ex_infomap$clusters$K_5)
 ```
 
-## OSLOM
+## 2.2 OSLOM
+
 OSLOM stands for Order Statistics Local Optimization Method.
 
 *Similarity-based* algorithm.
@@ -223,7 +226,7 @@ ex_oslom <- netclu_oslom(fish_simil,
 table(ex_oslom$clusters$K_338)
 ```
 
-## Louvain
+## 2.3 Louvain
 
 @Blondel2008
 
@@ -255,8 +258,10 @@ table(ex_louvain$clusters$K_23)
 ```
 
 
-# Functions from the igraph package
-## Fastgreedy
+# 3. Functions from the igraph package
+
+## 3.1 Fastgreedy
+
 @Clauset2004
 ```{r}
 set.seed(1)
@@ -271,7 +276,7 @@ ex_greedy <- netclu_greedy(fishdf,
 table(ex_greedy$clusters$K_5)
 ```
 
-## Label propagation
+## 3.2 Label propagation
 
 @Raghavan2007
 
@@ -288,7 +293,8 @@ ex_labelprop <- netclu_labelprop(fishdf,
 table(ex_labelprop$clusters$K_11)
 ```
 
-## Leiden algorithm
+## 3.3 Leiden algorithm
+
 @Traag2019
 
 ```{r}
@@ -309,7 +315,7 @@ ex_leiden <- netclu_leiden(fishdf,
 length(unique(ex_leiden$clusters$K_505))
 ```
 
-## Leading eigenvector
+## 3.4 Leading eigenvector
 
 @Newman2006
 
@@ -326,7 +332,7 @@ ex_leadingeigen <- netclu_leadingeigen(fishdf,
 table(ex_leadingeigen$clusters$K_17)
 ```
 
-## Walktrap
+## 3.5 Walktrap
 
 @Pons2005
 
@@ -344,8 +350,9 @@ ex_walktrap <- netclu_walktrap(fishdf,
 table(ex_walktrap$clusters$K_14)
 ```
 
-# Function from the bipartite package
-## Beckett
+# 4 Function from the bipartite package
+
+## 4.1 Beckett
 
 Update of the QuanBiMo algorithm developed by Dormann & Strauss (2014).
 
@@ -364,5 +371,5 @@ ex_beckett <- netclu_beckett(fishdf,
 ex_beckett$clusters$K_23
 ```
 
-# References
+# 5. References
 

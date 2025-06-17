@@ -7,10 +7,13 @@ colnames(comat) <- paste0("Species", 1:10)
 # Tests for invalid inputs -----------------------------------------------------
 test_that("invalid inputs", {
   
-  test <- 1
-  expect_error(
-    betapart_to_bioregion(test),
-    "betapart_result must be a valid object from the betapart package.",
-    fixed = TRUE)
+  expect_warning(
+    expect_error(
+      betapart_to_bioregion(1),
+      "betapart_result must be a valid object from the betapart package.",
+      fixed = TRUE),
+    "^'betapart_to_bioregion' is deprecated."
+  )
+
   
 })

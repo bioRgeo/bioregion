@@ -58,13 +58,14 @@ reference:
   - net_to_mat
   - site_species_subset
   
-- title: Pairwise similarity and distance metrics
+- title: Pairwise similarity and dissimilarity metrics
   desc: ~
   contents:
   - similarity
   - similarity_to_dissimilarity
   - dissimilarity
   - dissimilarity_to_similarity
+  - as_bioregion_pairwise
   - betapart_to_bioregion
   
 - title: Clustering

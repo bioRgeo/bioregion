@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl    
+csl: style_citation.csl    
 vignette: >
   %\VignetteIndexEntry{5.3 Summary metrics}
   \usepackage[utf8]{inputenc}
@@ -34,7 +34,8 @@ options(tinytex.verbose = TRUE)
 In this vignette, we aim at evaluating the contribution of individual species
 to each bioregion, using the function `site_species_metrics()`.
 
-# Data  
+# 1. Data  
+
 We use the vegetation dataset that comes with `bioregion`.
 
 ```{r}
@@ -46,7 +47,8 @@ vegedissim <- dissimilarity(vegemat, metric = c("Simpson"))
 vegesim <- dissimilarity_to_similarity(vegedissim)
 ```
 
-# Bioregionalization
+# 2. Bioregionalization
+
 We use the same three bioregionalization algorithms as in the
 [visualization vignette](https://biorgeo.github.io/bioregion/articles/a5_visualization.html),
 i.e. a non-hierarchical, hierarchical and network bioregionalizations.  
@@ -74,7 +76,7 @@ vege_netclu_walktrap <- netclu_walktrap(vegesim,
 vege_netclu_walktrap$cluster_info # 3
 ```
 
-# Bioregion metrics
+# 3. Bioregion metrics
 
 Number of sites belonging to a bioregion, how many species do these sites
 contain. Number of endemic and proportion of endemism are also calculated.
@@ -87,11 +89,12 @@ bioregion_summary <- bioregion_metrics(bioregionalization = vege_nhclu_kmeans,
 bioregion_summary
 ```
 
-# Species metrics
+# 4. Species metrics
 
 Different summary statistics are available at the species level.
 
-## Contribution ($\rho$)
+## 4.1 Contribution ($\rho$)
+
 <center>
 <img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
 </center> 
@@ -108,7 +111,8 @@ is present, $n_j$ the number of sites belonging to the bioregion $j$, $n_ij$
 the number of occurrences of species $i$ in sites belonging to the bioregion
 $j$.
 
-## Individual contributions
+## 4.2 Individual contributions
+
 Affinity, fidelity and individual contributions describe how species are
 linked to their bioregions. These metrics are presented in [@Bernardo2019].
 
@@ -130,14 +134,14 @@ than their associated one.
 Indicator Value of species: $$IndVal = F_i \times A_i$$
 <br>
 
-# Bipartite metrics
+# 5. Bipartite metrics
 
 When running a community detection algorithm on a site x species matrix, both
 sites and species get a bioregion assigned. The degree of affinity of both
 types of nodes can therefore be directly assessed, with metrics like the
 coefficient of participation `C` or the within-bioregion degree `z`.
 
-## Cz statistics
+## 5.1 Cz statistics
 
 `Cz` metrics are derived from [@Guimera2005].
 Their respective formula are:
@@ -159,7 +163,8 @@ $\sigma_{k_{si}}$ is the standard deviation of $k$ in $s_i$.
 The within-bioregion degree z-score measures how well-connected node $i$
 is to other nodes in the bioregion.
 
-## Running the site_species_metrics function
+## 5.2 Running the site_species_metrics function
+
 We can now run the function `site_species_metrics()`.
 <br>
 
@@ -180,7 +185,7 @@ cz_netclu <- site_species_metrics(bioregionalization = clust_bip,  comat = vegem
 `site_species_metrics()` outputs `data.frame` with the contribution metrics available
 at the species level.
 
-# Spatial coherence
+# 6. Spatial coherence
 
 We use the metric of spatial coherence as in [@Divisek2016], except that we
 replace the number of pixels per bioregion with the area of each coherent part.
@@ -216,4 +221,4 @@ ggplot(vegemap) +
 ```
 
 
-# References
+# 7. References

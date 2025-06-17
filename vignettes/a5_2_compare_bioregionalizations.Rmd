@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl    
+csl: style_citation.csl    
 vignette: >
   %\VignetteIndexEntry{5.2 Compare bioregionalizations}
   \usepackage[utf8]{inputenc}
@@ -33,7 +33,7 @@ In this vignette, we aim at comparing the assignment of sites into different
 bioregions across multiple bioregionalizations, using the function
 `compare_bioregionalizations()`.
 
-# Data  
+# 1. Data  
 We use the vegetation dataset that comes with `bioregion`.
 
 ```{r}
@@ -45,7 +45,8 @@ vegedissim <- dissimilarity(vegemat, metric = c("Simpson"))
 vegesim <- dissimilarity_to_similarity(vegedissim)
 ```
 
-# Bioregionalization
+# 2. Bioregionalization
+
 We use the same three bioregionalization algorithms as in the
 [visualization vignette](https://biorgeo.github.io/bioregion/articles/a5_visualization.html),
 i.e. a non-hierarchical, hierarchical and network bioregionalizations.  
@@ -72,7 +73,8 @@ vege_netclu_walktrap <- netclu_walktrap(vegesim,
 vege_netclu_walktrap$cluster_info # 3
 ```
 
-# Compare the bioregionalizations 
+# 3. Compare the bioregionalizations 
+
 Before comparing the bioregionalizations, we build a common `data.frame`
 containing the three distinct bioregionalizations.
 <br>
@@ -109,7 +111,8 @@ similar pairwise memberships
 
 Let's first look at pairwise membership within bioregionalization.
 
-## Pairwise membership
+## 3.1 Pairwise membership
+
 The number of pairwise combinations for $n$ sites equals $n(n-1)/2$.
 So in our case, where we have `r nrow(comp)` sites, we do end up with
 `r nrow(comp)*(nrow(comp)-1)/2` pairwise combinations.
@@ -154,7 +157,8 @@ table(hclu_vs_netclu$freq_item_pw_membership)
 we see that the most dominant situation is when sites are never assigned to
 the same bioregion.
 
-## Confusion matrix
+## 3.2 Confusion matrix
+
 The confusion matrix allows to compare different bioregionalizations by looking
 at the similarity of their pairwise memberships. To do so, the function
 computes a confusion matrix with four elements:

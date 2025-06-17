@@ -77,7 +77,6 @@
 #' @importFrom fastkmedoids fastclarans    
 #'                    
 #' @export
-
 nhclu_clarans <- function(dissimilarity,
                           index = names(dissimilarity)[3],
                           seed = NULL,

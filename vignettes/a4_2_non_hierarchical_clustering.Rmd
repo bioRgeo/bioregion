@@ -12,7 +12,7 @@ output:
     smooth_scroll: false
     toc_depth: 2
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl
+csl: style_citation.csl
 vignette: >
   %\VignetteIndexEntry{4.2 Non-hierarchical clustering}
   \usepackage[utf8]{inputenc}
@@ -461,4 +461,4 @@ find_optimal_n(a)
 
 Based on the metric selected, the optimal number of clusters can vary.
 
-# References
+# 6. References

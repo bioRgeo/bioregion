@@ -2,7 +2,7 @@
 % Please edit documentation in R/betapart_to_bioregion.R
 \name{betapart_to_bioregion}
 \alias{betapart_to_bioregion}
-\title{Convert betapart dissimilarity to bioregion dissimilarity}
+\title{Convert betapart dissimilarity to bioregion dissimilarity (DEPRECATED)}
 \usage{
 betapart_to_bioregion(betapart_result)
 }
@@ -32,6 +32,10 @@ colnames(comat) <- paste0("Species", 1:10)
 beta_div <- betapart::beta.pair.abund(comat)
 betapart_to_bioregion(beta_div)
 }
+
+}
+\seealso{
+This function is deprecated, use \link{as_bioregion_pairwise} instead.
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

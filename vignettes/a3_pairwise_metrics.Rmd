@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl    
+csl: style_citation.csl    
 vignette: >
   %\VignetteIndexEntry{3. Pairwise similarity/dissimilarity metrics}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +37,7 @@ options(tinytex.verbose = TRUE)
 data(vegemat)
 ```
 
-# Compute pairwise similarity metrics
+# 1. Compute pairwise similarity metrics
 
 The function 
 [similarity](https://bioRgeo.github.io/bioregion/reference/similarity.html) 
@@ -115,7 +115,7 @@ $$\displaystyle Euclidean = \frac{1}{1 + d_{ij}}$$
 where $d_{ij}$ is the Euclidean distance between site $i$ and  site $j$ in terms of 
 species composition.
 
-# Compute pairwise dissimilarity metrics
+# 2. Compute pairwise dissimilarity metrics
 
 The [dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity.html) 
 function is very similar, with the sole exception that it computes the 
@@ -131,7 +131,7 @@ dissim[1:10,]
 
 ```
 
-# From similarity to dissimilarity (and back again) 
+# 3. From similarity to dissimilarity (and back again) 
 
 The functions [similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and 
 can be used to switch easily switch between similarity and dissimilarity metrics.
@@ -154,7 +154,7 @@ sim2 <- dissimilarity_to_similarity(dissim1)
 sim2[1:10,]
 ```
 
-# Comparison with other R packages
+# 4. Comparison with other R packages
 
 `bioregion` is not the only R package that allows the computation of 
 similarity, dissimilarity, distance, and $\beta$-diversity metrics based 
@@ -195,7 +195,7 @@ the `a`, `b`, `c`, `A`, `B` or `C` components separately.
 | **abc/ABC**         | yes (abc or ABC)          | yes (abc or ABC) | yes (abc and ABC)              | no                     | yes (a, b, c, A, B or C)     |
 | **Several metrics** | no                        | no               | yes                            | no                     | no                           |
 
-## Basic comparison (Jaccard and Bray-Curtis)
+## 4.1 Basic comparison (Jaccard and Bray-Curtis)
 
 We first present a basic comparison of the computation of two well-known 
 metrics, Jaccard and Bray-Curtis, based on a small co-occurrence `matrix`.
@@ -213,7 +213,7 @@ comatbin[comat > 0.7] <- 1
 comatbin[comat <= 0.7] <- 0
 ```
 
-### Jaccard
+### 4.1.1 Jaccard
 
 We propose below a comparison of computation time for generating a Jaccard 
 dissimilarity matrix based on the `comatbin` defined above. It should be noted 
@@ -236,6 +236,7 @@ two available functions, `vegdist` and
 dissim <- list()
 
 comp_j <- microbenchmark(
+  
   adespatial = { d <- beta.div(comatbin, 
                                method = "jaccard",
                                samp = FALSE,
@@ -244,10 +245,12 @@ comp_j <- microbenchmark(
                  d <- as.matrix(d$D)
                  d <- d*d
                  dissim$adespatial <- d},
+  
   betapart = { d <- beta.pair(comatbin, 
                               index.family = "jaccard")
                d <- as.matrix(d$beta.jac)
                dissim$betapart <- d},
+  
   bioregion = { d <- dissimilarity(comatbin, 
                                    metric = "Jaccard")
                 d <- net_to_mat(d,   
@@ -255,17 +258,21 @@ comp_j <- microbenchmark(
                                 squared = TRUE,
                                 symmetrical = TRUE)
                      dissim$bioregion <- d },
+  
   ecodist_dist = { d <- distance(comatbin, 
                                  method = "jaccard")
                    d <- as.matrix(d)
                    dissim$ecodist_dist <- d },
+  
   ecodist_bcdist = { d <- bcdist(comatbin)
                      d <- as.matrix(d)
                      dissim$ecodist_bcdist <- d },
+  
   vegan_veg = { d <- vegdist(comatbin,
                              method = "jaccard")
                 d <- as.matrix(d)
                 dissim$vegan_veg <- d },
+  
   vegan_design = { d <- designdist(comatbin,
                                    method = "(A+B-2*J)/(A+B-J)",
                                    terms = "binary")
@@ -311,7 +318,7 @@ reformatting step (from matrix to network and back). The `distance`
 and `beta.div` functions rank significantly 
 lower in terms of speed.
 
-### Bray-Curtis
+### 4.1.2 Bray-Curtis
 
 We present below a similar example using the Bray-Curtis dissimilarity metric, 
 based on the `comat` defined above.
@@ -320,6 +327,7 @@ based on the `comat` defined above.
 dissim <- list()
 
 comp_bc <- microbenchmark(
+  
   adespatial = { d <- beta.div(comat, 
                                method = "percentdiff",
                                samp = FALSE,
@@ -328,10 +336,12 @@ comp_bc <- microbenchmark(
                  d <- as.matrix(d$D)
                  d <- d*d
                  dissim$adespatial <- d},
+  
   betapart = { d <- beta.pair.abund(comat, 
                                     index.family = "bray")
                d <- as.matrix(d$beta.bray)
                dissim$betapart <- d},
+  
   bioregion = { d <- dissimilarity(comatbin, 
                                     metric = "Bray")
                  d <- net_to_mat(d,   
@@ -339,17 +349,21 @@ comp_bc <- microbenchmark(
                                  squared = TRUE,
                                  symmetrical = TRUE)
                  dissim$bioregion <- d },
+  
   ecodist_dist = { d <- distance(comat, 
                                  method = "bray-curtis")
                    d <- as.matrix(d)
                    dissim$ecodist_dist <- d },
+  
   ecodist_bcdist = { d <- bcdist(comat)
                      d <- as.matrix(d)
                      dissim$ecodist_bcdist <- d },
+  
   vegan_veg = { d <- vegdist(comatbin,
                              method = "bray")
                 d <- as.matrix(d)
                 dissim$vegan_veg <- d },
+  
   vegan_design = { d <- designdist(comat,
                                    method = "(A+B-2*J)/(A+B)",
                                    terms = "minimum")
@@ -395,7 +409,7 @@ others. They are again followed by `bcdist`, while our `dissimilarity` function
 remains slightly slower. The `distance` and `beta.div` functions, joined by 
 `beta.pair.abund`, rank significantly lower in terms of computation speed.
 
-## Systematic comparison (Jaccard and Bray-Curtis)
+## 4.2 Systematic comparison (Jaccard and Bray-Curtis)
 
 These differences in computation times become noticeable only for (site-species) 
 co-occurrence `matrix` objects of significant size. To better understand the 
@@ -434,4 +448,4 @@ Work in progress
 -->
 
 ---
-# Reference
+# 5. Reference

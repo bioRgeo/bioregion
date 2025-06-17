@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl    
+csl: style_citation.csl    
 vignette: >
   %\VignetteIndexEntry{2. Matrix and network formats}
   %\VignetteEngine{knitr::rmarkdown}
@@ -28,7 +28,7 @@ options(tinytex.verbose = TRUE)
 
 ```
 
-# Load data
+# 1. Load data
 
 The `bioregion`'s package contains as example dataset the spatial distribution of 
 Mediterranean vegetation. This dataset has been analyzed in 
@@ -58,7 +58,7 @@ dim(vegemat)
 and [vegesf](https://bioRgeo.github.io/bioregion/reference/vegesf.html) a spatial
 object containing the geometry of the 715 sites. 
 
-# From matrix to network
+# 2. From matrix to network
 
 The function [mat_to_net](https://bioRgeo.github.io/bioregion/reference/mat_to_net.html) 
 transforms a co-occurrence `matrix` such as `vegemat` into a network represented 
@@ -91,7 +91,7 @@ head(net)
 dim(net)
 ```
 
-# From network to matrix
+# 3. From network to matrix
 
 The function [net_to_mat](https://bioRgeo.github.io/bioregion/reference/net_to_mat.html)
 does the opposite. It transforms a network represented by a two- or a three-columns

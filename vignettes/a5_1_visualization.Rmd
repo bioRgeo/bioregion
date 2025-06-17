@@ -6,7 +6,7 @@ output:
   html_vignette:
     number_sections: true
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl    
+csl: style_citation.csl    
 vignette: >
   %\VignetteIndexEntry{5.1 Visualization}
   \usepackage[utf8]{inputenc}
@@ -39,7 +39,7 @@ with the diferent algorithms available in `bioregion`.
 Using one of the dataset coming along with `bioregion`, we show three strategies
 to plot your results.
 
-# Data  
+# 1. Data  
 For this vignette, we rely on the dataset describing the distribution of 
 vascular plants in the Mediterranean part of France. We first load the matrix
 format of this dataset, computes the dissimilarity matrix out of it and also
@@ -67,11 +67,12 @@ world <- rnaturalearth::ne_coastline(returnclass = "sf", scale = "medium")
 vegesf <- st_transform(vegesf, crs = st_crs(world))
 ```
 
-# Plots  
+# 2. Plots  
+
 In this section, we show three ways to plot your results.
 <br>
 
-## map_bioregions()  
+## 2.1 map_bioregions()  
 The first possibility is to use the function `map_bioregions()` from the package.
 This function can directly provide a plot of each site colored according to
 the cluster they belong to.
@@ -92,7 +93,8 @@ stored in `fishsf`.
 map_bioregions(vege_nhclu_kmeans, geometry = vegesf, plot = TRUE)
 ```
 
-## Custom plot  
+## 2.2 Custom plot  
+
 If you want to customize yourself the plot and not simply rely on the default
 option, `map_bioregions()` gives you the possibility to extract each site as well
 as its geometry and cluster number.  
@@ -115,7 +117,8 @@ ggplot(custom) +
   theme_void()
 ```
 
-## Plot with facets  
+## 2.3 Plot with facets  
+
 Finally, you can be interested in plotting several bioregionalizations at once.
 For this purpose, we can build a single `data.frame` gathering all the
 bioregions obtained from distinct algorithms and then take advantage of the

@@ -12,7 +12,7 @@ output:
     smooth_scroll: false
     toc_depth: 2
 bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl
+csl: style_citation.csl
 vignette: >
   %\VignetteIndexEntry{4.1 Hierarchical clustering}
   \usepackage[utf8]{inputenc}
@@ -831,5 +831,5 @@ clust1 <- hclu_optics(dissim)
 clust1
 ```
 
-# References
+# 5. References
 
