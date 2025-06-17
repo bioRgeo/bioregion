@@ -95,9 +95,17 @@ compute respectively pairwise similarity and dissimilarity metrics based on a
 `bioregion.pairwise.metric` object containing all requested metrics between each 
 pair of sites.
 
-The functions [dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html)
+The functions 
+[dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and 
+[similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html)
 can be used to transform a similarity object into a dissimilarity object 
 and vice versa.
+
+The function 
+[as_bioregion_pairwise](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html)
+allows to convert a (dis)similarity `matrix` or a `list` of such matrices into a 
+`bioregion.pairwise.metric` object compatible with the `bioregion` package. 
+The input can come from base R, `dist` objects, or outputs from other packages. 
 
 Please have a look at this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html) 
 to better understand how these functions work.

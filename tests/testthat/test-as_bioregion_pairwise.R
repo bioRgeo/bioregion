@@ -196,8 +196,20 @@ test_that("betapart", {
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
-  expect_equal(dim(pair)[2], 5)
+  expect_equal(dim(pair)[2], 8)
   expect_equal(colnames(pair)[3], "a")
+  expect_equal(pair[1,1], "s1")
+  
+  pair <- as_bioregion_pairwise(betapart.core.abund(comat), 
+                                metric_name = NULL,
+                                pkg = "betapart",
+                                is_similarity = FALSE)
+  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(attr(pair, "type"), "dissimilarity")
+  expect_equal(attr(pair, "nb_sites"), 10)
+  expect_equal(attr(pair, "nb_species"), NA)
+  expect_equal(dim(pair)[2], 6)
+  expect_equal(colnames(pair)[3], "A")
   expect_equal(pair[1,1], "s1")
   
 })

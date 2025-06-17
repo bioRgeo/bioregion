@@ -23,14 +23,15 @@
 #'   represents similarity (`TRUE`) or dissimilarity (`FALSE`).
 #' 
 #' @details
-#' This function can directly handle outputs from nine functions across four 
+#' This function can directly handle outputs from ten functions across four 
 #' packages:
 #'
 #' - **adespatial**: [beta.div][adespatial::beta.div], 
 #'   [beta.div.comp][adespatial::beta.div.comp]
 #' - **betapart**: [beta.pair][betapart::beta.pair], 
 #'   [beta.pair.abund][betapart::beta.pair.abund], 
-#'   [betapart.core][betapart::betapart.core]
+#'   [betapart.core][betapart::betapart.core],
+#'   [betapart.core.abund][betapart::betapart.core.abund]
 #' - **ecodist**: [distance][ecodist::distance], 
 #'   [bcdist][ecodist::bcdist]
 #' - **vegan**: [vegdist][vegan::vegdist], 
@@ -159,20 +160,32 @@ as_bioregion_pairwise <- function(mat,
       betapairr <- c("beta.ruz.bal", "beta.ruz.gra", "beta.ruz")
       betacore <- c("data", "sumSi", "St", "a", "shared", "not.shared", 
                    "sum.not.shared", "max.not.shared", "min.not.shared")
+      betacoreabund <- c("data", "multiple.shared.abund", "pair.shared.abund", 
+                         "pair.min.not.shared.abund", 
+                         "pair.max.not.shared.abund", 
+                         "pair.sum.not.shared.abund")
       
       if(!any(identical(names(mat),betapairj),
               identical(names(mat),betapairs),
               identical(names(mat),betapairb),
               identical(names(mat),betapairr),
-              identical(names(mat),betacore))){
+              identical(names(mat),betacore),
+              identical(names(mat),betacoreabund))){
         stop("mat does not seem to be an output from the betapart package.", 
              call. = FALSE)
       }else{
         if(identical(names(mat),betacore)){
-          a <- mat$shared
-          b <- mat$not.shared
-          c <- t(b)
-          mat <- list(a=a, b=b, c=c)
+          mat <- list(mat$shared, 
+                      t(mat$not.shared), 
+                      mat$not.shared,
+                      mat$min.not.shared,
+                      mat$max.not.shared,
+                      mat$sum.not.shared)
+          metric_name <- c("a", "b", "c", "min(b,c)","max(b,c)","sum(b,c)")
+        }
+        if(identical(names(mat),betacoreabund)){
+          mat <- mat[3:6]
+          metric_name <- c("A","min(B,C)","max(B,C)","sum(B,C)")
         }
       }
     }

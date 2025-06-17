@@ -40,14 +40,15 @@ The input can come from base R, \code{dist} objects, or outputs from other
 packages.
 }
 \details{
-This function can directly handle outputs from nine functions across four
+This function can directly handle outputs from ten functions across four
 packages:
 \itemize{
 \item \strong{adespatial}: \link[adespatial:beta.div]{beta.div},
 \link[adespatial:beta.div.comp]{beta.div.comp}
 \item \strong{betapart}: \link[betapart:beta.pair]{beta.pair},
 \link[betapart:beta.pair.abund]{beta.pair.abund},
-\link[betapart:betapart.core]{betapart.core}
+\link[betapart:betapart.core]{betapart.core},
+\link[betapart:betapart.core.abund]{betapart.core.abund}
 \item \strong{ecodist}: \link[ecodist:distance]{distance},
 \link[ecodist:bcdist]{bcdist}
 \item \strong{vegan}: \link[vegan:vegdist]{vegdist},

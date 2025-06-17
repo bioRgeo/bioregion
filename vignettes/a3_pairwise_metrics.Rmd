@@ -131,7 +131,7 @@ dissim[1:10,]
 
 ```
 
-# 3. From similarity to dissimilarity (and back again) 
+# 3. From similarity to dissimilarity (and vice versa) 
 
 The functions [similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and 
 can be used to switch easily switch between similarity and dissimilarity metrics.
@@ -189,14 +189,14 @@ the `a`, `b`, `c`, `A`, `B` or `C` components separately.
 
 
 |                     | adespatial (0.3-28)       | betapart (1.6)   | bioregion (1.2.0)              | ecodist (2.1.3)        | vegan (2.6-10)               |
-| ------------------- | ------------------------- | -----------------| ------------------------------ | ---------------------- | ---------------------------- |
-| **Format**          | matrix                    | matrix           | data.frame (network)           | matrix                 | matrix                       |
-| **Custom formulas** | no                        | no               | yes                            | no                     | yes                          |
-| **abc/ABC**         | yes (abc or ABC)          | yes (abc or ABC) | yes (abc and ABC)              | no                     | yes (a, b, c, A, B or C)     |
-| **Several metrics** | no                        | no               | yes                            | no                     | no                           |
-
+  | ------------------- | ------------------------- | -----------------| ------------------------------ | ---------------------- | ---------------------------- |
+  | **Format**          | matrix                    | matrix           | data.frame (network)           | matrix                 | matrix                       |
+  | **Custom formulas** | no                        | no               | yes                            | no                     | yes                          |
+  | **abc/ABC**         | yes (abc or ABC)          | yes (abc or ABC) | yes (abc and ABC)              | no                     | yes (a, b, c, A, B or C)     |
+  | **Several metrics** | no                        | no               | yes                            | no                     | no                           |
+  
 ## 4.1 Basic comparison (Jaccard and Bray-Curtis)
-
+  
 We first present a basic comparison of the computation of two well-known 
 metrics, Jaccard and Bray-Curtis, based on a small co-occurrence `matrix`.
 
@@ -204,6 +204,7 @@ metrics, Jaccard and Bray-Curtis, based on a small co-occurrence `matrix`.
 nbsite <- 100
 nbsp <- 200
 
+set.seed(1)
 comat <- matrix(runif(nbsite*nbsp), nbsite, nbsp)
 rownames(comat) <- paste0("s", 1:nbsite)
 colnames(comat) <- paste0("sp", 1:nbsp)
@@ -242,43 +243,43 @@ comp_j <- microbenchmark(
                                samp = FALSE,
                                nperm = 1,
                                save.D = TRUE) 
-                 d <- as.matrix(d$D)
-                 d <- d*d
-                 dissim$adespatial <- d},
+  d <- as.matrix(d$D)
+  d <- d*d
+  dissim$adespatial <- d},
   
   betapart = { d <- beta.pair(comatbin, 
                               index.family = "jaccard")
-               d <- as.matrix(d$beta.jac)
-               dissim$betapart <- d},
+  d <- as.matrix(d$beta.jac)
+  dissim$betapart <- d},
   
   bioregion = { d <- dissimilarity(comatbin, 
                                    metric = "Jaccard")
-                d <- net_to_mat(d,   
-                                weight = TRUE,
-                                squared = TRUE,
-                                symmetrical = TRUE)
-                     dissim$bioregion <- d },
+  d <- net_to_mat(d,   
+                  weight = TRUE,
+                  squared = TRUE,
+                  symmetrical = TRUE)
+  dissim$bioregion <- d },
   
   ecodist_dist = { d <- distance(comatbin, 
                                  method = "jaccard")
-                   d <- as.matrix(d)
-                   dissim$ecodist_dist <- d },
+  d <- as.matrix(d)
+  dissim$ecodist_dist <- d },
   
   ecodist_bcdist = { d <- bcdist(comatbin)
-                     d <- as.matrix(d)
-                     dissim$ecodist_bcdist <- d },
+  d <- as.matrix(d)
+  dissim$ecodist_bcdist <- d },
   
   vegan_veg = { d <- vegdist(comatbin,
                              method = "jaccard")
-                d <- as.matrix(d)
-                dissim$vegan_veg <- d },
+  d <- as.matrix(d)
+  dissim$vegan_veg <- d },
   
   vegan_design = { d <- designdist(comatbin,
                                    method = "(A+B-2*J)/(A+B-J)",
                                    terms = "binary")
-                   d <- as.matrix(d)
-                   dissim$vegan_design <- d },
-                      
+  d <- as.matrix(d)
+  dissim$vegan_design <- d },
+  
   times = 10
 )
 ```
@@ -333,43 +334,43 @@ comp_bc <- microbenchmark(
                                samp = FALSE,
                                nperm = 1,
                                save.D = TRUE) 
-                 d <- as.matrix(d$D)
-                 d <- d*d
-                 dissim$adespatial <- d},
+  d <- as.matrix(d$D)
+  d <- d*d
+  dissim$adespatial <- d},
   
   betapart = { d <- beta.pair.abund(comat, 
                                     index.family = "bray")
-               d <- as.matrix(d$beta.bray)
-               dissim$betapart <- d},
+  d <- as.matrix(d$beta.bray)
+  dissim$betapart <- d},
   
   bioregion = { d <- dissimilarity(comatbin, 
-                                    metric = "Bray")
-                 d <- net_to_mat(d,   
-                                 weight = TRUE,
-                                 squared = TRUE,
-                                 symmetrical = TRUE)
-                 dissim$bioregion <- d },
+                                   metric = "Bray")
+  d <- net_to_mat(d,   
+                  weight = TRUE,
+                  squared = TRUE,
+                  symmetrical = TRUE)
+  dissim$bioregion <- d },
   
   ecodist_dist = { d <- distance(comat, 
                                  method = "bray-curtis")
-                   d <- as.matrix(d)
-                   dissim$ecodist_dist <- d },
+  d <- as.matrix(d)
+  dissim$ecodist_dist <- d },
   
   ecodist_bcdist = { d <- bcdist(comat)
-                     d <- as.matrix(d)
-                     dissim$ecodist_bcdist <- d },
+  d <- as.matrix(d)
+  dissim$ecodist_bcdist <- d },
   
   vegan_veg = { d <- vegdist(comatbin,
                              method = "bray")
-                d <- as.matrix(d)
-                dissim$vegan_veg <- d },
+  d <- as.matrix(d)
+  dissim$vegan_veg <- d },
   
   vegan_design = { d <- designdist(comat,
                                    method = "(A+B-2*J)/(A+B)",
                                    terms = "minimum")
-                   d <- as.matrix(d)
-                   dissim$vegan_design <- d },
-                      
+  d <- as.matrix(d)
+  dissim$vegan_design <- d },
+  
   times = 10
 )
 
@@ -409,6 +410,7 @@ others. They are again followed by `bcdist`, while our `dissimilarity` function
 remains slightly slower. The `distance` and `beta.div` functions, joined by 
 `beta.pair.abund`, rank significantly lower in terms of computation speed.
 
+
 ## 4.2 Systematic comparison (Jaccard and Bray-Curtis)
 
 These differences in computation times become noticeable only for (site-species) 
@@ -419,33 +421,190 @@ subset of functions (`beta.pair` and `beta.pair.abund`, `dissimilarity`,
 and species.
 
 The plot below shows the results obtained for the Jaccard dissimilarity metric
-based on 16 combinations of numbers of
-sites and species (chosen among 500, 1000, 2000, and 5000), averaged over three
-replications. We also include the results from a single simulation with 10,000
-sites and species.
+based on 16 combinations of numbers of sites and species (chosen among 500, 
+1000, 2000, and 5000), averaged over three replications. We also include the 
+results from a single simulation with 10,000 sites and species.
 
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/comparison_Jaccard.png">
-</center> 
-
+  <img align="bottom" width="100%" height="100%" src="../man/figures/comparison_Jaccard.png">
+  </center> 
+  
 A similar plot showing the results obtained for the Bray-Curtis dissimilarity
 metric is available below. In this case, the results based on a single
 simulation with 10,000 sites and species exclude `beta.pair.abund` because it
 took too much time to compute.
 
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/comparison_Bray-Curtis.png">
+  <img align="bottom" width="100%" height="100%" src="../man/figures/comparison_Bray-Curtis.png">
 </center> 
+  
+# 5. Importing pairwise (dis)similarity metrics from other packages into bioregion
+  
+To enable the conversion of (dis)similarity metrics stored in base R objects  
+or outputs from other packages into a `bioregion.pairwise.metric` object  
+compatible with the `bioregion` package, we developed the 
+[`as_bioregion_pairwise()`](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html) 
+function.
+
+This function can take as input `matrix`, a `dist` object, or a `list` of these
+ 
+``` {r convert}
+dissim1 <- dissimilarity(vegemat, 
+                         metric = "Euclidean")
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(dist(vegemat),
+                                 metric_name = "Euclidean")
+dissim2[1:10,]
+
+```
+
+but also outputs from several functions provided by the packages 
+[adespatial](https://cran.r-project.org/package=adespatial), 
+[betapart](https://cran.r-project.org/package=betapart), 
+[ecodist](https://cran.r-project.org/package=ecodist) and 
+[vegan](https://cran.r-project.org/package=vegan) described above.
+
+This includes the outputs of `beta.div` and `beta.div.comp` from the 
+[adespatial](https://cran.r-project.org/package=adespatial) package.
+
+``` {r adespatial 1}
+dissim1 <- dissimilarity(comat, 
+                         metric = "Euclidean")
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(beta.div(comat,
+                                          method = "euclidean",
+                                          save.D = TRUE),
+                                 pkg = "adespatial")
+dissim2[1:10,]
+
+```
+
+``` {r adespatial 2}
+dissim1 <- dissimilarity(comatbin, 
+                         metric = c("Jaccard","abc"))
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(beta.div.comp(comatbin,
+                                               save.abc = TRUE),
+                                 pkg = "adespatial")
+dissim2[1:10,]
+
+```
+
+`beta.pair`, `beta.pair.abund`, `betapart.core` and `betapart.core.abund` from 
+the [betapart](https://cran.r-project.org/package=betapart) package.
+
+``` {r betapart 1}
+dissim1 <- dissimilarity(comatbin, 
+                         metric = c("Jaccard","Jaccardturn"))
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(beta.pair(comatbin,
+                                           index.family = "jaccard"),
+                                 pkg = "betapart")
+dissim2[1:10,]
+
+```
+
+``` {r betapart 2}
+dissim1 <- dissimilarity(comat, 
+                         metric = c("Brayturn","Bray"))
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(beta.pair.abund(comat,
+                                                 index.family = "bray"),
+                                 pkg = "betapart")
+dissim2[1:10,]
+
+```
+
+``` {r betapart 3}
+dissim1 <- dissimilarity(comatbin, 
+                         metric = "abc",
+                         formula = c("pmin(b,c)","pmax(b,c)","b+c"))
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(betapart.core(comatbin),
+                                 pkg = "betapart")
+dissim2[1:10,]
+
+```
+
+
+``` {r betapart 4}
+dissim1 <- dissimilarity(comat, 
+                         metric = "ABC",
+                         formula = c("pmin(B,C)","pmax(B,C)","B+C"))
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(betapart.core.abund(comat),
+                                 pkg = "betapart")
+dissim2[1:10,]
+
+```
+
+`distance` and `bcdist` from the 
+[ecodist](https://cran.r-project.org/package=ecodist) package.
+
+``` {r ecodist 1}
+dissim1 <- dissimilarity(comatbin, 
+                         metric = "Jaccard")
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(distance(comatbin,
+                                          method="jaccard"),
+                                 pkg = "ecodist")
+dissim2[1:10,]
+
+```
+
+``` {r ecodist 2}
+dissim1 <- dissimilarity(comat, 
+                         metric = "Bray")
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(bcdist(comat),
+                                 pkg = "ecodist")
+dissim2[1:10,]
+
+```
+
+and finally `vegdist` and `designdist` from 
+[vegan](https://cran.r-project.org/package=ecodist).
+
+``` {r vegan 1}
+dissim1 <- dissimilarity(comatbin, 
+                         metric = "Jaccard")
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(vegdist(comatbin,
+                                         method="jaccard"),
+                                 pkg = "vegan")
+dissim2[1:10,]
+
+```
+
+``` {r vegan 2}
+dissim1 <- dissimilarity(comat, 
+                         metric = "Bray",
+                         formula = "(B + C) / (2*A + B + C)")
+dissim1[1:10,]
+
+dissim2 <- as_bioregion_pairwise(designdist(comat,
+                                            method = "(A+B-2*J)/(A+B)",
+                                            terms = "minimum"),
+                                 pkg = "vegan")
+dissim2[1:10,]
+
+```
 
 <!--
-# Converting other R objects into bioregion dissimilarity objects
-
-Work in progress
-
-# Enrich a similarity/dissimilarity object
-
-Work in progress
+# 6. Combine and enrich (dis)similarity objects
+  
+  Work in progress
 -->
+  
 
----
 # 5. Reference
