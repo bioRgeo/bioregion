@@ -53,8 +53,6 @@ compare_bioregionalizations
 
 * Add fuzzy clustering methods
 
-* from_abcABC (to compute metrics from abc and/or ABC).
-
 * reassign_cluster (to assign or reassign cluster based on a partition and a 
 (dis)similarity metric) + spatial coherence (reassignment of sites)
 
@@ -76,6 +74,6 @@ between_bioregions_metrics()
 
 #### Miscellaneous
 
-* data-raw ? 
+*
 
 

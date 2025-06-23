@@ -607,11 +607,33 @@ dissim2[1:10,]
 
 ```
 
-<!--
+
 # 6. Combine and enrich (dis)similarity objects
   
-  Work in progress
--->
+It is also possible to use the function
+[`combine_bioregion_pairwise()`](https://bioRgeo.github.io/bioregion/reference/combine_bioregion_pairwise.html) to combine two `bioregion.pairwise.metric` objects and/or compute new pairwise 
+metrics based on the columns of the object(s). This function is particularly 
+useful for deriving new metrics from the components $a$, $b$, and $c$, and/or 
+$A$, $B$, and $C$, especially when these components required significant 
+computation time.
   
+``` {r combine}
+dissim1 <- dissimilarity(comat, 
+                         metric = c("ABC","Bray"),
+                         formula = "(B + C) / (2*A + B + C)")
 
-# 6. Reference
+dissim2 <- as_bioregion_pairwise(designdist(comat,
+                                            method = "(A+B-2*J)/(A+B)",
+                                            terms = "minimum"),
+                                 pkg = "vegan")
+
+dissim <- combine_bioregion_pairwise(primary_metrics = dissim1,
+                                     secondary_metrics = dissim2,
+                                     new_metrics = c("(B + C) / (2*A + B + C)",
+                                                     "Bray*Bray"))
+
+dissim[1:10,]
+
+```
+
+# 7. Reference

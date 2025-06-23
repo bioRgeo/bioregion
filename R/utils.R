@@ -4,6 +4,7 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   lstype <- c("input_nhandhclu",
               "input_similarity",
               "input_dissimilarity",
+              "input_pairwise",
               "input_conversion_similarity",
               "input_conversion_dissimilarity",
               "input_net",
@@ -123,6 +124,25 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
                       "before using this function."), call. = FALSE)
         }
       }
+    }
+  }
+  
+  # Input pairwise #############################################################
+  if (type == "input_pairwise") {
+    
+    if (!inherits(data, "bioregion.pairwise.metric")) {
+      stop(paste0(deparse(substitute(data)), 
+                  " should be a bioregion.pairwise.metric object created by ",
+                  "similarity() or dissimilarity_to_similarity()."),
+           call. = FALSE)
+    }
+    if(is.null(attr(data, "type"))){
+      stop(paste0(deparse(substitute(data)),
+                  " is a bioregion.pairwise.metric object but it has not ",
+                  "been possible to identify the object's type (similarity or ",
+                  " dissimilarity) probably because the ",
+                  "bioregion.pairwise.metric object has been altered."),
+           call. = FALSE)
     }
   }
   

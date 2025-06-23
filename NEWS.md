@@ -3,6 +3,9 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
+* Added `combine_bioregion_pairwise()` to combine pairwise (dis)similarity 
+objects.
+
 * Added `as_bioregion_pairwise()` to replace and improve upon
 `betapart_to_bioregion()`, which is now deprecated.
 

@@ -59,7 +59,7 @@
 #' \url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
 #' 
 #' Associated functions: 
-#' [dissimilarity] [similarity] 
+#' [dissimilarity] [similarity] [combine_bioregion_pairwise]
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
