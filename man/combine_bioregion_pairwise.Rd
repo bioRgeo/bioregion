@@ -15,13 +15,13 @@ combine_bioregion_pairwise(
 main set of pairwise metrics that will be used as a base for the combination.}
 
 \item{secondary_metrics}{A second \code{bioregion.pairwise.metric}
-object to be combined with \code{primary_metrics}. Must have the same sites
+object to be combined with \code{primary_metrics}. It must have the same sites
 identifiers and pairwise structure. Can be set to \code{NULL} if \code{new_metrics} is
 specified.}
 
 \item{new_metrics}{A \code{character} vector or a single \code{character} string
 specifying custom formula(s) based on the column names of \code{primary_metrics}
-and \code{secondary_metrics} (see Details). The default is \code{NULL}.}
+and \code{secondary_metrics} (see Details).}
 }
 \value{
 A new \code{bioregion.pairwise.metric} object containing the combined and/or

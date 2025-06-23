@@ -7,13 +7,13 @@
 #' main set of pairwise metrics that will be used as a base for the combination.
 #'   
 #' @param secondary_metrics A second `bioregion.pairwise.metric` 
-#' object to be combined with `primary_metrics`. Must have the same sites 
+#' object to be combined with `primary_metrics`. It must have the same sites 
 #' identifiers and pairwise structure. Can be set to `NULL` if `new_metrics` is 
 #' specified.
 #'   
 #' @param new_metrics  A `character` vector or a single `character` string 
 #' specifying custom formula(s) based on the column names of `primary_metrics` 
-#' and `secondary_metrics` (see Details). The default is `NULL`.
+#' and `secondary_metrics` (see Details). 
 #' 
 #' @details
 #' When both `primary_metrics` and `secondary_metrics` are provided and if the

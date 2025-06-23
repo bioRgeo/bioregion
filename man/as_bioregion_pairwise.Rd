@@ -88,7 +88,7 @@ see the vignette:
 \url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
 
 Associated functions:
-\link{dissimilarity} \link{similarity}
+\link{dissimilarity} \link{similarity} \link{combine_bioregion_pairwise}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
