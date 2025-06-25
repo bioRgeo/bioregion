@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-06-23</h4>
+            <h4 data-toc-skip class="date">2025-06-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -138,8 +138,8 @@ computed between each pair of sites.</p>
 <span><span class="co">## 10    35    88 0.9844961</span></span>
 <span><span class="co">## 11    35    89 0.6821705</span></span></code></pre>
 <p>The resulting <code>data.frame</code> is stored in a
-<code>bioregion.pairwise.metric</code> object, which contains the
-Simpson similarity metric between each pair of sites. The function <a href="https://bioRgeo.github.io/bioregion/reference/similarity.html">similarity</a>
+<code>bioregion.pairwise</code> object, which contains the Simpson
+similarity metric between each pair of sites. The function <a href="https://bioRgeo.github.io/bioregion/reference/similarity.html">similarity</a>
 can handle three types of metrics: metrics based on <code>abc</code>,
 metrics based on <code>ABC</code>, and one metric based on the Euclidean
 distance.</p>
@@ -540,21 +540,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 272.730180 277.615747 280.178688 279.260367 282.253983</span></span>
-<span><span class="co">##        betapart   1.650867   1.836003   1.913071   1.869545   1.940578</span></span>
-<span><span class="co">##       bioregion   9.206161  10.941536  13.682859  14.390836  16.089733</span></span>
-<span><span class="co">##    ecodist_dist 128.238687 135.840788 182.906127 160.292683 175.772433</span></span>
-<span><span class="co">##  ecodist_bcdist   3.378848   3.549838   3.565220   3.570711   3.621491</span></span>
-<span><span class="co">##       vegan_veg   1.233710   1.325681   1.943716   2.280080   2.294497</span></span>
-<span><span class="co">##    vegan_design   1.249068   1.281719   1.355373   1.314490   1.366267</span></span>
+<span><span class="co">##      adespatial 295.316812 301.366292 306.464032 303.052420 310.876994</span></span>
+<span><span class="co">##        betapart   1.905543   2.017241   2.233798   2.070415   2.154427</span></span>
+<span><span class="co">##       bioregion  10.438763  11.420414  15.303514  16.645136  17.661239</span></span>
+<span><span class="co">##    ecodist_dist 135.088164 148.723217 191.866275 165.049021 179.183359</span></span>
+<span><span class="co">##  ecodist_bcdist   3.397365   3.638524   3.654308   3.653672   3.755914</span></span>
+<span><span class="co">##       vegan_veg   1.247536   1.342072   1.997831   2.347266   2.360601</span></span>
+<span><span class="co">##    vegan_design   1.373822   1.398838   1.508989   1.423910   1.546132</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  289.702056    10</span></span>
-<span><span class="co">##    2.394784    10</span></span>
-<span><span class="co">##   16.266582    10</span></span>
-<span><span class="co">##  436.765113    10</span></span>
-<span><span class="co">##    3.642831    10</span></span>
-<span><span class="co">##    2.312180    10</span></span>
-<span><span class="co">##    1.761894    10</span></span></code></pre>
+<span><span class="co">##  322.973227    10</span></span>
+<span><span class="co">##    3.459491    10</span></span>
+<span><span class="co">##   18.267881    10</span></span>
+<span><span class="co">##  472.628682    10</span></span>
+<span><span class="co">##    3.782463    10</span></span>
+<span><span class="co">##    2.418369    10</span></span>
+<span><span class="co">##    1.982496    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -641,21 +641,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 274.084885 277.892903 281.780429 281.061465 286.186113</span></span>
-<span><span class="co">##        betapart 306.351603 307.238836 333.377562 320.508838 356.058029</span></span>
-<span><span class="co">##       bioregion  10.234337  10.428510  11.204670  10.542834  11.048646</span></span>
-<span><span class="co">##    ecodist_dist  81.718740  91.051207 104.019441  98.876042 124.467066</span></span>
-<span><span class="co">##  ecodist_bcdist   5.987351   6.021404   6.117023   6.097922   6.180480</span></span>
-<span><span class="co">##       vegan_veg   1.217069   1.249529   1.678866   1.297694   2.287654</span></span>
-<span><span class="co">##    vegan_design   1.228921   1.261722   1.436070   1.363707   1.690241</span></span>
+<span><span class="co">##      adespatial 297.345665 298.474008 307.062330 308.288257 311.652470</span></span>
+<span><span class="co">##        betapart 312.091057 315.495184 340.994704 328.393349 364.932441</span></span>
+<span><span class="co">##       bioregion  10.479328  10.747909  11.544447  10.858887  11.432616</span></span>
+<span><span class="co">##    ecodist_dist  88.498316 102.639092 111.232883 105.777628 130.883364</span></span>
+<span><span class="co">##  ecodist_bcdist   6.000197   6.026857   6.147182   6.146285   6.228493</span></span>
+<span><span class="co">##       vegan_veg   1.226187   1.281089   1.720899   1.334894   2.355221</span></span>
+<span><span class="co">##    vegan_design   1.262053   1.365616   1.502433   1.441763   1.683449</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  290.676984    10</span></span>
-<span><span class="co">##  403.847152    10</span></span>
-<span><span class="co">##   13.966284    10</span></span>
-<span><span class="co">##  130.793139    10</span></span>
-<span><span class="co">##    6.393999    10</span></span>
-<span><span class="co">##    2.337847    10</span></span>
-<span><span class="co">##    1.735615    10</span></span></code></pre>
+<span><span class="co">##  318.834621    10</span></span>
+<span><span class="co">##  407.097789    10</span></span>
+<span><span class="co">##   14.272581    10</span></span>
+<span><span class="co">##  134.898048    10</span></span>
+<span><span class="co">##    6.369436    10</span></span>
+<span><span class="co">##    2.386430    10</span></span>
+<span><span class="co">##    1.853567    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.
@@ -699,8 +699,8 @@ into bioregion<a class="anchor" aria-label="anchor" href="#importing-pairwise-di
 </h2>
 <p>To enable the conversion of (dis)similarity metrics stored in base R
 objects<br>
-or outputs from other packages into a
-<code>bioregion.pairwise.metric</code> object<br>
+or outputs from other packages into a <code>bioregion.pairwise</code>
+object<br>
 compatible with the <code>bioregion</code> package, we developed the <a href="https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html"><code>as_bioregion_pairwise()</code></a>
 function.</p>
 <p>This function can take as input <code>matrix</code>, a
@@ -1247,9 +1247,9 @@ above.</p>
 <div class="section level2">
 <h2 id="combine-and-enrich-dissimilarity-objects">6. Combine and enrich (dis)similarity objects<a class="anchor" aria-label="anchor" href="#combine-and-enrich-dissimilarity-objects"></a>
 </h2>
-<p>It is also possible to use the function <a href="https://bioRgeo.github.io/bioregion/reference/combine_bioregion_pairwise.html"><code>combine_bioregion_pairwise()</code></a>
-to combine two <code>bioregion.pairwise.metric</code> objects and/or
-compute new pairwise metrics based on the columns of the object(s). This
+<p>It is also possible to use the function <a href="https://bioRgeo.github.io/bioregion/reference/bind_pairwise.html"><code>bind_pairwise()</code></a>
+to combine two <code>bioregion.pairwise</code> objects and/or compute
+new pairwise metrics based on the columns of the object(s). This
 function is particularly useful for deriving new metrics from the
 components <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(c\)</span>, and/or <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span>, especially when these components
 required significant computation time.</p>
@@ -1263,7 +1263,7 @@ required significant computation time.</p>
 <span>                                            terms <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span>,</span>
 <span>                                 pkg <span class="op">=</span> <span class="st">"vegan"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine_bioregion_pairwise.html">combine_bioregion_pairwise</a></span><span class="op">(</span>primary_metrics <span class="op">=</span> <span class="va">dissim1</span>,</span>
+<span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bind_pairwise.html">bind_pairwise</a></span><span class="op">(</span>primary_metrics <span class="op">=</span> <span class="va">dissim1</span>,</span>
 <span>                                     secondary_metrics <span class="op">=</span> <span class="va">dissim2</span>,</span>
 <span>                                     new_metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(B + C) / (2*A + B + C)"</span>,</span>
 <span>                                                     <span class="st">"Bray*Bray"</span><span class="op">)</span><span class="op">)</span></span>

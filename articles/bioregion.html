@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-06-23</h4>
+            <h4 data-toc-skip class="date">2025-06-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/bioregion.Rmd" class="external-link"><code>vignettes/bioregion.Rmd</code></a></small>
       <div class="d-none name"><code>bioregion.Rmd</code></div>
@@ -167,9 +167,8 @@ page</a> to better understand how these two functions work.</p>
 and <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity.html">dissimilarity</a>
 compute respectively pairwise similarity and dissimilarity metrics based
 on a (site-species) co-occurrence matrix. The resulting
-<code>data.frame</code> is stored in a
-<code>bioregion.pairwise.metric</code> object containing all requested
-metrics between each pair of sites.</p>
+<code>data.frame</code> is stored in a <code>bioregion.pairwise</code>
+object containing all requested metrics between each pair of sites.</p>
 <p>The functions <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a>
 and <a href="https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html">similarity_to_dissimilarity</a>
 can be used to transform a similarity object into a dissimilarity object
@@ -177,7 +176,7 @@ and vice versa.</p>
 <p>The function <a href="https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html">as_bioregion_pairwise</a>
 allows to convert a (dis)similarity <code>matrix</code> or a
 <code>list</code> of such matrices into a
-<code>bioregion.pairwise.metric</code> object compatible with the
+<code>bioregion.pairwise</code> object compatible with the
 <code>bioregion</code> package. The input can come from base R,
 <code>dist</code> objects, or outputs from other packages.</p>
 <p>Please have a look at this <a href="https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html">tutorial
