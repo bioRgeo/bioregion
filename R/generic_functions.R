@@ -426,8 +426,8 @@ str.bioregion.optimal.n <- function(object, ...)
 
 
 #' @export
-#' @method print bioregion.pairwise.metric
-print.bioregion.pairwise.metric <- function(x, ...)
+#' @method print bioregion.pairwise
+print.bioregion.pairwise <- function(x, ...)
 {
   metrics <- colnames(x)[-which(colnames(x) %in%
                                   c("Site1", "Site2", "a", "b",
@@ -451,8 +451,8 @@ print.bioregion.pairwise.metric <- function(x, ...)
 }
 
 #' @export
-#' @method `[` bioregion.pairwise.metric
-`[.bioregion.pairwise.metric` <- function(x, i, j, ..., drop = TRUE) {
+#' @method `[` bioregion.pairwise
+`[.bioregion.pairwise` <- function(x, i, j, ..., drop = TRUE) {
   metric_type <- attributes(x)$type
   nb_sites <- attributes(x)$nb_sites
   nb_species <- attributes(x)$nb_species
@@ -462,7 +462,7 @@ print.bioregion.pairwise.metric <- function(x, ...)
   # We keep track of pw metric class & attribute only if the subset is not a vector
   if(inherits(out, "data.frame")){
   #if(class(out) == "data.frame") {
-    class(out) <- append("bioregion.pairwise.metric", class(out))
+    class(out) <- append("bioregion.pairwise", class(out))
     attributes(out)$type <- metric_type
     attributes(out)$nb_sites <- nb_sites
     attributes(out)$nb_species <- nb_species
@@ -471,8 +471,8 @@ print.bioregion.pairwise.metric <- function(x, ...)
 }
 
 #' @export
-#' @method as.dist bioregion.pairwise.metric
-as.dist.bioregion.pairwise.metric <- function(m, diag = FALSE, 
+#' @method as.dist bioregion.pairwise
+as.dist.bioregion.pairwise <- function(m, diag = FALSE, 
                                               upper = FALSE)
 {
   if(ncol(x) > 3) {

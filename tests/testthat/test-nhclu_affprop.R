@@ -199,7 +199,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_affprop("zz"),
-    "^similarity is not a bioregion.pairwise.metric object")
+    "^similarity is not a bioregion.pairwise object")
   
   expect_error(
     nhclu_affprop(dissim),

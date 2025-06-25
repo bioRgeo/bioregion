@@ -24,7 +24,7 @@
 #' 
 #' @return 
 #' A `data.frame` with the additional class 
-#' `bioregion.pairwise.metric`, containing one or several similarity
+#' `bioregion.pairwise`, containing one or several similarity
 #' metrics between pairs of sites. The first two columns represent the pairs of 
 #' sites. There is one column per similarity metric provided in `metric` and
 #' `formula`, except for the `abc` and `ABC` metrics, which are stored in three 
@@ -310,7 +310,7 @@ similarity <- function(comat,
   }
 
   # Create output class
-  class(res) <- append("bioregion.pairwise.metric", class(res))
+  class(res) <- append("bioregion.pairwise", class(res))
   
   # Inform nature of the output
   attr(res, "type") <- "similarity"

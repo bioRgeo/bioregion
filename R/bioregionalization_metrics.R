@@ -13,7 +13,7 @@
 #' `"avg_endemism"`, or `"tot_endemism"`. If `"all"` is specified, all metrics
 #'  will be calculated.
 #'  
-#' @param dissimilarity A `dist` object or a `bioregion.pairwise.metric` 
+#' @param dissimilarity A `dist` object or a `bioregion.pairwise` 
 #' object (output from [similarity_to_dissimilarity()]). Required if 
 #' `eval_metric` includes `"pc_distance"` and `tree` is not a
 #' `bioregion.hierar.tree` object.
@@ -209,7 +209,7 @@ bioregionalization_metrics <- function(bioregionalization,
       eval_metric <-
         eval_metric[-which(eval_metric %in% dissimilarity_based_metrics)]
     }
-  } else if (inherits(dissimilarity, "bioregion.pairwise.metric")) {
+  } else if (inherits(dissimilarity, "bioregion.pairwise")) {
     if (attr(dissimilarity, "type") == "dissimilarity") {
       if(is.null(dissimilarity_index)) {
         dissimilarity_index <- bioregionalization$args$index
@@ -229,7 +229,7 @@ bioregionalization_metrics <- function(bioregionalization,
                   "similarity_to_dissimilarity(), or an object of class dist."),
            call. = FALSE)
     }
-  } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
+  } else if(!any(inherits(dissimilarity, "bioregion.pairwise"),
                  inherits(dissimilarity, "dist"))){
     #if(is.numeric(dissimilarity_index)){
     #  dissimilarity_index <- names(dissimilarity)[dissimilarity_index]
@@ -241,14 +241,14 @@ bioregionalization_metrics <- function(bioregionalization,
     #has.dissimilarity <- TRUE
     #
     #if(!(dissimilarity_index %in% colnames(dissimilarity))){
-    #  stop(paste0("dissimilarity is not a bioregion.pairwise.metric object, ",
+    #  stop(paste0("dissimilarity is not a bioregion.pairwise object, ",
     #              "a dissimilarity matrix (class dist) or a data.frame with ",
     #              "at least 3 columns (site1, site2, and your dissimilarity ",
     #              "index)"),
     #       call. = FALSE)
     #}
     
-    stop(paste0("dissimilarity must be a bioregion.pairwise.metric object or ",
+    stop(paste0("dissimilarity must be a bioregion.pairwise object or ",
                 "a dissimilarity matrix (class dist)."),
         call. = FALSE)
   }

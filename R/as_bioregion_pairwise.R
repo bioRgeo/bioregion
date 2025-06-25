@@ -1,13 +1,13 @@
 #' Convert a matrix or list of matrices to a bioregion (dis)similarity object
 #'
 #' Converts a (dis)similarity `matrix` or a `list` of such matrices into a 
-#' `bioregion.pairwise.metric` object compatible with the `bioregion` package. 
+#' `bioregion.pairwise` object compatible with the `bioregion` package. 
 #' The input can come from base R, `dist` objects, or outputs from other 
 #' packages.
 #'
 #' @param mat A `matrix`, a `dist` object, or a `list` of these representing 
 #'   pairwise similarity or dissimilarity values to convert into a 
-#'   `bioregion.pairwise.metric` object. This function can also directly handle 
+#'   `bioregion.pairwise` object. This function can also directly handle 
 #'   outputs from other R packages (see the `pkg` argument).
 #'   
 #' @param metric_name Optional `character` vector or single `character` string 
@@ -50,7 +50,7 @@
 #' be used as column names only if `metric_name = NULL`.
 #' 
 #' @return 
-#' A dissimilarity or similarity object of class `bioregion.pairwise.metric`, 
+#' A dissimilarity or similarity object of class `bioregion.pairwise`, 
 #' compatible with the `bioregion` package.
 #' 
 #' @seealso 
@@ -59,7 +59,7 @@
 #' \url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
 #' 
 #' Associated functions: 
-#' [dissimilarity] [similarity] [combine_bioregion_pairwise]
+#' [dissimilarity] [similarity] [bind_pairwise]
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
@@ -321,7 +321,7 @@ as_bioregion_pairwise <- function(mat,
   attr(net, "nb_sites") <- dim(lmat[[1]])[1]
   attr(net, "nb_species") <- NA
   
-  class(net) <- append("bioregion.pairwise.metric", class(net))
+  class(net) <- append("bioregion.pairwise", class(net))
   
   return(net)
   

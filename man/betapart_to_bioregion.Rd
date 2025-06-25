@@ -11,7 +11,7 @@ betapart_to_bioregion(betapart_result)
 using the \code{beta.pair} function).}
 }
 \value{
-A dissimilarity object of class \code{bioregion.pairwise.metric},
+A dissimilarity object of class \code{bioregion.pairwise},
 compatible with the bioregion package.
 }
 \description{

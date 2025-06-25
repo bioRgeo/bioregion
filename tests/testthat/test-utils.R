@@ -17,7 +17,7 @@ test_that("input_nhandhclu", {
     controls(args=NULL, 
              data=data, 
              type = "input_nhandhclu"),
-    "^data is not a bioregion.pairwise.metric object")
+    "^data is not a bioregion.pairwise object")
   
 })
 
@@ -36,7 +36,7 @@ test_that("input_similarity", {
     controls(args=NULL, 
              data=simil, 
              type = "input_similarity"),
-    "^simil is a bioregion.pairwise.metric object but")
+    "^simil is a bioregion.pairwise object but")
   attr(simil, "type") <- "dissimilarity"
   expect_error(
     controls(args=NULL, 
@@ -61,7 +61,7 @@ test_that("input_dissimilarity", {
     controls(args=NULL, 
              data=dissimil, 
              type = "input_dissimilarity"),
-    "^dissimil is a bioregion.pairwise.metric object but")
+    "^dissimil is a bioregion.pairwise object but")
   attr(dissimil, "type") <- "similarity"
   expect_error(
     controls(args=NULL, 
@@ -87,12 +87,12 @@ test_that("input_conversion_similarity", {
     controls(args=NULL, 
              data=test, 
              type = "input_conversion_similarity"),
-    "^test should be a bioregion.pairwise.metric object created by")
+    "^test should be a bioregion.pairwise object created by")
   expect_error(
     controls(args=NULL, 
              data=simil, 
              type = "input_conversion_similarity"),
-    "^simil is a bioregion.pairwise.metric object but")
+    "^simil is a bioregion.pairwise object but")
   attr(simil, "type") <- "dissimilarity"
   expect_error(
     controls(args=NULL, 
@@ -118,12 +118,12 @@ test_that("input_conversion_dissimilarity", {
     controls(args=NULL, 
              data=test, 
              type = "input_conversion_dissimilarity"),
-    "^test should be a bioregion.pairwise.metric object created by")
+    "^test should be a bioregion.pairwise object created by")
   expect_error(
     controls(args=NULL, 
              data=dissimil, 
              type = "input_conversion_dissimilarity"),
-    "^dissimil is a bioregion.pairwise.metric object but")
+    "^dissimil is a bioregion.pairwise object but")
   attr(dissimil, "type") <- "similarity"
   expect_error(
     controls(args=NULL, 

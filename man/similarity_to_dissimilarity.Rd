@@ -15,7 +15,7 @@ formula(s) should also be converted (see Details). The default is \code{TRUE}.}
 }
 \value{
 A \code{data.frame} with additional class
-\code{bioregion.pairwise.metric}, providing dissimilarity
+\code{bioregion.pairwise}, providing dissimilarity
 metric(s) between each pair of sites based on a similarity object.
 }
 \description{

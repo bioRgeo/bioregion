@@ -166,7 +166,7 @@ test_that("invalid inputs", {
   
 #   expect_message(
 #     netclu_leadingeigen(net, bipartite = FALSE),
-#     "net is not a bioregion.pairwise.metric object. 
+#     "net is not a bioregion.pairwise object. 
 # Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
 # others similarity metrics (netclu_). 
 # Please carefully check your data before using the clustering functions.",

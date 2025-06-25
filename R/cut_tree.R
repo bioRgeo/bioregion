@@ -201,7 +201,7 @@ cut_tree <- function(tree,
            call. = FALSE)
     }
     if(dynamic_method == "hybrid"){
-      if(inherits(dissimilarity, "bioregion.pairwise.metric"))
+      if(inherits(dissimilarity, "bioregion.pairwise"))
       {
         if(attr(dissimilarity, "type") == "similarity")
         {
@@ -220,17 +220,17 @@ cut_tree <- function(tree,
             weight = TRUE, squared = TRUE, symmetrical = TRUE))
         
         
-      } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
+      } else if(!any(inherits(dissimilarity, "bioregion.pairwise"),
                      inherits(dissimilarity, "dist"))){
         if(!is.data.frame(dissimilarity)){
-          stop(paste0("dissimilarity is not a bioregion.pairwise.metric ",
+          stop(paste0("dissimilarity is not a bioregion.pairwise ",
                       "object, a dissimilarity matrix (class dist) or a ",
                       "data.frame with at least 3 columns (site1, site2, and ",
                       "your dissimilarity index)"), 
                call. = FALSE)
         }
         if(ncol(dissimilarity) != 3){
-          stop(paste0("dissimilarity is not a bioregion.pairwise.metric ",
+          stop(paste0("dissimilarity is not a bioregion.pairwise ",
                       "object, a dissimilarity matrix (class dist) or a ",
                       "data.frame with at least 3 columns (site1, site2, and ",
                       "your dissimilarity index)"), 

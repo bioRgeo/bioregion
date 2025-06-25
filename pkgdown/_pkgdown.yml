@@ -66,7 +66,7 @@ reference:
   - dissimilarity
   - dissimilarity_to_similarity
   - as_bioregion_pairwise
-  - combine_bioregion_pairwise
+  - bind_pairwise
   - betapart_to_bioregion
   
 - title: Clustering

@@ -110,7 +110,7 @@ coefficient, and optionally retrieves clusters from the tree upon user
 request. The function includes a randomization process for the dissimilarity
 matrix to generate the tree, with two methods available for constructing the
 final tree. Typically, the dissimilarity \code{data.frame} is a
-\code{bioregion.pairwise.metric} object obtained by running \code{similarity},
+\code{bioregion.pairwise} object obtained by running \code{similarity},
 or by running \code{similarity} followed by \code{similarity_to_dissimilarity}.
 }
 \details{

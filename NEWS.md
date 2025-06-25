@@ -3,8 +3,9 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
-* Added `combine_bioregion_pairwise()` to combine pairwise (dis)similarity 
-objects.
+* Renamed class `bioregion.pairwise.metric` to `bioregion.pairwise`.
+
+* Added `bind_pairwise()` to combine pairwise (dis)similarity objects.
 
 * Added `as_bioregion_pairwise()` to replace and improve upon
 `betapart_to_bioregion()`, which is now deprecated.
@@ -91,14 +92,14 @@ matrices using `include_diag` and `include_lower`.
 * Added a function to extract a subset of nodes (sites or species) from 
 `bioregion.clusters` objects containing both types.
 
-* Added a generic function to maintain attributes of `bioregion.pairwise.metric`
+* Added a generic function to maintain attributes of `bioregion.pairwise`
 objects and track the number of sites and species.
 
 * Added new functions: `nhclu_clara()` and `nhclu_clarans()`.
 
 * Edited vignettes to document new functions.
 
-* Modified controls for `bioregion.pairwise.metric` objects.
+* Modified controls for `bioregion.pairwise` objects.
 
 * Added the `include_formula` argument to 
 `similarity_dissimilarity_conversion()` to (not) select formula metrics.

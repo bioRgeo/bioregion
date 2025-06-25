@@ -6,7 +6,7 @@
 #' request. The function includes a randomization process for the dissimilarity 
 #' matrix to generate the tree, with two methods available for constructing the 
 #' final tree. Typically, the dissimilarity `data.frame` is a
-#' `bioregion.pairwise.metric` object obtained by running `similarity`,
+#' `bioregion.pairwise` object obtained by running `similarity`,
 #' or by running `similarity` followed by `similarity_to_dissimilarity`.
 #'
 #' @param dissimilarity The output object from [dissimilarity()] or

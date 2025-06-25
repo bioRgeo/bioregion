@@ -92,7 +92,7 @@ test_that("invalid inputs", {
   
   expect_error(
     hclu_diana(dissimilarity = "zz"),
-    "^dissimilarity is not a bioregion.pairwise.metric object")
+    "^dissimilarity is not a bioregion.pairwise object")
   
   expect_error(
     hclu_diana(dissim2),

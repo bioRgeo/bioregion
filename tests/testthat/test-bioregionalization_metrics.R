@@ -114,7 +114,7 @@ test_that("invalid inputs", {
                                dissimilarity = 1,
                                dissimilarity_index = NULL,
                                eval_metric = "all"),
-    "^dissimilarity must be a bioregion.pairwise.metric object or")
+    "^dissimilarity must be a bioregion.pairwise object or")
 
   expect_error(
     bioregionalization_metrics(clu1,

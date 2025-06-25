@@ -11,7 +11,7 @@
 #' using the `beta.pair` function).
 #' 
 #' @return 
-#' A dissimilarity object of class `bioregion.pairwise.metric`, 
+#' A dissimilarity object of class `bioregion.pairwise`, 
 #' compatible with the bioregion package.
 #' 
 #' @seealso 
@@ -68,7 +68,7 @@ betapart_to_bioregion <- function(betapart_result) {
   attr(result_df, "nb_sites") <- nb_sites
   attr(result_df, "nb_species") <- NA
   
-  class(result_df) <- append("bioregion.pairwise.metric", class(result_df))
+  class(result_df) <- append("bioregion.pairwise", class(result_df))
   
   return(result_df)
 }

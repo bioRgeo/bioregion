@@ -92,7 +92,7 @@ The functions [similarity](https://bioRgeo.github.io/bioregion/reference/similar
 and [dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity.html)
 compute respectively pairwise similarity and dissimilarity metrics based on a 
 (site-species) co-occurrence matrix. The resulting `data.frame` is stored in a 
-`bioregion.pairwise.metric` object containing all requested metrics between each 
+`bioregion.pairwise` object containing all requested metrics between each 
 pair of sites.
 
 The functions 
@@ -104,7 +104,7 @@ and vice versa.
 The function 
 [as_bioregion_pairwise](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html)
 allows to convert a (dis)similarity `matrix` or a `list` of such matrices into a 
-`bioregion.pairwise.metric` object compatible with the `bioregion` package. 
+`bioregion.pairwise` object compatible with the `bioregion` package. 
 The input can come from base R, `dist` objects, or outputs from other packages. 
 
 Please have a look at this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html) 

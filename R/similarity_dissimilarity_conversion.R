@@ -11,7 +11,7 @@
 #' 
 #' @return 
 #' A `data.frame` with additional class 
-#' `bioregion.pairwise.metric`, providing dissimilarity
+#' `bioregion.pairwise`, providing dissimilarity
 #' metric(s) between each pair of sites based on a similarity object.
 #' 
 #' @note
@@ -122,7 +122,7 @@ similarity_to_dissimilarity <- function(similarity, include_formula = TRUE){
 #' formula(s) should also be converted (see Details). The default is `TRUE`.
 #' 
 #' @return A `data.frame` with the additional class 
-#' `bioregion.pairwise.metric`, providing similarity metrics for each pair of 
+#' `bioregion.pairwise`, providing similarity metrics for each pair of 
 #' sites based on a dissimilarity object.
 #' 
 #' @note

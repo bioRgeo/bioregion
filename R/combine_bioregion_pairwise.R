@@ -1,12 +1,12 @@
 #' Combine and enrich bioregion (dis)similarity object(s)
 #'
-#' Combine two `bioregion.pairwise.metric` objects and/or compute new pairwise
+#' Combine two `bioregion.pairwise` objects and/or compute new pairwise
 #' metrics based on the columns of the object(s).
 #'
-#' @param primary_metrics A `bioregion.pairwise.metric` object. This is the 
+#' @param primary_metrics A `bioregion.pairwise` object. This is the 
 #' main set of pairwise metrics that will be used as a base for the combination.
 #'   
-#' @param secondary_metrics A second `bioregion.pairwise.metric` 
+#' @param secondary_metrics A second `bioregion.pairwise` 
 #' object to be combined with `primary_metrics`. It must have the same sites 
 #' identifiers and pairwise structure. Can be set to `NULL` if `new_metrics` is 
 #' specified.
@@ -22,7 +22,7 @@
 #' names of `primary_metrics` (and `secondary_metrics` if provided). 
 #' 
 #' @return 
-#' A new `bioregion.pairwise.metric` object containing the combined and/or
+#' A new `bioregion.pairwise` object containing the combined and/or
 #' enriched data. It includes all original metrics from the inputs, as well as 
 #' any newly computed metrics.
 #' 
@@ -45,14 +45,14 @@
 #' rownames(comat) <- paste0("s", 1:5)
 #' colnames(comat) <- paste0("sp", 1:10)
 #'
-#' sim <- combine_bioregion_pairwise(primary_metrics = similarity(comat, 
+#' sim <- bind_pairwise(primary_metrics = similarity(comat, 
 #'                                                                metric = "abc"),
 #'                                   secondary_metrics = similarity(comat, 
 #'                                                                  metric = "Simpson"),
 #'                                   new_metrics = "1 - (b + c) / (a + b + c)")
 #' 
 #' @export
-combine_bioregion_pairwise <- function(primary_metrics,
+bind_pairwise <- function(primary_metrics,
                                        secondary_metrics,
                                        new_metrics = NULL) {
   
@@ -63,10 +63,10 @@ combine_bioregion_pairwise <- function(primary_metrics,
   nbsp1 <- attr(primary_metrics, "nb_species")
   if(type1 != "similarity" & type1 != "dissimilarity"){
     stop(paste0("primary_metrics",
-                " is a bioregion.pairwise.metric object but it has not ",
+                " is a bioregion.pairwise object but it has not ",
                 "been possible to identify the object's type (similarity or ",
                 " dissimilarity) probably because the ",
-                "bioregion.pairwise.metric object has been altered."),
+                "bioregion.pairwise object has been altered."),
          call. = FALSE)
   }
   
@@ -78,10 +78,10 @@ combine_bioregion_pairwise <- function(primary_metrics,
     nbsp2 <- attr(secondary_metrics, "nb_species")
     if(type2 != "similarity" & type2 != "dissimilarity"){
       stop(paste0("secondary_metrics",
-                  " is a bioregion.pairwise.metric object but it has not ",
+                  " is a bioregion.pairwise object but it has not ",
                   "been possible to identify the object's type (similarity or ",
                   " dissimilarity) probably because the ",
-                  "bioregion.pairwise.metric object has been altered."),
+                  "bioregion.pairwise object has been altered."),
            call. = FALSE)
     }
     if(type1 != type2){
@@ -140,7 +140,7 @@ combine_bioregion_pairwise <- function(primary_metrics,
   attr(mat, "nb_sites") <- nbs1
   attr(mat, "nb_species") <- nbsp
   
-  class(mat) <- append("bioregion.pairwise.metric", class(mat))
+  class(mat) <- append("bioregion.pairwise", class(mat))
   
   return(mat)
   

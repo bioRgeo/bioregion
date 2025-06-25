@@ -11,7 +11,7 @@ iterative_consensus_tree <- function(
     max_remaining_size = length(sites),
     monotonicity_direction = c("top-down", "bottom-up")) {
 
-  if(inherits(dissim, "bioregion.pairwise.metric") |
+  if(inherits(dissim, "bioregion.pairwise") |
      inherits(dissim, "data.frame")) {
     dissim[, 3] <- dissim[, index]
     dissim <- stats::as.dist(

@@ -25,7 +25,7 @@
 #' 
 #' @return 
 #' A `data.frame` with the additional class 
-#' `bioregion.pairwise.metric`, containing one or several dissimilarity
+#' `bioregion.pairwise`, containing one or several dissimilarity
 #' metrics between pairs of sites. The first two columns represent the pairs of 
 #' sites. There is one column per similarity metric provided in `metric` and
 #' `formula`, except for the `abc` and `ABC` metrics, which are stored in three 

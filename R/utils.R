@@ -51,11 +51,11 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input nhandhclu ############################################################
   if (type == "input_nhandhclu") {
-    if (!inherits(data, "bioregion.pairwise.metric") &
+    if (!inherits(data, "bioregion.pairwise") &
         !inherits(data, "dist") &
         !is.data.frame(data)) {
       stop(paste0(deparse(substitute(data)), 
-                  " is not a bioregion.pairwise.metric object, ", 
+                  " is not a bioregion.pairwise object, ", 
                   "a dissimilarity matrix (class dist) or ",
                   "a data.frame with at least 3 columns ", 
                   "(site1, site2 and your dissimilarity index)."),
@@ -65,9 +65,9 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input similarity ###########################################################
   if (type == "input_similarity") {
-    if(!inherits(data, "bioregion.pairwise.metric")) {
+    if(!inherits(data, "bioregion.pairwise")) {
       # message(paste0(deparse(substitute(data)),
-      #                " is not a bioregion.pairwise.metric object.\n", 
+      #                " is not a bioregion.pairwise object.\n", 
       #                "Note that some functions required dissimilarity metrics ", 
       #                "(hclu_ & nhclu_) and others similarity metrics ",
       #                "(netclu_). Please carefully check your data before ", 
@@ -75,10 +75,10 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     }else{
       if(is.null(attr(data, "type"))){
         message(paste0(deparse(substitute(data)),
-                       " is a bioregion.pairwise.metric object but it has not ",
+                       " is a bioregion.pairwise object but it has not ",
                        "been possible to identify the object's type ",
                        "(similarity or dissimilarity) probably because the ",
-                       "bioregion.pairwise.metric object has been altered.\n",
+                       "bioregion.pairwise object has been altered.\n",
                        "Note that some functions required dissimilarity ",
                        "metrics (hclu_ & nhclu_) and others similarity ",
                        "metrics (netclu_). Please carefully check your data ",
@@ -97,9 +97,9 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input dissimilarity ########################################################
   if (type == "input_dissimilarity") {
-    if(!inherits(data, "bioregion.pairwise.metric")) {
+    if(!inherits(data, "bioregion.pairwise")) {
       # message(paste0(deparse(substitute(data)),
-      #                " is not a bioregion.pairwise.metric object.\n", 
+      #                " is not a bioregion.pairwise object.\n", 
       #                "Note that some functions required dissimilarity metrics ", 
       #                "(hclu_ & nhclu_) and others similarity metrics ",
       #                "(netclu_). Please carefully check your data before ", 
@@ -107,10 +107,10 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     }else{
       if(is.null(attr(data, "type"))){
         message(paste0(deparse(substitute(data)),
-                       " is a bioregion.pairwise.metric object but it has not ",
+                       " is a bioregion.pairwise object but it has not ",
                        "been possible to identify the object's type ",
                        "(similarity or dissimilarity) probably because the ",
-                       "bioregion.pairwise.metric object has been altered.\n",
+                       "bioregion.pairwise object has been altered.\n",
                        "Note that some functions required dissimilarity ",
                        "metrics (hclu_ & nhclu_) and others similarity ",
                        "metrics (netclu_). Please carefully check your data ",
@@ -130,18 +130,18 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   # Input pairwise #############################################################
   if (type == "input_pairwise") {
     
-    if (!inherits(data, "bioregion.pairwise.metric")) {
+    if (!inherits(data, "bioregion.pairwise")) {
       stop(paste0(deparse(substitute(data)), 
-                  " should be a bioregion.pairwise.metric object created by ",
+                  " should be a bioregion.pairwise object created by ",
                   "similarity() or dissimilarity_to_similarity()."),
            call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
       stop(paste0(deparse(substitute(data)),
-                  " is a bioregion.pairwise.metric object but it has not ",
+                  " is a bioregion.pairwise object but it has not ",
                   "been possible to identify the object's type (similarity or ",
                   " dissimilarity) probably because the ",
-                  "bioregion.pairwise.metric object has been altered."),
+                  "bioregion.pairwise object has been altered."),
            call. = FALSE)
     }
   }
@@ -149,18 +149,18 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   # Input conversion similarity ################################################
   if (type == "input_conversion_similarity") {
     
-    if (!inherits(data, "bioregion.pairwise.metric")) {
+    if (!inherits(data, "bioregion.pairwise")) {
       stop(paste0(deparse(substitute(data)), 
-                  " should be a bioregion.pairwise.metric object created by ",
+                  " should be a bioregion.pairwise object created by ",
                   "similarity() or dissimilarity_to_similarity()."),
                   call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
       stop(paste0(deparse(substitute(data)),
-                  " is a bioregion.pairwise.metric object but it has not ",
+                  " is a bioregion.pairwise object but it has not ",
                   "been possible to identify the object's type (similarity or ",
                   " dissimilarity) probably because the ",
-                  "bioregion.pairwise.metric object has been altered."),
+                  "bioregion.pairwise object has been altered."),
            call. = FALSE)
     }
     if (attr(data, "type") == "dissimilarity") {
@@ -176,18 +176,18 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   # Input conversion dissimilarity #############################################
   if (type == "input_conversion_dissimilarity") {
     
-    if (!inherits(data, "bioregion.pairwise.metric")) {
+    if (!inherits(data, "bioregion.pairwise")) {
       stop(paste0(deparse(substitute(data)), 
-                  " should be a bioregion.pairwise.metric object created by ",
+                  " should be a bioregion.pairwise object created by ",
                   "dissimilarity() or similarity_to_dissimilarity()."),
            call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
       stop(paste0(deparse(substitute(data)),
-                  " is a bioregion.pairwise.metric object but it has not ",
+                  " is a bioregion.pairwise object but it has not ",
                   "been possible to identify the object's type (similarity or ",
                   "dissimilarity) probably because the ",
-                  "bioregion.pairwise.metric object has been altered."),
+                  "bioregion.pairwise object has been altered."),
            call. = FALSE)
     }
     if (attr(data, "type") == "similarity") {

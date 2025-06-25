@@ -17,7 +17,7 @@ bioregionalization_metrics(
 \arguments{
 \item{bioregionalization}{A \code{bioregion.clusters} object.}
 
-\item{dissimilarity}{A \code{dist} object or a \code{bioregion.pairwise.metric}
+\item{dissimilarity}{A \code{dist} object or a \code{bioregion.pairwise}
 object (output from \code{\link[=similarity_to_dissimilarity]{similarity_to_dissimilarity()}}). Required if
 \code{eval_metric} includes \code{"pc_distance"} and \code{tree} is not a
 \code{bioregion.hierar.tree} object.}

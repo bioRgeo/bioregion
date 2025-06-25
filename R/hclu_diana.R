@@ -6,7 +6,7 @@
 #' by the user. The function implements randomization of the dissimilarity matrix 
 #' to generate the tree, with a selection method based on the optimal cophenetic
 #' correlation coefficient. Typically, the dissimilarity `data.frame` is a
-#' `bioregion.pairwise.metric` object obtained by running `similarity`
+#' `bioregion.pairwise` object obtained by running `similarity`
 #' or `similarity` followed by `similarity_to_dissimilarity`.
 #'
 #' @param dissimilarity The output object from [dissimilarity()] or

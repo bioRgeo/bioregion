@@ -14,7 +14,7 @@ as_bioregion_pairwise(
 \arguments{
 \item{mat}{A \code{matrix}, a \code{dist} object, or a \code{list} of these representing
 pairwise similarity or dissimilarity values to convert into a
-\code{bioregion.pairwise.metric} object. This function can also directly handle
+\code{bioregion.pairwise} object. This function can also directly handle
 outputs from other R packages (see the \code{pkg} argument).}
 
 \item{metric_name}{Optional \code{character} vector or single \code{character} string
@@ -30,12 +30,12 @@ Available options are \code{"adespatial"}, \code{"betapart"}, \code{"ecodist"}, 
 represents similarity (\code{TRUE}) or dissimilarity (\code{FALSE}).}
 }
 \value{
-A dissimilarity or similarity object of class \code{bioregion.pairwise.metric},
+A dissimilarity or similarity object of class \code{bioregion.pairwise},
 compatible with the \code{bioregion} package.
 }
 \description{
 Converts a (dis)similarity \code{matrix} or a \code{list} of such matrices into a
-\code{bioregion.pairwise.metric} object compatible with the \code{bioregion} package.
+\code{bioregion.pairwise} object compatible with the \code{bioregion} package.
 The input can come from base R, \code{dist} objects, or outputs from other
 packages.
 }
@@ -88,7 +88,7 @@ see the vignette:
 \url{https://biorgeo.github.io/bioregion/articles/a3_pairwise_metrics.html}.
 
 Associated functions:
-\link{dissimilarity} \link{similarity} \link{combine_bioregion_pairwise}
+\link{dissimilarity} \link{similarity} \link{bind_pairwise}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

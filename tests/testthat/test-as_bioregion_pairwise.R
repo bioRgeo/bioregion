@@ -22,7 +22,7 @@ test_that("valid output", {
                                 metric_name = c("abc", "ABC", "Euclidean"),
                                 pkg = NULL,
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -31,7 +31,7 @@ test_that("valid output", {
                                 metric_name = c("abc", "ABC", "Euclidean"),
                                 pkg = NULL,
                                 is_similarity = TRUE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "similarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -40,7 +40,7 @@ test_that("valid output", {
                                 metric_name = NULL,
                                 pkg = NULL,
                                 is_similarity = TRUE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "similarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -50,7 +50,7 @@ test_that("valid output", {
                                 metric_name = NULL,
                                 pkg = NULL,
                                 is_similarity = TRUE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "similarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -60,7 +60,7 @@ test_that("valid output", {
                                 metric_name = NULL,
                                 pkg = NULL,
                                 is_similarity = TRUE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "similarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -70,7 +70,7 @@ test_that("valid output", {
                                 metric_name = "Mettric",
                                 pkg = NULL,
                                 is_similarity = TRUE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "similarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -105,7 +105,7 @@ test_that("adespatial", {
                                 metric_name = NULL,
                                 pkg = "adespatial",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -116,7 +116,7 @@ test_that("adespatial", {
                                 metric_name = NULL,
                                 pkg = "adespatial",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -128,7 +128,7 @@ test_that("adespatial", {
                                 metric_name = NULL,
                                 pkg = "adespatial",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -155,7 +155,7 @@ test_that("betapart", {
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -168,7 +168,7 @@ test_that("betapart", {
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -180,7 +180,7 @@ test_that("betapart", {
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -192,7 +192,7 @@ test_that("betapart", {
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -204,7 +204,7 @@ test_that("betapart", {
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -232,7 +232,7 @@ test_that("ecodist", {
                                 metric_name = NULL,
                                 pkg = "ecodist",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -244,7 +244,7 @@ test_that("ecodist", {
                                 metric_name = NULL,
                                 pkg = "ecodist",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -271,7 +271,7 @@ test_that("vegan", {
                                 metric_name = NULL,
                                 pkg = "vegan",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)
@@ -285,7 +285,7 @@ test_that("vegan", {
                                 metric_name = NULL,
                                 pkg = "vegan",
                                 is_similarity = FALSE)
-  expect_equal(inherits(pair, "bioregion.pairwise.metric"), TRUE)
+  expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "dissimilarity")
   expect_equal(attr(pair, "nb_sites"), 10)
   expect_equal(attr(pair, "nb_species"), NA)

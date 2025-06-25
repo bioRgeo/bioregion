@@ -116,7 +116,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_kmeans(dissimilarity = "zz"),
-    "^dissimilarity is not a bioregion.pairwise.metric object")
+    "^dissimilarity is not a bioregion.pairwise object")
   
   expect_error(
     nhclu_kmeans(dissim2),

@@ -109,7 +109,7 @@ test_that("invalid inputs", {
   expect_error(
     hclu_hierarclust(dissimilarity = "zz",
                      optimal_tree_method = "best"),
-    "^dissimilarity is not a bioregion.pairwise.metric object")
+    "^dissimilarity is not a bioregion.pairwise object")
   
   expect_error(
     hclu_hierarclust(dissim2,

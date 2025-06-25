@@ -35,12 +35,12 @@ test_that("invalid inputs", {
   expect_error(
     dissimilarity_to_similarity("2", 
                                 include_formula = TRUE),
-    "^dissimilarity should be a bioregion.pairwise.metric object")
+    "^dissimilarity should be a bioregion.pairwise object")
   
   expect_error(
     dissimilarity_to_similarity(dissimil2, 
                                 include_formula = TRUE),
-    "^dissimilarity is a bioregion.pairwise.metric object but it has not")
+    "^dissimilarity is a bioregion.pairwise object but it has not")
   
   expect_error(
     dissimilarity_to_similarity(dissimil3, 

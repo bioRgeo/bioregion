@@ -58,7 +58,7 @@ correlation coefficient, and can generate clusters from the tree if requested
 by the user. The function implements randomization of the dissimilarity matrix
 to generate the tree, with a selection method based on the optimal cophenetic
 correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
-\code{bioregion.pairwise.metric} object obtained by running \code{similarity}
+\code{bioregion.pairwise} object obtained by running \code{similarity}
 or \code{similarity} followed by \code{similarity_to_dissimilarity}.
 }
 \details{

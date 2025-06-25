@@ -55,7 +55,7 @@ sim <- similarity(vegemat,
 sim[1:10,]
 ```
 
-The resulting `data.frame` is stored in a `bioregion.pairwise.metric` object, 
+The resulting `data.frame` is stored in a `bioregion.pairwise` object, 
 which contains the Simpson similarity metric between each pair of sites. The 
 function 
 [similarity](https://bioRgeo.github.io/bioregion/reference/similarity.html) 
@@ -441,7 +441,7 @@ took too much time to compute.
 # 5. Importing pairwise (dis)similarity metrics from other packages into bioregion
   
 To enable the conversion of (dis)similarity metrics stored in base R objects  
-or outputs from other packages into a `bioregion.pairwise.metric` object  
+or outputs from other packages into a `bioregion.pairwise` object  
 compatible with the `bioregion` package, we developed the 
 [`as_bioregion_pairwise()`](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html) 
 function.
@@ -611,7 +611,7 @@ dissim2[1:10,]
 # 6. Combine and enrich (dis)similarity objects
   
 It is also possible to use the function
-[`combine_bioregion_pairwise()`](https://bioRgeo.github.io/bioregion/reference/combine_bioregion_pairwise.html) to combine two `bioregion.pairwise.metric` objects and/or compute new pairwise 
+[`bind_pairwise()`](https://bioRgeo.github.io/bioregion/reference/bind_pairwise.html) to combine two `bioregion.pairwise` objects and/or compute new pairwise 
 metrics based on the columns of the object(s). This function is particularly 
 useful for deriving new metrics from the components $a$, $b$, and $c$, and/or 
 $A$, $B$, and $C$, especially when these components required significant 
@@ -627,7 +627,7 @@ dissim2 <- as_bioregion_pairwise(designdist(comat,
                                             terms = "minimum"),
                                  pkg = "vegan")
 
-dissim <- combine_bioregion_pairwise(primary_metrics = dissim1,
+dissim <- bind_pairwise(primary_metrics = dissim1,
                                      secondary_metrics = dissim2,
                                      new_metrics = c("(B + C) / (2*A + B + C)",
                                                      "Bray*Bray"))
