@@ -212,7 +212,22 @@ bioregionalization_metrics <- function(bioregionalization,
   } else if (inherits(dissimilarity, "bioregion.pairwise")) {
     if (attr(dissimilarity, "type") == "dissimilarity") {
       if(is.null(dissimilarity_index)) {
-        dissimilarity_index <- bioregionalization$args$index
+        if("index" %in% names(bioregionalization$args)) {
+          # If an index was already used for bioregionalization, use it here
+          dissimilarity_index <- bioregionalization$args$index 
+        } else {
+          # else choose the 3rd column and warn the user if there are more than
+          # 3 columns
+          if(ncol(dissimilarity) > 3) {
+            warning(paste0("You did not specify the dissimilarity ",
+                           "index to use in dissimilarity.",
+                           " Defaulting to the third column of",
+                           " the dissimilarity object: ",
+                           colnames(dissimilarity)[3]))
+          }
+          dissimilarity_index <- colnames(dissimilarity)[3]
+        }
+        
       } else if(!(dissimilarity_index %in% colnames(dissimilarity))) {
         stop(paste0("dissimilarity_index does not exist in the dissimilarity ",
                     "object. Did you misspecify the metric name?"),
