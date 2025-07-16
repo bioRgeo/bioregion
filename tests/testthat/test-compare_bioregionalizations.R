@@ -7,7 +7,8 @@ dissim <- dissimilarity(fishmat, metric = "all")
 clu2 <- hclu_hierarclust(dissim,
                          optimal_tree_method = "best",
                          n_clust = NULL,
-                         cut_height = NULL)
+                         cut_height = NULL,
+                         verbose = FALSE)
 
 sim <- similarity(fishmat, metric = "all")
 clu3 <- netclu_louvain(sim)

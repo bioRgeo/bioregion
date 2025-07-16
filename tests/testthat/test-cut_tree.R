@@ -9,7 +9,8 @@ dissim<- similarity_to_dissimilarity(simil)
 
 tree <- hclu_hierarclust(dissim,
                          optimal_tree_method = "best",
-                         n_clust = 5)
+                         n_clust = 5,
+                         verbose = FALSE)
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {

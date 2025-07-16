@@ -5,7 +5,8 @@ set.seed(1)
 tree1 <- hclu_hierarclust(dissim, 
                           n_clust = 2:48, 
                           index = "Simpson",
-                          optimal_tree_method = "best")
+                          optimal_tree_method = "best",
+                          verbose = FALSE)
 
 a <- bioregionalization_metrics(tree1,
                                 dissimilarity = dissim,

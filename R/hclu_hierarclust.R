@@ -30,14 +30,15 @@
 #' 
 #' @param n_runs The number of trials for randomizing the dissimilarity matrix.
 #' 
-#' @param keep_trials A `boolean` indicating whether all random trial results
-#' should be stored in the output object. Set to `FALSE` to save space if your
-#' `dissimilarity` object is large. Note that this cannot be set to `TRUE` if
-#' `optimal_tree_method = "iterative_consensus_tree"`.
+#' @param keep_trials A `character` string indicating whether random trial results 
+#' (including the randomized matrix, the associated tree, and metrics for that tree) 
+#' should be stored in the output object. Possible values are `"no"` (default), 
+#' `"all"`, or `"metrics"`. Note that this parameter is automatically set to 
+#' `"no"` if `optimal_tree_method = "iterative_consensus_tree"`.
 #' 
 #' @param optimal_tree_method A `character` string indicating how the final tree
 #' should be obtained from all trials. Possible values are 
-#' `"iterative_consensus_tree"` (default), `"best"`, and `"consensus"`. 
+#' `"iterative_consensus_tree"` (default), `"best"` or `"consensus"`. 
 #' **We recommend `"iterative_consensus_tree"`. See Details.** 
 #' 
 #' @param n_clust An `integer` vector or a single `integer` indicating the 
@@ -63,8 +64,7 @@
 #' trees that must support a region/cluster for it to be included in the final 
 #' consensus tree.
 #'  
-#' @param verbose A `boolean` (applicable only if 
-#' `optimal_tree_method = "iterative_consensus_tree"`) indicating whether to 
+#' @param verbose A `boolean` indicating whether to 
 #' display progress messages. Set to `FALSE` to suppress these messages.
 #' 
 #' @return
@@ -227,7 +227,7 @@ hclu_hierarclust <- function(dissimilarity,
                              method = "average",
                              randomize = TRUE,
                              n_runs = 100,
-                             keep_trials = FALSE,
+                             keep_trials = "no",
                              optimal_tree_method = "iterative_consensus_tree", 
                              n_clust = NULL,
                              cut_height = NULL,
@@ -282,7 +282,12 @@ hclu_hierarclust <- function(dissimilarity,
   }
   controls(args = randomize, data = NULL, type = "boolean")
   controls(args = n_runs, data = NULL, type = "strict_positive_integer")
-  controls(args = keep_trials, data = NULL, type = "boolean")
+  controls(args = keep_trials, data = NULL, type = "character")
+  if(!(keep_trials %in% c("no", "all", "metrics"))){
+    stop(paste0("Please choose keep_trials from the following:\n",
+                "no, all or metrics"), 
+         call. = FALSE)
+  }
   controls(args = optimal_tree_method, data = NULL, type = "character")
   if(!(optimal_tree_method %in% c("iterative_consensus_tree",
                                   "best", "consensus"))){
@@ -371,10 +376,12 @@ hclu_hierarclust <- function(dissimilarity,
   
   if(randomize) {
     if(optimal_tree_method == "iterative_consensus_tree") {
-      message(paste0("Building the iterative hierarchical consensus tree...",
-                     " Note that this",
-                     " process can take time especially if you have a lot of",
-                     " sites."))
+      if(verbose){
+        message(paste0("Building the iterative hierarchical consensus tree...",
+                       " Note that this",
+                       " process can take time especially if you have a lot of",
+                       " sites."))
+      }
 
       if(method == "mcquitty") {
         warning("mcquitty (WPGMA) method may not be properly implemented",
@@ -413,10 +420,11 @@ hclu_hierarclust <- function(dissimilarity,
       
 
     } else {
-      message(paste0("Randomizing the dissimilarity matrix with ", 
-                     n_runs,
-                     " trials"))
-      
+      if(verbose){
+        message(paste0("Randomizing the dissimilarity matrix with ", 
+                       n_runs,
+                       " trials"))
+      }
       results <- vector("list", n_runs)
       
       for (run in 1:n_runs) {
@@ -437,11 +445,14 @@ hclu_hierarclust <- function(dissimilarity,
       if (optimal_tree_method == "best") {
         coph.coeffs <- sapply(results, function(x) x$cophcor)
         
-        message(paste0(" -- range of cophenetic correlation coefficients ",
-                       "among trials: ",
-                       round(min(coph.coeffs), 4), 
-                       " - ", 
-                       round(max(coph.coeffs), 4)))
+        if(verbose){
+          message(paste0(" -- range of cophenetic correlation coefficients ",
+                         "among trials: ",
+                         round(min(coph.coeffs), 4), 
+                         " - ", 
+                         round(max(coph.coeffs), 4)))
+        }
+
 
         best.run <- which.max(coph.coeffs)
         final.tree <- results[[best.run]]$hierartree
@@ -468,6 +479,13 @@ hclu_hierarclust <- function(dissimilarity,
                                    # `2norm` = evals$norm2, 
                                    msd = evals$msd)
       }
+      
+      # keep_trials
+      if(keep_trials == "metrics"){
+        for (run in 1:n_runs) {
+          results[[run]] <- results[[run]][-c(1,2)]
+        }
+      }
 
       outputs$algorithm$final.tree <- final.tree
       outputs$algorithm$final.tree.coph.cor <- final.tree.metrics$cophcor
@@ -475,12 +493,13 @@ hclu_hierarclust <- function(dissimilarity,
       outputs$algorithm$final.tree.msd <- final.tree.metrics$msd
 
     }
+    if(verbose){
+      message(paste0("\nFinal tree has a ",
+                     round(outputs$algorithm$final.tree.coph.cor, 4),
+                     " cophenetic correlation coefficient with the initial ",
+                     "dissimilarity matrix\n"))
+    }
 
-    message(paste0("\nFinal tree has a ",
-                   round(outputs$algorithm$final.tree.coph.cor, 4),
-                   " cophenetic correlation coefficient with the initial ",
-                   "dissimilarity matrix\n"))
-    
   } else  {
     outputs$algorithm$final.tree <- fastcluster::hclust(dist.obj,
                                                         method = method)
@@ -493,10 +512,13 @@ hclu_hierarclust <- function(dissimilarity,
     # outputs$algorithm$final.tree.2norm <- evals$norm2
     outputs$algorithm$final.tree.msd <- evals$msd
     
-    message(paste0("Output tree has a ",
-                   round(outputs$algorithm$final.tree.coph.cor, 4),
-                   " cophenetic correlation coefficient with the initial
+    if(verbose){
+      message(paste0("Output tree has a ",
+                     round(outputs$algorithm$final.tree.coph.cor, 4),
+                     " cophenetic correlation coefficient with the initial
                    dissimilarity matrix\n"))
+    }
+
   }
   
   class(outputs) <- append("bioregion.clusters", class(outputs))
@@ -518,9 +540,9 @@ hclu_hierarclust <- function(dissimilarity,
     outputs$inputs$hierarchical <- FALSE
   }
   
-  # Keep trials ?
+  # Keep trials 
   if(randomize){
-    if(!keep_trials){
+    if(keep_trials == "no"){
       outputs$algorithm$trials <- "Trials not stored in output"
     }else{
       if(optimal_tree_method == "iterative_consensus_tree"){

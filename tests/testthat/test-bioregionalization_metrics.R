@@ -20,14 +20,16 @@ dissim2 <- similarity_to_dissimilarity(simil2)
 comat_df2 <- mat_to_net(comat2, weight = TRUE, remove_zeroes = TRUE)
 
 clu1 <- hclu_hierarclust(dissim, 
-                          n_clust = 5,
-                          index = "Simpson",
-                          optimal_tree_method = "best")
+                         n_clust = 5,
+                         index = "Simpson",
+                         optimal_tree_method = "best",
+                         verbose = FALSE)
 
 clu2 <- hclu_hierarclust(dissim,
                          optimal_tree_method = "best",
                          n_clust = NULL,
-                         cut_height = NULL)
+                         cut_height = NULL,
+                         verbose = FALSE)
 
 clu3 <- netclu_louvain(simil)
 clu3$clusters <- NULL

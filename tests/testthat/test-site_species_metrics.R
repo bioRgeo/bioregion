@@ -22,7 +22,8 @@ clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 clust_h <- hclu_hierarclust(dissim,
                             optimal_tree_method = "best",
                             n_clust = NULL,
-                            cut_height = NULL)
+                            cut_height = NULL,
+                            verbose = FALSE)
 
 simil <- dissimilarity_to_similarity(dissim)
 clust_louv <- netclu_louvain(simil)

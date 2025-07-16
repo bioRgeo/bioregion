@@ -11,7 +11,8 @@ clu1 <- netclu_louvain(net,
                        lang = "igraph", 
                        bipartite = TRUE)
 clu2 <- hclu_hierarclust(net,
-                         optimal_tree_method = "best")
+                         optimal_tree_method = "best",
+                         verbose = FALSE)
 clu3 <- netclu_louvain(net, 
                        lang = "igraph")
 clu4 <- netclu_louvain(net,

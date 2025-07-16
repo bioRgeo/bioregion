@@ -320,15 +320,18 @@ select the tree that best represents the distance matrix; i.e.,
 the one that has the highest cophenetic correlation coefficient among all 
 trials.
 
-Let's see an example of `optimal_tree_method = "best"`. We can also
-ask the function to keep all individual trees for further exploration 
-(`keep_trials = TRUE`).
+Let's see an example of `optimal_tree_method = "best"`. We can also  
+ask the function to keep all individual trees for further exploration  
+with `keep_trials = "all"` (including, for each trial, the randomized matrix,  
+the associated tree, and metrics for that tree).  
+By default, `keep_trials = "no"` and `keep_trials = "metrics"` can be used to  
+keep only the metrics associated with each tree.
 
 ```{r}
 tree_best <- hclu_hierarclust(dissim_random,
                               randomize = TRUE,
                               optimal_tree_method = "best",
-                              keep_trials = TRUE)
+                              keep_trials = "all")
 ```
 
 
@@ -341,7 +344,7 @@ are a lot of ties in the distance matrix. Let's see it in action here:
 tree_consensus <- hclu_hierarclust(dissim_random,
                                    randomize = TRUE,
                                    optimal_tree_method = "consensus",
-                                   keep_trials = TRUE)
+                                   keep_trials = "no")
 ```
 
 See how the cophenetic correlation coefficient for the consensus tree is
