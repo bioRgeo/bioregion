@@ -438,6 +438,10 @@ hclu_hierarclust <- function(dissimilarity,
         trial$cophcor <- evals$cophcor
         # trial$`2norm` <- evals$norm2
         trial$msd <- evals$msd
+        
+        if(keep_trials != "All"){
+          trial$dist.matrix <- NULL
+        }
 
         results[[run]] <- trial
       }
