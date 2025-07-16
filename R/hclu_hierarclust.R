@@ -439,7 +439,7 @@ hclu_hierarclust <- function(dissimilarity,
         # trial$`2norm` <- evals$norm2
         trial$msd <- evals$msd
         
-        if(keep_trials != "All"){
+        if(keep_trials != "all"){
           trial$dist.matrix <- NULL
         }
 
