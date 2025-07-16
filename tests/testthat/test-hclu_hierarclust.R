@@ -80,6 +80,42 @@ test_that("valid output", {
   expect_equal(clust$inputs$hierarchical, TRUE)
   expect_equal(dim(clust$clusters)[2], 4)
   
+  clust <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = TRUE,
+                            n_runs = 30,
+                            keep_trials = TRUE,
+                            optimal_tree_method = "best")
+  expect_equal(length(clust$algorithm$trials), 30)
+  
+  clust <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = TRUE,
+                            n_runs = 30,
+                            keep_trials = TRUE,
+                            optimal_tree_method = "iterative_consensus_tree")
+  expect_equal(clust$algorithm$trials, "Trials not stored in output")
+  
+  clust <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = TRUE,
+                            n_runs = 30,
+                            keep_trials = FALSE,
+                            optimal_tree_method = "best")
+  expect_equal(clust$algorithm$trials, "Trials not stored in output")
+  
+  clust <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = FALSE,
+                            n_runs = 30,
+                            keep_trials = FALSE,
+                            optimal_tree_method = "iterative_consensus_tree")
+  expect_equal(clust$algorithm$trials, NULL)
+  
   clust <- hclu_hierarclust(d,
                             optimal_tree_method = "best",)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)

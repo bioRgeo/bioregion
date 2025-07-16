@@ -476,7 +476,6 @@ hclu_hierarclust <- function(dissimilarity,
 
     }
 
-    
     message(paste0("\nFinal tree has a ",
                    round(outputs$algorithm$final.tree.coph.cor, 4),
                    " cophenetic correlation coefficient with the initial ",
@@ -519,8 +518,17 @@ hclu_hierarclust <- function(dissimilarity,
     outputs$inputs$hierarchical <- FALSE
   }
   
-  if(!keep_trials){
-    outputs$algorithm$trials <- "Trials not stored in output"
+  # Keep trials ?
+  if(randomize){
+    if(!keep_trials){
+      outputs$algorithm$trials <- "Trials not stored in output"
+    }else{
+      if(optimal_tree_method == "iterative_consensus_tree"){
+        outputs$algorithm$trials <- "Trials not stored in output"
+      }else{
+        outputs$algorithm$trials <- results
+      }
+    }
   }
   
   return(outputs)
