@@ -98,7 +98,7 @@ or by running <code>similarity</code> followed by <code>similarity_to_dissimilar
 <span>  method <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  randomize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_runs <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  keep_trials <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keep_trials <span class="op">=</span> <span class="st">"no"</span>,</span>
 <span>  optimal_tree_method <span class="op">=</span> <span class="st">"iterative_consensus_tree"</span>,</span>
 <span>  n_clust <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cut_height <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -146,16 +146,17 @@ matrix.</p></dd>
 
 
 <dt id="arg-keep-trials">keep_trials<a class="anchor" aria-label="anchor" href="#arg-keep-trials"></a></dt>
-<dd><p>A <code>boolean</code> indicating whether all random trial results
-should be stored in the output object. Set to <code>FALSE</code> to save space if your
-<code>dissimilarity</code> object is large. Note that this cannot be set to <code>TRUE</code> if
-<code>optimal_tree_method = "iterative_consensus_tree"</code>.</p></dd>
+<dd><p>A <code>character</code> string indicating whether random trial results
+(including the randomized matrix, the associated tree, and metrics for that tree)
+should be stored in the output object. Possible values are <code>"no"</code> (default),
+<code>"all"</code>, or <code>"metrics"</code>. Note that this parameter is automatically set to
+<code>"no"</code> if <code>optimal_tree_method = "iterative_consensus_tree"</code>.</p></dd>
 
 
 <dt id="arg-optimal-tree-method">optimal_tree_method<a class="anchor" aria-label="anchor" href="#arg-optimal-tree-method"></a></dt>
 <dd><p>A <code>character</code> string indicating how the final tree
 should be obtained from all trials. Possible values are
-<code>"iterative_consensus_tree"</code> (default), <code>"best"</code>, and <code>"consensus"</code>.
+<code>"iterative_consensus_tree"</code> (default), <code>"best"</code> or <code>"consensus"</code>.
 <strong>We recommend <code>"iterative_consensus_tree"</code>. See Details.</strong></p></dd>
 
 
@@ -195,8 +196,7 @@ consensus tree.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>A <code>boolean</code> (applicable only if
-<code>optimal_tree_method = "iterative_consensus_tree"</code>) indicating whether to
+<dd><p>A <code>boolean</code> indicating whether to
 display progress messages. Set to <code>FALSE</code> to suppress these messages.</p></dd>
 
 </dl></div>

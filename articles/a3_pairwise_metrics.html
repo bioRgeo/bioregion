@@ -540,21 +540,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 267.065885 272.238745 280.478608 281.329085 283.523938</span></span>
-<span><span class="co">##        betapart   1.812465   1.868399   1.964020   1.917185   2.021856</span></span>
-<span><span class="co">##       bioregion  14.733712  15.211895  15.615393  15.676978  16.058305</span></span>
-<span><span class="co">##    ecodist_dist 127.816199 153.639137 188.784777 168.493940 175.804606</span></span>
-<span><span class="co">##  ecodist_bcdist   3.471452   3.557884   3.610600   3.624959   3.650647</span></span>
-<span><span class="co">##       vegan_veg   1.227031   1.335804   1.962065   2.318775   2.336192</span></span>
-<span><span class="co">##    vegan_design   1.257979   1.288596   1.372656   1.350347   1.378384</span></span>
+<span><span class="co">##      adespatial 266.103162 270.156925 271.603442 272.072435 273.655803</span></span>
+<span><span class="co">##        betapart   1.814666   1.881079   1.953418   1.900176   1.983741</span></span>
+<span><span class="co">##       bioregion  14.037770  14.526862  15.184923  15.117584  15.950569</span></span>
+<span><span class="co">##    ecodist_dist 126.843428 153.118149 185.842458 167.916032 174.349068</span></span>
+<span><span class="co">##  ecodist_bcdist   3.504137   3.589727   3.611124   3.620410   3.651122</span></span>
+<span><span class="co">##       vegan_veg   1.221278   1.307429   1.956309   2.300111   2.314878</span></span>
+<span><span class="co">##    vegan_design   1.263638   1.281681   1.369068   1.315885   1.388220</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  296.737471    10</span></span>
-<span><span class="co">##    2.356230    10</span></span>
-<span><span class="co">##   16.557337    10</span></span>
-<span><span class="co">##  441.070641    10</span></span>
-<span><span class="co">##    3.688518    10</span></span>
-<span><span class="co">##    2.341793    10</span></span>
-<span><span class="co">##    1.754296    10</span></span></code></pre>
+<span><span class="co">##  275.106089    10</span></span>
+<span><span class="co">##    2.328705    10</span></span>
+<span><span class="co">##   16.351336    10</span></span>
+<span><span class="co">##  427.274646    10</span></span>
+<span><span class="co">##    3.656912    10</span></span>
+<span><span class="co">##    2.384309    10</span></span>
+<span><span class="co">##    1.766034    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -641,21 +641,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 268.402272 276.115905 281.461166 283.101208 287.124260</span></span>
-<span><span class="co">##        betapart 306.762901 307.132832 333.023172 319.302751 356.999627</span></span>
-<span><span class="co">##       bioregion  10.230212  10.369773  11.147966  10.576089  10.868214</span></span>
-<span><span class="co">##    ecodist_dist  80.523139  90.525777 104.517291  99.609544 125.189183</span></span>
-<span><span class="co">##  ecodist_bcdist   5.973785   6.005864   6.100008   6.114522   6.191792</span></span>
-<span><span class="co">##       vegan_veg   1.208225   1.241428   1.680939   1.286898   2.317858</span></span>
-<span><span class="co">##    vegan_design   1.244363   1.275331   1.441003   1.387015   1.675318</span></span>
+<span><span class="co">##      adespatial 269.287684 273.063989 278.114066 277.607476 283.466467</span></span>
+<span><span class="co">##        betapart 307.030480 307.423152 334.348285 321.875085 358.487722</span></span>
+<span><span class="co">##       bioregion  10.162821  10.263288  11.099612  10.516665  10.895157</span></span>
+<span><span class="co">##    ecodist_dist  79.985107  89.512301 103.371457  96.796315 124.333696</span></span>
+<span><span class="co">##  ecodist_bcdist   5.975438   5.992820   6.091235   6.102811   6.167687</span></span>
+<span><span class="co">##       vegan_veg   1.243399   1.249110   1.678713   1.286966   2.294631</span></span>
+<span><span class="co">##    vegan_design   1.264950   1.311016   1.450310   1.383075   1.671578</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  293.298720    10</span></span>
-<span><span class="co">##  397.250997    10</span></span>
-<span><span class="co">##   13.754363    10</span></span>
-<span><span class="co">##  131.085352    10</span></span>
-<span><span class="co">##    6.215246    10</span></span>
-<span><span class="co">##    2.352653    10</span></span>
-<span><span class="co">##    1.728738    10</span></span></code></pre>
+<span><span class="co">##  285.980497    10</span></span>
+<span><span class="co">##  399.794157    10</span></span>
+<span><span class="co">##   13.700962    10</span></span>
+<span><span class="co">##  132.043500    10</span></span>
+<span><span class="co">##    6.206279    10</span></span>
+<span><span class="co">##    2.336740    10</span></span>
+<span><span class="co">##    1.720570    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.

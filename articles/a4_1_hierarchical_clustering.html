@@ -368,7 +368,7 @@ object structure:</p>
 <span><span class="co">##   ..$ randomize          : logi TRUE</span></span>
 <span><span class="co">##   ..$ n_runs             : num 100</span></span>
 <span><span class="co">##   ..$ optimal_tree_method: chr "iterative_consensus_tree"</span></span>
-<span><span class="co">##   ..$ keep_trials        : logi FALSE</span></span>
+<span><span class="co">##   ..$ keep_trials        : chr "no"</span></span>
 <span><span class="co">##   ..$ n_clust            : NULL</span></span>
 <span><span class="co">##   ..$ cut_height         : num [1:3] 0.4 0.5 0.6</span></span>
 <span><span class="co">##   ..$ find_h             : logi TRUE</span></span>
@@ -506,13 +506,20 @@ exploration. To do that, choose
 best represents the distance matrix; i.e., the one that has the highest
 cophenetic correlation coefficient among all trials.</p>
 <p>Let’s see an example of <code>optimal_tree_method = "best"</code>. We
-can also ask the function to keep all individual trees for further
-exploration (<code>keep_trials = TRUE</code>).</p>
+can also<br>
+ask the function to keep all individual trees for further
+exploration<br>
+with <code>keep_trials = "all"</code> (including, for each trial, the
+randomized matrix,<br>
+the associated tree, and metrics for that tree).<br>
+By default, <code>keep_trials = "no"</code> and
+<code>keep_trials = "metrics"</code> can be used to<br>
+keep only the metrics associated with each tree.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree_best</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim_random</span>,</span>
 <span>                              randomize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                              optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span>
-<span>                              keep_trials <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>                              keep_trials <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Randomizing the dissimilarity matrix with 100 trials</span></span></code></pre>
 <pre><code><span><span class="co">##  -- range of cophenetic correlation coefficients among trials: 0.6669 - 0.6974</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
@@ -526,7 +533,7 @@ Let’s see it in action here:</p>
 <code class="sourceCode R"><span><span class="va">tree_consensus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim_random</span>,</span>
 <span>                                   randomize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                   optimal_tree_method <span class="op">=</span> <span class="st">"consensus"</span>,</span>
-<span>                                   keep_trials <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>                                   keep_trials <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Randomizing the dissimilarity matrix with 100 trials</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Final tree has a 0.202 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
