@@ -178,6 +178,7 @@ stable_binary_split <- function(dist.obj,
     randomtrees[[run]]$hierartree <-  
       fastcluster::hclust(randomtrees[[run]]$dist.matrix, 
                           method = method)
+    randomtrees[[run]]$dist.matrix <- 0 # CHECK IF PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   }
   
   # Step 2: cut trees at 2 clusters for each run

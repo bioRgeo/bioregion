@@ -3,6 +3,9 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
+* Modified argument `keep_trials` in `hclu_hierarclust()` and fixed potential 
+randomized matrix strorage problem.
+
 * Renamed class `bioregion.pairwise.metric` to `bioregion.pairwise`.
 
 * Added `bind_pairwise()` to combine pairwise (dis)similarity objects.
