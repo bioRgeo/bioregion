@@ -147,9 +147,9 @@ matrix.</p></dd>
 
 <dt id="arg-keep-trials">keep_trials<a class="anchor" aria-label="anchor" href="#arg-keep-trials"></a></dt>
 <dd><p>A <code>character</code> string indicating whether random trial results
-(including the randomized matrix, the associated tree, and metrics for that tree)
+(including the randomized matrix, the associated tree and metrics for that tree)
 should be stored in the output object. Possible values are <code>"no"</code> (default),
-<code>"all"</code>, or <code>"metrics"</code>. Note that this parameter is automatically set to
+<code>"all"</code> or <code>"metrics"</code>. Note that this parameter is automatically set to
 <code>"no"</code> if <code>optimal_tree_method = "iterative_consensus_tree"</code>.</p></dd>
 
 
@@ -211,7 +211,7 @@ clustering procedure, such as the original cluster objects.</p></li>
 </ol><p>In the <code>algorithm</code> slot, users can find the following elements:</p>
 <ul><li><p><code>trials</code>: A list containing all randomization trials. Each trial
 includes the dissimilarity matrix with randomized site order, the
-associated tree, and the cophenetic correlation coefficient (Spearman) for
+associated tree, and the cophenetic correlation coefficient for
 that tree.</p></li>
 <li><p><code>final.tree</code>: An <code>hclust</code> object representing the final
 hierarchical tree to be used.</p></li>
