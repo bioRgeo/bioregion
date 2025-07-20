@@ -44,9 +44,9 @@ matrix.}
 \item{n_runs}{The number of trials for randomizing the dissimilarity matrix.}
 
 \item{keep_trials}{A \code{character} string indicating whether random trial results
-(including the randomized matrix, the associated tree, and metrics for that tree)
+(including the randomized matrix, the associated tree and metrics for that tree)
 should be stored in the output object. Possible values are \code{"no"} (default),
-\code{"all"}, or \code{"metrics"}. Note that this parameter is automatically set to
+\code{"all"} or \code{"metrics"}. Note that this parameter is automatically set to
 \code{"no"} if \code{optimal_tree_method = "iterative_consensus_tree"}.}
 
 \item{optimal_tree_method}{A \code{character} string indicating how the final tree
@@ -95,7 +95,7 @@ In the \code{algorithm} slot, users can find the following elements:
 \itemize{
 \item{\code{trials}: A list containing all randomization trials. Each trial
 includes the dissimilarity matrix with randomized site order, the
-associated tree, and the cophenetic correlation coefficient (Spearman) for
+associated tree, and the cophenetic correlation coefficient for
 that tree.}
 \item{\code{final.tree}: An \code{hclust} object representing the final
 hierarchical tree to be used.}

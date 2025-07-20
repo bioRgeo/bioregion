@@ -31,9 +31,9 @@
 #' @param n_runs The number of trials for randomizing the dissimilarity matrix.
 #' 
 #' @param keep_trials A `character` string indicating whether random trial results 
-#' (including the randomized matrix, the associated tree, and metrics for that tree) 
+#' (including the randomized matrix, the associated tree and metrics for that tree) 
 #' should be stored in the output object. Possible values are `"no"` (default), 
-#' `"all"`, or `"metrics"`. Note that this parameter is automatically set to 
+#' `"all"` or `"metrics"`. Note that this parameter is automatically set to 
 #' `"no"` if `optimal_tree_method = "iterative_consensus_tree"`.
 #' 
 #' @param optimal_tree_method A `character` string indicating how the final tree
@@ -82,7 +82,7 @@
 #' \itemize{
 #' \item{`trials`: A list containing all randomization trials. Each trial
 #' includes the dissimilarity matrix with randomized site order, the
-#' associated tree, and the cophenetic correlation coefficient (Spearman) for
+#' associated tree, and the cophenetic correlation coefficient for
 #' that tree.}
 #' \item{`final.tree`: An `hclust` object representing the final
 #' hierarchical tree to be used.}
