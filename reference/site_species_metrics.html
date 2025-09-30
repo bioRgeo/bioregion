@@ -15,7 +15,7 @@ species or site to its bioregion."><meta property="og:image" content="https://bi
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,13 +121,27 @@ containing the species in <code>net</code>. 2 by default.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>data.frame</code> with columns <code>Bioregion</code>, <code>Species</code>, and the desired summary
-statistics, or a list of <code>data.frame</code>s if <code>Cz</code> and other indices are
-selected.</p>
+    <p>A named list of class <code>bioregion.site.species.metrics</code> containing one element
+per bioregionalization. Each element is a list with:</p><ul><li><p><code>name</code>: Character, the bioregionalization name</p></li>
+<li><p><code>metrics</code>: A <code>data.frame</code> with columns <code>Bioregion</code>, <code>Species</code>, and
+the requested contribution metrics (e.g., <code>rho</code>, <code>affinity</code>, <code>fidelity</code>,
+<code>indicator_value</code>)</p></li>
+<li><p><code>indices</code>: Character vector of computed indices</p></li>
+<li><p><code>cz_metrics</code>: (If <code>Cz</code> requested) A <code>data.frame</code> with Cz metrics for nodes</p></li>
+<li><p><code>args</code>: List of input arguments</p></li>
+</ul><p>For a single bioregionalization, the list contains one element accessible via
+<code>result[[1]]</code> or <code>result$bioregionalization_name</code>.</p>
+<p>For multiple bioregionalizations, access individual results via
+<code>result$bioregionalization_name</code> or <code>result[[i]]</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The \(\rho\) metric is derived from Lenormand et al. (2019) with the
+    <p>When multiple bioregionalizations are provided (i.e., the <code>clusters</code> arg has more
+than 2 columns), the function computes metrics for each bioregionalization
+separately. The output is always returned as a named list of class
+<code>bioregion.site.species.metrics</code>, regardless of the number of
+bioregionalizations.</p>
+<p>The \(\rho\) metric is derived from Lenormand et al. (2019) with the
 following formula:</p>
 <p>\(\rho_{ij} = \frac{n_{ij} - \frac{n_i n_j}{n}}{\sqrt{\left(\frac{n - n_j}{
 n-1}\right) \left(1-\frac{n_j}{n}\right) \frac{n_i n_j}{n}}}\)</p>
@@ -194,151 +208,359 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Site"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">comat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Species"</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Single bioregionalization</span></span></span>
 <span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clust1</span> <span class="op">&lt;-</span> <span class="fu"><a href="nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust1</span>, </span></span>
+<span class="r-in"><span>                                comat <span class="op">=</span> <span class="va">comat</span>,</span></span>
+<span class="r-in"><span>                                indices <span class="op">=</span> <span class="st">"rho"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Print shows summary</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">metrics</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site and species contribution metrics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of bioregionalizations:  1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Bioregionalizations:  K_3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Computed indices:  rho </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bioregionalization 'K_3':</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Metrics:  75  rows</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Unique species:  25 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Bioregions:  3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Columns:  Bioregion, Species, rho </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Access individual results with:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   your_object[[1]]$metrics  # Contribution metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Or see the full list structure with str(your_object)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Access the data</span></span></span>
+<span class="r-in"><span><span class="va">metrics</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">metrics</span>  <span class="co"># The contribution metrics data.frame</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Bioregion   Species         rho</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          2  Species1  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2  Species2  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          2  Species3  0.38527588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          2  Species4  0.88975652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          2  Species5  0.48432210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          2  Species6  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          2  Species7 -0.12108053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          2  Species8  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          2  Species9  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         2 Species10 -0.12108053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         2 Species11  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         2 Species12  0.38527588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         2 Species13 -0.35355339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         2 Species14 -0.89897704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         2 Species15  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         2 Species16  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         2 Species17  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         2 Species18 -0.25685058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         2 Species19  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20         2 Species20  1.64750894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21         2 Species21  0.96104688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22         2 Species22  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         2 Species23  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24         2 Species24  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25         2 Species25  0.96104688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26         1  Species1 -0.68920244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         1  Species2  0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28         1  Species3  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29         1  Species4 -1.59164485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30         1  Species5  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31         1  Species6 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32         1  Species7  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33         1  Species8 -0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34         1  Species9  0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35         1 Species10  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36         1 Species11 -0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37         1 Species12  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38         1 Species13  0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39         1 Species14  1.37840488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40         1 Species15  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41         1 Species16 -0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42         1 Species17 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43         1 Species18  0.68920244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44         1 Species19  0.35590261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45         1 Species20 -2.21036519</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46         1 Species21 -1.47357680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47         1 Species22  0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48         1 Species23 -1.37840488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49         1 Species24 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50         1 Species25  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51         3  Species1 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52         3  Species2 -0.70710678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53         3  Species3 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54         3  Species4  0.79089469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55         3  Species5 -0.64576281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56         3  Species6  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57         3  Species7  0.16144070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58         3  Species8  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59         3  Species9 -0.58142389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60         3 Species10  0.16144070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61         3 Species11  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62         3 Species12 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63         3 Species13  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64         3 Species14 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65         3 Species15 -1.36986978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66         3 Species16  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67         3 Species17  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68         3 Species18 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69         3 Species19 -0.44212357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70         3 Species20  0.54916965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71         3 Species21  0.54916965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72         3 Species22 -0.58142389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73         3 Species23  0.34246744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74         3 Species24  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75         3 Species25 -1.28139584</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">metrics</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">metrics</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Bioregion  Species       rho</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         2 Species1 1.0274023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         2 Species2 0.2357023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         2 Species3 0.3852759</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         2 Species4 0.8897565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         2 Species5 0.4843221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         2 Species6 0.7475450</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Multiple contribution metrics</span></span></span>
 <span class="r-in"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity.html">similarity</a></span><span class="op">(</span><span class="va">comat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">com</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">metrics_all</span> <span class="op">&lt;-</span> <span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">com</span>, </span></span>
+<span class="r-in"><span>                                    comat <span class="op">=</span> <span class="va">comat</span>,</span></span>
+<span class="r-in"><span>                                    indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rho"</span>, <span class="st">"affinity"</span>, </span></span>
+<span class="r-in"><span>                                               <span class="st">"fidelity"</span>, <span class="st">"indicator_value"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">metrics_all</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">metrics</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Bioregion  Species        rho  affinity  fidelity    indval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1 Species1 -1.0000000 0.7894737 0.9375000 0.7401316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         1 Species2 -0.2294157 0.9473684 0.9473684 0.8975069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         1 Species3 -1.0000000 0.7894737 0.9375000 0.7401316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         1 Species4 -2.3094011 0.5789474 0.9166667 0.5307018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         1 Species5 -0.4714045 0.8947368 0.9444444 0.8450292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         1 Species6  4.1231056 0.8947368 1.0000000 0.8947368</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust1</span>, comat <span class="op">=</span> <span class="va">comat</span>,</span></span>
-<span class="r-in"><span>indices <span class="op">=</span> <span class="st">"rho"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Bioregion   Species          rho</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          2  Species1  691.3133454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2  Species2 1096.2512131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          2  Species3  412.6304623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          2  Species4  710.4705820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          2  Species5 1963.8050546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          2  Species6 1101.5075599</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          2  Species7  367.9637192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          2  Species8  723.8416417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          2  Species9 1069.7368973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         2 Species10  662.1893978</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11         2 Species11  316.5853082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         2 Species12  942.3847907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13         2 Species13  742.1085669</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         2 Species14  675.9023104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15         2 Species15  527.5710984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16         2 Species16  227.0991279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17         2 Species17 1202.4261351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18         2 Species18  925.0473763</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19         2 Species19  307.7180046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20         2 Species20  177.3817961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21         2 Species21  436.1779924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22         2 Species22  608.1278588</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23         2 Species23 1947.3126985</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24         2 Species24  512.1929169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25         2 Species25  560.4276251</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26         1  Species1  183.3278484</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27         1  Species2 1051.4573220</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28         1  Species3 1009.6815711</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29         1  Species4  536.3843150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30         1  Species5 1194.3072004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31         1  Species6  488.4302527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32         1  Species7 1242.3913858</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33         1  Species8 1506.1928495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34         1  Species9  676.9823831</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35         1 Species10 1606.9214943</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36         1 Species11  440.2892832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37         1 Species12  269.4781531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38         1 Species13  437.9754559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39         1 Species14  913.8824323</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40         1 Species15  642.3366718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41         1 Species16  595.4568834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42         1 Species17  353.3680884</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43         1 Species18 1938.7264570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44         1 Species19 1343.5323467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45         1 Species20   87.6778193</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46         1 Species21   96.5192801</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47         1 Species22 1145.6882108</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48         1 Species23 1142.0084391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49         1 Species24  517.8497341</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50         1 Species25  293.9785706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51         3  Species1    0.3424674</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52         3  Species2   11.8636804</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53         3  Species3  190.4118992</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54         3  Species4  201.4804211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55         3  Species5  341.6085246</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56         3  Species6  112.3809319</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57         3  Species7    9.0406793</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58         3  Species8  639.6173673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59         3  Species9  212.0535988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60         3 Species10  575.6975420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61         3 Species11   64.2058096</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62         3 Species12   30.3083688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63         3 Species13  579.1204538</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64         3 Species14   14.0411652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65         3 Species15   -1.3698698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66         3 Species16  166.6414981</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67         3 Species17  864.9095668</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68         3 Species18  278.5972662</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69         3 Species19   94.1723204</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70         3 Species20  257.7436212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71         3 Species21   90.2468787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72         3 Species22   78.3261041</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73         3 Species23  115.0690614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74         3 Species24  251.0920600</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75         3 Species25   -1.2813958</span>
+<span class="r-in"><span><span class="co"># Multiple bioregionalizations</span></span></span>
+<span class="r-in"><span><span class="co"># Create two different clustering solutions</span></span></span>
+<span class="r-in"><span><span class="va">clust_k3</span> <span class="op">&lt;-</span> <span class="fu"><a href="nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">clust_k4</span> <span class="op">&lt;-</span> <span class="fu"><a href="nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">dissim</span>, n_clust <span class="op">=</span> <span class="fl">4</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Contribution metrics</span></span></span>
-<span class="r-in"><span><span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">com</span>, comat <span class="op">=</span> <span class="va">comat</span>,</span></span>
-<span class="r-in"><span>indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rho"</span>, <span class="st">"affinity"</span>, <span class="st">"fidelity"</span>, <span class="st">"indicator_value"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Bioregion   Species           rho  affinity     fidelity       indval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1  Species1  6.704000e+03  71.36842  84.75000000 6.048474e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          1  Species2  1.571016e+04 181.15789 181.15789474 3.281818e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          1  Species3  8.989000e+03  95.42105 113.31250000 1.081240e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          1  Species4  1.006091e+04  92.31579 146.16666667 1.349349e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          1  Species5  2.572407e+04 288.10526 304.11111111 8.761601e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          1  Species6  1.278090e+04 139.52632 155.94117647 2.175790e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          1  Species7  1.178936e+04 132.52632 139.88888889 1.853896e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          1  Species8  2.028930e+04 233.68421 233.68421053 5.460831e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          1  Species9  1.231523e+04 134.47368 150.29411765 2.021060e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         1 Species10  1.613099e+04 181.00000 191.05555556 3.458106e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11         1 Species11  5.466025e+03  60.15789  67.23529412 4.044734e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         1 Species12  9.469000e+03 100.47368 119.31250000 1.198777e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13         1 Species13  1.217257e+04 140.57895 140.57894737 1.976244e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         1 Species14  8.834000e+03  93.78947 111.37500000 1.044580e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15         1 Species15  7.939000e+03  84.36842 100.18750000 8.452661e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16         1 Species16  7.061187e+03  81.94737  81.94736842 6.715371e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17         1 Species17  1.698162e+04 185.10526 206.88235294 3.829501e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18         1 Species18  2.289900e+04 241.84211 287.18750000 6.945403e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19         1 Species19  1.269693e+04 130.15789 164.86666667 2.145870e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20         1 Species20  3.103972e+03  31.26316  42.42857143 1.326451e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21         1 Species21  4.627361e+03  46.26316  62.78571429 2.904665e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22         1 Species22  1.313500e+04 143.36842 160.23529412 2.297268e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23         1 Species23  2.412400e+04 254.73684 302.50000000 7.705789e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24         1 Species24  9.011896e+03  98.63158 110.23529412 1.087268e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25         1 Species25  6.460773e+03  64.31579  87.28571429 5.613850e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26         2  Species1  2.523573e+00   3.00000   0.18750000 5.625000e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27         2  Species2  1.200526e+02 115.00000   6.05263158 6.960526e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28         2  Species3  6.104753e+02 533.00000  33.31250000 1.775556e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29         2  Species4  1.237113e+02  94.00000   7.83333333 7.363333e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30         2  Species5  5.201900e+01  49.00000   2.72222222 1.333889e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31         2  Species6 -9.459053e-01   0.00000   0.00000000 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32         2  Species7  3.255243e+01  31.00000   1.72222222 5.338889e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33         2  Species8  2.157895e+00   3.00000   0.15789474 4.736842e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34         2  Species9  4.964890e+02 447.00000  26.29411765 1.175347e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35         2 Species10  9.280147e+02 859.00000  47.72222222 4.099339e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36         2 Species11  1.303680e+02 118.00000   6.94117647 8.190588e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37         2 Species12  2.294157e-01   1.00000   0.06250000 6.250000e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38         2 Species13  3.794737e+01  37.00000   1.94736842 7.205263e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39         2 Species14  7.205948e+02 629.00000  39.31250000 2.472756e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40         2 Species15  1.883503e+02 165.00000  10.31250000 1.701562e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41         2 Species16  5.263158e-02   1.00000   0.05263158 5.263158e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42         2 Species17 -9.459053e-01   0.00000   0.00000000 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43         2 Species18 -9.176629e-01   0.00000   0.00000000 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44         2 Species19 -8.885233e-01   0.00000   0.00000000 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45         2 Species20  9.601762e+01  79.00000   5.64285714 4.457857e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46         2 Species21 -8.583951e-01   0.00000   0.00000000 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47         2 Species22  8.474199e+01  77.00000   4.52941176 3.487647e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48         2 Species23 -9.176629e-01   0.00000   0.00000000 0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49         2 Species24  4.579294e+01  42.00000   2.47058824 1.037647e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50         2 Species25  6.499277e+00   6.00000   0.42857143 2.571429e+00</span>
+<span class="r-in"><span><span class="co"># Combine them into one bioregion.clusters object</span></span></span>
+<span class="r-in"><span><span class="va">clust_multi</span> <span class="op">&lt;-</span> <span class="va">clust_k3</span></span></span>
+<span class="r-in"><span><span class="va">clust_multi</span><span class="op">$</span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">clust_k3</span><span class="op">$</span><span class="va">clusters</span>, K_4 <span class="op">=</span> <span class="va">clust_k4</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Cz indices</span></span></span>
+<span class="r-in"><span><span class="va">metrics_multi</span> <span class="op">&lt;-</span> <span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust_multi</span>, </span></span>
+<span class="r-in"><span>                                      comat <span class="op">=</span> <span class="va">comat</span>,</span></span>
+<span class="r-in"><span>                                      indices <span class="op">=</span> <span class="st">"rho"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Multiple bioregionalizations detected (2 columns). Computing metrics for each...</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Pretty print of results</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">metrics_multi</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site and species contribution metrics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of bioregionalizations:  2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Bioregionalizations:  K_3, K_4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Computed indices:  rho </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bioregionalization 'K_3':</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Metrics:  75  rows</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Unique species:  25 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Bioregions:  3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Columns:  Bioregion, Species, rho </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bioregionalization 'K_4':</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Metrics:  100  rows</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Unique species:  25 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Bioregions:  4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     - Columns:  Bioregion, Species, rho </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Access individual results with:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   your_object$bioregionalization_name$metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   your_object[[1]]$metrics  # First bioregionalization</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Or see the full list structure with str(your_object)</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Access individual bioregionalization by name</span></span></span>
+<span class="r-in"><span><span class="va">metrics_multi</span><span class="op">$</span><span class="va">K_3</span><span class="op">$</span><span class="va">metrics</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Bioregion   Species         rho</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1  Species1  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          1  Species2  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          1  Species3  0.38527588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          1  Species4  0.88975652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          1  Species5  0.48432210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          1  Species6  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          1  Species7 -0.12108053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          1  Species8  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          1  Species9  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         1 Species10 -0.12108053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         1 Species11  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         1 Species12  0.38527588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         1 Species13 -0.35355339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         1 Species14 -0.89897704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         1 Species15  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         1 Species16  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         1 Species17  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         1 Species18 -0.25685058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         1 Species19  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20         1 Species20  1.64750894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21         1 Species21  0.96104688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22         1 Species22  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         1 Species23  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24         1 Species24  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25         1 Species25  0.96104688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26         3  Species1 -0.68920244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         3  Species2  0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28         3  Species3  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29         3  Species4 -1.59164485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30         3  Species5  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31         3  Species6 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32         3  Species7  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33         3  Species8 -0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34         3  Species9  0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35         3 Species10  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36         3 Species11 -0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37         3 Species12  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38         3 Species13  0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39         3 Species14  1.37840488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40         3 Species15  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41         3 Species16 -0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42         3 Species17 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43         3 Species18  0.68920244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44         3 Species19  0.35590261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45         3 Species20 -2.21036519</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46         3 Species21 -1.47357680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47         3 Species22  0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48         3 Species23 -1.37840488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49         3 Species24 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50         3 Species25  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51         2  Species1 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52         2  Species2 -0.70710678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53         2  Species3 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54         2  Species4  0.79089469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55         2  Species5 -0.64576281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56         2  Species6  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57         2  Species7  0.16144070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58         2  Species8  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59         2  Species9 -0.58142389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60         2 Species10  0.16144070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61         2 Species11  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62         2 Species12 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63         2 Species13  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64         2 Species14 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65         2 Species15 -1.36986978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66         2 Species16  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67         2 Species17  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68         2 Species18 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69         2 Species19 -0.44212357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70         2 Species20  0.54916965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71         2 Species21  0.54916965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72         2 Species22 -0.58142389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73         2 Species23  0.34246744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74         2 Species24  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75         2 Species25 -1.28139584</span>
+<span class="r-in"><span><span class="co"># Or by index</span></span></span>
+<span class="r-in"><span><span class="va">metrics_multi</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">metrics</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Bioregion   Species         rho</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1  Species1  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          1  Species2  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          1  Species3  0.38527588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          1  Species4  0.88975652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          1  Species5  0.48432210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          1  Species6  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          1  Species7 -0.12108053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          1  Species8  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          1  Species9  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         1 Species10 -0.12108053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         1 Species11  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         1 Species12  0.38527588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         1 Species13 -0.35355339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         1 Species14 -0.89897704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         1 Species15  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         1 Species16  0.23570226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         1 Species17  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         1 Species18 -0.25685058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         1 Species19  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20         1 Species20  1.64750894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21         1 Species21  0.96104688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22         1 Species22  0.12459083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         1 Species23  1.02740233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24         1 Species24  0.74754500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25         1 Species25  0.96104688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26         3  Species1 -0.68920244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         3  Species2  0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28         3  Species3  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29         3  Species4 -1.59164485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30         3  Species5  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31         3  Species6 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32         3  Species7  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33         3  Species8 -0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34         3  Species9  0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35         3 Species10  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36         3 Species11 -0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37         3 Species12  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38         3 Species13  0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39         3 Species14  1.37840488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40         3 Species15  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41         3 Species16 -0.31622777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42         3 Species17 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43         3 Species18  0.68920244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44         3 Species19  0.35590261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45         3 Species20 -2.21036519</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46         3 Species21 -1.47357680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47         3 Species22  0.33431229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48         3 Species23 -1.37840488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49         3 Species24 -1.00293686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50         3 Species25  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51         2  Species1 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52         2  Species2 -0.70710678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53         2  Species3 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54         2  Species4  0.79089469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55         2  Species5 -0.64576281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56         2  Species6  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57         2  Species7  0.16144070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58         2  Species8  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59         2  Species9 -0.58142389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60         2 Species10  0.16144070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61         2 Species11  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62         2 Species12 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63         2 Species13  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64         2 Species14 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65         2 Species15 -1.36986978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66         2 Species16  0.07856742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67         2 Species17  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68         2 Species18 -0.51370117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69         2 Species19 -0.44212357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70         2 Species20  0.54916965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71         2 Species21  0.54916965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72         2 Species22 -0.58142389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73         2 Species23  0.34246744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74         2 Species24  0.24918167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75         2 Species25 -1.28139584</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># See structure</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">metrics_multi</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 2 bioregionalization(s)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Class: bioregion.site.species.metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Indices: rho </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of bioregionalizations: 2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ K_3:List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ name   : chr "K_3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ metrics:'data.frame':	75 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ indices: chr "rho"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ args   :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ K_4:List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ name   : chr "K_4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ metrics:'data.frame':	100 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ indices: chr "rho"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ args   :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr [1:2] "bioregion.site.species.metrics" "list"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "indices")= chr "rho"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "n_bioregionalizations")= int 2</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Cz indices (bipartite only)</span></span></span>
 <span class="r-in"><span><span class="va">net_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">comat</span>, weight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clust_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">net_bip</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust_bip</span>, comat <span class="op">=</span> <span class="va">comat</span>, </span></span>
-<span class="r-in"><span>net <span class="op">=</span> <span class="va">net_bip</span>, indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">metrics_cz</span> <span class="op">&lt;-</span> <span class="fu">site_species_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust_bip</span>, </span></span>
+<span class="r-in"><span>                                   comat <span class="op">=</span> <span class="va">comat</span>, </span></span>
+<span class="r-in"><span>                                   net <span class="op">=</span> <span class="va">net_bip</span>, </span></span>
+<span class="r-in"><span>                                   indices <span class="op">=</span> <span class="st">"Cz"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">metrics_cz</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">cz_metrics</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         Node Bioregion Category         C          z</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      Site1         7     site 0.8368056 -0.5773503</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      Site2         5     site 0.8088643  1.0690450</span>

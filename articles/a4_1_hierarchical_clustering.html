@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-07-20</h4>
+            <h4 data-toc-skip class="date">2025-09-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -688,8 +688,16 @@ evaluation plot.</p>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
 <pre><code><span><span class="co">## pc_distance 19</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: `aes_string()` was deprecated in ggplot2 3.0.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use tidy evaluation idioms with `aes()`.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> See also `vignette("ggplot2-in-packages")` for more information.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">bioregion</span> package.</span></span>
+<span><span class="co">##   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/bioRgeo/bioregion/issues&gt;</span>.</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-22-1.png" width="768"></p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opti_n_tree4</span></span></code></pre></div>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
@@ -700,7 +708,7 @@ evaluation plot.</p>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
 <span><span class="co">## pc_distance - 19</span></span></code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 5. Extract the optimal number of clusters</span></span>
 <span><span class="co"># We get the name of the correct partition in the next line</span></span>
 <span><span class="va">K_name</span> <span class="op">&lt;-</span> <span class="va">opti_n_tree4</span><span class="op">$</span><span class="va">evaluation_df</span><span class="op">$</span><span class="va">K</span><span class="op">[</span><span class="va">opti_n_tree4</span><span class="op">$</span><span class="va">evaluation_df</span><span class="op">$</span><span class="va">optimal_n_pc_distance</span><span class="op">]</span></span>
@@ -713,7 +721,7 @@ evaluation plot.</p>
 <span><span class="co">## 1006 1006    1</span></span>
 <span><span class="co">## 1007 1007    1</span></span>
 <span><span class="co">## 1008 1008    1</span></span></code></pre>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make a map of the clusters</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vegesf"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-spatial.github.io/sf/" class="external-link">"sf"</a></span><span class="op">)</span></span>
@@ -764,7 +772,7 @@ need to provide your species-site network to the argument
 We have a function to make the conversion).</p>
 <p>Let’s see that in practice. Depending on the size of your dataset,
 computing endemism-based metrics can take a while.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate pc_distance and anosim</span></span>
 <span><span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree4</span>, </span>
 <span>                           dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span>
@@ -783,7 +791,7 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## Max    0.9823024 0.8669999</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span></code></pre>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate avg_endemism and tot_endemism</span></span>
 <span><span class="co"># I have an abundance matrix, I need to convert it into network format first:</span></span>
 <span><span class="va">vegenet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
@@ -832,7 +840,7 @@ value of the metrics, or by finding break points in the curve with a
 segmented model.</p>
 <p>Before we look at these different methods, we will compute all the
 evaluation metrics and store them in <code>eval_tree4</code>:</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vegenet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mat_to_net.html">mat_to_net</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span><span class="va">eval_tree4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree4</span>, </span>
 <span>                                         dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span>
@@ -860,7 +868,7 @@ metric.</em></p>
 <p>The elbow method is the default method in
 <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code>. There are no parameters to adjust it. If
 the curve is not elbow-shaped, it may give spurious results.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Number of bioregionalizations: 99</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>
@@ -910,7 +918,7 @@ increasing metrics (<code>pc_distance</code>) and
 <code>anosim</code> values can either increase or decrease depending on
 your dataset, so you would have to explore both ways.</p>
 <p>By default, the function selects the top 1% steps:</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span><span class="op">)</span></span></code></pre></div>
@@ -930,7 +938,7 @@ your dataset, so you would have to explore both ways.</p>
 <span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
 <span><span class="co">## anosim - 19</span></span>
 <span><span class="co">## pc_distance - 12</span></span></code></pre>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"decreasing_step"</span><span class="op">)</span></span></code></pre></div>
@@ -953,7 +961,7 @@ your dataset, so you would have to explore both ways.</p>
 <p>However, you can adjust it in two different ways. First, choose a
 number of steps to select, e.g. to select the largest 3 steps, use
 <code>step_levels = 3</code>:</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span>,</span>
@@ -980,7 +988,7 @@ hierarchical nature of the tree.</p>
 <p>Second, you can set a quantile of steps to select, e.g. to select the
 5% largest steps set the quantile to 0.95
 (<code>step_quantile = 0.95</code>):</p>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anosim"</span>, <span class="st">"pc_distance"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"increasing_step"</span>,</span>
@@ -1008,7 +1016,7 @@ with 4 clusters, or the partition with 5 clusters?</p>
 <p>By default, the function keeps the partition with <span class="math inline">\(N + 1\)</span> (5 clusters in our example above).
 You can change this by setting
 <code>step_round_above = FALSE</code>:</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"avg_endemism"</span>, <span class="st">"tot_endemism"</span><span class="op">)</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"decreasing_step"</span>,</span>
@@ -1062,7 +1070,7 @@ allow you to use higher cutoffs.</p></li>
 <p>For example, in our case, a regional-scale study on vegetation, we
 can use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and
 0.9 (shallow cutoff).</p>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="st">"pc_distance"</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"cutoff"</span>,</span>
@@ -1101,7 +1109,7 @@ the number of breaks to be identified on the curve. Note that such a
 model is likely to require a minimum number of points to find an
 appropriate number of clusters. In our example here, we make 100 cuts in
 the tree to have enough values.</p>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree4</span>,</span>
 <span>                  cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">tree4</span><span class="op">$</span><span class="va">algorithm</span><span class="op">$</span><span class="va">final.tree</span><span class="op">$</span><span class="va">height</span><span class="op">)</span>, </span>
 <span>                                   length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> </span>
@@ -1117,7 +1125,7 @@ the tree to have enough values.</p>
 <pre><code><span><span class="co">## Computing composition-based metrics...</span></span></code></pre>
 <pre><code><span><span class="co">##   - avg_endemism OK</span></span></code></pre>
 <pre><code><span><span class="co">##   - tot_endemism OK</span></span></code></pre>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Number of bioregionalizations: 100</span></span></code></pre>
@@ -1144,7 +1152,7 @@ the tree to have enough values.</p>
 <ul>
 <li>2 breaks</li>
 </ul>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span>,</span>
 <span>               n_breakpoints <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -1171,7 +1179,7 @@ the tree to have enough values.</p>
 <ul>
 <li>3 breaks</li>
 </ul>
-<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree5</span>,</span>
 <span>               criterion <span class="op">=</span> <span class="st">"breakpoints"</span>,</span>
 <span>               n_breakpoints <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -1216,7 +1224,7 @@ this method <span class="citation">(Hahsler <em>et al.</em>,
 2019)</span>.</p>
 <p>To run the optics algorithm, use the <code><a href="../reference/hclu_optics.html">hclu_optics()</a></code>
 function:</p>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calculate dissimilarities</span></span>
