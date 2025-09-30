@@ -34,15 +34,35 @@ the sites in \code{net}. 1 by default.}
 containing the species in \code{net}. 2 by default.}
 }
 \value{
-A \code{data.frame} with columns \code{Bioregion}, \code{Species}, and the desired summary
-statistics, or a list of \code{data.frame}s if \code{Cz} and other indices are
-selected.
+A named list of class \code{bioregion.site.species.metrics} containing one element
+per bioregionalization. Each element is a list with:
+\itemize{
+\item{\code{name}: Character, the bioregionalization name}
+\item{\code{metrics}: A \code{data.frame} with columns \code{Bioregion}, \code{Species}, and
+the requested contribution metrics (e.g., \code{rho}, \code{affinity}, \code{fidelity},
+\code{indicator_value})}
+\item{\code{indices}: Character vector of computed indices}
+\item{\code{cz_metrics}: (If \code{Cz} requested) A \code{data.frame} with Cz metrics for nodes}
+\item{\code{args}: List of input arguments}
+}
+
+For a single bioregionalization, the list contains one element accessible via
+\code{result[[1]]} or \code{result$bioregionalization_name}.
+
+For multiple bioregionalizations, access individual results via
+\code{result$bioregionalization_name} or \code{result[[i]]}.
 }
 \description{
 This function calculates metrics to assess the contribution of a given
 species or site to its bioregion.
 }
 \details{
+When multiple bioregionalizations are provided (i.e., the \code{clusters} arg has more
+than 2 columns), the function computes metrics for each bioregionalization
+separately. The output is always returned as a named list of class
+\code{bioregion.site.species.metrics}, regardless of the number of
+bioregionalizations.
+
 The \eqn{\rho} metric is derived from Lenormand et al. (2019) with the
 following formula:
 
@@ -93,24 +113,62 @@ comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
 
+# Single bioregionalization
 dissim <- dissimilarity(comat, metric = "Simpson")
 clust1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
 
+metrics <- site_species_metrics(bioregionalization = clust1, 
+                                comat = comat,
+                                indices = "rho")
+
+# Print shows summary
+print(metrics)
+
+# Access the data
+metrics[[1]]$metrics  # The contribution metrics data.frame
+head(metrics[[1]]$metrics)
+
+# Multiple contribution metrics
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_greedy(net)
+metrics_all <- site_species_metrics(bioregionalization = com, 
+                                    comat = comat,
+                                    indices = c("rho", "affinity", 
+                                               "fidelity", "indicator_value"))
+head(metrics_all[[1]]$metrics)
 
-site_species_metrics(bioregionalization = clust1, comat = comat,
-indices = "rho")
+# Multiple bioregionalizations
+# Create two different clustering solutions
+clust_k3 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
+clust_k4 <- nhclu_kmeans(dissim, n_clust = 4, index = "Simpson")
 
-# Contribution metrics
-site_species_metrics(bioregionalization = com, comat = comat,
-indices = c("rho", "affinity", "fidelity", "indicator_value"))
+# Combine them into one bioregion.clusters object
+clust_multi <- clust_k3
+clust_multi$clusters <- cbind(clust_k3$clusters, K_4 = clust_k4$clusters[, 2])
 
-# Cz indices
+metrics_multi <- site_species_metrics(bioregionalization = clust_multi, 
+                                      comat = comat,
+                                      indices = "rho")
+
+# Pretty print of results
+print(metrics_multi)
+
+# Access individual bioregionalization by name
+metrics_multi$K_3$metrics
+# Or by index
+metrics_multi[[1]]$metrics
+
+# See structure
+str(metrics_multi)
+
+# Cz indices (bipartite only)
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
-site_species_metrics(bioregionalization = clust_bip, comat = comat, 
-net = net_bip, indices = "Cz")
+metrics_cz <- site_species_metrics(bioregionalization = clust_bip, 
+                                   comat = comat, 
+                                   net = net_bip, 
+                                   indices = "Cz")
+metrics_cz[[1]]$cz_metrics
 
 }
 \references{

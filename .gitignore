@@ -20,3 +20,9 @@ inst/REFERENCES.bib.bak
 docs/
 
 vignettes/a4_1_hierarchical_clustering_cache
+README_PACKAGE_BUILD.md
+
+temp/
+.vscode/
+.Renviron
+.Rprofile

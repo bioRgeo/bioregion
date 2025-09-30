@@ -29,3 +29,5 @@
 ^vignettes/a5_3_summary_metrics.Rmd
 
 LICENSE
+.Renviron
+.vscode

@@ -471,6 +471,88 @@ print.bioregion.pairwise <- function(x, ...)
 }
 
 #' @export
+#' @method print bioregion.site.species.metrics
+print.bioregion.site.species.metrics <- function(x, ...)
+{
+  cat("Site and species contribution metrics:\n")
+  cat(" - Number of bioregionalizations: ", 
+      attr(x, "n_bioregionalizations"), "\n")
+  cat(" - Bioregionalizations: ", paste(names(x), collapse = ", "), "\n")
+  cat(" - Computed indices: ", paste(attr(x, "indices"), collapse = ", "), "\n")
+  cat("\n")
+  
+  # Determine how many to show (max 3)
+  n_to_show <- min(3, length(x))
+  show_truncated_msg <- length(x) > 3
+  
+  if(show_truncated_msg) {
+    cat("Showing first ", n_to_show, " out of ", length(x), 
+        " bioregionalizations:\n\n", sep = "")
+  }
+  
+  # Summary for each bioregionalization (first 3 only)
+  for(i in 1:n_to_show) {
+    cat("Bioregionalization '", names(x)[i], "':\n", sep = "")
+    
+    # Access metrics from the structured list
+    if(!is.null(x[[i]]$metrics)) {
+      cat("  - Metrics: ", nrow(x[[i]]$metrics), " rows\n")
+      if("Species" %in% colnames(x[[i]]$metrics)) {
+        cat("    - Unique species: ", 
+            length(unique(x[[i]]$metrics$Species)), "\n")
+      }
+      if("Bioregion" %in% colnames(x[[i]]$metrics)) {
+        cat("    - Bioregions: ", 
+            length(unique(x[[i]]$metrics$Bioregion)), "\n")
+      }
+      cat("    - Columns: ", paste(colnames(x[[i]]$metrics), collapse = ", "), "\n")
+    }
+    
+    # Cz metrics if present
+    if(!is.null(x[[i]]$cz_metrics)) {
+      cat("  - Cz metrics: ", nrow(x[[i]]$cz_metrics), " rows (Nodes)\n")
+      cat("    - Columns: ", paste(colnames(x[[i]]$cz_metrics), collapse = ", "), "\n")
+    }
+    cat("\n")
+  }
+  
+  # Message if truncated
+  if(show_truncated_msg) {
+    cat("... and ", length(x) - n_to_show, " more bioregionalization(s).\n\n", sep = "")
+  }
+  
+  cat("Access individual results with:\n")
+  if(attr(x, "n_bioregionalizations") == 1) {
+    cat("  your_object[[1]]$metrics  # Contribution metrics\n")
+    if("Cz" %in% attr(x, "indices")) {
+      cat("  your_object[[1]]$cz_metrics  # Cz metrics\n")
+    }
+  } else {
+    cat("  your_object$bioregionalization_name$metrics\n")
+    cat("  your_object[[1]]$metrics  # First bioregionalization\n")
+  }
+  cat("Or see the full list structure with str(your_object)\n")
+}
+
+#' @export
+#' @method str bioregion.site.species.metrics
+str.bioregion.site.species.metrics <- function(object, ...)
+{
+  cat("List of", length(object), "bioregionalization(s)\n")
+  cat(" - Class: bioregion.site.species.metrics\n")
+  cat(" - Indices:", paste(attr(object, "indices"), collapse = ", "), "\n")
+  cat(" - Number of bioregionalizations:", attr(object, "n_bioregionalizations"), "\n")
+  cat("\n")
+  
+  args <- list(...)
+  if(is.null(args$max.level))
+  {
+    args$max.level <- 2
+  }
+  NextMethod("str", object = object, max.level = args$max.level)
+}
+
+#' @export
 #' @method as.dist bioregion.pairwise
 as.dist.bioregion.pairwise <- function(m, diag = FALSE, 
                                               upper = FALSE)

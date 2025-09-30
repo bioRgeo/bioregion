@@ -1,3 +1,10 @@
+# bioregion 1.2.0.9001
+
+* Updated `site_species_metrics()` to handle multiple bioregionalizations at once
+
+* Added generic function for pretty display of results
+
+
 # bioregion 1.2.0.9000
 
 This is a list of changes made in the development/GitHub version of the package 
