@@ -125,6 +125,37 @@ print.bioregion.clusters <- function(x, ...)
         cat(" - Height of cut not searched for.", "\n")
       }
     }
+    
+    # Display color information if present
+    if (!is.null(x$colors)) {
+      cat(" - Color palette assigned:\n")
+      
+      # Process each partition
+      for (part_name in names(x$colors)) {
+        partition_colors <- x$colors[[part_name]]
+        
+        # Identify grey colors (RGB values all equal, excluding black)
+        is_grey <- sapply(partition_colors$color, function(col) {
+          if (col == "#000000") return(FALSE)
+          r <- substr(col, 2, 3)
+          g <- substr(col, 4, 5)
+          b <- substr(col, 6, 7)
+          return(r == g && g == b)
+        })
+        
+        nb_vivid <- sum(partition_colors$color != "#000000" & !is_grey)
+        nb_grey <- sum(is_grey)
+        nb_insignificant <- sum(partition_colors$color == "#000000")
+        
+        cat("   * ", part_name, ": ")
+        parts <- character(0)
+        if (nb_vivid > 0) parts <- c(parts, paste(nb_vivid, "vivid colors"))
+        if (nb_grey > 0) parts <- c(parts, paste(nb_grey, "grey shades"))
+        if (nb_insignificant > 0) parts <- c(parts, 
+                                             paste(nb_insignificant, "insignificant (black)"))
+        cat(paste(parts, collapse = ", "), "\n")
+      }
+    }
   } else {
     cat("Clustering procedure incomplete - no clusters yet\n")
   }

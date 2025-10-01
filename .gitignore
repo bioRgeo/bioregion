@@ -26,3 +26,6 @@ temp/
 .vscode/
 .Renviron
 .Rprofile
+*.tar.gz
+*.gdf
+Rplot*.pdf

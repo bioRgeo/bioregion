@@ -1,7 +1,7 @@
 Package: bioregion
 Type: Package
 Title: Comparison of Bioregionalization Methods
-Version: 1.2.0.9001
+Version: 1.2.0.9010
 Authors@R: 
     c(person(given = "Maxime",
               family = "Lenormand",
@@ -42,6 +42,7 @@ Imports:
     mathjaxr,
     Matrix,
     phangorn,
+    rcartocolor,
     Rdpack,
     rlang,
     rmarkdown,

@@ -1,32 +1,305 @@
+#' Export a network to GDF format for Gephi visualization
+#'
+#' This function exports a network (unipartite or bipartite) from a 
+#' `data.frame` to the GDF (Graph Data Format) file format, which can be 
+#' directly imported into Gephi visualization software. The function handles 
+#' edge data, node attributes, and color specifications.
+#'
+#' @param df A two- or three-column `data.frame` where each row represents 
+#' an edge (interaction) between two nodes. The first two columns contain the 
+#' node identifiers, and an optional third column can contain edge weights.
+#'
+#' @param col1 A `character` string specifying the name of the first column 
+#' in `df` containing node identifiers. Defaults to `"Node1"`.
+#'
+#' @param col2 A `character` string specifying the name of the second column 
+#' in `df` containing node identifiers. Defaults to `"Node2"`.
+#'
+#' @param weight A `character` string specifying the name of the column in 
+#' `df` containing edge weights. If `NULL` (default), edges are unweighted.
+#'
+#' @param bioregions An optional `bioregion.clusters` object (typically 
+#' from clustering functions like [netclu_greedy()]) or a `data.frame` 
+#' containing bioregionalization results. When a `bioregion.clusters` object with 
+#' colors (from [bioregion_colors()]) is provided, colors and bioregion 
+#' assignments are automatically extracted and used for visualization. 
+#' Alternatively, a `data.frame` with bioregionalization data can be provided, where 
+#' each row represents a node with one column containing node identifiers that 
+#' match those in `df`.
+#'
+#' @param bioregionalization A `character` string specifying the name of the column 
+#' in `bioregions` that contains node identifiers (when `bioregions` is a 
+#' `data.frame`). Defaults to the first column name. Not needed when 
+#' `bioregions` is a `bioregion.clusters` object.
+#'
+#' @param color_column A `character` string specifying the name of a column 
+#' in `bioregions` containing color information in hexadecimal format (e.g., 
+#' "#FF5733"). If specified, colors will be converted to RGB format for Gephi. 
+#' If `NULL` (default), colors are automatically extracted when `bioregions` 
+#' is a `bioregion.clusters` object with colors. When `bioregions` is a plain 
+#' `data.frame`, this parameter must be specified to include colors.
+#'
+#' @param cluster_column A `character` string specifying which partition 
+#' (bioregionalization) to use when `bioregions` is a `bioregion.clusters` 
+#' object with multiple partitions. If `NULL` (default), the first partition 
+#' is used. This allows choosing which bioregionalization to export.
+#'
+#' @param file A `character` string specifying the output file path. 
+#' Defaults to `"output.gdf"`.
+#'
+#' @details
+#' The GDF format is a simple text-based format used by Gephi to define graph 
+#' structure. This function creates a GDF file with two main sections:
+#' \itemize{
+#'   \item \strong{nodedef}: Defines nodes and their attributes (name, label, 
+#'   and any additional bioregionalization information from `bioregions`)
+#'   \item \strong{edgedef}: Defines edges between nodes, optionally with 
+#'   weights
+#' }
+#' 
+#' If `color_column` is specified, hexadecimal color codes are automatically 
+#' converted to RGB format (e.g., "#FF5733" becomes "255,87,51") as required 
+#' by Gephi's color specification.
+#' 
+#' Attributes are automatically typed as VARCHAR (text), DOUBLE (numeric), 
+#' or color (for color attributes).
+#' 
+#' \strong{Important note on zero-weight edges}: Gephi does not handle edges 
+#' with weight = 0 properly. If a weight column is specified and edges with 
+#' weight = 0 are detected, they will be automatically removed from the exported 
+#' network, and a warning will be issued.
+#'
+#' @return
+#' The function writes a GDF file to the specified path and returns nothing 
+#' (`NULL` invisibly). The file can be directly opened in Gephi for network 
+#' visualization and analysis.
+#'
+#' @author
+#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
+#' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
+#'
+#' @examples
+#' # Create a simple network
+#' net <- data.frame(
+#'   Node1 = c("A", "A", "B", "C"),
+#'   Node2 = c("B", "C", "C", "D"),
+#'   Weight = c(1.5, 2.0, 1.0, 3.5)
+#' )
+#' 
+#' # Export network with weights
+#' \dontrun{
+#' exportGDF(net, weight = "Weight", file = "my_network.gdf")
+#' }
+#' 
+#' # Create bioregionalization data with colors (as data.frame)
+#' bioregion_data <- data.frame(
+#'   node_id = c("A", "B", "C", "D"),
+#'   cluster = c("1", "2", "3", "4"),
+#'   node_color = c("#FF5733", "#33FF57", "#3357FF", "#FF33F5")
+#' )
+#' 
+#' # Export network with bioregionalization and colors
+#' \dontrun{
+#' exportGDF(net, 
+#'           weight = "Weight",
+#'           bioregions = bioregion_data,
+#'           bioregionalization = "node_id",
+#'           color_column = "node_color",
+#'           file = "my_network_with_bioregions.gdf")
+#' }
+#' 
+#' # Using bioregion.clusters object with colors (recommended)
+#' \dontrun{
+#' data(fishmat)
+#' net <- similarity(fishmat, metric = "Simpson")
+#' clust <- netclu_greedy(net)
+#' clust_colored <- bioregion_colors(clust)
+#' 
+#' # Convert to network format
+#' net_df <- mat_to_net(fishmat, weight = TRUE)
+#' 
+#' # Export with automatic colors from clustering - very simple!
+#' exportGDF(net_df, 
+#'           weight = "weight",
+#'           bioregions = clust_colored,
+#'           file = "my_network_colored.gdf")
+#' 
+#' # With multiple partitions, specify which one to use
+#' dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
+#' clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 5, 8))
+#' clust_hier_colored <- bioregion_colors(clust_hier)
+#' 
+#' exportGDF(net_df,
+#'           weight = "weight",
+#'           bioregions = clust_hier_colored,
+#'           cluster_column = "K_5",
+#'           file = "my_network_K5.gdf")
+#' }
+#'
+#' @export
 exportGDF <- function(df,
                       col1 = "Node1",
                       col2 = "Node2",
                       weight = NULL,
-                      node_chars = NULL,
-                      node_chars_ID = colnames(node_chars)[1],
+                      bioregions = NULL,
+                      bioregionalization = NULL,
                       color_column = NULL,
+                      cluster_column = NULL,
                       file = "output.gdf") {
+  
+  # Control df (network data.frame)
+  controls(args = NULL, data = df, type = "input_net")
+  
+  # Control col1 and col2 (column names for nodes)
+  controls(args = col1, data = NULL, type = "character")
+  controls(args = col2, data = NULL, type = "character")
+  
+  if (!(col1 %in% colnames(df))) {
+    stop(paste0("col1 ('", col1, "') is not a column name in df."),
+         call. = FALSE)
+  }
+  
+  if (!(col2 %in% colnames(df))) {
+    stop(paste0("col2 ('", col2, "') is not a column name in df."),
+         call. = FALSE)
+  }
+  
+  # Control weight (optional column name for edge weights)
+  if (!is.null(weight)) {
+    controls(args = weight, data = NULL, type = "character")
+    
+    if (!(weight %in% colnames(df))) {
+      stop(paste0("weight ('", weight, "') is not a column name in df."),
+           call. = FALSE)
+    }
+    
+    if (!is.numeric(df[[weight]])) {
+      stop("The weight column must be numeric.",
+           call. = FALSE)
+    }
+    
+    if (sum(is.na(df[[weight]])) > 0) {
+      stop("NA(s) detected in the weight column.",
+           call. = FALSE)
+    }
+  }
+  
+  # Handle bioregion.clusters objects
+  is_bioregion_clusters <- inherits(bioregions, "bioregion.clusters")
+  
+  if (is_bioregion_clusters) {
+    # Extract information from bioregion.clusters object
+    if (is.null(bioregions$clusters)) {
+      stop("bioregion.clusters object does not contain clusters data.",
+           call. = FALSE)
+    }
+    
+    # Determine which partition to use
+    partition_names <- names(bioregions$clusters)[-1]  # Exclude ID column
+    
+    if (is.null(cluster_column)) {
+      # Use first partition by default
+      cluster_column <- partition_names[1]
+      message(paste0("Using partition '", cluster_column, 
+                    "' for cluster assignments and colors."))
+    } else {
+      if (!cluster_column %in% partition_names) {
+        stop(paste0("cluster_column '", cluster_column, 
+                   "' not found in available partitions: ",
+                   paste(partition_names, collapse = ", ")),
+             call. = FALSE)
+      }
+    }
+    
+    # Create bioregions data.frame from clusters
+    bioregions_from_clusters <- bioregions$clusters[, c(1, which(names(bioregions$clusters) == cluster_column))]
+    names(bioregions_from_clusters) <- c("name", "cluster")
+    
+    # Add colors if available
+    if (!is.null(bioregions$clusters_colors)) {
+      colors_col <- bioregions$clusters_colors[[cluster_column]]
+      bioregions_from_clusters$node_color <- colors_col
+      
+      if (is.null(color_column)) {
+        color_column <- "node_color"
+      }
+    }
+    
+    # Replace bioregions with extracted data
+    bioregions <- bioregions_from_clusters
+    bioregionalization <- "name"
+  }
+  
+  # Control bioregions (optional data.frame with bioregionalization data)
+  if (!is.null(bioregions)) {
+    if (!is_bioregion_clusters) {
+      controls(args = NULL, data = bioregions, type = "input_data_frame")
+    }
+    
+    # Set default for bioregionalization if not specified
+    if (is.null(bioregionalization)) {
+      bioregionalization <- colnames(bioregions)[1]
+    }
+    
+    # Control bioregionalization
+    controls(args = bioregionalization, data = NULL, type = "character")
+    
+    if (!(bioregionalization %in% colnames(bioregions))) {
+      stop(paste0("bioregionalization ('", bioregionalization, 
+                  "') is not a column name in bioregions."),
+           call. = FALSE)
+    }
+  }
+  
+  # Control color_column (optional column name for node colors)
+  if (!is.null(color_column)) {
+    controls(args = color_column, data = NULL, type = "character")
+  }
+  
+  # Control file (output file path)
+  controls(args = file, data = NULL, type = "character")
+  
+  # Function body starts here
+  # Filter out edges with weight = 0 if weight column is specified
+  if (!is.null(weight)) {
+    n_zero <- sum(df[[weight]] == 0)
+    if (n_zero > 0) {
+      warning(paste0(n_zero, " edge(s) with weight = 0 detected and removed. ",
+                    "Gephi does not handle zero-weight edges properly."),
+              call. = FALSE)
+      df <- df[df[[weight]] != 0, ]
+    }
+  }
   
   nodes <- unique(c(df[[col1]], df[[col2]]))
 
   node_df <- data.frame(name = nodes, label = nodes, stringsAsFactors = FALSE)
 
-  if (!is.null(node_chars)) {
-    colnames(node_chars)[which(colnames(node_chars) ==
-                                 node_chars_ID)] <- "name"
-    if (!('name' %in% colnames(node_chars))) {
-      stop("The node_chars data.frame must contain a 'name' column.")
+  if (!is.null(bioregions)) {
+    colnames(bioregions)[which(colnames(bioregions) ==
+                                 bioregionalization)] <- "name"
+    if (!('name' %in% colnames(bioregions))) {
+      stop("The bioregions data.frame must contain a 'name' column.",
+           call. = FALSE)
     }
-     node_df <- merge(node_df, node_chars, by = 'name', all.x = TRUE)
+    node_df <- merge(node_df, bioregions, by = 'name', all.x = TRUE)
   }
   
   if (!is.null(color_column)) {
     if (!color_column %in% names(node_df)) {
-      stop(paste("Color column", color_column, "not found in node characteristics"))
+      stop(paste0("Color column '", color_column, 
+                  "' not found in node characteristics."),
+           call. = FALSE)
     }
     
     # Convert the color column from hex to RGB
     hex_to_rgb <- function(hex) {
+      # Handle NA values - assign a neutral grey for nodes without colors
+      # (e.g., species in bipartite networks when only sites were clustered)
+      if (is.na(hex)) {
+        return("200,200,200")  # Light grey for uncolored nodes
+      }
       # Remove '#' if present
       hex <- gsub("#", "", hex)
       # Split into R, G, B components
@@ -45,7 +318,7 @@ exportGDF <- function(df,
   node_attributes <- setdiff(names(node_df), c("name", "label"))
   attribute_definitions <- sapply(node_attributes, function(attr) {
     if (attr == "color") {
-      "graphics.color VARCHAR"
+      "color VARCHAR"
     } else if (is.numeric(node_df[[attr]])) {
       paste0(attr, " DOUBLE")
     } else {
@@ -55,7 +328,18 @@ exportGDF <- function(df,
   
   node_header <- paste("nodedef>name VARCHAR,label VARCHAR", paste(attribute_definitions, collapse=","), sep=",")
   
-  node_lines <- apply(node_df, 1, function(x) paste(x, collapse=","))
+  # Build node lines with proper quoting for fields containing commas
+  node_lines <- apply(node_df, 1, function(x) {
+    # Quote fields that contain commas (like RGB colors) with single quotes for Gephi
+    quoted_fields <- sapply(x, function(field) {
+      if (grepl(",", field)) {
+        paste0("'", field, "'")
+      } else {
+        field
+      }
+    })
+    paste(quoted_fields, collapse=",")
+  })
   
   if (!is.null(weight)) {
     edge_header <- "edgedef>node1 VARCHAR,node2 VARCHAR,weight DOUBLE"

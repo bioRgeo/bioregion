@@ -51,7 +51,7 @@ vegedissim <- dissimilarity(vegemat, metric = "all")
 data(vegedf)
 ```
 
-Since we aim at plotting the result, we also need the object `fishsf` linking
+Since we aim at plotting the result, we also need the object `vegesf` linking
 each site of the dataset to a geometry.
 
 ```{r}
@@ -93,7 +93,117 @@ stored in `fishsf`.
 map_bioregions(vege_nhclu_kmeans, geometry = vegesf, plot = TRUE)
 ```
 
-## 2.2 Custom plot  
+## 2.2 Color palettes with bioregion_colors()
+
+The `bioregion_colors()` function is designed to define and manage 
+consistent color palettes across all your visualizations. This function 
+assigns fixed colors to bioregions and ensures that these colors remain 
+consistent across different types of plots. The same bioregion should 
+have the same color in all 
+your figures (maps, summary plots, networks, etc.)
+
+### Available color palettes
+
+The function uses qualitative color palettes from the `rcartocolor` package. 
+Let's explore a few examples with different palettes:
+
+#### Example 1: Vivid palette (default)
+
+```{r}
+# Apply the Vivid palette (default)
+vege_kmeans_vivid <- bioregion_colors(vege_nhclu_kmeans, 
+                                      palette = "Vivid",
+                                      cluster_ordering = "n_sites")
+
+# View the color assignments
+vege_kmeans_vivid$colors
+
+# Map with Vivid colors
+map_bioregions(vege_kmeans_vivid, geometry = vegesf, plot = TRUE)
+```
+
+Note that vege_kmeans_vivid is identical to vege_kmeans with two new slots:
+* colors: a small data.frame summarising the color assigned to each bioregion
+* clusters_colors: a data.frame identical to the clusters slot, but
+  with content modified to include colors
+
+#### Example 2: Bold palette
+
+```{r}
+# Apply the Bold palette
+vege_kmeans_bold <- bioregion_colors(vege_nhclu_kmeans, 
+                                     palette = "Bold",
+                                     cluster_ordering = "n_sites")
+
+# View the color assignments
+vege_kmeans_bold$colors
+
+# Map with Bold colors
+map_bioregions(vege_kmeans_bold, geometry = vegesf, plot = TRUE)
+```
+
+#### Example 3: Safe palette
+
+The Safe palette is designed to be colorblind-friendly.
+
+```{r}
+# Apply the Safe palette
+vege_kmeans_safe <- bioregion_colors(vege_nhclu_kmeans, 
+                                      palette = "Safe",
+                                      cluster_ordering = "n_sites")
+
+# View the color assignments
+vege_kmeans_safe$colors
+
+# Map with Safe colors
+map_bioregions(vege_kmeans_safe, geometry = vegesf, plot = TRUE)
+
+```
+
+### Using consistent colors across different plot types
+
+Once you've assigned colors to your bioregions, you can use them consistently 
+across all your visualizations. Here's an example creating a summary bar chart 
+showing the number of sites per bioregion with the same colors as the map:
+
+```{r}
+# Use the colored cluster object (e.g., with Vivid palette)
+# Extract cluster assignments
+clusters_df <- vege_kmeans_vivid$clusters
+
+# Count number of sites per bioregion
+bioregion_summary <- clusters_df %>%
+  group_by(K_3) %>%
+  summarise(n_sites = n()) %>%
+  arrange(desc(n_sites))
+# Another simpler option: dplyr::count(clusters_df, K_3)
+
+# Extract colors for plotting
+colors_df_K3 <- vege_kmeans_vivid$colors[[1]]  # First (and only) partition
+color_vector <- setNames(colors_df_K3$color, colors_df_K3$cluster)
+
+# Create bar plot with matching colors
+ggplot(bioregion_summary, aes(x = reorder(K_3, -n_sites), 
+                               y = n_sites, 
+                               fill = K_3)) +
+  geom_col() +
+  scale_fill_manual(values = color_vector) +
+  labs(title = "Number of sites per bioregion",
+       x = "Bioregion",
+       y = "Number of sites") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Colors in the bar chart match exactly those on the map. This 
+makes it easier for readers to connect the spatial patterns with the summary 
+statistics. The same color scheme can also be applied when exporting networks to Gephi 
+(see section 3.3 on "Network with node attributes and colors"). The 
+`exportGDF()` function automatically uses the colors defined by 
+`bioregion_colors()`, ensuring consistency between your maps and network 
+visualizations.
+
+## 2.3 Custom plot  
 
 If you want to customize yourself the plot and not simply rely on the default
 option, `map_bioregions()` gives you the possibility to extract each site as well
@@ -117,7 +227,7 @@ ggplot(custom) +
   theme_void()
 ```
 
-## 2.3 Plot with facets  
+## 2.4 Plot with facets  
 
 Finally, you can be interested in plotting several bioregionalizations at once.
 For this purpose, we can build a single `data.frame` gathering all the
@@ -273,3 +383,148 @@ final_plot <- plot_basis +
   facet_wrap(~ Algo)
 final_plot
 ```
+
+# 3. Exporting networks to Gephi
+
+In addition to visualizing bioregions on maps, you may want to visualize the 
+network structure of your data using specialized network visualization software 
+like [Gephi](https://gephi.org/). The `exportGDF` function allows you to export 
+your data in GDF (Graph Data Format), which can be directly imported into Gephi.
+
+For these examples, we will use the fish dataset which provides a clearer 
+network structure that is easier to visualize:
+
+```{r}
+# Load the fish dataset
+data(fishdf)
+data(fishmat)
+```
+
+## 3.1 Basic network export
+
+Let's start by creating a simple bipartite network from the fish data and 
+exporting it without weights or colors:
+
+```{r, eval=FALSE}
+# Export the entire bipartite (site-species) fish network to GDF format 
+exportGDF(fishdf,
+          col1 = "Site",
+          col2 = "Species",
+          file = "fish_network_basic.gdf")
+```
+
+This creates a GDF file with nodes (sites and species) and edges (interactions) 
+that can be opened in Gephi. The fish dataset contains `r nrow(fishdf)` 
+site-species interactions across `r length(unique(fishdf$Site))` sites and 
+`r length(unique(fishdf$Species))` species.
+
+In gephi, this network can be visualised as follows, after applying a layout 
+algorithm:
+<center>
+<img align="bottom" width="100%" height="100%" src="../man/figures/05_network_fish_basic.png">
+</center> 
+
+
+## 3.2 Unipartite network with edge weights
+
+In addition to bipartite networks, you can create unipartite networks where 
+sites are connected based on shared species richness. Edge weights represent 
+the number of species shared between pairs of sites:
+
+```{r, eval=FALSE}
+# Create a site-to-site network based on shared species
+# First, convert the matrix to a dissimilarity object
+fish_dissim_jac <- dissimilarity(fishmat, metric = "Jaccard")
+
+# Convert dissimilarity to similarity (shared species proportion)
+# Jaccard similarity = 1 - Jaccard dissimilarity
+# This is because links in a network represent similarity, not dissimilarity
+fish_sim <- dissimilarity_to_similarity(fish_dissim_jac)
+
+# Remove all links with weight 0 BEFORE exporting to GDF
+fish_sim <- filter(fish_sim, Jaccard > 0)  # Remove zero similarity links
+
+# Export the unipartite network with shared species as weights
+exportGDF(fish_sim,
+          col1 = "Site1",
+          col2 = "Site2",
+          weight = "Jaccard",
+          file = "fish_network_unipartite_weighted.gdf")
+```
+
+<center>
+<img align="bottom" width="100%" height="100%" src="../man/figures/05_network_fish_unipartite_weighted.png">
+</center> 
+
+This creates a unipartite network where nodes are sites and edges represent 
+the Jaccard similarity index. The edge weight indicates how similar is each 
+each pair of sites. In Gephi, these weights can be used to size edges or 
+influence layout algorithms, helping to visualize which sites have similar 
+fish communities.
+
+## 3.3 Network with node attributes and colors
+
+To create more sophisticated visualizations, you can add node attributes and 
+colors. For example, we can color sites according to their bioregion assignment:
+
+```{r, eval=FALSE}
+# Install binaries if not already installed
+install_binaries(binpath = "tempdir")
+
+# Run a bipartite network clustering analysis
+fish_netclu <- netclu_infomap(fishdf, # Run Infomap on the bipartite network
+                             weight = FALSE, # Do not use weights (no abundance here) for clustering
+                             binpath = "tempdir", # Path to the Infomap binary
+                             numtrials = 100, # Number of trials for Infomap
+                             show_hierarchy = TRUE, # Show hierarchical levels
+                             bipartite = TRUE, # This is a bipartite network
+                             bipartite_version = FALSE, # Use standard Infomap, not bipartite version
+                             # Because in our experience the standard version produces better results even
+                             # for bipartite biogeographical networks
+                             site_col = "Site", # Column name for sites
+                             species_col = "Species", # Column name for species
+                             seed = 123) # Set seed for reproducibility
+
+fish_netclu <- bioregion_colors(fish_nhclu, # Assign colors to bioregions
+                                   palette = "Vivid", # Color palette from rcartocolor
+                                   cluster_ordering = "n_both") # Order clusters by total size (sites + species)
+
+# Let's make the map for the first bioregionalization
+map_bioregions(fish_netclu, geometry = fishsf,
+                partition = 1)
+
+# Export the first bioregionalization to GDF with colors and attributes
+exportGDF(fishdf, 
+          col1 = "Site", 
+          col2 = "Species",
+          bioregions = fish_netclu,
+          file = "fish_network_colored.gdf")
+# Note: the first bioregionalization is exported by default, but you 
+# can specify another one with the 'cluster_column' argument
+```
+
+<center>
+<img align="bottom" width="100%" height="100%" src="../man/figures/05_map_fish_bipartite_infomap.png">
+</center> 
+
+<center>
+<img align="bottom" width="100%" height="100%" src="../man/figures/05_network_fish_bipartite_colored.png">
+</center> 
+
+## 3.4 Visualizing in Gephi
+
+Once you have exported your network to GDF format, you can visualize it in Gephi:
+
+1. Open Gephi and go to **File > Open** and select your GDF file
+2. The network will be imported with:
+   - All nodes (sites and species) and edges (occurrences here)
+   - Edge weights representing abundance (if specified)
+   - Node colors indicating bioregions for sites (if specified)
+   - Node attributes such as bioregion and node type (if specified)
+3. **Layout**: Apply a ForceAtlas 2 algorithm to arrange 
+   nodes
+4. **Appearance**: 
+   - Node colors are already set based on bioregions
+   - Adjust node sizes based on degree (= occurrence/richness in our example here)
+   or other attributes
+5. Now, spend time on Gephi to make it look gorgeous ;)
