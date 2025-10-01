@@ -78,9 +78,13 @@ map_bioregions(clu_bip_colored, fishsf, plot = TRUE)
 
 # With multiple bioregionalizations, plot only specific ones
 dissim <- dissimilarity(fishmat, metric = "Simpson")
-clu_multi <- hclu_hierarclust(dissim, n_clust = 2:5)
-map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3), plot = TRUE)  # By index
-map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), plot = TRUE)  # By name
+clu_multi <- hclu_hierarclust(dissim,
+                              optimal_tree_method = "best",
+                              n_clust = c(2, 4, 10))
+map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3),
+ plot = TRUE)  # By index
+map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), 
+plot = TRUE)  # By name
 
 }
 \author{

@@ -67,9 +67,13 @@
 #' 
 #' # With multiple bioregionalizations, plot only specific ones
 #' dissim <- dissimilarity(fishmat, metric = "Simpson")
-#' clu_multi <- hclu_hierarclust(dissim, n_clust = 2:5)
-#' map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3), plot = TRUE)  # By index
-#' map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), plot = TRUE)  # By name
+#' clu_multi <- hclu_hierarclust(dissim,
+#'                               optimal_tree_method = "best",
+#'                               n_clust = c(2, 4, 10))
+#' map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3),
+#'  plot = TRUE)  # By index
+#' map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), 
+#' plot = TRUE)  # By name
 #' 
 #' @importFrom sf st_geometry
 #' 
@@ -100,7 +104,7 @@ map_bioregions <- function(clusters,
       # colors is a list with one data.frame per partition
       color_list <- lapply(clusters$colors, function(color_df) {
         # Create a named vector: cluster ID -> color
-        setNames(color_df$color, color_df$cluster)
+        stats::setNames(color_df$color, color_df$cluster)
       })
       names(color_list) <- names(clusters$colors)
     }
@@ -202,7 +206,7 @@ map_bioregions <- function(clusters,
   missing_sites <- setdiff(idc, idg)
   if(length(missing_sites) > 0){
     stop(paste0("Some cluster sites are not found in the geometry:\n",
-                "  Missing sites: ", paste(head(missing_sites, 10), collapse = ", "),
+                "  Missing sites: ", paste(utils::head(missing_sites, 10), collapse = ", "),
                 if(length(missing_sites) > 10) paste0(" ... (", length(missing_sites) - 10, " more)") else "",
                 "\n  Please ensure that all sites in 'clusters' have corresponding entries in 'geometry'."),
          call. = FALSE)
@@ -267,8 +271,8 @@ map_bioregions <- function(clusters,
         }
         
         # Set up the plotting layout
-        old_par <- par(mfrow = c(nrows, ncols))
-        on.exit(par(old_par), add = TRUE)
+        old_par <- graphics::par(mfrow = c(nrows, ncols))
+        on.exit(graphics::par(old_par), add = TRUE)
         
         # Plot each partition with its colors
         for(i in seq_len(nbplotsp)) {
