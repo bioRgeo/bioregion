@@ -479,7 +479,7 @@ test_that("bioregion.clusters integration - multiple partitions", {
     similarity(fishmat, metric = "Simpson")
   )
   # Use n_clust values that can actually be achieved
-  clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 4, 8))
+  clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 4, 8), optimal_tree_method = "best")
   clust_colored <- bioregion_colors(clust_hier)
   
   # Create simple network from fishmat
@@ -487,6 +487,7 @@ test_that("bioregion.clusters integration - multiple partitions", {
   
   temp_file1 <- tempfile(fileext = ".gdf")
   temp_file2 <- tempfile(fileext = ".gdf")
+  temp_file3 <- tempfile(fileext = ".gdf")
   
   # Export with default partition (first one)
   expect_message(
@@ -496,26 +497,40 @@ test_that("bioregion.clusters integration - multiple partitions", {
     "Using partition"
   )
   
-  # Export with specific partition
+  # Export with specific partition (character - no message)
   expect_no_message(
     exportGDF(net_df, weight = "Weight",
               bioregions = clust_colored,
-              cluster_column = "K_8",
+              bioregionalization = "K_8",
               file = temp_file2)
+  )
+  
+  # Export with specific partition (integer - with message)
+  expect_message(
+    exportGDF(net_df, weight = "Weight",
+              bioregions = clust_colored,
+              bioregionalization = 1,
+              file = temp_file3),
+    "Using partition 1"
   )
   
   expect_true(file.exists(temp_file1))
   expect_true(file.exists(temp_file2))
+  expect_true(file.exists(temp_file3))
   
   # Verify different partitions produce different cluster assignments
   content1 <- readLines(temp_file1)
   content2 <- readLines(temp_file2)
+  content3 <- readLines(temp_file3)
   
   # Files should be different (different cluster assignments)
   expect_false(identical(content1, content2))
+  # But partition 1 (integer) should equal first partition (default)
+  expect_true(identical(content1, content3))
   
   unlink(temp_file1)
   unlink(temp_file2)
+  unlink(temp_file3)
 })
 
 test_that("bioregion.clusters integration - without colors", {
@@ -584,9 +599,9 @@ test_that("bioregion.clusters integration - invalid cluster_column", {
   expect_error(
     exportGDF(net_df,
               bioregions = clust_colored,
-              cluster_column = "NonExistent",
+              bioregionalization = "NonExistent",
               file = temp_file),
-    "cluster_column 'NonExistent' not found in available partitions"
+    "bioregionalization 'NonExistent' not found in available partitions"
   )
 })
 
@@ -626,4 +641,120 @@ test_that("bioregion.clusters integration - color consistency", {
   expect_equal(lines_with_colors, length(node_lines))
   
   unlink(temp_file)
+})
+
+test_that("bioregion.clusters integration - integer partition selection", {
+  
+  # Create clustering with multiple partitions
+  dissim <- similarity_to_dissimilarity(
+    similarity(fishmat, metric = "Simpson")
+  )
+  clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 10, 20), optimal_tree_method = "best")
+  clust_colored <- bioregion_colors(clust_hier)
+  
+  # Create simple network from fishmat
+  net_df <- mat_to_net(fishmat[1:10, 1:20], weight = TRUE)
+  
+  temp_file1 <- tempfile(fileext = ".gdf")
+  temp_file2 <- tempfile(fileext = ".gdf")
+  temp_file3 <- tempfile(fileext = ".gdf")
+  
+  # Export with integer 1 (first partition)
+  expect_message(
+    exportGDF(net_df, weight = "Weight",
+              bioregions = clust_colored,
+              bioregionalization = 1,
+              file = temp_file1),
+    "Using partition 1"
+  )
+  
+  # Export with integer 2 (second partition)
+  expect_message(
+    exportGDF(net_df, weight = "Weight",
+              bioregions = clust_colored,
+              bioregionalization = 2,
+              file = temp_file2),
+    "Using partition 2"
+  )
+  
+  # Export with integer 3 (third partition)
+  expect_message(
+    exportGDF(net_df, weight = "Weight",
+              bioregions = clust_colored,
+              bioregionalization = 3,
+              file = temp_file3),
+    "Using partition 3"
+  )
+  
+  expect_true(file.exists(temp_file1))
+  expect_true(file.exists(temp_file2))
+  expect_true(file.exists(temp_file3))
+  
+  # Verify different partitions produce different outputs
+  content1 <- readLines(temp_file1)
+  content2 <- readLines(temp_file2)
+  content3 <- readLines(temp_file3)
+  
+  expect_false(identical(content1, content2))
+  expect_false(identical(content2, content3))
+  
+  unlink(temp_file1)
+  unlink(temp_file2)
+  unlink(temp_file3)
+})
+
+test_that("bioregion.clusters integration - integer validation", {
+  
+  # Create clustering
+  comat_small <- matrix(sample(0:100, 40, replace = TRUE), 5, 8)
+  rownames(comat_small) <- c("A", "B", "C", "D", "E")
+  colnames(comat_small) <- paste0("Species", 1:8)
+  
+  net <- similarity(comat_small, metric = "Simpson")
+  clust <- netclu_greedy(net)
+  clust_colored <- bioregion_colors(clust)
+  
+  # Create network data frame
+  net_df <- data.frame(
+    Node1 = c("A", "A", "B", "C", "D"),
+    Node2 = c("B", "C", "C", "D", "E")
+  )
+  
+  temp_file <- tempfile(fileext = ".gdf")
+  
+  # Test invalid integer (out of range)
+  expect_error(
+    exportGDF(net_df,
+              bioregions = clust_colored,
+              bioregionalization = 10,
+              file = temp_file),
+    "bioregionalization index 10 is out of range"
+  )
+  
+  # Test invalid integer (zero)
+  expect_error(
+    exportGDF(net_df,
+              bioregions = clust_colored,
+              bioregionalization = 0,
+              file = temp_file),
+    "must be strictly higher than 0"
+  )
+  
+  # Test invalid integer (negative)
+  expect_error(
+    exportGDF(net_df,
+              bioregions = clust_colored,
+              bioregionalization = -1,
+              file = temp_file),
+    "must be strictly higher than 0"
+  )
+  
+  # Test invalid type (float)
+  expect_error(
+    exportGDF(net_df,
+              bioregions = clust_colored,
+              bioregionalization = 1.5,
+              file = temp_file),
+    "must be an integer"
+  )
 })

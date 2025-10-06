@@ -27,10 +27,18 @@
 #' each row represents a node with one column containing node identifiers that 
 #' match those in `df`.
 #'
-#' @param bioregionalization A `character` string specifying the name of the column 
-#' in `bioregions` that contains node identifiers (when `bioregions` is a 
-#' `data.frame`). Defaults to the first column name. Not needed when 
-#' `bioregions` is a `bioregion.clusters` object.
+#' @param bioregionalization A `character` string or a positive `integer` with 
+#' two different uses depending on the type of `bioregions`: 
+#' \itemize{
+#'   \item When `bioregions` is a `bioregion.clusters` object with multiple 
+#'   partitions: specifies which partition to use. Can be either a character 
+#'   string with the partition name (e.g., "K_3", "K_5") or a positive integer 
+#'   indicating the partition index (e.g., 1 for first partition, 2 for second). 
+#'   If `NULL` (default), the first partition is used.
+#'   \item When `bioregions` is a `data.frame`: specifies the name of the column 
+#'   containing node identifiers that match those in `df`. Must be a character 
+#'   string. Defaults to the first column name if not specified.
+#' }
 #'
 #' @param color_column A `character` string specifying the name of a column 
 #' in `bioregions` containing color information in hexadecimal format (e.g., 
@@ -38,11 +46,6 @@
 #' If `NULL` (default), colors are automatically extracted when `bioregions` 
 #' is a `bioregion.clusters` object with colors. When `bioregions` is a plain 
 #' `data.frame`, this parameter must be specified to include colors.
-#'
-#' @param cluster_column A `character` string specifying which partition 
-#' (bioregionalization) to use when `bioregions` is a `bioregion.clusters` 
-#' object with multiple partitions. If `NULL` (default), the first partition 
-#' is used. This allows choosing which bioregionalization to export.
 #'
 #' @param file A `character` string specifying the output file path. 
 #' Defaults to `"output.gdf"`.
@@ -130,11 +133,19 @@
 #' clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 5, 8))
 #' clust_hier_colored <- bioregion_colors(clust_hier)
 #' 
+#' # Using partition name
 #' exportGDF(net_df,
 #'           weight = "weight",
 #'           bioregions = clust_hier_colored,
-#'           cluster_column = "K_5",
+#'           bioregionalization = "K_5",
 #'           file = "my_network_K5.gdf")
+#' 
+#' # Or using partition index (2 = second partition)
+#' exportGDF(net_df,
+#'           weight = "weight",
+#'           bioregions = clust_hier_colored,
+#'           bioregionalization = 2,
+#'           file = "my_network_partition2.gdf")
 #' }
 #'
 #' @export
@@ -145,7 +156,6 @@ exportGDF <- function(df,
                       bioregions = NULL,
                       bioregionalization = NULL,
                       color_column = NULL,
-                      cluster_column = NULL,
                       file = "output.gdf") {
   
   # Control df (network data.frame)
@@ -198,27 +208,48 @@ exportGDF <- function(df,
     # Determine which partition to use
     partition_names <- names(bioregions$clusters)[-1]  # Exclude ID column
     
-    if (is.null(cluster_column)) {
+    if (is.null(bioregionalization)) {
       # Use first partition by default
-      cluster_column <- partition_names[1]
-      message(paste0("Using partition '", cluster_column, 
+      bioregionalization_partition <- partition_names[1]
+      message(paste0("Using partition '", bioregionalization_partition, 
                     "' for cluster assignments and colors."))
     } else {
-      if (!cluster_column %in% partition_names) {
-        stop(paste0("cluster_column '", cluster_column, 
-                   "' not found in available partitions: ",
-                   paste(partition_names, collapse = ", ")),
-             call. = FALSE)
+      # Control bioregionalization (character or positive integer)
+      controls(args = bioregionalization, data = NULL, 
+               type = "character_or_positive_integer")
+      
+      # Handle integer input (partition index)
+      if (is.numeric(bioregionalization)) {
+        if (bioregionalization > length(partition_names)) {
+          stop(paste0("bioregionalization index ", bioregionalization, 
+                     " is out of range. Available partitions: 1 to ",
+                     length(partition_names), " (",
+                     paste(partition_names, collapse = ", "), ")."),
+               call. = FALSE)
+        }
+        bioregionalization_partition <- partition_names[bioregionalization]
+        message(paste0("Using partition ", bioregionalization, " ('", 
+                      bioregionalization_partition, 
+                      "') for cluster assignments and colors."))
+      } else {
+        # Handle character input (partition name)
+        if (!bioregionalization %in% partition_names) {
+          stop(paste0("bioregionalization '", bioregionalization, 
+                     "' not found in available partitions: ",
+                     paste(partition_names, collapse = ", ")),
+               call. = FALSE)
+        }
+        bioregionalization_partition <- bioregionalization
       }
     }
     
     # Create bioregions data.frame from clusters
-    bioregions_from_clusters <- bioregions$clusters[, c(1, which(names(bioregions$clusters) == cluster_column))]
+    bioregions_from_clusters <- bioregions$clusters[, c(1, which(names(bioregions$clusters) == bioregionalization_partition))]
     names(bioregions_from_clusters) <- c("name", "cluster")
     
     # Add colors if available
     if (!is.null(bioregions$clusters_colors)) {
-      colors_col <- bioregions$clusters_colors[[cluster_column]]
+      colors_col <- bioregions$clusters_colors[[bioregionalization_partition]]
       bioregions_from_clusters$node_color <- colors_col
       
       if (is.null(color_column)) {
@@ -242,8 +273,10 @@ exportGDF <- function(df,
       bioregionalization <- colnames(bioregions)[1]
     }
     
-    # Control bioregionalization
-    controls(args = bioregionalization, data = NULL, type = "character")
+    # Control bioregionalization (must be character for data.frame)
+    if (!is_bioregion_clusters) {
+      controls(args = bioregionalization, data = NULL, type = "character")
+    }
     
     if (!(bioregionalization %in% colnames(bioregions))) {
       stop(paste0("bioregionalization ('", bioregionalization, 

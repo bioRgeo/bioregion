@@ -12,7 +12,6 @@ exportGDF(
   bioregions = NULL,
   bioregionalization = NULL,
   color_column = NULL,
-  cluster_column = NULL,
   file = "output.gdf"
 )
 }
@@ -39,10 +38,18 @@ Alternatively, a \code{data.frame} with bioregionalization data can be provided,
 each row represents a node with one column containing node identifiers that
 match those in \code{df}.}
 
-\item{bioregionalization}{A \code{character} string specifying the name of the column
-in \code{bioregions} that contains node identifiers (when \code{bioregions} is a
-\code{data.frame}). Defaults to the first column name. Not needed when
-\code{bioregions} is a \code{bioregion.clusters} object.}
+\item{bioregionalization}{A \code{character} string or a positive \code{integer} with
+two different uses depending on the type of \code{bioregions}:
+\itemize{
+\item When \code{bioregions} is a \code{bioregion.clusters} object with multiple
+partitions: specifies which partition to use. Can be either a character
+string with the partition name (e.g., "K_3", "K_5") or a positive integer
+indicating the partition index (e.g., 1 for first partition, 2 for second).
+If \code{NULL} (default), the first partition is used.
+\item When \code{bioregions} is a \code{data.frame}: specifies the name of the column
+containing node identifiers that match those in \code{df}. Must be a character
+string. Defaults to the first column name if not specified.
+}}
 
 \item{color_column}{A \code{character} string specifying the name of a column
 in \code{bioregions} containing color information in hexadecimal format (e.g.,
@@ -50,11 +57,6 @@ in \code{bioregions} containing color information in hexadecimal format (e.g.,
 If \code{NULL} (default), colors are automatically extracted when \code{bioregions}
 is a \code{bioregion.clusters} object with colors. When \code{bioregions} is a plain
 \code{data.frame}, this parameter must be specified to include colors.}
-
-\item{cluster_column}{A \code{character} string specifying which partition
-(bioregionalization) to use when \code{bioregions} is a \code{bioregion.clusters}
-object with multiple partitions. If \code{NULL} (default), the first partition
-is used. This allows choosing which bioregionalization to export.}
 
 \item{file}{A \code{character} string specifying the output file path.
 Defaults to \code{"output.gdf"}.}
@@ -143,11 +145,19 @@ dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
 clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 5, 8))
 clust_hier_colored <- bioregion_colors(clust_hier)
 
+# Using partition name
 exportGDF(net_df,
           weight = "weight",
           bioregions = clust_hier_colored,
-          cluster_column = "K_5",
+          bioregionalization = "K_5",
           file = "my_network_K5.gdf")
+
+# Or using partition index (2 = second partition)
+exportGDF(net_df,
+          weight = "weight",
+          bioregions = clust_hier_colored,
+          bioregionalization = 2,
+          file = "my_network_partition2.gdf")
 }
 
 }
