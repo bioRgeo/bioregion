@@ -21,8 +21,8 @@ vignette: >
 
 # 2025
 
-* Noori S, Rödder D, Yusefi GH, Hawlitschek O, Wanke D, Husemann M & Rajaei H 
-(2025) [Biogeographic Patterns of Iranian Lepidoptera: A Framework for Conservation.](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.70010) 
+* Noori S, Rödder D, Yusefi GH, Hawlitschek O, Wanke D, Husemann M & Rajaei H (2025) 
+[Biogeographic Patterns of Iranian Lepidoptera: A Framework for Conservation.](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.70010) 
 *Diversity and Distributions* 31, e70010.
 
 * Cheng Z & Ma KY (2025) [Historical Biogeography of Penaeus Prawns (Crustacea: Decapoda: Penaeidae).](https://onlinelibrary.wiley.com/doi/10.1111/jbi.70056) 
