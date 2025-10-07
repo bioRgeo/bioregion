@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,14 +65,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.0.9001" id="bioregion-1209001">bioregion 1.2.0.9001<a class="anchor" aria-label="anchor" href="#bioregion-1209001"></a></h2>
-<ul><li><p>Updated <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> to handle multiple bioregionalizations at once</p></li>
-<li><p>Added generic function for pretty display of results</p></li>
-</ul></div>
-    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0.9000" id="bioregion-1209000">bioregion 1.2.0.9000<a class="anchor" aria-label="anchor" href="#bioregion-1209000"></a></h2>
 <p>This is a list of changes made in the development/GitHub version of the package between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.</p>
-<ul><li><p>Modified the <code>keep_trials</code> argument in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and and fixed a potential issue with randomized matrix storage.</p></li>
+<ul><li><p>Added export of the function <code><a href="../reference/exportGDF.html">exportGDF()</a></code> with documentation and tests.</p></li>
+<li><p>New feature: added <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code> function to provide bioregion colors thatqcan be used across multiple visualizations (maps, networks, other graphs, etc.).</p></li>
+<li><p>Updated <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> to handle bioregion colors.</p></li>
+<li><p>Updated <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> to handle multiple bioregionalizations simultaneously.</p></li>
+<li><p>Added a generic function for pretty display of results.</p></li>
+<li><p>Modified the <code>keep_trials</code> argument in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and and fixed a potential issue with randomized matrix storage.</p></li>
 <li><p>Renamed class <code>bioregion.pairwise.metric</code> to <code>bioregion.pairwise</code>.</p></li>
 <li><p>Added <code><a href="../reference/bind_pairwise.html">bind_pairwise()</a></code> to combine pairwise (dis)similarity objects.</p></li>
 <li><p>Added <code><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise()</a></code> to replace and improve upon <code><a href="../reference/betapart_to_bioregion.html">betapart_to_bioregion()</a></code>, which is now deprecated.</p></li>

@@ -15,7 +15,7 @@ bioregion.clusters object combined with a geometry (sf objects)."><meta property
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,14 @@ bioregion.clusters object combined with a geometry (sf objects)."><meta property
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">map_bioregions</span><span class="op">(</span><span class="va">clusters</span>, <span class="va">geometry</span>, write_clusters <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">map_bioregions</span><span class="op">(</span></span>
+<span>  <span class="va">clusters</span>,</span>
+<span>  <span class="va">geometry</span>,</span>
+<span>  bioregionalization <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  write_clusters <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,6 +97,16 @@ ID, and the subsequent column(s) should represent the clusters.</p></dd>
 <dt id="arg-geometry">geometry<a class="anchor" aria-label="anchor" href="#arg-geometry"></a></dt>
 <dd><p>A spatial object that can be handled by the <code>sf</code> package.
 The first attribute should correspond to the sites' ID (see Details).</p></dd>
+
+
+<dt id="arg-bioregionalization">bioregionalization<a class="anchor" aria-label="anchor" href="#arg-bioregionalization"></a></dt>
+<dd><p>An <code>integer</code>, <code>character</code>, or <code>NULL</code> specifying
+which bioregionalization(s) to plot. If <code>NULL</code> (default), all
+bioregionalizations are plotted. If an <code>integer</code> or vector of <code>integers</code>,
+bioregionalization(s) are selected by column number(s) in the <code>clusters</code>
+data.frame (starting from 1 after the ID column). If a <code>character</code> or
+vector of <code>characters</code>, bioregionalization(s) are selected by name(s)
+matching column names in <code>clusters</code>.</p></dd>
 
 
 <dt id="arg-write-clusters">write_clusters<a class="anchor" aria-label="anchor" href="#arg-write-clusters"></a></dt>
@@ -116,6 +133,12 @@ geometry with additional clusters' attributes if <code>write_clusters = TRUE</co
 have the same type (i.e., <code>character</code> if <code>clusters</code> is a
 <code>bioregion.clusters</code> object) and the sites of <code>clusters</code> should be
 included in the sites of <code>geometry</code>.</p>
+<p><strong>Bipartite networks</strong>: If the <code>clusters</code> object is from a bipartite network
+(containing both sites and species), only site nodes will be mapped. The
+function automatically filters to site nodes using the <code>node_type</code> attribute.</p>
+<p><strong>Colors</strong>: If the <code>clusters</code> object contains colors (added via
+<code><a href="bioregion_colors.html">bioregion_colors()</a></code>), these colors will be automatically used for plotting.
+Otherwise, the default <code>sf</code> color scheme will be applied.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -127,11 +150,45 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishmat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span> <span class="co"># (data.frame version of fishmat)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishsf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity.html">similarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clu</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu">map_bioregions</span><span class="op">(</span><span class="va">clu</span>, <span class="va">fishsf</span>, write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With colors</span></span></span>
+<span class="r-in"><span><span class="va">clu_colored</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">clu</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">map_bioregions</span><span class="op">(</span><span class="va">clu_colored</span>, <span class="va">fishsf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="map_bioregions-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With bipartite network (sites and species)</span></span></span>
+<span class="r-in"><span><span class="va">clu_bip</span> <span class="op">&lt;-</span> <span class="fu"><a href="netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">fishdf</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">clu_bip_colored</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">clu_bip</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">map_bioregions</span><span class="op">(</span><span class="va">clu_bip_colored</span>, <span class="va">fishsf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="map_bioregions-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With multiple bioregionalizations, plot only specific ones</span></span></span>
+<span class="r-in"><span><span class="va">dissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">clu_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissim</span>,</span></span>
+<span class="r-in"><span>                              optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span></span>
+<span class="r-in"><span>                              n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 100 trials</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among trials: 0.8263 - 0.8586</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.8586 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 2 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.9921875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 4 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.96875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.765625</span>
+<span class="r-in"><span><span class="fu">map_bioregions</span><span class="op">(</span><span class="va">clu_multi</span>, <span class="va">fishsf</span>, bioregionalization <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># By index</span></span></span>
+<span class="r-plt img"><img src="map_bioregions-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">map_bioregions</span><span class="op">(</span><span class="va">clu_multi</span>, <span class="va">fishsf</span>, bioregionalization <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K_2"</span>, <span class="st">"K_4"</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># By name</span></span></span>
+<span class="r-plt img"><img src="map_bioregions-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
