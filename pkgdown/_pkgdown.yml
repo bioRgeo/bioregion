@@ -110,7 +110,10 @@ reference:
   
 - title: Visualisation
   desc: ~
-  contents: map_bioregions
+  contents: 
+  - map_bioregions
+  - bioregion_colors
+  - exportGDF
   
 - title: Data
   desc: ~

@@ -21,6 +21,13 @@ vignette: >
 
 # 2025
 
+* Noori S, Rödder D, Yusefi GH, Hawlitschek O, Wanke D, Husemann M & Rajaei H 
+(2025) [Biogeographic Patterns of Iranian Lepidoptera: A Framework for Conservation.](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.70010) 
+*Diversity and Distributions* 31, e70010.
+
+* Cheng Z & Ma KY (2025) [Historical Biogeography of Penaeus Prawns (Crustacea: Decapoda: Penaeidae).](https://onlinelibrary.wiley.com/doi/10.1111/jbi.70056) 
+*Journal of Biogeography* (early view).
+
 * Souza Oliveira M, Lenormand M, Luque S, Zamora NA, Alleaume S, Aguilar Porras AC, 
 Castillo MU, Chac&#243;n-Madrigal E, Delgado D, Hern&#225;ndez S&#225;nchez LG, Ngo Bieng M-A, 
 Quesada RM, Solano GS & Z&#250;&#241;iga PM (2025) [Unlocking tropical forest complexity: How tree assemblages in
@@ -29,8 +36,9 @@ secondary forests boost biodiversity conservation.](https://arxiv.org/abs/2503.0
 
 * Lenormand M, F&#233;ret JB, Papuga G, Alleaume S & Luque S (2025) 
 [Coupling in situ and remote sensing data to assess &#945;- and &#946;-diversity over biogeographic gradients.](https://nsojournals.onlinelibrary.wiley.com/doi/full/10.1111/ecog.07479)
-*Ecography* (early view).  
+*Ecography* 2025, e07479.  
 
 * Noori S, Rödder D, Yusefi GH, Hawlitschek O, Wanke D, Husemann M & Rajaei H (2025) 
 [Biogeographic Patterns of Iranian Lepidoptera: A Framework for Conservation.](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.70010)
 *Diversity and Distributions* 31, e70010.
+

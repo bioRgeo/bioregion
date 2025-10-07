@@ -1,23 +1,20 @@
-# bioregion 1.2.0.9010
-
-* Added export of function exportGDF() with documentation + tests 
-
-* New feature: added bioregion_colors() function to add bioregion colors that
-can be used across multiple visualizations (maps, networks, other graphs...)
-
-* Update map_bioregions to handle bioregion colors 
-
-# bioregion 1.2.0.9001
-
-* Updated `site_species_metrics()` to handle multiple bioregionalizations at once
-
-* Added generic function for pretty display of results
-
-
 # bioregion 1.2.0.9000
 
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
+
+- Added export of the function `exportGDF()` with documentation and tests.
+
+- New feature: added `bioregion_colors()` function to provide bioregion colors 
+thatqcan be used across multiple visualizations (maps, networks, other graphs, 
+etc.).
+
+- Updated `map_bioregions()` to handle bioregion colors.
+
+- Updated `site_species_metrics()` to handle multiple bioregionalizations 
+simultaneously.
+
+- Added a generic function for pretty display of results.
 
 * Modified the `keep_trials` argument in `hclu_hierarclust()` and and fixed a 
 potential issue with randomized matrix storage.
