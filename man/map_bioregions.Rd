@@ -4,7 +4,14 @@
 \alias{map_bioregions}
 \title{Create a map of bioregions}
 \usage{
-map_bioregions(clusters, geometry, write_clusters = FALSE, plot = TRUE, ...)
+map_bioregions(
+  clusters,
+  geometry,
+  bioregionalization = NULL,
+  write_clusters = FALSE,
+  plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{clusters}{An object of class \code{bioregion.clusters} or a \code{data.frame}.
@@ -13,6 +20,14 @@ ID, and the subsequent column(s) should represent the clusters.}
 
 \item{geometry}{A spatial object that can be handled by the \code{sf} package.
 The first attribute should correspond to the sites' ID (see Details).}
+
+\item{bioregionalization}{An \code{integer}, \code{character}, or \code{NULL} specifying
+which bioregionalization(s) to plot. If \code{NULL} (default), all
+bioregionalizations are plotted. If an \code{integer} or vector of \code{integers},
+bioregionalization(s) are selected by column number(s) in the \code{clusters}
+data.frame (starting from 1 after the ID column). If a \code{character} or
+vector of \code{characters}, bioregionalization(s) are selected by name(s)
+matching column names in \code{clusters}.}
 
 \item{write_clusters}{A \code{boolean} indicating if the \code{clusters} should be
 added to the \code{geometry}.}
@@ -34,14 +49,42 @@ The \code{clusters} and \code{geometry} site IDs should correspond. They should
 have the same type (i.e., \code{character} if \code{clusters} is a
 \code{bioregion.clusters} object) and the sites of \code{clusters} should be
 included in the sites of \code{geometry}.
+
+\strong{Bipartite networks}: If the \code{clusters} object is from a bipartite network
+(containing both sites and species), only site nodes will be mapped. The
+function automatically filters to site nodes using the \code{node_type} attribute.
+
+\strong{Colors}: If the \code{clusters} object contains colors (added via
+\code{bioregion_colors()}), these colors will be automatically used for plotting.
+Otherwise, the default \code{sf} color scheme will be applied.
 }
 \examples{
 data(fishmat)
+data(fishdf) # (data.frame version of fishmat)
 data(fishsf)
 
 net <- similarity(fishmat, metric = "Simpson")
 clu <- netclu_greedy(net)
 map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
+
+# With colors
+clu_colored <- bioregion_colors(clu)
+map_bioregions(clu_colored, fishsf, plot = TRUE)
+
+# With bipartite network (sites and species)
+clu_bip <- netclu_greedy(fishdf, bipartite = TRUE)
+clu_bip_colored <- bioregion_colors(clu_bip)
+map_bioregions(clu_bip_colored, fishsf, plot = TRUE)
+
+# With multiple bioregionalizations, plot only specific ones
+dissim <- dissimilarity(fishmat, metric = "Simpson")
+clu_multi <- hclu_hierarclust(dissim,
+                              optimal_tree_method = "best",
+                              n_clust = c(2, 4, 10))
+map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3),
+ plot = TRUE)  # By index
+map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), 
+plot = TRUE)  # By name
 
 }
 \author{

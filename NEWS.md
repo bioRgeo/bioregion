@@ -1,3 +1,12 @@
+# bioregion 1.2.0.9010
+
+* Added export of function exportGDF() with documentation + tests 
+
+* New feature: added bioregion_colors() function to add bioregion colors that
+can be used across multiple visualizations (maps, networks, other graphs...)
+
+* Update map_bioregions to handle bioregion colors 
+
 # bioregion 1.2.0.9001
 
 * Updated `site_species_metrics()` to handle multiple bioregionalizations at once

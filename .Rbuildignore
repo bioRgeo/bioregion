@@ -31,3 +31,9 @@
 LICENSE
 .Renviron
 .vscode
+^Rplot.*\.pdf$
+\.gdf$
+\.md$
+
+^test_.*\.R$
+^dev_scripts/

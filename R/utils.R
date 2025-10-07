@@ -36,7 +36,8 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
               "positive_integer",
               "positive_integer_vector",
               "strict_positive_integer",
-              "strict_positive_integer_vector")
+              "strict_positive_integer_vector",
+              "character_or_positive_integer")
   
   if(!(type %in% lstype)){
     stop("Control type not defined!", call.=FALSE)
@@ -753,6 +754,33 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
                       " must be composed of values strictly higher than 0."), 
                call. = FALSE)
         }
+      }
+    }
+  }
+  
+  # Character or positive integer ##############################################
+  if (type == "character_or_positive_integer") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.character(args) && !is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), 
+                  " must be a character string or a positive integer."),
+           call. = FALSE
+      )
+    }
+    if (is.numeric(args)) {
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."),
+             call. = FALSE
+        )
+      }
+      if (args <= 0) {
+        stop(paste0(deparse(substitute(args)),
+                    " must be strictly higher than 0."), 
+             call. = FALSE)
       }
     }
   }
