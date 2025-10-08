@@ -267,7 +267,7 @@ print.bioregion.clusters <- function(x, ...) {
         ifelse(x$args$optimal_tree_method == "best",
           "Tree with the best cophenetic correlation coefficient",
           ifelse(x$args$optimal_tree_method == "iterative_consensus_tree",
-            "Iterative consensus hierarchical tree",
+            "Iterative hierarchical consensus tree",
             paste0(
               "Consensus tree with p = ",
               x$args$consensus_p

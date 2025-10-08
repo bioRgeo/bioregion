@@ -120,8 +120,9 @@ sites in the distance matrix. Therefore, by default, the function
 performs a randomization of the order of sites in the distance
 matrix with 30 trials
 ([more information in the randomization section](#randomization)). It also
-tells us that among all the trials selected the tree with the highest 
-cophenetic correlation coefficient, with a value of 
+tells us that it built a consensus tree based on an iterative hierarchical
+consensus algorithm, and it found a tree with a cophenetic correlation 
+coefficient of 
 `r round(tree1$algorithm$final.tree.coph.cor, 2)`. 
 
 
