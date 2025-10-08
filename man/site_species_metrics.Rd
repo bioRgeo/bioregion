@@ -10,7 +10,8 @@ site_species_metrics(
   indices = c("rho"),
   net = NULL,
   site_col = 1,
-  species_col = 2
+  species_col = 2,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ the sites in \code{net}. 1 by default.}
 
 \item{species_col}{A number indicating the position of the column
 containing the species in \code{net}. 2 by default.}
+
+\item{verbose}{A \code{logical} indicating whether to display progress messages
+during computation. Default is \code{TRUE}.}
 }
 \value{
 A named list of class \code{bioregion.site.species.metrics} containing one element

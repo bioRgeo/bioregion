@@ -22,6 +22,9 @@
 #' @param species_col A number indicating the position of the column
 #' containing the species in `net`. 2 by default.
 #' 
+#' @param verbose A `logical` indicating whether to display progress messages
+#' during computation. Default is `TRUE`.
+#' 
 #' @return 
 #' A named list of class `bioregion.site.species.metrics` containing one element 
 #' per bioregionalization. Each element is a list with:
@@ -190,9 +193,14 @@ site_species_metrics <- function(bioregionalization,
                                  indices = c("rho"),
                                  net = NULL,
                                  site_col = 1,
-                                 species_col = 2){
+                                 species_col = 2,
+                                 verbose = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
+  if(verbose) {
+    message("Starting site_species_metrics computation...")
+  }
+  
   # input can be of format bioregion.clusters
   if (inherits(bioregionalization, "bioregion.clusters")) {
     if (inherits(bioregionalization$clusters, "data.frame")) {
@@ -224,7 +232,20 @@ site_species_metrics <- function(bioregionalization,
          call. = FALSE)
   }
   
+  if(verbose) {
+    message("Validating input data...")
+  }
+  
   controls(args = NULL, data = comat, type = "input_matrix")
+  
+  # Check if rownames of comat are present in clusters
+  if(!all(rownames(comat) %in% clusters[, 1])){
+    stop(paste0("Site names of comat cannot be found in clusters of object ",
+                "bioregionalization.\n",
+                "Did you invert column/row names? Sites should be in rows and ",
+                "species in columns in comat."),
+         call. = FALSE)
+  }
   
   controls(args = indices, data = NULL, type = "character_vector")
   
@@ -268,6 +289,10 @@ site_species_metrics <- function(bioregionalization,
   }
   
   # 2. Main computation -------------------------------------------------------
+  if(verbose) {
+    message("Input validation completed. Starting main computation...")
+  }
+  
   # Store bipartite status
   is_bipartite <- bioregionalization$inputs$bipartite
   
@@ -277,6 +302,11 @@ site_species_metrics <- function(bioregionalization,
     bioregion_names <- colnames(clusters)[-1]
     
     results_list <- lapply(2:ncol(clusters), function(col_idx) {
+      
+      if(verbose) {
+        message("Computing metrics for bioregionalization ", col_idx - 1, 
+                " of ", ncol(clusters) - 1, ": ", bioregion_names[col_idx - 1])
+      }
       
       # Extract single bioregionalization
       single_clusters <- clusters[, c(1, col_idx)]
@@ -299,7 +329,8 @@ site_species_metrics <- function(bioregionalization,
         net = net_copy,
         site_col = site_col,
         species_col = species_col,
-        is_bipartite = is_bipartite
+        is_bipartite = is_bipartite,
+        verbose = verbose
       )
     })
     
@@ -308,6 +339,10 @@ site_species_metrics <- function(bioregionalization,
   } else {
     # Single bioregionalization - also return list for consistency
     bioregion_name <- colnames(clusters)[2]
+    
+    if(verbose) {
+      message("Computing metrics for single bioregionalization: ", bioregion_name)
+    }
     
     results_list <- list(
       compute_single_bioregionalization_metrics(
@@ -318,7 +353,8 @@ site_species_metrics <- function(bioregionalization,
         net = net,
         site_col = site_col,
         species_col = species_col,
-        is_bipartite = is_bipartite
+        is_bipartite = is_bipartite,
+        verbose = verbose
       )
     )
     names(results_list) <- bioregion_name
@@ -328,6 +364,10 @@ site_species_metrics <- function(bioregionalization,
   class(results_list) <- c("bioregion.site.species.metrics", "list")
   attr(results_list, "indices") <- indices
   attr(results_list, "n_bioregionalizations") <- length(results_list)
+  
+  if(verbose) {
+    message("Computation completed successfully!")
+  }
   
   return(results_list)
 }
@@ -342,12 +382,16 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
                                                       net = NULL,
                                                       site_col = 1,
                                                       species_col = 2,
-                                                      is_bipartite = FALSE) {
+                                                      is_bipartite = FALSE,
+                                                      verbose = TRUE) {
   
   rho_df <- affinity_df <- fidelity_df <- indval_df <- bipartite_df <- NULL
   
   # 1. Cz indices (bipartite only) ------------------------------------------
   if("Cz" %in% indices && is_bipartite) {
+    if(verbose) {
+      message("  Computing Cz indices (participation coefficient and z-score)...")
+    }
     # Rename site and species columns as Sites and Species
     colnames(net)[site_col] <- "Site"
     colnames(net)[species_col] <- "Species"
@@ -374,25 +418,36 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     colnames(net)[colnames(net) == "Bioregion"] <- "Bioregion_species"
     
     # Compute coefficient of participation C
-    C_site <- data.frame()
-    dat_com <- bipartite_df[which(bipartite_df$Category == "site"), ]
-    for(i in 1:nrow(dat_com)){
-      tmp <- table(net[which(net$Site == dat_com[i, "Node"]), "Bioregion_species"])
-      C_site <- rbind(C_site,
-                      data.frame(Node = dat_com[i, "Node"],
-                                 C = 1 - sum((tmp/sum(tmp))^2),
-                                 Category = "site"))
+    if(verbose) {
+      message("    Computing participation coefficient C for sites and species...")
     }
     
-    C_sp <- data.frame()
+    # Vectorized computation for sites
+    dat_com <- bipartite_df[which(bipartite_df$Category == "site"), ]
+    C_site <- tapply(net$Bioregion_species, net$Site, function(x) {
+      tmp <- table(x)
+      1 - sum((tmp/sum(tmp))^2)
+    })
+    C_site <- data.frame(
+      Node = names(C_site),
+      C = as.numeric(C_site),
+      Category = "site",
+      stringsAsFactors = FALSE
+    )
+    
+    # Vectorized computation for species
     dat_sp <- bipartite_df[which(bipartite_df$Category == "species"), ]
-    for(i in 1:nrow(dat_sp)){
-      tmp <- table(net[which(net$Species == dat_sp[i, "Node"]), "Bioregion_site"])
-      C_sp <- rbind(C_sp,
-                    data.frame(Node = dat_sp[i, "Node"],
-                               C = 1 - sum((tmp/sum(tmp))^2),
-                               Category = "species"))
-    }
+    C_sp <- tapply(net$Bioregion_site, net$Species, function(x) {
+      tmp <- table(x)
+      1 - sum((tmp/sum(tmp))^2)
+    })
+    C_sp <- data.frame(
+      Node = names(C_sp),
+      C = as.numeric(C_sp),
+      Category = "species",
+      stringsAsFactors = FALSE
+    )
+    
     C_dat <- rbind(C_site, C_sp)
     
     # Merge results with bipartite_df
@@ -400,18 +455,33 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
                                      by = c("Node",  "Category"))
     
     # Compute z
-    bipartite_df$n_link_bioregion <- NA
-    for(i in 1:nrow(bipartite_df)){
-      if(bipartite_df[i, "Category"] == "site"){
-        tmp <- net[which(net$Site == bipartite_df[i, "Node"]), ]
-        bipartite_df[i, "n_link_bioregion"] <-
-          nrow(tmp[which(tmp$Bioregion_site == tmp$Bioregion_species), ])
-      } else{
-        tmp <- net[which(net$Species == bipartite_df[i, "Node"]), ]
-        bipartite_df[i, "n_link_bioregion"] <-
-          nrow(tmp[which(tmp$Bioregion_site == tmp$Bioregion_species), ])
-      }
+    if(verbose) {
+      message("    Computing within-bioregion degree z-score...")
     }
+    
+    # Vectorized computation: count links within same bioregion
+    # Add a logical column for within-bioregion links
+    net$within_bioregion <- net$Bioregion_site == net$Bioregion_species
+    
+    # Count within-bioregion links for sites
+    site_links <- tapply(net$within_bioregion, net$Site, sum)
+    site_links_df <- data.frame(
+      Node = names(site_links),
+      n_link_bioregion = as.numeric(site_links),
+      stringsAsFactors = FALSE
+    )
+    
+    # Count within-bioregion links for species
+    species_links <- tapply(net$within_bioregion, net$Species, sum)
+    species_links_df <- data.frame(
+      Node = names(species_links),
+      n_link_bioregion = as.numeric(species_links),
+      stringsAsFactors = FALSE
+    )
+    
+    # Merge with bipartite_df
+    all_links <- rbind(site_links_df, species_links_df)
+    bipartite_df <- dplyr::left_join(bipartite_df, all_links, by = "Node")
     
     # Average number of links within a bioregion
     mean_link_bioregion <- tapply(bipartite_df$n_link_bioregion,
@@ -444,15 +514,22 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
   
   # 2. Contribution metrics (rho, affinity, fidelity, indicator_value) ------
   if(any(c("rho", "affinity", "fidelity", "indicator_value") %in% indices)){
+    if(verbose) {
+      selected_indices <- intersect(indices, 
+                                   c("rho", "affinity", "fidelity", "indicator_value"))
+      message("  Computing contribution metrics: ", 
+              paste(selected_indices, collapse = ", "))
+    }
     # Binary site-species matrix
     comat_bin <- comat
     comat_bin[comat_bin > 0] <- 1
     
-    # If it is a bipartite object, we just consider the sites
-    if(is_bipartite){
-      single_clusters <- single_clusters[
-        which(attributes(single_clusters)$node_type == "site"), ]
-    }
+    # If it is a bipartite object, split site and species into two objects
+     if(is_bipartite){
+       all_clusters <- single_clusters
+       single_clusters <- single_clusters[
+         which(attributes(single_clusters)$node_type == "site"), ]
+     }
     
     # Data.frames with output
     rho_df <- data.frame(Bioregion = character(),
@@ -470,61 +547,107 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     
     # Formula components
     n <- nrow(comat) # number of sites
-    n_i <- colSums(comat_bin) # number of occurrences per species
+    rich <- rowSums(comat_bin) # species richness per site
+    n_i <- colSums(comat_bin) # number of occurrences per species (previously n_i)
     n_species <- ncol(comat)
     
     # Get unique bioregions
     bioregions <- unique(single_clusters[, 2])
     n_bioregions <- length(bioregions)
-    n_clust <- n_bioregions
     
-    # Loop over bioregions
-    for(j in 1:n_bioregions){
-      focal_j <- as.character(bioregions[j]) # bioregion j (ensure character for consistent joins)
+    if(verbose) {
+      message("    Processing ", n_bioregions, " bioregions...")
+    }
+    
+    # Vectorized computation over bioregions
+    # Pre-allocate storage lists for efficiency
+    rho_list <- affinity_list <- fidelity_list <- indval_list <- vector("list", n_bioregions)
+    
+    # Create a mapping matrix: sites x bioregions (TRUE if site belongs to bioregion)
+    # This avoids repeated subsetting operations
+    site_bioregion_map <- sapply(bioregions, function(br) {
+      single_clusters[, 2] == br
+    })
+    rownames(site_bioregion_map) <- single_clusters[, 1]
+    
+    # Count sites per bioregion
+    n_j_vec <- colSums(site_bioregion_map)
+    
+    # Compute n_ij matrix: species (rows) x bioregions (columns)
+    # n_ij[i, j] = number of occurrences of species i in sites of bioregion j
+    # Matrix multiplication: t(comat_bin) %*% site_bioregion_map gives us this directly
+    n_ij_mat <- t(comat_bin) %*% site_bioregion_map
+    
+    # Now vectorize calculations across all bioregions at once
+    if("rho" %in% indices){
+      # Compute rho for all species x bioregion combinations at once
+      # Original formula: p_ij <- (n_ij - ((n_i*n_j)/n))/(sqrt(((n - n_j)/(n-1))*(1-(n_j/n))*((n_i*n_j)/n)))
+      # where:
+      #   n_ij = occurrences of species i in bioregion j (matrix: species x bioregions)
+      #   n_i = total occurrences of species i across all sites (vector: per species)
+      #   n_j = number of sites in bioregion j (vector: per bioregion)
+      #   n = total number of sites (scalar)
       
-      # Sites belonging to bioregion j
-      focal_sites <- single_clusters[which(single_clusters[, 2] == bioregions[j]), 1]
-      # Number of sites belonging to bioregion j
-      n_j <- sum(single_clusters[, 2] == focal_j)
+      # Replicate vectors to match n_ij_mat dimensions (species x bioregions)
+      # n_i_mat: replicate n_i (per species) across bioregions (columns)
+      n_i_mat <- matrix(n_i, nrow = n_species, ncol = n_bioregions, byrow = FALSE)
+      # n_j_mat: replicate n_j_vec (per bioregion) across species (rows)
+      n_j_mat <- matrix(n_j_vec, nrow = n_species, ncol = n_bioregions, byrow = TRUE)
       
-      # Occurrences per species in each of these sites to get n_ij
-      n_ij <- colSums(comat_bin[focal_sites, , drop = FALSE])
+      # Calculate rho using the original formula, vectorized
+      numerator <- n_ij_mat - ((n_i_mat * n_j_mat) / n)
+      denominator <- sqrt(((n - n_j_mat) / (n - 1)) * (1 - (n_j_mat / n)) * ((n_i_mat * n_j_mat) / n))
+      p_ij_mat <- numerator / denominator
       
-      if("rho" %in% indices){
-        # Contribution of species i to bioregion j
-        p_ij <- (n_ij - ((n_i*n_j)/n))/(sqrt(((n - n_j)/(n-1))*(1-(n_j/n))*((n_i*n_j)/n)))
-        
-        rho_df <- rbind(rho_df,
-                        data.frame(Bioregion = focal_j,
-                                   Species = names(p_ij),
-                                   rho = as.numeric(p_ij)))
-      }
-      if("affinity" %in% indices){
-        # Affinity of species i to bioregion j
-        affinity_df <- rbind(affinity_df,
-                             data.frame(Bioregion = focal_j,
-                                        Species = names(n_ij),
-                                        affinity = n_ij/n_j))
-      }
+      # Convert matrix to long format data.frame
+      rho_df <- data.frame(
+        Bioregion = rep(as.character(bioregions), each = n_species),
+        Species = rep(colnames(comat), times = n_bioregions),
+        rho = as.vector(p_ij_mat)
+      )
+    }
+    
+    if("affinity" %in% indices) {
+      # Affinity: n_ij / n_j for each bioregion
+      # Divide each column of n_ij_mat by corresponding n_j
+      affinity_mat <- sweep(n_ij_mat, 2, n_j_vec, FUN = "/")
       
-      if("fidelity" %in% indices){
-        # Fidelity of species i to bioregion j
-        fidelity_df <- rbind(fidelity_df,
-                             data.frame(Bioregion = focal_j,
-                                        Species = names(n_ij),
-                                        fidelity = n_ij/n_i))
-      }
+      affinity_df <- data.frame(
+        Bioregion = rep(as.character(bioregions), each = n_species),
+        Species = rep(colnames(comat), times = n_bioregions),
+        affinity = as.vector(affinity_mat)
+      )
+    }
+    
+    if("fidelity" %in% indices) {
+      # Fidelity: n_ij / n_i for each species
+      # Divide each row of n_ij_mat by corresponding n_i
+      fidelity_mat <- sweep(n_ij_mat, 1, n_i, FUN = "/")
       
-      if("indicator_value" %in% indices){
-        # Individual contribution of species i to bioregion j
-        indval_df <- rbind(indval_df,
-                           data.frame(Bioregion = focal_j,
-                                      Species = names(n_ij),
-                                      indval = (n_ij/n_j)*(n_ij/n_i)))
-      }
+      fidelity_df <- data.frame(
+        Bioregion = rep(as.character(bioregions), each = n_species),
+        Species = rep(colnames(comat), times = n_bioregions),
+        fidelity = as.vector(fidelity_mat)
+      )
+    }
+    
+    if("indicator_value" %in% indices) {
+      # Indicator value: (n_ij/n_j) * (n_ij/n_i)
+      affinity_mat <- sweep(n_ij_mat, 2, n_j_vec, FUN = "/")
+      fidelity_mat <- sweep(n_ij_mat, 1, n_i, FUN = "/")
+      indval_mat <- affinity_mat * fidelity_mat
+      
+      indval_df <- data.frame(
+        Bioregion = rep(as.character(bioregions), each = n_species),
+        Species = rep(colnames(comat), times = n_bioregions),
+        indval = as.vector(indval_mat)
+      )
     }
     
     # Merge all outputs together into a single data.frame
+    if(verbose) {
+      message("    Merging results...")
+    }
     res_df <- dplyr::full_join(rho_df, affinity_df, 
                                by = c("Bioregion", "Species"))
     res_df <- dplyr::full_join(res_df, fidelity_df, 
@@ -537,7 +660,7 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     
     # Controls on the output
     # test if all bioregions are there
-    if(length(unique(res_df$Bioregion)) != n_clust){
+    if(length(unique(res_df$Bioregion)) != n_bioregions){
       warning("Not all bioregions are in the output.")
     }
     
@@ -548,7 +671,7 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     
     # test if all species are there X times (X = nb of bioregions)
     if(length(unique(table(res_df$Species))) != 1 ||
-       unique(table(res_df$Species)) != n_clust){
+       unique(table(res_df$Species)) != n_bioregions){
       warning("Not all species x bioregions combinations are in the output.")
     }
   } else {
