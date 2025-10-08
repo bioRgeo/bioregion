@@ -702,3 +702,38 @@ test_that("show_hierarchy argument works", {
   expect_equal(nrow(clust5$cluster_info), 2)
   
 })
+
+# Tests for summary on uncut tree ----------------------------------------------
+test_that("summary works on uncut hclu_hierarclust tree", {
+  
+  # Create an uncut tree
+  tree_uncut <- hclu_hierarclust(dissim,
+                                 index = "Simpson",
+                                 randomize = FALSE,
+                                 verbose = FALSE)
+  
+  # Summary should not crash
+  expect_no_error(summary(tree_uncut))
+  
+  # Verify tree structure
+  expect_equal(tree_uncut$name, "hclu_hierarclust")
+  expect_true(!is.data.frame(tree_uncut$clusters))
+  expect_true(is.na(tree_uncut$clusters))
+  expect_equal(tree_uncut$inputs$hierarchical, FALSE)
+  
+  # Create a cut tree for comparison
+  tree_cut <- hclu_hierarclust(dissim,
+                               index = "Simpson",
+                               randomize = FALSE,
+                               n_clust = 5,
+                               verbose = FALSE)
+  
+  # Both should work with summary
+  expect_no_error(summary(tree_uncut))
+  expect_no_error(summary(tree_cut))
+  
+  # Cut tree should have clusters
+  expect_true(is.data.frame(tree_cut$clusters))
+  expect_equal(ncol(tree_cut$clusters), 2) # ID + 1 partition
+  
+})
