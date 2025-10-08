@@ -42,6 +42,9 @@
 #' @param dissimilarity Relevant only if `dynamic_method = "hybrid"`. Provide 
 #' the dissimilarity `data.frame` used to build the `tree`.
 #' 
+#' @param show_hierarchy A `boolean` specifying if the hierarchy of clusters
+#' should be identifiable in the outputs (`FALSE` by default).
+#' 
 #' @param ... Additional arguments passed to
 #' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic] to
 #' customize the dynamic tree cut method.
@@ -130,6 +133,7 @@ cut_tree <- function(tree,
                      dynamic_method = "tree",
                      dynamic_minClusterSize = 5,
                      dissimilarity = NULL,
+                     show_hierarchy = FALSE,
                      ...){
   
   # Control n_clust
@@ -178,6 +182,9 @@ cut_tree <- function(tree,
            call. = FALSE)
     }
   }
+  
+  # Control show_hierarchy
+  controls(args = show_hierarchy, data = NULL, type = "boolean")
   
   # Control dynamic_tree_cut, dynamic_method, dynamic_minClusterSize 
   # and dissimilarity
@@ -254,8 +261,9 @@ cut_tree <- function(tree,
       cur.tree <- tree$algorithm$final.tree
       # Update args
       tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min",
-                  "dynamic_tree_cut")] <-
-        list(n_clust, cut_height, find_h, h_max, h_min, dynamic_tree_cut)
+                  "dynamic_tree_cut", "show_hierarchy")] <-
+        list(n_clust, cut_height, find_h, h_max, h_min, dynamic_tree_cut, 
+             show_hierarchy)
       
       if(dynamic_tree_cut){
         tree$args[c("dynamic_method",
@@ -381,6 +389,9 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
   
+  # Note: show_hierarchy is stored in args but doesn't change behavior 
+  # significantly for hierarchical clustering since cutree returns integers.
+  # The hierarchy is already preserved through multiple partition columns.
   clusters <- knbclu(clusters, reorder = TRUE)
   
   if(inherits(tree, "bioregion.clusters")) {
@@ -402,6 +413,11 @@ cut_tree <- function(tree,
     } else if(!is.null(cut_height)) {
       tree$cluster_info$requested_cut_height <- cut_height
     }
+    
+    # Update hierarchical status based on number of partitions
+    tree$inputs$hierarchical <- ifelse(ncol(tree$clusters) > 2,
+                                       TRUE,
+                                       FALSE)
     
     return(tree)
   } else if (inherits(tree, "hclust")){

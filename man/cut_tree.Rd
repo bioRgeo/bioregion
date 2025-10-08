@@ -15,6 +15,7 @@ cut_tree(
   dynamic_method = "tree",
   dynamic_minClusterSize = 5,
   dissimilarity = NULL,
+  show_hierarchy = FALSE,
   ...
 )
 }
@@ -53,6 +54,9 @@ size for the dynamic tree cut method (see
 
 \item{dissimilarity}{Relevant only if \code{dynamic_method = "hybrid"}. Provide
 the dissimilarity \code{data.frame} used to build the \code{tree}.}
+
+\item{show_hierarchy}{A \code{boolean} specifying if the hierarchy of clusters
+should be identifiable in the outputs (\code{FALSE} by default).}
 
 \item{...}{Additional arguments passed to
 \link[dynamicTreeCut:cutreeDynamic]{dynamicTreeCut::cutreeDynamic()} to

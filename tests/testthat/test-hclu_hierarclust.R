@@ -611,5 +611,94 @@ test_that("invalid inputs", {
                      verbose = FALSE),
     "At least two trees are required to calculate a consensus.",
     fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim,
+                     show_hierarchy = 1,
+                     optimal_tree_method = "best",
+                     n_clust = 5,
+                     verbose = FALSE),
+    "show_hierarchy must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim,
+                     show_hierarchy = c(TRUE, FALSE),
+                     optimal_tree_method = "best",
+                     n_clust = 5,
+                     verbose = FALSE),
+    "show_hierarchy must be of length 1.",
+    fixed = TRUE)
 
+})
+
+# Tests for show_hierarchy argument --------------------------------------------
+test_that("show_hierarchy argument works", {
+  
+  clust1 <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = FALSE,
+                            n_clust = c(5, 10),
+                            show_hierarchy = FALSE,
+                            verbose = FALSE)
+  expect_equal(clust1$args$show_hierarchy, FALSE)
+  expect_equal(inherits(clust1, "bioregion.clusters"), TRUE)
+  expect_equal(dim(clust1$clusters)[2], 3)
+  
+  clust2 <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = FALSE,
+                            n_clust = c(5, 10),
+                            show_hierarchy = TRUE,
+                            verbose = FALSE)
+  expect_equal(clust2$args$show_hierarchy, TRUE)
+  expect_equal(inherits(clust2, "bioregion.clusters"), TRUE)
+  expect_equal(dim(clust2$clusters)[2], 3)
+  
+  # Both should produce similar cluster structures since cutree returns integers
+  expect_equal(ncol(clust1$clusters), ncol(clust2$clusters))
+  
+  # Test with cut_tree
+  clust3 <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            randomize = FALSE,
+                            verbose = FALSE)
+  
+  clust4 <- cut_tree(clust3,
+                    n_clust = c(5, 10),
+                    show_hierarchy = FALSE)
+  expect_equal(clust4$args$show_hierarchy, FALSE)
+  expect_equal(dim(clust4$clusters)[2], 3)
+  
+  clust5 <- cut_tree(clust3,
+                    n_clust = c(5, 10),
+                    show_hierarchy = TRUE)
+  expect_equal(clust5$args$show_hierarchy, TRUE)
+  expect_equal(dim(clust5$clusters)[2], 3)
+  
+  # Test that summary works with both show_hierarchy settings
+  expect_no_error(summary(clust1))
+  expect_no_error(summary(clust2))
+  expect_no_error(summary(clust4))
+  expect_no_error(summary(clust5))
+  
+  # Verify hierarchical status is properly set
+  expect_equal(clust1$inputs$hierarchical, TRUE)
+  expect_equal(clust2$inputs$hierarchical, TRUE)
+  # With 2 partitions (3 columns including ID), should be hierarchical
+  expect_equal(clust4$inputs$hierarchical, TRUE)
+  expect_equal(clust5$inputs$hierarchical, TRUE)
+  
+  # Verify cluster_info is present
+  expect_true(!is.null(clust1$cluster_info))
+  expect_true(!is.null(clust2$cluster_info))
+  expect_true(!is.null(clust4$cluster_info))
+  expect_true(!is.null(clust5$cluster_info))
+  expect_equal(nrow(clust1$cluster_info), 2)
+  expect_equal(nrow(clust2$cluster_info), 2)
+  expect_equal(nrow(clust4$cluster_info), 2)
+  expect_equal(nrow(clust5$cluster_info), 2)
+  
 })

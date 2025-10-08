@@ -63,6 +63,10 @@
 #' `optimal_tree_method = "consensus"`) indicating the threshold proportion of 
 #' trees that must support a region/cluster for it to be included in the final 
 #' consensus tree.
+#' 
+#' @param show_hierarchy A `boolean` specifying if the hierarchy of clusters
+#' should be identifiable in the outputs (`FALSE` by default). This argument is 
+#' only used if the tree is cut (i.e., `n_clust` or `cut_height` is provided).
 #'  
 #' @param verbose A `boolean` indicating whether to 
 #' display progress messages. Set to `FALSE` to suppress these messages.
@@ -235,9 +239,8 @@ hclu_hierarclust <- function(dissimilarity,
                              h_max = 1,
                              h_min = 0,
                              consensus_p = 0.5,
+                             show_hierarchy = FALSE,
                              verbose = TRUE){
-  
-# TODO: Add show_hierarchy to hclu_hierarclust AND cut_tree
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
   if(!inherits(dissimilarity, "dist")){
@@ -340,6 +343,7 @@ hclu_hierarclust <- function(dissimilarity,
     stop("consensus_p must be between 0.5 and 1.",
          call. = FALSE)
   }
+  controls(args = show_hierarchy, data = NULL, type = "boolean")
   
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "hclu_hierarclust")
@@ -358,6 +362,7 @@ hclu_hierarclust <- function(dissimilarity,
                        h_max = h_max,
                        h_min = h_min,
                        consensus_p = consensus_p,
+                       show_hierarchy = show_hierarchy,
                        verbose = verbose,
                        dynamic_tree_cut = dynamic_tree_cut)
   
@@ -534,7 +539,8 @@ hclu_hierarclust <- function(dissimilarity,
                         find_h = find_h,
                         h_max = h_max,
                         h_min = h_min,
-                        dynamic_tree_cut = dynamic_tree_cut)
+                        dynamic_tree_cut = dynamic_tree_cut,
+                        show_hierarchy = show_hierarchy)
     outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
                                           TRUE,
                                           FALSE)

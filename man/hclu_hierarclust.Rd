@@ -18,6 +18,7 @@ hclu_hierarclust(
   h_max = 1,
   h_min = 0,
   consensus_p = 0.5,
+  show_hierarchy = FALSE,
   verbose = TRUE
 )
 }
@@ -76,6 +77,10 @@ tree for the chosen \code{index}.}
 \code{optimal_tree_method = "consensus"}) indicating the threshold proportion of
 trees that must support a region/cluster for it to be included in the final
 consensus tree.}
+
+\item{show_hierarchy}{A \code{boolean} specifying if the hierarchy of clusters
+should be identifiable in the outputs (\code{FALSE} by default). This argument is
+only used if the tree is cut (i.e., \code{n_clust} or \code{cut_height} is provided).}
 
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}

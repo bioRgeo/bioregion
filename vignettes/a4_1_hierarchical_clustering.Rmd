@@ -194,6 +194,14 @@ tree1 <- cut_tree(tree1,
 
 plot(tree1, cex = .2)
 ```
+
+We can also see directly in the console the hierarchical structure of the tree,
+with info on each cluster, by using the convenient `summary()` function.
+
+```{r}
+summary(tree1)
+```
+
 However, it may be more useful to choose the heights of cut, rather than the
 number of clusters. We could, for example, cut the tree at heights 0.4 (shallow
 cut), 0.5 (intermediate cut) and 0.6 (deep cut):
@@ -217,6 +225,11 @@ From the result, we can read that for the deep cut partition (h = 0.6) we have
 partition (h = 0.5) we have `r tree1$algorithm$output_n_clust[2]` clusters and 
 for the shallow cut partition (h = 0.4) we have 
 `r tree1$algorithm$output_n_clust[3]` clusters.
+
+Let's look at the hierarchical structure of clusters with `summary()`:
+```{r}
+summary(tree1)
+```
 
 Here is how the maps look like:
 

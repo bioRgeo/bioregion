@@ -172,6 +172,81 @@ test_that("invalid inputs", {
     cut_tree(tree = 1),
     "^This function is designed to work either on outputs")
   
+  expect_error(
+    cut_tree(tree,
+             show_hierarchy = 1),
+    "show_hierarchy must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    cut_tree(tree,
+             show_hierarchy = c(TRUE, FALSE)),
+    "show_hierarchy must be of length 1.",
+    fixed = TRUE)
+  
+})
+
+# Tests for show_hierarchy argument --------------------------------------------
+test_that("show_hierarchy argument works in cut_tree", {
+  
+  tree_no_cut <- hclu_hierarclust(dissim,
+                                  optimal_tree_method = "best",
+                                  verbose = FALSE)
+  
+  cut1 <- cut_tree(tree_no_cut,
+                   n_clust = c(3, 5),
+                   show_hierarchy = FALSE)
+  expect_equal(cut1$args$show_hierarchy, FALSE)
+  expect_equal(inherits(cut1, "bioregion.clusters"), TRUE)
+  
+  cut2 <- cut_tree(tree_no_cut,
+                   n_clust = c(3, 5),
+                   show_hierarchy = TRUE)
+  expect_equal(cut2$args$show_hierarchy, TRUE)
+  expect_equal(inherits(cut2, "bioregion.clusters"), TRUE)
+  
+  # Both should have same structure
+  expect_equal(dim(cut1$clusters), dim(cut2$clusters))
+  
+  # Test that summary works with both show_hierarchy settings
+  expect_no_error(summary(cut1))
+  expect_no_error(summary(cut2))
+  
+  # Verify hierarchical status is properly set when multiple cuts
+  expect_equal(cut1$inputs$hierarchical, TRUE)
+  expect_equal(cut2$inputs$hierarchical, TRUE)
+  
+  # Verify cluster_info is present
+  expect_true(!is.null(cut1$cluster_info))
+  expect_true(!is.null(cut2$cluster_info))
+  expect_equal(nrow(cut1$cluster_info), 2)
+  expect_equal(nrow(cut2$cluster_info), 2)
+  
+  # Test with single cut
+  cut3 <- cut_tree(tree_no_cut,
+                   n_clust = 5,
+                   show_hierarchy = FALSE)
+  expect_equal(cut3$args$show_hierarchy, FALSE)
+  expect_no_error(summary(cut3))
+  
+  cut4 <- cut_tree(tree_no_cut,
+                   n_clust = 5,
+                   show_hierarchy = TRUE)
+  expect_equal(cut4$args$show_hierarchy, TRUE)
+  expect_no_error(summary(cut4))
+  
+  # With cut_height instead of n_clust
+  cut5 <- cut_tree(tree_no_cut,
+                   cut_height = c(0.3, 0.5),
+                   show_hierarchy = FALSE)
+  expect_equal(cut5$args$show_hierarchy, FALSE)
+  expect_no_error(summary(cut5))
+  
+  cut6 <- cut_tree(tree_no_cut,
+                   cut_height = c(0.3, 0.5),
+                   show_hierarchy = TRUE)
+  expect_equal(cut6$args$show_hierarchy, TRUE)
+  expect_no_error(summary(cut6))
   
 })
 
