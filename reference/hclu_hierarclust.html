@@ -106,6 +106,7 @@ or by running <code>similarity</code> followed by <code>similarity_to_dissimilar
 <span>  h_max <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  h_min <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  consensus_p <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -193,6 +194,12 @@ tree for the chosen <code>index</code>.</p></dd>
 <code>optimal_tree_method = "consensus"</code>) indicating the threshold proportion of
 trees that must support a region/cluster for it to be included in the final
 consensus tree.</p></dd>
+
+
+<dt id="arg-show-hierarchy">show_hierarchy<a class="anchor" aria-label="anchor" href="#arg-show-hierarchy"></a></dt>
+<dd><p>A <code>boolean</code> specifying if the hierarchy of clusters
+should be identifiable in the outputs (<code>FALSE</code> by default). This argument is
+only used if the tree is cut (i.e., <code>n_clust</code> or <code>cut_height</code> is provided).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

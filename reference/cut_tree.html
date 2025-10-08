@@ -97,6 +97,7 @@ height for the requested number(s) of clusters.</p>
 <span>  dynamic_method <span class="op">=</span> <span class="st">"tree"</span>,</span>
 <span>  dynamic_minClusterSize <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  dissimilarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -158,6 +159,11 @@ size for the dynamic tree cut method (see
 <dt id="arg-dissimilarity">dissimilarity<a class="anchor" aria-label="anchor" href="#arg-dissimilarity"></a></dt>
 <dd><p>Relevant only if <code>dynamic_method = "hybrid"</code>. Provide
 the dissimilarity <code>data.frame</code> used to build the <code>tree</code>.</p></dd>
+
+
+<dt id="arg-show-hierarchy">show_hierarchy<a class="anchor" aria-label="anchor" href="#arg-show-hierarchy"></a></dt>
+<dd><p>A <code>boolean</code> specifying if the hierarchy of clusters
+should be identifiable in the outputs (<code>FALSE</code> by default).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
