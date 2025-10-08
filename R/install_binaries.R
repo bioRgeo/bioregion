@@ -113,12 +113,18 @@ install_binaries <- function(binpath = "tempdir",
   url <- "https://github.com/bioRgeo/bioregion/releases/download/v1.0.0/bin.zip"
   backup <- "https://www.mmmycloud.com/index.php/s/wnyLYFZGESyckW8/download"
   if(httr::HEAD(url)$status_code == 200){
-    utils::download.file(url, paste0(binpath, "/bin.zip"), mode = "wb")
+    utils::download.file(url, 
+                         paste0(binpath, "/bin.zip"), 
+                         mode = "wb",
+                         quiet = TRUE)
     message(paste0("The folder has been successfully downloaded to ",
                    binpath, 
                    "."))
   }else if(httr::HEAD(backup)$status_code == 200){
-    utils::download.file(backup, paste0(binpath, "/bin.zip"), mode = "wb")
+    utils::download.file(backup, 
+                         paste0(binpath, "/bin.zip"), 
+                         mode = "wb",
+                         quiet = TRUE)
     message(paste0("The folder has been successfully downloaded to ",
                    binpath, 
                    "."))

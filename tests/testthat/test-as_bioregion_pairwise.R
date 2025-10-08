@@ -82,7 +82,7 @@ test_that("valid output", {
 # Tests for external packages --------------------------------------------------
 test_that("adespatial", {
   skip_if_not_installed("adespatial")
-  library(adespatial)
+  quietly(library(adespatial))
   
   expect_error(
     as_bioregion_pairwise(mat0,
@@ -141,7 +141,7 @@ test_that("adespatial", {
 
 test_that("betapart", {
   skip_if_not_installed("betapart")
-  library(betapart)
+  quietly(library(betapart))
   
   expect_error(
     as_bioregion_pairwise(mat0,
@@ -216,8 +216,9 @@ test_that("betapart", {
 
 test_that("ecodist", {
   skip_if_not_installed("ecodist")
-  library(ecodist)
-  registerS3method("dim", "dist", get("dim.dist", envir = asNamespace("proxy")))
+  quietly(library(ecodist))
+  quietly(registerS3method("dim", "dist", get("dim.dist", 
+                                              envir = asNamespace("proxy"))))
   
   expect_error(
     as_bioregion_pairwise(mat0,
@@ -256,7 +257,7 @@ test_that("ecodist", {
 
 test_that("vegan", {
   skip_if_not_installed("vegan")
-  library(vegan)
+  quietly(library(vegan))
   
   expect_error(
     as_bioregion_pairwise(mat0,

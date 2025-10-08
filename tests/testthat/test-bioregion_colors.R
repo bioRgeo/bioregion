@@ -270,8 +270,11 @@ test_that("input validation catches errors", {
 
 test_that("handles multiple partitions correctly", {
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 4, 8),
-                                 optimal_tree_method = "best")
+  
+  quietly(
+    clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 4, 8),
+                                   optimal_tree_method = "best")
+  )
   
   clust_colored <- bioregion_colors(clust_hier)
   
