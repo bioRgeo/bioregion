@@ -8,7 +8,9 @@ create_mock_clusters <- function(comat,
                                  clusters_df, 
                                  bipartite = FALSE,
                                  species_clusters = NULL,
-                                 algorithm = "mock_clustering") {
+                                 algorithm = "mock_clustering",
+                                 weight = FALSE,
+                                 weight_index = 3) {
   
   # Validate inputs
   if (!is.matrix(comat) && !is.data.frame(comat)) {
@@ -39,10 +41,13 @@ create_mock_clusters <- function(comat,
   # This mimics the output of netclu_infomap()
   mock_clusters <- list(
     name = algorithm,
-    args = list(), 
+    args = list(
+      weight = weight,
+      index = weight_index
+    ), 
     inputs = list(
       bipartite = bipartite,
-      weight = FALSE,
+      weight = weight,
       pairwise = !bipartite,  
       pairwise_metric = if (!bipartite) "Simpson" else NA,
       dissimilarity = !bipartite,

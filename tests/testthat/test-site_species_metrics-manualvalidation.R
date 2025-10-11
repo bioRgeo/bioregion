@@ -325,7 +325,9 @@ test_that("Cz indices - Bipartite network", {
     tc4$comat, 
     tc4$site_clusters,
     bipartite = TRUE,
-    species_clusters = tc4$species_clusters
+    species_clusters = tc4$species_clusters,
+    weight = TRUE,
+    weight_index = 3  # Third column in net dataframe is the weight
   )
   
   # Create network data.frame for Cz calculations

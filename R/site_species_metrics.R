@@ -393,11 +393,28 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
   
   rho_df <- affinity_df <- fidelity_df <- indval_df <- bipartite_df <- NULL
   
+
+  weight <- ifelse(is.null(weight), FALSE, weight)
+  
   # 1. Cz indices (bipartite only) ------------------------------------------
   if("Cz" %in% indices && is_bipartite) {
     if(verbose) {
       message("  Computing Cz indices (participation coefficient and z-score)...")
     }
+    
+    # Store original column name for weight if it exists
+    # weight_index can be either a character (column name) or numeric (column position)
+    original_weight_colname <- NULL
+    if(weight && !is.null(weight_index)) {
+      if(is.character(weight_index)) {
+        # weight_index is a column name
+        original_weight_colname <- weight_index
+      } else if(is.numeric(weight_index) && weight_index <= ncol(net)) {
+        # weight_index is a column position
+        original_weight_colname <- colnames(net)[weight_index]
+      }
+    }
+    
     # Rename site and species columns as Sites and Species
     colnames(net)[site_col] <- "Site"
     colnames(net)[species_col] <- "Species"
@@ -421,6 +438,16 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     colnames(species_bioregions) <- c("Species", "Bioregion_species")
     net <- merge(net, species_bioregions, by = "Species", all.x = TRUE)
     
+    if(weight && !is.null(original_weight_colname)) {
+      weight_col_idx <- which(colnames(net) == original_weight_colname)
+      if(length(weight_col_idx) == 0) {
+        warning("Weight column '", original_weight_colname, "' not found after merge. Using unweighted calculations.")
+        weight <- FALSE
+      } else {
+        weight_col_idx <- weight_col_idx[1]
+      }
+    }
+    
     # Compute coefficient of participation C
     if(verbose) {
       message("    Computing participation coefficient C for sites and species...")
@@ -433,7 +460,7 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     if(weight) {
       # Sum weights by site and species bioregion
       C_site <- by(net, net$Site, function(site_net) {
-        weight_by_bioregion <- tapply(site_net[[weight_index]], 
+        weight_by_bioregion <- tapply(site_net[[weight_col_idx]], 
                                       site_net$Bioregion_species, 
                                       sum, na.rm = TRUE)
         total_weight <- sum(weight_by_bioregion, na.rm = TRUE)
@@ -462,7 +489,7 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     if(weight) {
       # Sum weights by species and site bioregion
       C_sp <- by(net, net$Species, function(species_net) {
-        weight_by_bioregion <- tapply(species_net[[index]], 
+        weight_by_bioregion <- tapply(species_net[[weight_col_idx]], 
                                       species_net$Bioregion_site, 
                                       sum, na.rm = TRUE)
         total_weight <- sum(weight_by_bioregion, na.rm = TRUE)
@@ -505,7 +532,7 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
         site_bioregion <- dat_com$Bioregion[dat_com$Node == site_node]
         site_net <- net[net$Site == site_node, ]
         # Sum weights where species is in same bioregion
-        sum(site_net[[weight_index]][site_net$Bioregion_species == site_bioregion], 
+        sum(site_net[[weight_col_idx]][site_net$Bioregion_species == site_bioregion], 
             na.rm = TRUE)
       })
     } else {
@@ -529,7 +556,7 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
         species_bioregion <- dat_sp$Bioregion[dat_sp$Node == species_node]
         species_net <- net[net$Species == species_node, ]
         # Sum weights where species is in same bioregion
-        sum(species_net[[weight_index]][species_net$Bioregion_site == species_bioregion], 
+        sum(species_net[[weight_col_idx]][species_net$Bioregion_site == species_bioregion], 
             na.rm = TRUE)
       })
     } else {
