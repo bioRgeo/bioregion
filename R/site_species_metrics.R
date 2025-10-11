@@ -324,6 +324,8 @@ site_species_metrics <- function(bioregionalization,
       compute_single_bioregionalization_metrics(
         single_clusters = single_clusters,
         bioregion_name = bioregion_names[col_idx - 1],
+        weight = bioregionalization$args$weight,
+        weight_index = bioregionalization$args$index,
         comat = comat,
         indices = indices,
         net = net_copy,
@@ -348,6 +350,8 @@ site_species_metrics <- function(bioregionalization,
       compute_single_bioregionalization_metrics(
         single_clusters = clusters,
         bioregion_name = bioregion_name,
+        weight = bioregionalization$args$weight,
+        weight_index = bioregionalization$args$index,
         comat = comat,
         indices = indices,
         net = net,
@@ -377,6 +381,8 @@ site_species_metrics <- function(bioregionalization,
 #' @noRd
 compute_single_bioregionalization_metrics <- function(single_clusters,
                                                       bioregion_name,
+                                                      weight,
+                                                      weight_index,
                                                       comat,
                                                       indices,
                                                       net = NULL,
@@ -404,30 +410,44 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     # Add bioregions of the sites to the bipartite data.frame
     net$Site <- as.character(net$Site)
     bipartite_df$Node <- as.character(bipartite_df$Node)
-    net <- dplyr::left_join(net,
-                            bipartite_df[, c("Node", "Bioregion")],
-                            by = c("Site" = "Node"))
-    colnames(net)[colnames(net) == "Bioregion"] <- "Bioregion_site"
+    
+    site_bioregions <- bipartite_df[, c("Node", "Bioregion")]
+    colnames(site_bioregions) <- c("Site", "Bioregion_site")
+    net <- merge(net, site_bioregions, by = "Site", all.x = TRUE)
     
     # Add bioregions of the species to the bipartite data.frame
     net$Species <- as.character(net$Species)
-    bipartite_df$Node <- as.character(bipartite_df$Node)
-    net <- dplyr::left_join(net,
-                            bipartite_df[, c("Node", "Bioregion")],
-                            by = c("Species" = "Node"))
-    colnames(net)[colnames(net) == "Bioregion"] <- "Bioregion_species"
+    species_bioregions <- bipartite_df[, c("Node", "Bioregion")]
+    colnames(species_bioregions) <- c("Species", "Bioregion_species")
+    net <- merge(net, species_bioregions, by = "Species", all.x = TRUE)
     
     # Compute coefficient of participation C
     if(verbose) {
       message("    Computing participation coefficient C for sites and species...")
     }
-    
+
     # Vectorized computation for sites
+    # For sites: C measures distribution of (weighted) links across species bioregions
     dat_com <- bipartite_df[which(bipartite_df$Category == "site"), ]
-    C_site <- tapply(net$Bioregion_species, net$Site, function(x) {
-      tmp <- table(x)
-      1 - sum((tmp/sum(tmp))^2)
-    })
+    
+    if(weight) {
+      # Sum weights by site and species bioregion
+      C_site <- by(net, net$Site, function(site_net) {
+        weight_by_bioregion <- tapply(site_net[[weight_index]], 
+                                      site_net$Bioregion_species, 
+                                      sum, na.rm = TRUE)
+        total_weight <- sum(weight_by_bioregion, na.rm = TRUE)
+        if(total_weight == 0) return(NA)
+        1 - sum((weight_by_bioregion/total_weight)^2)
+      })
+    } else {
+      # Count occurrences by site and species bioregion
+      C_site <- tapply(net$Bioregion_species, net$Site, function(x) {
+        tmp <- table(x)
+        1 - sum((tmp/sum(tmp))^2)
+      })
+    }
+    
     C_site <- data.frame(
       Node = names(C_site),
       C = as.numeric(C_site),
@@ -436,11 +456,27 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     )
     
     # Vectorized computation for species
+    # For species: C measures distribution of (weighted) links across site bioregions
     dat_sp <- bipartite_df[which(bipartite_df$Category == "species"), ]
-    C_sp <- tapply(net$Bioregion_site, net$Species, function(x) {
-      tmp <- table(x)
-      1 - sum((tmp/sum(tmp))^2)
-    })
+    
+    if(weight) {
+      # Sum weights by species and site bioregion
+      C_sp <- by(net, net$Species, function(species_net) {
+        weight_by_bioregion <- tapply(species_net[[index]], 
+                                      species_net$Bioregion_site, 
+                                      sum, na.rm = TRUE)
+        total_weight <- sum(weight_by_bioregion, na.rm = TRUE)
+        if(total_weight == 0) return(NA)
+        1 - sum((weight_by_bioregion/total_weight)^2)
+      })
+    } else {
+      # Count occurrences by species and site bioregion
+      C_sp <- tapply(net$Bioregion_site, net$Species, function(x) {
+        tmp <- table(x)
+        1 - sum((tmp/sum(tmp))^2)
+      })
+    }
+    
     C_sp <- data.frame(
       Node = names(C_sp),
       C = as.numeric(C_sp),
@@ -450,63 +486,106 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     
     C_dat <- rbind(C_site, C_sp)
     
-    # Merge results with bipartite_df
-    bipartite_df <- dplyr::left_join(bipartite_df, C_dat,
-                                     by = c("Node",  "Category"))
+    # Merge results with bipartite_df using base R
+    bipartite_df <- merge(bipartite_df, C_dat, by = c("Node", "Category"), 
+                         all.x = TRUE)
     
     # Compute z
     if(verbose) {
       message("    Computing within-bioregion degree z-score...")
     }
     
-    # Vectorized computation: count links within same bioregion
-    # Add a logical column for within-bioregion links
-    net$within_bioregion <- net$Bioregion_site == net$Bioregion_species
+    # For sites: (weighted) sum of links to species that are in the SITE'S bioregion
+    # For species: (weighted) sum of links to sites that are in the SPECIES' bioregion
+    # In code terms: count/sum links where the bioregion of the node
+    # matches the bioregion of its partner
+
+    if(weight) {
+      site_links <- sapply(dat_com$Node, function(site_node) {
+        site_bioregion <- dat_com$Bioregion[dat_com$Node == site_node]
+        site_net <- net[net$Site == site_node, ]
+        # Sum weights where species is in same bioregion
+        sum(site_net[[weight_index]][site_net$Bioregion_species == site_bioregion], 
+            na.rm = TRUE)
+      })
+    } else {
+      site_links <- sapply(dat_com$Node, function(site_node) {
+        site_bioregion <- dat_com$Bioregion[dat_com$Node == site_node]
+        site_net <- net[net$Site == site_node, ]
+        sum(site_net$Bioregion_species == site_bioregion)
+      })
+    }
     
-    # Count within-bioregion links for sites
-    site_links <- tapply(net$within_bioregion, net$Site, sum)
     site_links_df <- data.frame(
-      Node = names(site_links),
+      Node = dat_com$Node,
       n_link_bioregion = as.numeric(site_links),
       stringsAsFactors = FALSE
     )
     
-    # Count within-bioregion links for species
-    species_links <- tapply(net$within_bioregion, net$Species, sum)
+    # Count/sum within-bioregion links for species
+    # (links to sites in the same bioregion as the species)
+    if(weight) {
+      species_links <- sapply(dat_sp$Node, function(species_node) {
+        species_bioregion <- dat_sp$Bioregion[dat_sp$Node == species_node]
+        species_net <- net[net$Species == species_node, ]
+        # Sum weights where species is in same bioregion
+        sum(species_net[[weight_index]][species_net$Bioregion_site == species_bioregion], 
+            na.rm = TRUE)
+      })
+    } else {
+      species_links <- sapply(dat_sp$Node, function(species_node) {
+        species_bioregion <- dat_sp$Bioregion[dat_sp$Node == species_node]
+        species_net <- net[net$Species == species_node, ]
+        sum(species_net$Bioregion_site == species_bioregion)
+      })
+    }
+    
     species_links_df <- data.frame(
-      Node = names(species_links),
+      Node = dat_sp$Node,
       n_link_bioregion = as.numeric(species_links),
       stringsAsFactors = FALSE
     )
     
     # Merge with bipartite_df
     all_links <- rbind(site_links_df, species_links_df)
-    bipartite_df <- dplyr::left_join(bipartite_df, all_links, by = "Node")
+    bipartite_df <- merge(bipartite_df, all_links, by = "Node", all.x = TRUE)
     
-    # Average number of links within a bioregion
-    mean_link_bioregion <- tapply(bipartite_df$n_link_bioregion,
-                                  bipartite_df$Bioregion,
-                                  mean)
-    mean_link_bioregion <-
-      data.frame(Bioregion = names(mean_link_bioregion),
-                 mean_link_bioregion = as.numeric(mean_link_bioregion))
-    bipartite_df <- dplyr::left_join(bipartite_df, mean_link_bioregion,
-                                     by = "Bioregion")
+    # Calculate mean and SD separately for sites and species within each bioregion
+    # Create a grouping key
+    bipartite_df$group_key <- paste(bipartite_df$Bioregion, 
+                                     bipartite_df$Category, sep = "_")
     
-    # Standard deviation of the number of links within a bioregion
-    sd_link_bioregion <- tapply(bipartite_df$n_link_bioregion,
-                                bipartite_df$Bioregion,
-                                stats::sd)
-    sd_link_bioregion <-
-      data.frame(Bioregion = names(sd_link_bioregion),
-                 sd_link_bioregion = as.numeric(sd_link_bioregion))
-    bipartite_df <- dplyr::left_join(bipartite_df, sd_link_bioregion,
-                                     by = "Bioregion")
+    # Compute mean by group
+    mean_by_group <- tapply(bipartite_df$n_link_bioregion,
+                           bipartite_df$group_key,
+                           mean, na.rm = TRUE)
+    mean_df <- data.frame(
+      group_key = names(mean_by_group),
+      mean_link_bioregion = as.numeric(mean_by_group),
+      stringsAsFactors = FALSE
+    )
     
-    # z
+    # Compute SD by group
+    sd_by_group <- tapply(bipartite_df$n_link_bioregion,
+                         bipartite_df$group_key,
+                         stats::sd, na.rm = TRUE)
+    sd_df <- data.frame(
+      group_key = names(sd_by_group),
+      sd_link_bioregion = as.numeric(sd_by_group),
+      stringsAsFactors = FALSE
+    )
+    
+    # Merge back to bipartite_df
+    bipartite_df <- merge(bipartite_df, mean_df, by = "group_key", all.x = TRUE)
+    bipartite_df <- merge(bipartite_df, sd_df, by = "group_key", all.x = TRUE)
+    
+    # Calculate z-score
     bipartite_df$z <- (bipartite_df$n_link_bioregion -
                          bipartite_df$mean_link_bioregion) /
       bipartite_df$sd_link_bioregion
+    
+    # Replace NaN with 0 when SD is 0 (all nodes have same degree)
+    bipartite_df$z[is.nan(bipartite_df$z)] <- 0
     
     # Remove intermediate columns
     bipartite_df <- bipartite_df[, c("Node", "Bioregion", "Category", "C", "z")]

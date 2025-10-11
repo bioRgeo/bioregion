@@ -1,3 +1,17 @@
+# Tests for site_species_metrics()
+# 
+# This file contains unit tests for input validation, output structure, 
+# and error handling.
+#
+# For NUMERICAL VALIDATION of calculations (comparing against manual 
+# calculations), see: tests/validation/validate_site_species_metrics.R
+#
+# The validation tests verify that formulas are correctly implemented by
+# comparing function outputs with hand-calculated expected values for
+# simple test cases.
+#
+
+
 # Inputs -----------------------------------------------------------------------
 set.seed(123)  # For reproducibility
 comat <- matrix(sample(1000, 50), 5, 10)
