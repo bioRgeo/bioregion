@@ -6,33 +6,45 @@
 \usage{
 site_species_metrics(
   bioregionalization,
-  comat,
+  comat = NULL,
   indices = c("rho"),
   net = NULL,
   site_col = 1,
   species_col = 2,
+  weight = NULL,
   verbose = TRUE
 )
 }
 \arguments{
 \item{bioregionalization}{A \code{bioregion.clusters} object.}
 
-\item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
-columns.}
+\item{comat}{Optional (if \code{net} is provided). A co-occurrence \code{matrix} with
+sites as rows and species as columns. Either \code{comat} or \code{net} must be
+provided. If both are provided, \code{comat} takes precedence.}
 
 \item{indices}{A \code{character} specifying the contribution metric to compute.
 Available options are \code{rho}, \code{affinity}, \code{fidelity}, \code{indicator_value} and
 \code{Cz}.}
 
-\item{net}{\code{NULL} by default. Required for \code{Cz} indices. A
-\code{data.frame} where each row represents an interaction between two nodes
-and an optional third column indicating the interaction's weight.}
+\item{net}{Optional (if \code{comat} is provided). A \code{data.frame} where each row
+represents an interaction between two nodes (site and species) and an
+optional third column indicating the interaction's weight. Required for \code{Cz}
+indices in bipartite networks. Either \code{comat} or \code{net} must be provided.}
 
-\item{site_col}{A number indicating the position of the column containing
-the sites in \code{net}. 1 by default.}
+\item{site_col}{A \code{character} (column name) or \code{integer} (column index)
+indicating the position of the column containing sites in \code{net}. Default is
+\code{1}. If not provided and available in \code{bioregionalization$args$site_col},
+that value will be used.}
 
-\item{species_col}{A number indicating the position of the column
-containing the species in \code{net}. 2 by default.}
+\item{species_col}{A \code{character} (column name) or \code{integer} (column index)
+indicating the position of the column containing species in \code{net}. Default
+is \code{2}. If not provided and available in \code{bioregionalization$args$species_col},
+that value will be used.}
+
+\item{weight}{A \code{logical} or \code{NULL}. When \code{net} is provided without \code{comat},
+determines whether the third column should be used as weights when
+converting to matrix format. If \code{NULL} (default), this argument is
+automatically retrieved from \code{bioregionalization$args$weight}.}
 
 \item{verbose}{A \code{logical} indicating whether to display progress messages
 during computation. Default is \code{TRUE}.}
@@ -46,7 +58,15 @@ per bioregionalization. Each element is a list with:
 the requested contribution metrics (e.g., \code{rho}, \code{affinity}, \code{fidelity},
 \code{indicator_value})}
 \item{\code{indices}: Character vector of computed indices}
-\item{\code{cz_metrics}: (If \code{Cz} requested) A \code{data.frame} with Cz metrics for nodes}
+\item{\code{cz_metrics}: (If \code{Cz} requested) A \code{data.frame} with Cz metrics for
+nodes (sites and species), including columns \code{Node}, \code{Bioregion}, \code{Category},
+\code{C} (participation coefficient), and \code{z} (within-bioregion degree z-score)}
+\item{\code{species_clusters}: (If \code{Cz} requested for unipartite networks) A
+\code{data.frame} showing species assignments to bioregions based on indicator
+values, with columns \code{Species} and \code{Bioregion}}
+\item{\code{tied_species}: (If applicable for unipartite networks) A \code{data.frame}
+with species names that had equal indicator values across multiple
+bioregions, including columns \code{Species}, \code{Tied_Bioregions}, and \code{Tie_Reason}}
 \item{\code{args}: List of input arguments}
 }
 
@@ -95,7 +115,27 @@ High fidelity indicates that the species is not present in other regions.
 \eqn{IndVal = F_i \cdot A_i}.
 }
 
-\code{Cz} metrics are derived from Guimerà & Amaral (2005):
+\code{Cz} metrics are derived from Guimerà & Amaral (2005), and to be computed
+they require both SITES and SPECIES to be assigned to bioregions.
+
+For \strong{bipartite networks}, both sites and species are already assigned to
+bioregions, and Cz metrics are computed directly from these assignments.
+
+For \strong{unipartite networks}, only sites are assigned to bioregions.
+Hence, Cz metrics can normally not be computed on unipartite networks.
+We propose here a solution to be able to do that, but it is an experimental
+feature which has not been extensively tested yet. To compute Cz metrics,
+species must first be assigned to bioregions.
+To do that, we assign species to the bioregion where they have the highest
+indicator value (IndVal). In case of ties:
+\enumerate{
+\item Species are assigned to the bioregion where they have the highest
+number of occurrences
+\item If still tied, species are assigned to the first bioregion in
+sorted order
+}
+Species assignments and tie information are returned in the output for
+verification and reproducibility.
 \itemize{
 \item Participation coefficient:
 \eqn{C_i = 1 - \sum_{s=1}^{N_M}{\left(\frac{k_{is}}{k_i}\right)^2}}, where
@@ -165,7 +205,7 @@ metrics_multi[[1]]$metrics
 # See structure
 str(metrics_multi)
 
-# Cz indices (bipartite only)
+# Cz indices (bipartite networks)
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 metrics_cz <- site_species_metrics(bioregionalization = clust_bip, 
@@ -173,6 +213,38 @@ metrics_cz <- site_species_metrics(bioregionalization = clust_bip,
                                    net = net_bip, 
                                    indices = "Cz")
 metrics_cz[[1]]$cz_metrics
+
+# Using net instead of comat 
+net <- mat_to_net(comat, weight = TRUE)
+metrics_from_net <- site_species_metrics(bioregionalization = clust1,
+                                         net = net,
+                                         indices = "rho")
+
+# Results should be equivalent
+metrics_from_net[[1]]$metrics
+
+# Cz indices for unipartite networks
+dissim_uni <- dissimilarity(comat, metric = "Simpson")
+clust_uni <- nhclu_kmeans(dissim_uni, n_clust = 3)
+net_uni <- mat_to_net(comat, weight = TRUE)
+
+metrics_cz_uni <- site_species_metrics(
+  bioregionalization = clust_uni,
+  comat = comat,
+  net = net_uni,
+  indices = "Cz"
+)
+
+# View Cz metrics for sites and species
+head(metrics_cz_uni[[1]]$cz_metrics)
+
+# View species assignments to bioregions
+head(metrics_cz_uni[[1]]$species_clusters)
+
+# Check if any species had tied indicator values
+if("tied_species" \%in\% names(metrics_cz_uni[[1]])) {
+  print(metrics_cz_uni[[1]]$tied_species)
+}
 
 }
 \references{

@@ -5,22 +5,33 @@
 #' 
 #' @param bioregionalization A `bioregion.clusters` object.
 #' 
-#' @param comat A co-occurrence `matrix` with sites as rows and species as 
-#' columns. 
+#' @param comat Optional (if `net` is provided). A co-occurrence `matrix` with 
+#' sites as rows and species as columns. Either `comat` or `net` must be 
+#' provided. If both are provided, `comat` takes precedence.
 #' 
 #' @param indices A `character` specifying the contribution metric to compute. 
 #' Available options are `rho`, `affinity`, `fidelity`, `indicator_value` and
 #' `Cz`.
 #' 
-#' @param net `NULL` by default. Required for `Cz` indices. A 
-#' `data.frame` where each row represents an interaction between two nodes 
-#' and an optional third column indicating the interaction's weight.  
+#' @param net Optional (if `comat` is provided). A `data.frame` where each row 
+#' represents an interaction between two nodes (site and species) and an 
+#' optional third column indicating the interaction's weight. Required for `Cz` 
+#' indices in bipartite networks. Either `comat` or `net` must be provided.
 #' 
-#' @param site_col A number indicating the position of the column containing
-#' the sites in `net`. 1 by default.
+#' @param site_col A `character` (column name) or `integer` (column index) 
+#' indicating the position of the column containing sites in `net`. Default is 
+#' `1`. If not provided and available in `bioregionalization$args$site_col`, 
+#' that value will be used.
 #' 
-#' @param species_col A number indicating the position of the column
-#' containing the species in `net`. 2 by default.
+#' @param species_col A `character` (column name) or `integer` (column index) 
+#' indicating the position of the column containing species in `net`. Default 
+#' is `2`. If not provided and available in `bioregionalization$args$species_col`, 
+#' that value will be used.
+#' 
+#' @param weight A `logical` or `NULL`. When `net` is provided without `comat`, 
+#' determines whether the third column should be used as weights when 
+#' converting to matrix format. If `NULL` (default), this argument is 
+#' automatically retrieved from `bioregionalization$args$weight`.
 #' 
 #' @param verbose A `logical` indicating whether to display progress messages
 #' during computation. Default is `TRUE`.
@@ -34,7 +45,15 @@
 #' the requested contribution metrics (e.g., `rho`, `affinity`, `fidelity`, 
 #' `indicator_value`)}
 #' \item{`indices`: Character vector of computed indices}
-#' \item{`cz_metrics`: (If `Cz` requested) A `data.frame` with Cz metrics for nodes}
+#' \item{`cz_metrics`: (If `Cz` requested) A `data.frame` with Cz metrics for 
+#' nodes (sites and species), including columns `Node`, `Bioregion`, `Category`, 
+#' `C` (participation coefficient), and `z` (within-bioregion degree z-score)}
+#' \item{`species_clusters`: (If `Cz` requested for unipartite networks) A 
+#' `data.frame` showing species assignments to bioregions based on indicator 
+#' values, with columns `Species` and `Bioregion`}
+#' \item{`tied_species`: (If applicable for unipartite networks) A `data.frame` 
+#' with species names that had equal indicator values across multiple 
+#' bioregions, including columns `Species`, `Tied_Bioregions`, and `Tie_Reason`}
 #' \item{`args`: List of input arguments}
 #' }
 #' 
@@ -81,7 +100,27 @@
 #' - Indicator Value of species: 
 #'   \eqn{IndVal = F_i \cdot A_i}.
 #' 
-#' `Cz` metrics are derived from Guimerà & Amaral (2005):
+#' `Cz` metrics are derived from Guimerà & Amaral (2005), and to be computed
+#' they require both SITES and SPECIES to be assigned to bioregions.
+#' 
+#' For **bipartite networks**, both sites and species are already assigned to 
+#' bioregions, and Cz metrics are computed directly from these assignments.
+#' 
+#' For **unipartite networks**, only sites are assigned to bioregions. 
+#' Hence, Cz metrics can normally not be computed on unipartite networks.
+#' We propose here a solution to be able to do that, but it is an experimental
+#' feature which has not been extensively tested yet. To compute Cz metrics,
+#' species must first be assigned to bioregions. 
+#' To do that, we assign species to the bioregion where they have the highest
+#' indicator value (IndVal). In case of ties:
+#' \enumerate{
+#'   \item Species are assigned to the bioregion where they have the highest 
+#'   number of occurrences
+#'   \item If still tied, species are assigned to the first bioregion in 
+#'   sorted order
+#' }
+#' Species assignments and tie information are returned in the output for 
+#' verification and reproducibility.
 #' 
 #' - Participation coefficient: 
 #'   \eqn{C_i = 1 - \sum_{s=1}^{N_M}{\left(\frac{k_{is}}{k_i}\right)^2}}, where 
@@ -176,7 +215,7 @@
 #' # See structure
 #' str(metrics_multi)
 #' 
-#' # Cz indices (bipartite only)
+#' # Cz indices (bipartite networks)
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
 #' metrics_cz <- site_species_metrics(bioregionalization = clust_bip, 
@@ -185,15 +224,47 @@
 #'                                    indices = "Cz")
 #' metrics_cz[[1]]$cz_metrics
 #' 
+#' # Using net instead of comat 
+#' net <- mat_to_net(comat, weight = TRUE)
+#' metrics_from_net <- site_species_metrics(bioregionalization = clust1,
+#'                                          net = net,
+#'                                          indices = "rho")
+#' 
+#' # Results should be equivalent
+#' metrics_from_net[[1]]$metrics
+#' 
+#' # Cz indices for unipartite networks
+#' dissim_uni <- dissimilarity(comat, metric = "Simpson")
+#' clust_uni <- nhclu_kmeans(dissim_uni, n_clust = 3)
+#' net_uni <- mat_to_net(comat, weight = TRUE)
+#' 
+#' metrics_cz_uni <- site_species_metrics(
+#'   bioregionalization = clust_uni,
+#'   comat = comat,
+#'   net = net_uni,
+#'   indices = "Cz"
+#' )
+#' 
+#' # View Cz metrics for sites and species
+#' head(metrics_cz_uni[[1]]$cz_metrics)
+#' 
+#' # View species assignments to bioregions
+#' head(metrics_cz_uni[[1]]$species_clusters)
+#' 
+#' # Check if any species had tied indicator values
+#' if("tied_species" %in% names(metrics_cz_uni[[1]])) {
+#'   print(metrics_cz_uni[[1]]$tied_species)
+#' }
+#' 
 #' @export
 
-
 site_species_metrics <- function(bioregionalization,
-                                 comat,
+                                 comat = NULL,
                                  indices = c("rho"),
                                  net = NULL,
                                  site_col = 1,
                                  species_col = 2,
+                                 weight = NULL,
                                  verbose = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
@@ -236,6 +307,146 @@ site_species_metrics <- function(bioregionalization,
     message("Validating input data...")
   }
   
+  # Extract parameters from bioregionalization object if not provided
+  # (Prioritize existing arguments from bioregion.clusters object)
+  if(is.null(weight) && !is.null(bioregionalization$args$weight)) {
+    weight <- bioregionalization$args$weight
+    if(verbose) {
+      message("Using weight = ", weight, " from bioregionalization object.")
+    }
+  }
+  
+  if(is.null(weight)) {
+    weight <- FALSE  # Default value if not found anywhere
+  }
+  
+  # Get index/weight column name if available
+  weight_index <- NULL
+  if(!is.null(bioregionalization$args$index)) {
+    weight_index <- bioregionalization$args$index
+  }
+  
+  # Get site_col and species_col from bioregionalization if available
+  if(missing(site_col) && !is.null(bioregionalization$args$site_col)) {
+    site_col <- bioregionalization$args$site_col
+    if(verbose) {
+      message("Using site_col from bioregionalization object.")
+    }
+  }
+  if(missing(species_col) && !is.null(bioregionalization$args$species_col)) {
+    species_col <- bioregionalization$args$species_col
+    if(verbose) {
+      message("Using species_col from bioregionalization object.")
+    }
+  }
+  
+  # Validate that at least one of comat or net is provided
+  if(is.null(comat) && is.null(net)) {
+    stop("Either 'comat' or 'net' must be provided.", call. = FALSE)
+  }
+  
+  # Initialize flag to track if net was provided by user
+  net_was_converted_from_user <- FALSE
+  
+  # If both provided, issue warning and use comat
+  if(!is.null(comat) && !is.null(net)) {
+    warning("Both 'comat' and 'net' provided. Using 'comat' and ignoring 'net'.")
+    net <- NULL
+  }
+  
+  # Convert net to comat if only net is provided
+  if(is.null(comat) && !is.null(net)) {
+    if(verbose) {
+      message("Converting 'net' to co-occurrence matrix format...")
+    }
+    
+    # Validate net format
+    if(!is.data.frame(net)){
+      stop(paste0("net should be a data.frame with at least two columns, ",
+                  "corresponding to the sites and species. By default, sites are ",
+                  "considered to be in the first column, and species in the second. ",
+                  "This can be changed with the arguments 'site_col' and 'species_col'."),
+           call. = FALSE)
+    }
+    
+    # Validate site_col and species_col (accept both integer and character)
+    controls(args = site_col, data = NULL, type = "character_or_positive_integer")
+    controls(args = species_col, data = NULL, type = "character_or_positive_integer")
+    
+    # Store original site_col and species_col for later
+    original_site_col <- site_col
+    original_species_col <- species_col
+    
+    # Convert character column names to indices if needed
+    if(is.character(site_col)) {
+      if(!(site_col %in% colnames(net))) {
+        stop(paste0("site_col '", site_col, "' not found in net column names."), 
+             call. = FALSE)
+      }
+      site_col <- which(colnames(net) == site_col)
+    }
+    
+    if(is.character(species_col)) {
+      if(!(species_col %in% colnames(net))) {
+        stop(paste0("species_col '", species_col, "' not found in net column names."), 
+             call. = FALSE)
+      }
+      species_col <- which(colnames(net) == species_col)
+    }
+    
+    if(site_col > ncol(net)){
+      stop("The site column ('site_col') is incorrect.", call. = FALSE)
+    }
+    
+    if(species_col > ncol(net)){
+      stop("The species column ('species_col') is incorrect.", call. = FALSE)
+    }
+    
+    # Determine if weight should be used
+    # Priority: explicit weight parameter > auto-detect from net structure > bioregionalization$args$weight > FALSE
+    use_weight <- weight  # Already set from bioregionalization or user input
+    
+    # Auto-detect if not explicitly set and net has 3+ columns
+    if(!use_weight && ncol(net) >= 3) {
+      use_weight <- TRUE
+      weight <- TRUE  # Update weight for later use in Cz calculations
+      if(verbose) {
+        message("Auto-detected weights in 'net' (3+ columns). Setting weight = TRUE.")
+      }
+    }
+    
+    if(use_weight && ncol(net) < 3) {
+      stop(paste0("weight is TRUE but 'net' has only ", ncol(net), 
+                  " columns. A third column with weights is required."),
+           call. = FALSE)
+    }
+    
+    if(use_weight && verbose) {
+      message("Using weights from 'net' for conversion to co-occurrence matrix.")
+    }
+    
+    # Convert net to comat using net_to_mat()
+    comat <- net_to_mat(net = net,
+                        weight = use_weight,
+                        squared = FALSE,
+                        symmetrical = FALSE,
+                        missing_value = 0)
+    
+    # Ensure comat has sites as rows and species as columns
+    # net_to_mat places first column (site_col) as rows
+    # If site_col and species_col are swapped from default, transpose
+    if(site_col > species_col) {
+      comat <- t(comat)
+    }
+    
+    # Store whether weights were used for later Cz calculations
+    # Keep the original net for Cz calculations
+    net_was_converted_from_user <- TRUE
+    # Store the original net before we might need to reset columns
+    original_net_for_cz <- net
+  }
+  
+  # Now validate comat
   controls(args = NULL, data = comat, type = "input_matrix")
   
   # Check if rownames of comat are present in clusters
@@ -256,17 +467,33 @@ site_species_metrics <- function(bioregionalization,
          call. = FALSE)
   }
   
-  if("Cz" %in% indices && is.null(net)){
-    stop("net is needed to compute Cz indices.",
-         call. = FALSE)
+  # Handle net for Cz calculations
+  if("Cz" %in% indices) {
+    if(net_was_converted_from_user && exists("original_net_for_cz")) {
+      # User provided net - use the original one they provided
+      if(verbose) {
+        message("Using original 'net' provided by user for Cz calculations...")
+      }
+      net <- original_net_for_cz
+      # Reset site_col and species_col to defaults since we're using original net structure
+      site_col <- 1
+      species_col <- 2
+    } else if(is.null(net)) {
+      # No net provided, create from comat with weights
+      if(verbose) {
+        message("Converting 'comat' to network format for Cz calculations...")
+      }
+      net <- mat_to_net(comat, weight = TRUE, remove_zeroes = TRUE)
+      # Ensure columns are in expected order (sites, species, weight)
+      colnames(net)[1:2] <- c("Site", "Species")
+      # Reset site_col and species_col to defaults after conversion
+      site_col <- 1
+      species_col <- 2
+    }
   }
   
-  if("Cz" %in% indices && bioregionalization$inputs$bipartite == FALSE){
-    stop(paste0("Cz metrics can only be computed for a bipartite ",
-                "bioregionalization ",
-                "(where both sites and species are assigned to a bioregion."),
-         call. = FALSE)
-  }
+  # Note: Removed check for bipartite == FALSE
+  # Unipartite networks will now be handled by assigning species to bioregions
   
   if(!is.null(net)){
     if(!is.data.frame(net)){
@@ -295,6 +522,16 @@ site_species_metrics <- function(bioregionalization,
   
   # Store bipartite status
   is_bipartite <- bioregionalization$inputs$bipartite
+  
+  # Inform user if computing Cz for unipartite network
+  if("Cz" %in% indices && !is_bipartite) {
+    if(verbose) {
+      message("Computing Cz indices for UNIPARTITE network.")
+      message("Species will be assigned to bioregions based on indicator values.")
+      message("Note: This feature assigns each species to the bioregion where it has the highest indicator value.")
+      message("This is an experimental feature which has not been extensively tested.")
+    }
+  }
   
   # Handle multiple bioregionalizations
   if(ncol(clusters) > 2) {
@@ -396,8 +633,8 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
 
   weight <- ifelse(is.null(weight), FALSE, weight)
   
-  # 1. Cz indices (bipartite only) ------------------------------------------
-  if("Cz" %in% indices && is_bipartite) {
+  # 1. Cz indices ------------------------------------------
+  if("Cz" %in% indices) {
     if(verbose) {
       message("  Computing Cz indices (participation coefficient and z-score)...")
     }
@@ -415,14 +652,83 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
       }
     }
     
+    # Auto-detect weight from net structure if not explicitly specified
+    # (happens when user provides net directly without going through a clustering function)
+    if(is.null(original_weight_colname) && ncol(net) >= 3) {
+      # Net has 3+ columns, assume it's weighted
+      if(!weight) {
+        # Update weight to TRUE if net has weights but weight was FALSE
+        weight <- TRUE
+        if(verbose) {
+          message("  Auto-detected weighted net (3+ columns). Setting weight = TRUE for Cz calculations.")
+        }
+      }
+      # Assume third column is weights
+      original_weight_colname <- colnames(net)[3]
+      if(verbose) {
+        message("  Using column '", original_weight_colname, "' as weights for Cz calculations.")
+      }
+    }
+    
+    # If net has only 2 columns, it's unweighted
+    if(ncol(net) < 3 && weight) {
+      if(verbose) {
+        message("  Note: weight = TRUE but net has only ", ncol(net), " columns. Using unweighted calculations.")
+      }
+      weight <- FALSE
+    }
+    
     # Rename site and species columns as Sites and Species
     colnames(net)[site_col] <- "Site"
     colnames(net)[species_col] <- "Species"
     
-    bipartite_df <- single_clusters
-    # Add a column category (site or species) to bipartite_df
-    bipartite_df$cat <- attributes(single_clusters)$node_type
-    colnames(bipartite_df) <- c("Node", "Bioregion", "Category")
+    # Handle bipartite vs unipartite differently
+    if(is_bipartite) {
+      bipartite_df <- single_clusters
+      # Add a column category (site or species) to bipartite_df
+      bipartite_df$cat <- attributes(single_clusters)$node_type
+      colnames(bipartite_df) <- c("Node", "Bioregion", "Category")
+      
+    } else {
+  
+      # Get bioregions
+      bioregions <- sort(unique(single_clusters[, 2]))
+      
+      # Assign species using helper function
+      species_assignment <- assign_species_to_bioregions(
+        comat = comat,
+        single_clusters = single_clusters,
+        bioregions = bioregions
+      )
+      
+      # Create bipartite_df structure
+      # Sites
+      site_df <- data.frame(
+        Node = single_clusters[, 1],
+        Bioregion = single_clusters[, 2],
+        Category = "site",
+        stringsAsFactors = FALSE
+      )
+      
+      # Species
+      species_df <- data.frame(
+        Node = species_assignment$species_clusters$Species,
+        Bioregion = species_assignment$species_clusters$Bioregion,
+        Category = "species",
+        stringsAsFactors = FALSE
+      )
+      
+      # Combine
+      bipartite_df <- rbind(site_df, species_df)
+      
+      # Store tied species info for output
+      attr(bipartite_df, "tied_species") <- species_assignment$tied_species
+      
+      if(nrow(species_assignment$tied_species) > 0 && verbose) {
+        message("    ", nrow(species_assignment$tied_species), 
+                " species had tied indicator values (see $tied_species for details).")
+      }
+    }
     
     # Add bioregions of the sites to the bipartite data.frame
     net$Site <- as.character(net$Site)
@@ -798,7 +1104,167 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
   # If Cz indices were computed, add them
   if("Cz" %in% indices && !is.null(bipartite_df)) {
     output$cz_metrics <- bipartite_df
+    
+    # For unipartite Cz calculations, add species assignments and tie information
+    if(!is_bipartite) {
+      # Extract species clusters
+      species_clusters <- bipartite_df[bipartite_df$Category == "species", 
+                                        c("Node", "Bioregion")]
+      colnames(species_clusters) <- c("Species", "Bioregion")
+      output$species_clusters <- species_clusters
+      
+      # Add tied species info if it exists
+      tied_species <- attr(bipartite_df, "tied_species")
+      if(!is.null(tied_species) && nrow(tied_species) > 0) {
+        output$tied_species <- tied_species
+      }
+    }
   }
   
   return(output)
 }
+
+
+
+
+#' Assign species to bioregions based on indicator values
+#' 
+#' For unipartite clusterings, assign each species to the bioregion where it 
+#' has the highest indicator value. Ties are broken by highest occurrence, 
+#' then by first bioregion in sorted order.
+#' 
+#' @param comat Site x species matrix
+#' @param single_clusters Data frame with site assignments (ID and cluster)
+#' @param bioregions Vector of unique bioregion IDs
+#' @param tie_method Character specifying tie-breaking method: 
+#'   "occurrence" (default) uses highest occurrence,
+#'   "first" uses first bioregion in sorted order
+#' 
+#' @return List containing:
+#'   - species_clusters: data.frame with Species and Bioregion columns
+#'   - tied_species: data.frame with species names and tied bioregions
+#' 
+#' @noRd
+assign_species_to_bioregions <- function(comat, single_clusters, bioregions,
+                                          tie_method = "occurrence") {
+  # TODO: vectorize loop for efficiency
+  # Binary matrix
+  comat_bin <- comat
+  comat_bin[comat_bin > 0] <- 1
+  
+  n_species <- ncol(comat)
+  species_names <- colnames(comat)
+  n_bioregions <- length(bioregions)
+  
+  # Calculate indicator values for all species x bioregion combinations
+  
+  # Create site-bioregion mapping matrix
+  site_bioregion_map <- sapply(bioregions, function(br) {
+    single_clusters[, 2] == br
+  })
+  rownames(site_bioregion_map) <- single_clusters[, 1]
+  
+  # Count sites per bioregion
+  n_j_vec <- colSums(site_bioregion_map)
+  
+  # Count species occurrences per bioregion
+  n_ij_mat <- t(comat_bin) %*% site_bioregion_map
+  
+  # Total occurrences per species
+  n_i <- colSums(comat_bin)
+  
+  # Replicate for matrix operations
+  n_i_mat <- matrix(n_i, nrow = n_species, ncol = n_bioregions, byrow = FALSE)
+  n_j_mat <- matrix(n_j_vec, nrow = n_species, ncol = n_bioregions, byrow = TRUE)
+  
+  # Calculate indicator value: affinity * fidelity
+  affinity_mat <- n_ij_mat / n_j_mat
+  fidelity_mat <- n_ij_mat / n_i_mat
+  indval_mat <- affinity_mat * fidelity_mat
+  
+  # Replace NaN with 0 (occurs when species has 0 occurrences)
+  indval_mat[is.nan(indval_mat)] <- 0
+  
+  # For each species, find bioregion with highest indval
+  max_indval_idx <- apply(indval_mat, 1, which.max)
+  max_indval <- apply(indval_mat, 1, max)
+  
+  # Identify ties: species where multiple bioregions have max indval
+  tied_species_list <- list()
+  assigned_bioregions <- bioregions[max_indval_idx]
+  
+  for(i in 1:n_species) {
+    # Find all bioregions with max indval for this species
+    max_val <- max_indval[i]
+    bioregions_with_max <- which(abs(indval_mat[i, ] - max_val) < 1e-10)
+    
+    if(length(bioregions_with_max) > 1) {
+      # Tie exists - resolve by specified method
+      if(tie_method == "occurrence") {
+        # Resolve by highest occurrence
+        occurrences_in_tied <- n_ij_mat[i, bioregions_with_max]
+        max_occurrence <- max(occurrences_in_tied)
+        bioregions_with_max_occ <- bioregions_with_max[
+          occurrences_in_tied == max_occurrence
+        ]
+        
+        if(length(bioregions_with_max_occ) > 1) {
+          # Still tied - use first bioregion in sorted order
+          tied_bioregions <- bioregions[bioregions_with_max]
+          tied_species_list[[species_names[i]]] <- data.frame(
+            Species = species_names[i],
+            Tied_Bioregions = paste(tied_bioregions, collapse = ", "),
+            Tie_Reason = "Equal indval and occurrence",
+            stringsAsFactors = FALSE
+          )
+          assigned_bioregions[i] <- bioregions[bioregions_with_max_occ[1]]
+        } else {
+          # Resolved by occurrence
+          tied_bioregions <- bioregions[bioregions_with_max]
+          tied_species_list[[species_names[i]]] <- data.frame(
+            Species = species_names[i],
+            Tied_Bioregions = paste(tied_bioregions, collapse = ", "),
+            Tie_Reason = "Equal indval (resolved by occurrence)",
+            stringsAsFactors = FALSE
+          )
+          assigned_bioregions[i] <- bioregions[bioregions_with_max_occ]
+        }
+      } else {
+        # Use first bioregion in sorted order
+        tied_bioregions <- bioregions[bioregions_with_max]
+        tied_species_list[[species_names[i]]] <- data.frame(
+          Species = species_names[i],
+          Tied_Bioregions = paste(tied_bioregions, collapse = ", "),
+          Tie_Reason = "Equal indval",
+          stringsAsFactors = FALSE
+        )
+        assigned_bioregions[i] <- bioregions[bioregions_with_max[1]]
+      }
+    }
+  }
+  
+  # Create output data.frame
+  species_clusters <- data.frame(
+    Species = species_names,
+    Bioregion = assigned_bioregions,
+    stringsAsFactors = FALSE
+  )
+  
+  # Combine tied species info
+  tied_species_df <- if(length(tied_species_list) > 0) {
+    do.call(rbind, tied_species_list)
+  } else {
+    data.frame(
+      Species = character(),
+      Tied_Bioregions = character(),
+      Tie_Reason = character(),
+      stringsAsFactors = FALSE
+    )
+  }
+  
+  return(list(
+    species_clusters = species_clusters,
+    tied_species = tied_species_df
+  ))
+}
+

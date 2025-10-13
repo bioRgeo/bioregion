@@ -333,13 +333,13 @@ test_that("Cz indices - Bipartite network", {
   # Create network data.frame for Cz calculations
   net <- mat_to_net(tc4$comat, weight = TRUE)
   
-  result <- site_species_metrics(
+  expect_warning(result <- site_species_metrics(
     bioregionalization = mock_clust_bip,
     comat = tc4$comat,
     net = net,
     indices = "Cz",
     verbose = FALSE
-  )
+  ))
   
   # Cz metrics are stored separately from other metrics
   cz_df <- result[[1]]$cz_metrics
