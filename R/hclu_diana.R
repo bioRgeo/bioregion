@@ -175,16 +175,22 @@ hclu_diana <- function(dissimilarity,
                        h_min = h_min,
                        dynamic_tree_cut = dynamic_tree_cut)
   
+  # Determine data_type based on pairwise metric
+  pairwise_metric_value <- ifelse(!inherits(dissimilarity, "dist"), 
+                                   ifelse(is.numeric(index), 
+                                          # net is already 3 col at this stage
+                                          names(net)[3], 
+                                          index), 
+                                   NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric_value)
+  
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric_value,
                          dissimilarity = TRUE,
-                         nb_sites = attr(dist.obj, "Size"))
+                         nb_sites = attr(dist.obj, "Size"),
+                         data_type = data_type)
   
   # DIANA clustering
   diana_clust <- cluster::diana(dist.obj,

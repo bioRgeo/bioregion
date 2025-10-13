@@ -3,9 +3,27 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
+## Function changes
+
+* Added `inputs$data_type` field to all clustering outputs to explicitly track
+  whether original co-occurrence data was occurrence-based or abundance-based.
+  This field is automatically determined based on the algorithm type and 
+  similarity/dissimilarity metric used.
+
+* `site_species_metrics()` vectorized to be much faster. It also allows providing
+  only `comat`, `net`, or both `comat` and `net`. When only one is provided, the other 
+  is automatically created using appropriate weight handling.
+
+* Renamed class `bioregion.pairwise.metric` to `bioregion.pairwise`.
+
+
+
+
+## New features
+
 - Added export of the function `exportGDF()` with documentation and tests.
 
-- New feature: added `bioregion_colors()` function to provide bioregion colors 
+- Added `bioregion_colors()` function to provide bioregion colors 
 thatqcan be used across multiple visualizations (maps, networks, other graphs, 
 etc.).
 
@@ -14,12 +32,7 @@ etc.).
 - Updated `site_species_metrics()` to handle multiple bioregionalizations 
 simultaneously.
 
-- Added a generic function for pretty display of results.
-
-* Modified the `keep_trials` argument in `hclu_hierarclust()` and and fixed a 
-potential issue with randomized matrix storage.
-
-* Renamed class `bioregion.pairwise.metric` to `bioregion.pairwise`.
+- Added a generic function `summary()` for pretty display of results.
 
 * Added `bind_pairwise()` to combine pairwise (dis)similarity objects.
 
@@ -28,6 +41,15 @@ potential issue with randomized matrix storage.
 
 * Added a comparison with other R packages for the computation of dissimilarity
   metrics in tutorial 3 (Pairwise similarity/dissimilarity metrics).
+
+## Bug fixes
+
+* Fixed incorrect weight detection in `site_species_metrics()` for unipartite
+  Networks
+
+* Modified the `keep_trials` argument in `hclu_hierarclust()` and and fixed a 
+potential issue with randomized matrix storage.
+
 
 # bioregion 1.2.0
 

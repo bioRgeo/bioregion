@@ -187,7 +187,8 @@ netclu_beckett <- function(net,
     pairwise_metric = NA,
     dissimilarity = FALSE,
     nb_sites = nbsites,
-    hierarchical = FALSE)
+    hierarchical = FALSE,
+    data_type = ifelse(weight, "abundance", "occurrence"))
   
   outputs$algorithm <- list()
   

@@ -9,9 +9,10 @@ site_species_metrics(
   comat = NULL,
   indices = c("rho"),
   net = NULL,
-  site_col = 1,
-  species_col = 2,
-  weight = NULL,
+  net_site_col = 1,
+  net_species_col = 2,
+  net_weight = NULL,
+  net_weight_col = NULL,
   verbose = TRUE
 )
 }
@@ -31,20 +32,26 @@ represents an interaction between two nodes (site and species) and an
 optional third column indicating the interaction's weight. Required for \code{Cz}
 indices in bipartite networks. Either \code{comat} or \code{net} must be provided.}
 
-\item{site_col}{A \code{character} (column name) or \code{integer} (column index)
+\item{net_site_col}{A \code{character} (column name) or \code{integer} (column index)
 indicating the position of the column containing sites in \code{net}. Default is
 \code{1}. If not provided and available in \code{bioregionalization$args$site_col},
 that value will be used.}
 
-\item{species_col}{A \code{character} (column name) or \code{integer} (column index)
+\item{net_species_col}{A \code{character} (column name) or \code{integer} (column index)
 indicating the position of the column containing species in \code{net}. Default
 is \code{2}. If not provided and available in \code{bioregionalization$args$species_col},
 that value will be used.}
 
-\item{weight}{A \code{logical} or \code{NULL}. When \code{net} is provided without \code{comat},
-determines whether the third column should be used as weights when
-converting to matrix format. If \code{NULL} (default), this argument is
-automatically retrieved from \code{bioregionalization$args$weight}.}
+\item{net_weight}{A \code{logical} or \code{NULL}. When \code{net} is provided without \code{comat},
+determines whether weights should be used when converting to matrix format.
+If \code{NULL} (default), weight usage is automatically determined based on the
+clustering algorithm inputs. Set to \code{TRUE} to force using weights
+or \code{FALSE} to force ignoring them.}
+
+\item{net_weight_col}{A \code{character} (column name) or \code{integer} (column index)
+specifying which column in \code{net} contains the weights (i.e., abundance,
+density or any other quantitative measure of your taxa). If \code{NULL} (default),
+the third column is used when \code{net_weight = TRUE}.}
 
 \item{verbose}{A \code{logical} indicating whether to display progress messages
 during computation. Default is \code{TRUE}.}

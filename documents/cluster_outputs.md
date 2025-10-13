@@ -334,6 +334,27 @@ Additional slot in some cases:
   - Can be `TRUE` or `FALSE` for hclu_* depending on whether tree is cut and `show_hierarchy`
   - Updated by `cut_tree` based on number of partition columns
 
+#### 3.8 `data_type`
+- **Type**: Character
+- **Content**:
+  - `"occurrence"`: Original co-occurrence data was presence/absence (binary)
+  - `"abundance"`: Original co-occurrence data was quantitative/abundance
+  - `"unknown"`: Cannot determine (e.g., user-provided dist object, Euclidean metric, custom formula)
+- **Universal**: ✅ Yes (added in version 1.2.0.9000)
+- **Determination**:
+  - **Bipartite networks (netclu_* with bipartite=TRUE)**: Based on `weight` argument
+    - `weight = TRUE` → `"abundance"`
+    - `weight = FALSE` → `"occurrence"`
+  - **Unipartite networks (netclu_* with bipartite=FALSE, all nhclu_*, all hclu_*)**: Based on `pairwise_metric` used in similarity/dissimilarity calculation
+    - Occurrence metrics (abc-based): Jaccard, Jaccardturn, Sorensen, Simpson, abc, beta.sim, beta.sne, beta.sor, beta.jtu, beta.jne, beta.jac → `"occurrence"`
+    - Abundance metrics (ABC-based): Bray, Brayturn, ABC, beta.bray.bal, beta.bray.gra, beta.bray, beta.ruz.bal, beta.ruz.gra, beta.ruz → `"abundance"`
+    - Euclidean or custom formulas → `"unknown"`
+  - **User-provided dist objects**: `"unknown"` (no way to determine original data type)
+- **Usage**: This field enables `site_species_metrics()` to automatically determine correct weight handling for computing contribution metrics
+- **Notes**: 
+  - Preserved by `cut_tree()` when cutting hierarchical trees
+  - For old bioregion.clusters objects created before this field was added, it will be absent (NULL)
+
 ### Harmonization Status:
 
 **✅ Excellent harmonization** - This slot is consistent across all functions with:

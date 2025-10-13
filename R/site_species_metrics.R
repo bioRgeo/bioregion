@@ -18,20 +18,26 @@
 #' optional third column indicating the interaction's weight. Required for `Cz` 
 #' indices in bipartite networks. Either `comat` or `net` must be provided.
 #' 
-#' @param site_col A `character` (column name) or `integer` (column index) 
+#' @param net_site_col A `character` (column name) or `integer` (column index) 
 #' indicating the position of the column containing sites in `net`. Default is 
 #' `1`. If not provided and available in `bioregionalization$args$site_col`, 
 #' that value will be used.
 #' 
-#' @param species_col A `character` (column name) or `integer` (column index) 
+#' @param net_species_col A `character` (column name) or `integer` (column index) 
 #' indicating the position of the column containing species in `net`. Default 
 #' is `2`. If not provided and available in `bioregionalization$args$species_col`, 
 #' that value will be used.
 #' 
-#' @param weight A `logical` or `NULL`. When `net` is provided without `comat`, 
-#' determines whether the third column should be used as weights when 
-#' converting to matrix format. If `NULL` (default), this argument is 
-#' automatically retrieved from `bioregionalization$args$weight`.
+#' @param net_weight A `logical` or `NULL`. When `net` is provided without `comat`, 
+#' determines whether weights should be used when converting to matrix format. 
+#' If `NULL` (default), weight usage is automatically determined based on the 
+#' clustering algorithm inputs. Set to `TRUE` to force using weights 
+#' or `FALSE` to force ignoring them.
+#' 
+#' @param net_weight_col A `character` (column name) or `integer` (column index) 
+#' specifying which column in `net` contains the weights (i.e., abundance,
+#' density or any other quantitative measure of your taxa). If `NULL` (default), 
+#' the third column is used when `net_weight = TRUE`. 
 #' 
 #' @param verbose A `logical` indicating whether to display progress messages
 #' during computation. Default is `TRUE`.
@@ -262,9 +268,10 @@ site_species_metrics <- function(bioregionalization,
                                  comat = NULL,
                                  indices = c("rho"),
                                  net = NULL,
-                                 site_col = 1,
-                                 species_col = 2,
-                                 weight = NULL,
+                                 net_site_col = 1,
+                                 net_species_col = 2,
+                                 net_weight = NULL,
+                                 net_weight_col = NULL,
                                  verbose = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
@@ -303,65 +310,80 @@ site_species_metrics <- function(bioregionalization,
          call. = FALSE)
   }
   
+  # 2. Input validation and setup ----------------------------------------------
   if(verbose) {
     message("Validating input data...")
   }
   
-  # Extract parameters from bioregionalization object if not provided
-  # (Prioritize existing arguments from bioregion.clusters object)
-  if(is.null(weight) && !is.null(bioregionalization$args$weight)) {
-    weight <- bioregionalization$args$weight
-    if(verbose) {
-      message("Using weight = ", weight, " from bioregionalization object.")
-    }
-  }
+  # Map renamed arguments to internal variable names for consistency
+  site_col <- net_site_col
+  species_col <- net_species_col
+  weight <- net_weight
   
-  if(is.null(weight)) {
-    weight <- FALSE  # Default value if not found anywhere
-  }
-  
-  # Get index/weight column name if available
-  weight_index <- NULL
-  if(!is.null(bioregionalization$args$index)) {
-    weight_index <- bioregionalization$args$index
-  }
-  
-  # Get site_col and species_col from bioregionalization if available
-  if(missing(site_col) && !is.null(bioregionalization$args$site_col)) {
+  # Extract site_col and species_col from bioregionalization if not provided
+  if(is.null(net_site_col) && !is.null(bioregionalization$args$site_col)) {
     site_col <- bioregionalization$args$site_col
     if(verbose) {
       message("Using site_col from bioregionalization object.")
     }
   }
-  if(missing(species_col) && !is.null(bioregionalization$args$species_col)) {
+  if(is.null(net_species_col) && !is.null(bioregionalization$args$species_col)) {
     species_col <- bioregionalization$args$species_col
     if(verbose) {
       message("Using species_col from bioregionalization object.")
     }
   }
   
+  # Get index/weight column name if available from bioregionalization
+  user_index <- net_weight_col
+  
+  # For bipartite networks, use args$index (the weight column name from original net)
+  # For unipartite networks, this should not be used as it refers to the similarity metric
+  if(!is.null(bioregionalization$args$index) && bioregionalization$inputs$bipartite) {
+    if(is.null(net_weight_col)) {
+      user_index <- bioregionalization$args$index
+    }
+  }
+  
   # Validate that at least one of comat or net is provided
-  if(is.null(comat) && is.null(net)) {
+  comat_provided <- !is.null(comat)
+  net_provided <- !is.null(net)
+  
+  if (!comat_provided && !net_provided) {
     stop("Either 'comat' or 'net' must be provided.", call. = FALSE)
   }
   
-  # Initialize flag to track if net was provided by user
-  net_was_converted_from_user <- FALSE
+  # 3. Ensure both comat AND net exist -----------------------------------------
   
-  # If both provided, issue warning and use comat
-  if(!is.null(comat) && !is.null(net)) {
-    warning("Both 'comat' and 'net' provided. Using 'comat' and ignoring 'net'.")
-    net <- NULL
-  }
-  
-  # Convert net to comat if only net is provided
-  if(is.null(comat) && !is.null(net)) {
-    if(verbose) {
-      message("Converting 'net' to co-occurrence matrix format...")
+  if (comat_provided && !net_provided) {
+    # Scenario 1: Only comat provided - create net from comat
+    if (verbose) {
+      message("Only 'comat' provided. Creating 'net' from 'comat'...")
+    }
+    
+    # Determine weight usage using priority system
+    weight_info <- determine_weight_usage(
+      bioregionalization = bioregionalization,
+      user_weight = weight,
+      user_index = user_index,
+      net = NULL,
+      verbose = verbose
+    )
+    
+    # Create net from comat
+    net <- mat_to_net(comat, weight = weight_info$use_weight, remove_zeroes = TRUE)
+    colnames(net)[1:2] <- c("Site", "Species")
+    site_col <- 1
+    species_col <- 2
+    
+  } else if (!comat_provided && net_provided) {
+    # Scenario 2: Only net provided - create comat from net
+    if (verbose) {
+      message("Only 'net' provided. Creating 'comat' from 'net'...")
     }
     
     # Validate net format
-    if(!is.data.frame(net)){
+    if (!is.data.frame(net)) {
       stop(paste0("net should be a data.frame with at least two columns, ",
                   "corresponding to the sites and species. By default, sites are ",
                   "considered to be in the first column, and species in the second. ",
@@ -369,82 +391,84 @@ site_species_metrics <- function(bioregionalization,
            call. = FALSE)
     }
     
-    # Validate site_col and species_col (accept both integer and character)
+    # Validate and process site_col and species_col
     controls(args = site_col, data = NULL, type = "character_or_positive_integer")
     controls(args = species_col, data = NULL, type = "character_or_positive_integer")
     
-    # Store original site_col and species_col for later
-    original_site_col <- site_col
-    original_species_col <- species_col
-    
     # Convert character column names to indices if needed
-    if(is.character(site_col)) {
-      if(!(site_col %in% colnames(net))) {
+    if (is.character(site_col)) {
+      if (!(site_col %in% colnames(net))) {
         stop(paste0("site_col '", site_col, "' not found in net column names."), 
              call. = FALSE)
       }
       site_col <- which(colnames(net) == site_col)
     }
     
-    if(is.character(species_col)) {
-      if(!(species_col %in% colnames(net))) {
+    if (is.character(species_col)) {
+      if (!(species_col %in% colnames(net))) {
         stop(paste0("species_col '", species_col, "' not found in net column names."), 
              call. = FALSE)
       }
       species_col <- which(colnames(net) == species_col)
     }
     
-    if(site_col > ncol(net)){
+    if (site_col > ncol(net)) {
       stop("The site column ('site_col') is incorrect.", call. = FALSE)
     }
     
-    if(species_col > ncol(net)){
+    if (species_col > ncol(net)) {
       stop("The species column ('species_col') is incorrect.", call. = FALSE)
     }
     
-    # Determine if weight should be used
-    # Priority: explicit weight parameter > auto-detect from net structure > bioregionalization$args$weight > FALSE
-    use_weight <- weight  # Already set from bioregionalization or user input
+    # Determine weight usage using priority system
+    weight_info <- determine_weight_usage(
+      bioregionalization = bioregionalization,
+      user_weight = weight,
+      user_index = user_index,
+      net = net,
+      verbose = verbose
+    )
     
-    # Auto-detect if not explicitly set and net has 3+ columns
-    if(!use_weight && ncol(net) >= 3) {
-      use_weight <- TRUE
-      weight <- TRUE  # Update weight for later use in Cz calculations
-      if(verbose) {
-        message("Auto-detected weights in 'net' (3+ columns). Setting weight = TRUE.")
-      }
-    }
-    
-    if(use_weight && ncol(net) < 3) {
+    # Validate weight requirements
+    if (weight_info$use_weight && ncol(net) < 3) {
       stop(paste0("weight is TRUE but 'net' has only ", ncol(net), 
                   " columns. A third column with weights is required."),
            call. = FALSE)
     }
     
-    if(use_weight && verbose) {
-      message("Using weights from 'net' for conversion to co-occurrence matrix.")
-    }
-    
-    # Convert net to comat using net_to_mat()
-    comat <- net_to_mat(net = net,
-                        weight = use_weight,
-                        squared = FALSE,
-                        symmetrical = FALSE,
-                        missing_value = 0)
+    # Convert net to comat
+    comat <- net_to_mat(
+      net = net,
+      weight = weight_info$use_weight,
+      squared = FALSE,
+      symmetrical = FALSE,
+      missing_value = 0
+    )
     
     # Ensure comat has sites as rows and species as columns
-    # net_to_mat places first column (site_col) as rows
-    # If site_col and species_col are swapped from default, transpose
-    if(site_col > species_col) {
+    if (site_col > species_col) {
       comat <- t(comat)
     }
     
-    # Store whether weights were used for later Cz calculations
-    # Keep the original net for Cz calculations
-    net_was_converted_from_user <- TRUE
-    # Store the original net before we might need to reset columns
-    original_net_for_cz <- net
+  } else {
+    # Scenario 3: Both comat and net provided - keep both
+    if (verbose) {
+      message("Both 'comat' and 'net' provided. Using both.")
+    }
+    
+    # TODO: Add validation for consistency between comat and net
+    # For now, just determine weight usage
+    weight_info <- determine_weight_usage(
+      bioregionalization = bioregionalization,
+      user_weight = weight,
+      user_index = user_index,
+      net = net,
+      verbose = verbose
+    )
   }
+  
+  # Update weight variable for later use
+  weight <- weight_info$use_weight
   
   # Now validate comat
   controls(args = NULL, data = comat, type = "input_matrix")
@@ -467,55 +491,28 @@ site_species_metrics <- function(bioregionalization,
          call. = FALSE)
   }
   
-  # Handle net for Cz calculations
-  if("Cz" %in% indices) {
-    if(net_was_converted_from_user && exists("original_net_for_cz")) {
-      # User provided net - use the original one they provided
-      if(verbose) {
-        message("Using original 'net' provided by user for Cz calculations...")
-      }
-      net <- original_net_for_cz
-      # Reset site_col and species_col to defaults since we're using original net structure
-      site_col <- 1
-      species_col <- 2
-    } else if(is.null(net)) {
-      # No net provided, create from comat with weights
-      if(verbose) {
-        message("Converting 'comat' to network format for Cz calculations...")
-      }
-      net <- mat_to_net(comat, weight = TRUE, remove_zeroes = TRUE)
-      # Ensure columns are in expected order (sites, species, weight)
-      colnames(net)[1:2] <- c("Site", "Species")
-      # Reset site_col and species_col to defaults after conversion
-      site_col <- 1
-      species_col <- 2
-    }
+  # 4. Validate indices and prepare for computation ----------------------------
+  
+  controls(args = indices, data = NULL, type = "character_vector")
+  
+  if(!isTRUE(unique(indices %in% c("rho", "Cz", "affinity", "fidelity",
+                                   "indicator_value")))){
+    stop(paste0("Please choose indices from the following:\n",
+                "rho, affinity, fidelity, indicator_value or Cz."),
+         call. = FALSE)
   }
   
-  # Note: Removed check for bipartite == FALSE
-  # Unipartite networks will now be handled by assigning species to bioregions
-  
-  if(!is.null(net)){
-    if(!is.data.frame(net)){
-      stop("net should be a data.frame with at least two columns,
-           corresponding to the sites and species. By default, sites are
-           considered to be in the first column, and species in the second.
-           This can be changed with the arguments 'site_col' and
-           'species_col'.")
-    }
-    controls(args = site_col, data = NULL, type = "strict_positive_numeric")
-    controls(args = species_col, data = NULL, type = "strict_positive_numeric")
-    
-    if(site_col > ncol(net)){
-      stop("The site column ('site_col') is incorrect.")
-    }
-    
-    if(species_col > ncol(net)){
-      stop("The species column ('species_col') is incorrect.")
-    }
+  # At this point, both comat and net are guaranteed to exist and be properly formatted
+  # Validate net structure (basic checks)
+  if(!is.data.frame(net)){
+    stop("net should be a data.frame with at least two columns,
+         corresponding to the sites and species. By default, sites are
+         considered to be in the first column, and species in the second.
+         This can be changed with the arguments 'site_col' and
+         'species_col'.")
   }
   
-  # 2. Main computation -------------------------------------------------------
+  # 5. Main computation ---------------------------------------------------------
   if(verbose) {
     message("Input validation completed. Starting main computation...")
   }

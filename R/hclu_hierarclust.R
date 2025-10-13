@@ -366,16 +366,19 @@ hclu_hierarclust <- function(dissimilarity,
                        verbose = verbose,
                        dynamic_tree_cut = dynamic_tree_cut)
   
+  # Determine data_type based on pairwise metric
+  pairwise_metric_value <- ifelse(!inherits(dissimilarity, "dist"), 
+                                   ifelse(is.numeric(index), names(net)[3], index), 
+                                   NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric_value)
+  
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric_value,
                          dissimilarity = TRUE,
-                         nb_sites = attr(dist.obj, "Size"))
+                         nb_sites = attr(dist.obj, "Size"),
+                         data_type = data_type)
   
   # outputs$dist.matrix <- dist.obj
   

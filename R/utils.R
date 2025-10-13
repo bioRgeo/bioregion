@@ -921,3 +921,214 @@ seedrng <- function() {
 
 
 
+#' Detect data type from metric name
+#' 
+#' Determines whether a similarity/dissimilarity metric is based on
+#' occurrence (presence/absence) or abundance (quantitative) data.
+#' 
+#' @param metric Character string with metric name
+#' 
+#' @return Character: "occurrence", "abundance", or "unknown"
+#' 
+#' @details
+#' Occurrence metrics (using abc): Jaccard, Jaccardturn, Sorensen, Simpson, abc
+#' Betapart occurrence metrics (case insensitive): beta.sim, beta.sne,
+#' beta.sor, beta.jtu, beta.jne, beta.jac
+#' Abundance metrics (using ABC): Bray, Brayturn, ABC
+#' Betapart abundance metrics (case insensitive): beta.bray.bal, beta.bray.gra,
+#' beta.bray, beta.ruz.bal, beta.ruz.gra, beta.ruz
+#' Unknown: Euclidean, custom formulas, or NA
+#' 
+#' @noRd
+detect_data_type_from_metric <- function(metric) {
+  if (is.na(metric) || is.null(metric)) {
+    return("unknown")
+  }
+  
+  occurrence_metrics <- c("abc", "Jaccard", "Jaccardturn", "Sorensen", "Simpson")
+  abundance_metrics <- c("ABC", "Bray", "Brayturn")
+  
+  betapart_occurrence <- c("beta.sim", "beta.sne", "beta.sor", 
+                           "beta.jtu", "beta.jne", "beta.jac")
+  betapart_abundance <- c("beta.bray.bal", "beta.bray.gra", "beta.bray",
+                          "beta.ruz.bal", "beta.ruz.gra", "beta.ruz")
+  
+  metric_lower <- tolower(metric)
+  
+  if (metric %in% occurrence_metrics) {
+    return("occurrence")
+  } else if (metric %in% abundance_metrics) {
+    return("abundance")
+  } else if (metric_lower %in% betapart_occurrence) {
+    return("occurrence")
+  } else if (metric_lower %in% betapart_abundance) {
+    return("abundance")
+  } else if (metric == "Euclidean") {
+    return("unknown")
+  } else {
+    # Custom formula or unknown metric
+    return("unknown")
+  }
+}
+
+
+#' Determine weight usage for site_species_metrics
+#' 
+#' Uses a priority system to determine whether to use weights
+#' when computing site-species metrics.
+#' 
+#' @param bioregionalization bioregion.clusters object
+#' @param user_weight User-provided weight argument (can be NULL)
+#' @param user_index User-provided index argument (can be NULL)
+#' @param net Optional network data.frame
+#' @param verbose Logical, show messages
+#' 
+#' @return List with:
+#'   - use_weight: Logical, whether to use weights
+#'   - weight_col: Character or integer, column name/index for weights (or NULL)
+#'   - source: Character, description of where decision came from
+#' 
+#' @details
+#' Priority order:
+#' 1. User-provided weight argument
+#' 2. User-provided index argument (implies weight = TRUE)
+#' 3. bioregionalization$inputs$data_type
+#' 4. Auto-detect from net structure (3rd column present and numeric)
+#' 5. Default to FALSE with user notification
+#' 
+#' @noRd
+determine_weight_usage <- function(bioregionalization,
+                                   user_weight = NULL,
+                                   user_index = NULL,
+                                   net = NULL,
+                                   verbose = TRUE) {
+  
+  # Priority 1: User explicitly provided weight argument
+  if (!is.null(user_weight)) {
+    if (verbose) {
+      message("Using weight specification from user argument: ", user_weight)
+    }
+    
+    weight_col <- NULL
+    if (user_weight && !is.null(user_index)) {
+      weight_col <- user_index
+    } else if (user_weight && !is.null(net) && ncol(net) >= 3) {
+      weight_col <- 3  # Default to 3rd column
+    }
+    
+    # Check for conflict with detected type
+    if (!is.null(bioregionalization$inputs$data_type)) {
+      detected_type <- bioregionalization$inputs$data_type
+      user_type <- ifelse(user_weight, "abundance", "occurrence")
+      
+      if (detected_type != "unknown" && detected_type != user_type) {
+        message(
+          "NOTE: User-specified weight (", user_type, ") is different from ",
+          "original data type (", detected_type, ") from clustering. ",
+          "Using user specification, but please verify this is intentional."
+        )
+      }
+    }
+    
+    return(list(
+      use_weight = user_weight,
+      weight_col = weight_col,
+      source = "user_argument"
+    ))
+  }
+  
+  # Priority 2: User provided index (implies weight = TRUE)
+  if (!is.null(user_index)) {
+    if (verbose) {
+      message("Weight column specified via 'index' argument: ", user_index)
+    }
+    return(list(
+      use_weight = TRUE,
+      weight_col = user_index,
+      source = "user_index"
+    ))
+  }
+  
+  # Priority 3: Use bioregionalization$inputs$data_type (if available)
+  if (!is.null(bioregionalization$inputs$data_type)) {
+    data_type <- bioregionalization$inputs$data_type
+    
+    if (data_type == "occurrence") {
+      if (verbose) {
+        message("Original data was occurrence-based (from clustering inputs). ",
+                "Setting weight = FALSE.")
+      }
+      return(list(
+        use_weight = FALSE,
+        weight_col = NULL,
+        source = "bioregionalization_data_type"
+      ))
+      
+    } else if (data_type == "abundance") {
+      if (verbose) {
+        message("Original data was abundance-based (from clustering inputs). ",
+                "Setting weight = TRUE.")
+      }
+      
+      # Try to get weight column name from bioregionalization
+      weight_col <- NULL
+      # For bipartite networks, args$index contains the weight column name
+      # For unipartite networks, args$index contains the similarity metric name (not useful)
+      if (!is.null(bioregionalization$inputs$bipartite) && 
+          bioregionalization$inputs$bipartite &&
+          !is.null(bioregionalization$args$index)) {
+        weight_col <- bioregionalization$args$index
+      } else if (!is.null(net) && ncol(net) >= 3) {
+        weight_col <- 3
+      }
+      
+      return(list(
+        use_weight = TRUE,
+        weight_col = weight_col,
+        source = "bioregionalization_data_type"
+      ))
+      
+    } else {  # data_type == "unknown"
+      if (verbose) {
+        message("Original data type unknown from clustering inputs. ",
+                "Attempting auto-detection...")
+      }
+      # Fall through to Priority 4
+    }
+  }
+  
+  # Priority 4: Auto-detect from net structure
+  if (!is.null(net) && ncol(net) >= 3) {
+    third_col_numeric <- is.numeric(net[[3]])
+    
+    if (third_col_numeric) {
+      if (verbose) {
+        message("Auto-detected numeric 3rd column in 'net'. ",
+                "Setting weight = TRUE.")
+      }
+      return(list(
+        use_weight = TRUE,
+        weight_col = 3,
+        source = "auto_detect_net"
+      ))
+    }
+  }
+  
+  # Priority 5: Default to FALSE with notification
+  message(
+    "NOTE: Could not determine if original data was occurrence or abundance-based.\n",
+    "Defaulting to occurrence (weight = FALSE).\n",
+    "If your original data used abundances, please specify:\n",
+    "  - weight = TRUE, or\n",
+    "  - index = <column_name_or_number> (for 'net' input)\n",
+    "Incorrect specification may lead to wrong results."
+  )
+  
+  return(list(
+    use_weight = FALSE,
+    weight_col = NULL,
+    source = "default"
+  ))
+}
+
+

@@ -307,6 +307,18 @@ netclu_louvain <- function(net,
     algorithm_in_output = algorithm_in_output
   )
 
+  # Determine data_type based on bipartite vs unipartite
+  if (isbip) {
+    # For bipartite networks, weight directly indicates data type
+    data_type <- ifelse(weight, "abundance", "occurrence")
+  } else {
+    # For unipartite networks, determine from pairwise metric
+    pairwise_metric_value <- ifelse(!isbip & weight, 
+                                     ifelse(is.numeric(index), names(net)[3], index), 
+                                     NA)
+    data_type <- detect_data_type_from_metric(pairwise_metric_value)
+  }
+  
   outputs$inputs <- list(
     bipartite = isbip,
     weight = weight,
@@ -316,7 +328,8 @@ netclu_louvain <- function(net,
                              NA),
     dissimilarity = FALSE,
     nb_sites = nbsites,
-    hierarchical = FALSE
+    hierarchical = FALSE,
+    data_type = data_type
   )
 
   outputs$algorithm <- list()
