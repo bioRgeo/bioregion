@@ -66,6 +66,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[2], 2)
   
   clust <- nhclu_dbscan(dissim,
@@ -92,6 +93,19 @@ test_that("valid output", {
                          plot = FALSE)
   expect_equal(sum(clust1$clusters$K_19_3==clust2$clusters$K_19_3, 
                    na.rm = TRUE), 136)
+  
+  # Test data_type with different dissimilarity metrics
+  clust <- nhclu_dbscan(dissim, index = "Simpson", minPts = 3, eps = 0.1)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_dbscan(dissim, index = "Jaccard", minPts = 3, eps = 0.1)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_dbscan(dissim, index = "Bray", minPts = 3, eps = 0.1)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  clust <- nhclu_dbscan(dissim, index = "Euclidean", minPts = 3, eps = 0.1)
+  expect_equal(clust$inputs$data_type, "unknown")
   
 })
 

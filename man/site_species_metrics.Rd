@@ -13,7 +13,7 @@ site_species_metrics(
   net_species_col = 2,
   net_weight = NULL,
   net_weight_col = NULL,
-  verbose = TRUE
+  verbose = FALSE
 )
 }
 \arguments{

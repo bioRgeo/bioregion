@@ -818,6 +818,615 @@ test_that("strict_positive_integer", {
   
 })
 
+# Test detect_data_type_from_metric --------------------------------------------
+test_that("detect_data_type_from_metric works with occurrence metrics", {
+  
+  # Standard occurrence metrics
+  expect_equal(detect_data_type_from_metric("Jaccard"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Simpson"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Sorensen"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Jaccardturn"), "occurrence")
+  expect_equal(detect_data_type_from_metric("abc"), "occurrence")
+  
+})
+
+test_that("detect_data_type_from_metric works with abundance metrics", {
+  
+  # Standard abundance metrics
+  expect_equal(detect_data_type_from_metric("Bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("ABC"), "abundance")
+  expect_equal(detect_data_type_from_metric("Brayturn"), "abundance")
+  
+})
+
+test_that("detect_data_type_from_metric works with betapart occurrence metrics", {
+  
+  # Betapart occurrence metrics (case-insensitive)
+  expect_equal(detect_data_type_from_metric("beta.sim"), "occurrence")
+  expect_equal(detect_data_type_from_metric("BETA.SIM"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Beta.Sim"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sne"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sor"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jtu"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jne"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jac"), "occurrence")
+  
+})
+
+test_that("detect_data_type_from_metric works with betapart abundance metrics", {
+  
+  # Betapart abundance metrics (case-insensitive)
+  expect_equal(detect_data_type_from_metric("beta.bray.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("BETA.BRAY.BAL"), "abundance")
+  expect_equal(detect_data_type_from_metric("Beta.Bray.Bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray.gra"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.gra"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz"), "abundance")
+  
+})
+
+test_that("detect_data_type_from_metric works with unknown metrics", {
+  
+  # Euclidean is explicitly unknown
+  expect_equal(detect_data_type_from_metric("Euclidean"), "unknown")
+  
+  # NA and NULL return unknown
+  expect_equal(detect_data_type_from_metric(NA), "unknown")
+  expect_equal(detect_data_type_from_metric(NULL), "unknown")
+  
+  # Custom or unknown metrics
+  expect_equal(detect_data_type_from_metric("custom_metric"), "unknown")
+  expect_equal(detect_data_type_from_metric("a/(a+b+c)"), "unknown")
+  expect_equal(detect_data_type_from_metric("unknown"), "unknown")
+  
+})
+
+# Test determine_weight_usage --------------------------------------------------
+test_that("determine_weight_usage respects user_weight priority (Priority 1)", {
+  
+  # Create a mock bioregionalization object
+  bio <- list(
+    inputs = list(
+      data_type = "occurrence",
+      bipartite = FALSE
+    ),
+    args = list(index = "Jaccard")
+  )
+  
+  # User explicitly sets weight = TRUE (abundance)
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = TRUE,
+    user_index = NULL,
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$source, "user_argument")
+  
+  # User explicitly sets weight = FALSE (occurrence)
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = FALSE,
+    user_index = NULL,
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, FALSE)
+  expect_equal(result$source, "user_argument")
+  
+})
+
+test_that("determine_weight_usage uses user_weight with user_index", {
+  
+  bio <- list(
+    inputs = list(data_type = "occurrence", bipartite = FALSE),
+    args = list(index = "Jaccard")
+  )
+  
+  # User provides both weight and index
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = TRUE,
+    user_index = "Weight",
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, "Weight")
+  expect_equal(result$source, "user_argument")
+  
+})
+
+test_that("determine_weight_usage uses user_weight with net", {
+  
+  bio <- list(
+    inputs = list(data_type = "occurrence", bipartite = FALSE),
+    args = list(index = "Jaccard")
+  )
+  
+  net <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Weight = c(10, 20, 15)
+  )
+  
+  # User provides weight with net
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = TRUE,
+    user_index = NULL,
+    net = net,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "user_argument")
+  
+})
+
+test_that("determine_weight_usage respects user_index priority (Priority 2)", {
+  
+  bio <- list(
+    inputs = list(data_type = "occurrence", bipartite = FALSE),
+    args = list(index = "Jaccard")
+  )
+  
+  # User provides index (implies weight = TRUE)
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = "Abundance",
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, "Abundance")
+  expect_equal(result$source, "user_index")
+  
+  # User provides numeric index
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = 3,
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "user_index")
+  
+})
+
+test_that("determine_weight_usage uses data_type occurrence (Priority 3)", {
+  
+  bio <- list(
+    inputs = list(data_type = "occurrence", bipartite = FALSE),
+    args = list(index = "Jaccard")
+  )
+  
+  # No user arguments, should use data_type
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, FALSE)
+  expect_equal(result$weight_col, NULL)
+  expect_equal(result$source, "bioregionalization_data_type")
+  
+})
+
+test_that("determine_weight_usage uses data_type abundance (Priority 3)", {
+  
+  bio <- list(
+    inputs = list(data_type = "abundance", bipartite = FALSE),
+    args = list(index = "Bray")
+  )
+  
+  # No user arguments, should use data_type
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$source, "bioregionalization_data_type")
+  
+})
+
+test_that("determine_weight_usage uses data_type abundance with bipartite", {
+  
+  bio <- list(
+    inputs = list(data_type = "abundance", bipartite = TRUE),
+    args = list(index = "Weight")
+  )
+  
+  # Bipartite with abundance should extract weight column from args$index
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = NULL,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, "Weight")
+  expect_equal(result$source, "bioregionalization_data_type")
+  
+})
+
+test_that("determine_weight_usage uses data_type abundance with net", {
+  
+  bio <- list(
+    inputs = list(data_type = "abundance", bipartite = FALSE),
+    args = list(index = "Bray")
+  )
+  
+  net <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Abund = c(10, 20, 15)
+  )
+  
+  # Should default to column 3 when net is provided
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = net,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "bioregionalization_data_type")
+  
+})
+
+test_that("determine_weight_usage handles unknown data_type (Priority 4)", {
+  
+  bio <- list(
+    inputs = list(data_type = "unknown", bipartite = FALSE),
+    args = list(index = "Euclidean")
+  )
+  
+  net <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Weight = c(10, 20, 15)
+  )
+  
+  # Unknown data_type should fall through to auto-detection
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = net,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "auto_detect_net")
+  
+})
+
+test_that("determine_weight_usage auto-detects from net (Priority 4)", {
+  
+  bio <- list(
+    inputs = list(bipartite = FALSE),
+    args = list(index = "custom")
+  )
+  
+  net_numeric <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Count = c(10, 20, 15)
+  )
+  
+  # Should detect numeric 3rd column
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = net_numeric,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "auto_detect_net")
+  
+  net_non_numeric <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Notes = c("x", "y", "z")
+  )
+  
+  # Should NOT detect non-numeric 3rd column
+  expect_message(
+    result <- determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = NULL,
+      user_index = NULL,
+      net = net_non_numeric,
+      verbose = TRUE
+    ),
+    "Could not determine if original data was occurrence or abundance-based"
+  )
+  expect_equal(result$use_weight, FALSE)
+  expect_equal(result$source, "default")
+  
+})
+
+test_that("determine_weight_usage defaults appropriately (Priority 5)", {
+  
+  bio <- list(
+    inputs = list(bipartite = FALSE),
+    args = list(index = "custom")
+  )
+  
+  # No information available, should default to FALSE
+  expect_message(
+    result <- determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = NULL,
+      user_index = NULL,
+      net = NULL,
+      verbose = TRUE
+    ),
+    "Could not determine if original data was occurrence or abundance-based"
+  )
+  expect_equal(result$use_weight, FALSE)
+  expect_equal(result$weight_col, NULL)
+  expect_equal(result$source, "default")
+  
+})
+
+test_that("determine_weight_usage handles NULL bioregionalization inputs", {
+  
+  bio <- list(
+    inputs = list(),
+    args = list()
+  )
+  
+  net <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Weight = c(10, 20, 15)
+  )
+  
+  # Should fall back to auto-detection
+  result <- determine_weight_usage(
+    bioregionalization = bio,
+    user_weight = NULL,
+    user_index = NULL,
+    net = net,
+    verbose = FALSE
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "auto_detect_net")
+  
+})
+
+test_that("determine_weight_usage verbose messages work correctly", {
+  
+  bio <- list(
+    inputs = list(data_type = "occurrence", bipartite = FALSE),
+    args = list(index = "Jaccard")
+  )
+  
+  # Test verbose = TRUE
+  expect_message(
+    determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = TRUE,
+      user_index = NULL,
+      net = NULL,
+      verbose = TRUE
+    ),
+    "Using weight specification from user argument"
+  )
+  
+  expect_message(
+    determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = NULL,
+      user_index = "Weight",
+      net = NULL,
+      verbose = TRUE
+    ),
+    "Weight column specified via 'index' argument"
+  )
+  
+  expect_message(
+    determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = NULL,
+      user_index = NULL,
+      net = NULL,
+      verbose = TRUE
+    ),
+    "Original data was occurrence-based"
+  )
+  
+})
+
+test_that("determine_weight_usage detects conflict between user and data_type", {
+  
+  bio <- list(
+    inputs = list(data_type = "occurrence", bipartite = FALSE),
+    args = list(index = "Jaccard")
+  )
+  
+  # User sets weight = TRUE but data_type is occurrence
+  expect_message(
+    determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = TRUE,
+      user_index = NULL,
+      net = NULL,
+      verbose = TRUE
+    ),
+    "User-specified weight.*is different from.*original data type"
+  )
+  
+})
+
+# Test betapart integration ----------------------------------------------------
+test_that("detect_data_type_from_metric works with betapart occurrence metrics (beta.pair)", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create a small binary matrix
+  comat_bin <- matrix(sample(0:1, 50, replace = TRUE), 5, 10)
+  rownames(comat_bin) <- paste0("Site", 1:5)
+  colnames(comat_bin) <- paste0("Species", 1:10)
+  
+  # Test with betapart::beta.pair (occurrence-based)
+  beta_result <- betapart::beta.pair(comat_bin, index.family = "jaccard")
+  
+  # Convert to bioregion format
+  dissim_beta <- as_bioregion_pairwise(beta_result, pkg = "betapart")
+  
+  # Check that betapart metric names are correctly detected as occurrence
+  expect_equal(detect_data_type_from_metric("beta.jac"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jtu"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jne"), "occurrence")
+  
+  # Test with Sorensen family
+  beta_result_sor <- betapart::beta.pair(comat_bin, index.family = "sorensen")
+  dissim_beta_sor <- as_bioregion_pairwise(beta_result_sor, pkg = "betapart")
+  
+  expect_equal(detect_data_type_from_metric("beta.sor"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sim"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sne"), "occurrence")
+  
+})
+
+test_that("detect_data_type_from_metric works with betapart abundance metrics (beta.pair.abund)", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create a small abundance matrix
+  comat <- matrix(sample(0:100, 50, replace = TRUE), 5, 10)
+  rownames(comat) <- paste0("Site", 1:5)
+  colnames(comat) <- paste0("Species", 1:10)
+  
+  # Test with betapart::beta.pair.abund (abundance-based)
+  beta_result <- betapart::beta.pair.abund(comat, index.family = "bray")
+  
+  # Convert to bioregion format
+  dissim_beta <- as_bioregion_pairwise(beta_result, pkg = "betapart")
+  
+  # Check that betapart abundance metric names are correctly detected
+  expect_equal(detect_data_type_from_metric("beta.bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray.gra"), "abundance")
+  
+  # Test with Ruzicka family
+  beta_result_ruz <- betapart::beta.pair.abund(comat, index.family = "ruzicka")
+  dissim_beta_ruz <- as_bioregion_pairwise(beta_result_ruz, pkg = "betapart")
+  
+  expect_equal(detect_data_type_from_metric("beta.ruz"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.gra"), "abundance")
+  
+})
+
+test_that("betapart metrics are case-insensitive", {
+  
+  # Test case insensitivity for occurrence metrics
+  expect_equal(detect_data_type_from_metric("BETA.JAC"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Beta.Jac"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.JAC"), "occurrence")
+  expect_equal(detect_data_type_from_metric("BETA.SOR"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Beta.Sim"), "occurrence")
+  
+  # Test case insensitivity for abundance metrics
+  expect_equal(detect_data_type_from_metric("BETA.BRAY"), "abundance")
+  expect_equal(detect_data_type_from_metric("Beta.Bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.BRAY"), "abundance")
+  expect_equal(detect_data_type_from_metric("BETA.RUZ.BAL"), "abundance")
+  expect_equal(detect_data_type_from_metric("Beta.Ruz.Gra"), "abundance")
+  
+})
+
+test_that("betapart integration with clustering functions preserves data_type", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create test matrices
+  comat_bin <- matrix(sample(0:1, 100, replace = TRUE), 10, 10)
+  rownames(comat_bin) <- paste0("Site", 1:10)
+  colnames(comat_bin) <- paste0("Species", 1:10)
+  
+  comat_abund <- matrix(sample(0:50, 100, replace = TRUE), 10, 10)
+  rownames(comat_abund) <- paste0("Site", 1:10)
+  colnames(comat_abund) <- paste0("Species", 1:10)
+  
+  # Test occurrence-based betapart metrics
+  beta_occ <- betapart::beta.pair(comat_bin, index.family = "jaccard")
+  dissim_occ <- as_bioregion_pairwise(beta_occ, pkg = "betapart")
+  
+  # Run clustering with occurrence-based betapart metrics
+  clust_occ <- nhclu_pam(dissim_occ, index = "beta.jac", n_clust = 3)
+  expect_equal(clust_occ$inputs$data_type, "occurrence")
+  expect_equal(clust_occ$inputs$pairwise_metric, "beta.jac")
+  
+  # Test abundance-based betapart metrics
+  beta_abund <- betapart::beta.pair.abund(comat_abund, index.family = "bray")
+  dissim_abund <- as_bioregion_pairwise(beta_abund, pkg = "betapart")
+  
+  # Run clustering with abundance-based betapart metrics
+  clust_abund <- nhclu_pam(dissim_abund, index = "beta.bray", n_clust = 3)
+  expect_equal(clust_abund$inputs$data_type, "abundance")
+  expect_equal(clust_abund$inputs$pairwise_metric, "beta.bray")
+  
+})
+
+test_that("betapart.core and betapart.core.abund work correctly", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create test matrices
+  comat_bin <- matrix(sample(0:1, 100, replace = TRUE), 10, 10)
+  rownames(comat_bin) <- paste0("Site", 1:10)
+  colnames(comat_bin) <- paste0("Species", 1:10)
+  
+  comat_abund <- matrix(sample(0:50, 100, replace = TRUE), 10, 10)
+  rownames(comat_abund) <- paste0("Site", 1:10)
+  colnames(comat_abund) <- paste0("Species", 1:10)
+  
+  # Test betapart.core (occurrence) - converts to a, b, c format
+  beta_core_occ <- betapart::betapart.core(comat_bin)
+  dissim_core_occ <- as_bioregion_pairwise(beta_core_occ, pkg = "betapart")
+  
+  # Verify that a, b, c columns exist (converted from betapart occurrence format)
+  expect_true("a" %in% colnames(dissim_core_occ))
+  expect_true("b" %in% colnames(dissim_core_occ))
+  expect_true("c" %in% colnames(dissim_core_occ))
+  expect_true("min(b,c)" %in% colnames(dissim_core_occ))
+  
+  # Test betapart.core.abund (abundance) - converts to A and derived columns
+  beta_core_abund <- betapart::betapart.core.abund(comat_abund)
+  dissim_core_abund <- as_bioregion_pairwise(beta_core_abund, pkg = "betapart")
+  
+  # Verify that A and derived columns exist (converted from betapart abundance format)
+  expect_true("A" %in% colnames(dissim_core_abund))
+  expect_true("min(B,C)" %in% colnames(dissim_core_abund))
+  expect_true("max(B,C)" %in% colnames(dissim_core_abund))
+  expect_true("sum(B,C)" %in% colnames(dissim_core_abund))
+  
+})
+
+
+
 
 
 

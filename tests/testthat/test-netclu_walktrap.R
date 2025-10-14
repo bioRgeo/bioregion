@@ -86,6 +86,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[1], 5)
   
   clust <- netclu_walktrap(simil,
@@ -150,6 +151,25 @@ test_that("valid output", {
   clust1 <- netclu_walktrap(simf)
   clust2 <- netclu_walktrap(simf)
   expect_equal(sum(clust1$clusters$K_18==clust2$clusters$K_18), 338)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_walktrap(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_walktrap(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_walktrap(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_walktrap(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_walktrap(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
   
 })
 

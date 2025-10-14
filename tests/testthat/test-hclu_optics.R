@@ -70,6 +70,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[2], 2)
   
   clust1 <- hclu_optics(dissim,
@@ -101,6 +102,19 @@ test_that("valid output", {
   expect_equal(clust2$inputs$hierarchical, TRUE)
   tab12 <- table(clust1$clusters$K_18,clust2$clusters$K_18)
   expect_equal(sum(apply(tab12==0,1,sum)==17),18)
+  
+  # Test data_type with different dissimilarity metrics
+  clust <- hclu_optics(dissim, index = "Simpson", minPts = 3, xi = 0.05)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- hclu_optics(dissim, index = "Jaccard", minPts = 3, xi = 0.05)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- hclu_optics(dissim, index = "Bray", minPts = 3, xi = 0.05)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  clust <- hclu_optics(dissim, index = "Euclidean", minPts = 3, xi = 0.05)
+  expect_equal(clust$inputs$data_type, "unknown")
   
 })
 

@@ -79,6 +79,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, TRUE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[2], 4)
   
   clust <- hclu_hierarclust(dissim,
@@ -156,6 +157,24 @@ test_that("valid output", {
                             verbose = FALSE)
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
+  
+  # Test data_type with different dissimilarity metrics
+  clust <- hclu_hierarclust(dissim, index = "Simpson", n_clust = 3, 
+                            optimal_tree_method = "best", verbose = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- hclu_hierarclust(dissim, index = "Jaccard", n_clust = 3, 
+                            optimal_tree_method = "best", verbose = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- hclu_hierarclust(dissim, index = "Bray", n_clust = 3, 
+                            optimal_tree_method = "best", verbose = FALSE)
+  expect_equal(clust$inputs$data_type, "abundance")
+
+  # Expect warning as the algo cannot find 3 clusters here
+  expect_warning(clust <- hclu_hierarclust(dissim, index = "Euclidean", n_clust = 3,
+                            optimal_tree_method = "best", verbose = FALSE))
+  expect_equal(clust$inputs$data_type, "unknown")
 
 })
 

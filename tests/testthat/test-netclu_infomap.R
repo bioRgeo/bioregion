@@ -108,6 +108,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(clust$algorithm$version, "2.8.0")
   expect_equal(dim(clust$clusters)[1], 5)
   
@@ -240,6 +241,25 @@ test_that("valid output", {
   expect_equal(clust$cluster_info[2,2], 7)
   expect_equal(clust$cluster_info[2,3], 2)
   expect_equal(clust$inputs$hierarchical, TRUE)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_infomap(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_infomap(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_infomap(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_infomap(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_infomap(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
   
 })
 

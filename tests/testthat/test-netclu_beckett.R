@@ -67,6 +67,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 3)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "abundance")
   expect_equal(dim(clust$clusters)[1], 7)
   expect_equal(dim(clust$clusters)[2], 2)
   
@@ -120,6 +121,14 @@ test_that("valid output", {
   expect_equal(r1!=r2, TRUE)
   expect_equal(r2!=r3, TRUE)
   expect_equal(r1!=r3, TRUE)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_beckett(net, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_beckett(net, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   
 })
 

@@ -69,6 +69,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, TRUE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[2], 4)
   
   clust <- hclu_diana(dissim,
@@ -84,6 +85,21 @@ test_that("valid output", {
                             find_h = FALSE)
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
+  
+  # Test data_type with different dissimilarity metrics
+  # We expect warnings here as the algo cannot find 3 clusters with those metrics
+  # on this dataset
+  expect_warning(clust <- hclu_diana(dissim, index = "Simpson", n_clust = 3))
+  expect_equal(clust$inputs$data_type, "occurrence")
+
+  expect_warning(clust <- hclu_diana(dissim, index = "Jaccard", n_clust = 3))
+  expect_equal(clust$inputs$data_type, "occurrence")
+
+  expect_warning(clust <- hclu_diana(dissim, index = "Bray", n_clust = 3))
+  expect_equal(clust$inputs$data_type, "abundance")
+
+  expect_warning(clust <- hclu_diana(dissim, index = "Euclidean", n_clust = 3))
+  expect_equal(clust$inputs$data_type, "unknown")
   
 })
 

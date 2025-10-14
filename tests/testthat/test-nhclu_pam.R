@@ -70,6 +70,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[2], 4)
   
   clust <- nhclu_pam(dissim,
@@ -109,6 +110,19 @@ test_that("valid output", {
   expect_equal(r1!=r2, TRUE)
   expect_equal(r2!=r3, TRUE)
   expect_equal(r1!=r3, TRUE)
+  
+  # Test data_type with different dissimilarity metrics
+  clust <- nhclu_pam(dissim, index = "Simpson", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_pam(dissim, index = "Jaccard", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_pam(dissim, index = "Bray", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  clust <- nhclu_pam(dissim, index = "Euclidean", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "unknown")
   
 })
 

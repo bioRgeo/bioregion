@@ -81,6 +81,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   
   clust <- nhclu_affprop(sim,
                          index = "Simpson",
@@ -191,6 +192,20 @@ test_that("valid output", {
                          algorithm_in_output = FALSE)
   expect_equal(clust$cluster_info[1,1], "K_6")
   expect_equal(clust$cluster_info[1,2], 6)
+  
+  # Test data_type with different similarity metrics
+  # Create similarity objects with different metrics
+  sim_occ <- similarity(fishmat, metric = c("Simpson", "Jaccard"))
+  sim_abund <- similarity(fishmat, metric = "Bray")
+  
+  clust <- nhclu_affprop(sim_occ, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_affprop(sim_occ, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_affprop(sim_abund, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
   
 })
 

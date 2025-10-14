@@ -102,6 +102,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[1], 5)
   
   clust <- netclu_louvain(net)
@@ -182,6 +183,25 @@ test_that("valid output", {
   
   clust <- netclu_louvain(fdf, lang = "cpp")
   expect_equal(clust$inputs$hierarchical, TRUE)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_louvain(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_louvain(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_louvain(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_louvain(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_louvain(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
 
   
 })

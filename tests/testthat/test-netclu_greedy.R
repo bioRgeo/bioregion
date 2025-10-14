@@ -84,6 +84,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   expect_equal(dim(clust$clusters)[1], 5)
   
   clust <- netclu_greedy(simil,
@@ -143,6 +144,25 @@ test_that("valid output", {
   clust1 <- netclu_greedy(simf)
   clust2 <- netclu_greedy(simf)
   expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3), 338)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_greedy(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_greedy(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_greedy(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_greedy(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_greedy(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
   
 })
 
