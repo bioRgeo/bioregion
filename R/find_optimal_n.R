@@ -128,7 +128,7 @@
 #'
 #' @importFrom stats predict quantile
 #' @importFrom tidyr pivot_longer
-#' @importFrom ggplot2 ggplot aes_string geom_line facet_wrap geom_vline
+#' @importFrom ggplot2 ggplot aes geom_line facet_wrap geom_vline
 #' @importFrom ggplot2 theme_bw
 #' @importFrom rlang .data
 #' 
@@ -533,29 +533,29 @@ find_optimal_n <- function(bioregionalizations,
         message("   (the red line is the prediction from the segmented ",
                 "regression)")
         
-        p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
-                                                       y = "value")) +
+        p <- ggplot2::ggplot(ggdf, ggplot2::aes(x = .data$n_clusters,
+                                                       y = .data$value)) +
           ggplot2::geom_line(col = "darkgrey") +
           ggplot2::facet_wrap(~ variable, scales = "free_y") +
           # ggplot2::geom_hline(yintercept = bioregionalizations$evaluation_df[
           #   bioregionalizations$evaluation_df$optimal_nclust, eval_metric[1]],
           #                     linetype = 2) +
           ggplot2::geom_vline(data = ggdf2,
-                              ggplot2::aes_string(xintercept = "n_clusters"),
+                              ggplot2::aes(xintercept = .data$n_clusters),
                               linetype = 2) +
           ggplot2::theme_bw() +
           ggplot2::geom_line(data = seg_preds,
                              col = "red")
       } else {
-        p <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "n_clusters",
-                                                       y = "value")) +
+        p <- ggplot2::ggplot(ggdf, ggplot2::aes(x = .data$n_clusters,
+                                                       y = .data$value)) +
           ggplot2::geom_line(col = "darkgrey") +
           ggplot2::facet_wrap(~ variable, scales = "free_y") +
           # ggplot2::geom_hline(yintercept = bioregionalizations$evaluation_df[
           #   bioregionalizations$evaluation_df$optimal_nclust, eval_metric[1]],
           #                     linetype = 2) +
           ggplot2::geom_vline(data = ggdf2,
-                              ggplot2::aes_string(xintercept = "n_clusters"),
+                              ggplot2::aes(xintercept = .data$n_clusters),
                               linetype = 2) +
           ggplot2::theme_bw()
       }
