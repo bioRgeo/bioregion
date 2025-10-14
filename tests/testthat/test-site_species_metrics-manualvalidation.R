@@ -5,8 +5,8 @@
 # test cases. 
 
 # Source helper functions and manual calculations
-source("tests/helpers/helper_functions_validation.R")
-source("tests/helpers/manual_calculations_site_species_metrics.R")
+source(test_path("../helpers/helper_functions_validation.R"))
+source(test_path("../helpers/manual_calculations_site_species_metrics.R"))
 
 # Test 1: Perfect Partitioning - Affinity, Fidelity, IndVal ---------------
 test_that("Affinity, Fidelity, IndVal - Perfect Partitioning", {
@@ -333,13 +333,14 @@ test_that("Cz indices - Bipartite network", {
   # Create network data.frame for Cz calculations
   net <- mat_to_net(tc4$comat, weight = TRUE)
   
-  expect_warning(result <- site_species_metrics(
+  # No warning expected anymore - function uses both comat and net
+  result <- site_species_metrics(
     bioregionalization = mock_clust_bip,
     comat = tc4$comat,
     net = net,
     indices = "Cz",
     verbose = FALSE
-  ))
+  )
   
   # Cz metrics are stored separately from other metrics
   cz_df <- result[[1]]$cz_metrics

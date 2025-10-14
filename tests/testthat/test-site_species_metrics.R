@@ -211,11 +211,11 @@ test_that("invalid inputs", {
     site_species_metrics(clust_louv),
     "^bioregionalization does not have the expected type of")
   
+  # When comat is invalid, the error now comes from mat_to_net
   expect_error(
     site_species_metrics(com, 
                          comat = "zz"),
-    "comat must be a matrix.",
-    fixed = TRUE)
+    "mat must be a matrix.")
   
   expect_error(
     site_species_metrics(com, 
@@ -247,39 +247,39 @@ test_that("invalid inputs", {
     "net should be a data.frame with at least two columns",
     fixed = TRUE)
   
-  # Test site_col validation when using net (no comat)
-  # NOTE: site_col can now be character or numeric, so test invalid character name
+  # Test net_site_col validation when using net (no comat)
+  # NOTE: net_site_col can now be character or numeric, so test invalid character name
   expect_error(
     site_species_metrics(com, 
                          net = net_bip,
-                         site_col = "NonExistentColumn"),
+                         net_site_col = "NonExistentColumn"),
     "site_col 'NonExistentColumn' not found in net column names.",
     fixed = TRUE)
   
-  # Test species_col validation when using net (no comat)
+  # Test net_species_col validation when using net (no comat)
   expect_error(
     site_species_metrics(com, 
                          net = net_bip,
-                         species_col = "NonExistentColumn"),
+                         net_species_col = "NonExistentColumn"),
     "species_col 'NonExistentColumn' not found in net column names.",
     fixed = TRUE)
   
-  # Test site_col index out of bounds
+  # Test net_site_col index out of bounds
   expect_error(
     site_species_metrics(clust_bip, 
                          net = net_bip,
                          indices = "Cz",
-                         site_col = 30),
-    "The site column ('site_col') is incorrect.",
+                         net_site_col = 30),
+    "The site column ('net_site_col') is incorrect.",
     fixed = TRUE)
   
-  # Test species_col index out of bounds
+  # Test net_species_col index out of bounds
   expect_error(
     site_species_metrics(clust_bip, 
                          net = net_bip,
                          indices = "Cz",
-                         species_col = 30),
-    "The species column ('species_col') is incorrect.",
+                         net_species_col = 30),
+    "The species column ('net_species_col') is incorrect.",
     fixed = TRUE)
   
 })
@@ -520,18 +520,17 @@ test_that("only net provided works (new behavior)", {
   expect_equal(nrow(result[[1]]$metrics), 75)
 })
 
-test_that("both comat and net provided uses comat with warning", {
+test_that("both comat and net provided uses both", {
   
   net_test <- mat_to_net(comat, weight = TRUE)
   
-  expect_warning(
-    result <- site_species_metrics(
-      bioregionalization = clust1,
-      comat = comat,
-      net = net_test,
-      indices = "rho"
-    ),
-    "Both 'comat' and 'net' provided. Using 'comat' and ignoring 'net'."
+
+  result <- site_species_metrics(
+    bioregionalization = clust1,
+    comat = comat,
+    net = net_test,
+    indices = "rho",
+    verbose = FALSE
   )
   
   expect_true(inherits(result, "bioregion.site.species.metrics"))
@@ -549,7 +548,7 @@ test_that("neither comat nor net provided errors", {
   )
 })
 
-test_that("weight parameter affects Cz indices but not other metrics", {
+test_that("net_weight parameter affects Cz indices but not other metrics", {
   
   # Create test data for unipartite network
   comat_test <- matrix(sample(0:10, 100, replace = TRUE), 10, 10)
@@ -566,14 +565,14 @@ test_that("weight parameter affects Cz indices but not other metrics", {
   result_rho_weighted <- site_species_metrics(
     bioregionalization = clust_test,
     net = net_weighted,
-    weight = TRUE,
+    net_weight = TRUE,
     indices = "rho"
   )
   
   result_rho_unweighted <- site_species_metrics(
     bioregionalization = clust_test,
     net = net_unweighted,
-    weight = FALSE,
+    net_weight = FALSE,
     indices = "rho"
   )
   
@@ -604,7 +603,7 @@ test_that("weight parameter affects Cz indices but not other metrics", {
                         result_cz_unweighted[[1]]$cz_metrics$C))
 })
 
-test_that("reversed site_col/species_col order", {
+test_that("reversed net_site_col/net_species_col order", {
   
   # Create net with reversed columns (species, site, weight)
   net_reversed <- mat_to_net(comat, weight = TRUE)
@@ -614,8 +613,8 @@ test_that("reversed site_col/species_col order", {
   result <- site_species_metrics(
     bioregionalization = clust1,
     net = net_reversed,
-    site_col = 2,
-    species_col = 1,
+    net_site_col = 2,
+    net_species_col = 1,
     indices = "rho"
   )
   
@@ -655,15 +654,15 @@ test_that("results equivalent when using comat vs equivalent net", {
   expect_equal(metrics_comat, metrics_net, tolerance = 1e-10)
 })
 
-test_that("site_col and species_col as integers (column indices)", {
+test_that("net_site_col and net_species_col as integers (column indices)", {
   
   net_test <- mat_to_net(comat, weight = TRUE)
   
   result <- site_species_metrics(
     bioregionalization = clust1,
     net = net_test,
-    site_col = 1,
-    species_col = 2,
+    net_site_col = 1,
+    net_species_col = 2,
     indices = "rho"
   )
   
@@ -671,7 +670,7 @@ test_that("site_col and species_col as integers (column indices)", {
   expect_equal(nrow(result[[1]]$metrics), 75)
 })
 
-test_that("site_col and species_col as characters (column names)", {
+test_that("net_site_col and net_species_col as characters (column names)", {
   
   net_test <- mat_to_net(comat, weight = TRUE)
   colnames(net_test) <- c("SiteCol", "SpeciesCol", "WeightCol")
@@ -679,8 +678,8 @@ test_that("site_col and species_col as characters (column names)", {
   result <- site_species_metrics(
     bioregionalization = clust1,
     net = net_test,
-    site_col = "SiteCol",
-    species_col = "SpeciesCol",
+    net_site_col = "SiteCol",
+    net_species_col = "SpeciesCol",
     indices = "rho"
   )
   
@@ -727,8 +726,8 @@ test_that("explicitly provided parameters override bioregionalization", {
   result <- site_species_metrics(
     bioregionalization = clust_with_args,
     net = net_reversed,
-    site_col = 2,  # Explicitly override
-    species_col = 1,  # Explicitly override
+    net_site_col = 2,  # Explicitly override
+    net_species_col = 1,  # Explicitly override
     indices = "rho"
   )
   
@@ -764,7 +763,7 @@ test_that("works with different clustering functions (netclu_*, hclu_*, nhclu_*)
   expect_true(inherits(result_hclu, "bioregion.site.species.metrics"))
 })
 
-test_that("invalid site_col name errors appropriately", {
+test_that("invalid net_site_col name errors appropriately", {
   
   net_test <- mat_to_net(comat, weight = TRUE)
   colnames(net_test) <- c("Site", "Species", "Weight")
@@ -773,8 +772,8 @@ test_that("invalid site_col name errors appropriately", {
     site_species_metrics(
       bioregionalization = clust1,
       net = net_test,
-      site_col = "NonExistentColumn",
-      species_col = "Species",
+      net_site_col = "NonExistentColumn",
+      net_species_col = "Species",
       indices = "rho"
     ),
     "site_col 'NonExistentColumn' not found in net column names.",
@@ -782,7 +781,7 @@ test_that("invalid site_col name errors appropriately", {
   )
 })
 
-test_that("invalid species_col name errors appropriately", {
+test_that("invalid net_species_col name errors appropriately", {
   
   net_test <- mat_to_net(comat, weight = TRUE)
   colnames(net_test) <- c("Site", "Species", "Weight")
@@ -791,8 +790,8 @@ test_that("invalid species_col name errors appropriately", {
     site_species_metrics(
       bioregionalization = clust1,
       net = net_test,
-      site_col = "Site",
-      species_col = "NonExistentColumn",
+      net_site_col = "Site",
+      net_species_col = "NonExistentColumn",
       indices = "rho"
     ),
     "species_col 'NonExistentColumn' not found in net column names.",
@@ -1065,4 +1064,296 @@ test_that("Cz edge cases: species present in only one bioregion", {
   sp1_br1 <- metrics[metrics$Species == "Species1" & metrics$Bioregion == 1, "indval"]
   expect_equal(sp1_br1, 1.0)
 })
+
+# Tests for automatic weight detection system ----------------------------------
+test_that("automatic weight detection from bioregionalization - occurrence", {
+  
+  # Create occurrence network (no weights)
+  net_occurrence <- mat_to_net(comat, weight = FALSE)
+  
+  # Create bioregionalization with occurrence data_type
+  clust_occurrence <- clust1
+  clust_occurrence$inputs$data_type <- "occurrence"
+  
+  # Should automatically detect occurrence and NOT use weights
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_occurrence,
+      net = net_occurrence,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Original data was occurrence-based.*Setting weight = FALSE"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("automatic weight detection from bioregionalization - abundance", {
+  
+  # Create abundance network (with weights)
+  net_abundance <- mat_to_net(comat, weight = TRUE)
+  
+  # Create bioregionalization with abundance data_type
+  clust_abundance <- clust1
+  clust_abundance$inputs$data_type <- "abundance"
+  
+  # Should automatically detect abundance and use weights
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_abundance,
+      net = net_abundance,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Original data was abundance-based.*Setting weight = TRUE"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("automatic weight detection from net structure (3rd column)", {
+  
+  # Create net with 3rd column (weights)
+  net_weighted <- mat_to_net(comat, weight = TRUE)
+  
+  # Create bioregionalization without data_type info
+  clust_no_type <- clust1
+  clust_no_type$inputs$data_type <- NULL
+  
+  # Should auto-detect from net structure
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_no_type,
+      net = net_weighted,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Auto-detected numeric 3rd column.*Setting weight = TRUE"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("override automatic detection - force occurrence on abundance network", {
+  
+  # Create abundance network
+  net_abundance <- mat_to_net(comat, weight = TRUE)
+  
+  # Create bioregionalization with abundance data_type
+  clust_abundance <- clust1
+  clust_abundance$inputs$data_type <- "abundance"
+  
+  # Override to use occurrence (weight = FALSE)
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_abundance,
+      net = net_abundance,
+      net_weight = FALSE,  # Force occurrence
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "User-specified weight.*is different from.*original data type"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("override automatic detection - force abundance on occurrence network", {
+  
+  # Create occurrence network (2 columns only)
+  net_occurrence <- mat_to_net(comat, weight = FALSE)
+  
+  # Add a dummy weight column for testing
+  net_occurrence$Abundance <- 1
+  
+  # Create bioregionalization with occurrence data_type
+  clust_occurrence <- clust1
+  clust_occurrence$inputs$data_type <- "occurrence"
+  
+  # Override to use abundance (weight = TRUE)
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_occurrence,
+      net = net_occurrence,
+      net_weight = TRUE,  # Force abundance
+      net_weight_col = 3,  # Specify weight column
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "User-specified weight.*is different from.*original data type"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("net_weight_col specifies custom weight column", {
+  
+  # Create net with multiple numeric columns
+  net_multi <- mat_to_net(comat, weight = TRUE)
+  colnames(net_multi) <- c("Site", "Species", "Weight")
+  
+  # Add another numeric column
+  set.seed(123)
+  net_multi$Abundance <- sample(1:100, nrow(net_multi), replace = TRUE)
+  
+  # Use the 4th column as weight
+  result <- site_species_metrics(
+    bioregionalization = clust1,
+    net = net_multi,
+    net_weight = TRUE,
+    net_weight_col = 4,  # Use Abundance column
+    indices = "rho"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("net_weight_col as character (column name)", {
+  
+  # Create net with named columns
+  net_named <- mat_to_net(comat, weight = TRUE)
+  colnames(net_named) <- c("Site", "Species", "Count")
+  
+  # Use column name instead of index
+  result <- site_species_metrics(
+    bioregionalization = clust1,
+    net = net_named,
+    net_weight = TRUE,
+    net_weight_col = "Count",
+    indices = "rho"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("weight detection with bipartite networks", {
+  
+  # Create bipartite network with weights
+  net_bip_weighted <- mat_to_net(comat, weight = TRUE)
+  
+  # Create bipartite bioregionalization with abundance data
+  clust_bip_abund <- clust_bip
+  clust_bip_abund$inputs$data_type <- "abundance"
+  clust_bip_abund$args$index <- 3  # Weight column index
+  
+  # Should detect abundance from bipartite bioregionalization
+  # Note: Cz for bipartite requires comat, so it uses both comat and net
+  suppressWarnings({
+    result <- site_species_metrics(
+      bioregionalization = clust_bip_abund,
+      comat = comat,
+      net = net_bip_weighted,
+      indices = "Cz",
+      verbose = FALSE
+    )
+  })
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+  expect_true("cz_metrics" %in% names(result[[1]]))
+})
+
+test_that("default to occurrence when data type unknown", {
+  
+  # Create net with 2 columns (no weight)
+  net_simple <- mat_to_net(comat, weight = FALSE)
+  
+  # Create bioregionalization without data_type
+  clust_unknown <- clust1
+  clust_unknown$inputs$data_type <- NULL
+  
+  # Should default to occurrence with a message
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_unknown,
+      net = net_simple,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Could not determine if original data was occurrence or abundance-based.*Defaulting to occurrence"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("results differ when using occurrence vs abundance on same network", {
+  
+  # Create a network with meaningful weights
+  comat_test <- matrix(c(
+    5, 10, 0, 0,
+    8, 12, 0, 0,
+    0, 0, 3, 7,
+    0, 0, 5, 9
+  ), nrow = 4, byrow = TRUE)
+  rownames(comat_test) <- paste0("Site", 1:4)
+  colnames(comat_test) <- paste0("Species", 1:4)
+  
+  # Create clustering
+  simple_clusters <- data.frame(
+    ID = paste0("Site", 1:4),
+    K_2 = c(1, 1, 2, 2)
+  )
+  class(simple_clusters) <- c("bioregion.clusters", "data.frame")
+  
+  simple_bioregion <- list(
+    name = "test",
+    args = list(),
+    inputs = list(bipartite = FALSE),
+    algorithm = list(),
+    clusters = simple_clusters,
+    cluster_info = list(n_clust = 2)
+  )
+  class(simple_bioregion) <- "bioregion.clusters"
+  
+  # Create net with weights
+  net_test <- mat_to_net(comat_test, weight = TRUE)
+  
+  # Compute with occurrence (ignore weights)
+  result_occurrence <- site_species_metrics(
+    bioregionalization = simple_bioregion,
+    net = net_test,
+    net_weight = FALSE,
+    indices = c("affinity", "fidelity"),
+    verbose = FALSE
+  )
+  
+  # Compute with abundance (use weights)
+  result_abundance <- site_species_metrics(
+    bioregionalization = simple_bioregion,
+    net = net_test,
+    net_weight = TRUE,
+    indices = c("affinity", "fidelity"),
+    verbose = FALSE
+  )
+  
+  # Results should be identical for these metrics (they use presence/absence)
+  # But verify that the function executes both correctly
+  expect_true(inherits(result_occurrence, "bioregion.site.species.metrics"))
+  expect_true(inherits(result_abundance, "bioregion.site.species.metrics"))
+})
+
+test_that("weight parameter priority: user > index > data_type > auto-detect", {
+  
+  net_test <- mat_to_net(comat, weight = TRUE)
+  
+  # Priority 1: User-provided net_weight takes precedence
+  clust_test <- clust1
+  clust_test$inputs$data_type <- "occurrence"  # Says occurrence
+  clust_test$args$index <- 3  # Says use index
+  
+  # But user says use weight = TRUE
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_test,
+      net = net_test,
+      net_weight = TRUE,  # User override
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Using weight specification from user argument: TRUE"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
 

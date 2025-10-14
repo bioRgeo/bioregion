@@ -37,6 +37,9 @@ create_mock_clusters <- function(comat,
     }
   }
   
+  # Determine data_type based on weight parameter
+  data_type <- if (weight) "abundance" else "occurrence"
+  
   # Create minimal bioregion.clusters structure
   # This mimics the output of netclu_infomap()
   mock_clusters <- list(
@@ -48,6 +51,7 @@ create_mock_clusters <- function(comat,
     inputs = list(
       bipartite = bipartite,
       weight = weight,
+      data_type = data_type,  
       pairwise = !bipartite,  
       pairwise_metric = if (!bipartite) "Simpson" else NA,
       dissimilarity = !bipartite,

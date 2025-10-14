@@ -272,7 +272,7 @@ site_species_metrics <- function(bioregionalization,
                                  net_species_col = 2,
                                  net_weight = NULL,
                                  net_weight_col = NULL,
-                                 verbose = TRUE){
+                                 verbose = FALSE){
   
   # 1. Controls ---------------------------------------------------------------
   if(verbose) {
@@ -287,8 +287,10 @@ site_species_metrics <- function(bioregionalization,
       
       # Message if multiple bioregionalizations detected
       if(ncol(clusters) > 2) {
-        message("Multiple bioregionalizations detected (", ncol(clusters) - 1, 
-                " columns). Computing metrics for each...")
+        if(verbose) {
+          message("Multiple bioregionalizations detected (", ncol(clusters) - 1, 
+                  " columns). Computing metrics for each...")
+        }
       }
       
     } else {
@@ -330,7 +332,7 @@ site_species_metrics <- function(bioregionalization,
   if(is.null(net_species_col) && !is.null(bioregionalization$args$species_col)) {
     species_col <- bioregionalization$args$species_col
     if(verbose) {
-      message("Using species_col from bioregionalization object.")
+      message("Using net_species_col from bioregionalization object.")
     }
   }
   
@@ -387,7 +389,7 @@ site_species_metrics <- function(bioregionalization,
       stop(paste0("net should be a data.frame with at least two columns, ",
                   "corresponding to the sites and species. By default, sites are ",
                   "considered to be in the first column, and species in the second. ",
-                  "This can be changed with the arguments 'site_col' and 'species_col'."),
+                  "This can be changed with the arguments 'net_site_col' and 'net_species_col'."),
            call. = FALSE)
     }
     
@@ -413,11 +415,11 @@ site_species_metrics <- function(bioregionalization,
     }
     
     if (site_col > ncol(net)) {
-      stop("The site column ('site_col') is incorrect.", call. = FALSE)
+      stop("The site column ('net_site_col') is incorrect.", call. = FALSE)
     }
     
     if (species_col > ncol(net)) {
-      stop("The species column ('species_col') is incorrect.", call. = FALSE)
+      stop("The species column ('net_species_col') is incorrect.", call. = FALSE)
     }
     
     # Determine weight usage using priority system
@@ -508,8 +510,8 @@ site_species_metrics <- function(bioregionalization,
     stop("net should be a data.frame with at least two columns,
          corresponding to the sites and species. By default, sites are
          considered to be in the first column, and species in the second.
-         This can be changed with the arguments 'site_col' and
-         'species_col'.")
+         This can be changed with the arguments 'net_site_col' and
+         'net_species_col'.")
   }
   
   # 5. Main computation ---------------------------------------------------------

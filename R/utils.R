@@ -1119,7 +1119,7 @@ determine_weight_usage <- function(bioregionalization,
     "NOTE: Could not determine if original data was occurrence or abundance-based.\n",
     "Defaulting to occurrence (weight = FALSE).\n",
     "If your original data used abundances, please specify:\n",
-    "  - weight = TRUE, or\n",
+    "  - weight = TRUE, and\n",
     "  - index = <column_name_or_number> (for 'net' input)\n",
     "Incorrect specification may lead to wrong results."
   )
