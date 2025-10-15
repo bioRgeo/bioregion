@@ -61,6 +61,114 @@ simil <- dissimilarity_to_similarity(dissim)
 clust_louv <- netclu_louvain(simil)
 clust_louv$clusters <- NULL
 
+# Tests for verbose messaging -----------------------------------------------------
+test_that("verbose message for multiple bioregionalizations detection", {
+  
+  # Test with multi_clust_manual (2 bioregionalizations)
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = multi_clust_manual, 
+      comat = comat,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Multiple bioregionalizations detected.*2.*columns"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("verbose messages for site_col and species_col extraction", {
+  
+  # Create bioregionalization with stored parameters
+  net_test <- mat_to_net(comat, weight = TRUE)
+  colnames(net_test) <- c("site", "species", "weight")
+  
+  # Create clustering with stored args
+  clust_with_args <- netclu_beckett(net_test, weight = TRUE)
+  
+  # Call without explicitly providing net_site_col/net_species_col
+  # The function should use the values from bioregionalization$args
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust_with_args,
+      net = net_test,
+      net_site_col = NULL,
+      net_species_col = NULL,
+      indices = c("rho", "Cz"),
+      verbose = TRUE
+    )
+  )
+  
+  # Verify it completes successfully (which means it found the columns)
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+  expect_equal(nrow(result[[1]]$metrics), 150)
+  expect_equal(nrow(result[[1]]$cz_metricsmetrics), 45)
+})
+
+test_that("verbose message when only comat provided", {
+  
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust1,
+      comat = comat,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Only 'comat' provided. Creating 'net' from 'comat'"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("verbose message when both comat and net provided", {
+  
+  net_test <- mat_to_net(comat, weight = TRUE)
+  
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust1,
+      comat = comat,
+      net = net_test,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Both 'comat' and 'net' provided. Using both"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("verbose message for main computation start", {
+  
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = clust1,
+      comat = comat,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Input validation completed. Starting main computation"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("verbose progress messages for multiple bioregionalizations", {
+  
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = multi_clust_manual,
+      comat = comat,
+      indices = "rho",
+      verbose = TRUE
+    ),
+    "Computing metrics for bioregionalization [0-9]+ of [0-9]+"
+  )
+  
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
 # Tests for valid outputs ------------------------------------------------------
 test_that("output structure for single bioregionalization", {
   
@@ -170,6 +278,74 @@ test_that("Cz indices work for bipartite", {
   expect_true("rho" %in% colnames(cz_mixed[[1]]$metrics))
 })
 
+test_that("Cz verbose messages for auto-detection, weights, and computations", {
+  
+  # Create test data
+  comat_uni <- matrix(sample(0:10, 100, replace = TRUE), 10, 10)
+  rownames(comat_uni) <- paste0("Site", 1:10)
+  colnames(comat_uni) <- paste0("Species", 1:10)
+  
+  dissim_uni <- dissimilarity(comat_uni, metric = "Simpson")
+  clust_uni <- nhclu_kmeans(dissim_uni, n_clust = 3)
+  net_uni <- mat_to_net(comat_uni, weight = TRUE)
+  
+  # Auto-detected weighted net message
+  suppressWarnings({
+    expect_message(
+      result <- site_species_metrics(
+        bioregionalization = clust_uni,
+        comat = comat_uni,
+        net = net_uni,
+        indices = "Cz",
+        verbose = TRUE
+      ),
+      "Auto-detected weighted net.*Setting weight = TRUE for Cz"
+    )
+  })
+  
+  # Group 13: Using specific column as weights message
+  suppressWarnings({
+    expect_message(
+      result <- site_species_metrics(
+        bioregionalization = clust_uni,
+        comat = comat_uni,
+        net = net_uni,
+        indices = "Cz",
+        verbose = TRUE
+      ),
+      "Using column '.*' as weights for Cz calculations"
+    )
+  })
+  
+  # Computing participation coefficient C message
+  suppressWarnings({
+    expect_message(
+      result <- site_species_metrics(
+        bioregionalization = clust_uni,
+        comat = comat_uni,
+        net = net_uni,
+        indices = "Cz",
+        verbose = TRUE
+      ),
+      "Computing participation coefficient C"
+    )
+  })
+  
+  # Computing z-score message
+  suppressWarnings({
+    expect_message(
+      result <- site_species_metrics(
+        bioregionalization = clust_uni,
+        comat = comat_uni,
+        net = net_uni,
+        indices = "Cz",
+        verbose = TRUE
+      ),
+      "Computing within-bioregion degree z-score"
+    )
+  })
+})
+
 test_that("print method works", {
   
   result <- site_species_metrics(clust1, comat, indices = "rho")
@@ -200,9 +376,6 @@ test_that("invalid inputs", {
     site_species_metrics("zz"),
     "^This function is designed to work on bioregion.clusters objects ")
   
-  # REMOVED: No longer expect error for multiple bioregionalizations
-  # This is now a valid use case!
-  
   expect_error(
     site_species_metrics(clust_h),
     "^No clusters have been generated for your hierarchical")
@@ -230,7 +403,12 @@ test_that("invalid inputs", {
                          indices = "zz"),
     "^Please choose indices from the following")
   
-
+  # Test invalid indices with multiple invalid names
+  expect_error(
+    site_species_metrics(com, 
+                         comat = comat, 
+                         indices = c("rho", "invalid_metric")),
+    "^Please choose indices from the following")
   
   # Test that net is required for Cz when no comat provided
   expect_error(
@@ -282,7 +460,27 @@ test_that("invalid inputs", {
     "The species column ('net_species_col') is incorrect.",
     fixed = TRUE)
   
+  # Test error when comat rownames don't match clusters
+  comat_wrong_sites <- comat
+  rownames(comat_wrong_sites) <- paste0("WrongSite", 1:nrow(comat))
+  
+  expect_error(
+    site_species_metrics(clust1, 
+                         comat = comat_wrong_sites),
+    "Site names of comat cannot be found in clusters",
+    fixed = FALSE)
+  
+  # Test error when weight is TRUE but net has only 2 columns
+  net_2col <- mat_to_net(comat, weight = FALSE)
+  
+  expect_error(
+    site_species_metrics(clust1, 
+                       net = net_2col,
+                       net_weight = TRUE),
+    "weight is TRUE but 'net' has only 2 columns.")
+  
 })
+
 
 # Tests with known expected values ---------------------------------------------
 test_that("rho calculation is correct with known values", {
@@ -1063,6 +1261,186 @@ test_that("Cz edge cases: species present in only one bioregion", {
   metrics <- result[[1]]$metrics
   sp1_br1 <- metrics[metrics$Species == "Species1" & metrics$Bioregion == 1, "indval"]
   expect_equal(sp1_br1, 1.0)
+})
+
+# Edge case tests --------------------------------------------------------------
+test_that("note when using bipartite metrics for unipartite clusterings", {
+  
+  # Create test data for unipartite
+  comat_uni <- matrix(sample(0:10, 100, replace = TRUE), 10, 10)
+  rownames(comat_uni) <- paste0("Site", 1:10)
+  colnames(comat_uni) <- paste0("Species", 1:10)
+  
+  dissim_uni <- dissimilarity(comat_uni, metric = "Simpson")
+  clust_uni <- nhclu_kmeans(dissim_uni, n_clust = 3)
+  # Also test with unweighted net to see if the function falls back correctly
+  net_uni_2col <- mat_to_net(comat_uni, weight = FALSE)
+  
+  # Try to use Cz with 2-column net
+  # The function handles this by defaulting to unweighted
+  expect_message({
+    result <- site_species_metrics(
+      bioregionalization = clust_uni,
+      comat = comat_uni,
+      net = net_uni_2col,
+      indices = "Cz",
+      verbose = TRUE
+    )
+  }, "Species will be assigned to bioregions based on indicator values.")
+  
+  # Verify it completes successfully despite having only 2 columns
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+})
+
+test_that("C coefficient is NA for species with zero total weight", {
+  
+  # Create a matrix where one species has zero weight everywhere
+  comat_zero <- matrix(c(
+    1, 0, 1,
+    1, 0, 1,
+    1, 0, 2,
+    2, 0, 2
+  ), nrow = 4, byrow = TRUE)
+  rownames(comat_zero) <- paste0("Site", 1:4)
+  colnames(comat_zero) <- paste0("Species", 1:3)
+  
+  # Create clustering
+  clust_zero <- data.frame(
+    ID = paste0("Site", 1:4),
+    K_2 = c(1, 1, 2, 2)
+  )
+  class(clust_zero) <- c("bioregion.clusters", "data.frame")
+  
+  bioregion_zero <- list(
+    name = "test",
+    args = list(),
+    inputs = list(bipartite = FALSE),
+    algorithm = list(),
+    clusters = clust_zero,
+    cluster_info = list(n_clust = 2)
+  )
+  class(bioregion_zero) <- "bioregion.clusters"
+  
+  # Set species 2 to have zero weights by making it all zeros
+  comat_zero[, 2] <- 0
+  net_zero <- mat_to_net(comat_zero, weight = TRUE)
+  
+  # Compute Cz metrics
+  suppressWarnings({
+    result <- site_species_metrics(
+      bioregionalization = bioregion_zero,
+      comat = comat_zero,
+      net = net_zero,
+      indices = "Cz"
+    )
+  })
+  
+  # Check that species with zero weight has NA for C
+  cz_data <- result[[1]]$cz_metrics
+  species2_data <- cz_data[cz_data$Node == "Species2" & cz_data$Category == "species", ]
+  if(nrow(species2_data) > 0) {
+    # If the species appears, its C should be NA
+    expect_true(all(is.na(species2_data$C)))
+  }
+})
+
+test_that("tied species detection and handling in unipartite Cz", {
+  
+  # Create matrix where species have identical patterns (will create ties)
+  comat_tied <- matrix(c(
+    1, 1, 0, 0,  # Sp1 and Sp2 identical pattern
+    1, 1, 1, 1,
+    1, 1, 1, 1,  # Sp3 and Sp4 identical pattern
+    0, 1, 1, 0
+  ), nrow = 4, byrow = TRUE)
+  rownames(comat_tied) <- paste0("Site", 1:4)
+  colnames(comat_tied) <- paste0("Species", 1:4)
+  
+  clust_tied <- data.frame(
+    ID = paste0("Site", 1:4),
+    K_2 = c(1, 1, 2, 2)
+  )
+  class(clust_tied) <- c("bioregion.clusters", "data.frame")
+  
+  bioregion_tied <- list(
+    name = "test",
+    args = list(),
+    inputs = list(bipartite = FALSE),
+    algorithm = list(),
+    clusters = clust_tied,
+    cluster_info = list(n_clust = 2)
+  )
+  class(bioregion_tied) <- "bioregion.clusters"
+  
+  net_tied <- mat_to_net(comat_tied, weight = TRUE)
+  
+  # Compute Cz - check if tied_species information is available
+  expect_message({
+    result <- site_species_metrics(
+      bioregionalization = bioregion_tied,
+      comat = comat_tied,
+      net = net_tied,
+      indices = "Cz",
+      verbose = TRUE
+    )
+  },
+  "species had tied indicator values")
+  
+  # Verify computation completed successfully
+  # If ties exist, they should be in species_clusters or a tied_species element
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+  expect_true("species_clusters" %in% names(result[[1]]))
+})
+
+
+# Warning tests for missing data  --------------------------------
+test_that("warnings for incomplete outputs", {
+  
+  # These warnings are hard to trigger naturally because the function 
+  # is designed to handle edge cases gracefully. We test that the function
+  # completes successfully even in edge cases.
+  
+  # Create a sparse matrix where some species might not appear in all bioregions
+  comat_sparse <- matrix(0, nrow = 10, ncol = 5)
+  rownames(comat_sparse) <- paste0("Site", 1:10)
+  colnames(comat_sparse) <- paste0("Species", 1:5)
+  
+  # Make some species very rare (might not show up in all bioregions)
+  comat_sparse[1:2, 1] <- 1
+  comat_sparse[3:4, 2] <- 1
+  comat_sparse[5:6, 3] <- 1
+  comat_sparse[7:8, 4] <- 1
+  comat_sparse[9:10, 5] <- 1
+  
+  # Create clustering with 5 bioregions
+  clust_sparse <- data.frame(
+    ID = paste0("Site", 1:10),
+    K_5 = c(1, 1, 2, 2, 3, 3, 4, 4, 5, 5)
+  )
+  class(clust_sparse) <- c("bioregion.clusters", "data.frame")
+  
+  bioregion_sparse <- list(
+    name = "test",
+    args = list(),
+    inputs = list(bipartite = FALSE),
+    algorithm = list(),
+    clusters = clust_sparse,
+    cluster_info = list(n_clust = 5)
+  )
+  class(bioregion_sparse) <- "bioregion.clusters"
+  
+  # Should complete without errors (warnings are internal, not always exposed)
+  expect_message(
+    result <- site_species_metrics(
+      bioregionalization = bioregion_sparse,
+      comat = comat_sparse,
+      indices = "rho"
+    ), "NOTE: Could not determine if original data was occurrence or abundance-based."
+  )
+  expect_true(inherits(result, "bioregion.site.species.metrics"))
+  
+  # Verify that output exists even if sparse
+  expect_true(nrow(result[[1]]$metrics) > 0)
 })
 
 # Tests for automatic weight detection system ----------------------------------

@@ -1116,6 +1116,36 @@ test_that("determine_weight_usage handles unknown data_type (Priority 4)", {
   
 })
 
+test_that("determine_weight_usage handles unknown data_type with verbose message", {
+  
+  bio <- list(
+    inputs = list(data_type = "unknown", bipartite = FALSE),
+    args = list(index = "Euclidean")
+  )
+  
+  net <- data.frame(
+    Site = c("A", "A", "B"),
+    Species = c("sp1", "sp2", "sp1"),
+    Weight = c(10, 20, 15)
+  )
+  
+  # Unknown data_type with verbose = TRUE should display message
+  expect_message(
+    result <- determine_weight_usage(
+      bioregionalization = bio,
+      user_weight = NULL,
+      user_index = NULL,
+      net = net,
+      verbose = TRUE
+    ),
+    "Original data type unknown from clustering inputs"
+  )
+  expect_equal(result$use_weight, TRUE)
+  expect_equal(result$weight_col, 3)
+  expect_equal(result$source, "auto_detect_net")
+  
+})
+
 test_that("determine_weight_usage auto-detects from net (Priority 4)", {
   
   bio <- list(
