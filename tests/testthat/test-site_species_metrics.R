@@ -103,7 +103,7 @@ test_that("verbose messages for site_col and species_col extraction", {
   # Verify it completes successfully (which means it found the columns)
   expect_true(inherits(result, "bioregion.site.species.metrics"))
   expect_equal(nrow(result[[1]]$metrics), 150)
-  expect_equal(nrow(result[[1]]$cz_metricsmetrics), 45)
+  expect_equal(nrow(result[[1]]$cz_metrics), 45)
 })
 
 test_that("verbose message when only comat provided", {
