@@ -8,7 +8,7 @@
 source(test_path("../helpers/helper_functions_validation.R"))
 source(test_path("../helpers/manual_calculations_site_species_metrics.R"))
 
-# Test 1: Perfect Partitioning - Affinity, Fidelity, IndVal ---------------
+# Test 1: Perfect Partitioning - Affinity, Fidelity, IndVal -------------------
 test_that("Affinity, Fidelity, IndVal - Perfect Partitioning", {
   
   # Get test case data with manual calculations
@@ -81,7 +81,7 @@ test_that("Affinity, Fidelity, IndVal - Perfect Partitioning", {
 })
 
 
-# Test 2: Partial Overlap - Affinity, Fidelity, IndVal --------------------
+# Test 2: Partial Overlap - Affinity, Fidelity, IndVal ------------------------
 test_that("Affinity, Fidelity, IndVal - Partial Overlap", {
   
   tc2 <- calculate_test_case_2()
@@ -130,7 +130,7 @@ test_that("Affinity, Fidelity, IndVal - Partial Overlap", {
 })
 
 
-# Test 3: Three Bioregions with Generalists --------------------------------
+# Test 3: Three Bioregions with Generalists -----------------------------------
 test_that("Affinity, Fidelity, IndVal - Three Bioregions with Generalists", {
   
   tc3 <- calculate_test_case_3()
@@ -180,7 +180,7 @@ test_that("Affinity, Fidelity, IndVal - Three Bioregions with Generalists", {
 })
 
 
-# Test 4: Rho Calculation - Perfect Partitioning ---------------------------
+# Test 4: Rho Calculation - Perfect Partitioning ------------------------------
 test_that("Rho calculation - Perfect Partitioning", {
   
   tc1 <- calculate_test_case_1()
@@ -234,7 +234,7 @@ test_that("Rho calculation - Perfect Partitioning", {
 })
 
 
-# Test 5: Rho Calculation - Partial Overlap --------------------------------
+# Test 5: Rho Calculation - Partial Overlap -----------------------------------
 test_that("Rho calculation - Partial Overlap", {
   
   tc2 <- calculate_test_case_2()
@@ -280,7 +280,7 @@ test_that("Rho calculation - Partial Overlap", {
 })
 
 
-# Test 6: Rho Calculation - Minimal Example --------------------------------
+# Test 6: Rho Calculation - Minimal Example -----------------------------------
 test_that("Rho calculation - Minimal Example (3 sites, 2 species)", {
   
   tc5 <- calculate_test_case_5()
@@ -315,7 +315,7 @@ test_that("Rho calculation - Minimal Example (3 sites, 2 species)", {
 })
 
 
-# Test 7: Cz Indices - Bipartite Network -----------------------------------
+# Test 7: Cz Indices - Bipartite Network --------------------------------------
 test_that("Cz indices - Bipartite network", {
   
   tc4 <- calculate_test_case_4()
@@ -381,7 +381,7 @@ test_that("Cz indices - Bipartite network", {
 })
 
 
-# Test 8: All Indices Combined ---------------------------------------------
+# Test 8: All Indices Combined ------------------------------------------------
 test_that("All indices computed together", {
   
   tc2 <- calculate_test_case_2()
@@ -413,7 +413,7 @@ test_that("All indices computed together", {
 })
 
 
-# Test 9: Edge Case - Single Site in a Bioregion --------------------------
+# Test 9: Edge Case - Single Site in a Bioregion ------------------------------
 test_that("Edge case - Single site in a bioregion", {
   
   # Create a matrix with an uneven bioregionalization
@@ -459,7 +459,7 @@ test_that("Edge case - Single site in a bioregion", {
 })
 
 
-# Test 10: Multiple Bioregionalizations -----------------------------------
+# Test 10: Multiple Bioregionalizations ---------------------------------------
 test_that("Multiple bioregionalizations (K_2 and K_3)", {
   
   # Create a matrix with multiple bioregionalizations
@@ -513,3 +513,56 @@ test_that("Multiple bioregionalizations (K_2 and K_3)", {
   expect_equal(sp_a_k3$affinity, 1.0, tolerance = 1e-10)
   expect_equal(sp_a_k3$fidelity, 1.0, tolerance = 1e-10)
 })
+
+# Test 11: IndVal with abundances ---------------------------------------------
+test_that("IndVal with abundances", {
+  
+  # Reproduce Table 2 from doi 10.1890/0012-9615(1997)067[0345:SAAIST]2.0.CO;2 
+  comat <- matrix(c(
+    rep(4, 5), rep(5, 10), rep(3, 10),
+    rep(8, 5), rep(4, 5), rep(6, 5), rep(4, 2), 2, rep(0, 7),
+    rep(18, 5), rep(2, 5), rep(0, 15)
+  ), nrow = 3, byrow = TRUE)
+  comat <- t(comat)
+  rownames(comat) <- paste0("Site_", 1:25)
+  colnames(comat) <- paste0("Species_", LETTERS[1:3])
+  
+  clusters <- data.frame(ID = rownames(comat),
+                         K_5 = rep(paste0("Group ", 1:5), each = 5),
+                         stringsAsFactors = FALSE)
+  
+  # Two bioregionalizations: K_2 and K_3
+  clusters <- data.frame(ID = rownames(comat),
+                         K_5 = rep(paste0("Group ", 1:5), each = 5),
+                         stringsAsFactors = FALSE)
+  
+  mock_clust <- create_mock_clusters(comat, clusters)
+  
+  result <- site_species_metrics(
+    bioregionalization = mock_clust,
+    comat = comat,
+    indices = c("indicator_value"),
+    verbose = FALSE
+  )
+  
+  expect_equal(names(result), c("K_5"))
+  
+  # Check K_5 results and IndVal values
+  k5_metrics <- result$K_5$metrics
+
+  # Expected IndVal values with five clusters (Table 3 of Dufrene & Legendre)
+  expected_indval <- data.frame(
+    Species = rep(paste0("Species_", LETTERS[1:3]), each = 5),
+    K_5 = rep(paste0("Group ", 1:5), 3),
+    IndVal_theor = c(20, 25, 25, 15, 15, 40, 20, 30, 10, 0, 90, 10, 0, 0, 0)/
+      100)
+  
+  # Merge results with expectations
+  k5_metrics <- dplyr::left_join(k5_metrics, expected_indval,
+                                 by = c("Species", "Bioregion" = "K_5"))
+  
+  # expect_equal(k5_metrics$indval,
+  #              k5_metrics$IndVal_theor, tolerance = 1e-10)
+  
+})
+

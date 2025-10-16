@@ -94,7 +94,7 @@ calculate_test_case_1 <- function() {
   # = 3 - (3 * 3 / 6) = 3 - 1.5 = 1.5
   
   denominator_A1 <- sqrt(((n - n_j_1) / (n - 1)) * (1 - n_j_1 / n) * 
-                          (n_i_A * n_j_1 / n))
+                           (n_i_A * n_j_1 / n))
   # = sqrt(((6-3)/(6-1)) * (1 - 3/6) * (3*3/6))
   # = sqrt((3/5) * (0.5) * (1.5))
   # = sqrt(0.6 * 0.5 * 1.5)
@@ -109,7 +109,7 @@ calculate_test_case_1 <- function() {
   
   numerator_A2 <- n_ij_A2 - (n_i_A * n_j_2 / n)  # 0 - 1.5 = -1.5
   denominator_A2 <- sqrt(((n - n_j_2) / (n - 1)) * (1 - n_j_2 / n) * 
-                          (n_i_A * n_j_2 / n))  # Same as above: ≈ 0.6708
+                           (n_i_A * n_j_2 / n))  # Same as above: ≈ 0.6708
   rho_A2 <- numerator_A2 / denominator_A2  # -1.5 / 0.6708 ≈ -2.236
   
   # By symmetry:
@@ -548,7 +548,7 @@ calculate_test_case_5 <- function() {
   # = 1 - (2 * 1 / 3) = 1 - 0.6667 = 0.3333
   
   denominator <- sqrt(((n - n_j_1) / (n - 1)) * (1 - n_j_1 / n) * 
-                       (n_i_A * n_j_1 / n))
+                        (n_i_A * n_j_1 / n))
   # = sqrt(((3 - 1) / (3 - 1)) * (1 - 1/3) * (2 * 1 / 3))
   # = sqrt((2/2) * (2/3) * (2/3))
   # = sqrt(1 * 0.6667 * 0.6667)
@@ -565,7 +565,7 @@ calculate_test_case_5 <- function() {
   # = 1 - (2 * 2 / 3) = 1 - 1.3333 = -0.3333
   
   denominator_A2 <- sqrt(((n - n_j_2) / (n - 1)) * (1 - n_j_2 / n) * 
-                          (n_i_A * n_j_2 / n))
+                           (n_i_A * n_j_2 / n))
   # = sqrt(((3 - 2) / 2) * (1 - 2/3) * (2 * 2 / 3))
   # = sqrt((1/2) * (1/3) * (4/3))
   # = sqrt(0.5 * 0.3333 * 1.3333)
@@ -582,7 +582,7 @@ calculate_test_case_5 <- function() {
   # = 0 - (2 * 1 / 3) = -0.6667
   
   denominator_B1 <- sqrt(((n - n_j_1) / (n - 1)) * (1 - n_j_1 / n) * 
-                          (n_i_B * n_j_1 / n))
+                           (n_i_B * n_j_1 / n))
   # = sqrt(1 * 0.6667 * 0.6667) ≈ 0.6667
   
   rho_B1 <- numerator_B1 / denominator_B1  # -0.6667 / 0.6667 ≈ -1.0
@@ -594,7 +594,7 @@ calculate_test_case_5 <- function() {
   # = 2 - (2 * 2 / 3) = 2 - 1.3333 = 0.6667
   
   denominator_B2 <- sqrt(((n - n_j_2) / (n - 1)) * (1 - n_j_2 / n) * 
-                          (n_i_B * n_j_2 / n))
+                           (n_i_B * n_j_2 / n))
   # ≈ 0.4714 (same as for Species A in Br2)
   
   rho_B2 <- numerator_B2 / denominator_B2  # 0.6667 / 0.4714 ≈ 1.414
@@ -611,4 +611,47 @@ calculate_test_case_5 <- function() {
     clusters = clusters,
     expected_rho = expected_rho
   ))
+}
+
+# Test Case 6: Test Case matrix from Dufrene & Legendre 1997 ------------------
+
+calculate_test_case_6 <- function() {
+  
+  # Reproduce Table 2 from doi 10.1890/0012-9615(1997)067[0345:SAAIST]2.0.CO;2 
+  comat <- matrix(c(
+    rep(4, 5), rep(5, 10), rep(3, 10),
+    rep(8, 5), rep(4, 5), rep(6, 5), rep(4, 2), 2, rep(0, 7),
+    rep(18, 5), rep(2, 5), rep(0, 15)
+  ), nrow = 3, byrow = TRUE)
+  comat <- t(comat)
+  rownames(comat) <- paste0("Site_", 1:25)
+  colnames(comat) <- paste0("Species_", LETTERS[1:3])
+  
+  clusters <- data.frame(ID = rownames(comat),
+                         K_5 = rep(paste0("Group ", 1:5), each = 5),
+                         stringsAsFactors = FALSE)
+  
+  # Expected IndVal values with five clusters (Table 3 of Dufrene & Legendre)
+  expected_indval <- data.frame(
+    Species = rep(paste0("Species_", LETTERS[1:3]), each = 5),
+    K_5 = rep(paste0("Group ", 1:5), 3),
+    IndVal_theor = c(20, 25, 25, 15, 15, 40, 20, 30, 10, 0, 90, 10, 0, 0, 0)/
+      100)
+  
+  # Manual calculation species_A Group 1
+  # (4*5)/sum(comat[, "Species_A"]) * 5/5 = 0.2
+  # Manual calculation species_B Group 1
+  # (8*5)/sum(comat[, "Species_B"]) * 5/5 = 0.4
+  # So far the function works only with a binary matrix
+  # comat_bin <- comat
+  # comat_bin[comat_bin > 0] <- 1
+  # (1*5)/sum(comat_bin[, "Species_B"]) * 5/5
+  
+  return(list(
+    comat = comat,
+    clusters = clusters,
+    expected = expected,
+    expected_rho = expected_rho
+  ))
+
 }
