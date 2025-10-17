@@ -959,7 +959,12 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     # Formula components
     n <- nrow(comat) # number of sites
     rich <- rowSums(comat_bin) # species richness per site
-    n_i <- colSums(comat_bin) # number of occurrences per species (previously n_i)
+    if(weight){
+      # number of occurrences per species (previously n_i)
+      n_i <- colSums(comat)
+    }else{
+      n_i <- colSums(comat_bin)
+    }
     n_species <- ncol(comat)
     
     # Get unique bioregions
@@ -987,7 +992,11 @@ compute_single_bioregionalization_metrics <- function(single_clusters,
     # Compute n_ij matrix: species (rows) x bioregions (columns)
     # n_ij[i, j] = number of occurrences of species i in sites of bioregion j
     # Matrix multiplication: t(comat_bin) %*% site_bioregion_map gives us this directly
-    n_ij_mat <- t(comat_bin) %*% site_bioregion_map
+    if(weight){
+      n_ij_mat <- t(comat) %*% site_bioregion_map
+    } else{
+      n_ij_mat <- t(comat_bin) %*% site_bioregion_map
+    }
     
     # Now vectorize calculations across all bioregions at once
     if("rho" %in% indices){

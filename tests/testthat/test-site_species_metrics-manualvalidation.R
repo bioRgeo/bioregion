@@ -517,52 +517,39 @@ test_that("Multiple bioregionalizations (K_2 and K_3)", {
 # Test 11: IndVal with abundances ---------------------------------------------
 test_that("IndVal with abundances", {
   
-  # Reproduce Table 2 from doi 10.1890/0012-9615(1997)067[0345:SAAIST]2.0.CO;2 
-  comat <- matrix(c(
-    rep(4, 5), rep(5, 10), rep(3, 10),
-    rep(8, 5), rep(4, 5), rep(6, 5), rep(4, 2), 2, rep(0, 7),
-    rep(18, 5), rep(2, 5), rep(0, 15)
-  ), nrow = 3, byrow = TRUE)
-  comat <- t(comat)
-  rownames(comat) <- paste0("Site_", 1:25)
-  colnames(comat) <- paste0("Species_", LETTERS[1:3])
+  tc6 <- calculate_test_case_6()
   
-  clusters <- data.frame(ID = rownames(comat),
-                         K_5 = rep(paste0("Group ", 1:5), each = 5),
-                         stringsAsFactors = FALSE)
+  mock_clust <- create_mock_clusters(tc6$comat, tc6$clusters, weight = TRUE)
   
-  # Two bioregionalizations: K_2 and K_3
-  clusters <- data.frame(ID = rownames(comat),
-                         K_5 = rep(paste0("Group ", 1:5), each = 5),
-                         stringsAsFactors = FALSE)
-  
-  mock_clust <- create_mock_clusters(comat, clusters)
-  
-  result <- site_species_metrics(
-    bioregionalization = mock_clust,
-    comat = comat,
-    indices = c("indicator_value"),
-    verbose = FALSE
-  )
+  result <- site_species_metrics(bioregionalization = mock_clust,
+                                 comat = tc6$comat,
+                                 indices = c("indicator_value"),
+                                 verbose = FALSE)
   
   expect_equal(names(result), c("K_5"))
   
   # Check K_5 results and IndVal values
   k5_metrics <- result$K_5$metrics
 
-  # Expected IndVal values with five clusters (Table 3 of Dufrene & Legendre)
-  expected_indval <- data.frame(
-    Species = rep(paste0("Species_", LETTERS[1:3]), each = 5),
-    K_5 = rep(paste0("Group ", 1:5), 3),
-    IndVal_theor = c(20, 25, 25, 15, 15, 40, 20, 30, 10, 0, 90, 10, 0, 0, 0)/
-      100)
-  
-  # Merge results with expectations
-  k5_metrics <- dplyr::left_join(k5_metrics, expected_indval,
+  # Merge results with expectations (Table 3 of Dufrene & Legendre)
+  k5_metrics <- dplyr::left_join(k5_metrics, tc6$expected,
                                  by = c("Species", "Bioregion" = "K_5"))
   
-  # expect_equal(k5_metrics$indval,
-  #              k5_metrics$IndVal_theor, tolerance = 1e-10)
+  expect_equal(k5_metrics$indval, k5_metrics$IndVal_theor, tolerance = 1e-10)
+  
+  # With binary site-species matrix
+  mock_clust_bin <- create_mock_clusters(tc6$comat_bin, tc6$clusters)
+  result_bin <- site_species_metrics(
+    bioregionalization = mock_clust_bin,
+    comat = tc6$comat_bin,
+    indices = c("indicator_value"),
+    verbose = FALSE)
+  k5_metrics_bin <- result_bin$K_5$metrics
+  k5_metrics_bin <- dplyr::left_join(k5_metrics_bin, tc6$expected_bin,
+                                     by = c("Species", "Bioregion" = "K_5"))
+  
+  expect_equal(k5_metrics_bin$indval, k5_metrics_bin$IndVal_theor,
+               tolerance = 1e-10)
   
 })
 

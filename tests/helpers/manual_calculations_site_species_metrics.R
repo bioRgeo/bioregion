@@ -627,16 +627,80 @@ calculate_test_case_6 <- function() {
   rownames(comat) <- paste0("Site_", 1:25)
   colnames(comat) <- paste0("Species_", LETTERS[1:3])
   
+  comat_bin <- comat
+  comat_bin[comat_bin > 0] <- 1
+  
   clusters <- data.frame(ID = rownames(comat),
                          K_5 = rep(paste0("Group ", 1:5), each = 5),
                          stringsAsFactors = FALSE)
   
-  # Expected IndVal values with five clusters (Table 3 of Dufrene & Legendre)
+  # Expected IndVal values with five clusters
   expected_indval <- data.frame(
     Species = rep(paste0("Species_", LETTERS[1:3]), each = 5),
     K_5 = rep(paste0("Group ", 1:5), 3),
-    IndVal_theor = c(20, 25, 25, 15, 15, 40, 20, 30, 10, 0, 90, 10, 0, 0, 0)/
-      100)
+    IndVal_theor = c(
+      sum(comat[clusters[which(clusters$K_5 == "Group 1"), "ID"],
+                "Species_A"])/sum(comat[, "Species_A"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 1"),
+                           "ID"], "Species_A"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 2"), "ID"],
+                "Species_A"])/sum(comat[, "Species_A"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 2"),
+                           "ID"], "Species_A"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 3"), "ID"],
+                "Species_A"])/sum(comat[, "Species_A"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 3"),
+                           "ID"], "Species_A"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 4"), "ID"],
+                "Species_A"])/sum(comat[, "Species_A"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 4"),
+                           "ID"], "Species_A"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 5"), "ID"],
+                "Species_A"])/sum(comat[, "Species_A"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 5"),
+                           "ID"], "Species_A"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 1"), "ID"],
+                "Species_B"])/sum(comat[, "Species_B"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 1"),
+                           "ID"], "Species_B"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 2"), "ID"],
+                "Species_B"])/sum(comat[, "Species_B"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 2"),
+                           "ID"], "Species_B"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 3"), "ID"],
+                "Species_B"])/sum(comat[, "Species_B"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 3"),
+                           "ID"], "Species_B"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 4"), "ID"],
+                "Species_B"])/sum(comat[, "Species_B"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 4"),
+                           "ID"], "Species_B"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 5"), "ID"],
+                "Species_B"])/sum(comat[, "Species_B"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 5"),
+                           "ID"], "Species_B"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 1"), "ID"],
+                "Species_C"])/sum(comat[, "Species_C"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 1"),
+                           "ID"], "Species_C"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 2"), "ID"],
+                "Species_C"])/sum(comat[, "Species_C"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 2"),
+                           "ID"], "Species_C"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 3"), "ID"],
+                "Species_C"])/sum(comat[, "Species_C"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 3"),
+                           "ID"], "Species_C"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 4"), "ID"],
+                "Species_C"])/sum(comat[, "Species_C"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 4"),
+                           "ID"], "Species_C"])/5,
+      sum(comat[clusters[which(clusters$K_5 == "Group 5"), "ID"],
+                "Species_C"])/sum(comat[, "Species_C"])*
+        sum(comat[clusters[which(clusters$K_5 == "Group 5"),
+                           "ID"], "Species_C"])/5))
+  # IndVal_theor = c(20, 25, 25, 15, 15, 40, 20, 30, 10, 0, 90, 10, 0, 0, 0)/
+  #   100)
   
   # Manual calculation species_A Group 1
   # (4*5)/sum(comat[, "Species_A"]) * 5/5 = 0.2
@@ -647,11 +711,76 @@ calculate_test_case_6 <- function() {
   # comat_bin[comat_bin > 0] <- 1
   # (1*5)/sum(comat_bin[, "Species_B"]) * 5/5
   
-  return(list(
-    comat = comat,
-    clusters = clusters,
-    expected = expected,
-    expected_rho = expected_rho
-  ))
-
+  # Expected values with the binary matrix
+  expected_indval_bin <- data.frame(
+    Species = rep(paste0("Species_", LETTERS[1:3]), each = 5),
+    K_5 = rep(paste0("Group ", 1:5), 3),
+    IndVal_theor = c(
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 1"), "ID"],
+                    "Species_A"])/sum(comat_bin[, "Species_A"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 1"),
+                               "ID"], "Species_A"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 2"), "ID"],
+                    "Species_A"])/sum(comat_bin[, "Species_A"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 2"),
+                               "ID"], "Species_A"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 3"), "ID"],
+                    "Species_A"])/sum(comat_bin[, "Species_A"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 3"),
+                               "ID"], "Species_A"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 4"), "ID"],
+                    "Species_A"])/sum(comat_bin[, "Species_A"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 4"),
+                               "ID"], "Species_A"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 5"), "ID"],
+                    "Species_A"])/sum(comat_bin[, "Species_A"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 5"),
+                               "ID"], "Species_A"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 1"), "ID"],
+                    "Species_B"])/sum(comat_bin[, "Species_B"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 1"),
+                               "ID"], "Species_B"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 2"), "ID"],
+                    "Species_B"])/sum(comat_bin[, "Species_B"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 2"),
+                               "ID"], "Species_B"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 3"), "ID"],
+                    "Species_B"])/sum(comat_bin[, "Species_B"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 3"),
+                               "ID"], "Species_B"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 4"), "ID"],
+                    "Species_B"])/sum(comat_bin[, "Species_B"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 4"),
+                               "ID"], "Species_B"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 5"), "ID"],
+                    "Species_B"])/sum(comat_bin[, "Species_B"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 5"),
+                               "ID"], "Species_B"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 1"), "ID"],
+                    "Species_C"])/sum(comat_bin[, "Species_C"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 1"),
+                               "ID"], "Species_C"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 2"), "ID"],
+                    "Species_C"])/sum(comat_bin[, "Species_C"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 2"),
+                               "ID"], "Species_C"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 3"), "ID"],
+                    "Species_C"])/sum(comat_bin[, "Species_C"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 3"),
+                               "ID"], "Species_C"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 4"), "ID"],
+                    "Species_C"])/sum(comat_bin[, "Species_C"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 4"),
+                               "ID"], "Species_C"])/5,
+      sum(comat_bin[clusters[which(clusters$K_5 == "Group 5"), "ID"],
+                    "Species_C"])/sum(comat_bin[, "Species_C"])*
+        sum(comat_bin[clusters[which(clusters$K_5 == "Group 5"),
+                               "ID"], "Species_C"])/5))
+  
+  return(list(comat = comat,
+              comat_bin = comat_bin,
+              clusters = clusters,
+              expected = expected_indval,
+              expected_bin = expected_indval_bin))
+  
 }
