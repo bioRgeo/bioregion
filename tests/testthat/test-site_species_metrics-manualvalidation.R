@@ -43,34 +43,34 @@ test_that("Affinity, Fidelity, IndVal - Perfect Partitioning", {
     # Find matching row in actual results
     result_row <- metrics_df[
       metrics_df$Species == species & 
-      metrics_df$Bioregion == bioregion, 
+        metrics_df$Bioregion == bioregion, 
     ]
     
     # Check that we found exactly one matching row
     expect_equal(nrow(result_row), 1,
-                info = sprintf("Expected 1 row for %s in Bioregion %s", 
-                              species, bioregion))
+                 info = sprintf("Expected 1 row for %s in Bioregion %s", 
+                                species, bioregion))
     
     # Compare affinity (within tolerance for floating-point arithmetic)
     expect_equal(result_row$affinity, 
-                tc1$expected$affinity[i], 
-                tolerance = 1e-10,
-                label = sprintf("Affinity for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc1$expected$affinity[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("Affinity for %s in Bioregion %s", 
+                                 species, bioregion))
     
     # Compare fidelity
     expect_equal(result_row$fidelity, 
-                tc1$expected$fidelity[i], 
-                tolerance = 1e-10,
-                label = sprintf("Fidelity for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc1$expected$fidelity[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("Fidelity for %s in Bioregion %s", 
+                                 species, bioregion))
     
     # Compare indicator value (IndVal)
     expect_equal(result_row$indval, 
-                tc1$expected$indval[i], 
-                tolerance = 1e-10,
-                label = sprintf("IndVal for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc1$expected$indval[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("IndVal for %s in Bioregion %s", 
+                                 species, bioregion))
   }
   
   # Additional check: verify that perfect partitioning gives perfect metrics
@@ -104,28 +104,28 @@ test_that("Affinity, Fidelity, IndVal - Partial Overlap", {
     
     result_row <- metrics_df[
       metrics_df$Species == species & 
-      metrics_df$Bioregion == bioregion, 
+        metrics_df$Bioregion == bioregion, 
     ]
     
     expect_equal(nrow(result_row), 1)
     
     expect_equal(result_row$affinity, 
-                tc2$expected$affinity[i], 
-                tolerance = 1e-10,
-                label = sprintf("Affinity for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc2$expected$affinity[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("Affinity for %s in Bioregion %s", 
+                                 species, bioregion))
     
     expect_equal(result_row$fidelity, 
-                tc2$expected$fidelity[i], 
-                tolerance = 1e-10,
-                label = sprintf("Fidelity for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc2$expected$fidelity[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("Fidelity for %s in Bioregion %s", 
+                                 species, bioregion))
     
     expect_equal(result_row$indval, 
-                tc2$expected$indval[i], 
-                tolerance = 1e-10,
-                label = sprintf("IndVal for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc2$expected$indval[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("IndVal for %s in Bioregion %s", 
+                                 species, bioregion))
   }
 })
 
@@ -153,28 +153,28 @@ test_that("Affinity, Fidelity, IndVal - Three Bioregions with Generalists", {
     
     result_row <- metrics_df[
       metrics_df$Species == species & 
-      metrics_df$Bioregion == bioregion, 
+        metrics_df$Bioregion == bioregion, 
     ]
     
     expect_equal(nrow(result_row), 1)
     
     expect_equal(result_row$affinity, 
-                tc3$expected$affinity[i], 
-                tolerance = 1e-10,
-                label = sprintf("Affinity for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc3$expected$affinity[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("Affinity for %s in Bioregion %s", 
+                                 species, bioregion))
     
     expect_equal(result_row$fidelity, 
-                tc3$expected$fidelity[i], 
-                tolerance = 1e-10,
-                label = sprintf("Fidelity for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc3$expected$fidelity[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("Fidelity for %s in Bioregion %s", 
+                                 species, bioregion))
     
     expect_equal(result_row$indval, 
-                tc3$expected$indval[i], 
-                tolerance = 1e-10,
-                label = sprintf("IndVal for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc3$expected$indval[i], 
+                 tolerance = 1e-10,
+                 label = sprintf("IndVal for %s in Bioregion %s", 
+                                 species, bioregion))
   }
   
 })
@@ -207,7 +207,7 @@ test_that("Rho calculation - Perfect Partitioning", {
     
     result_row <- metrics_df[
       metrics_df$Species == species & 
-      metrics_df$Bioregion == bioregion, 
+        metrics_df$Bioregion == bioregion, 
     ]
     
     expect_equal(nrow(result_row), 1)
@@ -215,19 +215,19 @@ test_that("Rho calculation - Perfect Partitioning", {
     # Rho values should match manual calculations
     # Using slightly larger tolerance due to sqrt operations
     expect_equal(result_row$rho, 
-                tc1$expected_rho$rho[i], 
-                tolerance = 1e-6,
-                label = sprintf("Rho for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc1$expected_rho$rho[i], 
+                 tolerance = 1e-6,
+                 label = sprintf("Rho for %s in Bioregion %s", 
+                                 species, bioregion))
   }
   
   # Additional checks:
   # - Species in their own bioregion should have positive rho
   # - Species absent from a bioregion should have negative rho
   sp_a_br1 <- metrics_df[metrics_df$Species == "Sp_A" & 
-                          metrics_df$Bioregion == 1, "rho"]
+                           metrics_df$Bioregion == 1, "rho"]
   sp_a_br2 <- metrics_df[metrics_df$Species == "Sp_A" & 
-                          metrics_df$Bioregion == 2, "rho"]
+                           metrics_df$Bioregion == 2, "rho"]
   
   expect_true(sp_a_br1 > 0, label = "Sp_A should have positive rho in Bioregion 1")
   expect_true(sp_a_br2 < 0, label = "Sp_A should have negative rho in Bioregion 2")
@@ -257,26 +257,26 @@ test_that("Rho calculation - Partial Overlap", {
     
     result_row <- metrics_df[
       metrics_df$Species == species & 
-      metrics_df$Bioregion == bioregion, 
+        metrics_df$Bioregion == bioregion, 
     ]
     
     expect_equal(result_row$rho, 
-                tc2$expected_rho$rho[i], 
-                tolerance = 1e-6,
-                label = sprintf("Rho for %s in Bioregion %s", 
-                               species, bioregion))
+                 tc2$expected_rho$rho[i], 
+                 tolerance = 1e-6,
+                 label = sprintf("Rho for %s in Bioregion %s", 
+                                 species, bioregion))
   }
   
   # Sp_B is present in both bioregions equally, so rho should be 0
   sp_b_br1 <- metrics_df[metrics_df$Species == "Sp_B" & 
-                          metrics_df$Bioregion == 1, "rho"]
+                           metrics_df$Bioregion == 1, "rho"]
   sp_b_br2 <- metrics_df[metrics_df$Species == "Sp_B" & 
-                          metrics_df$Bioregion == 2, "rho"]
+                           metrics_df$Bioregion == 2, "rho"]
   
   expect_equal(sp_b_br1, 0, tolerance = 1e-10,
-              label = "Sp_B should have rho = 0 in Bioregion 1 (equal distribution)")
+               label = "Sp_B should have rho = 0 in Bioregion 1 (equal distribution)")
   expect_equal(sp_b_br2, 0, tolerance = 1e-10,
-              label = "Sp_B should have rho = 0 in Bioregion 2 (equal distribution)")
+               label = "Sp_B should have rho = 0 in Bioregion 2 (equal distribution)")
 })
 
 
@@ -303,14 +303,14 @@ test_that("Rho calculation - Minimal Example (3 sites, 2 species)", {
     
     result_row <- metrics_df[
       metrics_df$Species == species & 
-      metrics_df$Bioregion == bioregion, 
+        metrics_df$Bioregion == bioregion, 
     ]
     
     expect_equal(result_row$rho, 
-                tc5$expected_rho$rho[i], 
-                tolerance = 1e-6,
-                label = sprintf("Rho for %s in Bioregion %s (minimal example)", 
-                               species, bioregion))
+                 tc5$expected_rho$rho[i], 
+                 tolerance = 1e-6,
+                 label = sprintf("Rho for %s in Bioregion %s (minimal example)", 
+                                 species, bioregion))
   }
 })
 
@@ -358,26 +358,26 @@ test_that("Cz indices - Bipartite network", {
     result_row <- cz_df[cz_df$Node == node, ]
     
     expect_equal(nrow(result_row), 1,
-                info = sprintf("Expected 1 row for node %s", node))
+                 info = sprintf("Expected 1 row for node %s", node))
     
     # Compare participation coefficient (C)
     # C should be 0 for perfect within-bioregion connectivity
     expect_equal(result_row$C, 
-                tc4$expected_cz$C[i], 
-                tolerance = 1e-6,
-                label = sprintf("Participation coefficient for %s", node))
+                 tc4$expected_cz$C[i], 
+                 tolerance = 1e-6,
+                 label = sprintf("Participation coefficient for %s", node))
     
     # Compare z-score
     # In this test case, all nodes have the same degree as their bioregion mean
     # so z-score should be 0 (or NA if sd = 0)
     if (!is.na(tc4$expected_cz$z[i])) {
       expect_equal(result_row$z, 
-                  tc4$expected_cz$z[i], 
-                  tolerance = 1e-6,
-                  label = sprintf("Z-score for %s", node))
+                   tc4$expected_cz$z[i], 
+                   tolerance = 1e-6,
+                   label = sprintf("Z-score for %s", node))
     }
   }
-
+  
 })
 
 
@@ -400,11 +400,11 @@ test_that("All indices computed together", {
   
   # Check that all columns are present
   expect_true(all(c("Bioregion", "Species", "rho", "affinity", 
-                   "fidelity", "indval") %in% colnames(metrics_df)))
+                    "fidelity", "indval") %in% colnames(metrics_df)))
   
   # Verify that metrics match expected values for at least one species
   sp_a_br1 <- metrics_df[metrics_df$Species == "Sp_A" & 
-                          metrics_df$Bioregion == 1, ]
+                           metrics_df$Bioregion == 1, ]
   
   expect_equal(sp_a_br1$affinity, 1.0, tolerance = 1e-10)
   expect_equal(sp_a_br1$fidelity, 1.0, tolerance = 1e-10)
@@ -449,7 +449,7 @@ test_that("Edge case - Single site in a bioregion", {
   
   # Sp_A is only in the single-site bioregion
   sp_a_br1 <- metrics_df[metrics_df$Species == "Sp_A" & 
-                          metrics_df$Bioregion == 1, ]
+                           metrics_df$Bioregion == 1, ]
   
   # Affinity should be 1.0 (present in the only site)
   expect_equal(sp_a_br1$affinity, 1.0, tolerance = 1e-10)
@@ -508,7 +508,7 @@ test_that("Multiple bioregionalizations (K_2 and K_3)", {
   expect_equal(sp_a_k2$affinity, 1.0, tolerance = 1e-10)
   expect_equal(sp_a_k2$fidelity, 1.0, tolerance = 1e-10)
   
-
+  
   sp_a_k3 <- k3_metrics[k3_metrics$Species == "Sp_A" & k3_metrics$Bioregion == 1, ]
   expect_equal(sp_a_k3$affinity, 1.0, tolerance = 1e-10)
   expect_equal(sp_a_k3$fidelity, 1.0, tolerance = 1e-10)
@@ -530,7 +530,7 @@ test_that("IndVal with abundances", {
   
   # Check K_5 results and IndVal values
   k5_metrics <- result$K_5$metrics
-
+  
   # Merge results with expectations (Table 3 of Dufrene & Legendre)
   k5_metrics <- dplyr::left_join(k5_metrics, tc6$expected,
                                  by = c("Species", "Bioregion" = "K_5"))
@@ -551,5 +551,18 @@ test_that("IndVal with abundances", {
   expect_equal(k5_metrics_bin$indval, k5_metrics_bin$IndVal_theor,
                tolerance = 1e-10)
   
+  # With weighted matrix but weight = FALSE
+  mock_clust2 <- create_mock_clusters(tc6$comat, tc6$clusters, weight = FALSE)
+  
+  result2 <- site_species_metrics(bioregionalization = mock_clust2,
+                                  comat = tc6$comat_bin,
+                                  indices = c("indicator_value"),
+                                  verbose = FALSE)
+  
+  expect_equal(names(result2), c("K_5"))
+  k5_metrics2 <- result2$K_5$metrics
+  k5_metrics2 <- dplyr::left_join(k5_metrics2, tc6$expected_bin,
+                                  by = c("Species", "Bioregion" = "K_5"))
+  expect_equal(k5_metrics2$indval, k5_metrics2$IndVal_theor, tolerance = 1e-10)
 })
 
