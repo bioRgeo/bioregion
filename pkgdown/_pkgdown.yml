@@ -108,7 +108,7 @@ reference:
   - find_optimal_n
   - compare_bioregionalizations
   
-- title: Visualisation
+- title: Visualization
   desc: ~
   contents: 
   - map_bioregions
