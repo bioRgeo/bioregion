@@ -2,7 +2,7 @@
 # Testing with different clustering algorithms and configurations
 
 # Install binaries for infomap tests
-suppressMessages(install_binaries(binpath = tempdir(), infomap_version = "2.7.1"))
+quietly(install_binaries())
 
 # Test data setup --------------------------------------------------------------
 dissim_fish <- dissimilarity(fishmat, metric = "Simpson")
@@ -15,15 +15,15 @@ test_that("summary works for non-hierarchical clustering (nhclu_pam)", {
   clust_pam <- nhclu_pam(dissim_fish, n_clust = 5, seed = 123)
   
   # Test that summary runs without error
-  expect_no_error(summary(clust_pam))
+  expect_no_error(quietly(summary(clust_pam)))
   
   # Test that summary returns the object invisibly
   result <- summary(clust_pam)
   expect_identical(result, clust_pam)
   
   # Test with different parameters
-  expect_no_error(summary(clust_pam, n_bioregionalizations = 1, n_top_clusters = 3))
-  expect_no_error(summary(clust_pam, n_bioregionalizations = 10, n_top_clusters = 20))
+  expect_no_error(quietly(summary(clust_pam, n_bioregionalizations = 1, n_top_clusters = 3)))
+  expect_no_error(quietly(summary(clust_pam, n_bioregionalizations = 10, n_top_clusters = 20)))
 })
 
 # Test 2: Hierarchical clustering (hclu_hierarclust) --------------------------
@@ -38,15 +38,15 @@ test_that("summary works for hierarchical clustering (hclu_hierarclust)", {
   )
   
   # Test that summary runs without error
-  expect_no_error(summary(clust_hclust))
+  expect_no_error(quietly(summary(clust_hclust)))
   
   # Test that summary returns the object invisibly
   result <- summary(clust_hclust, n_bioregionalizations = 3, n_top_clusters = 10)
   expect_identical(result, clust_hclust)
   
   # Test with different parameters
-  expect_no_error(summary(clust_hclust, n_bioregionalizations = 1, n_top_clusters = 5))
-  expect_no_error(summary(clust_hclust, n_bioregionalizations = 2, n_top_clusters = 15))
+  expect_no_error(quietly(summary(clust_hclust, n_bioregionalizations = 1, n_top_clusters = 5)))
+  expect_no_error(quietly(summary(clust_hclust, n_bioregionalizations = 2, n_top_clusters = 15)))
 })
 
 # Test 3: Network clustering - unipartite, no hierarchy ------------------------
@@ -66,14 +66,14 @@ test_that("summary works for unipartite netclu_infomap without hierarchy", {
   )
   
   # Test that summary runs without error
-  expect_no_error(summary(clust_infomap_uni_flat))
+  expect_no_error(quietly(summary(clust_infomap_uni_flat)))
   
   # Test that summary returns the object invisibly
   result <- summary(clust_infomap_uni_flat, n_bioregionalizations = 3, n_top_clusters = 10)
   expect_identical(result, clust_infomap_uni_flat)
   
   # Check that hierarchical structure is not displayed
-  output <- capture.output(summary(clust_infomap_uni_flat))
+  output <- capture.output(quietly(summary(clust_infomap_uni_flat)))
   expect_false(any(grepl("Hierarchical structure", output)))
 })
 

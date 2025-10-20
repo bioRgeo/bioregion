@@ -37,9 +37,11 @@ simil4 <- similarity(comat3, metric = "all", formula = "a + b")
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  pair <- bind_pairwise(primary_metrics = simil1, 
-                                     secondary_metrics = simil3,
-                                     new_metrics = NULL)
+  quietly(
+    pair <- bind_pairwise(primary_metrics = simil1, 
+                                       secondary_metrics = simil3,
+                                       new_metrics = NULL)
+  )
   expect_equal(inherits(pair, "bioregion.pairwise"), TRUE)
   expect_equal(attr(pair, "type"), "similarity")
   expect_equal(attr(pair, "nb_sites"), 5)
@@ -131,15 +133,15 @@ test_that("invalid inputs", {
     "^primary_metrics and secondary_metrics are based")
   
   expect_error(
-    bind_pairwise(primary_metrics = simil1,
-                               secondary_metrics = simil4,
-                               new_metrics = NULL),
+    quietly(bind_pairwise(primary_metrics = simil1,
+                          secondary_metrics = simil4,
+                          new_metrics = NULL)),
     "^primary_metrics and secondary_metrics should have the same sites")
   
   expect_error(
-    bind_pairwise(primary_metrics = simil1,
-                               secondary_metrics = simil3,
-                               new_metrics = 1),
+    quietly(bind_pairwise(primary_metrics = simil1,
+                          secondary_metrics = simil3,
+                          new_metrics = 1)),
     "new_metrics must be a character.",
     fixed = TRUE)
   

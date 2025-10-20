@@ -4,19 +4,23 @@ infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  install_binaries(binpath = "tempdir",
-                   download_only = FALSE,
-                   infomap_version = c("2.1.0", 
-                                       "2.6.0", 
-                                       "2.7.1",
-                                       "2.8.0"))
+  quietly(
+    install_binaries(binpath = "tempdir",
+                     download_only = FALSE,
+                     infomap_version = c("2.1.0", 
+                                         "2.6.0", 
+                                         "2.7.1",
+                                         "2.8.0"))
+  )
   
-  install_binaries(binpath = "pkgfolder",
-                   download_only = FALSE,
-                   infomap_version = c("2.1.0", 
-                                       "2.6.0", 
-                                       "2.7.1",
-                                       "2.8.0"))
+  quietly(
+    install_binaries(binpath = "pkgfolder",
+                     download_only = FALSE,
+                     infomap_version = c("2.1.0", 
+                                         "2.6.0", 
+                                         "2.7.1",
+                                         "2.8.0"))
+  )
   
 })
 

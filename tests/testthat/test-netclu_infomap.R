@@ -1,5 +1,5 @@
 # Inputs -----------------------------------------------------------------------
-install_binaries()
+quietly(install_binaries())
 
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),

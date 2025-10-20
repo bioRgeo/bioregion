@@ -47,21 +47,23 @@ uni4 <- data.frame(
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  clust <- nhclu_affprop(sim,
-                         index = "Simpson",
-                         seed = NULL,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = FALSE,
-                         K = NULL,
-                         prc = NULL,
-                         bimaxit = NULL,
-                         exact = NULL,
-                         algorithm_in_output = TRUE)
+  quietly(
+    clust <- nhclu_affprop(sim,
+                           index = "Simpson",
+                           seed = NULL,
+                           p = NA,
+                           q = NA,
+                           maxits = 1000,
+                           convits = 100,
+                           lam = 0.9,
+                           details = FALSE,
+                           nonoise = FALSE,
+                           K = NULL,
+                           prc = NULL,
+                           bimaxit = NULL,
+                           exact = NULL,
+                           algorithm_in_output = TRUE)
+  )
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "nhclu_affprop")
   expect_equal(clust$args$index, "Simpson")
@@ -83,113 +85,125 @@ test_that("valid output", {
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
   
-  clust <- nhclu_affprop(sim,
-                         index = "Simpson",
-                         seed = NULL,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = TRUE,
-                         K = NULL,
-                         prc = NULL,
-                         bimaxit = NULL,
-                         exact = NULL,
-                         algorithm_in_output = TRUE)
+  quietly(
+    clust <- nhclu_affprop(sim,
+                           index = "Simpson",
+                           seed = NULL,
+                           p = NA,
+                           q = NA,
+                           maxits = 1000,
+                           convits = 100,
+                           lam = 0.9,
+                           details = FALSE,
+                           nonoise = TRUE,
+                           K = NULL,
+                           prc = NULL,
+                           bimaxit = NULL,
+                           exact = NULL,
+                           algorithm_in_output = TRUE)
+  )  
   expect_equal(clust$cluster_info[1,1], "K_16")
   expect_equal(clust$cluster_info[1,2], 16)
   
-  clust <- nhclu_affprop(sim,
-                         index = "Simpson",
-                         seed = 2,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = FALSE,
-                         K = NULL,
-                         prc = NULL,
-                         bimaxit = NULL,
-                         exact = NULL,
-                         algorithm_in_output = TRUE)
+  quietly(
+    clust <- nhclu_affprop(sim,
+                           index = "Simpson",
+                           seed = 2,
+                           p = NA,
+                           q = NA,
+                           maxits = 1000,
+                           convits = 100,
+                           lam = 0.9,
+                           details = FALSE,
+                           nonoise = FALSE,
+                           K = NULL,
+                           prc = NULL,
+                           bimaxit = NULL,
+                           exact = NULL,
+                           algorithm_in_output = TRUE)
+  )  
   expect_equal(clust$cluster_info[1,1], "K_16")
   expect_equal(clust$cluster_info[1,2], 16)
   
-  clust <- nhclu_affprop(d,
-                         index = "Simpson",
-                         seed = 2,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = FALSE,
-                         K = NULL,
-                         prc = NULL,
-                         bimaxit = NULL,
-                         exact = NULL,
-                         algorithm_in_output = TRUE)
+  quietly(
+    clust <- nhclu_affprop(d,
+                           index = "Simpson",
+                           seed = 2,
+                           p = NA,
+                           q = NA,
+                           maxits = 1000,
+                           convits = 100,
+                           lam = 0.9,
+                           details = FALSE,
+                           nonoise = FALSE,
+                           K = NULL,
+                           prc = NULL,
+                           bimaxit = NULL,
+                           exact = NULL,
+                           algorithm_in_output = TRUE)
+  )  
   expect_equal(clust$cluster_info[1,1], "K_2")
   expect_equal(clust$cluster_info[1,2], 2)
   
-  clust1 <- nhclu_affprop(sim,
-                         index = "Simpson",
-                         seed = 2,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = FALSE,
-                         K = 6,
-                         prc = 1,
-                         bimaxit = 5,
-                         exact = TRUE,
-                         algorithm_in_output = FALSE)
+  quietly(
+    clust1 <- nhclu_affprop(sim,
+                           index = "Simpson",
+                           seed = 2,
+                           p = NA,
+                           q = NA,
+                           maxits = 1000,
+                           convits = 100,
+                           lam = 0.9,
+                           details = FALSE,
+                           nonoise = FALSE,
+                           K = 6,
+                           prc = 1,
+                           bimaxit = 5,
+                           exact = TRUE,
+                           algorithm_in_output = FALSE)
+  )  
   expect_equal(clust1$cluster_info[1,1], "K_6")
   expect_equal(clust1$cluster_info[1,2], 6)
   
-  clust2 <- nhclu_affprop(sim,
-                          index = "Simpson",
-                          seed = 2,
-                          p = NA,
-                          q = NA,
-                          maxits = 1000,
-                          convits = 100,
-                          lam = 0.9,
-                          details = FALSE,
-                          nonoise = FALSE,
-                          K = 6,
-                          prc = 1,
-                          bimaxit = 5,
-                          exact = TRUE,
-                          algorithm_in_output = FALSE)
+  quietly(
+    clust2 <- nhclu_affprop(sim,
+                            index = "Simpson",
+                            seed = 2,
+                            p = NA,
+                            q = NA,
+                            maxits = 1000,
+                            convits = 100,
+                            lam = 0.9,
+                            details = FALSE,
+                            nonoise = FALSE,
+                            K = 6,
+                            prc = 1,
+                            bimaxit = 5,
+                            exact = TRUE,
+                            algorithm_in_output = FALSE)
+  )
   expect_equal(clust2$cluster_info[1,1], "K_6")
   expect_equal(clust2$cluster_info[1,2], 6)
   
   expect_equal(sum(clust1$clusters$K_6==clust2$clusters$K_6), 338)
   
-  clust <- nhclu_affprop(sim,
-                         index = "Simpson",
-                         seed = NULL,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = TRUE,
-                         K = 6,
-                         prc = 1,
-                         bimaxit = 5,
-                         exact = TRUE,
-                         algorithm_in_output = FALSE)
+  quietly(
+    clust <- nhclu_affprop(sim,
+                           index = "Simpson",
+                           seed = NULL,
+                           p = NA,
+                           q = NA,
+                           maxits = 1000,
+                           convits = 100,
+                           lam = 0.9,
+                           details = FALSE,
+                           nonoise = TRUE,
+                           K = 6,
+                           prc = 1,
+                           bimaxit = 5,
+                           exact = TRUE,
+                           algorithm_in_output = FALSE)
+  )
   expect_equal(clust$cluster_info[1,1], "K_6")
   expect_equal(clust$cluster_info[1,2], 6)
   

@@ -19,17 +19,21 @@ simil2 <- similarity(comat2, metric = "all")
 dissim2 <- similarity_to_dissimilarity(simil2)
 comat_df2 <- mat_to_net(comat2, weight = TRUE, remove_zeroes = TRUE)
 
-clu1 <- hclu_hierarclust(dissim, 
-                         n_clust = 5,
-                         index = "Simpson",
-                         optimal_tree_method = "best",
-                         verbose = FALSE)
+quietly(
+  clu1 <- hclu_hierarclust(dissim, 
+                           n_clust = 5,
+                           index = "Simpson",
+                           optimal_tree_method = "best",
+                           verbose = FALSE)
+)
 
-clu2 <- hclu_hierarclust(dissim,
-                         optimal_tree_method = "best",
-                         n_clust = NULL,
-                         cut_height = NULL,
-                         verbose = FALSE)
+quietly(
+  clu2 <- hclu_hierarclust(dissim,
+                           optimal_tree_method = "best",
+                           n_clust = NULL,
+                           cut_height = NULL,
+                           verbose = FALSE)
+)
 
 clu3 <- netclu_louvain(simil)
 clu3$clusters <- NULL
@@ -37,15 +41,17 @@ clu3$clusters <- NULL
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  a <- bioregionalization_metrics(clu1,
-                         dissimilarity = dissim,
-                         net = comat_df,
-                         site_col = "Node1",
-                         species_col = "Node2",
-                         eval_metric = c("tot_endemism",
-                                         "avg_endemism",
-                                         "pc_distance",
-                                         "anosim"))
+  quietly(
+    a <- bioregionalization_metrics(clu1,
+                                    dissimilarity = dissim,
+                                    net = comat_df,
+                                    site_col = "Node1",
+                                    species_col = "Node2",
+                                    eval_metric = c("tot_endemism",
+                                                    "avg_endemism",
+                                                    "pc_distance",
+                                                    "anosim"))
+  )
   expect_identical(class(a)[1], "bioregion.bioregionalization.metrics")
   expect_identical(class(a)[2], "list")
 
