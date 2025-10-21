@@ -10,17 +10,19 @@ test_that("valid output", {
                      infomap_version = c("2.1.0", 
                                          "2.6.0", 
                                          "2.7.1",
-                                         "2.8.0"))
+                                         "2.8.0"),
+                     verbose = TRUE)
   )
   
-  quietly(
+  #quietly(
     install_binaries(binpath = "pkgfolder",
                      download_only = FALSE,
                      infomap_version = c("2.1.0", 
                                          "2.6.0", 
                                          "2.7.1",
-                                         "2.8.0"))
-  )
+                                         "2.8.0"),
+                     verbose = FALSE)
+  #)
   
 })
 
@@ -78,5 +80,15 @@ test_that("invalid inputs", {
   expect_error(
     install_binaries(infomap_version = "1"),
     "^Please select a version of Infomap from")
+  
+  expect_error(
+    install_binaries(verbose = 1),
+    "verbose must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    install_binaries(verbose = c(TRUE, FALSE)),
+    "verbose must be of length 1.",
+    fixed = TRUE)
   
 })  

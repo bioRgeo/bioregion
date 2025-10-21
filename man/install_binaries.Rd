@@ -7,7 +7,8 @@
 install_binaries(
   binpath = "tempdir",
   download_only = FALSE,
-  infomap_version = c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
+  infomap_version = c("2.1.0", "2.6.0", "2.7.1", "2.8.0"),
+  verbose = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ only download the \code{bin.zip} file or perform the entire process (see Details
 
 \item{infomap_version}{A \code{character} vector or a single \code{character} string
 specifying the Infomap version(s) to install.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 No return value.

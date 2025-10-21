@@ -8,24 +8,28 @@ tree1 <- hclu_hierarclust(dissim,
                           optimal_tree_method = "best",
                           verbose = FALSE)
 
-a <- bioregionalization_metrics(tree1,
-                                dissimilarity = dissim,
-                                net = fishdf,
-                                species_col = "Species",
-                                site_col = "Site",
-                                eval_metric = c("tot_endemism",
-                                                "avg_endemism",
-                                                "pc_distance",
-                                                "anosim"))
+#quietly(
+  a <- bioregionalization_metrics(tree1,
+                                  dissimilarity = dissim,
+                                  net = fishdf,
+                                  species_col = "Species",
+                                  site_col = "Site",
+                                  eval_metric = c("tot_endemism",
+                                                  "avg_endemism",
+                                                  "pc_distance",
+                                                  "anosim"))
+#)
 
-a1 <- bioregionalization_metrics(tree1,
-                                dissimilarity = dissim,
-                                net = fishdf,
-                                species_col = "Species",
-                                site_col = "Site",
-                                eval_metric = c("tot_endemism",
-                                                "avg_endemism",
-                                                "pc_distance"))
+#quietly(
+  a1 <- bioregionalization_metrics(tree1,
+                                  dissimilarity = dissim,
+                                  net = fishdf,
+                                  species_col = "Species",
+                                  site_col = "Site",
+                                  eval_metric = c("tot_endemism",
+                                                  "avg_endemism",
+                                                  "pc_distance"))
+#)
 
 partdf <- data.frame(K = c(3,5,6,2,3), 
                      n_clusters = c(3,5,6,23,6),
@@ -64,7 +68,8 @@ a3$evaluation_df <- a3$evaluation_df[1:8,]
 test_that("valid output", {
   
   optim_a <- find_optimal_n(a1, 
-                            plot = FALSE)
+                            plot = FALSE,
+                            verbose = FALSE)
   expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 13)
   expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 12)
   expect_equal(optim_a$optimal_nb_clusters$pc_distance, 13)
@@ -142,7 +147,8 @@ test_that("invalid inputs", {
   
   expect_warning(
     find_optimal_n(partdf3,
-                   plot = FALSE),
+                   plot = FALSE,
+                   verbose = FALSE),
     "^Metrics metric2")
   
   expect_warning(
@@ -155,97 +161,113 @@ test_that("invalid inputs", {
   expect_warning(
    find_optimal_n(a2,
                   criterion = "breakpoints",
-                  plot = FALSE),
+                  plot = FALSE,
+                  verbose = FALSE),
    "^Metrics tot_endemism")
   
-  expect_message(
+  quietly(
+    expect_message(
+      expect_warning(
+        find_optimal_n(a3,
+                       criterion = "increasing_step",
+                       plot = FALSE),
+        "^Criterion 'increasing_step' cannot work properly with "),
+     "^...Caveat: be cautious with the interpretation of")
+  )
+  
+  quietly(
     expect_warning(
       find_optimal_n(a3,
-                     criterion = "increasing_step",
+                     criterion = "decreasing_step",
                      plot = FALSE),
-      "^Criterion 'increasing_step' cannot work properly with "),
-   "^...Caveat: be cautious with the interpretation of")
-  
-  expect_warning(
-    find_optimal_n(a3,
-                   criterion = "decreasing_step",
-                   plot = FALSE),
-    "^Criterion 'decreasing_step' cannot work properly with")
+      "^Criterion 'decreasing_step' cannot work properly with")
+  )
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_quantile = c("zz","zz")),
+                   step_quantile = c("zz","zz"),
+                   verbose = FALSE),
     "step_quantile must be of length 1.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_quantile = "zz"),
+                   step_quantile = "zz",
+                   verbose = FALSE),
     "step_quantile must be numeric.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_quantile = -1.1),
+                   step_quantile = -1.1,
+                   verbose = FALSE),
     "step_quantile must be strictly higher than 0.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_quantile = 0),
+                   step_quantile = 0,
+                   verbose = FALSE),
     "step_quantile must be strictly higher than 0.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_quantile = 1),
+                   step_quantile = 1,
+                   verbose = FALSE),
     "step_quantile must be in the ]0,1[ interval.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_round_above = c(TRUE, TRUE)),
+                   step_round_above = c(TRUE, TRUE),
+                   verbose = FALSE),
     "step_round_above must be of length 1.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_round_above = 1),
+                   step_round_above = 1,
+                   verbose = FALSE),
     "step_round_above must be a boolean.",
      fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_levels = c(1,1)),
+                   step_levels = c(1,1),
+                   verbose = FALSE),
     "step_levels must be of length 1.",
     fixed = TRUE)  
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_levels = "zz"),
+                   step_levels = "zz",
+                   verbose = FALSE),
     "step_levels must be numeric.",
     fixed = TRUE)
     
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_levels = 1.1),
+                   step_levels = 1.1,
+                   verbose = FALSE),
     "step_levels must be an integer.",
     fixed = TRUE)
   
   expect_error(
     find_optimal_n(a,
                    criterion = "increasing_step",
-                   step_levels = -1),
+                   step_levels = -1,
+                   verbose = FALSE),
     "step_levels must be higher than 0.",
     fixed = TRUE)
   
@@ -261,17 +283,35 @@ test_that("invalid inputs", {
     "plot must be a boolean.",
     fixed = TRUE)
   
-  expect_warning(
-    find_optimal_n(a,
-                   criterion = "elbow",
-                   plot = FALSE),
-    "^The elbow method")
+  quietly(
+    expect_warning(
+      find_optimal_n(a,
+                     criterion = "elbow",
+                     plot = FALSE),
+      "^The elbow method")
+  )
+  
+  quietly(
+    expect_error(
+      find_optimal_n(a,
+                     criterion = "cutoff",
+                     plot = FALSE),
+      "^Criterion 'cutoff' should probably")
+  )
   
   expect_error(
     find_optimal_n(a,
-                   criterion = "cutoff",
-                   plot = FALSE),
-    "^Criterion 'cutoff' should probably")
+                   plot = FALSE,
+                   verbose = 1),
+    "verbose must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    find_optimal_n(a,
+                   plot = FALSE,
+                   verbose = c(TRUE, FALSE)),
+    "verbose must be of length 1.",
+    fixed = TRUE)
   
 })
 

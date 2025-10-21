@@ -19,7 +19,8 @@ nhclu_affprop(
   prc = NULL,
   bimaxit = NULL,
   exact = NULL,
-  algorithm_in_output = TRUE
+  algorithm_in_output = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -75,6 +76,9 @@ range exactly.}
 \item{algorithm_in_output}{A \code{boolean} indicating whether to include the
 original output of \link[apcluster:apcluster-methods]{apcluster} in the result. Defaults
 to \code{TRUE}.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:

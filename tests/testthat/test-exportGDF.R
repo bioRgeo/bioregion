@@ -479,7 +479,10 @@ test_that("bioregion.clusters integration - multiple partitions", {
     similarity(fishmat, metric = "Simpson")
   )
   # Use n_clust values that can actually be achieved
-  clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 4, 8), optimal_tree_method = "best")
+  clust_hier <- hclu_hierarclust(dissim, 
+                                 n_clust = c(3, 4, 8), 
+                                 optimal_tree_method = "best",
+                                 verbose = FALSE)
   clust_colored <- bioregion_colors(clust_hier)
   
   # Create simple network from fishmat
@@ -649,7 +652,10 @@ test_that("bioregion.clusters integration - integer partition selection", {
   dissim <- similarity_to_dissimilarity(
     similarity(fishmat, metric = "Simpson")
   )
-  clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 10, 20), optimal_tree_method = "best")
+  clust_hier <- hclu_hierarclust(dissim, 
+                                 n_clust = c(3, 10, 20), 
+                                 optimal_tree_method = "best",
+                                 verbose = FALSE)
   clust_colored <- bioregion_colors(clust_hier)
   
   # Create simple network from fishmat

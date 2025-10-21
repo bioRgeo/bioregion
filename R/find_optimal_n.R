@@ -39,6 +39,9 @@
 #' 
 #' @param plot A `boolean` indicating if a plot of the first `eval_metric` 
 #' with identified optimal clusters should be drawn.
+#' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
 #'
 #' @return
 #' A `list` of class `bioregion.optimal.n` with these elements:
@@ -141,7 +144,8 @@ find_optimal_n <- function(bioregionalizations,
                            step_round_above = TRUE,
                            metric_cutoffs = c(.5, .75, .9, .95, .99, .999),
                            n_breakpoints = 1,
-                           plot = TRUE){
+                           plot = TRUE,
+                           verbose = TRUE){
   
   if(!inherits(bioregionalizations, "bioregion.bioregionalization.metrics")){
     if(!inherits(bioregionalizations, "data.frame")){
@@ -193,6 +197,9 @@ find_optimal_n <- function(bioregionalizations,
          call. = FALSE)   
   }
   
+  controls(args = plot, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
+  
   # Verifying that metrics vary, otherwise we remove them
   nvals_metrics <- sapply(lapply(bioregionalizations$evaluation_df[, metrics_to_use,
                                                           drop = FALSE],
@@ -231,12 +238,16 @@ find_optimal_n <- function(bioregionalizations,
          call. = FALSE) 
          
   } else{
-    message(paste0("Number of bioregionalizations: ",
-                   nrow(bioregionalizations$evaluation_df), "\n"))
+    if(verbose){
+      message(paste0("Number of bioregionalizations: ",
+                     nrow(bioregionalizations$evaluation_df), "\n"))
+    }
     
-    if(criterion %in% c("elbow", "increasing_step", "decreasing_step",
+    if(criterion %in% c("elbow", 
+                        "increasing_step", 
+                        "decreasing_step",
                         "breakpoints")) {
-      if(nrow(bioregionalizations$evaluation_df) <= 8) {
+      if(nrow(bioregionalizations$evaluation_df) <= 8 & verbose) {
         message(paste0("...Caveat: be cautious with the interpretation of ",
                        "metric analyses with such a low number of bioregionalizations"))
       }
@@ -264,12 +275,12 @@ find_optimal_n <- function(bioregionalizations,
       }
     }
     
-    controls(args = plot, type = "boolean")
-    
-    message(paste0("Searching for potential optimal number(s) of clusters ",
-                   "based on the ",
-                   criterion, 
-                   " method"))
+    if(verbose){
+      message(paste0("Searching for potential optimal number(s) of clusters ",
+                     "based on the ",
+                     criterion, 
+                     " method"))
+    }
     
     bioregionalizations$evaluation_df <- data.frame(
       bioregionalizations$evaluation_df,
@@ -328,8 +339,10 @@ find_optimal_n <- function(bioregionalizations,
       #Rounding to get the closest bioregionalization
       optim_n <- lapply(optim_n, round)
       if(any(!(na.omit(unlist(optim_n)) %in% bioregionalizations$evaluation_df$n_clusters))) {
-        message("Exact break point not in the list of bioregionalizations: finding the",
-                " closest bioregionalization...\n")
+        if(verbose){
+          message("Exact break point not in the list of bioregionalizations: finding the",
+                  " closest bioregionalization...\n")
+        }
         for(m in names(optim_n)) {
           if(any(!(optim_n[[m]] %in% bioregionalizations$evaluation_df$n_clusters))) {
             for(cutoff in  optim_n[[m]][
@@ -373,11 +386,13 @@ find_optimal_n <- function(bioregionalizations,
                                  paste0("optimal_n_", metric)] <- TRUE
       }
       
-      message(paste0("   * elbow found at:"))
-      message(paste(paste(names(optim_n), optim_n, sep = " "),
-                    collapse = "\n"))
+      if(verbose){
+        message(paste0("   * elbow found at:"))
+        message(paste(paste(names(optim_n), optim_n, sep = " "),
+                      collapse = "\n"))
+      }
       
-      if("anosim" %in% metrics_to_use){
+      if("anosim" %in% metrics_to_use & verbose){
         warning(paste0(
           "The elbow method is likely not suitable for the ANOSIM",
           " metric. You should rather look for leaps in the curve",
@@ -387,18 +402,22 @@ find_optimal_n <- function(bioregionalizations,
     }
     
     if(criterion %in% c("increasing_step", "decreasing_step")) {
-      message(" - Step method")
       
-      if(criterion == "increasing_step" & any(c("tot_endemism",
-                                                "avg_endemism") %in% 
-                                              metrics_to_use)) {
+      if(verbose){
+        message(" - Step method")
+      }  
+
+      if(criterion == "increasing_step" & 
+         verbose &
+         any(c("tot_endemism", "avg_endemism") %in% metrics_to_use)) {
         warning(paste0(
           "Criterion 'increasing_step' cannot work properly with ",
           "metric 'tot_endemism', because this metric is usually ",
           "monotonously decreasing. Consider using ",
           "criterion = 'decreasing_step' instead.\n"))
-      } else if(criterion == "decreasing_step" & any(c("pc_distance") %in% 
-                                                     metrics_to_use)) {
+      } else if(criterion == "decreasing_step" & 
+                verbose &
+                any(c("pc_distance") %in% metrics_to_use)) {
         warning(paste0(
           "Criterion 'decreasing_step' cannot work properly with",
           " metrics 'pc_distance' or 'avg_endemism', because these",
@@ -420,7 +439,7 @@ find_optimal_n <- function(bioregionalizations,
             level_diffs <- diffs[order(diffs, decreasing = TRUE)][1:s_lvl]
             optim_n <- which(diffs %in% level_diffs) + cl
             
-            if(length(optim_n) >= s_lvl + 2) {
+            if(length(optim_n) >= s_lvl + 2 & verbose) {
               warning(paste0("The number of optimal N for method '",
                              x, "' is suspiciously high, consider ",
                              "switching between 'increasing_step'",
@@ -449,7 +468,10 @@ find_optimal_n <- function(bioregionalizations,
       
     }
     if(criterion == "cutoff") {
-      message(" - Cutoff method")
+      
+      if(verbose){
+        message(" - Cutoff method")
+      }
       
       if(length(metrics_to_use) > 1) {
         stop(paste0("Criterion 'cutoff' should probably be used with only one ",
@@ -475,7 +497,10 @@ find_optimal_n <- function(bioregionalizations,
     }
     
     if(criterion == "max"){
-      message(" - Max value method")
+      
+      if(verbose){
+        message(" - Max value method")
+      }
       
       optim_index <- lapply(metrics_to_use,
                             function(x, eval_df) {
@@ -494,7 +519,10 @@ find_optimal_n <- function(bioregionalizations,
     }
     
     if(criterion == "min"){
-      message(" - Min value method")
+      
+      if(verbose){
+        message(" - Min value method")
+      }
       
       optim_index <- lapply(metrics_to_use,
                             function(x, eval_df) {
@@ -524,14 +552,18 @@ find_optimal_n <- function(bioregionalizations,
         data = bioregionalizations$evaluation_df, cols = metrics_to_use,
         names_to = "variable"))
       
-      message("Plotting results...")
-
+      if(verbose){
+        message("Plotting results...")
+      }
+      
       if(criterion == "breakpoints"){
         
         names(seg_preds) <- c("n_clusters", "value", "variable")
         
-        message("   (the red line is the prediction from the segmented ",
-                "regression)")
+        if(verbose){
+          message("   (the red line is the prediction from the segmented ",
+                  "regression)")
+        }
         
         p <- ggplot2::ggplot(ggdf, ggplot2::aes(x = .data$n_clusters,
                                                        y = .data$value)) +

@@ -13,6 +13,9 @@
 #'
 #' @param infomap_version A `character` vector or a single `character` string 
 #' specifying the Infomap version(s) to install.
+#' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
 #'
 #' @return
 #' No return value.
@@ -50,7 +53,11 @@ install_binaries <- function(binpath = "tempdir",
                              infomap_version = c("2.1.0", 
                                                  "2.6.0", 
                                                  "2.7.1",
-                                                 "2.8.0")) {
+                                                 "2.8.0"),
+                             verbose = TRUE) {
+  
+  # Control verbose
+  controls(args = verbose, data = NULL, type = "boolean")
   
   # Control binpath and download_only
   controls(args = binpath, data = NULL, type = "character")
@@ -106,28 +113,44 @@ install_binaries <- function(binpath = "tempdir",
   }
 
   # Download bin.zip
-  message(" ")
-  message("1. Download bin.zip")
-  message(" ")
+  if(verbose){
+    message(" ")
+    message("1. Download bin.zip")
+    message(" ")
+  }
   
   url <- "https://github.com/bioRgeo/bioregion/releases/download/v1.0.0/bin.zip"
   backup <- "https://www.mmmycloud.com/index.php/s/wnyLYFZGESyckW8/download"
   if(httr::HEAD(url)$status_code == 200){
-    utils::download.file(url, 
-                         paste0(binpath, "/bin.zip"), 
-                         mode = "wb",
-                         quiet = TRUE)
-    message(paste0("The folder has been successfully downloaded to ",
-                   binpath, 
-                   "."))
+    if(verbose){
+      utils::download.file(url, 
+                           paste0(binpath, "/bin.zip"), 
+                           mode = "wb")
+      message(paste0("The folder has been successfully downloaded to ",
+                     binpath, 
+                     "."))
+    }else{
+      utils::download.file(url, 
+                           paste0(binpath, "/bin.zip"), 
+                           mode = "wb",
+                           quiet = TRUE)
+    }
+
   }else if(httr::HEAD(backup)$status_code == 200){
-    utils::download.file(backup, 
-                         paste0(binpath, "/bin.zip"), 
-                         mode = "wb",
-                         quiet = TRUE)
-    message(paste0("The folder has been successfully downloaded to ",
-                   binpath, 
-                   "."))
+    if(verbose){
+      utils::download.file(backup, 
+                           paste0(binpath, "/bin.zip"), 
+                           mode = "wb")
+      message(paste0("The folder has been successfully downloaded to ",
+                     binpath, 
+                     "."))
+    }else{
+      utils::download.file(backup, 
+                           paste0(binpath, "/bin.zip"), 
+                           mode = "wb",
+                           quiet = TRUE)
+    }
+
   }else{
     stop(paste0("An error occurred. ",
                 "Check your connection or contact the maintainers."),
@@ -137,9 +160,11 @@ install_binaries <- function(binpath = "tempdir",
   if(!download_only){
     
     # Unzip folder
-    message(" ")
-    message("2. Unzip folder")
-    message(" ")
+    if(verbose){
+      message(" ")
+      message("2. Unzip folder")
+      message(" ")
+    }
     utils::unzip(zipfile = paste0(binpath, "/bin.zip"), exdir = binpath)
     
     # Delete bin.zip
@@ -158,10 +183,12 @@ install_binaries <- function(binpath = "tempdir",
     nblouvain <- length(list.files(paste0(binpath, "/bin/LOUVAIN")))
     
     if (nboslom == 8 & (nbinfomap == 8 * nbversion) & nblouvain == 8) {
-      message(paste0(
-        "The folder has been successfully unzipped in ",
-        binpath, "."
-      ))
+      if(verbose){
+        message(paste0(
+          "The folder has been successfully unzipped in ",
+          binpath, "."
+        ))
+      }
     } else {
       unlink(paste0(binpath, "/bin"), recursive = TRUE)
       stop(paste0("An error occurred, unzip failed."),
@@ -212,31 +239,40 @@ install_binaries <- function(binpath = "tempdir",
     nbfiles <- length(files)
     
     # Check permissions
-    message(" ")
-    message("3. Check permissions")
-    message(" ")
-    
+    if(verbose){
+      message(" ")
+      message("3. Check permissions")
+      message(" ")
+    }
+
     perm <- rep(-1, nbfiles)
     for (f in 1:nbfiles) {
       file <- files[f]
       perm[f] <- file.access(file, mode = 1)
       if (perm[f] == -1) {
-        message(paste0("Permission to execute ", 
-                       file, 
-                       " as program: denied."))
+        if(verbose){
+          message(paste0("Permission to execute ", 
+                         file, 
+                         " as program: denied."))
+        }
       } else {
         perm[f] == 10
-        message(paste0("Permission to execute ", 
-                       file, 
-                       " as program: granted."))
+        if(verbose){
+          message(paste0("Permission to execute ", 
+                         file, 
+                         " as program: granted."))
+        }
       }
     }
     
     if (sum(perm == -1) > 0) {
-      message(" ")
-      message("Try to change permissions automatically")
-      message(" ")
       
+      if(verbose){
+        message(" ")
+        message("Try to change permissions automatically")
+        message(" ")
+      }
+
       for (f in 1:nbfiles) {
         file <- files[f]
         if (perm[f] == -1) {
@@ -251,14 +287,18 @@ install_binaries <- function(binpath = "tempdir",
           }
           perm[f] <- file.access(file, mode = 1)
           if (perm[f] == -1) {
-            message(paste0("Automatic change of permission of ", 
-                           file,
-                           " failed."))
+            if(verbose){
+              message(paste0("Automatic change of permission of ", 
+                             file,
+                             " failed."))
+            }
           } else {
             perm[f] == 10
-            message(paste0("Automatic change of permission succeed, ", 
-                           file,
-                           " can now be executed as progam."))
+            if(verbose){
+              message(paste0("Automatic change of permission succeed, ", 
+                             file,
+                             " can now be executed as progam."))
+            }
           }
         }
       }
@@ -313,9 +353,11 @@ install_binaries <- function(binpath = "tempdir",
     }
     
     # Test INFOMAP
-    message(" ")
-    message("4. Test Infomap")
-    message(" ")
+    if(verbose){
+      message(" ")
+      message("4. Test Infomap")
+      message(" ")
+    }
     
     for (vinf in 1:nbversion) {
       version <- infomap_version[vinf]
@@ -388,13 +430,13 @@ install_binaries <- function(binpath = "tempdir",
         message(" ")
         message("Infomap is not installed...")
         message(paste0("Please have a look at ",
-                       "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
-                       " for more details."))
+                         "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                         " for more details."))
       } else {
         if (testopm) {
-          message(paste0("Congratulation, you successfully install the ",
-                         version, 
-                         " OpenMP version of Infomap!"))
+           message(paste0("Congratulation, you successfully install the ",
+                          version, 
+                          " OpenMP version of Infomap!"))
           file.copy(
             paste0(path, files[1]),
             paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
@@ -402,28 +444,32 @@ install_binaries <- function(binpath = "tempdir",
         } else {
           message(" ")
           message(paste0("Congratulation, you successfully install the ", 
-                         version,
-                         " no OpenMP version of Infomap!"))
+                          version,
+                          " no OpenMP version of Infomap!"))
+
           file.copy(
             paste0(path, files[2]),
             paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
           )
-          message(" ")
+           message(" ")
           message(paste0("A library is probably missing to install the OpenMP ",
-                         "version..."))
+                          "version..."))
           message(paste0("Please have a look at ",
-                         "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
-                         " for more details."))
+                          "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                          " for more details."))
+
         }
         utils::write.table(1, paste0(path, "check.txt"))
       }
     }
     
     # Test LOUVAIN
-    message(" ")
-    message("5. Test Louvain")
-    message(" ")
-    
+    if(verbose){
+      message(" ")
+      message("5. Test Louvain")
+      message(" ")
+    }
+
     path <- paste0(binpath, "/bin/LOUVAIN/")
     version <- list.files(path)[substr(list.files(path), 1, 7) == "version"]
     version <- substr(version, 9, nchar(version))
@@ -475,7 +521,7 @@ install_binaries <- function(binpath = "tempdir",
       message("Louvain is not installed...")
       message(paste0("Please have a look at ",
                      "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
-                     " for more details."))
+                      " for more details."))
     } else {
       message(paste0("Congratulation, you successfully install the version ",
                      version, 
@@ -484,10 +530,12 @@ install_binaries <- function(binpath = "tempdir",
     }
     
     # Test OSLOM
-    message(" ")
-    message("6. Test OSLOM")
-    message(" ")
-    
+    if(verbose){
+      message(" ")
+      message("6. Test OSLOM")
+      message(" ")
+    }
+
     path <- paste0(binpath, "/bin/OSLOM/")
     version <- list.files(path)[substr(list.files(path), 1, 7) == "version"]
     version <- substr(version, 9, nchar(version))

@@ -22,11 +22,13 @@ ldf <- list(df, 1)
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  comp <- compare_bioregionalizations(clu1)
+  comp <- compare_bioregionalizations(clu1,
+                                      verbose = FALSE)
   expect_equal(inherits(comp, "list"), TRUE)
   
   comp <- compare_bioregionalizations(clu1,
-                                      cor_frequency = TRUE)
+                                      cor_frequency = TRUE,
+                                      verbose = FALSE)
   expect_equal(as.numeric(comp$bioregionalization_freq_cor[1]) > 0, TRUE)
 
 })
@@ -73,5 +75,17 @@ test_that("invalid inputs", {
     compare_bioregionalizations(clu1, 
                                 indices = c("rand","zz")),
     "^Please choose indices from the following")
+  
+  expect_error(
+    compare_bioregionalizations(clu1, 
+                                verbose = 1),
+    "verbose must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    compare_bioregionalizations(clu1, 
+                                verbose = c(TRUE, FALSE)),
+    "verbose must be of length 1.",
+    fixed = TRUE)
   
 })

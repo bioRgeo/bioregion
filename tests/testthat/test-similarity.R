@@ -32,7 +32,9 @@ comat4[1,1] <- -1
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  simil <- similarity(comat0, metric = c("abc", "ABC", "Euclidean"))
+  quietly(
+    simil <- similarity(comat0, metric = c("abc", "ABC", "Euclidean"))
+  )
   expect_equal(inherits(simil, "bioregion.pairwise"), TRUE)
   expect_equal(dim(simil)[1], 10)
   expect_equal(dim(simil)[2], 9)

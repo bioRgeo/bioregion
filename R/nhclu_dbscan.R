@@ -29,6 +29,9 @@
 #' @param algorithm_in_output A `boolean` indicating whether the original output 
 #' of [dbscan::dbscan] should be included in the output. Defaults to `TRUE` (see 
 #' Value).
+#' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
 #'
 #' @param ... Additional arguments to be passed to `dbscan()` (see 
 #' [dbscan::dbscan]).
@@ -111,6 +114,7 @@ nhclu_dbscan <- function(dissimilarity,
                          eps = NULL,
                          plot = TRUE,
                          algorithm_in_output = TRUE,
+                         verbose = TRUE,
                          ...){
   
   # 1. Controls ----------------------------------------------------------------
@@ -152,6 +156,7 @@ nhclu_dbscan <- function(dissimilarity,
   }
   controls(args = plot, data = NULL, type = "boolean")
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
   
   # 2. Function ----------------------------------------------------------------
   # Output format
@@ -162,6 +167,7 @@ nhclu_dbscan <- function(dissimilarity,
                        eps = eps,
                        plot = plot,
                        algorithm_in_output = algorithm_in_output,
+                       verbose = verbose,
                        ...)
   
   # Determine data_type based on pairwise metric
@@ -193,7 +199,7 @@ nhclu_dbscan <- function(dissimilarity,
     minPts <- log(length(labels(dist.obj)))
   }
   
-  if (is.null(eps)) {
+  if (is.null(eps) & verbose) {
     message(
       "Trying to find a knee in the curve to search for an optimal eps value...
        NOTE: this automatic identification of the knee may not work properly

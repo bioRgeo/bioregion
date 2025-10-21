@@ -610,11 +610,13 @@ test_that("invalid inputs", {
     "consensus_p must be between 0.5 and 1.",
     fixed = TRUE)
   
-  expect_message(
-    hclu_hierarclust(dissim, 
-                     optimal_tree_method = "iterative_consensus_tree",
-                     verbose = TRUE),
-    "^Building the iterative")
+  quietly(
+    expect_message(
+      hclu_hierarclust(dissim, 
+                      optimal_tree_method = "iterative_consensus_tree",
+                      verbose = TRUE),
+      "^Building the iterative")
+  )
   
   expect_warning(
     hclu_hierarclust(dissim, 
@@ -647,6 +649,22 @@ test_that("invalid inputs", {
                      n_clust = 5,
                      verbose = FALSE),
     "show_hierarchy must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim,
+                     optimal_tree_method = "best",
+                     n_clust = 5,
+                     verbose = 1),
+    "verbose must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim,
+                     optimal_tree_method = "best",
+                     n_clust = 5,
+                     verbose = c(TRUE, FALSE)),
+    "verbose must be of length 1.",
     fixed = TRUE)
 
 })
@@ -687,21 +705,23 @@ test_that("show_hierarchy argument works", {
   
   clust4 <- cut_tree(clust3,
                     n_clust = c(5, 10),
-                    show_hierarchy = FALSE)
+                    show_hierarchy = FALSE,
+                    verbose = FALSE)
   expect_equal(clust4$args$show_hierarchy, FALSE)
   expect_equal(dim(clust4$clusters)[2], 3)
   
   clust5 <- cut_tree(clust3,
                     n_clust = c(5, 10),
-                    show_hierarchy = TRUE)
+                    show_hierarchy = TRUE,
+                    verbose = FALSE)
   expect_equal(clust5$args$show_hierarchy, TRUE)
   expect_equal(dim(clust5$clusters)[2], 3)
   
   # Test that summary works with both show_hierarchy settings
-  expect_no_error(summary(clust1))
-  expect_no_error(summary(clust2))
-  expect_no_error(summary(clust4))
-  expect_no_error(summary(clust5))
+  quietly(expect_no_error(summary(clust1)))
+  quietly(expect_no_error(summary(clust2)))
+  quietly(expect_no_error(summary(clust4)))
+  quietly(expect_no_error(summary(clust5)))
   
   # Verify hierarchical status is properly set
   expect_equal(clust1$inputs$hierarchical, TRUE)
@@ -732,7 +752,7 @@ test_that("summary works on uncut hclu_hierarclust tree", {
                                  verbose = FALSE)
   
   # Summary should not crash
-  expect_no_error(summary(tree_uncut))
+  quietly(expect_no_error(summary(tree_uncut)))
   
   # Verify tree structure
   expect_equal(tree_uncut$name, "hclu_hierarclust")
@@ -748,8 +768,8 @@ test_that("summary works on uncut hclu_hierarclust tree", {
                                verbose = FALSE)
   
   # Both should work with summary
-  expect_no_error(summary(tree_uncut))
-  expect_no_error(summary(tree_cut))
+  quietly(expect_no_error(summary(tree_uncut)))
+  quietly(expect_no_error(summary(tree_cut)))
   
   # Cut tree should have clusters
   expect_true(is.data.frame(tree_cut$clusters))

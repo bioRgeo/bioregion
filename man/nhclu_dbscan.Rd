@@ -11,6 +11,7 @@ nhclu_dbscan(
   eps = NULL,
   plot = TRUE,
   algorithm_in_output = TRUE,
+  verbose = TRUE,
   ...
 )
 }
@@ -40,6 +41,9 @@ plot should be displayed.}
 \item{algorithm_in_output}{A \code{boolean} indicating whether the original output
 of \link[dbscan:dbscan]{dbscan::dbscan} should be included in the output. Defaults to \code{TRUE} (see
 Value).}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 
 \item{...}{Additional arguments to be passed to \code{dbscan()} (see
 \link[dbscan:dbscan]{dbscan::dbscan}).}

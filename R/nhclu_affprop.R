@@ -55,6 +55,9 @@
 #' @param algorithm_in_output A `boolean` indicating whether to include the 
 #' original output of [apcluster][apcluster::apcluster] in the result. Defaults 
 #' to `TRUE`.
+#' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
 #'
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
@@ -145,7 +148,8 @@ nhclu_affprop <- function(similarity,
                           prc = NULL, 
                           bimaxit = NULL, 
                           exact = NULL,
-                          algorithm_in_output = TRUE){
+                          algorithm_in_output = TRUE,
+                          verbose = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = similarity, type = "input_nhandhclu")
@@ -266,6 +270,7 @@ nhclu_affprop <- function(similarity,
   }
   
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
   
   sim <- NULL
   
@@ -286,7 +291,8 @@ nhclu_affprop <- function(similarity,
                        prc = prc,
                        bimaxit = bimaxit,
                        exact = exact,
-                       algorithm_in_output = algorithm_in_output)
+                       algorithm_in_output = algorithm_in_output,
+                       verbose = verbose)
   
   # Determine data_type based on pairwise metric
   pairwise_metric_value <- ifelse(!inherits(similarity, "dist"), 
@@ -322,31 +328,76 @@ nhclu_affprop <- function(similarity,
   ## 2.1. apclusterK ----------------------------------------------------------
   if(!is.null(K)){
     if(is.null(seed)){
-      outputs$algorithm <- apcluster::apclusterK(s = sim_square,
-                                                 K = K,
-                                                 prc = prc,
-                                                 bimaxit = bimaxit,
-                                                 exact = FALSE,
-                                                 maxits = maxits,
-                                                 convits = convits,
-                                                 lam = lam,
-                                                 includeSim = FALSE,
-                                                 details = details,
-                                                 nonoise = nonoise,
-                                                 seed = NA)
+      if(verbose){
+        outputs$algorithm <- apcluster::apclusterK(s = sim_square,
+                                                   K = K,
+                                                   prc = prc,
+                                                   bimaxit = bimaxit,
+                                                   exact = FALSE,
+                                                   maxits = maxits,
+                                                   convits = convits,
+                                                   lam = lam,
+                                                   includeSim = FALSE,
+                                                   details = details,
+                                                   nonoise = nonoise,
+                                                   seed = NA)
+        
+      }else{
+        tmp <- tempfile() # Catch messages from apclustersK
+        sink(tmp)   
+        on.exit(sink())    
+        
+        outputs$algorithm <- suppressMessages(suppressWarnings(
+                                  apcluster::apclusterK(s = sim_square,
+                                                        K = K,
+                                                        prc = prc,
+                                                        bimaxit = bimaxit,
+                                                        exact = FALSE,
+                                                        maxits = maxits,
+                                                        convits = convits,
+                                                        lam = lam,
+                                                        includeSim = FALSE,
+                                                        details = details,
+                                                        nonoise = nonoise,
+                                                        seed = NA)
+                             ))    
+
+      }
+
     }else{
-      outputs$algorithm <- apcluster::apclusterK(s = sim_square,
-                                                 K = K,
-                                                 prc = prc,
-                                                 bimaxit = bimaxit,
-                                                 exact = FALSE,
-                                                 maxits = maxits,
-                                                 convits = convits,
-                                                 lam = lam,
-                                                 includeSim = FALSE,
-                                                 details = details,
-                                                 nonoise = nonoise,
-                                                 seed = seed)
+      if(verbose){
+        outputs$algorithm <- apcluster::apclusterK(s = sim_square,
+                                                   K = K,
+                                                   prc = prc,
+                                                   bimaxit = bimaxit,
+                                                   exact = FALSE,
+                                                   maxits = maxits,
+                                                   convits = convits,
+                                                   lam = lam,
+                                                   includeSim = FALSE,
+                                                   details = details,
+                                                   nonoise = nonoise,
+                                                   seed = seed)
+      }else{
+        tmp <- tempfile() # Catch messages from apclustersK
+        sink(tmp)   
+        on.exit(sink())   
+        
+        outputs$algorithm <- suppressMessages(suppressWarnings(
+                                apcluster::apclusterK(s = sim_square,
+                                                      K = K,
+                                                      prc = prc,
+                                                     bimaxit = bimaxit,
+                                                     exact = FALSE,
+                                                     maxits = maxits,
+                                                     convits = convits,
+                                                     lam = lam,
+                                                     includeSim = FALSE,
+                                                     details = details,
+                                                     nonoise = nonoise,
+                                                     seed = seed)
+                            ))
+      }
     }
   }
   ## 2.2. apcluster -----------------------------------------------------------

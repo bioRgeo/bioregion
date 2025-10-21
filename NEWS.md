@@ -3,53 +3,52 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
-## Function changes
 
-* Added `inputs$data_type` field to all clustering outputs to explicitly track
-  whether original co-occurrence data was occurrence-based or abundance-based.
-  This field is automatically determined based on the algorithm type and 
-  similarity/dissimilarity metric used.
+***Function changes***
 
-* `site_species_metrics()` vectorized to be much faster. It also allows providing
-  only `comat`, `net`, or both `comat` and `net`. When only one is provided, the other 
-  is automatically created using appropriate weight handling.
+* Added the `inputs$data_type` field to all clustering outputs to explicitly
+  track whether original co-occurrence data were occurrence-based or
+  abundance-based. This field is automatically determined based on the algorithm
+  type and the similarity/dissimilarity metric used.
 
-* Renamed class `bioregion.pairwise.metric` to `bioregion.pairwise`.
+* `site_species_metrics()` is now vectorized for much faster performance. It
+  also allows providing only `comat`, `net`, or both. When only one is provided,
+  the other is automatically created using appropriate weight handling.
 
+* Renamed the class `bioregion.pairwise.metric` to `bioregion.pairwise`.
 
+* Added a `verbose` argument to all talkative functions allowing users to
+  control the display of progress messages.
 
+***New features***
 
-## New features
+* Added export of the function `exportGDF()` with documentation and tests.
 
-- Added export of the function `exportGDF()` with documentation and tests.
+* Added `bioregion_colors()` to provide consistent bioregion color palettes for
+  use across multiple visualizations (maps, networks, graphs, etc.).
 
-- Added `bioregion_colors()` function to provide bioregion colors 
-thatqcan be used across multiple visualizations (maps, networks, other graphs, 
-etc.).
+* Updated `map_bioregions()` to handle bioregion colors.
 
-- Updated `map_bioregions()` to handle bioregion colors.
+* Updated `site_species_metrics()` to handle multiple bioregionalizations
+  simultaneously.
 
-- Updated `site_species_metrics()` to handle multiple bioregionalizations 
-simultaneously.
-
-- Added a generic function `summary()` for pretty display of results.
+* Added a generic function `summary()` for a clearer display of results.
 
 * Added `bind_pairwise()` to combine pairwise (dis)similarity objects.
 
 * Added `as_bioregion_pairwise()` to replace and improve upon
-`betapart_to_bioregion()`, which is now deprecated.
+  `betapart_to_bioregion()`, which is now deprecated.
 
-* Added a comparison with other R packages for the computation of dissimilarity
-  metrics in tutorial 3 (Pairwise similarity/dissimilarity metrics).
+* Added a comparison with other R packages for computing dissimilarity metrics
+  in tutorial 3 (*Pairwise similarity/dissimilarity metrics*).
 
-## Bug fixes
+***Bug fixes***
 
 * Fixed incorrect weight detection in `site_species_metrics()` for unipartite
-  Networks
+  networks.
 
-* Modified the `keep_trials` argument in `hclu_hierarclust()` and and fixed a 
-potential issue with randomized matrix storage.
-
+* Modified the `keep_trials` argument in `hclu_hierarclust()` and fixed a
+  potential issue with randomized matrix storage.
 
 # bioregion 1.2.0
 

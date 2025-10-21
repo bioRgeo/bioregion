@@ -344,6 +344,7 @@ hclu_hierarclust <- function(dissimilarity,
          call. = FALSE)
   }
   controls(args = show_hierarchy, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
   
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "hclu_hierarclust")
@@ -543,7 +544,8 @@ hclu_hierarclust <- function(dissimilarity,
                         h_max = h_max,
                         h_min = h_min,
                         dynamic_tree_cut = dynamic_tree_cut,
-                        show_hierarchy = show_hierarchy)
+                        show_hierarchy = show_hierarchy,
+                        verbose = verbose)
     outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
                                           TRUE,
                                           FALSE)

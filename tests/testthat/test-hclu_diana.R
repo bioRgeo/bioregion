@@ -48,12 +48,13 @@ uni4 <- data.frame(
 test_that("valid output", {
   
   clust <- hclu_diana(dissim,
-                            index = "Simpson",
-                            n_clust = c(1,2,3),
-                            cut_height = NULL,
-                            find_h = FALSE,
-                            h_max = 1,
-                            h_min = 0)
+                      index = "Simpson",
+                      n_clust = c(1,2,3),
+                      cut_height = NULL,
+                      find_h = FALSE,
+                      h_max = 1,
+                      h_min = 0,
+                      verbose = FALSE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "hclu_diana")
   expect_equal(clust$args$index, "Simpson")
@@ -62,6 +63,7 @@ test_that("valid output", {
   expect_equal(clust$args$find_h, FALSE)
   expect_equal(clust$args$h_max, 1)
   expect_equal(clust$args$h_min, 0)
+  expect_equal(clust$args$verbose, FALSE)
   expect_equal(clust$inputs$bipartite, FALSE)
   expect_equal(clust$inputs$weight, TRUE)
   expect_equal(clust$inputs$pairwise, TRUE)
@@ -73,32 +75,46 @@ test_that("valid output", {
   expect_equal(dim(clust$clusters)[2], 4)
   
   clust <- hclu_diana(dissim,
-                            index = "Euclidean",
-                            n_clust = c(5,10),
-                            find_h = FALSE)
+                      index = "Euclidean",
+                      n_clust = c(5,10),
+                      find_h = FALSE,
+                      verbose = FALSE)
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
   
   clust <- hclu_diana(dissim,
-                            index = "Euclidean",
-                            n_clust = c(10,5),
-                            find_h = FALSE)
+                      index = "Euclidean",
+                      n_clust = c(10,5),
+                      find_h = FALSE,
+                      verbose = FALSE)
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
   
   # Test data_type with different dissimilarity metrics
   # We expect warnings here as the algo cannot find 3 clusters with those metrics
   # on this dataset
-  expect_warning(clust <- hclu_diana(dissim, index = "Simpson", n_clust = 3))
+  expect_warning(clust <- hclu_diana(dissim, 
+                                     index = "Simpson", 
+                                     n_clust = 3,
+                                     verbose = FALSE),)
   expect_equal(clust$inputs$data_type, "occurrence")
 
-  expect_warning(clust <- hclu_diana(dissim, index = "Jaccard", n_clust = 3))
+  expect_warning(clust <- hclu_diana(dissim, 
+                                     index = "Jaccard", 
+                                     n_clust = 3,
+                                     verbose = FALSE))
   expect_equal(clust$inputs$data_type, "occurrence")
 
-  expect_warning(clust <- hclu_diana(dissim, index = "Bray", n_clust = 3))
+  expect_warning(clust <- hclu_diana(dissim, 
+                                     index = "Bray", 
+                                     n_clust = 3,
+                                     verbose = FALSE))
   expect_equal(clust$inputs$data_type, "abundance")
 
-  expect_warning(clust <- hclu_diana(dissim, index = "Euclidean", n_clust = 3))
+  expect_warning(clust <- hclu_diana(dissim, 
+                                     index = "Euclidean", 
+                                     n_clust = 3,
+                                     verbose = FALSE))
   expect_equal(clust$inputs$data_type, "unknown")
   
 })
@@ -151,7 +167,7 @@ test_that("invalid inputs", {
     fixed = TRUE)  
   
   expect_message(
-    hclu_diana(d2),
+    hclu_diana(d2, verbose = FALSE),
     "No labels detected, they have been assigned automatically.",
     fixed = TRUE) 
   
@@ -262,17 +278,20 @@ test_that("invalid inputs", {
     fixed = TRUE)   
   
   expect_error(
-    hclu_diana(dissim, h_max =  c("zz","zz")),
+    hclu_diana(dissim, 
+               h_max =  c("zz","zz")),
     "h_max must be of length 1.",
     fixed = TRUE)  
   
   expect_error(
-    hclu_diana(dissim, h_max = "zz"),
+    hclu_diana(dissim, 
+               h_max = "zz"),
     "h_max must be numeric.",
     fixed = TRUE)  
   
   expect_error(
-    hclu_diana(dissim, h_max = -1),
+    hclu_diana(dissim, 
+               h_max = -1),
     "h_max must be higher than 0.",
     fixed = TRUE)    
   
@@ -282,5 +301,17 @@ test_that("invalid inputs", {
                h_max = 0),
     "h_min must be inferior to h_max.",
     fixed = TRUE)    
+  
+  expect_error(
+    hclu_diana(dissim, 
+               verbose = 1),
+    "verbose must be a boolean.",
+    fixed = TRUE)   
+  
+  expect_error(
+    hclu_diana(dissim, 
+               verbose = c(TRUE, FALSE)),
+    "verbose must be of length 1.",
+    fixed = TRUE)   
   
 })

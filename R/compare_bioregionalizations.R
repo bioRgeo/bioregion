@@ -24,6 +24,9 @@
 #' @param store_confusion_matrix A `boolean`. If `TRUE`, stores the confusion 
 #' matrices of pairwise bioregionalization comparisons in the output object.
 #' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
+#' 
 #' @details 
 #' This function operates in two main steps:
 #' 
@@ -139,7 +142,8 @@ compare_bioregionalizations <- function(bioregionalizations,
                                         indices = c("rand", "jaccard"),
                                         cor_frequency = FALSE,
                                         store_pairwise_membership = TRUE,
-                                        store_confusion_matrix = TRUE){
+                                        store_confusion_matrix = TRUE,
+                                        verbose = TRUE){
   
   # input can be of format bioregion.clusters
   if (inherits(bioregionalizations, "bioregion.clusters")) {
@@ -205,10 +209,14 @@ compare_bioregionalizations <- function(bioregionalizations,
   controls(args = cor_frequency, type = "boolean")
   controls(args = store_pairwise_membership, type = "boolean")
   controls(args = store_confusion_matrix, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
 
-  message(Sys.time(), 
-          " - Computing pairwise membership comparisons for each ",
-          "bioregionalization...\n")
+  if(verbose){
+    message(Sys.time(), 
+            " - Computing pairwise membership comparisons for each ",
+            "bioregionalization...\n")
+  }
+
   # if(!is.null(sample_items)) {
   #   if(ncol(clusters) * (nrow(clusters) * (nrow(clusters) - 1)) / 2 > 10e6) {
   #     message("       /!\\\ NOTE: Very high number of comparisons ",
@@ -233,8 +241,10 @@ compare_bioregionalizations <- function(bioregionalizations,
   
   # BETWEEN bioregionalizationS - Pairwise bioregionalization comparison ------
   
-  message(Sys.time(), 
-          " - Comparing memberships among bioregionalizations...\n")
+  if(verbose){
+    message(Sys.time(), 
+            " - Comparing memberships among bioregionalizations...\n")
+  }
   
   # Prepare the pairwise bioregionalization comparisons
   partnames <- pw_cluster_comps <- t(utils::combn(seq_len(ncol(clusters)), 2))
@@ -260,8 +270,11 @@ compare_bioregionalizations <- function(bioregionalizations,
   
   # Rand index ----------------------------------------------------------------
   if("rand" %in% indices) {
-    message(Sys.time(), 
-            " - Computing Rand index...\n")
+    
+    if(verbose){
+      message(Sys.time(), 
+              " - Computing Rand index...\n")
+    }
     
     partcomp_indices$rand <- vapply(all_conf_matrices,
                                     rand_index,
@@ -270,8 +283,12 @@ compare_bioregionalizations <- function(bioregionalizations,
   
   # Jaccard index -------------------------------------------------------------
   if("jaccard" %in% indices) {
-    message(Sys.time(), 
-            " - Computing Jaccard index...\n")
+    
+    if(verbose){
+      message(Sys.time(), 
+              " - Computing Jaccard index...\n")
+    }
+
     partcomp_indices$jaccard <- vapply(all_conf_matrices,
                                        jaccard_index,
                                        numeric(1))
@@ -279,11 +296,14 @@ compare_bioregionalizations <- function(bioregionalizations,
   
   # Point biserial correlation  -----------------------------------------------
   if(cor_frequency) {
-    message(
-      Sys.time(), 
-      " - Computing the correlation between each bioregionalization and the",
-      " vector of frequency of pairwise membership...\n")
     
+    if(verbose){
+      message(
+        Sys.time(), 
+        " - Computing the correlation between each bioregionalization and the",
+        " vector of frequency of pairwise membership...\n")
+    }
+
     bioregionalization_freq_cor <- as.vector(suppressWarnings(
       cor(item_pw_mb, item_pw_mb_freq)))
     bioregionalization_freq_cor[is.na(bioregionalization_freq_cor)] <- 0
