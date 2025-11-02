@@ -3,17 +3,25 @@
 This is a list of changes made in the development/GitHub version of the package 
 between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
-
 ***Function changes***
 
 * Added the `inputs$data_type` field to all clustering outputs to explicitly
   track whether original co-occurrence data were occurrence-based or
   abundance-based. This field is automatically determined based on the algorithm
   type and the similarity/dissimilarity metric used.
+  
+* Added the `inputs$node_type` field to all clustering outputs to explicitly
+ indicate whether the clustering includes only sites or both sites and species.
+ This changes include the hidden `node_type` attributes.
 
-* `site_species_metrics()` is now vectorized for much faster performance. It
-  also allows providing only `comat`, `net`, or both. When only one is provided,
-  the other is automatically created using appropriate weight handling.
+* `site_species_metrics()` has been thoroughly reformatted and now provides: 
+  species-to-bioregion indices, species-to-bioregionalization indices, 
+  site-to-species cluster indices, site-to-species clustering indices, 
+  site-to-bioregion indices, and site-to-bioregionalization indices, all of 
+  which are rigorously defined in the corresponding vignette.
+
+* `site_species_subset()` has been simplified taking advantage on 
+  `inputs$node_type`.
 
 * Renamed the class `bioregion.pairwise.metric` to `bioregion.pairwise`.
 
@@ -29,9 +37,6 @@ between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
 * Updated `map_bioregions()` to handle bioregion colors.
 
-* Updated `site_species_metrics()` to handle multiple bioregionalizations
-  simultaneously.
-
 * Added a generic function `summary()` for a clearer display of results.
 
 * Added `bind_pairwise()` to combine pairwise (dis)similarity objects.
@@ -44,8 +49,8 @@ between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
 ***Bug fixes***
 
-* Fixed incorrect weight detection in `site_species_metrics()` for unipartite
-  networks.
+* Fixed a problem in `inputs$pairwise_metric` when numeric `index` in all 
+clustering outputs.
 
 * Modified the `keep_trials` argument in `hclu_hierarclust()` and fixed a
   potential issue with randomized matrix storage.

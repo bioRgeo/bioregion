@@ -2,9 +2,6 @@
 
 #### Issues (in French, some of them may have already been fixed).
 
-nhbclu_clara et clarans
-    - bien vérifier le problème de seed...
-
 site_species_metrics
     - Ajouter un test pour bipartite_link ?
     - Changer le nom bipartite_link (net dans bioregionalization_metrics) ?

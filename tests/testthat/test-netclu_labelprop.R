@@ -85,7 +85,23 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[1], 5)
+  
+  clust <- netclu_labelprop(simil,
+                            weight = TRUE,
+                            cut_weight = 0,
+                            index = 7,
+                            seed = NULL,
+                            bipartite = FALSE,
+                            site_col = 1,
+                            species_col = 2,
+                            return_node_type = "both",
+                            algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
   
   clust <- netclu_labelprop(simil,                         
                             weight = FALSE,
@@ -120,12 +136,14 @@ test_that("valid output", {
                          return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
+  expect_equal(clust$inputs$node_type, "species")
   
   clust <- netclu_labelprop(net, 
                          bipartite = TRUE, 
                          return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "site")
+  expect_equal(clust$inputs$node_type, "site")
   
   clust <- netclu_labelprop(net, cut_weight = 100)
   expect_equal(colnames(clust$clusters), c("ID","K_0"))

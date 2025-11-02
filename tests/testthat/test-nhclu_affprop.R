@@ -1,6 +1,6 @@
 # Inputs -----------------------------------------------------------------------
 sim <- similarity(fishmat, 
-                  metric = "Simpson")
+                  metric = "all")
 dissim <- similarity_to_dissimilarity(sim)
                   
 df <- data.frame(ID1 = sim$Site1, ID2 = sim$Site2, W = sim$Simpson)
@@ -84,6 +84,28 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
+  
+  clust <- nhclu_affprop(sim,
+                         index = 7,
+                         seed = NULL,
+                         p = NA,
+                         q = NA,
+                         maxits = 1000,
+                         convits = 100,
+                         lam = 0.9,
+                         details = FALSE,
+                         nonoise = FALSE,
+                         K = NULL,
+                         prc = NULL,
+                         bimaxit = NULL,
+                         exact = NULL,
+                         algorithm_in_output = TRUE,
+                         verbose = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
   
   clust <- nhclu_affprop(sim,
                          index = "Simpson",

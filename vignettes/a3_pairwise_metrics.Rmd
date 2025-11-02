@@ -426,8 +426,11 @@ based on 16 combinations of numbers of sites and species (chosen among 500,
 results from a single simulation with 10,000 sites and species.
 
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/comparison_Jaccard.png">
-  </center> 
+  <img align="bottom" 
+  width="100%" height="100%" 
+  src="../man/figures/comparison_Jaccard.png"
+  alt="Computation times for the Jaccard dissimilarity metric.">
+</center> 
   
 A similar plot showing the results obtained for the Bray-Curtis dissimilarity
 metric is available below. In this case, the results based on a single
@@ -435,7 +438,10 @@ simulation with 10,000 sites and species exclude `beta.pair.abund` because it
 took too much time to compute.
 
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/comparison_Bray-Curtis.png">
+  <img align="bottom" 
+  width="100%" height="100%" 
+  src="../man/figures/comparison_Bray-Curtis.png"
+  alt="Computation times for the Bray-Curtis dissimilarity metric.">
 </center> 
   
 # 5. Importing pairwise (dis)similarity metrics from other packages into bioregion

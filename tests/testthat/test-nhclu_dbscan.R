@@ -69,7 +69,30 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[2], 2)
+  
+  clust <- nhclu_dbscan(dissim,
+                        index = 7,
+                        minPts = NULL,
+                        eps = NULL,
+                        plot = FALSE,
+                        algorithm_in_output = TRUE,
+                        verbose = FALSE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
+  
+  clust <- nhclu_dbscan(d,
+                        index = 7,
+                        minPts = NULL,
+                        eps = NULL,
+                        plot = FALSE,
+                        algorithm_in_output = TRUE,
+                        verbose = FALSE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, NA)
   
   clust <- nhclu_dbscan(dissim,
                         index = "Euclidean",
@@ -120,7 +143,7 @@ test_that("valid output", {
                         index = "Euclidean", 
                         minPts = 3, 
                         eps = 0.1)
-  expect_equal(clust$inputs$data_type, "unknown")
+  expect_equal(clust$inputs$data_type, NA)
   
 })
 

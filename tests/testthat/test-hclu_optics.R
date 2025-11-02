@@ -71,7 +71,33 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[2], 2)
+  
+  clust <- hclu_optics(dissim,
+                       index = 7,
+                       minPts = NULL,
+                       eps = NULL,
+                       xi = 0.05,
+                       minimum = FALSE,
+                       show_hierarchy = FALSE,
+                       algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
+  
+  clust <- hclu_optics(d,
+                       index = 7,
+                       minPts = NULL,
+                       eps = NULL,
+                       xi = 0.05,
+                       minimum = FALSE,
+                       show_hierarchy = FALSE,
+                       algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, NA)
+
   
   clust1 <- hclu_optics(dissim,
                        index = "Simpson",
@@ -114,7 +140,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$data_type, "abundance")
   
   clust <- hclu_optics(dissim, index = "Euclidean", minPts = 3, xi = 0.05)
-  expect_equal(clust$inputs$data_type, "unknown")
+  expect_equal(clust$inputs$data_type, NA)
   
 })
 

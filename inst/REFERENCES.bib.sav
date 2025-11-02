@@ -317,4 +317,13 @@
   pages   = {1922–1933},
 }
 
+@Article{Rousseeuw1987,
+  author  = {Rousseeuw, P. J.},
+  title   = {Silhouettes: {A} graphical aid to the interpretation and validation of cluster analysis},
+  journal = {Journal of Computational and Applied Mathematics},
+  year    = {1987},
+  volume  = {20},
+  pages   = {53--65},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

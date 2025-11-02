@@ -99,7 +99,7 @@
 #' @seealso 
 #' For more details illustrated with a practical example, 
 #' see the vignette: 
-#' \url{https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html}.
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html}.
 #' 
 #' Associated functions: 
 #' [bioregionalization_metrics]

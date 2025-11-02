@@ -63,7 +63,10 @@ Network clustering takes place on the left-hand size part of the `bioregion`
 conceptual diagram:
 
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_network.png">
+  <img align="bottom" 
+  width="100%" height="100%" 
+  src="../man/figures/workflow_network.png"
+  alt="Workflow of the bioregion package for network clustering.">
 </center> 
 
 In total, we have 9 functions, which can be classified like this:  

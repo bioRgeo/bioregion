@@ -71,7 +71,32 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[2], 4)
+  
+  clust <- nhclu_pam(dissim,
+                     index = 7,
+                     seed = 1,
+                     n_clust = c(1,2,3),
+                     variant = "faster", 
+                     nstart = 1,
+                     cluster_only = FALSE, 
+                     algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
+  
+  clust <- nhclu_pam(d,
+                     index = 7,
+                     seed = 1,
+                     n_clust = c(1,2,3),
+                     variant = "faster", 
+                     nstart = 1,
+                     cluster_only = FALSE, 
+                     algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, NA)
   
   clust <- nhclu_pam(dissim,
                        index = "Euclidean",
@@ -122,7 +147,7 @@ test_that("valid output", {
   expect_equal(clust$inputs$data_type, "abundance")
   
   clust <- nhclu_pam(dissim, index = "Euclidean", n_clust = 3)
-  expect_equal(clust$inputs$data_type, "unknown")
+  expect_equal(clust$inputs$data_type, NA)
   
 })
 

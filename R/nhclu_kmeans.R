@@ -109,6 +109,13 @@ nhclu_kmeans <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -122,6 +129,7 @@ nhclu_kmeans <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }
   
   if(!is.null(seed)){
@@ -150,20 +158,21 @@ nhclu_kmeans <- function(dissimilarity,
                        algorithm = algorithm,
                        algorithm_in_output = algorithm_in_output)
   
-  # Determine data_type based on pairwise metric
-  pairwise_metric_value <- ifelse(!inherits(dissimilarity, "dist"), 
-                                   ifelse(is.numeric(index), names(net)[3], index), 
-                                   NA)
-  data_type <- detect_data_type_from_metric(pairwise_metric_value)
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
   
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = pairwise_metric_value,
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
                          hierarchical = FALSE,
-                         data_type = data_type)
+                         data_type = data_type,
+                         node_type = "site")
   
   outputs$algorithm <- list()
   
@@ -216,6 +225,9 @@ nhclu_kmeans <- function(dissimilarity,
                       function(x) outputs$algorithm[[x]]$cluster)))
   
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
+  
+  # Add node_type attribute
+  attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

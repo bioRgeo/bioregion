@@ -112,6 +112,13 @@ hclu_diana <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -125,6 +132,7 @@ hclu_diana <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }
   
   if(!is.null(n_clust)) {
@@ -182,22 +190,21 @@ hclu_diana <- function(dissimilarity,
                        verbose = verbose,
                        dynamic_tree_cut = dynamic_tree_cut)
   
-  # Determine data_type based on pairwise metric
-  pairwise_metric_value <- ifelse(!inherits(dissimilarity, "dist"), 
-                                   ifelse(is.numeric(index), 
-                                          # net is already 3 col at this stage
-                                          names(net)[3], 
-                                          index), 
-                                   NA)
-  data_type <- detect_data_type_from_metric(pairwise_metric_value)
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
   
+  # Outputs inputs
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = pairwise_metric_value,
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
-                         data_type = data_type)
+                         data_type = data_type,
+                         node_type = "site")
   
   # DIANA clustering
   diana_clust <- cluster::diana(dist.obj,
@@ -253,6 +260,10 @@ hclu_diana <- function(dissimilarity,
     outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
                                           TRUE,
                                           FALSE)
+    
+    # Add node_type attribute
+    attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
+    
   } else {
     outputs$clusters <- NA
     outputs$cluster_info <- NA

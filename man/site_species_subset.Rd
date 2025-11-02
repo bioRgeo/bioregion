@@ -23,12 +23,12 @@ This function extracts a subset of nodes based on their type (\code{"site"} or
 nodes (sites and species).
 }
 \note{
-Network clustering functions (prefixed with \code{netclu_}) may return both types
-of nodes (sites and species) when applied to bipartite networks (using the
-\code{bipartite} argument). In such cases, the type of nodes included in the
-output can be specified with the \code{return_node_type} argument. This function
-allows you to extract a particular type of nodes (sites or species) from the
-output and adjust the \code{return_node_type} attribute accordingly.
+Some \code{bioregion.clusters} objects may contain both types of nodes (sites and
+species). This information is available in the \verb{$inputs$node_type} slot.
+
+This function allows you to extract a specific type of node
+(either sites or species) from any \code{bioregion.clusters} object that
+includes both.
 }
 \examples{
 net <- data.frame(

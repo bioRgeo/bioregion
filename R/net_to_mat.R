@@ -156,7 +156,7 @@ net_to_mat <- function(net,
 
   # Replace NAs with 0s
   mat[is.na(mat)] <- missing_value
-
+  
   # Check for empty rows and columns if squared = FALSE
   # if(!squared){
   #  mat <- mat[rowSums(mat) > 0,]

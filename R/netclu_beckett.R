@@ -140,6 +140,13 @@ netclu_beckett <- function(net,
   if (weight) {
     controls(args = cut_weight, data = net, type = "positive_numeric")
     controls(args = index, data = net, type = "input_net_index")
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_positive_value")
@@ -188,7 +195,9 @@ netclu_beckett <- function(net,
     dissimilarity = FALSE,
     nb_sites = nbsites,
     hierarchical = FALSE,
-    data_type = ifelse(weight, "abundance", "occurrence"))
+    data_type = ifelse(weight, "abundance", "occurrence"),
+    node_type = return_node_type
+  )
   
   outputs$algorithm <- list()
   

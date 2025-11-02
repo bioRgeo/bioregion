@@ -103,7 +103,32 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[1], 5)
+  
+  clust <- netclu_louvain(simil,
+                          weight = TRUE,
+                          cut_weight = 0,
+                          index = 7,
+                          lang = "igraph",
+                          resolution = 1,
+                          seed = NULL,
+                          q = 0,
+                          c = 0.5,
+                          k = 1,
+                          bipartite = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          binpath = "tempdir",
+                          check_install = TRUE,
+                          path_temp = "louvain_temp",
+                          delete_temp = TRUE,
+                          algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
   
   clust <- netclu_louvain(net)
   expect_equal(dim(clust$clusters)[1], 7)
@@ -117,12 +142,14 @@ test_that("valid output", {
                           return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
+  expect_equal(clust$inputs$node_type, "species")
   
   clust <- netclu_louvain(net, 
                           bipartite = TRUE, 
                           return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "site")
+  expect_equal(clust$inputs$node_type, "site")
   
   clust <- netclu_louvain(net, cut_weight = 100, lang = "igraph")
   expect_equal(colnames(clust$clusters), c("ID","K_0"))

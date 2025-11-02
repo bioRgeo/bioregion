@@ -1,7 +1,8 @@
 # Controls #####################################################################
 controls <- function(args = NULL, data = NULL, type = "input_net") {
   
-  lstype <- c("input_nhandhclu",
+  lstype <- c("input_bioregionalization",
+              "input_nhandhclu",
               "input_similarity",
               "input_dissimilarity",
               "input_pairwise",
@@ -43,12 +44,47 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     stop("Control type not defined!", call.=FALSE)
   }
   
-  # TODO: reformat all error messages to single lines, using the following
-  # format:
-  # paste0("This is a multiline ",
-  #        "error sentence ",
-  #        "with no problematic line ",
-  #        "breaks")
+  # Input bioregionalization ###################################################
+  if (type == "input_bioregionalization") {
+    if (!inherits(data, "bioregion.clusters")) {
+      stop(paste0(deparse(substitute(data)), 
+                  " must be a bioregion.clusters object."),
+           call. = FALSE)
+    }else{
+      if(is.null(data$inputs$data_type)){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+              call. = FALSE)
+      }
+      if(!is.na(data$inputs$data_type)){
+        if(!(data$inputs$data_type %in% c("occurrence","abundance"))){
+          stop(paste0(deparse(substitute(data)),
+                      " is a bioregion.cluster object but it has been altered ",
+                      "and some informations regarding the name of the algorithm ",
+                      " data type and node type are missing."),
+               call. = FALSE)
+        }
+      }
+      if(is.null(data$inputs$node_type)){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+      if(!(data$inputs$node_type %in% c("site","species","both"))){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+
+      
+    }
+  }
   
   # Input nhandhclu ############################################################
   if (type == "input_nhandhclu") {
@@ -787,6 +823,7 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
 }
 
 # Additional functions #########################################################
+
 # reformat_hierarchy
 reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
@@ -919,7 +956,344 @@ seedrng <- function() {
   sample(1:10000, 1)
 }
 
+# Species to bioregions andv bioregionalization metrics
+# Site to species_clusters and species_clustering metrics 
+sbgc <- function(clusters, 
+                 comat,
+                 bioregion_indices,
+                 bioregionalization_indices,
+                 type = "sb",  # sb or gc
+                 data = "occurence"){ # occurence, abundance or both
+  
+  # Initialization output
+  res1 <- NULL
+  res12 <- NULL
+  res11 <- NULL
+  res2 <- NULL
+  res21 <- NULL
+  res22 <- NULL
+  
+  # sb
+  col1 <- "Species"
+  col2 <- "Bioregion"
+  colcoren <- c("n_sb", "n_s", "n_b")
+  colcorew <- c("w_sb", "w_s", "w_b")
+  
+  # gc
+  if(type == "gc"){
+    comat <- t(comat)  
+    col1 <- "Site"
+    col2 <- "Species_cluster"
+    colcoren <- c("n_gc", "n_g", "n_c")
+    colcorew <- c("w_gc", "w_g", "w_c")
+  }
+  
+  # Occurence
+  if((data != "abundance") |
+     (data == "abundance" & "Rho" %in% bioregion_indices)){
+    
+    # comat_bin
+    comat_bin <- comat
+    comat_bin[comat_bin > 0] <- 1
+  
+    # CoreTerms
+    temp <- aggregate(comat_bin, list(clusters), sum)
+    nij_mat <- t(as.matrix(temp[,-1]))
+    rownames(nij_mat) <- colnames(temp)[-1]
+    colnames(nij_mat) <- temp[,1]
 
+    ni_mat <- matrix(apply(comat_bin, 2, sum), 
+                     dim(comat_bin)[2], 
+                     dim(nij_mat)[2])
+    rownames(ni_mat) <- rownames(nij_mat)
+    colnames(ni_mat) <- colnames(nij_mat)
+    
+    temp <- aggregate(comat_bin, list(clusters), length)
+    nj_mat <- t(as.matrix(temp[,-1]))
+    rownames(nj_mat) <- rownames(nij_mat)
+    colnames(nj_mat) <- colnames(nij_mat)
+    
+    n <- sum(nj_mat[1,])
+    
+    # Output bioregions
+    if(!is.null(bioregion_indices) & data != "abundance"){
+      
+      res11 <- cbind(mat_to_net(nij_mat, weight = TRUE, remove_zeroes = FALSE),
+                     mat_to_net(ni_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                     mat_to_net(nj_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+      colnames(res11) <- c(col1, col2, colcoren) 
+      
+      nij <- res11[,3]
+      ni <- res11[,4]
+      nj <- res11[,5]
+
+      # Affinity 
+      if("Affinity" %in% bioregion_indices){
+        res11$Affinity_occ <- nij / nj
+      }
+      
+      # Fidelity 
+      if("Fidelity" %in% bioregion_indices){
+        res11$Fidelity_occ <- nij / ni
+      }
+      
+      # IndVal 
+      if("IndVal" %in% bioregion_indices){
+        res11$IndVal_occ <- (nij / ni) * (nij / nj)
+      }
+      
+      # Rho
+      if("Rho" %in% bioregion_indices){
+        
+        num <- nij-((ni*nj)/n)
+        den <- sqrt((n-nj)/(n-1)*(1-(ni/n))*((ni*nj)/n))
+        
+        res11$Rho_occ <- num/den
+      }
+      
+      # CoreTerms
+      if(!("CoreTerms" %in% bioregion_indices)){
+        res11 <- res11[,-c(3,4,5)]
+      }
+    }
+    
+    # Output bioregionalizations
+    if(!is.null(bioregionalization_indices) & data != "abundance"){
+      
+      res21 <- data.frame(nij_mat[,1],nij_mat[,1])
+      res21[,1] <- rownames(nij_mat)
+      colnames(res21) <- c(col1, "Dummy")
+      
+      if("P" %in% bioregionalization_indices){
+        res21$P_occ <- 1 - apply((nij_mat / ni_mat)*(nij_mat / ni_mat), 1 , sum)
+      }
+      
+      res21 <- res21[,-2]
+      rownames(res21) <- 1:dim(res21)[1]
+      
+    }
+  }
+  
+  # Abundance
+  if(data != "occurrence"){
+    
+    # CoreTerms
+    temp <- aggregate(comat, list(clusters), sum)
+    wij_mat <- t(as.matrix(temp[,-1]))
+    rownames(wij_mat) <- colnames(temp)[-1]
+    colnames(wij_mat) <- temp[,1]
+    
+    wi_mat <- matrix(apply(comat, 2, sum), 
+                     dim(comat)[2], 
+                     dim(wij_mat)[2])
+    rownames(wi_mat) <- rownames(wij_mat)
+    colnames(wi_mat) <- colnames(wij_mat)
+    
+    wj_mat <- matrix(apply(wij_mat,2,sum), 
+                     dim(comat)[2], 
+                     dim(wij_mat)[2],
+                     byrow=TRUE)
+    rownames(wj_mat) <- rownames(wij_mat)
+    colnames(wj_mat) <- colnames(wij_mat)
+    
+    if("Rho" %in% bioregion_indices){
+      muij_mat <- wij_mat / nij_mat
+      muij_mat[is.na(muij_mat)] <- 0
+      
+      mui_mat <- wi_mat / n
+      vari_mat <- (1/(n-1)) * (wi_mat-mui_mat)*(wi_mat-mui_mat)
+    }
+    
+    # Output bioregions
+    if(!is.null(bioregion_indices)){
+      
+      res12 <- cbind(mat_to_net(wij_mat, weight = TRUE, remove_zeroes = FALSE),
+                     mat_to_net(wi_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                     mat_to_net(wj_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+      colnames(res12) <- c(col1, col2, colcorew)
+      
+      wij <- res12[,3]
+      wi <- res12[,4]
+      wj <- res12[,5]
+      
+      # Affinity 
+      if("Affinity" %in% bioregion_indices){
+        res12$Affinity_abund <- wij / wj
+      }
+      
+      # Fidelity 
+      if("Fidelity" %in% bioregion_indices){
+        res12$Fidelity_abund <- wij / wi
+      }
+      
+      # IndVal 
+      if("IndVal" %in% bioregion_indices){
+        res12$IndVal_abund <- (wij / wi) * (wij / wj)
+      }
+      
+      # Rho
+      if("Rho" %in% bioregion_indices){
+        temprho <- cbind(mat_to_net(muij_mat, weight = TRUE, remove_zeroes = FALSE),
+                         mat_to_net(mui_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                         mat_to_net(vari_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                         mat_to_net(nj_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+        
+        muij <- temprho[,3]
+        mui <- temprho[,4]
+        vari <- temprho[,5]
+        nj <- temprho[,6]
+        
+        num <- muij-mui
+        den <- sqrt((n-nj)/(n-1)*(vari/nj))
+        
+        res12$Rho_abund <- num/den
+      }
+      
+      # CoreTerms
+      if(!("CoreTerms" %in% bioregion_indices)){
+        res12 <- res12[,-c(3,4,5)]
+      }
+    }
+    
+    # Output bioregionalizations
+    if(!is.null(bioregionalization_indices)){
+      
+      res22 <- data.frame(wij_mat[,1],wij_mat[,1])
+      res22[,1] <- rownames(wij_mat)
+      colnames(res22) <- c(col1, "Dummy")
+      
+      if("P" %in% bioregionalization_indices){
+        res22$P_abund <- 1 - apply((wij_mat / wi_mat)*(wij_mat / wi_mat),1,sum)
+      }
+      
+      res22 <- res22[,-2]
+      rownames(res22) <- 1:dim(res22)[1]
+      
+    }
+  }  
+  
+  # Combine outputs
+  if(!is.null(res11) & !is.null(res12)){
+    res1 <- cbind(res11, res12[, -c(1,2), drop = FALSE])
+  }else{
+    if(!is.null(res11)){
+      res1 <- res11
+    }
+    if(!is.null(res12)){
+      res1 <- res12
+    }
+  }
+  if(!is.null(res21) & !is.null(res22)){
+    res2 <- cbind(res21, res22[, -1, drop = FALSE])
+  }else{
+    if(!is.null(res21)){
+      res2 <- res21
+    }
+    if(!is.null(res22)){
+      res2 <- res22
+    }
+  }
+  
+  # Return output
+  res <- list()
+  res$bioregion <- res1
+  res$bioregionalization <- res2
+  
+  return(res)
+  
+}
+
+# Site to bioregions and bioregionalization metrics
+gb <- function(clusters,
+               similarity,
+               bioregion_indices,
+               bioregionalization_indices){
+  
+  # Initialization output
+  res1 <- NULL
+  res2 <- NULL
+  
+  # Compute MeanSim and SdSim
+  diag(similarity) <- NA
+  
+  temp <- aggregate(similarity, list(clusters), mean, na.rm=TRUE)
+  muij_mat <- t(as.matrix(temp[,-1]))
+  rownames(muij_mat) <- colnames(temp)[-1]
+  colnames(muij_mat) <- temp[,1]
+  muij_mat[is.na(muij_mat)] <- 0
+  
+  temp <- aggregate(similarity, list(clusters), sd, na.rm=TRUE)
+  sdij_mat <- t(as.matrix(temp[,-1]))
+  rownames(sdij_mat) <- colnames(temp)[-1]
+  colnames(sdij_mat) <- temp[,1]
+  sdij_mat[is.na(sdij_mat)] <- 0
+  
+  # Output bioregion
+  if(!is.null(bioregion_indices)){
+    
+    res1 <- cbind(mat_to_net(muij_mat, weight = TRUE, remove_zeroes = FALSE),
+                  mat_to_net(sdij_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+    colnames(res1) <- c("Site", "Bioregion", "MeanSim", "SdSim") 
+    
+    if(!("MeanSim" %in% bioregion_indices)){
+      res1 <- res1[,-3]
+    }
+    if(!("SdSim" %in% bioregion_indices)){
+      res1 <- res1[,-4]
+    }
+    
+  }
+  
+  # Output bioregionalizations
+  if(!is.null(bioregionalization_indices)){
+  
+     res2 <- data.frame(muij_mat[,1], muij_mat)
+     res2[,1] <- rownames(muij_mat)
+     colnames(res2)[1] <- "Site"
+
+    if(dim(res2)[2] == 2){
+      nomax2 <- TRUE
+      res2$max <- res2[,2]
+      res2$max2 <- NA
+    }else{
+      nomax2 <- FALSE
+      res2$max <- apply(as.data.frame(res2[,-1, drop = FALSE]), 1, max)
+      res2$max2 <- apply(res2[,-1], 1, function(x) sort(x, decreasing = TRUE)[2])
+    }
+    res2 <- res2[,c(1,(dim(res2)[2]-1),dim(res2)[2])]
+
+    if("Silhouette" %in% bioregionalization_indices){
+      if(nomax2){
+        res2$Silhouette <- NA
+      }else{
+        res2$Silhouette <- (res2$max - res2$max2) / pmax(res2$max,res2$max2)
+      }
+    }
+    if("Ratio" %in% bioregionalization_indices){
+      if(nomax2){
+        res2$Ratio <- NA
+      }else{
+        res2$Ratio <- res2$max2 / res2$max
+      }
+    }
+
+    res2 <- res2[,-c(2,3)]
+    rownames(res2) <- 1:dim(res2)[1]
+     
+  }
+
+  # Return output
+  res <- list()
+  res$bioregion <- res1
+  res$bioregionalization <- res2
+  
+  return(res)
+  
+}
+
+
+
+################################################################################
 
 #' Detect data type from metric name
 #' 
@@ -942,19 +1316,19 @@ seedrng <- function() {
 #' @noRd
 detect_data_type_from_metric <- function(metric) {
   if (is.na(metric) || is.null(metric)) {
-    return("unknown")
+    return(NA)
   }
-  
+
   occurrence_metrics <- c("abc", "Jaccard", "Jaccardturn", "Sorensen", "Simpson")
   abundance_metrics <- c("ABC", "Bray", "Brayturn")
-  
-  betapart_occurrence <- c("beta.sim", "beta.sne", "beta.sor", 
+
+  betapart_occurrence <- c("beta.sim", "beta.sne", "beta.sor",
                            "beta.jtu", "beta.jne", "beta.jac")
   betapart_abundance <- c("beta.bray.bal", "beta.bray.gra", "beta.bray",
                           "beta.ruz.bal", "beta.ruz.gra", "beta.ruz")
-  
+
   metric_lower <- tolower(metric)
-  
+
   if (metric %in% occurrence_metrics) {
     return("occurrence")
   } else if (metric %in% abundance_metrics) {
@@ -964,171 +1338,9 @@ detect_data_type_from_metric <- function(metric) {
   } else if (metric_lower %in% betapart_abundance) {
     return("abundance")
   } else if (metric == "Euclidean") {
-    return("unknown")
+    return(NA)
   } else {
     # Custom formula or unknown metric
-    return("unknown")
+    return(NA)
   }
 }
-
-
-#' Determine weight usage for site_species_metrics
-#' 
-#' Uses a priority system to determine whether to use weights
-#' when computing site-species metrics.
-#' 
-#' @param bioregionalization bioregion.clusters object
-#' @param user_weight User-provided weight argument (can be NULL)
-#' @param user_index User-provided index argument (can be NULL)
-#' @param net Optional network data.frame
-#' @param verbose Logical, show messages
-#' 
-#' @return List with:
-#'   - use_weight: Logical, whether to use weights
-#'   - weight_col: Character or integer, column name/index for weights (or NULL)
-#'   - source: Character, description of where decision came from
-#' 
-#' @details
-#' Priority order:
-#' 1. User-provided weight argument
-#' 2. User-provided index argument (implies weight = TRUE)
-#' 3. bioregionalization$inputs$data_type
-#' 4. Auto-detect from net structure (3rd column present and numeric)
-#' 5. Default to FALSE with user notification
-#' 
-#' @noRd
-determine_weight_usage <- function(bioregionalization,
-                                   user_weight = NULL,
-                                   user_index = NULL,
-                                   net = NULL,
-                                   verbose = TRUE) {
-  
-  # Priority 1: User explicitly provided weight argument
-  if (!is.null(user_weight)) {
-    if (verbose) {
-      message("Using weight specification from user argument: ", user_weight)
-    }
-    
-    weight_col <- NULL
-    if (user_weight && !is.null(user_index)) {
-      weight_col <- user_index
-    } else if (user_weight && !is.null(net) && ncol(net) >= 3) {
-      weight_col <- 3  # Default to 3rd column
-    }
-    
-    # Check for conflict with detected type
-    if (!is.null(bioregionalization$inputs$data_type)) {
-      detected_type <- bioregionalization$inputs$data_type
-      user_type <- ifelse(user_weight, "abundance", "occurrence")
-      
-      if (detected_type != "unknown" && detected_type != user_type) {
-        message(
-          "NOTE: User-specified weight (", user_type, ") is different from ",
-          "original data type (", detected_type, ") from clustering. ",
-          "Using user specification, but please verify this is intentional."
-        )
-      }
-    }
-    
-    return(list(
-      use_weight = user_weight,
-      weight_col = weight_col,
-      source = "user_argument"
-    ))
-  }
-  
-  # Priority 2: User provided index (implies weight = TRUE)
-  if (!is.null(user_index)) {
-    if (verbose) {
-      message("Weight column specified via 'index' argument: ", user_index)
-    }
-    return(list(
-      use_weight = TRUE,
-      weight_col = user_index,
-      source = "user_index"
-    ))
-  }
-  
-  # Priority 3: Use bioregionalization$inputs$data_type (if available)
-  if (!is.null(bioregionalization$inputs$data_type)) {
-    data_type <- bioregionalization$inputs$data_type
-    
-    if (data_type == "occurrence") {
-      if (verbose) {
-        message("Original data was occurrence-based (from clustering inputs). ",
-                "Setting weight = FALSE.")
-      }
-      return(list(
-        use_weight = FALSE,
-        weight_col = NULL,
-        source = "bioregionalization_data_type"
-      ))
-      
-    } else if (data_type == "abundance") {
-      if (verbose) {
-        message("Original data was abundance-based (from clustering inputs). ",
-                "Setting weight = TRUE.")
-      }
-      
-      # Try to get weight column name from bioregionalization
-      weight_col <- NULL
-      # For bipartite networks, args$index contains the weight column name
-      # For unipartite networks, args$index contains the similarity metric name (not useful)
-      if (!is.null(bioregionalization$inputs$bipartite) && 
-          bioregionalization$inputs$bipartite &&
-          !is.null(bioregionalization$args$index)) {
-        weight_col <- bioregionalization$args$index
-      } else if (!is.null(net) && ncol(net) >= 3) {
-        weight_col <- 3
-      }
-      
-      return(list(
-        use_weight = TRUE,
-        weight_col = weight_col,
-        source = "bioregionalization_data_type"
-      ))
-      
-    } else {  # data_type == "unknown"
-      if (verbose) {
-        message("Original data type unknown from clustering inputs. ",
-                "Attempting auto-detection...")
-      }
-      # Fall through to Priority 4
-    }
-  }
-  
-  # Priority 4: Auto-detect from net structure
-  if (!is.null(net) && ncol(net) >= 3) {
-    third_col_numeric <- is.numeric(net[[3]])
-    
-    if (third_col_numeric) {
-      if (verbose) {
-        message("Auto-detected numeric 3rd column in 'net'. ",
-                "Setting weight = TRUE.")
-      }
-      return(list(
-        use_weight = TRUE,
-        weight_col = 3,
-        source = "auto_detect_net"
-      ))
-    }
-  }
-  
-  # Priority 5: Default to FALSE with notification
-  message(
-    "NOTE: Could not determine if original data was occurrence or abundance-based.\n",
-    "Defaulting to occurrence (weight = FALSE).\n",
-    "If your original data used abundances, please specify:\n",
-    "  - weight = TRUE, and\n",
-    "  - index = <column_name_or_number> (for 'net' input)\n",
-    "Incorrect specification may lead to wrong results."
-  )
-  
-  return(list(
-    use_weight = FALSE,
-    weight_col = NULL,
-    source = "default"
-  ))
-}
-
-

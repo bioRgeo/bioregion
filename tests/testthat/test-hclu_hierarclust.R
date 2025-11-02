@@ -80,7 +80,44 @@ test_that("valid output", {
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, TRUE)
   expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[2], 4)
+  
+  quietly(
+    clust <- hclu_hierarclust(d,
+                              index = 7,
+                              method = "average",
+                              randomize = TRUE,
+                              n_runs = 30,
+                              keep_trials = "no",
+                              optimal_tree_method = "best",
+                              n_clust = c(1,2,3),
+                              cut_height = NULL,
+                              find_h = TRUE,
+                              h_max = 1,
+                              h_min = 0,
+                              verbose = FALSE)
+  )
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, NA)
+  
+  clust <- hclu_hierarclust(dissim,
+                            index = 7,
+                            method = "average",
+                            randomize = TRUE,
+                            n_runs = 30,
+                            keep_trials = "no",
+                            optimal_tree_method = "best",
+                            n_clust = c(1,2,3),
+                            cut_height = NULL,
+                            find_h = TRUE,
+                            h_max = 1,
+                            h_min = 0,
+                            verbose = FALSE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
   
   clust <- hclu_hierarclust(dissim,
                             index = "Simpson",
@@ -174,7 +211,7 @@ test_that("valid output", {
   # Expect warning as the algo cannot find 3 clusters here
   expect_warning(clust <- hclu_hierarclust(dissim, index = "Euclidean", n_clust = 3,
                             optimal_tree_method = "best", verbose = FALSE))
-  expect_equal(clust$inputs$data_type, "unknown")
+  expect_equal(clust$inputs$data_type, NA)
 
 })
 
