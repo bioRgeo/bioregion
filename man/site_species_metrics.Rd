@@ -179,11 +179,28 @@ versions—can also be derived from this site-to-bioregion approach. Detailed
 formulas, derivations, and examples are provided in the package vignette.
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
-                20, 25)
-rownames(comat) <- paste0("Site",1:20)
-colnames(comat) <- paste0("Species",1:25)
+data(fishmat)
 
+fishsim <- similarity(fishmat, metric = "Jaccard")
+
+bioregionalization <- hclu_hierarclust(similarity_to_dissimilarity(fishsim),
+                                       index = "Jaccard",
+                                       method = "average",
+                                       randomize = TRUE,
+                                       optimal_tree_method = "best",
+                                       n_clust = c(1,2,3),
+                                       verbose = FALSE)
+                                     
+ind <- site_species_metrics(bioregionalization = bioregionalization,
+                             bioregion_indices = "all",
+                             bioregionalization_indices = "all",
+                             data_type = "auto",
+                             node_type = "site",
+                             comat = fishmat,
+                             similarity = fishsim,
+                             index = 3,
+                             verbose = TRUE)
+                                     
 }
 \references{
 Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P,
