@@ -219,7 +219,7 @@ site_species_metrics <- function(bioregionalization,
                                  data_type = "auto",
                                  node_type = "site",
                                  comat,
-                                 similarity,
+                                 similarity = NULL,
                                  index = names(similarity)[3],
                                  verbose = TRUE){
   
@@ -242,10 +242,25 @@ site_species_metrics <- function(bioregionalization,
   b_data_type <- bioregionalization$inputs$data_type
   
   # Control indices
+  # list of acronyms used:
+  # s = species
+  # g = site
+  # b = bioregion
+  # sb = species to bioregion
+  # gb = site to bioregion
+  # sb_ind = indices based on species-to-bioregion relationships
   sb_ind <- c("Affinity", "Fidelity", "IndVal", "Rho", "CoreTerms")
+  # gb_ind = indices based on site-to-bioregion relationships
+  # NOTE: **REQUIRE similarity**
   gb_ind <- c("MeanSim", "SdSim")
   
+  # agind = aggregated indices??
+  # sb_agind = aggregated indices based on species to bioregion 
+  # NOTE: if P = participation coefficient, then it should rather be
+  # nodeind since P can be calculated on any type of node (site or species)
   sb_agind <- c("P")
+  # gb_agind = aggregated indices based on site to bioregion
+  # NOTE: **REQUIRE similarity**
   gb_agind <- c("Silhouette", "Ratio")
   
   indnull <- FALSE
@@ -253,7 +268,7 @@ site_species_metrics <- function(bioregionalization,
     controls(args = bioregion_indices, data = NULL, type = "character_vector")
     if ("all" %in% bioregion_indices) {
       ind <- c(sb_ind, gb_ind)
-    }else{
+    } else {
       ind <- bioregion_indices
     }
     if (length(intersect(c(sb_ind, gb_ind), ind)) !=
@@ -264,14 +279,7 @@ site_species_metrics <- function(bioregionalization,
                   "Affinity, Fidelity, IndVal, Rho and CoreTerms"),
            call. = FALSE)
     }
-    typeind <- "both"
-    if(length(intersect(ind, gb_ind)) == 0){
-      typeind <- "sb"
-    }
-    if(length(intersect(ind, sb_ind)) == 0){
-      typeind <- "gb"
-    }
-  }else{
+  } else {
     indnull <- TRUE
     ind <- NULL
   }
@@ -283,7 +291,7 @@ site_species_metrics <- function(bioregionalization,
              type = "character_vector")
     if ("all" %in% bioregionalization_indices) {
       agind <- c(sb_agind, gb_agind)
-    }else{
+    } else {
       agind <- bioregionalization_indices
     }
     if (length(intersect(c(sb_agind, gb_agind), agind)) !=
@@ -294,14 +302,7 @@ site_species_metrics <- function(bioregionalization,
                   "P, Silhouette and Ratio"),
            call. = FALSE)
     }
-    typeagind <- "both"
-    if(length(intersect(agind, gb_agind)) == 0){
-      typeagind <- "sb"
-    }
-    if(length(intersect(agind, sb_agind)) == 0){
-      typeagind <- "gb"
-    }
-  }else{
+  } else {
     agindnull <- TRUE
     agind <- NULL
   }
@@ -311,20 +312,29 @@ site_species_metrics <- function(bioregionalization,
          call. = FALSE)
   }
   
-  type <- "both"
-  if(indnull){
-    type <- typeagind
+
+  needs_sb <- FALSE  
+  needs_gb <- FALSE  
+  
+  if(!indnull){
+    needs_sb <- length(intersect(ind, sb_ind)) > 0
+    needs_gb <- length(intersect(ind, gb_ind)) > 0
   }
-  if(agindnull){
-    type <- typeind
+  
+  if(!agindnull){
+    needs_sb <- needs_sb || as.logical(length(intersect(agind, sb_agind)) > 0)
+    needs_gb <- needs_gb || as.logical(length(intersect(agind, gb_agind)) > 0)
   }
-  if(!indnull & !agindnull){
-    if(typeind == "sb" & typeagind == "sb"){
-      type = "sb"
-    }
-    if(typeind == "gb" & typeagind == "gb"){
-      type = "gb"
-    }
+  
+  # Set type based on actual needs
+  if(needs_sb && needs_gb){
+    type <- "both"
+  } else if(needs_sb){
+    type <- "sb"
+  } else if(needs_gb){
+    type <- "gb"
+  } else {
+    stop("No valid indices specified.", call. = FALSE)
   }
   
   # Control node_type
@@ -381,6 +391,9 @@ site_species_metrics <- function(bioregionalization,
            call. = FALSE)
     }
     
+    # NOTE: the following line may break user choices
+    # since it forces binarization (e.g., edge case where
+    # abundances are only 0 and 1) --> to be reconsidered?
     bin <- all(unique(as.vector(comat)) %in% c(0, 1))
     #if(verbose){
     #  if(bin){
@@ -433,34 +446,34 @@ site_species_metrics <- function(bioregionalization,
     }
     
     # auto
-    if(data_type == "auto"){
-      if(is.na(b_data_type)){
+    if(data_type == "auto") {
+      if(is.na(b_data_type)) {
         if(bin){
           data_type <- "occurrence"
-          if(verbose){
+          if(verbose) {
             message(paste0("No data type detected in bioregionalization and ",
                            "comat is based on occurence data so occurrence-",
                            "based indices will be computed."))
           }
-        }else{
+        } else  {
           data_type <- "abundance"
-          if(verbose){
+          if(verbose) {
             message(paste0("No data type detected in bioregionalization and ",
                            "comat is based on abundance data so abundance-",
                            "based indices will be computed."))
           }
         }
-      }else{
+      } else {
         if(b_data_type == "occurrence"){
           data_type <- "occurrence"
           if(bin){
-            if(verbose){
+            if(verbose) {
               message(paste0("The bioregionalization is based on occurence data ",
                              "and comat is based on occurence data so occurrence-",
                              "based indices will be computed."))
             }
           }else{
-            if(verbose){
+            if(verbose) {
               message(paste0("The bioregionalization is based on occurence data ",
                              "but note that even if comat is based on abundance ", 
                              "data, occurrence-based indices will be computed. ",
@@ -501,35 +514,60 @@ site_species_metrics <- function(bioregionalization,
 
   # Control similarity
   if(type != "sb"){
-    controls(args = NULL, 
-             data = similarity, 
-             type = "input_conversion_similarity")
-    controls(args = index, 
-             data = similarity, 
-             type = "input_net_index")
-    
-    similarity <- similarity
-    similarity[,3] <- similarity[,index]
-    similarity <- similarity[,1:3]
-    similarity <- net_to_mat(similarity, 
-                             weight = TRUE, 
-                             squared = TRUE,
-                             symmetrical = TRUE)
-    
-    sim_site <- rownames(similarity)
-    
-    if(length(intersect(b_site, sim_site)) == length(b_site) &
-       length(b_site) == length(sim_site)){
-      #print("match!")
-    }else{
-      stop("Site ID in bioregionalization and similarity do not match!", 
-           call. = FALSE)
-    }
-    
-    if(sum(b_site == sim_site) != length(b_site)){
-      similarity <- similarity[match(b_site, sim_site), 
-                               match(b_site, sim_site)]
+    # Case where similarity is not provided: downgrade to only sb indices 
+    # and inform users that gb indices will be ignored
+    if(is.null(similarity)){
+      missing_gb_ind <- character(0)
+      missing_gb_agind <- character(0)
+      if(!indnull){
+        missing_gb_ind <- intersect(ind, gb_ind)
+      }
+      if(!agindnull){
+        missing_gb_agind <- intersect(agind, gb_agind)
+      }
+      
+      if(length(missing_gb_ind) > 0 || length(missing_gb_agind) > 0){
+        missing_indices <- c(missing_gb_ind, missing_gb_agind)
+        warning(paste0("Site-to-bioregion indices (", 
+                       paste(missing_indices, collapse = ", "),
+                       ") were skipped because no similarity matrix was provided.\n",
+                       "Only species-to-bioregion indices will be computed.\n",
+                       "To compute these indices, provide a similarity object."),
+                call. = FALSE)
+        type <- "sb"  
+      }
+    } else {
+      # Case where similarity is provided --> control similarity
+      controls(args = NULL, 
+               data = similarity, 
+               type = "input_conversion_similarity")
+      controls(args = index, 
+               data = similarity, 
+               type = "input_net_index")
+      
+      similarity <- similarity
+      similarity[,3] <- similarity[,index]
+      similarity <- similarity[,1:3]
+      similarity <- net_to_mat(similarity, 
+                               weight = TRUE, 
+                               squared = TRUE,
+                               symmetrical = TRUE)
+      
       sim_site <- rownames(similarity)
+      
+      if(length(intersect(b_site, sim_site)) == length(b_site) &
+         length(b_site) == length(sim_site)){
+        #print("match!")
+      }else{
+        stop("Site ID in bioregionalization and similarity do not match!", 
+             call. = FALSE)
+      }
+      
+      if(sum(b_site == sim_site) != length(b_site)){
+        similarity <- similarity[match(b_site, sim_site), 
+                                 match(b_site, sim_site)]
+        sim_site <- rownames(similarity)
+      }
     }
   }  
 
@@ -608,6 +646,7 @@ site_species_metrics <- function(bioregionalization,
     output <- output[[1]]
   }
   
+  class(output) <- append(class(output), "bioregion.site_species_metrics")
   return(output)
   
 }
