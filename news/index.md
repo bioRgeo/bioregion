@@ -68,6 +68,10 @@ CRAN release.
 
 ***Bug fixes***
 
+- Fixed an tibble input problem with
+  [`net_to_mat()`](https://bioRgeo.github.io/bioregion/reference/net_to_mat.md)
+  (issue [\#11](https://github.com/bioRgeo/bioregion/issues/11)).
+
 - Fixed a problem in `inputs$pairwise_metric` when numeric `index` in
   all clustering outputs.
 
