@@ -33,8 +33,8 @@
     <li><a class="dropdown-item" href="../articles/a4_3_network_clustering.html">4.3 Network clustering</a></li>
     <li><a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a></li>
     <li><a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_2_compare_bioregionalizations.html">5.2 Compare bioregionalizations</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_3_summary_metrics.html">5.3 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
@@ -67,16 +67,24 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0.9000" id="bioregion-1209000">bioregion 1.2.0.9000<a class="anchor" aria-label="anchor" href="#bioregion-1209000"></a></h2>
 <p>This is a list of changes made in the development/GitHub version of the package between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.</p>
+<p><strong><em>Function changes</em></strong></p>
+<ul><li><p>Added the <code>inputs$data_type</code> field to all clustering outputs to explicitly track whether original co-occurrence data were occurrence-based or abundance-based. This field is automatically determined based on the algorithm type and the similarity/dissimilarity metric used.</p></li>
+<li><p>Added the <code>inputs$node_type</code> field to all clustering outputs to explicitly indicate whether the clustering includes only sites or both sites and species. This changes include the hidden <code>node_type</code> attributes.</p></li>
+<li><p><code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> has been thoroughly reformatted and now provides: species-to-bioregion indices, species-to-bioregionalization indices, site-to-species cluster indices, site-to-species clustering indices, site-to-bioregion indices, and site-to-bioregionalization indices, all of which are rigorously defined in the corresponding vignette.</p></li>
+<li><p><code><a href="../reference/site_species_subset.html">site_species_subset()</a></code> has been simplified taking advantage on <code>inputs$node_type</code>.</p></li>
+<li><p>Renamed the class <code>bioregion.pairwise.metric</code> to <code>bioregion.pairwise</code>.</p></li>
+<li><p>Added a <code>verbose</code> argument to all talkative functions allowing users to control the display of progress messages.</p></li>
+</ul><p><strong><em>New features</em></strong></p>
 <ul><li><p>Added export of the function <code><a href="../reference/exportGDF.html">exportGDF()</a></code> with documentation and tests.</p></li>
-<li><p>New feature: added <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code> function to provide bioregion colors thatqcan be used across multiple visualizations (maps, networks, other graphs, etc.).</p></li>
+<li><p>Added <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code> to provide consistent bioregion color palettes for use across multiple visualizations (maps, networks, graphs, etc.).</p></li>
 <li><p>Updated <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> to handle bioregion colors.</p></li>
-<li><p>Updated <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> to handle multiple bioregionalizations simultaneously.</p></li>
-<li><p>Added a generic function for pretty display of results.</p></li>
-<li><p>Modified the <code>keep_trials</code> argument in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and and fixed a potential issue with randomized matrix storage.</p></li>
-<li><p>Renamed class <code>bioregion.pairwise.metric</code> to <code>bioregion.pairwise</code>.</p></li>
+<li><p>Added a generic function <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> for a clearer display of results.</p></li>
 <li><p>Added <code><a href="../reference/bind_pairwise.html">bind_pairwise()</a></code> to combine pairwise (dis)similarity objects.</p></li>
 <li><p>Added <code><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise()</a></code> to replace and improve upon <code><a href="../reference/betapart_to_bioregion.html">betapart_to_bioregion()</a></code>, which is now deprecated.</p></li>
-<li><p>Added a comparison with other R packages for the computation of dissimilarity metrics in tutorial 3 (Pairwise similarity/dissimilarity metrics).</p></li>
+<li><p>Added a comparison with other R packages for computing dissimilarity metrics in tutorial 3 (<em>Pairwise similarity/dissimilarity metrics</em>).</p></li>
+</ul><p><strong><em>Bug fixes</em></strong></p>
+<ul><li><p>Fixed a problem in <code>inputs$pairwise_metric</code> when numeric <code>index</code> in all clustering outputs.</p></li>
+<li><p>Modified the <code>keep_trials</code> argument in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and fixed a potential issue with randomized matrix storage.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="bioregion-120">bioregion 1.2.0<a class="anchor" aria-label="anchor" href="#bioregion-120"></a></h2>
@@ -140,7 +148,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

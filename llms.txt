@@ -1,0 +1,254 @@
+# bioregion
+
+This **R package** gathers a comprehensive set of algorithms to perform
+bioregionalization analyses.
+
+Bioregionalization methods can be based on hierarchical clustering
+algorithms, non-hierarchical clustering algorithms or network
+algorithms.
+
+## ⏬ Installation
+
+The package can be installed with the following command line in R
+session:
+
+From the CRAN
+
+``` r
+install.packages("bioregion")
+```
+
+or from GitHub
+
+``` r
+# install.packages("devtools")
+devtools::install_github("bioRgeo/bioregion")
+```
+
+## 📜 Vignettes
+
+We wrote several vignettes that will help you using the **bioregion R
+package**. Vignettes available are the following ones:  
+
+- **[1. Installation of the executable binary
+  files](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html)**  
+- **[2. Matrix and network
+  formats](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html)**
+- **[3. Pairwise similarity/dissimilarity
+  metrics](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html)**
+- **[4.1 Hierarchical
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html)**
+- **[4.2 Non-hierarchical
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)**
+- **[4.3 Network
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html)**
+- **[4.4
+  Microbenchmark](https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html)**
+- **[5.1
+  Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html)**
+- **[5.2 Summary
+  metrics](https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.html)**
+- **[5.3 Compare
+  bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html)**
+
+Alternatively, if you prefer to view the vignettes in R, you can install
+the package with `build_vignettes = TRUE`. But be aware that some
+vignettes can be slow to generate.
+
+``` r
+remotes::install_github("bioRgeo/bioregion",
+                        dependencies = TRUE, 
+                        upgrade = "ask", 
+                        build_vignettes = TRUE)
+
+vignette("bioregion")
+```
+
+## 🖥️ Functions
+
+An overview of all functions and data is given
+**[here](https://bioRgeo.github.io/bioregion/reference/index.html)**.
+
+## 🐛 Find a bug?
+
+Thank you for finding it. Head over to the GitHub Issues tab and let us
+know about it. Alternatively, you can also send us an e-mail. We will
+try to get to it as soon as we can!
+
+## References and dependencies
+
+`bioregion` depends on `ape`, `apcluster`, `bipartite`, `cluster`,
+`data.table`, `dbscan`, `dynamicTreeCut`, `fastcluster`, `fastkmedoids`,
+`ggplot2`, `grDevices`, `httr`, `igraph`, `mathjaxr`, `Matrix`,
+`phangorn`, `rcartocolor`, `Rdpack`, `rlang`, `rmarkdown`,
+`segmented`,`sf`, `stats`, `tidyr` and `utils`.
+
+## Citation
+
+Denelle P, Leroy B & Lenormand M (2025) [Bioregionalization analyses
+with the bioregion R
+package.](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14496)
+*Methods in Ecology and Evolution* 16, 496-506.
+
+# Package index
+
+## Utils
+
+- [`install_binaries()`](https://bioRgeo.github.io/bioregion/reference/install_binaries.md)
+  : Download, unzip, check permissions, and test the bioregion's binary
+  files
+
+- [`mat_to_net()`](https://bioRgeo.github.io/bioregion/reference/mat_to_net.md)
+  : Create a data.frame from a contingency table
+
+- [`net_to_mat()`](https://bioRgeo.github.io/bioregion/reference/net_to_mat.md)
+  : Create a contingency table from a data.frame
+
+- [`site_species_subset()`](https://bioRgeo.github.io/bioregion/reference/site_species_subset.md)
+  :
+
+  Extract a subset of sites or species from a `bioregion.clusters`
+  object
+
+## Pairwise similarity and dissimilarity metrics
+
+- [`similarity()`](https://bioRgeo.github.io/bioregion/reference/similarity.md)
+  : Compute similarity metrics between sites based on species
+  composition
+- [`similarity_to_dissimilarity()`](https://bioRgeo.github.io/bioregion/reference/similarity_to_dissimilarity.md)
+  : Convert similarity metrics to dissimilarity metrics
+- [`dissimilarity()`](https://bioRgeo.github.io/bioregion/reference/dissimilarity.md)
+  : Compute dissimilarity metrics (beta-diversity) between sites based
+  on species composition
+- [`dissimilarity_to_similarity()`](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.md)
+  : Convert dissimilarity metrics to similarity metrics
+- [`as_bioregion_pairwise()`](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.md)
+  : Convert a matrix or list of matrices to a bioregion (dis)similarity
+  object
+- [`bind_pairwise()`](https://bioRgeo.github.io/bioregion/reference/bind_pairwise.md)
+  : Combine and enrich bioregion (dis)similarity object(s)
+- [`betapart_to_bioregion()`](https://bioRgeo.github.io/bioregion/reference/betapart_to_bioregion.md)
+  : Convert betapart dissimilarity to bioregion dissimilarity
+  (DEPRECATED)
+
+## Clustering
+
+### Hierarchical clustering
+
+- [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
+  : Hierarchical clustering based on dissimilarity or beta-diversity
+- [`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md)
+  : Cut a hierarchical tree
+- [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md)
+  : Divisive hierarchical clustering based on dissimilarity or
+  beta-diversity
+- [`hclu_optics()`](https://bioRgeo.github.io/bioregion/reference/hclu_optics.md)
+  : OPTICS hierarchical clustering algorithm
+
+### Non-hierarchical clustering
+
+- [`nhclu_clara()`](https://bioRgeo.github.io/bioregion/reference/nhclu_clara.md)
+  : Non-hierarchical clustering: CLARA
+- [`nhclu_clarans()`](https://bioRgeo.github.io/bioregion/reference/nhclu_clarans.md)
+  : Non-hierarchical clustering: CLARANS
+- [`nhclu_dbscan()`](https://bioRgeo.github.io/bioregion/reference/nhclu_dbscan.md)
+  : Non-hierarchical clustering: DBSCAN
+- [`nhclu_kmeans()`](https://bioRgeo.github.io/bioregion/reference/nhclu_kmeans.md)
+  : Non-hierarchical clustering: K-means analysis
+- [`nhclu_pam()`](https://bioRgeo.github.io/bioregion/reference/nhclu_pam.md)
+  : Non-hierarchical clustering: Partitioning Around Medoids
+- [`nhclu_affprop()`](https://bioRgeo.github.io/bioregion/reference/nhclu_affprop.md)
+  : Non-hierarchical clustering: Affinity Propagation
+
+### Network clustering
+
+- [`netclu_beckett()`](https://bioRgeo.github.io/bioregion/reference/netclu_beckett.md)
+  : Community structure detection in weighted bipartite networks via
+  modularity optimization
+- [`netclu_infomap()`](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.md)
+  : Infomap community finding
+- [`netclu_greedy()`](https://bioRgeo.github.io/bioregion/reference/netclu_greedy.md)
+  : Community structure detection via greedy optimization of modularity
+- [`netclu_labelprop()`](https://bioRgeo.github.io/bioregion/reference/netclu_labelprop.md)
+  : Finding communities based on propagating labels
+- [`netclu_leiden()`](https://bioRgeo.github.io/bioregion/reference/netclu_leiden.md)
+  : Finding communities using the Leiden algorithm
+- [`netclu_leadingeigen()`](https://bioRgeo.github.io/bioregion/reference/netclu_leadingeigen.md)
+  : Finding communities based on the leading eigenvector of the
+  community matrix
+- [`netclu_louvain()`](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.md)
+  : Louvain community finding
+- [`netclu_oslom()`](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.md)
+  : OSLOM community finding
+- [`netclu_walktrap()`](https://bioRgeo.github.io/bioregion/reference/netclu_walktrap.md)
+  : Community structure detection via short random walks
+
+## Bioregionalization analysis
+
+- [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
+  : Calculate contribution metrics of sites and species to each
+  bioregion
+- [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
+  : Calculate contribution metrics for bioregions
+- [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md)
+  : Calculate metrics for one or several bioregionalizations
+- [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
+  : Search for an optimal number of clusters in a list of
+  bioregionalizations
+- [`compare_bioregionalizations()`](https://bioRgeo.github.io/bioregion/reference/compare_bioregionalizations.md)
+  : Compare cluster memberships among multiple bioregionalizations
+
+## Visualization
+
+- [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
+  : Create a map of bioregions
+- [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
+  : Add color palettes to bioregion cluster objects
+- [`exportGDF()`](https://bioRgeo.github.io/bioregion/reference/exportGDF.md)
+  : Export a network to GDF format for Gephi visualization
+
+## Data
+
+- [`fishdf`](https://bioRgeo.github.io/bioregion/reference/fishdf.md) :
+  Spatial distribution of fish in Europe (data.frame)
+- [`fishmat`](https://bioRgeo.github.io/bioregion/reference/fishmat.md)
+  : Spatial distribution of fish in Europe (co-occurrence matrix)
+- [`fishsf`](https://bioRgeo.github.io/bioregion/reference/fishsf.md) :
+  Spatial distribution of fish in Europe
+- [`vegedf`](https://bioRgeo.github.io/bioregion/reference/vegedf.md) :
+  Spatial distribution of Mediterranean vegetation (data.frame)
+- [`vegemat`](https://bioRgeo.github.io/bioregion/reference/vegemat.md)
+  : Spatial distribution of Mediterranean vegetation (co-occurrence
+  matrix)
+- [`vegesf`](https://bioRgeo.github.io/bioregion/reference/vegesf.md) :
+  Spatial distribution of Mediterranean vegetation (spatial grid)
+
+# Articles
+
+### Tutorials
+
+- [1. Installation of the binary
+  files](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.md):
+- [2. Matrix and network
+  formats](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.md):
+- [3. Pairwise similarity/dissimilarity
+  metrics](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.md):
+- [4.1 Hierarchical
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.md):
+- [4.2 Non-hierarchical
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.md):
+- [4.3 Network
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.md):
+- [4.4
+  Microbenchmark](https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.md):
+- [5.1
+  Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.md):
+- [5.2 Summary
+  metrics](https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.md):
+- [5.3 Compare
+  bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.md):
+
+### Applications
+
+- [Citing
+  articles](https://bioRgeo.github.io/bioregion/articles/citations.md):

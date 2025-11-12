@@ -1,0 +1,195 @@
+# Export a network to GDF format for Gephi visualization
+
+This function exports a network (unipartite or bipartite) from a
+`data.frame` to the GDF (Graph Data Format) file format, which can be
+directly imported into Gephi visualization software. The function
+handles edge data, node attributes, and color specifications.
+
+## Usage
+
+``` r
+exportGDF(
+  df,
+  col1 = "Node1",
+  col2 = "Node2",
+  weight = NULL,
+  bioregions = NULL,
+  bioregionalization = NULL,
+  color_column = NULL,
+  file = "output.gdf"
+)
+```
+
+## Arguments
+
+- df:
+
+  A two- or three-column `data.frame` where each row represents an edge
+  (interaction) between two nodes. The first two columns contain the
+  node identifiers, and an optional third column can contain edge
+  weights.
+
+- col1:
+
+  A `character` string specifying the name of the first column in `df`
+  containing node identifiers. Defaults to `"Node1"`.
+
+- col2:
+
+  A `character` string specifying the name of the second column in `df`
+  containing node identifiers. Defaults to `"Node2"`.
+
+- weight:
+
+  A `character` string specifying the name of the column in `df`
+  containing edge weights. If `NULL` (default), edges are unweighted.
+
+- bioregions:
+
+  An optional `bioregion.clusters` object (typically from clustering
+  functions like
+  [`netclu_greedy()`](https://bioRgeo.github.io/bioregion/reference/netclu_greedy.md))
+  or a `data.frame` containing bioregionalization results. When a
+  `bioregion.clusters` object with colors (from
+  [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md))
+  is provided, colors and bioregion assignments are automatically
+  extracted and used for visualization. Alternatively, a `data.frame`
+  with bioregionalization data can be provided, where each row
+  represents a node with one column containing node identifiers that
+  match those in `df`.
+
+- bioregionalization:
+
+  A `character` string or a positive `integer` with two different uses
+  depending on the type of `bioregions`:
+
+  - When `bioregions` is a `bioregion.clusters` object with multiple
+    partitions: specifies which partition to use. Can be either a
+    character string with the partition name (e.g., "K_3", "K_5") or a
+    positive integer indicating the partition index (e.g., 1 for first
+    partition, 2 for second). If `NULL` (default), the first partition
+    is used.
+
+  - When `bioregions` is a `data.frame`: specifies the name of the
+    column containing node identifiers that match those in `df`. Must be
+    a character string. Defaults to the first column name if not
+    specified.
+
+- color_column:
+
+  A `character` string specifying the name of a column in `bioregions`
+  containing color information in hexadecimal format (e.g., "#FF5733").
+  If specified, colors will be converted to RGB format for Gephi. If
+  `NULL` (default), colors are automatically extracted when `bioregions`
+  is a `bioregion.clusters` object with colors. When `bioregions` is a
+  plain `data.frame`, this parameter must be specified to include
+  colors.
+
+- file:
+
+  A `character` string specifying the output file path. Defaults to
+  `"output.gdf"`.
+
+## Value
+
+The function writes a GDF file to the specified path and returns nothing
+(`NULL` invisibly). The file can be directly opened in Gephi for network
+visualization and analysis.
+
+## Details
+
+The GDF format is a simple text-based format used by Gephi to define
+graph structure. This function creates a GDF file with two main
+sections:
+
+- **nodedef**: Defines nodes and their attributes (name, label, and any
+  additional bioregionalization information from `bioregions`)
+
+- **edgedef**: Defines edges between nodes, optionally with weights
+
+If `color_column` is specified, hexadecimal color codes are
+automatically converted to RGB format (e.g., "#FF5733" becomes
+"255,87,51") as required by Gephi's color specification.
+
+Attributes are automatically typed as VARCHAR (text), DOUBLE (numeric),
+or color (for color attributes).
+
+**Important note on zero-weight edges**: Gephi does not handle edges
+with weight = 0 properly. If a weight column is specified and edges with
+weight = 0 are detected, they will be automatically removed from the
+exported network, and a warning will be issued.
+
+## Author
+
+Boris Leroy (<leroy.boris@gmail.com>)  
+Pierre Denelle (<pierre.denelle@gmail.com>)  
+Maxime Lenormand (<maxime.lenormand@inrae.fr>)
+
+## Examples
+
+``` r
+# Create a simple network
+net <- data.frame(
+  Node1 = c("A", "A", "B", "C"),
+  Node2 = c("B", "C", "C", "D"),
+  Weight = c(1.5, 2.0, 1.0, 3.5)
+)
+
+# Export network with weights
+if (FALSE) { # \dontrun{
+exportGDF(net, weight = "Weight", file = "my_network.gdf")
+} # }
+
+# Create bioregionalization data with colors (as data.frame)
+bioregion_data <- data.frame(
+  node_id = c("A", "B", "C", "D"),
+  cluster = c("1", "2", "3", "4"),
+  node_color = c("#FF5733", "#33FF57", "#3357FF", "#FF33F5")
+)
+
+# Export network with bioregionalization and colors
+if (FALSE) { # \dontrun{
+exportGDF(net, 
+          weight = "Weight",
+          bioregions = bioregion_data,
+          bioregionalization = "node_id",
+          color_column = "node_color",
+          file = "my_network_with_bioregions.gdf")
+} # }
+
+# Using bioregion.clusters object with colors (recommended)
+if (FALSE) { # \dontrun{
+data(fishmat)
+net <- similarity(fishmat, metric = "Simpson")
+clust <- netclu_greedy(net)
+clust_colored <- bioregion_colors(clust)
+
+# Convert to network format
+net_df <- mat_to_net(fishmat, weight = TRUE)
+
+# Export with automatic colors from clustering - very simple!
+exportGDF(net_df, 
+          weight = "weight",
+          bioregions = clust_colored,
+          file = "my_network_colored.gdf")
+
+# With multiple partitions, specify which one to use
+dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
+clust_hier <- hclu_hierarclust(dissim, n_clust = c(3, 5, 8))
+clust_hier_colored <- bioregion_colors(clust_hier)
+
+# Using partition name
+exportGDF(net_df,
+          weight = "weight",
+          bioregions = clust_hier_colored,
+          bioregionalization = "K_5",
+          file = "my_network_K5.gdf")
+
+# Or using partition index (2 = second partition)
+exportGDF(net_df,
+          weight = "weight",
+          bioregions = clust_hier_colored,
+          bioregionalization = 2,
+          file = "my_network_partition2.gdf")
+} # }
+```

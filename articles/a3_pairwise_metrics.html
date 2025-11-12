@@ -53,8 +53,8 @@
     <li><a class="dropdown-item" href="../articles/a4_3_network_clustering.html">4.3 Network clustering</a></li>
     <li><a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a></li>
     <li><a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_2_compare_bioregionalizations.html">5.2 Compare bioregionalizations</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_3_summary_metrics.html">5.3 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-10-08</h4>
+            <h4 data-toc-skip class="date">2025-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -540,21 +540,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 279.019984 281.799085 285.525287 283.327749 290.047320</span></span>
-<span><span class="co">##        betapart   1.792962   1.807139   1.895336   1.866364   1.915340</span></span>
-<span><span class="co">##       bioregion  13.900521  14.188168  16.366918  14.663013  15.557230</span></span>
-<span><span class="co">##    ecodist_dist 122.384043 151.202753 153.087217 160.269545 163.341812</span></span>
-<span><span class="co">##  ecodist_bcdist   3.421618   3.544146   3.571248   3.598934   3.611081</span></span>
-<span><span class="co">##       vegan_veg   1.219273   1.290245   1.917422   2.261241   2.285420</span></span>
-<span><span class="co">##    vegan_design   1.232427   1.257464   2.401150   1.306906   1.347752</span></span>
+<span><span class="co">##      adespatial 282.142077 284.747846 289.569965 289.154707 293.588109</span></span>
+<span><span class="co">##        betapart   1.713315   1.779609   1.840168   1.809839   1.839009</span></span>
+<span><span class="co">##       bioregion  14.560989  14.753098  15.415555  15.199986  16.052189</span></span>
+<span><span class="co">##    ecodist_dist 127.281047 155.499020 153.900938 159.952403 160.900170</span></span>
+<span><span class="co">##  ecodist_bcdist   3.475810   3.570828   3.592070   3.610066   3.630248</span></span>
+<span><span class="co">##       vegan_veg   1.231756   1.296858   1.912059   2.241964   2.251267</span></span>
+<span><span class="co">##    vegan_design   1.239601   1.254739   1.331617   1.292880   1.333466</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  300.083889    10</span></span>
-<span><span class="co">##    2.244493    10</span></span>
-<span><span class="co">##   31.207603    10</span></span>
-<span><span class="co">##  166.815727    10</span></span>
-<span><span class="co">##    3.613766    10</span></span>
-<span><span class="co">##    2.311689    10</span></span>
-<span><span class="co">##   12.049822    10</span></span></code></pre>
+<span><span class="co">##  296.937243    10</span></span>
+<span><span class="co">##    2.148336    10</span></span>
+<span><span class="co">##   16.517908    10</span></span>
+<span><span class="co">##  163.212342    10</span></span>
+<span><span class="co">##    3.642611    10</span></span>
+<span><span class="co">##    2.261707    10</span></span>
+<span><span class="co">##    1.729936    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -641,21 +641,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 282.806242 293.733451 294.792796 294.883739 297.326980</span></span>
-<span><span class="co">##        betapart 308.779558 319.242222 334.237986 325.807310 354.834178</span></span>
-<span><span class="co">##       bioregion  10.083657  10.303847  11.059246  10.493375  10.782279</span></span>
-<span><span class="co">##    ecodist_dist  87.430337  96.597145 132.727195 101.484380 123.198622</span></span>
-<span><span class="co">##  ecodist_bcdist   5.971502   5.994715   6.085912   6.072674   6.183997</span></span>
-<span><span class="co">##       vegan_veg   1.207451   1.254819   1.669388   1.290831   2.285971</span></span>
-<span><span class="co">##    vegan_design   1.218692   1.325571   1.434565   1.422717   1.626492</span></span>
+<span><span class="co">##      adespatial 286.622420 289.239069 293.014644 292.183033 296.906986</span></span>
+<span><span class="co">##        betapart 302.427530 313.185599 327.057670 319.751520 346.554355</span></span>
+<span><span class="co">##       bioregion  10.159552  10.489157  11.253932  10.626815  10.944607</span></span>
+<span><span class="co">##    ecodist_dist  86.053678  90.044349 129.595531 100.673658 118.252073</span></span>
+<span><span class="co">##  ecodist_bcdist   6.002972   6.018892   6.085406   6.079115   6.164123</span></span>
+<span><span class="co">##       vegan_veg   1.215276   1.265309   1.667188   1.314606   2.256317</span></span>
+<span><span class="co">##    vegan_design   1.218702   1.282901   1.420985   1.369934   1.623507</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  306.138465    10</span></span>
-<span><span class="co">##  365.555803    10</span></span>
-<span><span class="co">##   13.619818    10</span></span>
-<span><span class="co">##  375.716223    10</span></span>
-<span><span class="co">##    6.211869    10</span></span>
-<span><span class="co">##    2.306118    10</span></span>
-<span><span class="co">##    1.683248    10</span></span></code></pre>
+<span><span class="co">##  303.136552    10</span></span>
+<span><span class="co">##  351.206479    10</span></span>
+<span><span class="co">##   13.959879    10</span></span>
+<span><span class="co">##  368.258212    10</span></span>
+<span><span class="co">##    6.173932    10</span></span>
+<span><span class="co">##    2.276324    10</span></span>
+<span><span class="co">##    1.705741    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.
@@ -681,7 +681,7 @@ species (chosen among 500, 1000, 2000, and 5000), averaged over three
 replications. We also include the results from a single simulation with
 10,000 sites and species.</p>
 <center>
-<img align="bottom" width="100%" height="100%" src="../reference/figures/comparison_Jaccard.png">
+<img align="bottom" width="100%" height="100%" src="../reference/figures/comparison_Jaccard.png" alt="Computation times for the Jaccard dissimilarity metric.">
 </center>
 <p>A similar plot showing the results obtained for the Bray-Curtis
 dissimilarity metric is available below. In this case, the results based
@@ -689,7 +689,7 @@ on a single simulation with 10,000 sites and species exclude
 <code>beta.pair.abund</code> because it took too much time to
 compute.</p>
 <center>
-<img align="bottom" width="100%" height="100%" src="../reference/figures/comparison_Bray-Curtis.png">
+<img align="bottom" width="100%" height="100%" src="../reference/figures/comparison_Bray-Curtis.png" alt="Computation times for the Bray-Curtis dissimilarity metric.">
 </center>
 </div>
 </div>
@@ -1321,7 +1321,7 @@ Ecology and Biogeography</em> 21, 1223–1232.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

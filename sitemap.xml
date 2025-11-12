@@ -1,7 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://bioRgeo.github.io/bioregion/404.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/LICENSE-text.html</loc></url>
-<url><loc>https://bioRgeo.github.io/bioregion/TODO.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html</loc></url>
@@ -10,8 +9,8 @@
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html</loc></url>
-<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html</loc></url>
-<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_3_summary_metrics.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/bioregion.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/citations.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/index.html</loc></url>

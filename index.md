@@ -1,0 +1,91 @@
+# bioregion
+
+This **R package** gathers a comprehensive set of algorithms to perform
+bioregionalization analyses.
+
+Bioregionalization methods can be based on hierarchical clustering
+algorithms, non-hierarchical clustering algorithms or network
+algorithms.
+
+## ⏬ Installation
+
+The package can be installed with the following command line in R
+session:
+
+From the CRAN
+
+``` r
+install.packages("bioregion")
+```
+
+or from GitHub
+
+``` r
+# install.packages("devtools")
+devtools::install_github("bioRgeo/bioregion")
+```
+
+## 📜 Vignettes
+
+We wrote several vignettes that will help you using the **bioregion R
+package**. Vignettes available are the following ones:  
+
+- **[1. Installation of the executable binary
+  files](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html)**  
+- **[2. Matrix and network
+  formats](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html)**
+- **[3. Pairwise similarity/dissimilarity
+  metrics](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html)**
+- **[4.1 Hierarchical
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html)**
+- **[4.2 Non-hierarchical
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)**
+- **[4.3 Network
+  clustering](https://bioRgeo.github.io/bioregion/articles/a4_3_network_clustering.html)**
+- **[4.4
+  Microbenchmark](https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html)**
+- **[5.1
+  Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html)**
+- **[5.2 Summary
+  metrics](https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.html)**
+- **[5.3 Compare
+  bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html)**
+
+Alternatively, if you prefer to view the vignettes in R, you can install
+the package with `build_vignettes = TRUE`. But be aware that some
+vignettes can be slow to generate.
+
+``` r
+remotes::install_github("bioRgeo/bioregion",
+                        dependencies = TRUE, 
+                        upgrade = "ask", 
+                        build_vignettes = TRUE)
+
+vignette("bioregion")
+```
+
+## 🖥️ Functions
+
+An overview of all functions and data is given
+**[here](https://bioRgeo.github.io/bioregion/reference/index.html)**.
+
+## 🐛 Find a bug?
+
+Thank you for finding it. Head over to the GitHub Issues tab and let us
+know about it. Alternatively, you can also send us an e-mail. We will
+try to get to it as soon as we can!
+
+## References and dependencies
+
+`bioregion` depends on `ape`, `apcluster`, `bipartite`, `cluster`,
+`data.table`, `dbscan`, `dynamicTreeCut`, `fastcluster`, `fastkmedoids`,
+`ggplot2`, `grDevices`, `httr`, `igraph`, `mathjaxr`, `Matrix`,
+`phangorn`, `rcartocolor`, `Rdpack`, `rlang`, `rmarkdown`,
+`segmented`,`sf`, `stats`, `tidyr` and `utils`.
+
+## Citation
+
+Denelle P, Leroy B & Lenormand M (2025) [Bioregionalization analyses
+with the bioregion R
+package.](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14496)
+*Methods in Ecology and Evolution* 16, 496-506.

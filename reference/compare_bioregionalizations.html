@@ -39,8 +39,8 @@ enabling the user to compute additional comparison metrics."><meta property="og:
     <li><a class="dropdown-item" href="../articles/a4_3_network_clustering.html">4.3 Network clustering</a></li>
     <li><a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a></li>
     <li><a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_2_compare_bioregionalizations.html">5.2 Compare bioregionalizations</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_3_summary_metrics.html">5.3 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
@@ -85,7 +85,8 @@ enabling the user to compute additional comparison metrics.</p>
 <span>  indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rand"</span>, <span class="st">"jaccard"</span><span class="op">)</span>,</span>
 <span>  cor_frequency <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  store_pairwise_membership <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  store_confusion_matrix <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  store_confusion_matrix <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -120,6 +121,11 @@ membership of items in the output object.</p></dd>
 <dt id="arg-store-confusion-matrix">store_confusion_matrix<a class="anchor" aria-label="anchor" href="#arg-store-confusion-matrix"></a></dt>
 <dd><p>A <code>boolean</code>. If <code>TRUE</code>, stores the confusion
 matrices of pairwise bioregionalization comparisons in the output object.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>A <code>boolean</code> indicating whether to
+display progress messages. Set to <code>FALSE</code> to suppress these messages.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -184,7 +190,7 @@ all bioregionalizations. This is enabled by setting <code>cor_frequency = TRUE</
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>For more details illustrated with a practical example,
 see the vignette:
-<a href="https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html</a>.</p>
+<a href="https://biorgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html</a>.</p>
 <p>Associated functions:
 <a href="bioregionalization_metrics.html">bioregionalization_metrics</a></p></div>
     </div>
@@ -219,10 +225,10 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Running the function</span></span></span>
 <span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">compare_df</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.310461 - Computing pairwise membership comparisons for each bioregionalization...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.312595 - Comparing memberships among bioregionalizations...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.313333 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.313739 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.005621 - Computing pairwise membership comparisons for each bioregionalization...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.007757 - Comparing memberships among bioregionalizations...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.008511 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.008937 - Computing Jaccard index...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args$indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rand"    "jaccard"</span>
@@ -493,11 +499,11 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span><span class="co"># Find out which bioregionalizations are most representative</span></span></span>
 <span class="r-in"><span><span class="fu">compare_bioregionalizations</span><span class="op">(</span><span class="va">compare_df</span>,</span></span>
 <span class="r-in"><span>                            cor_frequency <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.317243 - Computing pairwise membership comparisons for each bioregionalization...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.318812 - Comparing memberships among bioregionalizations...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.319445 - Computing Rand index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.319814 - Computing Jaccard index...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-10-08 14:52:59.32014 - Computing the correlation between each bioregionalization and the vector of frequency of pairwise membership...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.012541 - Computing pairwise membership comparisons for each bioregionalization...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.014111 - Comparing memberships among bioregionalizations...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.014781 - Computing Rand index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.015144 - Computing Jaccard index...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-11-12 13:24:13.015497 - Computing the correlation between each bioregionalization and the vector of frequency of pairwise membership...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $args$indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rand"    "jaccard"</span>
@@ -780,7 +786,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -43,8 +43,8 @@ height for the requested number(s) of clusters."><meta property="og:image" conte
     <li><a class="dropdown-item" href="../articles/a4_3_network_clustering.html">4.3 Network clustering</a></li>
     <li><a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a></li>
     <li><a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_2_compare_bioregionalizations.html">5.2 Compare bioregionalizations</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_3_summary_metrics.html">5.3 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
@@ -98,6 +98,7 @@ height for the requested number(s) of clusters.</p>
 <span>  dynamic_minClusterSize <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  dissimilarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -164,6 +165,11 @@ the dissimilarity <code>data.frame</code> used to build the <code>tree</code>.</
 <dt id="arg-show-hierarchy">show_hierarchy<a class="anchor" aria-label="anchor" href="#arg-show-hierarchy"></a></dt>
 <dd><p>A <code>boolean</code> specifying if the hierarchy of clusters
 should be identifiable in the outputs (<code>FALSE</code> by default).</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>A <code>boolean</code> indicating whether to
+display progress messages. Set to <code>FALSE</code> to suppress these messages.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -264,7 +270,7 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

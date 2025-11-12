@@ -53,8 +53,8 @@
     <li><a class="dropdown-item" href="../articles/a4_3_network_clustering.html">4.3 Network clustering</a></li>
     <li><a class="dropdown-item" href="../articles/a4_4_microbenchmark.html">4.4 Microbenchmark</a></li>
     <li><a class="dropdown-item" href="../articles/a5_1_visualization.html">5.1 Visualization</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_2_compare_bioregionalizations.html">5.2 Compare bioregionalizations</a></li>
-    <li><a class="dropdown-item" href="../articles/a5_3_summary_metrics.html">5.3 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2025-10-08</h4>
+            <h4 data-toc-skip class="date">2025-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_3_network_clustering.Rmd" class="external-link"><code>vignettes/a4_3_network_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_3_network_clustering.Rmd</code></div>
@@ -129,7 +129,7 @@ functions relying on network algorithms start with the prefix
 <p>Network clustering takes place on the left-hand size part of the
 <code>bioregion</code> conceptual diagram:</p>
 <center>
-<img align="bottom" width="100%" height="100%" src="../reference/figures/workflow_network.png">
+<img align="bottom" width="100%" height="100%" src="../reference/figures/workflow_network.png" alt="Workflow of the bioregion package for network clustering.">
 </center>
 <p>In total, we have 9 functions, which can be classified like this:</p>
 <ul>
@@ -345,7 +345,11 @@ function (it must be &gt; 0, 1 is chosen by default)</li>
 <span>                             delete_temp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                             algorithm_in_output <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_louvain</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_23</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## &lt; table of extent 0 &gt;</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 </span></span>
+<span><span class="co">##  17   4   3  20 133   6  16  44  87  55   4   8  39   4   2  49   8   7   4   5 </span></span>
+<span><span class="co">##   7   8   9 </span></span>
+<span><span class="co">##   4   3  11</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -566,7 +570,7 @@ Traag VA, Waltman L &amp; Van Eck NJ (2019) From <span>Louvain</span> to
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
