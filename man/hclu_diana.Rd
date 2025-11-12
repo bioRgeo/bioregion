@@ -11,7 +11,8 @@ hclu_diana(
   cut_height = NULL,
   find_h = TRUE,
   h_max = 1,
-  h_min = 0
+  h_min = 0,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ for the chosen \code{index}.}
 
 \item{h_min}{A \code{numeric} value indicating the minimum possible height in the
 tree for the chosen \code{index}.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:

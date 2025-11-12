@@ -2,197 +2,245 @@
 % Please edit documentation in R/site_species_metrics.R
 \name{site_species_metrics}
 \alias{site_species_metrics}
-\title{Calculate contribution metrics of sites and species}
+\title{Calculate contribution metrics of sites and species to each bioregion}
 \usage{
 site_species_metrics(
   bioregionalization,
+  bioregion_indices = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
+    "Rho", "CoreTerms"),
+  bioregionalization_indices = "P",
+  data_type = "auto",
+  node_type = "site",
   comat,
-  indices = c("rho"),
-  net = NULL,
-  site_col = 1,
-  species_col = 2
+  similarity = NULL,
+  index = names(similarity)[3],
+  verbose = TRUE
 )
 }
 \arguments{
 \item{bioregionalization}{A \code{bioregion.clusters} object.}
 
+\item{bioregion_indices}{A \code{character} vector or a single \code{character} string
+specifying the indices to compute. Several indices belonging to different
+categories are available: species to bioregions (\code{"Specificity"},
+\code{"NSpecificity"}, \code{"Fidelity"}, \code{"NFidelity"}, \code{"IndVal"}, \code{"NIndVal"},
+\code{"Rho"} and \code{"CoreTerms"}), site to bioregions (\code{"MeanSim"} and
+\code{"SdSim"}), or site to species clusters when a cluster/bioregion has been
+assigned to the species  in \code{bioregionalization} (see Details). If \code{"all"}
+is specified (default), all indices will be calculated.}
+
+\item{bioregionalization_indices}{A \code{character} vector or a single \code{character}
+string specifying the bioregionalization indices to compute. Some aggregated
+indices (such as the participation coefficient or Silhouette index) can be
+derived from the \code{bioregion_indices} (see Details). If \code{"all"} is specified
+(default), all bioregionalization indices will be calculated.}
+
+\item{data_type}{A \code{character} string specifying which type of data should
+be considered to compute the related indices (\code{"A"}, \code{"B"},
+\code{"IndVal"} and \code{"Rho"}): occurrences or abundances. By default (\code{"auto"}),
+the type of data is inferred from \code{bioregionalization} and/or the provided
+co-occurrence matrix (argument \code{comat}). Other available options are
+\code{"occurence"}, \code{"abundance"} or \code{"both"} (see Details).}
+
+\item{node_type}{A \code{character} string specifying whether the related
+indices (\code{"Specificity"}, \code{"NSpecificity"}, \code{"Fidelity"}, \code{"NFidelity"},
+\code{"IndVal"}, \code{"NIndVal"}, \code{"Rho"} and \code{"CoreTerms"})
+should be computed as contributions from species to bioregions (\code{"site"} by
+default), from sites to species clusters (\code{"species"}), or for \code{"both"}.
+The latter type of contribution is only available if a cluster has been
+assigned to the species in \code{bioregionalization} (see Details).}
+
 \item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
 columns.}
 
-\item{indices}{A \code{character} specifying the contribution metric to compute.
-Available options are \code{rho}, \code{affinity}, \code{fidelity}, \code{indicator_value} and
-\code{Cz}.}
+\item{similarity}{The output object from \code{\link[=similarity]{similarity()}} or
+\code{\link[=dissimilarity_to_similarity]{dissimilarity_to_similarity()}}.}
 
-\item{net}{\code{NULL} by default. Required for \code{Cz} indices. A
-\code{data.frame} where each row represents an interaction between two nodes
-and an optional third column indicating the interaction's weight.}
+\item{index}{The name or number of the column to use as similarity.
+By default, the third column name of \code{similarity} is used.}
 
-\item{site_col}{A number indicating the position of the column containing
-the sites in \code{net}. 1 by default.}
-
-\item{species_col}{A number indicating the position of the column
-containing the species in \code{net}. 2 by default.}
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
-A named list of class \code{bioregion.site.species.metrics} containing one element
-per bioregionalization. Each element is a list with:
+A \code{list} containing between one and six elements (listed below), depending on
+the selected indices (\code{bioregion_indices} and/or \code{bioregionalization_indices})
+and the type of nodes (\code{site} and/or \code{species}).
 \itemize{
-\item{\code{name}: Character, the bioregionalization name}
-\item{\code{metrics}: A \code{data.frame} with columns \code{Bioregion}, \code{Species}, and
-the requested contribution metrics (e.g., \code{rho}, \code{affinity}, \code{fidelity},
-\code{indicator_value})}
-\item{\code{indices}: Character vector of computed indices}
-\item{\code{cz_metrics}: (If \code{Cz} requested) A \code{data.frame} with Cz metrics for nodes}
-\item{\code{args}: List of input arguments}
+\item{\strong{species_bioregions}: A \code{data.frame} containing the
+species-to-bioregions indice(s) based on \code{comat}.}
+\item{\strong{species_bioregionalization}: A \code{data.frame} containing the
+species-to-bioregionalization indice(s) based on \code{comat}.}
+\item{\strong{site_clusters}: A \code{data.frame} containing the
+site-to-species clusters indice(s) based on \code{comat}.}
+\item{\strong{site_clustering}: A \code{data.frame} containing the
+site-to-species clustering indice(s) based on \code{comat}.}
+\item{\strong{site_bioregions}: A \code{data.frame} containing the
+site-to-bioregions indice(s) based on \code{similarity}.}
+\item{\strong{site_bioregionalization}: A \code{data.frame} containing the
+site-to-bioregionalization indice(s) based on \code{similarity}.}
 }
 
-For a single bioregionalization, the list contains one element accessible via
-\code{result[[1]]} or \code{result$bioregionalization_name}.
-
-For multiple bioregionalizations, access individual results via
-\code{result$bioregionalization_name} or \code{result[[i]]}.
+Note that if \code{bioregionalization} contains more than one partition
+(i.e., if \code{dim(bioregionalization$clusters) > 2}), a list of lists will be
+returned, with one sublist per partition.
 }
 \description{
-This function calculates metrics to assess the contribution of a given
-species or site to its bioregion.
+This function computes metrics to assess the contribution of a given
+species or site to each bioregion.
 }
 \details{
-When multiple bioregionalizations are provided (i.e., the \code{clusters} arg has more
-than 2 columns), the function computes metrics for each bioregionalization
-separately. The output is always returned as a named list of class
-\code{bioregion.site.species.metrics}, regardless of the number of
-bioregionalizations.
+The \strong{first type} of indices provided by this function is based on the
+contribution of each species to a given bioregion (\code{node_type = "site"} or
+\code{node_type = "both"}). This is calculated from the bioregion assigned to
+each site (as defined in \code{bioregionalization}) and
+an associated site–species co-occurrence matrix \code{comat} (a strict match
+between site IDs is required).
 
-The \eqn{\rho} metric is derived from Lenormand et al. (2019) with the
-following formula:
-
-\eqn{\rho_{ij} = \frac{n_{ij} - \frac{n_i n_j}{n}}{\sqrt{\left(\frac{n - n_j}{
-n-1}\right) \left(1-\frac{n_j}{n}\right) \frac{n_i n_j}{n}}}}
-
-where \eqn{n} is the number of sites, \eqn{n_i} is the number of sites in
-which species \eqn{i} is present, \eqn{n_j} is the number of sites in
-bioregion \eqn{j}, and \eqn{n_{ij}} is the number of occurrences of species
-\eqn{i} in sites of bioregion \eqn{j}.
-
-Affinity \eqn{A}, fidelity \eqn{F}, and individual contributions
-\eqn{IndVal} describe how species are linked to their bioregions. These
-metrics are described in Bernardo-Madrid et al. (2019):
+Occurrence-based indices (\code{data_type = "occurrence"} or \code{data_type = "both"})
+are derived from three core terms:
 \itemize{
-\item Affinity of species to their region:
-\eqn{A_i = \frac{R_i}{Z}}, where \eqn{R_i} is the occurrence/range size
-of species \eqn{i} in its associated bioregion, and \eqn{Z} is the total
-size (number of sites) of the bioregion. High affinity indicates that the
-species occupies most sites in its bioregion.
-\item Fidelity of species to their region:
-\eqn{F_i = \frac{R_i}{D_i}}, where \eqn{R_i} is the occurrence/range size
-of species \eqn{i} in its bioregion, and \eqn{D_i} is its total range size.
-High fidelity indicates that the species is not present in other regions.
-\item Indicator Value of species:
-\eqn{IndVal = F_i \cdot A_i}.
+\item \strong{n_sb}: Number of sites belonging to bioregion \strong{b} in which species
+\strong{s} is present.
+\item \strong{n_s}: Total number of sites in which species \strong{s} is present.
+\item \strong{n_b}: Total number of sites belonging to bioregion \strong{b}.
 }
 
-\code{Cz} metrics are derived from Guimerà & Amaral (2005):
+These \strong{species-to-bioregion} indices include:
 \itemize{
-\item Participation coefficient:
-\eqn{C_i = 1 - \sum_{s=1}^{N_M}{\left(\frac{k_{is}}{k_i}\right)^2}}, where
-\eqn{k_{is}} is the number of links of node \eqn{i} to nodes in bioregion
-\eqn{s}, and \eqn{k_i} is the total degree of node \eqn{i}. A high value
-means links are uniformly distributed; a low value means links are within
-the node's bioregion.
-\item Within-bioregion degree z-score:
-\eqn{z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}}, where
-\eqn{k_i} is the number of links of node \eqn{i} to nodes in its bioregion
-\eqn{s_i}, \eqn{\overline{k_{si}}} is the average degree of nodes in
-\eqn{s_i}, and \eqn{\sigma_{k_{si}}} is the standard deviation of degrees
-in \eqn{s_i}.
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence}{\strong{Specificity}},
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#npecificity-occurrence}{\strong{NSpecificity}}
+is the normalized version of \strong{Specificity} accounting for bioregion size,
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#fidelity-occurrence}{\strong{Fidelity}}
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#indval-occurrence}{\strong{IndVal}},
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#nindval-occurrence}{\strong{NIndVal}}
+is the normalized version of \strong{IndVal} accounting for bioregion size,
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#rho-occurrence}{\strong{Rho}},
+as described in Lenormand \emph{et al.} (2019).
 }
+
+\strong{Species-to-bioregionalization} indices can also be computed, such as:
+\itemize{
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence}{\strong{Participation}},
+as described in Denelle \emph{et al.} (2020).
+}
+
+Abundance-weighted versions of these indices (\code{data_type = "abundance"} or
+\code{data_type = "both"}) can also be derived using the following analogous core
+terms:
+\itemize{
+\item \strong{w_sb}: Sum of abundances of species \strong{s} in sites of bioregion \strong{b}.
+\item \strong{w_s}: Total abundance of species \strong{s}.
+\item \strong{w_b}: Total abundance of all species present in sites of bioregion \strong{b}.
+}
+
+These abundance-weighted terms correspond directly to their occurrence-based
+counterparts and allow computing abundance versions of the same
+indices. Detailed formulas and examples are provided in the package vignette.
+
+The \strong{second type} of indices provided by this function is based on the
+contribution of each site to a given \emph{species cluster} (\code{node_type = "species"}
+or \code{node_type = "both"}, only when a
+cluster or bioregion has been assigned to species in \code{bioregionalization}).
+This is calculated from the cluster assigned to each species (as defined in
+\code{bioregionalization}) and an associated site–species co-occurrence matrix
+(a strict match between species IDs is required).
+
+In this case, occurrence-based indices (\code{data_type = "occurrence"} or
+\code{data_type = "both"}) are derived from three core terms:
+\itemize{
+\item \strong{n_gc}: Number of species belonging to cluster \strong{c} that are present
+in site \strong{g}.
+\item \strong{n_g}: Total number of species present in site \strong{g}.
+\item \strong{n_c}: Total number of species belonging to cluster \strong{c}.
+}
+
+As for the first type, all indices (including their abundance-weighted
+versions when \code{data_type = "abundance"} or \code{data_type = "both"}) can be
+derived from these \strong{site-to-clusters} relationships. Further
+details, mathematical definitions, and examples are provided in the package
+vignette.
+
+The \strong{third type} of indices provided by this function, not included by
+default, is based on the contribution of each site to a given bioregion. This
+is calculated from the bioregion assigned to each site (as defined in
+\code{bioregionalization}) and a site–site similarity metric (\code{similarity}) (a
+strict match between site IDs is required).
+
+These \strong{site-to-bioregion} indices include:
+\itemize{
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim}{\strong{MeanSim}}:
+The mean similarity of each site to the sites of every bioregion.
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#sdsim}{\strong{SdSim}}:
+The corresponding standard deviation of similarity values.
+}
+
+\strong{Site-to-bioregionalization} indices can also be computed, such as:
+\itemize{
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#silhouette}{\strong{Silhouette}},
+as described in Rousseeuw (1987) (similarity-based version).
+}
+}
+\note{
+If \code{data_type = "auto"}, the choice between occurrence- or abundance-
+based indices will be determined automatically from the input data, and a
+message will explain the choice made.
 }
 \examples{
-comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
-                20, 25)
-rownames(comat) <- paste0("Site",1:20)
-colnames(comat) <- paste0("Species",1:25)
+data(fishmat)
 
-# Single bioregionalization
-dissim <- dissimilarity(comat, metric = "Simpson")
-clust1 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
+fishsim <- similarity(fishmat, metric = "Jaccard")
 
-metrics <- site_species_metrics(bioregionalization = clust1, 
-                                comat = comat,
-                                indices = "rho")
-
-# Print shows summary
-print(metrics)
-
-# Access the data
-metrics[[1]]$metrics  # The contribution metrics data.frame
-head(metrics[[1]]$metrics)
-
-# Multiple contribution metrics
-net <- similarity(comat, metric = "Simpson")
-com <- netclu_greedy(net)
-metrics_all <- site_species_metrics(bioregionalization = com, 
-                                    comat = comat,
-                                    indices = c("rho", "affinity", 
-                                               "fidelity", "indicator_value"))
-head(metrics_all[[1]]$metrics)
-
-# Multiple bioregionalizations
-# Create two different clustering solutions
-clust_k3 <- nhclu_kmeans(dissim, n_clust = 3, index = "Simpson")
-clust_k4 <- nhclu_kmeans(dissim, n_clust = 4, index = "Simpson")
-
-# Combine them into one bioregion.clusters object
-clust_multi <- clust_k3
-clust_multi$clusters <- cbind(clust_k3$clusters, K_4 = clust_k4$clusters[, 2])
-
-metrics_multi <- site_species_metrics(bioregionalization = clust_multi, 
-                                      comat = comat,
-                                      indices = "rho")
-
-# Pretty print of results
-print(metrics_multi)
-
-# Access individual bioregionalization by name
-metrics_multi$K_3$metrics
-# Or by index
-metrics_multi[[1]]$metrics
-
-# See structure
-str(metrics_multi)
-
-# Cz indices (bipartite only)
-net_bip <- mat_to_net(comat, weight = TRUE)
-clust_bip <- netclu_greedy(net_bip, bipartite = TRUE)
-metrics_cz <- site_species_metrics(bioregionalization = clust_bip, 
-                                   comat = comat, 
-                                   net = net_bip, 
-                                   indices = "Cz")
-metrics_cz[[1]]$cz_metrics
-
+bioregionalization <- hclu_hierarclust(similarity_to_dissimilarity(fishsim),
+                                       index = "Jaccard",
+                                       method = "average",
+                                       randomize = TRUE,
+                                       optimal_tree_method = "best",
+                                       n_clust = c(1,2,3),
+                                       verbose = FALSE)
+                                     
+ind <- site_species_metrics(bioregionalization = bioregionalization,
+                             bioregion_indices = "all",
+                             bioregionalization_indices = "all",
+                             data_type = "auto",
+                             node_type = "site",
+                             comat = fishmat,
+                             similarity = fishsim,
+                             index = 3,
+                             verbose = TRUE)
+                                     
 }
 \references{
-Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P,
-Antonelli A & Revilla E (2019) Human activity is altering the world’s
-zoogeographical regions. \emph{Ecology Letters} 22, 1297--1305.
+De Cáceres M & Legendre P (2009) Associations between species and groups of
+sites: indices and statistical inference. \emph{Ecology} 90, 3566--3574.
 
-Guimerà R & Amaral LAN (2005) Functional cartography of complex metabolic
-networks. \emph{Nature} 433, 895--900.
+Denelle P, Violle C & Munoz F (2020) Generalist plants are more competitive
+and more functionally similar to each other than specialist plants: insights
+from network analyses. \emph{Journal of Biogeography} 47, 1922–-1933.
 
 Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S & Luque S (2019)
 Biogeographical network analysis of plant species distribution in the
 Mediterranean region. \emph{Ecology and Evolution} 9, 237--250.
+
+Rousseeuw PJ (1987) Silhouettes: A graphical aid to the interpretation and
+validation of cluster analysis. \emph{Journal of Computational and Applied
+Mathematics} 20, 53--65.
 }
 \seealso{
 For more details illustrated with a practical example,
 see the vignette:
-\url{https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html}.
+\url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}.
 
 Associated functions:
 \link{bioregion_metrics} \link{bioregionalization_metrics}
 }
 \author{
-Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
+Pierre Denelle (\email{pierre.denelle@gmail.com})
 }

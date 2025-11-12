@@ -36,10 +36,10 @@ navbar:
           href: articles/a4_4_microbenchmark.html
         - text: "5.1 Visualization"
           href: articles/a5_1_visualization.html
-        - text: "5.2 Compare bioregionalizations"
-          href: articles/a5_2_compare_bioregionalizations.html
-        - text: "5.3 Summary metrics"
-          href: articles/a5_3_summary_metrics.html  
+        - text: "5.2 Summary metrics"
+          href: articles/a5_2_summary_metrics.html  
+        - text: "5.3 Compare bioregionalizations"
+          href: articles/a5_3_compare_bioregionalizations.html
     applications:
       text: "Applications"
       menu:
@@ -108,7 +108,7 @@ reference:
   - find_optimal_n
   - compare_bioregionalizations
   
-- title: Visualisation
+- title: Visualization
   desc: ~
   contents: 
   - map_bioregions
@@ -136,8 +136,8 @@ articles:
       - a4_3_network_clustering
       - a4_4_microbenchmark
       - a5_1_visualization
-      - a5_2_compare_bioregionalizations
-      - a5_3_summary_metrics
+      - a5_2_summary_metrics
+      - a5_3_compare_bioregionalizations
 
   - title: "Applications"
     contents:

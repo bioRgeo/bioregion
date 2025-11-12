@@ -109,7 +109,10 @@ test_that("color integration works", {
   
   # Test with multiple partitions
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim,  optimal_tree_method = "best", n_clust = c(3, 4, 8))
+  clu_hier <- hclu_hierarclust(dissim,  
+                               optimal_tree_method = "best", 
+                               n_clust = c(3, 4, 8),
+                               verbose = FALSE)
   clu_hier_colored <- bioregion_colors(clu_hier)
   
   expect_no_error(
@@ -183,7 +186,10 @@ test_that("multi-panel data structure", {
   
   # Create hierarchical clustering with multiple partitions
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = c(3, 4, 8))
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = c(3, 4, 8),
+                               verbose = FALSE)
   clu_hier_colored <- bioregion_colors(clu_hier)
   
   # Test that write_clusters returns correct structure with multiple partitions
@@ -201,7 +207,10 @@ test_that("multi-panel data structure", {
   expect_true("K_8" %in% colnames(map))
   
   # Test with multiple partitions (use values that work reliably)
-  clu_many <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = c(2, 3, 4))
+  clu_many <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = c(2, 3, 4),
+                               verbose = FALSE)
   clu_many_colored <- bioregion_colors(clu_many)
   
   map_many <- map_bioregions(clusters = clu_many_colored, 
@@ -226,7 +235,10 @@ test_that("multi-panel unipartite with colors and plotting", {
   )
   
   # Create clusters with multiple partitions and colors
-  clu <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = c(2, 3, 4))
+  clu <- hclu_hierarclust(dissim, 
+                          optimal_tree_method = "best", 
+                          n_clust = c(2, 3, 4),
+                          verbose = FALSE)
   clu_colored <- bioregion_colors(clu)
   
   # Test that map_bioregions works with colors (structure check)
@@ -270,7 +282,7 @@ test_that("multi-panel bipartite with colors and plotting", {
   data(fishsf)
   
   # Install binaries for infomap
-  install_binaries(binpath = "tempdir")
+  quietly(install_binaries(verbose = FALSE))
   
   # Create bipartite clusters using netclu_infomap (creates hierarchical partitions)
   clu_bip <- netclu_infomap(fishdf, bipartite = TRUE, seed = 123)
@@ -336,7 +348,10 @@ test_that("multi-panel unipartite layout selection", {
   )
   
   # Test with 2 partitions (should use 1x2 layout)
-  clu_2 <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = c(2, 3))
+  clu_2 <- hclu_hierarclust(dissim, 
+                            optimal_tree_method = "best", 
+                            n_clust = c(2, 3),
+                            verbose = FALSE)
   clu_2_colored <- bioregion_colors(clu_2)
   
   map_2 <- map_bioregions(clusters = clu_2_colored, 
@@ -347,7 +362,10 @@ test_that("multi-panel unipartite layout selection", {
   expect_true(all(c("K_2", "K_3") %in% colnames(map_2)))
   
   # Test with 4 partitions (should use 1x4 layout)
-  clu_4 <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = c(2, 3, 4, 5))
+  clu_4 <- hclu_hierarclust(dissim, 
+                            optimal_tree_method = "best", 
+                            n_clust = c(2, 3, 4, 5),
+                            verbose = FALSE)
   clu_4_colored <- bioregion_colors(clu_4)
   
   map_4 <- map_bioregions(clusters = clu_4_colored, 
@@ -358,7 +376,10 @@ test_that("multi-panel unipartite layout selection", {
   expect_true(all(c("K_2", "K_3", "K_4", "K_5") %in% colnames(map_4)))
   
   # Test with 6 partitions (should use 2-column layout: 3x2)
-  clu_6 <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:7)
+  clu_6 <- hclu_hierarclust(dissim, 
+                            optimal_tree_method = "best", 
+                            n_clust = 2:7,
+                            verbose = FALSE)
   clu_6_colored <- bioregion_colors(clu_6)
   
   map_6 <- map_bioregions(clusters = clu_6_colored, 
@@ -374,7 +395,10 @@ test_that("bioregionalization parameter with integer indices", {
   
   # Create multi-partition clusters
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:5)
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = 2:5,
+                               verbose = FALSE)
   
   # Test single partition by index
   map_1 <- map_bioregions(clusters = clu_hier, 
@@ -410,7 +434,10 @@ test_that("bioregionalization parameter with character names", {
   
   # Create multi-partition clusters
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:5)
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = 2:5,
+                               verbose = FALSE)
   
   # Test single partition by name
   map_1 <- map_bioregions(clusters = clu_hier, 
@@ -446,7 +473,10 @@ test_that("bioregionalization parameter with colored clusters", {
   
   # Create multi-partition clusters with colors
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:5)
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = 2:5,
+                               verbose = FALSE)
   clu_colored <- bioregion_colors(clu_hier)
   
   # Test that colors are preserved when selecting partitions by index
@@ -482,7 +512,10 @@ test_that("bioregionalization parameter NULL default", {
   
   # Create multi-partition clusters
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:4)
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = 2:4,
+                               verbose = FALSE)
   
   # Test that NULL (default) plots all partitions
   map_null <- map_bioregions(clusters = clu_hier, 
@@ -509,7 +542,10 @@ test_that("bioregionalization parameter error handling", {
   
   # Create multi-partition clusters
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:5)
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = 2:5,
+                               verbose = FALSE)
   
   # Test invalid index (out of range)
   expect_error(
@@ -610,7 +646,10 @@ test_that("bioregionalization preserves row order", {
   
   # Create multi-partition clusters
   dissim <- similarity_to_dissimilarity(similarity(fishmat, metric = "Simpson"))
-  clu_hier <- hclu_hierarclust(dissim, optimal_tree_method = "best", n_clust = 2:4)
+  clu_hier <- hclu_hierarclust(dissim, 
+                               optimal_tree_method = "best", 
+                               n_clust = 2:4,
+                               verbose = FALSE)
   
   # Get full map
   map_full <- map_bioregions(clusters = clu_hier, 

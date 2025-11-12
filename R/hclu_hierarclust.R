@@ -253,6 +253,13 @@ hclu_hierarclust <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -268,10 +275,11 @@ hclu_hierarclust <- function(dissimilarity,
     }
     dissimilarity <- mat_to_net(as.matrix(dissimilarity), weight = TRUE)
     if(is.null(index)) {
-      colnames(dissimilarity)[3] <- index <- "Dissimilarity"
+      colnames(dissimilarity)[3] <- "Dissimiliraty"
     } else {
       colnames(dissimilarity)[3] <- index
     }
+    colnameindex <- NA
   }
 
   
@@ -344,12 +352,15 @@ hclu_hierarclust <- function(dissimilarity,
          call. = FALSE)
   }
   controls(args = show_hierarchy, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
   
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "hclu_hierarclust")
   
   # Adding dynamic_tree_cut = FALSE for compatibility with generic functions
   dynamic_tree_cut <- FALSE
+  
+  # Outputs args
   outputs$args <- list(index = index,
                        method = method,
                        randomize = randomize,
@@ -366,16 +377,21 @@ hclu_hierarclust <- function(dissimilarity,
                        verbose = verbose,
                        dynamic_tree_cut = dynamic_tree_cut)
   
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
+  
+  # Outputs inputs
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
-                         nb_sites = attr(dist.obj, "Size"))
+                         nb_sites = attr(dist.obj, "Size"),
+                         data_type = data_type,
+                         node_type = "site")
   
   # outputs$dist.matrix <- dist.obj
   
@@ -540,10 +556,17 @@ hclu_hierarclust <- function(dissimilarity,
                         h_max = h_max,
                         h_min = h_min,
                         dynamic_tree_cut = dynamic_tree_cut,
-                        show_hierarchy = show_hierarchy)
+                        show_hierarchy = show_hierarchy,
+                        verbose = verbose)
+    
+    # Add hierarchical attribute
     outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
                                           TRUE,
                                           FALSE)
+    
+    # Add node_type attribute
+    attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
+    
   } else {
     outputs$clusters <- NA
     outputs$cluster_info <- NA

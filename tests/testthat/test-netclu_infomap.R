@@ -1,5 +1,5 @@
 # Inputs -----------------------------------------------------------------------
-quietly(install_binaries())
+quietly(install_binaries(verbose = FALSE))
 
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
@@ -12,6 +12,11 @@ rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 simil <- similarity(comat, metric = "all")
+similnull <- simil
+colnames(similnull) <- NULL
+similna <- simil
+colnames(similna) <- NA
+
 dissimil <- dissimilarity(comat, metric = "all")
 
 uni <- data.frame(
@@ -79,10 +84,6 @@ test_that("valid output", {
                           check_install = TRUE,
                           path_temp = "infomap_temp",
                           delete_temp = TRUE)
-  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
-  expect_equal(clust$name, "netclu_infomap")
-  expect_equal(clust$args$weight, TRUE)
-  expect_equal(clust$args$cut_weight, 0)
   expect_equal(clust$args$index, 3)
   expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$nbmod, 0)
@@ -108,9 +109,36 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(clust$algorithm$version, "2.8.0")
   expect_equal(dim(clust$clusters)[1], 5)
   
+  clust <- netclu_infomap(simil,
+                          weight = TRUE,
+                          index = 5)
+  expect_equal(clust$args$index, 5)
+  expect_equal(clust$inputs$pairwise_metric, "Sorensen")
+  
+  clust <- netclu_infomap(simil,
+                          weight = TRUE,
+                          index = "Simpson")
+  expect_equal(clust$args$index, "Simpson")
+  expect_equal(clust$inputs$pairwise_metric, "Simpson")
+  
+  clust <- netclu_infomap(similna,
+                          weight = TRUE,
+                          index = 3)
+  expect_equal(clust$args$index, 3)
+  expect_equal(is.na(clust$inputs$pairwise_metric), TRUE)
+  
+  clust <- netclu_infomap(similna,
+                          weight = TRUE,
+                          index = 7)
+  expect_equal(clust$args$index, 7)
+  expect_equal(is.na(clust$inputs$pairwise_metric), TRUE)
   
   clust <- netclu_infomap(simil,
                           weight = TRUE,
@@ -170,12 +198,14 @@ test_that("valid output", {
                           return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
+  expect_equal(clust$inputs$node_type, "species")
   
   clust <- netclu_infomap(net, 
                           bipartite = TRUE, 
                           return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "site")
+  expect_equal(clust$inputs$node_type, "site")
   
   clust <- netclu_infomap(net, cut_weight = 40, seed = 1)
   expect_equal(colnames(clust$clusters), c("ID","K_2"))
@@ -240,6 +270,25 @@ test_that("valid output", {
   expect_equal(clust$cluster_info[2,2], 7)
   expect_equal(clust$cluster_info[2,3], 2)
   expect_equal(clust$inputs$hierarchical, TRUE)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_infomap(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_infomap(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_infomap(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_infomap(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_infomap(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
   
 })
 

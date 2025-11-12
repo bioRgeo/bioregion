@@ -60,10 +60,10 @@ package**. Vignettes available are the following ones: <br>
   Microbenchmark](https://bioRgeo.github.io/bioregion/articles/a4_4_microbenchmark.html)**
 - **[5.1
   Visualization](https://bioRgeo.github.io/bioregion/articles/a5_1_visualization.html)**
-- **[5.2 Compare
-  bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html)**
-- **[5.3 Summary
-  metrics](https://bioRgeo.github.io/bioregion/articles/a5_3_summary_metrics.html)**
+- **[5.2 Summary
+  metrics](https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.html)**
+- **[5.3 Compare
+  bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html)**
 
 Alternatively, if you prefer to view the vignettes in R, you can install
 the package with `build_vignettes = TRUE`. But be aware that some
@@ -92,7 +92,7 @@ try to get to it as soon as we can!
 ## References and dependencies
 
 `bioregion` depends on `ape`, `apcluster`, `bipartite`, `cluster`,
-`data.table`, `dbscan`, `dynamicTreeCut`, `earth`, `fastcluster`,
+`data.table`, `dbscan`, `dynamicTreeCut`, `fastcluster`, `fastkmedoids`,
 `ggplot2`, `grDevices`, `httr`, `igraph`, `mathjaxr`, `Matrix`,
 `phangorn`, `rcartocolor`, `Rdpack`, `rlang`, `rmarkdown`,
 `segmented`,`sf`, `stats`, `tidyr` and `utils`.

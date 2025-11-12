@@ -1,5 +1,5 @@
 # Inputs -----------------------------------------------------------------------
-quietly(install_binaries())
+quietly(install_binaries(verbose = FALSE))
 
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
@@ -104,7 +104,33 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[1], 5)
+  
+  clust <- netclu_oslom(simil,
+                        weight = TRUE,
+                        cut_weight = 0,
+                        index = 7,
+                        seed = NULL,
+                        reassign = "no",
+                        r = 10,
+                        hr = 50,
+                        t = 0.1,
+                        cp = 0.5,
+                        directed = FALSE,
+                        bipartite = FALSE,
+                        site_col = 1,
+                        species_col = 2,
+                        return_node_type = "both",
+                        binpath = "tempdir",
+                        check_install = TRUE,
+                        path_temp = "oslom_temp",
+                        delete_temp = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
   
   clust <- netclu_oslom(simil,
                         weight = TRUE,
@@ -157,12 +183,14 @@ test_that("valid output", {
                         return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
+  expect_equal(clust$inputs$node_type, "species")
   
   clust <- netclu_oslom(net, 
                         bipartite = TRUE, 
                         return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "site")
+  expect_equal(clust$inputs$node_type, "site")
   
   clust <- netclu_oslom(net, cut_weight = 40, seed = 1)
   expect_equal(colnames(clust$clusters), c("ID","K_4"))
@@ -216,6 +244,25 @@ test_that("valid output", {
   expect_equal(r1!=r2, TRUE)
   expect_equal(r2!=r3, TRUE)
   expect_equal(r1!=r3, TRUE)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_oslom(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_oslom(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_oslom(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_oslom(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_oslom(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
   
 })
 

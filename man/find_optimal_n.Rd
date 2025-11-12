@@ -13,7 +13,8 @@ find_optimal_n(
   step_round_above = TRUE,
   metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
   n_breakpoints = 1,
-  plot = TRUE
+  plot = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -50,6 +51,9 @@ curve. Defaults to 1.}
 
 \item{plot}{A \code{boolean} indicating if a plot of the first \code{eval_metric}
 with identified optimal clusters should be drawn.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 A \code{list} of class \code{bioregion.optimal.n} with these elements:

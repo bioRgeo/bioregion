@@ -51,7 +51,8 @@ test_that("valid output", {
                        minPts = NULL,
                        eps = NULL,
                        plot = FALSE,
-                       algorithm_in_output = TRUE)
+                       algorithm_in_output = TRUE,
+                       verbose = FALSE)
   expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
   expect_equal(clust$name, "nhclu_dbscan")
   expect_equal(clust$args$index, "Simpson")
@@ -59,6 +60,7 @@ test_that("valid output", {
   expect_equal(clust$args$eps, NULL)
   expect_equal(clust$args$plot, FALSE)
   expect_equal(clust$args$algorithm_in_output, TRUE)
+  expect_equal(clust$args$verbose, FALSE)
   expect_equal(clust$inputs$bipartite, FALSE)
   expect_equal(clust$inputs$weight, TRUE)
   expect_equal(clust$inputs$pairwise, TRUE)
@@ -66,7 +68,31 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[2], 2)
+  
+  clust <- nhclu_dbscan(dissim,
+                        index = 7,
+                        minPts = NULL,
+                        eps = NULL,
+                        plot = FALSE,
+                        algorithm_in_output = TRUE,
+                        verbose = FALSE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
+  
+  clust <- nhclu_dbscan(d,
+                        index = 7,
+                        minPts = NULL,
+                        eps = NULL,
+                        plot = FALSE,
+                        algorithm_in_output = TRUE,
+                        verbose = FALSE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, NA)
   
   clust <- nhclu_dbscan(dissim,
                         index = "Euclidean",
@@ -92,6 +118,32 @@ test_that("valid output", {
                          plot = FALSE)
   expect_equal(sum(clust1$clusters$K_19_3==clust2$clusters$K_19_3, 
                    na.rm = TRUE), 136)
+  
+  # Test data_type with different dissimilarity metrics
+  clust <- nhclu_dbscan(dissim, 
+                        index = "Simpson", 
+                        minPts = 3, 
+                        eps = 0.1,
+                        verbose = TRUE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_dbscan(dissim, 
+                        index = "Jaccard", 
+                        minPts = 3, 
+                        eps = 0.1)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_dbscan(dissim, 
+                        index = "Bray", 
+                        minPts = 3, 
+                        eps = 0.1)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  clust <- nhclu_dbscan(dissim, 
+                        index = "Euclidean", 
+                        minPts = 3, 
+                        eps = 0.1)
+  expect_equal(clust$inputs$data_type, NA)
   
 })
 
@@ -143,7 +195,7 @@ test_that("invalid inputs", {
     fixed = TRUE)  
   
   expect_message(
-    nhclu_dbscan(d2),
+    nhclu_dbscan(d2, verbose = FALSE),
     "No labels detected, they have been assigned automatically.",
     fixed = TRUE) 
   
@@ -233,6 +285,18 @@ test_that("invalid inputs", {
   expect_error(
     nhclu_dbscan(dissim, algorithm_in_output = c("zz","zz")),
     "algorithm_in_output must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_dbscan(dissim, 
+                 verbose = 1),
+    "verbose must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
+    nhclu_dbscan(dissim, 
+                 verbose = c(TRUE, FALSE)),
+    "verbose must be of length 1.",
     fixed = TRUE)
   
 })

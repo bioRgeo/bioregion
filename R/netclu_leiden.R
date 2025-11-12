@@ -154,6 +154,13 @@ netclu_leiden <- function(net,
   if (weight) {
     controls(args = cut_weight, data = net, type = "positive_numeric")
     controls(args = index, data = net, type = "input_net_index")
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_positive_value")
@@ -251,16 +258,28 @@ CPM or modularity", call. = FALSE)
     algorithm_in_output = algorithm_in_output
   )
   
+  
+  # Determine pairwise_metric and data_type
+  if (isbip) {
+    pairwise_metric <- NA
+    data_type <- ifelse(weight, "abundance", "occurrence")
+  } else {
+    pairwise_metric <- ifelse(weight, 
+                              colnameindex, 
+                              NA)
+    data_type <- detect_data_type_from_metric(pairwise_metric)
+  }
+  
   outputs$inputs <- list(
     bipartite = isbip,
     weight = weight,
     pairwise = ifelse(isbip, FALSE, TRUE),
-    pairwise_metric = ifelse(!isbip & weight, 
-                             ifelse(is.numeric(index), names(net)[3], index), 
-                             NA),
+    pairwise_metric = pairwise_metric,
     dissimilarity = FALSE,
     nb_sites = nbsites,
-    hierarchical = FALSE
+    hierarchical = FALSE,
+    data_type = data_type,
+    node_type = ifelse(bipartite, return_node_type, "site")
   )
   
   outputs$algorithm <- list()
@@ -296,8 +315,8 @@ CPM or modularity", call. = FALSE)
   com <- knbclu(com)
   
   # Add attributes and return_node_type
+  attr(com, "node_type") <- rep("site", dim(com)[1])
   if (isbip) {
-    attr(com, "node_type") <- rep("site", dim(com)[1])
     attributes(com)$node_type[!is.na(match(com[, 1], idfeat))] <- "species"
     if (return_node_type == "site") {
       com <- com[attributes(com)$node_type == "site", ]

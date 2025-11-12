@@ -157,7 +157,8 @@ exportGDF <- function(df,
                       bioregionalization = NULL,
                       color_column = NULL,
                       file = "output.gdf") {
-  
+  # TODO: rename df to net, and follow same arg names as in other functions
+
   # Control df (network data.frame)
   controls(args = NULL, data = df, type = "input_net")
   

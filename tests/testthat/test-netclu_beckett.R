@@ -17,6 +17,12 @@ net2 <- data.frame(
   Weight = c("a", "b", "a", "c", "d", "b", "d")
 )
 
+netdouble <- data.frame(
+  Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
+  Species = c("a", "b", "a", "c", "d", "b", "d"),
+  Weight = c(100, 1, 100, 20, 50, 10, 20),
+  Weightbis = c(100, 1, 100, 20, 50, 10, 20))
+
 net3 <- rbind(net, net)
 
 net4 <- net
@@ -67,18 +73,38 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 3)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  expect_equal(clust$inputs$node_type, "both")
   expect_equal(dim(clust$clusters)[1], 7)
   expect_equal(dim(clust$clusters)[2], 2)
+  
+  clust <- netclu_beckett(netdouble,
+                          weight = TRUE,
+                          cut_weight = 0,
+                          index = 4,
+                          seed = NULL,
+                          forceLPA = FALSE,
+                          site_col = 1,
+                          species_col = 2,
+                          return_node_type = "both",
+                          algorithm_in_output = TRUE)
+  expect_equal(inherits(clust, "bioregion.clusters"), TRUE)
+  expect_equal(clust$name, "netclu_beckett")
+  expect_equal(clust$args$weight, TRUE)
+  expect_equal(clust$args$cut_weight, 0)
+  expect_equal(clust$args$index, 4)
   
   clust <- netclu_beckett(net, return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "species")
+  expect_equal(clust$inputs$node_type, "species")
   
   clust <- netclu_beckett(net, return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "site")
+  expect_equal(clust$inputs$node_type, "site")
   
   clust <- netclu_beckett(net, cut_weight = 40, seed = 1)
   expect_equal(colnames(clust$clusters), c("ID","K_2"))
@@ -120,6 +146,14 @@ test_that("valid output", {
   expect_equal(r1!=r2, TRUE)
   expect_equal(r2!=r3, TRUE)
   expect_equal(r1!=r3, TRUE)
+  
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_beckett(net, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_beckett(net, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
   
 })
 

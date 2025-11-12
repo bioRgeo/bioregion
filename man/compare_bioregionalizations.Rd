@@ -9,7 +9,8 @@ compare_bioregionalizations(
   indices = c("rand", "jaccard"),
   cor_frequency = FALSE,
   store_pairwise_membership = TRUE,
-  store_confusion_matrix = TRUE
+  store_confusion_matrix = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ membership of items in the output object.}
 
 \item{store_confusion_matrix}{A \code{boolean}. If \code{TRUE}, stores the confusion
 matrices of pairwise bioregionalization comparisons in the output object.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 A \code{list} containing 4 to 7 elements:
@@ -141,7 +145,7 @@ compare_bioregionalizations(compare_df,
 \seealso{
 For more details illustrated with a practical example,
 see the vignette:
-\url{https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html}.
+\url{https://biorgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html}.
 
 Associated functions:
 \link{bioregionalization_metrics}

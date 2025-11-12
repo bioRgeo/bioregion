@@ -45,6 +45,9 @@
 #' @param show_hierarchy A `boolean` specifying if the hierarchy of clusters
 #' should be identifiable in the outputs (`FALSE` by default).
 #' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
+#' 
 #' @param ... Additional arguments passed to
 #' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic] to
 #' customize the dynamic tree cut method.
@@ -134,6 +137,7 @@ cut_tree <- function(tree,
                      dynamic_minClusterSize = 5,
                      dissimilarity = NULL,
                      show_hierarchy = FALSE,
+                     verbose = TRUE,
                      ...){
   
   # Control n_clust
@@ -183,8 +187,9 @@ cut_tree <- function(tree,
     }
   }
   
-  # Control show_hierarchy
+  # Control show_hierarchy and verbose
   controls(args = show_hierarchy, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
   
   # Control dynamic_tree_cut, dynamic_method, dynamic_minClusterSize 
   # and dissimilarity
@@ -313,7 +318,7 @@ cut_tree <- function(tree,
                         c("name", paste0("k_", n_clust)))))
       clusters$name <- cur.tree$labels
       for(cur_n in n_clust){
-        if(length(n_clust) < 10){
+        if(length(n_clust) < 10 & verbose){
           message("Determining the cut height to reach ", cur_n, " groups...")
         }
         k <- 0
@@ -335,7 +340,7 @@ cut_tree <- function(tree,
           }
           iter <- iter + 1
         }
-        if(length(n_clust) < 10){
+        if(length(n_clust) < 10 & verbose){
           message(paste0("--> ", h))
         }
         if(k != cur_n) {

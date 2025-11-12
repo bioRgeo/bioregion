@@ -48,7 +48,10 @@ Non-hierarchical clustering takes place on the very right-hand size part of
 the `bioregion` conceptual diagram:  
 
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow_nonetwork.png">
+  <img align="bottom" 
+  width="100%" height="100%" 
+  src="../man/figures/workflow_nonetwork.png"
+  alt="Workflow of the bioregion package for non-hierarchical clustering.">
 </center> 
 
 <br>

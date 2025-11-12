@@ -822,6 +822,225 @@ test_that("strict_positive_integer", {
 
 
 
+# Test detect_data_type_from_metric --------------------------------------------
+test_that("detect_data_type_from_metric works with occurrence metrics", {
+  
+  # Standard occurrence metrics
+  expect_equal(detect_data_type_from_metric("Jaccard"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Simpson"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Sorensen"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Jaccardturn"), "occurrence")
+  expect_equal(detect_data_type_from_metric("abc"), "occurrence")
+  
+})
+
+test_that("detect_data_type_from_metric works with abundance metrics", {
+  
+  # Standard abundance metrics
+  expect_equal(detect_data_type_from_metric("Bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("ABC"), "abundance")
+  expect_equal(detect_data_type_from_metric("Brayturn"), "abundance")
+  
+})
+
+test_that("detect_data_type_from_metric works with betapart occurrence metrics", {
+  
+  # Betapart occurrence metrics (case-insensitive)
+  expect_equal(detect_data_type_from_metric("beta.sim"), "occurrence")
+  expect_equal(detect_data_type_from_metric("BETA.SIM"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Beta.Sim"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sne"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sor"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jtu"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jne"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jac"), "occurrence")
+  
+})
+
+test_that("detect_data_type_from_metric works with betapart abundance metrics", {
+  
+  # Betapart abundance metrics (case-insensitive)
+  expect_equal(detect_data_type_from_metric("beta.bray.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("BETA.BRAY.BAL"), "abundance")
+  expect_equal(detect_data_type_from_metric("Beta.Bray.Bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray.gra"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.gra"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz"), "abundance")
+  
+})
+
+test_that("detect_data_type_from_metric works with unknown metrics", {
+  
+  # Euclidean is explicitly unknown
+  expect_equal(detect_data_type_from_metric("Euclidean"), NA)
+  
+  # NA and NULL return unknown
+  expect_equal(detect_data_type_from_metric(NA), NA)
+  expect_equal(detect_data_type_from_metric(NULL), NA)
+  
+  # Custom or unknown metrics
+  expect_equal(detect_data_type_from_metric("custom_metric"), NA)
+  expect_equal(detect_data_type_from_metric("a/(a+b+c)"), NA)
+  expect_equal(detect_data_type_from_metric(NA), NA)
+  
+})
+
+
+# Test betapart integration ----------------------------------------------------
+test_that("detect_data_type_from_metric works with betapart occurrence metrics (beta.pair)", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create a small binary matrix
+  comat_bin <- matrix(sample(0:1, 50, replace = TRUE), 5, 10)
+  rownames(comat_bin) <- paste0("Site", 1:5)
+  colnames(comat_bin) <- paste0("Species", 1:10)
+  
+  # Test with betapart::beta.pair (occurrence-based)
+  beta_result <- betapart::beta.pair(comat_bin, index.family = "jaccard")
+  
+  # Convert to bioregion format
+  dissim_beta <- as_bioregion_pairwise(beta_result, pkg = "betapart")
+  
+  # Check that betapart metric names are correctly detected as occurrence
+  expect_equal(detect_data_type_from_metric("beta.jac"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jtu"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.jne"), "occurrence")
+  
+  # Test with Sorensen family
+  beta_result_sor <- betapart::beta.pair(comat_bin, index.family = "sorensen")
+  dissim_beta_sor <- as_bioregion_pairwise(beta_result_sor, pkg = "betapart")
+  
+  expect_equal(detect_data_type_from_metric("beta.sor"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sim"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.sne"), "occurrence")
+  
+})
+
+test_that("detect_data_type_from_metric works with betapart abundance metrics (beta.pair.abund)", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create a small abundance matrix
+  comat <- matrix(sample(0:100, 50, replace = TRUE), 5, 10)
+  rownames(comat) <- paste0("Site", 1:5)
+  colnames(comat) <- paste0("Species", 1:10)
+  
+  # Test with betapart::beta.pair.abund (abundance-based)
+  beta_result <- betapart::beta.pair.abund(comat, index.family = "bray")
+  
+  # Convert to bioregion format
+  dissim_beta <- as_bioregion_pairwise(beta_result, pkg = "betapart")
+  
+  # Check that betapart abundance metric names are correctly detected
+  expect_equal(detect_data_type_from_metric("beta.bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.bray.gra"), "abundance")
+  
+  # Test with Ruzicka family
+  beta_result_ruz <- betapart::beta.pair.abund(comat, index.family = "ruzicka")
+  dissim_beta_ruz <- as_bioregion_pairwise(beta_result_ruz, pkg = "betapart")
+  
+  expect_equal(detect_data_type_from_metric("beta.ruz"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.bal"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.ruz.gra"), "abundance")
+  
+})
+
+test_that("betapart metrics are case-insensitive", {
+  
+  # Test case insensitivity for occurrence metrics
+  expect_equal(detect_data_type_from_metric("BETA.JAC"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Beta.Jac"), "occurrence")
+  expect_equal(detect_data_type_from_metric("beta.JAC"), "occurrence")
+  expect_equal(detect_data_type_from_metric("BETA.SOR"), "occurrence")
+  expect_equal(detect_data_type_from_metric("Beta.Sim"), "occurrence")
+  
+  # Test case insensitivity for abundance metrics
+  expect_equal(detect_data_type_from_metric("BETA.BRAY"), "abundance")
+  expect_equal(detect_data_type_from_metric("Beta.Bray"), "abundance")
+  expect_equal(detect_data_type_from_metric("beta.BRAY"), "abundance")
+  expect_equal(detect_data_type_from_metric("BETA.RUZ.BAL"), "abundance")
+  expect_equal(detect_data_type_from_metric("Beta.Ruz.Gra"), "abundance")
+  
+})
+
+test_that("betapart integration with clustering functions preserves data_type", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create test matrices
+  comat_bin <- matrix(sample(0:1, 100, replace = TRUE), 10, 10)
+  rownames(comat_bin) <- paste0("Site", 1:10)
+  colnames(comat_bin) <- paste0("Species", 1:10)
+  
+  comat_abund <- matrix(sample(0:50, 100, replace = TRUE), 10, 10)
+  rownames(comat_abund) <- paste0("Site", 1:10)
+  colnames(comat_abund) <- paste0("Species", 1:10)
+  
+  # Test occurrence-based betapart metrics
+  beta_occ <- betapart::beta.pair(comat_bin, index.family = "jaccard")
+  dissim_occ <- as_bioregion_pairwise(beta_occ, pkg = "betapart")
+  
+  # Run clustering with occurrence-based betapart metrics
+  clust_occ <- nhclu_pam(dissim_occ, index = "beta.jac", n_clust = 3)
+  expect_equal(clust_occ$inputs$data_type, "occurrence")
+  expect_equal(clust_occ$inputs$pairwise_metric, "beta.jac")
+  
+  # Test abundance-based betapart metrics
+  beta_abund <- betapart::beta.pair.abund(comat_abund, index.family = "bray")
+  dissim_abund <- as_bioregion_pairwise(beta_abund, pkg = "betapart")
+  
+  # Run clustering with abundance-based betapart metrics
+  clust_abund <- nhclu_pam(dissim_abund, index = "beta.bray", n_clust = 3)
+  expect_equal(clust_abund$inputs$data_type, "abundance")
+  expect_equal(clust_abund$inputs$pairwise_metric, "beta.bray")
+  
+})
+
+test_that("betapart.core and betapart.core.abund work correctly", {
+  
+  skip_if_not_installed("betapart")
+  
+  # Create test matrices
+  comat_bin <- matrix(sample(0:1, 100, replace = TRUE), 10, 10)
+  rownames(comat_bin) <- paste0("Site", 1:10)
+  colnames(comat_bin) <- paste0("Species", 1:10)
+  
+  comat_abund <- matrix(sample(0:50, 100, replace = TRUE), 10, 10)
+  rownames(comat_abund) <- paste0("Site", 1:10)
+  colnames(comat_abund) <- paste0("Species", 1:10)
+  
+  # Test betapart.core (occurrence) - converts to a, b, c format
+  beta_core_occ <- betapart::betapart.core(comat_bin)
+  dissim_core_occ <- as_bioregion_pairwise(beta_core_occ, pkg = "betapart")
+  
+  # Verify that a, b, c columns exist (converted from betapart occurrence format)
+  expect_true("a" %in% colnames(dissim_core_occ))
+  expect_true("b" %in% colnames(dissim_core_occ))
+  expect_true("c" %in% colnames(dissim_core_occ))
+  expect_true("min(b,c)" %in% colnames(dissim_core_occ))
+  
+  # Test betapart.core.abund (abundance) - converts to A and derived columns
+  beta_core_abund <- betapart::betapart.core.abund(comat_abund)
+  dissim_core_abund <- as_bioregion_pairwise(beta_core_abund, pkg = "betapart")
+  
+  # Verify that A and derived columns exist (converted from betapart abundance format)
+  expect_true("A" %in% colnames(dissim_core_abund))
+  expect_true("min(B,C)" %in% colnames(dissim_core_abund))
+  expect_true("max(B,C)" %in% colnames(dissim_core_abund))
+  expect_true("sum(B,C)" %in% colnames(dissim_core_abund))
+  
+})
+
+
+
+
+
+
+
 
 
 

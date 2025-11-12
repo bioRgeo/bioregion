@@ -36,7 +36,13 @@ summary.bioregion.clusters <- function(object,
 
   # Check if hierarchical
   is_hierarchical <- object$inputs$hierarchical
-  n_bioregionalizations_available <- ncol(object$clusters) - 1
+  
+  # Check if clusters have been computed
+  if (is.data.frame(object$clusters)) {
+    n_bioregionalizations_available <- ncol(object$clusters) - 1
+  } else {
+    n_bioregionalizations_available <- 0
+  }
 
   cat("Number of bioregionalizations: ", n_bioregionalizations_available, "\n")
   if (is_hierarchical) {
@@ -45,6 +51,17 @@ summary.bioregion.clusters <- function(object,
     cat("Hierarchical clustering: No\n")
   }
   cat("\n")
+  
+  # If no clusters have been computed, show message and return
+  if (n_bioregionalizations_available == 0) {
+    cat("No bioregionalizations have been computed yet.\n")
+    if (object$name == "hclu_hierarclust") {
+      cat("Use cut_tree() to cut the tree and obtain clusters.\n")
+    }
+    cat("\n")
+    invisible(object)
+    return(invisible(object))
+  }
 
   # Limit number of bioregionalizations to display
   n_to_show <- min(n_bioregionalizations, n_bioregionalizations_available)

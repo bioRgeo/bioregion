@@ -140,7 +140,7 @@ similarity <- function(comat,
                   " available.\n",
                   "Please choose from the following:\n",
                   "abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, ",
-                  "Bray, Brayturn or Euclidean."),
+                  "Bray, Brayturn and Euclidean."),
            call. = FALSE)
     }
   }

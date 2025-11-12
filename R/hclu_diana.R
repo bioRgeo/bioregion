@@ -35,6 +35,9 @@
 #' @param h_min A `numeric` value indicating the minimum possible height in the 
 #' tree for the chosen `index`.
 #' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
+#' 
 #' @return
 #' A `list` of class `bioregion.clusters` with five slots:
 #' \enumerate{
@@ -94,7 +97,8 @@ hclu_diana <- function(dissimilarity,
                        cut_height = NULL,
                        find_h = TRUE,
                        h_max = 1,
-                       h_min = 0){
+                       h_min = 0,
+                       verbose = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
@@ -107,6 +111,13 @@ hclu_diana <- function(dissimilarity,
     # Convert tibble into dataframe
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
+    }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
     }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
@@ -121,6 +132,7 @@ hclu_diana <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }
   
   if(!is.null(n_clust)) {
@@ -160,6 +172,8 @@ hclu_diana <- function(dissimilarity,
       stop("h_min must be inferior to h_max.")
     }
   }
+  
+  controls(args = verbose, data = NULL, type = "boolean")
 
   # 2. Function ---------------------------------------------------------------
   # Output of the function
@@ -173,18 +187,24 @@ hclu_diana <- function(dissimilarity,
                        find_h = find_h,
                        h_max = h_max,
                        h_min = h_min,
+                       verbose = verbose,
                        dynamic_tree_cut = dynamic_tree_cut)
   
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
+  
+  # Outputs inputs
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
-                         nb_sites = attr(dist.obj, "Size"))
+                         nb_sites = attr(dist.obj, "Size"),
+                         data_type = data_type,
+                         node_type = "site")
   
   # DIANA clustering
   diana_clust <- cluster::diana(dist.obj,
@@ -212,11 +232,13 @@ hclu_diana <- function(dissimilarity,
   #   stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
   #              method = "spearman")
   
-  message(paste0("Output tree has a ",
-                 round(outputs$algorithm$final.tree.coph.cor, 2),
-                 " cophenetic correlation coefficient with the initial ",
-                 "dissimilarity matrix\n"))
-  
+  if(verbose){
+    message(paste0("Output tree has a ",
+                   round(outputs$algorithm$final.tree.coph.cor, 2),
+                   " cophenetic correlation coefficient with the initial ",
+                   "dissimilarity matrix\n"))
+  }
+
   class(outputs) <- append("bioregion.clusters", class(outputs))
   
   # Cut tree
@@ -227,7 +249,8 @@ hclu_diana <- function(dissimilarity,
                                  find_h = find_h,
                                  h_max = h_max,
                                  h_min = h_min,
-                                 dynamic_tree_cut = dynamic_tree_cut)
+                                 dynamic_tree_cut = dynamic_tree_cut,
+                                 verbose = verbose)
     
     outputs$cluster_info <- data.frame(
       partition_name = names(outputs$clusters)[2:length(outputs$clusters),
@@ -237,6 +260,10 @@ hclu_diana <- function(dissimilarity,
     outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
                                           TRUE,
                                           FALSE)
+    
+    # Add node_type attribute
+    attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
+    
   } else {
     outputs$clusters <- NA
     outputs$cluster_info <- NA
