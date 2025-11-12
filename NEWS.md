@@ -49,6 +49,8 @@ between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
 
 ***Bug fixes***
 
+* Fixed an tibble input problem with `net_to_mat()` (issue #11).
+
 * Fixed a problem in `inputs$pairwise_metric` when numeric `index` in all 
 clustering outputs.
 

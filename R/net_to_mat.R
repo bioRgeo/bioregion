@@ -69,6 +69,12 @@ net_to_mat <- function(net,
     stop("symmetrical only for squared matrix!", call. = FALSE)
   }
 
+  # Convert tibble into dataframe
+  if(inherits(net, "tbl_df")){
+    net <- as.data.frame(net)
+  }
+  
+  # Control net
   controls(args = NULL, data = net, type = "input_net")
   controls(args = weight, data = net, type = "input_net_weight")
   if(weight){

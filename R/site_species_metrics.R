@@ -90,7 +90,7 @@
 #' 
 #' - [**Specificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence), 
 #'   as described in De Cáceres M & Legendre P (2009).  
-#' - [**NSpecificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#npecificity-occurrence) 
+#' - [**NSpecificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#nspecificity-occurrence) 
 #'   is the normalized version of **Specificity** accounting for bioregion size,  
 #'   as described in De Cáceres M & Legendre P (2009).  
 #' - [**Fidelity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#fidelity-occurrence)  

@@ -110,7 +110,7 @@ These \strong{species-to-bioregion} indices include:
 \itemize{
 \item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence}{\strong{Specificity}},
 as described in De Cáceres M & Legendre P (2009).
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#npecificity-occurrence}{\strong{NSpecificity}}
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#nspecificity-occurrence}{\strong{NSpecificity}}
 is the normalized version of \strong{Specificity} accounting for bioregion size,
 as described in De Cáceres M & Legendre P (2009).
 \item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#fidelity-occurrence}{\strong{Fidelity}}

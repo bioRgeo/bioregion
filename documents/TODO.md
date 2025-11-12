@@ -2,15 +2,6 @@
 
 #### Issues (in French, some of them may have already been fixed).
 
-site_species_metrics
-    - Ajouter un test pour bipartite_link ?
-    - Changer le nom bipartite_link (net dans bioregionalization_metrics) ?
-    - Problèmes avec affinity, fidelity et indicator_value :
-        - Plantage lorsqu'ils sont utilisés seuls (problème avec names(p_ij) non défini).
-        - Seulement rho et cz spécifié dans la documentation.
-    - Problème de contradiction entre la documentation et la fonction pour cluster_object
-      (peut-on utiliser un data.frame ou une liste de data.frame ?) ?
-
 bioregion_metrics
     - Problème de contradiction entre la documentation et la fonction pour cluster_object
       (peut-on utiliser un data.frame ou une liste de data.frame ?) ?
