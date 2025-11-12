@@ -31,12 +31,14 @@ suppressPackageStartupMessages({
 options(tinytex.verbose = TRUE)
 ```
 
-In this vignette, we aim at evaluating the contribution of individual species
-to each bioregion, using the function `site_species_metrics()`.
+In this vignette, we aim to evaluate the contribution of individual species and 
+sites to each bioregion using the function `site_species_metrics()`. We also show 
+how various metrics at the bioregion level can be computed, in particular with 
+the function `bioregion_metrics()`.
 
 # 1. Data  
 
-We use the vegetation dataset that comes with `bioregion`.
+We use the vegetation dataset included in the `bioregion`.
 
 ```{r}
 data("vegedf")
@@ -51,142 +53,396 @@ vegesim <- dissimilarity_to_similarity(vegedissim)
 
 We use the same three bioregionalization algorithms as in the
 [visualization vignette](https://biorgeo.github.io/bioregion/articles/a5_visualization.html),
-i.e. a non-hierarchical, hierarchical and network bioregionalizations.  
-We chose 3 bioregions for the non-hierarchical and hierarchical
+i.e., non-hierarchical, hierarchical, and network bioregionalizations. In 
+addition, we include a network bioregionalization algorithm based on a bipartite 
+network, which assigns a bioregion (or cluster) to both sites and species. We 
+chose three bioregions for the non-hierarchical and hierarchical 
 bioregionalizations.
 <br>
 
 ```{r}
 # Non hierarchical bioregionalization
-vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, n_clust = 3, index = "Simpson")
-vege_nhclu_kmeans$cluster_info # 3
+vege_nhclu <- nhclu_kmeans(vegedissim, 
+                           n_clust = 3, 
+                           index = "Simpson",
+                           seed = 1)
+vege_nhclu$cluster_info 
 
 # Hierarchical bioregionalization
 set.seed(1)
-vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
-                                          index = names(vegedissim)[3],
-                                          method = "average", n_clust = 3,
-                                          optimal_tree_method = "best")
-vege_hclu_hierarclust$cluster_info # 3
+vege_hclu <- hclu_hierarclust(dissimilarity = vegedissim,
+                              index = "Simpson",
+                              method = "average", 
+                              n_clust = 3,
+                              optimal_tree_method = "best",
+                              verbose = FALSE)
+vege_hclu$cluster_info
 
 # Network bioregionalization
 set.seed(1)
-vege_netclu_walktrap <- netclu_walktrap(vegesim,
-                                        index = names(vegesim)[3])
-vege_netclu_walktrap$cluster_info # 3
+vege_netclu <- netclu_walktrap(vegesim,
+                               index = "Simpson")
+vege_netclu$cluster_info 
+
+# Bipartite network bioregionalization
+install_binaries(verbose = FALSE)
+vege_netclubip <- netclu_infomap(vegedf,
+                                 seed = 1, 
+                                 bipartite = TRUE)
+vege_netclubip$cluster_info
+
 ```
 
-# 3. Bioregion metrics
+# 3. Species-to-bioregion & site-to-bioregion metrics
 
-Number of sites belonging to a bioregion, how many species do these sites
-contain. Number of endemic and proportion of endemism are also calculated.
-Endemic species are species only present in sites assigned to a particular
-bioregion.
+Several metrics evaluating the contribution of a species or a site to each 
+bioregion can be computed and further aggregated to assess the relationship 
+between a species or a site and the bioregionalization.
+
+## 3.1 Species-to-bioregion metrics
+
+Species-to-bioregion metrics are based on a bioregionalization containing $K$ 
+bioregions (`vege_nhclu` computed above for example) and its associated 
+site–species co-occurrence matrix
+[vegemat](https://biorgeo.github.io/bioregion/reference/vegemat.html) to
+compute three core terms, from which occurrence-based indices are derived.
+
+- $n_{sb}$ is the number of sites belonging to bioregion $b$ in which species $s$ is present.  
+- $n_s$ is the total number of sites in which species $s$ is present.  
+- $n_b$ is the total number of sites belonging to bioregion $b$.
+
+<center>
+  <img align="bottom" 
+   width="70%" height="70%" 
+   src="../man/figures/core_terms.svg"
+   alt="Illustration of core terms.">
+</center> 
 
 ```{r}
-bioregion_summary <- bioregion_metrics(bioregionalization = vege_nhclu_kmeans,
+nsb <- site_species_metrics(bioregionalization = vege_nhclu,
+                            bioregion_indices = "CoreTerms",
+                            bioregionalization_indices = NULL,
+                            data_type = "occurrence",
+                            node_type = "site",
+                            comat = vegemat,
+                            similarity = NULL,
+                            index = NULL,
+                            verbose = FALSE)
+
+nsb$species_bioregions[1:10,]
+
+```
+
+These core terms and associated indices are computed when 
+`data_type = "occurrence"` (or `data_type = "both"`) and 
+`node_type = "site"` (or `node_type = "both"`). `node_type = "site"` means that 
+a bioregion is assigned to each site in `vege_nhclu`. 
+
+Several metrics can be derived from these core terms.
+
+### Specificity (occurrence)
+
+The specificity $A_{sb}$ of species $s$ for bioregion $b$ [@Caceres2009] is 
+defined as
+
+$$A_{sb} = \frac{n_{sb}}{n_s}$$
+
+and measures the fraction of occurrences of species $s$ that belong to 
+bioregion $b$. It therefore reflects the uniqueness of a species to a particular 
+bioregion.
+
+### NSpecificity (occurrence)
+
+A normalized version that accounts for the size of each bioregion is also 
+available, as defined in [@Caceres2009]:
+
+$$\bar{A}_{sb} = \frac{n_{sb}/n_b}{\sum_{k=1}^K n_{sk}/n_k}$$
+
+It corresponds to a normalized specificity value that adjusts for differences 
+in bioregion size.
+
+### Fidelity (occurrence)
+
+The fidelity $B_{sb}$ of species $s$ for bioregion $b$ [@Caceres2009] is 
+defined as
+
+$$B_{sb} = \frac{n_{sb}}{n_b}$$
+
+and measures the fraction of sites in bioregion $b$ where species $s$ is 
+present. It therefore reflects the frequency of occurrence of a species 
+within a bioregion.
+
+### IndVal (occurrence)
+
+The indicator value $IndVal_{sb}$ of species $s$ for bioregion $b$ can be 
+defined as the product of specificity and fidelity [@Caceres2009]:
+
+$$IndVal_{sb} = A_{sb} \times B_{sb}$$
+
+This index quantifies the strength of association between a species and a 
+bioregion by combining its specificity (uniqueness to that bioregion) and 
+fidelity (consistency of occurrence within that bioregion). High IndVal 
+values identify species that are both frequent and restricted to a single 
+bioregion, making them good indicators of that region.
+
+### NIndVal (occurrence)
+
+A normalized version of the indicator value is also available:
+
+$$\bar{IndVal}_{sb} = \bar{A}_{sb} \times B_{sb}$$
+
+This normalization adjusts for differences in bioregion size, allowing more 
+comparable indicator values across regions with unequal sampling effort or 
+extent.
+
+### Rho (occurrence)
+
+The contribution index $\rho$ can also be calculated following 
+[@Lenormand2019]:
+
+$$\rho_{sb} = \frac{n_{sb} - n_s\frac{n_b}{n}}{\sqrt{\frac{n_b(n - n_b)}{n - 1} 
+\frac{n_s}{n}(1 - \frac{n_s}{n}) }}$$
+
+This index measures the deviation between the observed number of occurrences of 
+species $s$ in bioregion $b$ and the expected value under random association, 
+providing a standardized measure of contribution to the bioregional structure.
+
+```{r}
+nsb <- site_species_metrics(bioregionalization = vege_nhclu,
+                            bioregion_indices = c("Specificity", "NSpecificity",
+                                                  "Fidelity",
+                                                  "IndVal", "NIndVal",
+                                                  "Rho",
+                                                  "CoreTerms"),
+                            bioregionalization_indices = NULL,
+                            data_type = "occurrence",
+                            node_type = "site",
+                            comat = vegemat,
+                            similarity = NULL,
+                            index = NULL,
+                            verbose = FALSE)
+
+nsb$species_bioregions[1:10,]
+
+```
+
+The abundance version of these metrics can also be computed when 
+`data_type = "abundance"` (or `data_type = "both"`). In this case the core terms 
+and associated indices are:
+
+- $w_{sb}$ is the sum of abundances of species **s** in sites of bioregion **b**. 
+- $w_s$ is the total abundance of species **s**.  
+- $w_b$ is the total abundance of all species present in sites of bioregion **b**.
+
+
+```{r}
+wsb <- site_species_metrics(bioregionalization = vege_nhclu,
+                            bioregion_indices = "CoreTerms",
+                            bioregionalization_indices = NULL,
+                            data_type = "abundance",
+                            node_type = "site",
+                            comat = vegemat,
+                            similarity = NULL,
+                            index = NULL,
+                            verbose = FALSE)
+
+wsb$species_bioregions[1:10,]
+
+```
+
+### Specificity (abundance)
+
+$$A_{sb} = \frac{w_{sb}}{w_s}$$
+
+### NSpecificity (abundance)
+
+$$\bar{A}_{sb} = \frac{w_{sb}/n_b}{\sum_{k=1}^K w_{sk}/n_k}$$
+
+### Fidelity (abundance)
+
+$$B_{sb} = \frac{w_{sb}}{w_b}$$
+
+### IndVal (abundance)
+
+$$IndVal_{sb} = A_{sb} \times \frac{n_{sb}}{n_b}$$
+Note that the fidelity based on occurrence is used here [@Caceres2009].
+
+### NIndVal (abundance)
+
+$$\bar{IndVal}_{sb} = \bar{A}_{sb} \times \frac{n_{sb}}{n_b}$$
+
+Note that the fidelity based on occurrence is used here [@Caceres2009].
+
+### Rho (abundance)
+
+$$\rho_{sb} = \frac{\mu_{sb} - \mu_s}{\sqrt{\left(\frac{n - n_b}{n-1}\right) \left(\frac{{\sigma_s}^2}{n_b}\right)}}$$
+where 
+
+- $\mu_{sb} = \frac{w_{sb}}{n_b}$ the average abundance of species $s$ in 
+bioregion $b$ (as in *NSpecificity* and *NIndVal*)
+- $\mu_s = \frac{w_s}{n}$ the average abundance of species $s$
+- $\sigma_s$ the associated standard deviation.
+
+
+```{r}
+wsb <- site_species_metrics(bioregionalization = vege_nhclu,
+                            bioregion_indices = c("Specificity", "NSpecificity",
+                                                  "Fidelity",
+                                                  "IndVal", "NIndVal",
+                                                  "Rho",
+                                                  "CoreTerms"),
+                            bioregionalization_indices = NULL,
+                            data_type = "abundance",
+                            node_type = "site",
+                            comat = vegemat,
+                            similarity = NULL,
+                            index = NULL,
+                            verbose = FALSE)
+
+wsb$species_bioregions[1:10,]
+
+```
+
+## 3.2 Species-to-bioregionalization metrics
+
+Based on all these indices, it is also possible to derive aggregated indices.  
+For now, only the participation coefficient $P_s$ of a species $s$ to the 
+bioregionalization as described in [@Denelle2020] is proposed, available in 
+both its occurrence and abundance versions.
+
+### P (occurrence)
+
+$$
+P_s =  1 - \sum_{k=1}^K \left(\frac{n_{sk}}{n_s}\right)^2
+$$
+
+### P (abundance)
+
+$$
+P_s =  1 - \sum_{k=1}^K \left(\frac{w_{sk}}{w_s}\right)^2
+$$
+
+These indices measure how evenly a species is distributed among bioregions. 
+There are ranging from 0 to 1. Values close to 0 indicate that the species is 
+largely restricted to a single bioregion, while values close to 1 indicate that 
+the species is evenly distributed across multiple bioregions.
+
+```{r}
+ps <- site_species_metrics(bioregionalization = vege_nhclu,
+                           bioregion_indices = NULL,
+                            bioregionalization_indices = "P",
+                            data_type = "both",
+                            node_type = "site",
+                            comat = vegemat,
+                            similarity = NULL,
+                            index = NULL,
+                            verbose = FALSE)
+
+ps$species_bioregionalization[1:10,]
+
+```
+
+## 3.3 Site-to-species cluster & site-to-species clustering metrics
+
+Dual metrics can also be computed when a cluster or bioregion has been assigned  
+to each species in a bioregionalization (as is the case for `vege_netclubip`  
+computed above). In this case, setting `node_type = "species"` (or  
+`node_type = "both"`) allows computing site-to-species cluster and/or  
+site-to-species clustering metrics. These metrics are derived from the same  
+principles as above, based on three core terms:
+
+- $n_{gc}$ is the number of species belonging to cluster $c$ that are present in site $g$.  
+- $n_g$ is the total number of species present in site $g$.  
+- $n_c$ is the total number of species belonging to cluster $c$.  
+
+and their abundance counterparts.
+
+```{r}
+gc <- site_species_metrics(bioregionalization = vege_netclubip,
+                            bioregion_indices = c("Specificity", "NSpecificity",
+                                                  "Fidelity",
+                                                  "IndVal", "NIndVal",
+                                                  "Rho",
+                                                  "CoreTerms"),
+                            bioregionalization_indices = "P",
+                            data_type = "both",
+                            node_type = "species",
+                            comat = vegemat,
+                            similarity = NULL,
+                            index = NULL,
+                            verbose = FALSE)
+
+gc$site_clusters[1:10,]
+gc$site_clustering[1:10,]
+
+```
+
+## 3.4 Site-to-bioregion metrics
+
+A final type of metrics can be computed when a bioregionalization containing  
+$K$ bioregions (for example, `vege_nhclu` computed above) and its associated  
+site similarity matrix (`vegesim`) are available.
+
+These metrics include the average similarity of each site to the sites of  
+each bioregion ($MeanSim$) and the associated standard deviation ($SdSim$).  
+When computing the average similarity, the focal site itself is not included  
+in the calculation for its own bioregion.
+
+### MeanSim
+
+Let $g$ be a site and $b$ a bioregion with sites $g' \in b$, then:
+
+$$MeanSim_{gb} = \frac{1}{n_b - \delta_{g \in b}} \sum_{g' \in b, g' \neq g} sim_{gg'}$$
+where $sim_{gg'}$ is the similarity between sites $g$ and $g'$, $n_b$ is the 
+number of sites in bioregion $b$, and $\delta_{g \in b}$ is 1 if site $g$ belongs 
+to bioregion $b$ (to exclude itself), 0 otherwise.
+
+### SdSim
+
+The standard deviation of similarities of site $g$ to bioregion $b$ is:
+
+$$SdSim_{gb} = \sqrt{\frac{1}{n_b - 1 - \delta_{g \in b}} \sum_{g' \in b, g' \neq g} \left( sim_{gg'} - MeanSim_{gb} \right)^2}$$
+where $sim_{gg'}$ is the similarity between sites $g$ and $g'$, $n_b$ is the 
+number of sites in bioregion $b$, and $\delta_{g \in b}$ is 1 if site $g$ 
+belongs to bioregion $b$ (to exclude itself), 0 otherwise.
+
+
+## 3.5 Site-to-bioregionalization metrics
+
+Based on $MeanSim$, it is possible to derive aggregated metrics that assess  
+how well a site fits within its assigned bioregion relative to others.  
+
+For now, only the Silhouette index [@Rousseeuw1987] is proposed.
+
+### Silhouette
+
+The Silhouette index for a site $g$ is defined as:
+
+$$Silhouette_g = \frac{a_g - b_g}{\max(a_g, b_g)}$$
+
+where:
+
+- $a_g$ is the average similarity of site $g$ to all other sites in its own bioregion,  
+- $b_g$ is the average similarity of site $g$ to all sites belonging to the nearest bioregion.
+
+This index reflects how strongly a site is associated with its assigned bioregion 
+relative to the most similar alternative bioregion, ranging from -1, when the site 
+may be misassigned (i.e., more similar to another bioregion than its own), to 1, 
+when the site is well matched to its own bioregion, and around 0 when the site 
+lies near the boundary between bioregions.
+
+# 4. Bioregion metrics & spatial coherence
+
+For each bioregion, we calculate the number of sites it contains and the number 
+of species present in those sites. The number and proportion of endemic species 
+are also computed. Endemic species are defined as those occurring only in sites 
+assigned to a particular bioregion.
+
+```{r}
+bioregion_summary <- bioregion_metrics(bioregionalization = vege_nhclu,
                                        comat = vegemat)
 bioregion_summary
 ```
-
-# 4. Species metrics
-
-Different summary statistics are available at the species level.
-
-## 4.1 Contribution ($\rho$)
-
-<center>
-<img align="bottom" width="70%" height="70%" src="../man/figures/zscore_scheme.svg">
-</center> 
-
-<br>
-
-The contribution index $\rho$ is calculated for each species x bioregion combination, following [@Lenormand2019].
-<br>
-Its formula is the following:
-
-$$\rho_{ij} = \frac{n_{ij} - \frac{n_i n_j}{n}}{\sqrt{\frac{n - n_j}{n-1} (1-\frac{n_j}{n}) \frac{n_i n_j}{n}}}$$
-with $n$ the number of sites, $n_i$ the number of sites in which species $i$
-is present, $n_j$ the number of sites belonging to the bioregion $j$, $n_ij$
-the number of occurrences of species $i$ in sites belonging to the bioregion
-$j$.
-
-## 4.2 Individual contributions
-
-Affinity, fidelity and individual contributions describe how species are
-linked to their bioregions. These metrics are presented in [@Bernardo2019] and
-[@Dufrene1997].
-
-Affinity of species to their region: $$A_i = \frac{R_i}{Z}$$
-where $R_i$ is the occurrence/range size of species $i$ in its
-associated bioregion, and $Z$ the total size (number of sites) of the
-bioregion.
-
-A high affinity means that the species is occupying most sites of its
-associated bioregion.
-
-Fidelity of species to their region: $$F_i = \frac{R_i}{D_i}$$
-where $R_i$ is the occurrence/range size of species $i$ in its
-associated bioregion, and $D_i$ is its total occurrence/range size.
-
-A high fidelity means that the species is not present in other bioregions
-than their associated one.
-
-Indicator Value of species: $$IndVal = F_i \times A_i$$
-<br>
-
-# 5. Bipartite metrics
-
-When running a community detection algorithm on a site x species matrix, both
-sites and species get a bioregion assigned. The degree of affinity of both
-types of nodes can therefore be directly assessed, with metrics like the
-coefficient of participation `C` or the within-bioregion degree `z`.
-
-## 5.1 Cz statistics
-
-`Cz` metrics are derived from [@Guimera2005].
-Their respective formula are:
-$$C_i = 1 - \sum_{s=1}^{N_M}{{(\frac{k_is}{k_i}})^2}$$
-
-where $k_{is}$ is the number of links of node (species or site) $i$
-to nodes in bioregion $s$, and $k_i$ is the total degree of node
-$i$. The participation coefficient of a node is therefore close to 1 if
-its links are uniformly distributed among all the bioregions and 0 if all
-its links are within its own bioregion.
-
-And:
-$$z_i = \frac{k_i - \overline{k_{si}}}{\sigma_{k_{si}}}$$
-
-where $k_i$ is the number of links of node (species or site) $i$ to
-other nodes in its bioregion $s_i$, $\overline{k_{si}}$ is the
-average of $k$ over all the nodes in $s_i$, and
-$\sigma_{k_{si}}$ is the standard deviation of $k$ in $s_i$.
-The within-bioregion degree z-score measures how well-connected node $i$
-is to other nodes in the bioregion.
-
-## 5.2 Running the site_species_metrics function
-
-We can now run the function `site_species_metrics()`.
-<br>
-
-```{r}
-#contrib_kmeans <- site_species_metrics(vege_nhclu_kmeans, vegemat,
-#                                       indices = "rho")
-#contrib_hclu <- site_species_metrics(vege_hclu_hierarclust, vegemat,
-#                                     indices = "rho")
-#contrib_netclu <- site_species_metrics(vege_netclu_walktrap, vegemat,
-#                                       indices = "rho")
-
-# Cz indices
-#clust_bip <- netclu_greedy(vegedf, bipartite = TRUE)
-#cz_netclu <- site_species_metrics(bioregionalization = clust_bip,  comat = vegemat,
-#                                  net = vegedf, indices = "Cz")
-```
-
-`site_species_metrics()` outputs `data.frame` with the contribution metrics available
-at the species level.
-
-# 6. Spatial coherence
 
 We use the metric of spatial coherence as in [@Divisek2016], except that we
 replace the number of pixels per bioregion with the area of each coherent part.
@@ -222,4 +478,4 @@ ggplot(vegemap) +
 ```
 
 
-# 7. References
+# 5. References

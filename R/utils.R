@@ -956,7 +956,7 @@ seedrng <- function() {
   sample(1:10000, 1)
 }
 
-# Species to bioregions andv bioregionalization metrics
+# Species to bioregions and bioregionalization metrics
 # Site to species_clusters and species_clustering metrics 
 sbgc <- function(clusters, 
                  comat,
@@ -988,9 +988,12 @@ sbgc <- function(clusters,
     colcorew <- c("w_gc", "w_g", "w_c")
   }
   
-  # Occurence
+  # Occurrence
   if((data != "abundance") |
-     (data == "abundance" & "Rho" %in% bioregion_indices)){
+     (data == "abundance" & "Rho" %in% bioregion_indices) |
+     (data == "abundance" & "NSpecificity" %in% bioregion_indices) |
+     (data == "abundance" & "Indval" %in% bioregion_indices) |
+     (data == "abundance" & "NIndval" %in% bioregion_indices)){
     
     # comat_bin
     comat_bin <- comat
@@ -1015,6 +1018,15 @@ sbgc <- function(clusters,
     
     n <- sum(nj_mat[1,])
     
+    # Normalized for NSpecificity & NIndVal
+    if("NSpecificity" %in% bioregion_indices |
+       "NIndval" %in% bioregion_indices){
+      Nnij_mat <- nij_mat / nj_mat
+      Nnij_mat <- Nnij_mat / apply(Nnij_mat, 1, sum)
+      Nnij_mat[is.na(Nnij_mat)] <- 0
+    }
+
+    
     # Output bioregions
     if(!is.null(bioregion_indices) & data != "abundance"){
       
@@ -1027,14 +1039,22 @@ sbgc <- function(clusters,
       ni <- res11[,4]
       nj <- res11[,5]
 
-      # Affinity 
-      if("Affinity" %in% bioregion_indices){
-        res11$Affinity_occ <- nij / nj
+      # Specificity 
+      if("Specificity" %in% bioregion_indices){
+        res11$Specificity_occ <- nij / ni
+      }
+      
+      # NSpecificity 
+      if("NSpecificity" %in% bioregion_indices){
+        
+        tempnspe <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
+        
+        res11$NSpecificity_occ <- tempnspe[,3]
       }
       
       # Fidelity 
       if("Fidelity" %in% bioregion_indices){
-        res11$Fidelity_occ <- nij / ni
+        res11$Fidelity_occ <- nij / nj
       }
       
       # IndVal 
@@ -1042,11 +1062,20 @@ sbgc <- function(clusters,
         res11$IndVal_occ <- (nij / ni) * (nij / nj)
       }
       
+      # NIndVal 
+      if("NIndVal" %in% bioregion_indices){
+        
+        tempniv <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
+        
+        res11$NIndVal_occ <- tempniv[,3] * (nij / nj)
+      }
+      
       # Rho
       if("Rho" %in% bioregion_indices){
         
         num <- nij-((ni*nj)/n)
-        den <- sqrt((n-nj)/(n-1)*(1-(ni/n))*((ni*nj)/n))
+        den <- sqrt((nj*(n-nj)/(n-1))*(ni/n)*(1-(ni/n)))
+        # den[is.na(den)] <- ??
         
         res11$Rho_occ <- num/den
       }
@@ -1096,8 +1125,16 @@ sbgc <- function(clusters,
     rownames(wj_mat) <- rownames(wij_mat)
     colnames(wj_mat) <- colnames(wij_mat)
     
+    # Normalized for NSpecificity & NIndVal
+    if("NSpecificity" %in% bioregion_indices |
+       "NIndval" %in% bioregion_indices){
+      Nwij_mat <- wij_mat / nj_mat
+      Nwij_mat <- Nwij_mat / apply(Nwij_mat, 1, sum)
+      Nwij_mat[is.na(Nwij_mat)] <- 0
+    }
+    
     if("Rho" %in% bioregion_indices){
-      muij_mat <- wij_mat / nij_mat
+      muij_mat <- wij_mat / nj_mat
       muij_mat[is.na(muij_mat)] <- 0
       
       mui_mat <- wi_mat / n
@@ -1116,19 +1153,50 @@ sbgc <- function(clusters,
       wi <- res12[,4]
       wj <- res12[,5]
       
-      # Affinity 
-      if("Affinity" %in% bioregion_indices){
-        res12$Affinity_abund <- wij / wj
+      # Specificity
+      if("Specificity" %in% bioregion_indices){
+        res12$Specificity_abund <- wij / wi
+      }
+      
+      # NSpecificity
+      if("NSpecificity" %in% bioregion_indices){
+        tempnspe <- mat_to_net(Nwij_mat, weight = TRUE, remove_zeroes = FALSE)
+        
+        res12$NSpecificity_abund <- tempnspe[,3]
       }
       
       # Fidelity 
       if("Fidelity" %in% bioregion_indices){
-        res12$Fidelity_abund <- wij / wi
+        res12$Fidelity_abund <- wij / wj
       }
       
       # IndVal 
       if("IndVal" %in% bioregion_indices){
-        res12$IndVal_abund <- (wij / wi) * (wij / wj)
+        tempindval <- cbind(mat_to_net(nij_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE),
+                            mat_to_net(nj_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3])
+        
+        nij <- tempindval[,3]
+        nj <- tempindval[,4]
+        
+        res12$IndVal_abund <- (wij / wi) * (nij / nj)
+      }
+      
+      # NIndVal 
+      if("NIndVal" %in% bioregion_indices){
+        tempnindval <- cbind(mat_to_net(Nwij_mat, weight = TRUE, 
+                                        remove_zeroes = FALSE),
+                             mat_to_net(nij_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3],
+                             mat_to_net(nj_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3])
+        
+        Nwij <- tempnindval[,3]
+        nij <- tempnindval[,4]
+        nj <- tempnindval[,5]
+        
+        res12$NIndVal_abund <- Nwij * (nij / nj)
       }
       
       # Rho
@@ -1145,6 +1213,7 @@ sbgc <- function(clusters,
         
         num <- muij-mui
         den <- sqrt((n-nj)/(n-1)*(vari/nj))
+        # den[is.na(den)] <- ??
         
         res12$Rho_abund <- num/den
       }
@@ -1246,42 +1315,51 @@ gb <- function(clusters,
   
   # Output bioregionalizations
   if(!is.null(bioregionalization_indices)){
-  
-     res2 <- data.frame(muij_mat[,1], muij_mat)
-     res2[,1] <- rownames(muij_mat)
-     colnames(res2)[1] <- "Site"
-
-    if(dim(res2)[2] == 2){
-      nomax2 <- TRUE
-      res2$max <- res2[,2]
-      res2$max2 <- NA
+    
+    res2 <- data.frame(muij_mat[,1], muij_mat, clusters)
+    res2[,1] <- rownames(muij_mat)
+    colnames(res2) <- c("Site", colnames(muij_mat), "Assigned")
+    
+    if(dim(res2)[2] == 3){ # Only one site
+      nob <- TRUE
+      res2$a <- res2[,2]
+      res2$b <- NA
     }else{
-      nomax2 <- FALSE
-      res2$max <- apply(as.data.frame(res2[,-1, drop = FALSE]), 1, max)
-      res2$max2 <- apply(res2[,-1], 1, function(x) sort(x, decreasing = TRUE)[2])
+      nob <- FALSE
+      res2$a <- apply(res2, 1, function(x) {
+        # x[2:(ncol-1)] = MeanSim
+        meansim_values <- as.numeric(x[2:(ncol(res2)-1)])
+        # Assigned bioregion
+        assigned <- x[ncol(res2)]
+        # Extract meansim corresponding to the assigned bioregion
+        a_val <- meansim_values[which(colnames(res2)[2:(ncol(res2)-1)] == assigned)]
+        return(a_val)
+      })
+      res2$b <- apply(res2, 1, function(x) {
+        meansim_values <- as.numeric(x[2:(ncol(res2)-2)])
+        assigned <- x[ncol(res2)-1]  # colonne assigned
+        # Put NA for the Assigned
+        meansim_values[colnames(res2)[2:(ncol(res2)-2)] == assigned] <- NA
+        # b = max among other bioregions
+        b_val <- max(meansim_values, na.rm = TRUE)
+        return(b_val)
+      })
     }
-    res2 <- res2[,c(1,(dim(res2)[2]-1),dim(res2)[2])]
-
+    res2 <- res2[, c(1, (dim(res2)[2]-1), dim(res2)[2])]
+    
     if("Silhouette" %in% bioregionalization_indices){
-      if(nomax2){
+      if(nob){
         res2$Silhouette <- NA
       }else{
-        res2$Silhouette <- (res2$max - res2$max2) / pmax(res2$max,res2$max2)
-      }
-    }
-    if("Ratio" %in% bioregionalization_indices){
-      if(nomax2){
-        res2$Ratio <- NA
-      }else{
-        res2$Ratio <- res2$max2 / res2$max
+        res2$Silhouette <- (res2$a - res2$b) / pmax(res2$a,res2$b)
       }
     }
 
     res2 <- res2[,-c(2,3)]
     rownames(res2) <- 1:dim(res2)[1]
-     
+    
   }
-
+  
   # Return output
   res <- list()
   res$bioregion <- res1

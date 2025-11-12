@@ -6,12 +6,13 @@
 \usage{
 site_species_metrics(
   bioregionalization,
-  bioregion_indices = "all",
-  bioregionalization_indices = "all",
+  bioregion_indices = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
+    "Rho", "CoreTerms"),
+  bioregionalization_indices = "P",
   data_type = "auto",
   node_type = "site",
   comat,
-  similarity,
+  similarity = NULL,
   index = names(similarity)[3],
   verbose = TRUE
 )
@@ -21,8 +22,9 @@ site_species_metrics(
 
 \item{bioregion_indices}{A \code{character} vector or a single \code{character} string
 specifying the indices to compute. Several indices belonging to different
-categories are available: species to bioregions (\code{"Affinity"}, \code{"Fidelity"},
-\code{"IndVal"}, \code{"Rho"} and \code{"CoreTerms"}), site to bioregions (\code{"MeanSim"} and
+categories are available: species to bioregions (\code{"Specificity"},
+\code{"NSpecificity"}, \code{"Fidelity"}, \code{"NFidelity"}, \code{"IndVal"}, \code{"NIndVal"},
+\code{"Rho"} and \code{"CoreTerms"}), site to bioregions (\code{"MeanSim"} and
 \code{"SdSim"}), or site to species clusters when a cluster/bioregion has been
 assigned to the species  in \code{bioregionalization} (see Details). If \code{"all"}
 is specified (default), all indices will be calculated.}
@@ -34,14 +36,15 @@ derived from the \code{bioregion_indices} (see Details). If \code{"all"} is spec
 (default), all bioregionalization indices will be calculated.}
 
 \item{data_type}{A \code{character} string specifying which type of data should
-be considered to compute the related indices (\code{"Affinity"}, \code{"Fidelity"},
+be considered to compute the related indices (\code{"A"}, \code{"B"},
 \code{"IndVal"} and \code{"Rho"}): occurrences or abundances. By default (\code{"auto"}),
 the type of data is inferred from \code{bioregionalization} and/or the provided
 co-occurrence matrix (argument \code{comat}). Other available options are
 \code{"occurence"}, \code{"abundance"} or \code{"both"} (see Details).}
 
 \item{node_type}{A \code{character} string specifying whether the related
-indices (\code{"Affinity"}, \code{"Fidelity"}, \code{"IndVal"}, \code{"Rho"} and \code{"CoreTerms"})
+indices (\code{"Specificity"}, \code{"NSpecificity"}, \code{"Fidelity"}, \code{"NFidelity"},
+\code{"IndVal"}, \code{"NIndVal"}, \code{"Rho"} and \code{"CoreTerms"})
 should be computed as contributions from species to bioregions (\code{"site"} by
 default), from sites to species clusters (\code{"species"}), or for \code{"both"}.
 The latter type of contribution is only available if a cluster has been
@@ -88,12 +91,14 @@ species or site to each bioregion.
 }
 \details{
 The \strong{first type} of indices provided by this function is based on the
-contribution of each species to a given bioregion. This is calculated from
-the bioregion assigned to each site (as defined in \code{bioregionalization}) and
+contribution of each species to a given bioregion (\code{node_type = "site"} or
+\code{node_type = "both"}). This is calculated from the bioregion assigned to
+each site (as defined in \code{bioregionalization}) and
 an associated site–species co-occurrence matrix \code{comat} (a strict match
 between site IDs is required).
 
-Occurrence-based indices are derived from three core terms:
+Occurrence-based indices (\code{data_type = "occurrence"} or \code{data_type = "both"})
+are derived from three core terms:
 \itemize{
 \item \strong{n_sb}: Number of sites belonging to bioregion \strong{b} in which species
 \strong{s} is present.
@@ -103,25 +108,31 @@ Occurrence-based indices are derived from three core terms:
 
 These \strong{species-to-bioregion} indices include:
 \itemize{
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{Affinity}},
-as described in Bernardo-Madrid \emph{et al.} (2019).
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{Fidelity}},
-as described in Bernardo-Madrid \emph{et al.} (2019).
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{IndVal}},
-as described in Bernardo-Madrid \emph{et al.} (2019).
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{Rho}},
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence}{\strong{Specificity}},
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#npecificity-occurrence}{\strong{NSpecificity}}
+is the normalized version of \strong{Specificity} accounting for bioregion size,
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#fidelity-occurrence}{\strong{Fidelity}}
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#indval-occurrence}{\strong{IndVal}},
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#nindval-occurrence}{\strong{NIndVal}}
+is the normalized version of \strong{IndVal} accounting for bioregion size,
+as described in De Cáceres M & Legendre P (2009).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#rho-occurrence}{\strong{Rho}},
 as described in Lenormand \emph{et al.} (2019).
 }
 
 \strong{Species-to-bioregionalization} indices can also be computed, such as:
 \itemize{
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{Participation}},
-as described in Denelle \emph{et al.} (2020) and originally introduced by
-Guimerà & Amaral (2005).
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence}{\strong{Participation}},
+as described in Denelle \emph{et al.} (2020).
 }
 
-Abundance-weighted versions of these indices can also be derived using the
-following analogous core terms:
+Abundance-weighted versions of these indices (\code{data_type = "abundance"} or
+\code{data_type = "both"}) can also be derived using the following analogous core
+terms:
 \itemize{
 \item \strong{w_sb}: Sum of abundances of species \strong{s} in sites of bioregion \strong{b}.
 \item \strong{w_s}: Total abundance of species \strong{s}.
@@ -129,17 +140,19 @@ following analogous core terms:
 }
 
 These abundance-weighted terms correspond directly to their occurrence-based
-counterparts and allow computing abundance-sensitive versions of the same
+counterparts and allow computing abundance versions of the same
 indices. Detailed formulas and examples are provided in the package vignette.
 
 The \strong{second type} of indices provided by this function is based on the
-contribution of each site to a given \emph{species cluster} (only when a
+contribution of each site to a given \emph{species cluster} (\code{node_type = "species"}
+or \code{node_type = "both"}, only when a
 cluster or bioregion has been assigned to species in \code{bioregionalization}).
 This is calculated from the cluster assigned to each species (as defined in
 \code{bioregionalization}) and an associated site–species co-occurrence matrix
 (a strict match between species IDs is required).
 
-In this case, occurrence-based indices are derived from three core terms:
+In this case, occurrence-based indices (\code{data_type = "occurrence"} or
+\code{data_type = "both"}) are derived from three core terms:
 \itemize{
 \item \strong{n_gc}: Number of species belonging to cluster \strong{c} that are present
 in site \strong{g}.
@@ -148,35 +161,35 @@ in site \strong{g}.
 }
 
 As for the first type, all indices (including their abundance-weighted
-versions) can be derived from these \strong{site-to-clusters} relationships. Further
+versions when \code{data_type = "abundance"} or \code{data_type = "both"}) can be
+derived from these \strong{site-to-clusters} relationships. Further
 details, mathematical definitions, and examples are provided in the package
 vignette.
 
-The \strong{third type} of indices provided by this function is based on the
-contribution of each site to a given bioregion. This is calculated from
-the bioregion assigned to each site (as defined in \code{bioregionalization}) and
-a site–site similarity metric (\code{similarity}) (a strict match between site
-IDs is required).
+The \strong{third type} of indices provided by this function, not included by
+default, is based on the contribution of each site to a given bioregion. This
+is calculated from the bioregion assigned to each site (as defined in
+\code{bioregionalization}) and a site–site similarity metric (\code{similarity}) (a
+strict match between site IDs is required).
 
 These \strong{site-to-bioregion} indices include:
 \itemize{
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{MeanSim}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim}{\strong{MeanSim}}:
 The mean similarity of each site to the sites of every bioregion.
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{SdSim}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#sdsim}{\strong{SdSim}}:
 The corresponding standard deviation of similarity values.
 }
 
 \strong{Site-to-bioregionalization} indices can also be computed, such as:
 \itemize{
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{Silhouette}},
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#silhouette}{\strong{Silhouette}},
 as described in Rousseeuw (1987) (similarity-based version).
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}{\strong{Ratio}},
-as described in Lenormand \emph{et al.} (2019).
 }
-
-As for the previous types, all indices—including their abundance-weighted
-versions—can also be derived from this site-to-bioregion approach. Detailed
-formulas, derivations, and examples are provided in the package vignette.
+}
+\note{
+If \code{data_type = "auto"}, the choice between occurrence- or abundance-
+based indices will be determined automatically from the input data, and a
+message will explain the choice made.
 }
 \examples{
 data(fishmat)
@@ -203,16 +216,12 @@ ind <- site_species_metrics(bioregionalization = bioregionalization,
                                      
 }
 \references{
-Bernardo-Madrid R, Calatayud J, González‐Suárez M, Rosvall M, Lucas P,
-Antonelli A & Revilla E (2019) Human activity is altering the world’s
-zoogeographical regions. \emph{Ecology Letters} 22, 1297--1305.
+De Cáceres M & Legendre P (2009) Associations between species and groups of
+sites: indices and statistical inference. \emph{Ecology} 90, 3566--3574.
 
 Denelle P, Violle C & Munoz F (2020) Generalist plants are more competitive
 and more functionally similar to each other than specialist plants: insights
 from network analyses. \emph{Journal of Biogeography} 47, 1922–-1933.
-
-Guimerà R & Amaral LAN (2005) Functional cartography of complex metabolic
-networks. \emph{Nature} 433, 895--900.
 
 Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S & Luque S (2019)
 Biogeographical network analysis of plant species distribution in the
