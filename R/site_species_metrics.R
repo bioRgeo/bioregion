@@ -268,11 +268,11 @@ site_species_metrics <- function(bioregionalization,
   # sb_ind = indices based on species-to-bioregion relationships or 
   #          site-to-species cluster relationships (gc)
   # gb_ind = indices based on site-to-bioregion relationships
-  # ind = bioregion indices
+  # ind = bioregion indices set by users
   # sb_agind = indices based on species-to-bioregionalization relationships or 
   #            site-to-species clustering relationships (gc)
   # gb_agind = indices based on site-to-bioregionalization relationships
-  # agind = bioregionalization indices
+  # agind = bioregionalization indices set by users
   
   sb_ind <- c("Specificity", "NSpecificity", 
               "Fidelity", 
@@ -301,6 +301,22 @@ site_species_metrics <- function(bioregionalization,
                   "Rho and CoreTerms"),
            call. = FALSE)
     }
+    # Check conflict between similarity, comat and ind
+    if(is.null(similarity) & length(intersect(ind, gb_ind))>0){
+      warning(paste0("Site-to-bioregion indices (", 
+                     paste(intersect(ind, gb_ind), collapse = ", "),
+                     ") were skipped because no similarity matrix was provided."),
+              call. = FALSE)
+      ind <- setdiff(ind, gb_ind)
+    }
+    if(is.null(comat) & length(intersect(ind, sb_ind))>0){
+      warning(paste0("Species-to-bioregion indices (", 
+                     paste(intersect(ind, sb_ind), collapse = ", "),
+                     ") were skipped because no co-occurrence matrix was provided."),
+              call. = FALSE)
+      ind <- setdiff(ind, sb_ind)
+    }
+    
     # Check type of bioregion_indices (sb, gb or both)
     typeind <- "both"
     if(length(intersect(ind, gb_ind)) == 0){
@@ -332,6 +348,21 @@ site_species_metrics <- function(bioregionalization,
                   "P, Silhouette and Ratio"),
            call. = FALSE)
     }
+    # Check conflict between similarity, comat and ind
+    if(is.null(similarity) & length(intersect(agind, gb_agind))>0){
+      warning(paste0("Site-to-bioregionalization indices (", 
+                     paste(intersect(agind, gb_agind), collapse = ", "),
+                     ") were skipped because no similarity matrix was provided."),
+              call. = FALSE)
+      agind <- setdiff(agind, gb_agind)
+    }
+    if(is.null(comat) & length(intersect(agind, sb_agind))>0){
+      warning(paste0("Species-to-bioregionalization indices (", 
+                     paste(intersect(agind, sb_agind), collapse = ", "),
+                     ") were skipped because no co-occurrence matrix was provided."),
+              call. = FALSE)
+      agind <- setdiff(agind, sb_agind)
+    }
     # Check type of bioregionalization_indices (sb, gb or both)
     typeagind <- "both"
     if(length(intersect(agind, gb_agind)) == 0){
@@ -346,7 +377,8 @@ site_species_metrics <- function(bioregionalization,
   }
   
   if(indnull & agindnull){
-    stop(paste0("At least one type of indices should be specified."),
+    stop(paste0("At least one type of indices with the appropriate inputs ", 
+                "should be specified."),
          call. = FALSE)
   }
   
@@ -409,10 +441,6 @@ site_species_metrics <- function(bioregionalization,
   
   # Control comat only if species-to-bioregion needed (or site-to-species cluster)
   if(type != "gb"){
-    if(is.null(comat)){
-      stop(paste0("comat is missing!"),
-           call. = FALSE)
-    }
     
     controls(args = NULL, data = comat, type = "input_matrix")
     minco <- min(comat)
