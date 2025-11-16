@@ -237,5 +237,5 @@ colnames(comat) <- paste0("Species", 1:10)
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_oslom(net)
 #> OSLOM is not installed... Please have a look at https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html for more details.
-#> It should be located in /tmp/RtmpftDnW1/bin/OSLOM/
+#> It should be located in /tmp/Rtmp90CR88/bin/OSLOM/
 ```
