@@ -35,14 +35,19 @@ compare_bioregionalizations
     - Ajouter une colonne ID pour chaque data.frame ?
     - Imaginer un méta-objet bioregion.clusters permettant de fusionner les sorties des
       algorithmes ?
-
-
+      
 #### New functions
 
 * Add fuzzy clustering methods
 
-* reassign_cluster (to assign or reassign cluster based on a partition and a 
-(dis)similarity metric) + spatial coherence (reassignment of sites)
+* reassign_cluster to assign and reassign a cluster/bioregion to site and species
+based on site_species_metrics() [modify OSLOM] + add inputs$reassign in clusters.
+
+* as_bioregion_cluster() 
+
+* check_cluster() ? to check bioregionalization, comat & (dis)similarity
+
+* bind_cluster()
 
 * between_bioregions_metrics() => 'beta-diversity' between bioregions, output:
 matrix/network, produces results like in Lenormand et al. 2019
@@ -60,8 +65,22 @@ between_bioregions_metrics()
 
 * Code IHCT in Rcpp
 
+* Check hierarchy in igraph ?
+
 #### Miscellaneous
 
-*
+* [Terminology] indices <-> metrics in site_species_metrics()
+
+* [Terminology] clusters <-> bioregionalization in fonctions "Bioregionalization analysis" and
+utils and visualization
+
+* [Terminology] define species clusters and species clustering
+
+* Add something abount NA for site/species without bioregion/cluster in vignette
+and/or doc
+
+* Check prints in general 
+
+* Check number of clusters in cluster_info and name columns
 
 
