@@ -1118,6 +1118,12 @@ sbgc <- function(clusters,
     rownames(wi_mat) <- rownames(wij_mat)
     colnames(wi_mat) <- colnames(wij_mat)
     
+    w2i_mat <- matrix(apply(comat*comat, 2, sum), 
+                     dim(comat)[2], 
+                     dim(wij_mat)[2])
+    rownames(w2i_mat) <- rownames(wij_mat)
+    colnames(w2i_mat) <- colnames(wij_mat)
+    
     wj_mat <- matrix(apply(wij_mat,2,sum), 
                      dim(comat)[2], 
                      dim(wij_mat)[2],
@@ -1138,7 +1144,7 @@ sbgc <- function(clusters,
       muij_mat[is.na(muij_mat)] <- 0
       
       mui_mat <- wi_mat / n
-      vari_mat <- (1/(n-1)) * (wi_mat-mui_mat)*(wi_mat-mui_mat)
+      vari_mat <- (1/(n-1)) * (w2i_mat-wi_mat*wi_mat/n)
     }
     
     # Output bioregions
@@ -1331,6 +1337,8 @@ gb <- function(clusters,
         meansim_values <- as.numeric(x[2:(ncol(res2)-1)])
         # Assigned bioregion
         assigned <- x[ncol(res2)]
+        # POTENTIAL PROBLEM WITH NUMERIC WHEN > 10 [5 become " 5"]
+
         # Extract meansim corresponding to the assigned bioregion
         a_val <- meansim_values[which(colnames(res2)[2:(ncol(res2)-1)] == assigned)]
         return(a_val)
@@ -1345,6 +1353,7 @@ gb <- function(clusters,
         return(b_val)
       })
     }
+    
     res2 <- res2[, c(1, (dim(res2)[2]-1), dim(res2)[2])]
     
     if("Silhouette" %in% bioregionalization_indices){

@@ -279,7 +279,7 @@ $$\rho_{sb} = \frac{\mu_{sb} - \mu_s}{\sqrt{\left(\frac{n - n_b}{n-1}\right) \le
 where 
 
 - $\mu_{sb} = \frac{w_{sb}}{n_b}$ the average abundance of species $s$ in 
-bioregion $b$ (as in *NSpecificity* and *NIndVal*)
+bioregion $b$ (as in **NSpecificity** and **NIndVal**)
 - $\mu_s = \frac{w_s}{n}$ the average abundance of species $s$
 - $\sigma_s$ the associated standard deviation.
 

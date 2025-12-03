@@ -818,9 +818,234 @@ test_that("strict_positive_integer", {
   
 })
 
+# Tests for species/sites metrics ----------------------------------------------
+test_that("invalid inputs", {
+  
+  # Inputs
+  n_sites  <- sample(100:1000, 1)     
+  n_species <- sample(100:1000, 1) 
+  n_clusters <- sample(10, 1)
+  clusters_g <- sample(n_clusters, n_sites, replace = TRUE) 
+  clusters_s <- sample(n_clusters, n_species, replace = TRUE) 
+  comat <- matrix(runif(n_sites*n_species), n_sites, n_species)
+  rownames(comat) <- 1:n_sites
+  colnames(comat) <- 1:n_species
+  comat[comat < runif(1)] <- 0
+  sim <- matrix(runif(n_sites*n_sites), n_sites, n_sites)
+  diag(sim) <- 1
+  temp <- t(sim)
+  sim[lower.tri(sim)] <- temp[lower.tri(sim)]
+  rownames(sim) <- 1:n_sites
+  colnames(sim) <- 1:n_sites
 
+  # sb
+  sb <- sbgc(clusters_g, 
+             comat,
+             bioregion_indices = c("Specificity", "NSpecificity", 
+                                   "Fidelity", 
+                                   "IndVal", "NIndVal", 
+                                   "Rho", 
+                                   "CoreTerms"),
+             bioregionalization_indices = c("P"),
+             type = "sb", 
+             data = "both")
+  s <- sample(n_species, 1)
+  b <- sample(n_clusters, 1)
 
+  comat_bin <- comat>0
+  tab <- cbind(clusters_g, as.numeric(comat_bin[,s]))
+  agtab11 <- aggregate(tab[,2], list(tab[,1]), sum)
+  agtab12 <- aggregate(tab[,2], list(tab[,1]), length)
+  
+  n_sb <- agtab11[agtab11[,1]==b, 2]
+  n_s <- sum(tab[,2])
+  n_b <- sum(clusters_g==b)
+  
+  Specificity_occ <- n_sb / n_s
+  NSpecificity_occ <- (n_sb / n_b) / sum(agtab11[,2]/agtab12[,2])
+  Fidelity_occ <- n_sb / n_b
+  IndVal_occ <- Specificity_occ*Fidelity_occ
+  NIndVal_occ <- NSpecificity_occ*Fidelity_occ
+  num <- n_sb - n_s*(n_b / n_sites)
+  den <- sqrt((n_b*(n_sites - n_b)/(n_sites - 1))*
+              (n_s / n_sites)*
+              (1 - (n_s / n_sites)))
+  Rho_occ <- num / den
+  
+  tab <- cbind(clusters_g, as.numeric(comat[,s]))
+  agtab21 <- aggregate(tab[,2], list(tab[,1]), sum)
+  agtab22 <- aggregate(tab[,2], list(tab[,1]), length)
+  
+  w_sb <- agtab21[agtab21[,1]==b, 2]
+  w_s <- sum(tab[,2])
+  w_b <- sum(comat[clusters_g==b,])
+  
+  Specificity_abund <- w_sb / w_s
+  NSpecificity_abund <- (w_sb / n_b) / sum(agtab21[,2]/agtab12[,2])
+  Fidelity_abund <- w_sb / w_b
+  IndVal_abund <- Specificity_abund*Fidelity_occ
+  NIndVal_abund <- NSpecificity_abund*Fidelity_occ
 
+  num <- (w_sb / n_b) - mean(tab[,2])
+  den <- sqrt(((n_sites - n_b)/(n_sites - 1))*
+                (var(tab[,2]) / n_b))
+  Rho_abund <- num / den
+  
+  test <- c(s, b,
+            n_sb, n_s, n_b,
+            Specificity_occ, 
+            NSpecificity_occ,
+            Fidelity_occ,
+            IndVal_occ,
+            NIndVal_occ,
+            Rho_occ,
+            w_sb, w_s, w_b,
+            Specificity_abund, 
+            NSpecificity_abund,
+            Fidelity_abund,
+            IndVal_abund,
+            NIndVal_abund,
+            Rho_abund)
+  
+  check <- sb$bioregion
+  check <- check[check[,1]==s & check[,2]==b,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  P_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
+  P_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
+  
+  test <- c(s, P_occ, P_abund)
+  
+  check <- sb$bioregionalization
+  check <- check[check[,1]==s,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  # gc
+  gc <- sbgc(clusters_s, 
+             comat,
+             bioregion_indices = c("Specificity", "NSpecificity", 
+                                   "Fidelity", 
+                                   "IndVal", "NIndVal", 
+                                   "Rho", 
+                                   "CoreTerms"),
+             bioregionalization_indices = c("P"),
+             type = "gc", 
+             data = "both")
+  g <- sample(n_sites, 1)
+  c <- sample(n_clusters, 1)
+  
+  comat_bin <- t(comat>0)
+  tab <- cbind(clusters_s, as.numeric(comat_bin[,g]))
+  agtab11 <- aggregate(tab[,2], list(tab[,1]), sum)
+  agtab12 <- aggregate(tab[,2], list(tab[,1]), length)
+  
+  n_gc <- agtab11[agtab11[,1]==c, 2]
+  n_g <- sum(tab[,2])
+  n_c <- sum(clusters_s==c)
+  
+  Specificity_occ <- n_gc / n_g
+  NSpecificity_occ <- (n_gc / n_c) / sum(agtab11[,2]/agtab12[,2])
+  Fidelity_occ <- n_gc / n_c
+  IndVal_occ <- Specificity_occ*Fidelity_occ
+  NIndVal_occ <- NSpecificity_occ*Fidelity_occ
+  num <- n_gc - n_g*(n_c / n_species)
+  den <- sqrt((n_c*(n_species - n_c)/(n_species - 1))*
+                (n_g / n_species)*
+                (1 - (n_g / n_species)))
+  Rho_occ <- num / den
+  
+  comat <- t(comat)
+  tab <- cbind(clusters_s, as.numeric(comat[,g]))
+  agtab21 <- aggregate(tab[,2], list(tab[,1]), sum)
+  agtab22 <- aggregate(tab[,2], list(tab[,1]), length)
+  
+  w_gc <- agtab21[agtab21[,1]==c, 2]
+  w_g <- sum(tab[,2])
+  w_c <- sum(comat[clusters_s==c,])
+  
+  Specificity_abund <- w_gc / w_g
+  NSpecificity_abund <- (w_gc / n_c) / sum(agtab21[,2]/agtab12[,2])
+  Fidelity_abund <- w_gc / w_c
+  IndVal_abund <- Specificity_abund*Fidelity_occ
+  NIndVal_abund <- NSpecificity_abund*Fidelity_occ
+  
+  num <- (w_gc / n_c) - mean(tab[,2])
+  den <- sqrt(((n_species - n_c)/(n_species - 1))*
+                (var(tab[,2]) / n_c))
+  Rho_abund <- num / den
+  
+  test <- c(g, c,
+            n_gc, n_g, n_c,
+            Specificity_occ, 
+            NSpecificity_occ,
+            Fidelity_occ,
+            IndVal_occ,
+            NIndVal_occ,
+            Rho_occ,
+            w_gc, w_g, w_c,
+            Specificity_abund, 
+            NSpecificity_abund,
+            Fidelity_abund,
+            IndVal_abund,
+            NIndVal_abund,
+            Rho_abund)
+  
+  check <- gc$bioregion
+  check <- check[check[,1]==g & check[,2]==c,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  P_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
+  P_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
+  
+  test <- c(g, P_occ, P_abund)
+  
+  check <- gc$bioregionalization
+  check <- check[check[,1]==g,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  # gb
+  gb <- gb(as.character(clusters_g), 
+           sim,
+           bioregion_indices = c("MeanSim", "SdSim"),
+           bioregionalization_indices = c("Silhouette"))
+  
+  tab <- cbind(clusters_g[-g], as.numeric(sim[-g,g]))
+  agtab11 <- aggregate(tab[,2], list(tab[,1]), mean)
+  agtab12 <- aggregate(tab[,2], list(tab[,1]), sd)
+  
+  test <- c(g, b,
+            agtab11[agtab11[,1]==b,2],
+            agtab12[agtab12[,1]==b,2])
+  
+  check <- gb$bioregion
+  check <- check[check[,1]==g & check[,2]==b,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  if(n_clusters == 1){
+    sil <- NA
+  }else{
+    sil <- (agtab11[agtab11[,1]==clusters_g[g],2] - max(agtab11[agtab11[,1]!=clusters_g[g],2])) /
+      max(agtab11[agtab11[,1]==clusters_g[g],2], max(agtab11[agtab11[,1]!=clusters_g[g],2]))
+    sil[is.infinite(sil)] <- NA  
+  }
+  
+  test <- c(g,sil)
+  
+  check <- gb$bioregionalization
+  check <- check[check[,1]==g,]
+  
+  expect_equal(round(as.numeric(test),digits=2), 
+               round(as.numeric(check),digits=2))
+  
+
+})
+
+################################################################################
 
 # Test detect_data_type_from_metric --------------------------------------------
 test_that("detect_data_type_from_metric works with occurrence metrics", {
