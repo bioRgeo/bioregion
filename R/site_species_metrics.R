@@ -677,7 +677,42 @@ site_species_metrics <- function(bioregionalization,
     output <- output[[1]]
   }
   
-  class(output) <- append(class(output), "bioregion.site_species_metrics")
+  attr(output, "n_partitions") <- nb_partitions
+  attr(output, "node_type") <- if(type == "gb") "site" else node_type
+  attr(output, "clustering_data_type") <- b_data_type
+  attr(output, "index_data_type") <- if(type == "gb") NA else data_type
+  attr(output, "has_similarity") <- type != "sb"
+  attr(output, "has_comat") <- type != "gb"
+  
+  if(type != "gb") {
+    sb_computed <- intersect(ind, sb_ind)
+    if(data_type == "occurrence") {
+      attr(output, "bioregion_indices_occ") <- sb_computed
+      attr(output, "bioregion_indices_abd") <- character(0)
+      attr(output, "bioregionalization_indices_occ") <- intersect(agind, sb_agind)
+      attr(output, "bioregionalization_indices_abd") <- character(0)
+    } else if(data_type == "abundance") {
+      attr(output, "bioregion_indices_occ") <- character(0)
+      attr(output, "bioregion_indices_abd") <- sb_computed
+      attr(output, "bioregionalization_indices_occ") <- character(0)
+      attr(output, "bioregionalization_indices_abd") <- intersect(agind, sb_agind)
+    } else { # both
+      attr(output, "bioregion_indices_occ") <- sb_computed
+      attr(output, "bioregion_indices_abd") <- sb_computed
+      attr(output, "bioregionalization_indices_occ") <- intersect(agind, sb_agind)
+      attr(output, "bioregionalization_indices_abd") <- intersect(agind, sb_agind)
+    }
+  } else {
+    attr(output, "bioregion_indices_occ") <- character(0)
+    attr(output, "bioregion_indices_abd") <- character(0)
+    attr(output, "bioregionalization_indices_occ") <- character(0)
+    attr(output, "bioregionalization_indices_abd") <- character(0)
+  }
+  attr(output, "similarity_indices") <- if(type != "sb") {
+    c(intersect(ind, gb_ind), intersect(agind, gb_agind))
+  } else character(0)
+  
+  class(output) <- c("bioregion.site.species.metrics", class(output))
   return(output)
   
 }

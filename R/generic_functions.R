@@ -809,89 +809,324 @@ print.bioregion.pairwise <- function(x, ...) {
 
 #' @export
 #' @method print bioregion.site.species.metrics
-print.bioregion.site.species.metrics <- function(x, ...) {
-  cat("Site and species contribution metrics:\n")
-  cat(
-    " - Number of bioregionalizations: ",
-    attr(x, "n_bioregionalizations"), "\n"
-  )
-  cat(" - Bioregionalizations: ", paste(names(x), collapse = ", "), "\n")
-  cat(" - Computed indices: ", paste(attr(x, "indices"), collapse = ", "), "\n")
-  cat("\n")
-
-  # Determine how many to show (max 3)
-  n_to_show <- min(3, length(x))
-  show_truncated_msg <- length(x) > 3
-
-  if (show_truncated_msg) {
-    cat("Showing first ", n_to_show, " out of ", length(x),
-      " bioregionalizations:\n\n",
-      sep = ""
-    )
+print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
+  cat("Site and species contribution metrics\n")
+  cat("=====================================")
+  cat("\n\n")
+  
+  # Input summary
+  cat("Input summary:\n")
+  n_part <- attr(x, "n_partitions")
+  cat(" - Number of partitions:", n_part, "\n")
+  cat(" - Node type:", attr(x, "node_type"), "\n")
+  
+  clust_dt <- attr(x, "clustering_data_type")
+  if(!is.null(clust_dt) && !is.na(clust_dt)) {
+    cat(" - Clustering data type:", clust_dt, "(from bioregionalization object)\n")
   }
-
-  # Summary for each bioregionalization (first 3 only)
-  for (i in 1:n_to_show) {
-    cat("Bioregionalization '", names(x)[i], "':\n", sep = "")
-
-    # Access metrics from the structured list
-    if (!is.null(x[[i]]$metrics)) {
-      cat("  - Metrics: ", nrow(x[[i]]$metrics), " rows\n")
-      if ("Species" %in% colnames(x[[i]]$metrics)) {
-        cat(
-          "    - Unique species: ",
-          length(unique(x[[i]]$metrics$Species)), "\n"
-        )
+  cat("\n")
+  
+  # Computed indices
+  cat("Computed indices:\n")
+  bio_occ <- attr(x, "bioregion_indices_occ")
+  bio_abd <- attr(x, "bioregion_indices_abd")
+  bioreg_occ <- attr(x, "bioregionalization_indices_occ")
+  bioreg_abd <- attr(x, "bioregionalization_indices_abd")
+  sim_idx <- attr(x, "similarity_indices")
+  
+  if(length(bio_occ) > 0)
+    cat(" - Bioregion indices (occurrence):", paste(bio_occ, collapse = ", "), "\n")
+  if(length(bio_abd) > 0)
+    cat(" - Bioregion indices (abundance):", paste(bio_abd, collapse = ", "), "\n")
+  if(length(bioreg_occ) > 0)
+    cat(" - Bioregionalization indices (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
+  if(length(bioreg_abd) > 0)
+    cat(" - Bioregionalization indices (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
+  if(length(sim_idx) > 0)
+    cat(" - Similarity-based indices:", paste(sim_idx, collapse = ", "), "\n")
+  cat("\n")
+  
+  print_df_preview <- function(df, name, n_rows) {
+    cat("$", name, " (", nrow(df), " rows x ", ncol(df), " cols):\n", sep = "")
+    
+    df_preview <- utils::head(df, n_rows)
+    num_cols <- sapply(df_preview, is.numeric)
+    df_preview[num_cols] <- lapply(df_preview[num_cols], round, 3)
+    print(df_preview, row.names = FALSE)
+    if(nrow(df) > n_rows) cat("# ... with", nrow(df) - n_rows, "more rows\n")
+    cat("\n")
+  }
+  
+  if(n_preview > 0) {
+    # If data preview, show first few rows of the first partition
+    if(n_part == 1) {
+      cat("Data preview:\n")
+      for(comp in names(x)) {
+        if(is.data.frame(x[[comp]])) {
+          print_df_preview(x[[comp]], comp, n_preview)
+        }
       }
-      if ("Bioregion" %in% colnames(x[[i]]$metrics)) {
-        cat(
-          "    - Bioregions: ",
-          length(unique(x[[i]]$metrics$Bioregion)), "\n"
-        )
+    } else {
+      cat("Data preview (first partition: ", names(x)[1], "):\n", sep = "")
+      first_part <- x[[1]]
+      for(comp in names(first_part)) {
+        if(is.data.frame(first_part[[comp]])) {
+          print_df_preview(first_part[[comp]], comp, n_preview)
+        }
       }
-      cat("    - Columns: ", paste(colnames(x[[i]]$metrics), collapse = ", "), "\n")
+      cat("Partitions:", paste(names(x), collapse = ", "), "\n\n")
     }
-
-    # Cz metrics if present
-    if (!is.null(x[[i]]$cz_metrics)) {
-      cat("  - Cz metrics: ", nrow(x[[i]]$cz_metrics), " rows (Nodes)\n")
-      cat("    - Columns: ", paste(colnames(x[[i]]$cz_metrics), collapse = ", "), "\n")
+  } else {
+    # if not data preview: show dimensions of tables
+    cat("Available components:\n")
+    if(n_part == 1) {
+      for(comp in names(x)) {
+        if(is.data.frame(x[[comp]])) {
+          cat(" -", comp, ":", nrow(x[[comp]]), "rows x", ncol(x[[comp]]), "columns\n")
+        }
+      }
+    } else {
+      first_part <- x[[1]]
+      for(comp in names(first_part)) {
+        if(is.data.frame(first_part[[comp]])) {
+          cat(" -", comp, ":", nrow(first_part[[comp]]), "rows x", 
+              ncol(first_part[[comp]]), "columns (per partition)\n")
+        }
+      }
+      cat("\nPartitions:", paste(names(x), collapse = ", "), "\n")
     }
     cat("\n")
   }
-
-  # Message if truncated
-  if (show_truncated_msg) {
-    cat("... and ", length(x) - n_to_show, " more bioregionalization(s).\n\n", sep = "")
-  }
-
-  cat("Access individual results with:\n")
-  if (attr(x, "n_bioregionalizations") == 1) {
-    cat("  your_object[[1]]$metrics  # Contribution metrics\n")
-    if ("Cz" %in% attr(x, "indices")) {
-      cat("  your_object[[1]]$cz_metrics  # Cz metrics\n")
+  
+  cat("Access data with:\n")
+  if(n_part == 1) {
+    components <- names(x)
+    if(length(components) > 0) {
+      cat("  your_object$", components[1], "\n", sep = "")
     }
   } else {
-    cat("  your_object$bioregionalization_name$metrics\n")
-    cat("  your_object[[1]]$metrics  # First bioregionalization\n")
+    part_name <- names(x)[1]
+    components <- names(x[[1]])
+    if(length(components) > 0) {
+      cat("  your_object$", part_name, "$", components[1], "\n", sep = "")
+      cat("  your_object[[1]]$", components[1], "\n", sep = "")
+    }
   }
-  cat("Or see the full list structure with str(your_object)\n")
+  
+  invisible(x)
 }
 
 #' @export
 #' @method str bioregion.site.species.metrics
 str.bioregion.site.species.metrics <- function(object, ...) {
-  cat("List of", length(object), "bioregionalization(s)\n")
-  cat(" - Class: bioregion.site.species.metrics\n")
-  cat(" - Indices:", paste(attr(object, "indices"), collapse = ", "), "\n")
-  cat(" - Number of bioregionalizations:", attr(object, "n_bioregionalizations"), "\n")
+  cat("bioregion.site.species.metrics object\n")
+  cat(" - Partitions:", attr(object, "n_partitions"), "\n")
+  cat(" - Node type:", attr(object, "node_type"), "\n")
+  
+  clust_dt <- attr(object, "clustering_data_type")
+  if(!is.null(clust_dt) && !is.na(clust_dt))
+    cat(" - Clustering data type:", clust_dt, "\n")
+  
+  bio_occ <- attr(object, "bioregion_indices_occ")
+  bio_abd <- attr(object, "bioregion_indices_abd")
+  sim_idx <- attr(object, "similarity_indices")
+  
+  if(length(bio_occ) > 0)
+    cat(" - Bioregion indices (occurrence):", paste(bio_occ, collapse = ", "), "\n")
+  if(length(bio_abd) > 0)
+    cat(" - Bioregion indices (abundance):", paste(bio_abd, collapse = ", "), "\n")
+  if(length(sim_idx) > 0)
+    cat(" - Similarity-based indices:", paste(sim_idx, collapse = ", "), "\n")
   cat("\n")
-
+  
   args <- list(...)
-  if (is.null(args$max.level)) {
-    args$max.level <- 2
-  }
+  if(is.null(args$max.level)) args$max.level <- 2
   NextMethod("str", object = object, max.level = args$max.level)
+}
+
+# Helper function to summarize metric columns
+.summarize_metrics_df <- function(df, exclude_cols = c("Species", "Site", 
+                                                        "Bioregion", 
+                                                        "Species_cluster")) {
+  metric_cols <- setdiff(names(df), exclude_cols)
+  metric_cols <- metric_cols[sapply(df[metric_cols], is.numeric)]
+  if(length(metric_cols) == 0) return(NULL)
+  
+  # Helper to safely compute stats, returning NA if no valid values
+  safe_min <- function(x) {
+    x <- x[!is.na(x)]
+    if(length(x) == 0) NA_real_ else min(x)
+  }
+  safe_max <- function(x) {
+    x <- x[!is.na(x)]
+    if(length(x) == 0) NA_real_ else max(x)
+  }
+  safe_mean <- function(x) {
+    x <- x[!is.na(x)]
+    if(length(x) == 0) NA_real_ else mean(x)
+  }
+  
+  stats <- data.frame(
+    Index = metric_cols,
+    Min = sapply(df[metric_cols], safe_min),
+    Mean = sapply(df[metric_cols], safe_mean),
+    Max = sapply(df[metric_cols], safe_max),
+    row.names = NULL
+  )
+  stats
+}
+
+#' @export
+#' @method summary bioregion.site.species.metrics
+summary.bioregion.site.species.metrics <- function(object,
+                                                   n_partitions = 3,
+                                                   n_top = 5,
+                                                   show_top_contributors = TRUE,
+                                                   ...) {
+  cat("\nSummary of site and species contribution metrics\n")
+  cat("================================================\n\n")
+  
+  # Settings
+  cat("Settings:\n")
+  n_part <- attr(object, "n_partitions")
+  cat(" - Number of partitions:", n_part, "\n")
+  cat(" - Node type:", attr(object, "node_type"), "\n")
+  
+  clust_dt <- attr(object, "clustering_data_type")
+  if(!is.null(clust_dt) && !is.na(clust_dt))
+    cat(" - Clustering data type:", clust_dt, "(from bioregionalization object)\n")
+  cat("\n")
+  
+  n_to_show <- min(n_partitions, n_part)
+  
+  # Process each partition
+  for(p in seq_len(n_to_show)) {
+    # Get partition data
+    if(n_part == 1) {
+      part_data <- object
+      part_name <- "Single partition"
+    } else {
+      part_data <- object[[p]]
+      part_name <- names(object)[p]
+    }
+    
+    # Count bioregions if available
+    n_bio <- NA
+    if(!is.null(part_data$species_bioregions)) {
+      n_bio <- length(unique(part_data$species_bioregions$Bioregion))
+    } else if(!is.null(part_data$site_bioregions)) {
+      n_bio <- length(unique(part_data$site_bioregions$Bioregion))
+    } else if(!is.null(part_data$site_clusters)) {
+      n_bio <- length(unique(part_data$site_clusters$Species_cluster))
+    }
+    
+    bio_str <- if(!is.na(n_bio)) paste0(" (", n_bio, " bioregions)") else ""
+    cat("Partition ", p, ": ", part_name, bio_str, "\n", sep = "")
+    cat(strrep("-", nchar(paste0("Partition ", p, ": ", part_name, bio_str))), "\n\n")
+    
+    # Species-to-bioregion metrics
+    if(!is.null(part_data$species_bioregions)) {
+      cat("Species-to-bioregion metrics (species_bioregions):\n")
+      stats <- .summarize_metrics_df(part_data$species_bioregions)
+      if(!is.null(stats)) {
+        stats$Min <- round(stats$Min, 3)
+        stats$Mean <- round(stats$Mean, 3)
+        stats$Max <- round(stats$Max, 3)
+        print(stats, row.names = FALSE)
+      }
+      cat("\n")
+      
+      # Top contributors by IndVal
+      if(show_top_contributors) {
+        indval_cols <- grep("IndVal", names(part_data$species_bioregions), 
+                           value = TRUE)
+        if(length(indval_cols) > 0) {
+          indval_col <- indval_cols[1]
+          df <- part_data$species_bioregions
+          df <- df[order(-df[[indval_col]]), ]
+          n_show <- min(n_top, nrow(df))
+          cat("Top species by max ", indval_col, ":\n", sep = "")
+          for(i in seq_len(n_show)) {
+            cat("  ", i, ". ", df$Species[i], " (Bioregion ", df$Bioregion[i], 
+                "): ", indval_col, " = ", round(df[[indval_col]][i], 3), "\n", sep = "")
+          }
+          cat("\n")
+        }
+      }
+    }
+    
+    # Species-to-bioregionalization metrics
+    if(!is.null(part_data$species_bioregionalization)) {
+      cat("Species-to-bioregionalization metrics (species_bioregionalization):\n")
+      stats <- .summarize_metrics_df(part_data$species_bioregionalization)
+      if(!is.null(stats)) {
+        stats$Min <- round(stats$Min, 3)
+        stats$Mean <- round(stats$Mean, 3)
+        stats$Max <- round(stats$Max, 3)
+        print(stats, row.names = FALSE)
+      }
+      cat("\n")
+    }
+    
+    # Site-to-species cluster metrics
+    if(!is.null(part_data$site_clusters)) {
+      cat("Site-to-species cluster metrics (site_clusters):\n")
+      stats <- .summarize_metrics_df(part_data$site_clusters)
+      if(!is.null(stats)) {
+        stats$Min <- round(stats$Min, 3)
+        stats$Mean <- round(stats$Mean, 3)
+        stats$Max <- round(stats$Max, 3)
+        print(stats, row.names = FALSE)
+      }
+      cat("\n")
+    }
+    
+    # Site-to-species clustering metrics
+    if(!is.null(part_data$site_clustering)) {
+      cat("Site-to-species clustering metrics (site_clustering):\n")
+      stats <- .summarize_metrics_df(part_data$site_clustering)
+      if(!is.null(stats)) {
+        stats$Min <- round(stats$Min, 3)
+        stats$Mean <- round(stats$Mean, 3)
+        stats$Max <- round(stats$Max, 3)
+        print(stats, row.names = FALSE)
+      }
+      cat("\n")
+    }
+    
+    # Site-to-bioregion metrics (similarity-based)
+    if(!is.null(part_data$site_bioregions)) {
+      cat("Site-to-bioregion metrics (site_bioregions) - similarity-based:\n")
+      stats <- .summarize_metrics_df(part_data$site_bioregions)
+      if(!is.null(stats)) {
+        stats$Min <- round(stats$Min, 3)
+        stats$Mean <- round(stats$Mean, 3)
+        stats$Max <- round(stats$Max, 3)
+        print(stats, row.names = FALSE)
+      }
+      cat("\n")
+    }
+    
+    # Site-to-bioregionalization metrics (similarity-based)
+    if(!is.null(part_data$site_bioregionalization)) {
+      cat("Site-to-bioregionalization metrics (site_bioregionalization) - similarity-based:\n")
+      stats <- .summarize_metrics_df(part_data$site_bioregionalization)
+      if(!is.null(stats)) {
+        stats$Min <- round(stats$Min, 3)
+        stats$Mean <- round(stats$Mean, 3)
+        stats$Max <- round(stats$Max, 3)
+        print(stats, row.names = FALSE)
+      }
+      cat("\n")
+    }
+  }
+  
+  # Message if truncated
+  if(n_part > n_to_show) {
+    cat("... and ", n_part - n_to_show, " more partition(s).\n\n", sep = "")
+  }
+  
+  invisible(object)
 }
 
 #' @export
