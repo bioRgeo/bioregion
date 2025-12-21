@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-12-19</h4>
+            <h4 data-toc-skip class="date">2025-12-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -284,7 +284,7 @@ at which we can obtain 4 clusters in our tree.</li>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We reduced the size of text labels with cex = .2, because there are too many sites</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="1152"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="1152"></p>
 <p>Let’s see how it looks like on a map:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegesf</span><span class="op">)</span></span>
@@ -292,7 +292,7 @@ at which we can obtain 4 clusters in our tree.</li>
 <pre><code><span><span class="co">## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"K_3"</span><span class="op">)</span><span class="op">]</span>, <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="576"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="576"></p>
 <p>Now, this is a hierarchical tree, and cutting it only once (= only 1
 partition) oversimplifies the result of the tree. Why not cut it
 multiple times? For example, we could make deep, intermediate, and
@@ -312,7 +312,7 @@ fine-scale relationships among sites in our tree.</p>
 <pre><code><span><span class="co">## --&gt; 0.4453125</span></span></code></pre>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="1152"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="1152"></p>
 <p>We can also see directly in the console the hierarchical structure of
 the tree, with info on each cluster, by using the convenient
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function.</p>
@@ -388,7 +388,7 @@ cut):</p>
 <span>                  cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.5</span>, <span class="fl">.6</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="1152"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="1152"></p>
 <p>The plot is not easy to read because of the large number of sites. We
 can rather extract the information directly from the object:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
@@ -498,7 +498,7 @@ clusters.</p>
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">i</span><span class="op">)</span><span class="op">]</span>, <span class="va">vegesf</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="576"><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" width="576"><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-3.png" class="r-plt" width="576"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="576"><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" alt="" width="576"><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-3.png" class="r-plt" alt="" width="576"></p>
 <p>In the next section we will see what are the default settings and why
 we chose them, and then we will see how to find optimal numbers of
 clusters.</p>
@@ -613,7 +613,7 @@ the hierarchical tree. Let’s see that with an example:</p>
 <span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree2</span>, cex <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" width="768"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="768"></p>
 <p>This is how the tree looks like when the matrix is not randomized.
 Now let’s randomize it and regenerate the tree:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
@@ -627,7 +627,7 @@ Now let’s randomize it and regenerate the tree:</p>
 <span><span class="co">##                    dissimilarity matrix</span></span></code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree3</span>, cex <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="768"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="768"></p>
 <p>See how the tree looks different? This is problematic because it
 means that the outcome is heavily influenced by the order of sites in
 the distance matrix.</p>
@@ -697,7 +697,7 @@ distance matrix. This is because its topology is terribly wrong, see how
 the tree looks like:</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree_consensus</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" width="768"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="768"></p>
 <p>Booo, this is just a large rake, not a tree!!!</p>
 </div>
 <div class="section level4">
@@ -776,7 +776,7 @@ clustering.</p>
 <pre><code><span><span class="co">## Output tree has a 0.41 cophenetic correlation coefficient with the initial dissimilarity matrix</span></span></code></pre>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree_diana</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="768"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="768"></p>
 </div>
 </div>
 <div class="section level2">
@@ -841,7 +841,7 @@ evaluation plot.</p>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
 <pre><code><span><span class="co">## pc_distance 19</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="768"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="" width="768"></p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opti_n_tree4</span></span></code></pre></div>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
@@ -871,7 +871,7 @@ evaluation plot.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vegesf"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-spatial.github.io/sf/" class="external-link">"sf"</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">tree4</span><span class="op">$</span><span class="va">clusters</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="va">K_name</span><span class="op">)</span><span class="op">]</span>, <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-2.png" class="r-plt" width="768"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-2.png" class="r-plt" alt="" width="768"></p>
 <p>Or if you are allergic to lines of code, you could also simply recut
 your tree at the identified optimal number of cut-offs with
 <code><a href="../reference/cut_tree.html">cut_tree()</a></code>.</p>
@@ -1026,7 +1026,7 @@ the curve is not elbow-shaped, it may give spurious results.</p>
 <span><span class="co">## for the ANOSIM metric. You should rather look for leaps in the curve (see</span></span>
 <span><span class="co">## criterion = 'increasing_step' or decreasing_step)</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1039,7 +1039,7 @@ the curve is not elbow-shaped, it may give spurious results.</p>
 <span><span class="co">## anosim - 24</span></span>
 <span><span class="co">## avg_endemism - 9</span></span>
 <span><span class="co">## tot_endemism - 12</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="480"></p>
 <p>In our example above, the optimal number of clusters varies depending
 on the metric, from a minimum of 9 to a maximum of 24. The final choice
 depends on your metric preferences with respect to metrics, and your
@@ -1071,7 +1071,7 @@ your dataset, so you would have to explore both ways.</p>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the increasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1091,7 +1091,7 @@ your dataset, so you would have to explore both ways.</p>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the decreasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-2.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-2.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1115,7 +1115,7 @@ number of steps to select, e.g. to select the largest 3 steps, use
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the increasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1142,7 +1142,7 @@ hierarchical nature of the tree.</p>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the increasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-31-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-31-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1170,7 +1170,7 @@ You can change this by setting
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the decreasing_step method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Step method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1224,7 +1224,7 @@ can use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the cutoff method</span></span></code></pre>
 <pre><code><span><span class="co">##  - Cutoff method</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 99  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  100 </span></span>
@@ -1280,7 +1280,7 @@ the tree to have enough values.</p>
 <pre><code><span><span class="co">##    (the red line is the prediction from the segmented regression)</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
 <span><span class="co">## (`geom_line()`).</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 100  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  1  to  701 </span></span>
@@ -1308,7 +1308,7 @@ the tree to have enough values.</p>
 <pre><code><span><span class="co">##    (the red line is the prediction from the segmented regression)</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
 <span><span class="co">## (`geom_line()`).</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 100  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  1  to  701 </span></span>
@@ -1335,7 +1335,7 @@ the tree to have enough values.</p>
 <pre><code><span><span class="co">##    (the red line is the prediction from the segmented regression)</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
 <span><span class="co">## (`geom_line()`).</span></span></code></pre>
-<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-36-1.png" class="r-plt" width="480"></p>
+<p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-36-1.png" class="r-plt" alt="" width="480"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 100  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  1  to  701 </span></span>
