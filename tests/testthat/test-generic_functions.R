@@ -6,6 +6,8 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   data("vegemat")
   data("vegedf")
   
+  quietly(install_binaries(verbose = FALSE))
+  
   vegesim <- similarity(vegemat, metric = c("Jaccard", "Simpson", "Sorensen"))
   
   cluinfo <- netclu_infomap(vegedf, 
