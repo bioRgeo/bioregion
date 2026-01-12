@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2025-12-21</h4>
+            <h4 data-toc-skip class="date">2026-01-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -540,21 +540,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 280.306136 285.048792 290.731697 290.712899 295.635224</span></span>
-<span><span class="co">##        betapart   1.611735   1.746648   1.825132   1.800718   1.844470</span></span>
-<span><span class="co">##       bioregion   9.630280  10.469255  13.716393  14.237306  16.071904</span></span>
-<span><span class="co">##    ecodist_dist 120.894872 127.200543 144.743068 152.700093 154.089679</span></span>
-<span><span class="co">##  ecodist_bcdist   3.361829   3.538770   3.549388   3.574306   3.599192</span></span>
-<span><span class="co">##       vegan_veg   1.220977   1.328127   1.901829   2.248703   2.258562</span></span>
-<span><span class="co">##    vegan_design   1.202392   1.247126   1.308039   1.272112   1.305134</span></span>
+<span><span class="co">##      adespatial 277.861257 281.040817 282.521061 281.734215 284.241636</span></span>
+<span><span class="co">##        betapart   1.749342   1.757648   1.892259   1.809059   1.880227</span></span>
+<span><span class="co">##       bioregion  14.486737  14.644090  15.373750  15.059060  16.214980</span></span>
+<span><span class="co">##    ecodist_dist 122.738130 153.355360 151.528301 157.684012 158.836962</span></span>
+<span><span class="co">##  ecodist_bcdist   3.472376   3.576370   3.599661   3.613294   3.642834</span></span>
+<span><span class="co">##       vegan_veg   1.214986   1.297219   1.910313   2.254143   2.281164</span></span>
+<span><span class="co">##    vegan_design   1.220787   1.268836   1.334942   1.296298   1.322797</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  302.661779    10</span></span>
-<span><span class="co">##    2.231762    10</span></span>
-<span><span class="co">##   16.213176    10</span></span>
-<span><span class="co">##  155.852477    10</span></span>
-<span><span class="co">##    3.617226    10</span></span>
-<span><span class="co">##    2.277938    10</span></span>
-<span><span class="co">##    1.708387    10</span></span></code></pre>
+<span><span class="co">##  289.873118    10</span></span>
+<span><span class="co">##    2.635896    10</span></span>
+<span><span class="co">##   16.475636    10</span></span>
+<span><span class="co">##  161.592812    10</span></span>
+<span><span class="co">##    3.662510    10</span></span>
+<span><span class="co">##    2.283539    10</span></span>
+<span><span class="co">##    1.737751    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -641,21 +641,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 285.985198 291.811714 295.372910 293.119763 299.034223</span></span>
-<span><span class="co">##        betapart 302.044187 311.372584 326.679633 318.034273 348.316913</span></span>
-<span><span class="co">##       bioregion  10.339844  10.455810  11.232922  10.493009  11.082328</span></span>
-<span><span class="co">##    ecodist_dist  87.372064  89.919665 129.077930  98.612427 117.804109</span></span>
-<span><span class="co">##  ecodist_bcdist   5.984842   6.027240   6.092609   6.094381   6.165187</span></span>
-<span><span class="co">##       vegan_veg   1.209817   1.245222   1.650038   1.290361   2.239266</span></span>
-<span><span class="co">##    vegan_design   1.252115   1.278054   1.418627   1.362811   1.634078</span></span>
+<span><span class="co">##      adespatial 279.654250 286.485771 290.471962 290.127308 296.498975</span></span>
+<span><span class="co">##        betapart 300.651206 310.675995 325.549420 317.774684 347.965958</span></span>
+<span><span class="co">##       bioregion  10.292405  10.435651  11.272445  10.656519  11.035110</span></span>
+<span><span class="co">##    ecodist_dist  85.180046  90.318880 129.311317  99.255998 118.173197</span></span>
+<span><span class="co">##  ecodist_bcdist   5.996043   6.015028   6.104709   6.116688   6.188461</span></span>
+<span><span class="co">##       vegan_veg   1.215056   1.250993   1.657709   1.297385   2.246530</span></span>
+<span><span class="co">##    vegan_design   1.213343   1.281891   1.431408   1.386686   1.662681</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  308.058283    10</span></span>
-<span><span class="co">##  355.268418    10</span></span>
-<span><span class="co">##   13.983979    10</span></span>
-<span><span class="co">##  371.298383    10</span></span>
-<span><span class="co">##    6.186878    10</span></span>
-<span><span class="co">##    2.268301    10</span></span>
-<span><span class="co">##    1.653244    10</span></span></code></pre>
+<span><span class="co">##  298.823210    10</span></span>
+<span><span class="co">##  350.955654    10</span></span>
+<span><span class="co">##   14.018273    10</span></span>
+<span><span class="co">##  370.392123    10</span></span>
+<span><span class="co">##    6.199903    10</span></span>
+<span><span class="co">##    2.279821    10</span></span>
+<span><span class="co">##    1.684612    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.
