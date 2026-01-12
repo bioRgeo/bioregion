@@ -1,6 +1,6 @@
 **<span style="color:black"><font size="4">bioregion's TO DO list</span></font>**
 
-#### Issues (in French, some of them may have already been fixed).
+#### Issues (in French, some of them may have already been fixed)
 
 bioregion_metrics
     - Problème de contradiction entre la documentation et la fonction pour cluster_object
