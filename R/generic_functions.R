@@ -818,7 +818,7 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   cat("Input summary:\n")
   n_part <- attr(x, "n_partitions")
   cat(" - Number of partitions:", n_part, "\n")
-  cat(" - Node type:", attr(x, "node_type"), "\n")
+  cat(" - Node type:", attr(x, "cluster_on"), "\n")
   
   clust_dt <- attr(x, "clustering_data_type")
   if(!is.null(clust_dt) && !is.na(clust_dt)) {
@@ -826,24 +826,24 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   }
   cat("\n")
   
-  # Computed indices
-  cat("Computed indices:\n")
-  bio_occ <- attr(x, "bioregion_indices_occ")
-  bio_abd <- attr(x, "bioregion_indices_abd")
-  bioreg_occ <- attr(x, "bioregionalization_indices_occ")
-  bioreg_abd <- attr(x, "bioregionalization_indices_abd")
-  sim_idx <- attr(x, "similarity_indices")
+  # Computed metrics
+  cat("Computed metrics:\n")
+  bio_occ <- attr(x, "bioregion_metrics_occ")
+  bio_abd <- attr(x, "bioregion_metrics_abd")
+  bioreg_occ <- attr(x, "bioregionalization_metrics_occ")
+  bioreg_abd <- attr(x, "bioregionalization_metrics_abd")
+  sim_idx <- attr(x, "similarity_metrics")
   
   if(length(bio_occ) > 0)
-    cat(" - Bioregion indices (occurrence):", paste(bio_occ, collapse = ", "), "\n")
+    cat(" - Bioregion metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
   if(length(bio_abd) > 0)
-    cat(" - Bioregion indices (abundance):", paste(bio_abd, collapse = ", "), "\n")
+    cat(" - Bioregion metrics (abundance):", paste(bio_abd, collapse = ", "), "\n")
   if(length(bioreg_occ) > 0)
-    cat(" - Bioregionalization indices (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
+    cat(" - Bioregionalization metrics (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
   if(length(bioreg_abd) > 0)
-    cat(" - Bioregionalization indices (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
+    cat(" - Bioregionalization metrics (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
   if(length(sim_idx) > 0)
-    cat(" - Similarity-based indices:", paste(sim_idx, collapse = ", "), "\n")
+    cat(" - Similarity-based metrics:", paste(sim_idx, collapse = ", "), "\n")
   cat("\n")
   
   print_df_preview <- function(df, name, n_rows) {
@@ -921,22 +921,22 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
 str.bioregion.site.species.metrics <- function(object, ...) {
   cat("bioregion.site.species.metrics object\n")
   cat(" - Partitions:", attr(object, "n_partitions"), "\n")
-  cat(" - Node type:", attr(object, "node_type"), "\n")
+  cat(" - Node type:", attr(object, "cluster_on"), "\n")
   
   clust_dt <- attr(object, "clustering_data_type")
   if(!is.null(clust_dt) && !is.na(clust_dt))
     cat(" - Clustering data type:", clust_dt, "\n")
   
-  bio_occ <- attr(object, "bioregion_indices_occ")
-  bio_abd <- attr(object, "bioregion_indices_abd")
-  sim_idx <- attr(object, "similarity_indices")
+  bio_occ <- attr(object, "bioregion_metrics_occ")
+  bio_abd <- attr(object, "bioregion_metrics_abd")
+  sim_idx <- attr(object, "similarity_metrics")
   
   if(length(bio_occ) > 0)
-    cat(" - Bioregion indices (occurrence):", paste(bio_occ, collapse = ", "), "\n")
+    cat(" - Bioregion metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
   if(length(bio_abd) > 0)
-    cat(" - Bioregion indices (abundance):", paste(bio_abd, collapse = ", "), "\n")
+    cat(" - Bioregion metrics (abundance):", paste(bio_abd, collapse = ", "), "\n")
   if(length(sim_idx) > 0)
-    cat(" - Similarity-based indices:", paste(sim_idx, collapse = ", "), "\n")
+    cat(" - Similarity-based metrics:", paste(sim_idx, collapse = ", "), "\n")
   cat("\n")
   
   args <- list(...)
@@ -990,7 +990,7 @@ summary.bioregion.site.species.metrics <- function(object,
   cat("Settings:\n")
   n_part <- attr(object, "n_partitions")
   cat(" - Number of partitions:", n_part, "\n")
-  cat(" - Node type:", attr(object, "node_type"), "\n")
+  cat(" - Node type:", attr(object, "cluster_on"), "\n")
   
   clust_dt <- attr(object, "clustering_data_type")
   if(!is.null(clust_dt) && !is.na(clust_dt))

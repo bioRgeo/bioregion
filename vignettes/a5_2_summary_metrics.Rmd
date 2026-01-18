@@ -105,7 +105,7 @@ Species-to-bioregion metrics are based on a bioregionalization containing $K$
 bioregions (`vege_nhclu` computed above for example) and its associated 
 site–species co-occurrence matrix
 [vegemat](https://biorgeo.github.io/bioregion/reference/vegemat.html) to
-compute three core terms, from which occurrence-based indices are derived.
+compute three core terms, from which occurrence-based metrics are derived.
 
 - $n_{sb}$ is the number of sites belonging to bioregion $b$ in which species $s$ is present.  
 - $n_s$ is the total number of sites in which species $s$ is present.  
@@ -120,10 +120,10 @@ compute three core terms, from which occurrence-based indices are derived.
 
 ```{r}
 nsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = "CoreTerms",
-                            bioregionalization_indices = NULL,
+                            bioregion_metrics = "CoreTerms",
+                            bioregionalization_metrics = NULL,
                             data_type = "occurrence",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -133,9 +133,9 @@ nsb$species_bioregions[1:10,]
 
 ```
 
-These core terms and associated indices are computed when 
+These core terms and associated metrics are computed when 
 `data_type = "occurrence"` (or `data_type = "both"`) and 
-`node_type = "site"` (or `node_type = "both"`). `node_type = "site"` means that 
+`cluster_on = "site"` (or `cluster_on = "both"`). `cluster_on = "site"` means that 
 a bioregion is assigned to each site in `vege_nhclu`. 
 
 Several metrics can be derived from these core terms.
@@ -209,14 +209,14 @@ providing a standardized measure of contribution to the bioregional structure.
 
 ```{r}
 nsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = NULL,
+                            bioregionalization_metrics = NULL,
                             data_type = "occurrence",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -228,7 +228,7 @@ nsb$species_bioregions[1:10,]
 
 The abundance version of these metrics can also be computed when 
 `data_type = "abundance"` (or `data_type = "both"`). In this case the core terms 
-and associated indices are:
+and associated metrics are:
 
 - $w_{sb}$ is the sum of abundances of species **s** in sites of bioregion **b**. 
 - $w_s$ is the total abundance of species **s**.  
@@ -237,10 +237,10 @@ and associated indices are:
 
 ```{r}
 wsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = "CoreTerms",
-                            bioregionalization_indices = NULL,
+                            bioregion_metrics = "CoreTerms",
+                            bioregionalization_metrics = NULL,
                             data_type = "abundance",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -286,14 +286,14 @@ bioregion $b$ (as in **NSpecificity** and **NIndVal**)
 
 ```{r}
 wsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = NULL,
+                            bioregionalization_metrics = NULL,
                             data_type = "abundance",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -305,7 +305,7 @@ wsb$species_bioregions[1:10,]
 
 ## 3.2 Species-to-bioregionalization metrics
 
-Based on all these indices, it is also possible to derive aggregated indices.  
+Based on all these metrics, it is also possible to derive aggregated metrics.  
 For now, only the participation coefficient $P_s$ of a species $s$ to the 
 bioregionalization as described in [@Denelle2020] is proposed, available in 
 both its occurrence and abundance versions.
@@ -322,17 +322,17 @@ $$
 P_s =  1 - \sum_{k=1}^K \left(\frac{w_{sk}}{w_s}\right)^2
 $$
 
-These indices measure how evenly a species is distributed among bioregions. 
+These metrics measure how evenly a species is distributed among bioregions. 
 There are ranging from 0 to 1. Values close to 0 indicate that the species is 
 largely restricted to a single bioregion, while values close to 1 indicate that 
 the species is evenly distributed across multiple bioregions.
 
 ```{r}
 ps <- site_species_metrics(bioregionalization = vege_nhclu,
-                           bioregion_indices = NULL,
-                            bioregionalization_indices = "P",
+                           bioregion_metrics = NULL,
+                            bioregionalization_metrics = "P",
                             data_type = "both",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -346,8 +346,8 @@ ps$species_bioregionalization[1:10,]
 
 Dual metrics can also be computed when a cluster or bioregion has been assigned  
 to each species in a bioregionalization (as is the case for `vege_netclubip`  
-computed above). In this case, setting `node_type = "species"` (or  
-`node_type = "both"`) allows computing site-to-species cluster and/or  
+computed above). In this case, setting `cluster_on = "species"` (or  
+`cluster_on = "both"`) allows computing site-to-species cluster and/or  
 site-to-species clustering metrics. These metrics are derived from the same  
 principles as above, based on three core terms:
 
@@ -359,14 +359,14 @@ and their abundance counterparts.
 
 ```{r}
 gc <- site_species_metrics(bioregionalization = vege_netclubip,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = "P",
+                            bioregionalization_metrics = "P",
                             data_type = "both",
-                            node_type = "species",
+                            cluster_on = "species",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
