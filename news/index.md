@@ -20,11 +20,12 @@ CRAN release.
   attributes.
 
 - [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
-  has been thoroughly reformatted and now provides: species-to-bioregion
-  indices, species-to-bioregionalization indices, site-to-species
-  cluster indices, site-to-species clustering indices, site-to-bioregion
-  indices, and site-to-bioregionalization indices, all of which are
-  rigorously defined in the corresponding vignette.
+  has been thoroughly reformatted and now provides:
+  species-to-bioregions metrics, species-to-bioregionalization metrics,
+  site-to-chorotypes metrics, site-to-chorological classification
+  metrics, site-to-bioregions metrics, and site-to-bioregionalization
+  metrics, all of which are rigorously defined in the corresponding
+  vignette.
 
 - [`site_species_subset()`](https://bioRgeo.github.io/bioregion/reference/site_species_subset.md)
   has been simplified taking advantage on `inputs$node_type`.

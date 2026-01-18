@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2026-01-12</h4>
+            <h4 data-toc-skip class="date">2026-01-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_2_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_2_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_2_summary_metrics.Rmd</code></div>
@@ -185,7 +185,7 @@ relationship between a species or a site and the bioregionalization.</p>
 containing <span class="math inline">\(K\)</span> bioregions
 (<code>vege_nhclu</code> computed above for example) and its associated
 site–species co-occurrence matrix <a href="https://biorgeo.github.io/bioregion/reference/vegemat.html" class="external-link">vegemat</a>
-to compute three core terms, from which occurrence-based indices are
+to compute three core terms, from which occurrence-based metrics are
 derived.</p>
 <ul>
 <li>
@@ -207,10 +207,10 @@ sites belonging to bioregion <span class="math inline">\(b\)</span>.</li>
 </center>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
-<span>                            bioregion_indices <span class="op">=</span> <span class="st">"CoreTerms"</span>,</span>
-<span>                            bioregionalization_indices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                            bioregion_metrics <span class="op">=</span> <span class="st">"CoreTerms"</span>,</span>
+<span>                            bioregionalization_metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            data_type <span class="op">=</span> <span class="st">"occurrence"</span>,</span>
-<span>                            node_type <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>                            cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
 <span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -228,11 +228,11 @@ sites belonging to bioregion <span class="math inline">\(b\)</span>.</li>
 <span><span class="co">## 8    10003         2    0  86 150</span></span>
 <span><span class="co">## 9    10003         3    4  86 207</span></span>
 <span><span class="co">## 10   10004         1  205 438 358</span></span></code></pre>
-<p>These core terms and associated indices are computed when
+<p>These core terms and associated metrics are computed when
 <code>data_type = "occurrence"</code> (or
-<code>data_type = "both"</code>) and <code>node_type = "site"</code> (or
-<code>node_type = "both"</code>). <code>node_type = "site"</code> means
-that a bioregion is assigned to each site in
+<code>data_type = "both"</code>) and <code>cluster_on = "site"</code>
+(or <code>cluster_on = "both"</code>). <code>cluster_on = "site"</code>
+means that a bioregion is assigned to each site in
 <code>vege_nhclu</code>.</p>
 <p>Several metrics can be derived from these core terms.</p>
 <div class="section level4">
@@ -308,14 +308,14 @@ under random association, providing a standardized measure of
 contribution to the bioregional structure.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
-<span>                            bioregion_indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Specificity"</span>, <span class="st">"NSpecificity"</span>,</span>
+<span>                            bioregion_metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Specificity"</span>, <span class="st">"NSpecificity"</span>,</span>
 <span>                                                  <span class="st">"Fidelity"</span>,</span>
 <span>                                                  <span class="st">"IndVal"</span>, <span class="st">"NIndVal"</span>,</span>
 <span>                                                  <span class="st">"Rho"</span>,</span>
 <span>                                                  <span class="st">"CoreTerms"</span><span class="op">)</span>,</span>
-<span>                            bioregionalization_indices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                            bioregionalization_metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            data_type <span class="op">=</span> <span class="st">"occurrence"</span>,</span>
-<span>                            node_type <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>                            cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
 <span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -347,7 +347,7 @@ contribution to the bioregional structure.</p>
 <p>The abundance version of these metrics can also be computed when
 <code>data_type = "abundance"</code> (or
 <code>data_type = "both"</code>). In this case the core terms and
-associated indices are:</p>
+associated metrics are:</p>
 <ul>
 <li>
 <span class="math inline">\(w_{sb}\)</span> is the sum of abundances
@@ -363,10 +363,10 @@ all species present in sites of bioregion <strong>b</strong>.</li>
 </ul>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wsb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
-<span>                            bioregion_indices <span class="op">=</span> <span class="st">"CoreTerms"</span>,</span>
-<span>                            bioregionalization_indices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                            bioregion_metrics <span class="op">=</span> <span class="st">"CoreTerms"</span>,</span>
+<span>                            bioregionalization_metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            data_type <span class="op">=</span> <span class="st">"abundance"</span>,</span>
-<span>                            node_type <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>                            cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
 <span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -438,14 +438,14 @@ standard deviation.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wsb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
-<span>                            bioregion_indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Specificity"</span>, <span class="st">"NSpecificity"</span>,</span>
+<span>                            bioregion_metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Specificity"</span>, <span class="st">"NSpecificity"</span>,</span>
 <span>                                                  <span class="st">"Fidelity"</span>,</span>
 <span>                                                  <span class="st">"IndVal"</span>, <span class="st">"NIndVal"</span>,</span>
 <span>                                                  <span class="st">"Rho"</span>,</span>
 <span>                                                  <span class="st">"CoreTerms"</span><span class="op">)</span>,</span>
-<span>                            bioregionalization_indices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                            bioregionalization_metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            data_type <span class="op">=</span> <span class="st">"abundance"</span>,</span>
-<span>                            node_type <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>                            cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
 <span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -479,8 +479,8 @@ standard deviation.</li>
 <div class="section level3">
 <h3 id="species-to-bioregionalization-metrics">3.2 Species-to-bioregionalization metrics<a class="anchor" aria-label="anchor" href="#species-to-bioregionalization-metrics"></a>
 </h3>
-<p>Based on all these indices, it is also possible to derive aggregated
-indices.<br>
+<p>Based on all these metrics, it is also possible to derive aggregated
+metrics.<br>
 For now, only the participation coefficient <span class="math inline">\(P_s\)</span> of a species <span class="math inline">\(s\)</span> to the bioregionalization as described
 in <span class="citation">(Denelle <em>et al.</em>, 2020)</span> is
 proposed, available in both its occurrence and abundance versions.</p>
@@ -497,17 +497,17 @@ P_s =  1 - \sum_{k=1}^K \left(\frac{n_{sk}}{n_s}\right)^2
 <p><span class="math display">\[
 P_s =  1 - \sum_{k=1}^K \left(\frac{w_{sk}}{w_s}\right)^2
 \]</span></p>
-<p>These indices measure how evenly a species is distributed among
+<p>These metrics measure how evenly a species is distributed among
 bioregions. There are ranging from 0 to 1. Values close to 0 indicate
 that the species is largely restricted to a single bioregion, while
 values close to 1 indicate that the species is evenly distributed across
 multiple bioregions.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
-<span>                           bioregion_indices <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                            bioregionalization_indices <span class="op">=</span> <span class="st">"P"</span>,</span>
+<span>                           bioregion_metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                            bioregionalization_metrics <span class="op">=</span> <span class="st">"P"</span>,</span>
 <span>                            data_type <span class="op">=</span> <span class="st">"both"</span>,</span>
-<span>                            node_type <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>                            cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
 <span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -536,7 +536,7 @@ been assigned<br>
 to each species in a bioregionalization (as is the case for
 <code>vege_netclubip</code><br>
 computed above). In this case, setting
-<code>node_type = "species"</code> (or<br><code>node_type = "both"</code>) allows computing site-to-species
+<code>cluster_on = "species"</code> (or<br><code>cluster_on = "both"</code>) allows computing site-to-species
 cluster and/or<br>
 site-to-species clustering metrics. These metrics are derived from the
 same<br>
@@ -558,77 +558,24 @@ species belonging to cluster <span class="math inline">\(c\)</span>.</li>
 <p>and their abundance counterparts.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_netclubip</span>,</span>
-<span>                            bioregion_indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Specificity"</span>, <span class="st">"NSpecificity"</span>,</span>
+<span>                            bioregion_metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Specificity"</span>, <span class="st">"NSpecificity"</span>,</span>
 <span>                                                  <span class="st">"Fidelity"</span>,</span>
 <span>                                                  <span class="st">"IndVal"</span>, <span class="st">"NIndVal"</span>,</span>
 <span>                                                  <span class="st">"Rho"</span>,</span>
 <span>                                                  <span class="st">"CoreTerms"</span><span class="op">)</span>,</span>
-<span>                            bioregionalization_indices <span class="op">=</span> <span class="st">"P"</span>,</span>
+<span>                            bioregionalization_metrics <span class="op">=</span> <span class="st">"P"</span>,</span>
 <span>                            data_type <span class="op">=</span> <span class="st">"both"</span>,</span>
-<span>                            node_type <span class="op">=</span> <span class="st">"species"</span>,</span>
+<span>                            cluster_on <span class="op">=</span> <span class="st">"species"</span>,</span>
 <span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
 <span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                            verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">gc</span><span class="op">$</span><span class="va">site_clusters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##    Site Species_cluster n_gc n_g  n_c Specificity_occ NSpecificity_occ</span></span>
-<span><span class="co">## 1    35               1    1 129 2219     0.007751938      0.002901223</span></span>
-<span><span class="co">## 2    35               2  121 129  873     0.937984496      0.892297163</span></span>
-<span><span class="co">## 3    35               3    7 129  430     0.054263566      0.104801614</span></span>
-<span><span class="co">## 4    35               4    0 129  137     0.000000000      0.000000000</span></span>
-<span><span class="co">## 5    35               5    0 129   16     0.000000000      0.000000000</span></span>
-<span><span class="co">## 6    35               6    0 129   16     0.000000000      0.000000000</span></span>
-<span><span class="co">## 7    35               7    0 129    3     0.000000000      0.000000000</span></span>
-<span><span class="co">## 8    35               8    0 129    3     0.000000000      0.000000000</span></span>
-<span><span class="co">## 9    36               1  241 867 2219     0.277970012      0.116252995</span></span>
-<span><span class="co">## 10   36               2  585 867  873     0.674740484      0.717275560</span></span>
-<span><span class="co">##    Fidelity_occ   IndVal_occ  NIndVal_occ     Rho_occ  w_gc   w_g     w_c</span></span>
-<span><span class="co">## 1  0.0004506534 3.493438e-06 1.307446e-06 -13.9811951     1   423 2873216</span></span>
-<span><span class="co">## 2  0.1386025200 1.300070e-01 1.236746e-01  19.1029702   411   423 1149003</span></span>
-<span><span class="co">## 3  0.0162790698 8.833604e-04 1.706073e-03  -2.2372244    11   423  103264</span></span>
-<span><span class="co">## 4  0.0000000000 0.000000e+00 0.000000e+00  -2.2676901     0   423   85285</span></span>
-<span><span class="co">## 5  0.0000000000 0.000000e+00 0.000000e+00  -0.7621238     0   423   16026</span></span>
-<span><span class="co">## 6  0.0000000000 0.000000e+00 0.000000e+00  -0.7621238     0   423    9049</span></span>
-<span><span class="co">## 7  0.0000000000 0.000000e+00 0.000000e+00  -0.3294281     0   423    3356</span></span>
-<span><span class="co">## 8  0.0000000000 0.000000e+00 0.000000e+00  -0.3294281     0   423    2942</span></span>
-<span><span class="co">## 9  0.1086074808 3.018962e-02 1.262594e-02 -22.1362445  4139 43753 2873216</span></span>
-<span><span class="co">## 10 0.6701030928 4.521457e-01 4.806486e-01  34.7507328 38926 43753 1149003</span></span>
-<span><span class="co">##    Specificity_abund NSpecificity_abund Fidelity_abund IndVal_abund</span></span>
-<span><span class="co">## 1        0.002364066       0.0009070715   3.480421e-07 1.065375e-06</span></span>
-<span><span class="co">## 2        0.971631206       0.9476029112   3.577014e-04 1.346705e-01</span></span>
-<span><span class="co">## 3        0.026004728       0.0514900173   1.065231e-04 4.233328e-04</span></span>
-<span><span class="co">## 4        0.000000000       0.0000000000   0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">## 5        0.000000000       0.0000000000   0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">## 6        0.000000000       0.0000000000   0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">## 7        0.000000000       0.0000000000   0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">## 8        0.000000000       0.0000000000   0.000000e+00 0.000000e+00</span></span>
-<span><span class="co">## 9        0.094599227       0.0387188108   1.440546e-03 1.027418e-02</span></span>
-<span><span class="co">## 10       0.889676136       0.9255703214   3.387807e-02 5.961747e-01</span></span>
-<span><span class="co">##    NIndVal_abund   Rho_abund</span></span>
-<span><span class="co">## 1   4.087749e-07  -7.9728244</span></span>
-<span><span class="co">## 2   1.313402e-01  11.3128933</span></span>
-<span><span class="co">## 3   8.382096e-04  -1.8400980</span></span>
-<span><span class="co">## 4   0.000000e+00  -1.2815040</span></span>
-<span><span class="co">## 5   0.000000e+00  -0.4306870</span></span>
-<span><span class="co">## 6   0.000000e+00  -0.4306870</span></span>
-<span><span class="co">## 7   0.000000e+00  -0.1861645</span></span>
-<span><span class="co">## 8   0.000000e+00  -0.1861645</span></span>
-<span><span class="co">## 9   4.205153e-03 -14.0235465</span></span>
-<span><span class="co">## 10  6.202275e-01  20.9066178</span></span></code></pre>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gc</span><span class="op">$</span><span class="va">site_clustering</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##    Site     P_occ    P_abund</span></span>
-<span><span class="co">## 1    35 0.1171805 0.05525097</span></span>
-<span><span class="co">## 2    36 0.4653281 0.19928153</span></span>
-<span><span class="co">## 3    37 0.3498196 0.08246363</span></span>
-<span><span class="co">## 4    38 0.2925811 0.06936005</span></span>
-<span><span class="co">## 5    39 0.3870672 0.18829826</span></span>
-<span><span class="co">## 6    84 0.4950958 0.41403147</span></span>
-<span><span class="co">## 7    85 0.4611738 0.31729045</span></span>
-<span><span class="co">## 8    86 0.4555509 0.17223117</span></span>
-<span><span class="co">## 9    87 0.5147554 0.29310903</span></span>
-<span><span class="co">## 10   88 0.4965267 0.30487674</span></span></code></pre>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="site-to-bioregion-metrics">3.4 Site-to-bioregion metrics<a class="anchor" aria-label="anchor" href="#site-to-bioregion-metrics"></a>

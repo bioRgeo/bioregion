@@ -8,13 +8,14 @@ species or site to each bioregion.
 ``` r
 site_species_metrics(
   bioregionalization,
-  bioregion_indices = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
-    "Rho", "CoreTerms"),
-  bioregionalization_indices = "P",
+  bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
+    "Rho"),
+  bioregionalization_metrics = "P",
   data_type = "auto",
-  node_type = "site",
+  cluster_on = "site",
   comat,
   similarity = NULL,
+  include_cluster = FALSE,
   index = names(similarity)[3],
   verbose = TRUE
 )
@@ -26,44 +27,50 @@ site_species_metrics(
 
   A `bioregion.clusters` object.
 
-- bioregion_indices:
+- bioregion_metrics:
 
   A `character` vector or a single `character` string specifying the
-  indices to compute. Several indices belonging to different categories
+  metrics to compute. Several metrics belonging to different categories
   are available: species to bioregions (`"Specificity"`,
   `"NSpecificity"`, `"Fidelity"`, `"NFidelity"`, `"IndVal"`,
   `"NIndVal"`, `"Rho"` and `"CoreTerms"`), site to bioregions
-  (`"MeanSim"` and `"SdSim"`), or site to species clusters when a
-  cluster/bioregion has been assigned to the species in
-  `bioregionalization` (see Details). If `"all"` is specified (default),
-  all indices will be calculated.
+  (`"Richness"`, `"Rich_Endemics"`, `"Prop_Endemics"`, `"MeanSim"` and
+  `"SdSim"`), or site to chorotypes (`"Specificity"`, `"NSpecificity"`,
+  `"Fidelity"`, `"NFidelity"`, `"IndVal"`, `"NIndVal"`, `"Rho"` and
+  `"CoreTerms"`) when a cluster has been assigned to the species in
+  `bioregionalization` (see Details). If `"all"` is specified, all
+  metrics will be calculated.
 
-- bioregionalization_indices:
+- bioregionalization_metrics:
 
   A `character` vector or a single `character` string specifying the
-  bioregionalization indices to compute. Some aggregated indices (such
-  as the participation coefficient or Silhouette index) can be derived
-  from the `bioregion_indices` (see Details). If `"all"` is specified
-  (default), all bioregionalization indices will be calculated.
+  bioregionalization metrics to compute. Some aggregated metrics (such
+  as the participation coefficient `"P"` or Silhouette index
+  `"Silhouette"`) can be derived from the `bioregion_metrics` (see
+  Details). If `"all"` is specified , all bioregionalization metrics
+  will be calculated.
 
 - data_type:
 
   A `character` string specifying which type of data should be
-  considered to compute the related indices (`"A"`, `"B"`, `"IndVal"`
-  and `"Rho"`): occurrences or abundances. By default (`"auto"`), the
-  type of data is inferred from `bioregionalization` and/or the provided
-  co-occurrence matrix (argument `comat`). Other available options are
-  `"occurence"`, `"abundance"` or `"both"` (see Details).
+  considered to compute the related metrics (`"Specificity"`,
+  ``` "NSpecificity"``"Fidelity" ```, `"NFidelity"`, `"IndVal"`,
+  `"NIndVal"`, `"Rho"`, `"CoreTerms"`): occurrences or abundances. By
+  default (`"auto"`), the type of data is inferred from
+  `bioregionalization` and/or the provided co-occurrence matrix
+  (argument `comat`). Other available options are `"occurence"`,
+  `"abundance"` or `"both"` (see Details).
 
-- node_type:
+- cluster_on:
 
-  A `character` string specifying whether the related indices
+  A `character` string specifying whether the related metrics
   (`"Specificity"`, `"NSpecificity"`, `"Fidelity"`, `"NFidelity"`,
   `"IndVal"`, `"NIndVal"`, `"Rho"` and `"CoreTerms"`) should be computed
-  as contributions from species to bioregions (`"site"` by default),
-  from sites to species clusters (`"species"`), or for `"both"`. The
-  latter type of contribution is only available if a cluster has been
-  assigned to the species in `bioregionalization` (see Details).
+  as contributions from species to bioregions (clusters based on
+  `"site"` by default), from site to chorotypes (clusters based on
+  `"species"`) or for `"both"`. The latter type of contribution is only
+  available if a cluster has been assigned to the species in
+  `bioregionalization` (see Details).
 
 - comat:
 
@@ -75,6 +82,13 @@ site_species_metrics(
   [`similarity()`](https://bioRgeo.github.io/bioregion/reference/similarity.md)
   or
   [`dissimilarity_to_similarity()`](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.md).
+
+- include_cluster:
+
+  A `boolean` indicating whether to include an additional column
+  `Assigned` in the site-to-bioregions output, indicating for each site
+  whether the considered bioregion is its bioregion (`FALSE` by
+  default).
 
 - index:
 
@@ -89,27 +103,27 @@ site_species_metrics(
 ## Value
 
 A `list` containing between one and six elements (listed below),
-depending on the selected indices (`bioregion_indices` and/or
-`bioregionalization_indices`) and the type of nodes (`site` and/or
-`species`).
+depending on the selected metrics (`bioregion_metrics` and/or
+`bioregionalization_metrics`) and the type of cluster (bioregion when
+`cluster_on = "site"` and/or chorotypes when `cluster_on = "species"`).
 
 - **species_bioregions**: A `data.frame` containing the
-  species-to-bioregions indice(s) based on `comat`.
+  species-to-bioregions metric(s) based on `comat`.
 
 - **species_bioregionalization**: A `data.frame` containing the
-  species-to-bioregionalization indice(s) based on `comat`.
-
-- **site_clusters**: A `data.frame` containing the site-to-species
-  clusters indice(s) based on `comat`.
-
-- **site_clustering**: A `data.frame` containing the site-to-species
-  clustering indice(s) based on `comat`.
+  species-to-bioregionalization metric(s) based on `comat`.
 
 - **site_bioregions**: A `data.frame` containing the site-to-bioregions
-  indice(s) based on `similarity`.
+  metric(s) based on `comat` or `similarity`.
 
 - **site_bioregionalization**: A `data.frame` containing the
-  site-to-bioregionalization indice(s) based on `similarity`.
+  site-to-bioregionalization metric(s) based on `comat` or `similarity`.
+
+- **site_chorotypes**: A `data.frame` containing the site-to-chorotypes
+  metric(s) based on `comat`.
+
+- **site_chorological**: A `data.frame` containing the
+  site-to-chorological classification metric(s) based on `comat`.
 
 Note that if `bioregionalization` contains more than one partition
 (i.e., if `dim(bioregionalization$clusters) > 2`), a list of lists will
@@ -117,14 +131,14 @@ be returned, with one sublist per partition.
 
 ## Details
 
-The **first type** of indices provided by this function is based on the
-contribution of each species to a given bioregion (`node_type = "site"`
-or `node_type = "both"`). This is calculated from the bioregion assigned
-to each site (as defined in `bioregionalization`) and an associated
-site–species co-occurrence matrix `comat` (a strict match between site
-IDs is required).
+The **first type** of metrics provided by this function is based on the
+contribution of each species to a given bioregion (`cluster_on = "site"`
+or `cluster_on = "both"`). This is calculated from the bioregion
+assigned to each site (as defined in `bioregionalization`) and an
+associated site–species co-occurrence matrix `comat` (a strict match
+between site IDs is required).
 
-Occurrence-based indices (`data_type = "occurrence"` or
+Occurrence-based metrics (`data_type = "occurrence"` or
 `data_type = "both"`) are derived from three core terms:
 
 - **n_sb**: Number of sites belonging to bioregion **b** in which
@@ -134,7 +148,7 @@ Occurrence-based indices (`data_type = "occurrence"` or
 
 - **n_b**: Total number of sites belonging to bioregion **b**.
 
-These **species-to-bioregion** indices include:
+These **species-to-bioregions** metrics include:
 
 - [**Specificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence),
   as described in De Cáceres M & Legendre P (2009).
@@ -156,12 +170,12 @@ These **species-to-bioregion** indices include:
 - [**Rho**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#rho-occurrence),
   as described in Lenormand *et al.* (2019).
 
-**Species-to-bioregionalization** indices can also be computed, such as:
+**Species-to-bioregionalization** metrics can also be computed, such as:
 
 - [**Participation**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence),
   as described in Denelle *et al.* (2020).
 
-Abundance-weighted versions of these indices (`data_type = "abundance"`
+Abundance-weighted versions of these metrics (`data_type = "abundance"`
 or `data_type = "both"`) can also be derived using the following
 analogous core terms:
 
@@ -175,40 +189,30 @@ analogous core terms:
 
 These abundance-weighted terms correspond directly to their
 occurrence-based counterparts and allow computing abundance versions of
-the same indices. Detailed formulas and examples are provided in the
+the same metrics. Detailed formulas and examples are provided in the
 package vignette.
 
-The **second type** of indices provided by this function is based on the
-contribution of each site to a given *species cluster*
-(`node_type = "species"` or `node_type = "both"`, only when a cluster or
-bioregion has been assigned to species in `bioregionalization`). This is
-calculated from the cluster assigned to each species (as defined in
-`bioregionalization`) and an associated site–species co-occurrence
-matrix (a strict match between species IDs is required).
+The **second type** of metrics provided by this function is based on the
+contribution of each site to a given bioregion (`cluster_on = "site"` or
+`cluster_on = "both"`). This is calculated from the bioregion assigned
+to each site (as defined in `bioregionalization`), an associated
+site–species co-occurrence matrix `comat` (for `"Richness"`,
+`"Rich_Endemics"` and `"Prop_Endemics"`, a strict match between site IDs
+is required) and/or a site–site similarity metric `similarity` (for
+`"MeanSim"` and `"SdSim"`, a strict match between site IDs is required).
 
-In this case, occurrence-based indices (`data_type = "occurrence"` or
-`data_type = "both"`) are derived from three core terms:
+These **site-to-bioregions** metrics include:
 
-- **n_gc**: Number of species belonging to cluster **c** that are
-  present in site **g**.
+- [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richness):
+  The number of species present in a site.
 
-- **n_g**: Total number of species present in site **g**.
+- [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richendemics):
+  The number of species present in a site that are endemic to a
+  bioregion.
 
-- **n_c**: Total number of species belonging to cluster **c**.
-
-As for the first type, all indices (including their abundance-weighted
-versions when `data_type = "abundance"` or `data_type = "both"`) can be
-derived from these **site-to-clusters** relationships. Further details,
-mathematical definitions, and examples are provided in the package
-vignette.
-
-The **third type** of indices provided by this function, not included by
-default, is based on the contribution of each site to a given bioregion.
-This is calculated from the bioregion assigned to each site (as defined
-in `bioregionalization`) and a site–site similarity metric
-(`similarity`) (a strict match between site IDs is required).
-
-These **site-to-bioregion** indices include:
+- [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#propendemics):
+  The proportion of species present in a site that are endemic to a
+  bioregion.
 
 - [**MeanSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim):
   The mean similarity of each site to the sites of every bioregion.
@@ -216,15 +220,39 @@ These **site-to-bioregion** indices include:
 - [**SdSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#sdsim):
   The corresponding standard deviation of similarity values.
 
-**Site-to-bioregionalization** indices can also be computed, such as:
+**Site-to-bioregionalization** metrics can also be computed, such as:
 
 - [**Silhouette**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#silhouette),
   as described in Rousseeuw (1987) (similarity-based version).
 
+The **third type** of metrics provided by this function is based on the
+contribution of each site to a given *chorotypes*
+(`cluster_on = "species"` or `cluster = "both"`, only when a cluster has
+been assigned to species in `bioregionalization`). This is calculated
+from the chorotype assigned to each species (as defined in
+`bioregionalization`) and an associated site–species co-occurrence
+matrix (a strict match between species IDs is required).
+
+In this case, occurrence-based metrics (`data_type = "occurrence"` or
+`data_type = "both"`) are derived from three core terms:
+
+- **n_gc**: Number of species belonging to chorotype **c** that are
+  present in site **g**.
+
+- **n_g**: Total number of species present in site **g**.
+
+- **n_c**: Total number of species belonging to chorotype **c**.
+
+As for the first type, all metrics (including their abundance-weighted
+versions when `data_type = "abundance"` or `data_type = "both"`) can be
+derived from these **site-to-chorotypes** relationships. Further
+details, mathematical definitions, and examples are provided in the
+package vignette.
+
 ## Note
 
 If `data_type = "auto"`, the choice between occurrence- or abundance-
-based indices will be determined automatically from the input data, and
+based metrics will be determined automatically from the input data, and
 a message will explain the choice made.
 
 ## References
@@ -276,14 +304,15 @@ bioregionalization <- hclu_hierarclust(similarity_to_dissimilarity(fishsim),
                                        verbose = FALSE)
                                      
 ind <- site_species_metrics(bioregionalization = bioregionalization,
-                             bioregion_indices = "all",
-                             bioregionalization_indices = "all",
+                             bioregion_metrics = "all",
+                             bioregionalization_metrics = "all",
                              data_type = "auto",
-                             node_type = "site",
+                             cluster_on = "site",
                              comat = fishmat,
                              similarity = fishsim,
+                             include_cluster = TRUE,
                              index = 3,
                              verbose = TRUE)
-#> The bioregionalization is based on occurence data and comat is based on occurence data so occurrence-based indices will be computed.
+#> The bioregionalization is based on occurence data and comat is based on occurence data so occurrence-based metrics will be computed.
                                      
 ```

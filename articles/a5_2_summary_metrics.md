@@ -93,7 +93,7 @@ Species-to-bioregion metrics are based on a bioregionalization
 containing \\K\\ bioregions (`vege_nhclu` computed above for example)
 and its associated site–species co-occurrence matrix
 [vegemat](https://biorgeo.github.io/bioregion/reference/vegemat.html) to
-compute three core terms, from which occurrence-based indices are
+compute three core terms, from which occurrence-based metrics are
 derived.
 
 - \\n\_{sb}\\ is the number of sites belonging to bioregion \\b\\ in
@@ -106,10 +106,10 @@ derived.
 
 ``` r
 nsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = "CoreTerms",
-                            bioregionalization_indices = NULL,
+                            bioregion_metrics = "CoreTerms",
+                            bioregionalization_metrics = NULL,
                             data_type = "occurrence",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -130,9 +130,9 @@ nsb$species_bioregions[1:10,]
     ## 9    10003         3    4  86 207
     ## 10   10004         1  205 438 358
 
-These core terms and associated indices are computed when
+These core terms and associated metrics are computed when
 `data_type = "occurrence"` (or `data_type = "both"`) and
-`node_type = "site"` (or `node_type = "both"`). `node_type = "site"`
+`cluster_on = "site"` (or `cluster_on = "both"`). `cluster_on = "site"`
 means that a bioregion is assigned to each site in `vege_nhclu`.
 
 Several metrics can be derived from these core terms.
@@ -208,14 +208,14 @@ contribution to the bioregional structure.
 
 ``` r
 nsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = NULL,
+                            bioregionalization_metrics = NULL,
                             data_type = "occurrence",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -249,7 +249,7 @@ nsb$species_bioregions[1:10,]
 
 The abundance version of these metrics can also be computed when
 `data_type = "abundance"` (or `data_type = "both"`). In this case the
-core terms and associated indices are:
+core terms and associated metrics are:
 
 - \\w\_{sb}\\ is the sum of abundances of species **s** in sites of
   bioregion **b**.
@@ -259,10 +259,10 @@ core terms and associated indices are:
 
 ``` r
 wsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = "CoreTerms",
-                            bioregionalization_indices = NULL,
+                            bioregion_metrics = "CoreTerms",
+                            bioregionalization_metrics = NULL,
                             data_type = "abundance",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -319,14 +319,14 @@ n_b}{n-1}\right) \left(\frac{{\sigma_s}^2}{n_b}\right)}}\\ where
 
 ``` r
 wsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = NULL,
+                            bioregionalization_metrics = NULL,
                             data_type = "abundance",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -360,8 +360,8 @@ wsb$species_bioregions[1:10,]
 
 ### 3.2 Species-to-bioregionalization metrics
 
-Based on all these indices, it is also possible to derive aggregated
-indices.  
+Based on all these metrics, it is also possible to derive aggregated
+metrics.  
 For now, only the participation coefficient \\P_s\\ of a species \\s\\
 to the bioregionalization as described in (Denelle *et al.*, 2020) is
 proposed, available in both its occurrence and abundance versions.
@@ -374,7 +374,7 @@ proposed, available in both its occurrence and abundance versions.
 
 \\ P_s = 1 - \sum\_{k=1}^K \left(\frac{w\_{sk}}{w_s}\right)^2 \\
 
-These indices measure how evenly a species is distributed among
+These metrics measure how evenly a species is distributed among
 bioregions. There are ranging from 0 to 1. Values close to 0 indicate
 that the species is largely restricted to a single bioregion, while
 values close to 1 indicate that the species is evenly distributed across
@@ -382,10 +382,10 @@ multiple bioregions.
 
 ``` r
 ps <- site_species_metrics(bioregionalization = vege_nhclu,
-                           bioregion_indices = NULL,
-                            bioregionalization_indices = "P",
+                           bioregion_metrics = NULL,
+                            bioregionalization_metrics = "P",
                             data_type = "both",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -412,8 +412,8 @@ Dual metrics can also be computed when a cluster or bioregion has been
 assigned  
 to each species in a bioregionalization (as is the case for
 `vege_netclubip`  
-computed above). In this case, setting `node_type = "species"` (or  
-`node_type = "both"`) allows computing site-to-species cluster and/or  
+computed above). In this case, setting `cluster_on = "species"` (or  
+`cluster_on = "both"`) allows computing site-to-species cluster and/or  
 site-to-species clustering metrics. These metrics are derived from the
 same  
 principles as above, based on three core terms:
@@ -427,14 +427,14 @@ and their abundance counterparts.
 
 ``` r
 gc <- site_species_metrics(bioregionalization = vege_netclubip,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = "P",
+                            bioregionalization_metrics = "P",
                             data_type = "both",
-                            node_type = "species",
+                            cluster_on = "species",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,
@@ -443,66 +443,13 @@ gc <- site_species_metrics(bioregionalization = vege_netclubip,
 gc$site_clusters[1:10,]
 ```
 
-    ##    Site Species_cluster n_gc n_g  n_c Specificity_occ NSpecificity_occ
-    ## 1    35               1    1 129 2219     0.007751938      0.002901223
-    ## 2    35               2  121 129  873     0.937984496      0.892297163
-    ## 3    35               3    7 129  430     0.054263566      0.104801614
-    ## 4    35               4    0 129  137     0.000000000      0.000000000
-    ## 5    35               5    0 129   16     0.000000000      0.000000000
-    ## 6    35               6    0 129   16     0.000000000      0.000000000
-    ## 7    35               7    0 129    3     0.000000000      0.000000000
-    ## 8    35               8    0 129    3     0.000000000      0.000000000
-    ## 9    36               1  241 867 2219     0.277970012      0.116252995
-    ## 10   36               2  585 867  873     0.674740484      0.717275560
-    ##    Fidelity_occ   IndVal_occ  NIndVal_occ     Rho_occ  w_gc   w_g     w_c
-    ## 1  0.0004506534 3.493438e-06 1.307446e-06 -13.9811951     1   423 2873216
-    ## 2  0.1386025200 1.300070e-01 1.236746e-01  19.1029702   411   423 1149003
-    ## 3  0.0162790698 8.833604e-04 1.706073e-03  -2.2372244    11   423  103264
-    ## 4  0.0000000000 0.000000e+00 0.000000e+00  -2.2676901     0   423   85285
-    ## 5  0.0000000000 0.000000e+00 0.000000e+00  -0.7621238     0   423   16026
-    ## 6  0.0000000000 0.000000e+00 0.000000e+00  -0.7621238     0   423    9049
-    ## 7  0.0000000000 0.000000e+00 0.000000e+00  -0.3294281     0   423    3356
-    ## 8  0.0000000000 0.000000e+00 0.000000e+00  -0.3294281     0   423    2942
-    ## 9  0.1086074808 3.018962e-02 1.262594e-02 -22.1362445  4139 43753 2873216
-    ## 10 0.6701030928 4.521457e-01 4.806486e-01  34.7507328 38926 43753 1149003
-    ##    Specificity_abund NSpecificity_abund Fidelity_abund IndVal_abund
-    ## 1        0.002364066       0.0009070715   3.480421e-07 1.065375e-06
-    ## 2        0.971631206       0.9476029112   3.577014e-04 1.346705e-01
-    ## 3        0.026004728       0.0514900173   1.065231e-04 4.233328e-04
-    ## 4        0.000000000       0.0000000000   0.000000e+00 0.000000e+00
-    ## 5        0.000000000       0.0000000000   0.000000e+00 0.000000e+00
-    ## 6        0.000000000       0.0000000000   0.000000e+00 0.000000e+00
-    ## 7        0.000000000       0.0000000000   0.000000e+00 0.000000e+00
-    ## 8        0.000000000       0.0000000000   0.000000e+00 0.000000e+00
-    ## 9        0.094599227       0.0387188108   1.440546e-03 1.027418e-02
-    ## 10       0.889676136       0.9255703214   3.387807e-02 5.961747e-01
-    ##    NIndVal_abund   Rho_abund
-    ## 1   4.087749e-07  -7.9728244
-    ## 2   1.313402e-01  11.3128933
-    ## 3   8.382096e-04  -1.8400980
-    ## 4   0.000000e+00  -1.2815040
-    ## 5   0.000000e+00  -0.4306870
-    ## 6   0.000000e+00  -0.4306870
-    ## 7   0.000000e+00  -0.1861645
-    ## 8   0.000000e+00  -0.1861645
-    ## 9   4.205153e-03 -14.0235465
-    ## 10  6.202275e-01  20.9066178
+    ## NULL
 
 ``` r
 gc$site_clustering[1:10,]
 ```
 
-    ##    Site     P_occ    P_abund
-    ## 1    35 0.1171805 0.05525097
-    ## 2    36 0.4653281 0.19928153
-    ## 3    37 0.3498196 0.08246363
-    ## 4    38 0.2925811 0.06936005
-    ## 5    39 0.3870672 0.18829826
-    ## 6    84 0.4950958 0.41403147
-    ## 7    85 0.4611738 0.31729045
-    ## 8    86 0.4555509 0.17223117
-    ## 9    87 0.5147554 0.29310903
-    ## 10   88 0.4965267 0.30487674
+    ## NULL
 
 ### 3.4 Site-to-bioregion metrics
 
