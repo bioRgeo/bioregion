@@ -28,9 +28,9 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   expect_s3_class(ind, "bioregion.site.species.metrics")
   
   # Test print method
-  expect_output(print(ind), "Site and species contribution metrics")
-  expect_output(print(ind), "Input summary:")
-  expect_output(print(ind), "Node type:")
+  expect_output(print(ind), "Site and species metrics")
+  expect_output(print(ind), "Settings:")
+  expect_output(print(ind), "Clusters based on:")
   expect_output(print(ind), "Computed metrics:")
   expect_output(print(ind), "Data preview:")
   expect_output(print(ind), "Access data with:")
@@ -39,26 +39,26 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   expect_output(print(ind, n_preview = 0), "Available components:")
   
   # Test print with custom n_preview
-  expect_output(print(ind, n_preview = 5), "Site and species contribution metrics")
+  expect_output(print(ind, n_preview = 5), "Site and species metrics")
   
   # Test str method
   expect_output(str(ind), "bioregion.site.species.metrics object")
   expect_output(str(ind), "Partitions:")
-  expect_output(str(ind), "Node type:")
+  expect_output(str(ind), "Cluster based on:")
   
   # Test summary method
-  expect_output(summary(ind), "Summary of site and species contribution metrics")
+  expect_output(summary(ind), "Summary of site and species metrics")
   expect_output(summary(ind), "Settings:")
   expect_output(summary(ind), "Number of partitions:")
-  expect_output(summary(ind), "Node type:")
+  expect_output(summary(ind), "Cluster based on:")
   
   # Test summary with show_top_contributors = FALSE
   expect_output(summary(ind, show_top_contributors = FALSE), 
-                "Summary of site and species contribution metrics")
+                "Summary of site and species metrics")
   
   # Test summary with custom n_top
   expect_output(summary(ind, n_top = 3), 
-                "Summary of site and species contribution metrics")
+                "Summary of site and species metrics")
   
   # Test attributes
   expect_true(!is.null(attr(ind, "n_partitions")))
@@ -94,16 +94,16 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   expect_s3_class(ind_hier, "bioregion.site.species.metrics")
   
   # Test print for multiple partitions
-  expect_output(print(ind_hier), "Site and species contribution metrics")
+  expect_output(print(ind_hier), "Site and species metrics")
   expect_output(print(ind_hier), "Partitions:")
   
   # Test summary for multiple partitions
   expect_output(summary(ind_hier), 
-                "Summary of site and species contribution metrics")
+                "Summary of site and species metrics")
   
   # Test summary with n_partitions limit
   expect_output(summary(ind_hier, n_partitions = 1), 
-                "Summary of site and species contribution metrics")
+                "Summary of site and species metrics")
   
   # Test str for multiple partitions
   expect_output(str(ind_hier), "bioregion.site.species.metrics object")
@@ -120,9 +120,9 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
                                    verbose = FALSE)
   
   expect_s3_class(ind_site, "bioregion.site.species.metrics")
-  expect_output(print(ind_site), "Site and species contribution metrics")
+  expect_output(print(ind_site), "Site and species metrics")
   expect_output(str(ind_site), "bioregion.site.species.metrics object")
-  expect_output(summary(ind_site), "Summary of site and species contribution metrics")
+  expect_output(summary(ind_site), "Summary of site and species metrics")
   
   # Test with single node type (species only)
   ind_species <- site_species_metrics(bioregionalization = cluinfo,
@@ -134,9 +134,9 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
                                       verbose = FALSE)
   
   expect_s3_class(ind_species, "bioregion.site.species.metrics")
-  expect_output(print(ind_species), "Site and species contribution metrics")
+  expect_output(print(ind_species), "Site and species metrics")
   expect_output(str(ind_species), "bioregion.site.species.metrics object")
-  expect_output(summary(ind_species), "Summary of site and species contribution metrics")
+  expect_output(summary(ind_species), "Summary of site and species metrics")
   
   # Test with abundance data type
   ind_abund <- site_species_metrics(bioregionalization = cluinfo,
@@ -148,8 +148,8 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
                                     verbose = FALSE)
   
   expect_s3_class(ind_abund, "bioregion.site.species.metrics")
-  expect_output(print(ind_abund), "Site and species contribution metrics")
-  expect_output(print(ind_abund), "Bioregion metrics \\(abundance\\):")
+  expect_output(print(ind_abund), "Site and species metrics")
+  expect_output(print(ind_abund), "Per-cluster metrics \\(abundance\\):")
   
   # Test with similarity-based metrics only
   ind_sim <- site_species_metrics(bioregionalization = cluinfo,
@@ -163,7 +163,7 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
                                   verbose = FALSE)
   
   expect_s3_class(ind_sim, "bioregion.site.species.metrics")
-  expect_output(print(ind_sim), "Site and species contribution metrics")
+  expect_output(print(ind_sim), "Site and species metrics")
   expect_output(print(ind_sim), "Similarity-based metrics:")
   
 })

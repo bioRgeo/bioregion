@@ -784,7 +784,7 @@ $$
 
 ```{r}
 p_ab_sp <- site_species_metrics(bioregionalization = vege_netclubip,
-                            bioregion_metrics = "all",
+                            bioregion_metrics = NULL,
                             bioregionalization_metrics = "P",
                             data_type = "abundance",
                             cluster_on = "site",
