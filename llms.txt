@@ -186,8 +186,8 @@ package.](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.1449
 ## Bioregionalization analysis
 
 - [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
-  : Calculate contribution metrics of sites and species to each
-  bioregion
+  : Calculate metrics for sites and species relative to bioregions and
+  chorotypes
 - [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
   : Calculate contribution metrics for bioregions
 - [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md)
