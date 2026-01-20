@@ -65,6 +65,17 @@ clualt2$inputs <- clualt2$inputs[-9]
 test_that("valid output", {
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = NULL,
+                              bioregionalization_metrics = "Silhouette",
+                              data_type = "occurrence",
+                              cluster_on = "site",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = TRUE,
+                              index = 3,
+                              verbose = FALSE)
+  
+  ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = "all",
                               bioregionalization_metrics = "all",
                               data_type = "both",

@@ -381,7 +381,7 @@ site_species_metrics <- function(bioregionalization,
   comat_gb_metrics <- c("Richness", "Rich_Endemics", "Prop_Endemics")
   similarity_metrics <- c("MeanSim", "SdSim", "Silhouette")
   
-  # # Control bioregion_metrics and set ind
+  # Control bioregion_metrics and set ind
   ind <- NULL
   if(!is.null(bioregion_metrics)){
     controls(args = bioregion_metrics, data = NULL, type = "character_vector")
@@ -721,11 +721,11 @@ site_species_metrics <- function(bioregionalization,
                    type = "sb",
                    data = data_type)
         
-        if(!is.null(sb$bioregion)){
-          output[[k]]$species_bioregions <- sb$bioregion
+        if(!is.null(sb$bioregion1)){
+          output[[k]]$species_bioregions <- sb$bioregion1
         }
-        if(!is.null(sb$bioregionalization)){
-          output[[k]]$species_bioregionalization <- sb$bioregionalization
+        if(!is.null(sb$bioregion2)){
+          output[[k]]$species_bioregionalization <- sb$bioregion2
         }
       }
       # gc
@@ -739,11 +739,11 @@ site_species_metrics <- function(bioregionalization,
                    type = "gc",
                    data = data_type)
         
-        if(!is.null(gc$bioregion)){
-          output[[k]]$site_chorotypes <- gc$bioregion
+        if(!is.null(gc$bioregion1)){
+          output[[k]]$site_chorotypes <- gc$bioregion1
         }
-        if(!is.null(gc$bioregionalization)){
-          output[[k]]$site_chorological <- gc$bioregionalization
+        if(!is.null(gc$bioregion2)){
+          output[[k]]$site_chorological <- gc$bioregion2
         }
       }
     }
@@ -761,11 +761,11 @@ site_species_metrics <- function(bioregionalization,
                #data = data_type,
                include_cluster = include_cluster)
       
-      if(!is.null(gb$bioregion)){
-        output[[k]]$site_bioregions <- gb$bioregion
+      if(!is.null(gb$bioregion1)){
+        output[[k]]$site_bioregions <- gb$bioregion1
       }
-      if(!is.null(gb$bioregionalization)){
-        output[[k]]$site_bioregionalization <- gb$bioregionalization
+      if(!is.null(gb$bioregion2)){
+        output[[k]]$site_bioregionalization <- gb$bioregion2
       }
     }
     

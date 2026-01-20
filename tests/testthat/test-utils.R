@@ -907,7 +907,7 @@ test_that("invalid inputs", {
             NIndVal_abund,
             Rho_abund)
   
-  check <- sb$bioregion
+  check <- sb$bioregion1
   check <- check[check[,1]==s & check[,2]==b,]
   
   expect_equal(as.numeric(test), as.numeric(check))
@@ -917,7 +917,7 @@ test_that("invalid inputs", {
   
   test <- c(s, P_occ, P_abund)
   
-  check <- sb$bioregionalization
+  check <- sb$bioregion2
   check <- check[check[,1]==s,]
   
   expect_equal(as.numeric(test), as.numeric(check))
@@ -992,7 +992,7 @@ test_that("invalid inputs", {
             NIndVal_abund,
             Rho_abund)
   
-  check <- gc$bioregion
+  check <- gc$bioregion1
   check <- check[check[,1]==g & check[,2]==c,]
   
   expect_equal(as.numeric(test), as.numeric(check))
@@ -1002,7 +1002,7 @@ test_that("invalid inputs", {
   
   test <- c(g, P_occ, P_abund)
   
-  check <- gc$bioregionalization
+  check <- gc$bioregion2
   check <- check[check[,1]==g,]
   
   expect_equal(as.numeric(test), as.numeric(check))
@@ -1023,7 +1023,7 @@ test_that("invalid inputs", {
             agtab11[agtab11[,1]==b,2],
             agtab12[agtab12[,1]==b,2])
   
-  check <- gb$bioregion
+  check <- gb$bioregion1
   check <- check[check[,1]==g & check[,2]==b,]
   
   expect_equal(as.numeric(test), as.numeric(check))
@@ -1038,7 +1038,7 @@ test_that("invalid inputs", {
   
   test <- c(g,sil)
   
-  check <- gb$bioregionalization
+  check <- gb$bioregion2
   check <- check[check[,1]==g,]
   
   expect_equal(round(as.numeric(test),digits=2), 
