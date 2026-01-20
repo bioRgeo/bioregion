@@ -205,11 +205,11 @@ These metrics can be found in the output slot \code{species_bioregions}.
 
 \strong{Site-per-bioregion metrics} characterize sites relative to bioregions:
 \itemize{
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richness}{\strong{Richness}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics}{\strong{Richness}}:
 Number of species in the site.
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richendemics}{\strong{Rich_Endemics}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics}{\strong{Rich_Endemics}}:
 Number of species in the site that are endemic to one bioregion.
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#propendemics}{\strong{Prop_Endemics}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics}{\strong{Prop_Endemics}}:
 Proportion of endemic species in the site.
 \item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim}{\strong{MeanSim}}:
 Mean similarity of a site to all sites in each bioregion.
@@ -226,7 +226,7 @@ across all clusters, rather than in relation to each individual cluster.
 
 \emph{Species-level summary metric:}
 \itemize{
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence}{\strong{P}}
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#p-occurrence-1}{\strong{P}}
 (Participation): Evenness of species distribution across bioregions
 (Denelle et al. 2020). Found in output slot \code{species_bioregionalization}.
 }

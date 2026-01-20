@@ -184,11 +184,11 @@
 #' 
 #' **Site-per-bioregion metrics** characterize sites relative to bioregions:
 #' 
-#' - [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richness): 
+#' - [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics): 
 #'   Number of species in the site.
-#' - [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richendemics): 
+#' - [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics): 
 #'   Number of species in the site that are endemic to one bioregion.
-#' - [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#propendemics): 
+#' - [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics): 
 #'   Proportion of endemic species in the site.
 #' - [**MeanSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim): 
 #'   Mean similarity of a site to all sites in each bioregion.
@@ -203,7 +203,7 @@
 #' across all clusters, rather than in relation to each individual cluster.
 #' 
 #' *Species-level summary metric:*
-#' - [**P**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence) 
+#' - [**P**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#p-occurrence-1) 
 #'   (Participation): Evenness of species distribution across bioregions
 #'   (Denelle et al. 2020). Found in output slot `species_bioregionalization`.
 #'
@@ -505,19 +505,19 @@ site_species_metrics <- function(bioregionalization,
   # Control conflicts between b_node_type and cluster_on
   if(cluster_on != "species" & b_node_type == "species"){ 
     if(type == "sb"){ # species-per-bioregion (sb)
-      stop(paste0("Species-per-bioregions or species-in-bioregionalization metrics are not ",
+      stop(paste0("Species-per-bioregion or species-in-bioregionalization metrics are not ",
                   "available when no bioregion are assigned to the site in ",
                   "bioregionalization."
       ), call. = FALSE)
     } 
     if(type == "gb"){ # site-per-bioregion (gb)
-      stop(paste0("Site-per-bioregions or site-in-bioregionalization metrics are not ",
+      stop(paste0("Site-per-bioregion or site-in-bioregionalization metrics are not ",
                   "available when no bioregion are assigned to the site in ",
                   "bioregionalization."
       ), call. = FALSE)
     }
     if(type == "both"){ # both (gb & sb)
-      stop(paste0("Species/Site-per-bioregions or -in-bioregionalization metrics are ",
+      stop(paste0("Species/Site-per-bioregion or -in-bioregionalization metrics are ",
                   "not available when no bioregion are assigned to the site in ",
                   "bioregionalization."
       ), call. = FALSE)

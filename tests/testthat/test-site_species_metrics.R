@@ -500,7 +500,7 @@ test_that("invalid inputs", {
                          cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species-to-bioregions/bioregionalization metrics")
+    "^Species-per-bioregion or species-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -509,7 +509,7 @@ test_that("invalid inputs", {
                          cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species-to-bioregions/bioregionalization metrics")
+    "Species-per-bioregion or species-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -518,7 +518,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species-to-bioregions/bioregionalization metrics")
+    "^Species-per-bioregion or species-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -527,7 +527,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species-to-bioregions/bioregionalization metrics")
+    "^Species-per-bioregion or species-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -536,7 +536,7 @@ test_that("invalid inputs", {
                          cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregions/bioregionalization metrics")
+    "^Site-per-bioregion or site-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -545,7 +545,7 @@ test_that("invalid inputs", {
                          cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregions/bioregionalization metrics")
+    "^Site-per-bioregion or site-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -554,7 +554,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",                        
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregions/bioregionalization metrics")
+    "^Site-per-bioregion or site-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -563,7 +563,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregions/bioregionalization metrics")
+    "^Site-per-bioregion or site-in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -572,7 +572,7 @@ test_that("invalid inputs", {
                          cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species/Site-to-bioregions/bioregionalization metrics")
+    "^Species/Site-per-bioregion or -in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -581,7 +581,7 @@ test_that("invalid inputs", {
                          cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species/Site-to-bioregions/bioregionalization metrics")
+    "^Species/Site-per-bioregion or -in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -590,7 +590,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",                        
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species/Site-to-bioregions/bioregionalization metrics")
+    "^Species/Site-per-bioregion or -in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
@@ -599,7 +599,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species/Site-to-bioregions/bioregionalization metrics")
+    "^Species/Site-per-bioregion or -in-bioregionalization metrics")
   
   expect_error(
     site_species_metrics(clulouv,
@@ -608,7 +608,7 @@ test_that("invalid inputs", {
                          cluster_on = "species",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-chorotypes/chorological metrics")
+    "^Site-per-chorotypes or species-in-chorological metrics")
   
   expect_error(
     site_species_metrics(clulouv,
@@ -617,7 +617,7 @@ test_that("invalid inputs", {
                          cluster_on = "species",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-chorotypes/chorological metrics")
+    "^Site-per-chorotypes or species-in-chorological metrics")
   
   expect_error(
     site_species_metrics(clulouv,
@@ -626,7 +626,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-chorotypes/chorological metrics")
+    "^Site-per-chorotypes or species-in-chorological metrics")
   
   expect_error(
     site_species_metrics(clulouv,
@@ -635,7 +635,7 @@ test_that("invalid inputs", {
                          cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-chorotypes/chorological metrics")
+    "^Site-per-chorotypes or species-in-chorological metrics")
 
   expect_error(
     site_species_metrics(cluinfo,
