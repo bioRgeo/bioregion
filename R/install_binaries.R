@@ -434,29 +434,33 @@ install_binaries <- function(binpath = "tempdir",
                          " for more details."))
       } else {
         if (testopm) {
-           message(paste0("Congratulation, you successfully install the ",
-                          version, 
-                          " OpenMP version of Infomap!"))
+          if(verbose){
+            message(paste0("Congratulations, you successfully install the ",
+                           version, 
+                           " OpenMP version of Infomap!"))  
+          }  
+
           file.copy(
             paste0(path, files[1]),
             paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
           )
         } else {
           message(" ")
-          message(paste0("Congratulation, you successfully install the ", 
-                          version,
-                          " no OpenMP version of Infomap!"))
+          message(paste0("The ", 
+                         version,
+                         " no OpenMP version of Infomap has been installed."))
 
           file.copy(
             paste0(path, files[2]),
             paste0(path, "infomap_", substr(files[1], 13, nchar(file[1])))
           )
-           message(" ")
+          
+          message(" ")
           message(paste0("A library is probably missing to install the OpenMP ",
-                          "version..."))
+                         "version..."))
           message(paste0("Please have a look at ",
-                          "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
-                          " for more details."))
+                         "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
+                         " for more details."))
 
         }
         utils::write.table(1, paste0(path, "check.txt"))
@@ -523,9 +527,11 @@ install_binaries <- function(binpath = "tempdir",
                      "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
                       " for more details."))
     } else {
-      message(paste0("Congratulation, you successfully install the version ",
-                     version, 
-                     " of Louvain!"))
+      if(verbose){
+        message(paste0("Congratulations, you successfully install the version ",
+                       version, 
+                       " of Louvain!"))
+      }
       utils::write.table(1, paste0(path, "check.txt"))
     }
     
@@ -627,10 +633,12 @@ install_binaries <- function(binpath = "tempdir",
                      "https//bioRgeo.github.io/bioregion/articles/a3_1_install_binary_files.html ",
                      " for more details."))
     } else {
-      message(
-        "Congratulation, you successfully install the version ", version,
-        " of OSLOM!"
-      )
+      if(verbose){
+        message(
+          "Congratulations, you successfully install the version ", version,
+          " of OSLOM!"
+        )
+      }
       utils::write.table(1, paste0(path, "check.txt"))
       
       if (!testdir) {
