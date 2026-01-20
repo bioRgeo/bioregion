@@ -5,41 +5,51 @@
 #'
 #' @param bioregionalization A `bioregion.clusters` object.
 #'
-#' @param bioregion_indices A `character` vector or a single `character` string
-#' specifying the indices to compute. Several indices belonging to different 
+#' @param bioregion_metrics A `character` vector or a single `character` string
+#' specifying the metrics to compute. Several metrics belonging to different 
 #' categories are available: species to bioregions (`"Specificity"`, 
 #' `"NSpecificity"`, `"Fidelity"`, `"NFidelity"`, `"IndVal"`, `"NIndVal"`, 
-#' `"Rho"` and `"CoreTerms"`), site to bioregions (`"MeanSim"` and 
-#' `"SdSim"`), or site to species clusters when a cluster/bioregion has been 
-#' assigned to the species  in `bioregionalization` (see Details). If `"all"` 
-#' is specified (default), all indices will be calculated.
+#' `"Rho"` and `"CoreTerms"`), site to bioregions (`"Richness"`, 
+#' `"Rich_Endemics"`, `"Prop_Endemics"`, `"MeanSim"` and `"SdSim"`), or site 
+#' to chorotypes (`"Specificity"`, `"NSpecificity"`, `"Fidelity"`, `"NFidelity"`, 
+#' `"IndVal"`, `"NIndVal"`, `"Rho"` and `"CoreTerms"`)
+#' when a cluster has been assigned to the species in 
+#' `bioregionalization` (see Details). If `"all"` is specified, all 
+#' metrics will be calculated.
 #' 
-#' @param bioregionalization_indices A `character` vector or a single `character` 
-#' string specifying the bioregionalization indices to compute. Some aggregated 
-#' indices (such as the participation coefficient or Silhouette index) can be 
-#' derived from the `bioregion_indices` (see Details). If `"all"` is specified 
-#' (default), all bioregionalization indices will be calculated.
+#' @param bioregionalization_metrics A `character` vector or a single `character` 
+#' string specifying the bioregionalization metrics to compute. Some aggregated 
+#' metrics (such as the participation coefficient `"P"` or Silhouette index 
+#' `"Silhouette"`) can be derived from the `bioregion_metrics` (see Details). 
+#' If `"all"` is specified , all bioregionalization metrics will be calculated.
 #' 
 #' @param data_type A `character` string specifying which type of data should 
-#' be considered to compute the related indices (`"A"`, `"B"`,
-#' `"IndVal"` and `"Rho"`): occurrences or abundances. By default (`"auto"`),
-#' the type of data is inferred from `bioregionalization` and/or the provided
-#' co-occurrence matrix (argument `comat`). Other available options are
+#' be considered to compute the related metrics (`"Specificity"`, 
+#' `"NSpecificity"``"Fidelity"`, `"NFidelity"`, `"IndVal"`, `"NIndVal"`, 
+#' `"Rho"`, `"CoreTerms"`): occurrences or abundances. By default (`"auto"`), 
+#' the type of data is inferred from `bioregionalization` and/or the provided 
+#' co-occurrence matrix (argument `comat`). Other available options are 
 #' `"occurence"`, `"abundance"` or `"both"` (see Details).
 #' 
-#' @param node_type A `character` string specifying whether the related
-#'  indices (`"Specificity"`, `"NSpecificity"`, `"Fidelity"`, `"NFidelity"`, 
+#' @param cluster_on A `character` string specifying whether the related
+#'  metrics (`"Specificity"`, `"NSpecificity"`, `"Fidelity"`, `"NFidelity"`, 
 #'  `"IndVal"`, `"NIndVal"`, `"Rho"` and `"CoreTerms"`) 
-#'  should be computed as contributions from species to bioregions (`"site"` by
-#'  default), from sites to species clusters (`"species"`), or for `"both"`.
-#'  The latter type of contribution is only available if a cluster has been
-#'  assigned to the species in `bioregionalization` (see Details).
+#'  should be computed as contributions from species to bioregions (clusters 
+#'  based on `"site"` by default), from site to chorotypes (clusters based on 
+#'  `"species"`) or for `"both"`. The latter type of contribution is only 
+#'  available if a cluster has been assigned to the species in 
+#'  `bioregionalization` (see Details).
 #' 
 #' @param comat A co-occurrence `matrix` with sites as rows and species as
 #' columns.
 #' 
 #' @param similarity The output object from [similarity()] or
 #' [dissimilarity_to_similarity()].
+#' 
+#' @param include_cluster A `boolean` indicating whether to include an
+#' additional column `Assigned` in the site-to-bioregions output, indicating for
+#' each site whether the considered bioregion is its bioregion (`FALSE` by 
+#' default).
 #' 
 #' @param index The name or number of the column to use as similarity. 
 #' By default, the third column name of `similarity` is used.
@@ -49,21 +59,23 @@
 #' 
 #' @return 
 #' A `list` containing between one and six elements (listed below), depending on 
-#' the selected indices (`bioregion_indices` and/or `bioregionalization_indices`) 
-#' and the type of nodes (`site` and/or `species`).
+#' the selected metrics (`bioregion_metrics` and/or 
+#' `bioregionalization_metrics`) and the type of cluster 
+#' (bioregion when `cluster_on = "site"` and/or 
+#' chorotypes when `cluster_on = "species"`).
 #' \itemize{
 #'   \item{**species_bioregions**: A `data.frame` containing the 
-#'   species-to-bioregions indice(s) based on `comat`.}
+#'   species-to-bioregions metric(s) based on `comat`.}
 #'   \item{**species_bioregionalization**: A `data.frame` containing the  
-#'   species-to-bioregionalization indice(s) based on `comat`.}
-#'   \item{**site_clusters**: A `data.frame` containing the  
-#'   site-to-species clusters indice(s) based on `comat`.}
-#'   \item{**site_clustering**: A `data.frame` containing the 
-#'   site-to-species clustering indice(s) based on `comat`.}
+#'   species-to-bioregionalization metric(s) based on `comat`.}
 #'   \item{**site_bioregions**: A `data.frame` containing the 
-#'   site-to-bioregions indice(s) based on `similarity`.}
+#'   site-to-bioregions metric(s) based on `comat` or `similarity`.}
 #'   \item{**site_bioregionalization**: A `data.frame` containing the 
-#'   site-to-bioregionalization indice(s) based on `similarity`.}
+#'   site-to-bioregionalization metric(s) based on `comat` or `similarity`.}
+#'   \item{**site_chorotypes**: A `data.frame` containing the  
+#'   site-to-chorotypes metric(s) based on `comat`.}
+#'   \item{**site_chorological**: A `data.frame` containing the 
+#'   site-to-chorological classification metric(s) based on `comat`.}
 #' }
 #'
 #' Note that if `bioregionalization` contains more than one partition 
@@ -71,14 +83,14 @@
 #' returned, with one sublist per partition.
 #' 
 #' @details
-#' The **first type** of indices provided by this function is based on the 
-#' contribution of each species to a given bioregion (`node_type = "site"` or 
-#' `node_type = "both"`). This is calculated from the bioregion assigned to 
+#' The **first type** of metrics provided by this function is based on the 
+#' contribution of each species to a given bioregion (`cluster_on = "site"` or 
+#' `cluster_on = "both"`). This is calculated from the bioregion assigned to 
 #' each site (as defined in `bioregionalization`) and 
 #' an associated site–species co-occurrence matrix `comat` (a strict match 
 #' between site IDs is required). 
 #' 
-#' Occurrence-based indices (`data_type = "occurrence"` or `data_type = "both"`) 
+#' Occurrence-based metrics (`data_type = "occurrence"` or `data_type = "both"`) 
 #' are derived from three core terms:
 #' 
 #' - **n_sb**: Number of sites belonging to bioregion **b** in which species 
@@ -86,7 +98,7 @@
 #' - **n_s**: Total number of sites in which species **s** is present.  
 #' - **n_b**: Total number of sites belonging to bioregion **b**.
 #' 
-#' These **species-to-bioregion** indices include:  
+#' These **species-to-bioregions** metrics include:  
 #' 
 #' - [**Specificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence), 
 #'   as described in De Cáceres M & Legendre P (2009).  
@@ -103,12 +115,12 @@
 #' - [**Rho**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#rho-occurrence),  
 #'   as described in Lenormand *et al.* (2019).
 #' 
-#' **Species-to-bioregionalization** indices can also be computed, such as:  
+#' **Species-to-bioregionalization** metrics can also be computed, such as:  
 #' 
 #' - [**Participation**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence), 
 #'   as described in Denelle *et al.* (2020).  
 #' 
-#' Abundance-weighted versions of these indices (`data_type = "abundance"` or 
+#' Abundance-weighted versions of these metrics (`data_type = "abundance"` or 
 #' `data_type = "both"`) can also be derived using the following analogous core 
 #' terms:  
 #' 
@@ -118,50 +130,59 @@
 #' 
 #' These abundance-weighted terms correspond directly to their occurrence-based 
 #' counterparts and allow computing abundance versions of the same 
-#' indices. Detailed formulas and examples are provided in the package vignette.
+#' metrics. Detailed formulas and examples are provided in the package vignette.
 #' 
-#' The **second type** of indices provided by this function is based on the 
-#' contribution of each site to a given *species cluster* (`node_type = "species"` 
-#' or `node_type = "both"`, only when a 
-#' cluster or bioregion has been assigned to species in `bioregionalization`). 
-#' This is calculated from the cluster assigned to each species (as defined in 
-#' `bioregionalization`) and an associated site–species co-occurrence matrix 
-#' (a strict match between species IDs is required).
+#' The **second type** of metrics provided by this function is based on the 
+#' contribution of each site to a given bioregion (`cluster_on = "site"` or 
+#' `cluster_on = "both"`). This is calculated from the bioregion assigned to 
+#' each site (as defined in `bioregionalization`), an associated site–species 
+#' co-occurrence matrix `comat` (for `"Richness"`, `"Rich_Endemics"` and 
+#' `"Prop_Endemics"`, a strict match between site IDs is required) 
+#' and/or a site–site similarity metric `similarity` (for `"MeanSim"` and 
+#' `"SdSim"`, a strict match between site IDs is required).
 #' 
-#' In this case, occurrence-based indices (`data_type = "occurrence"` or 
-#' `data_type = "both"`) are derived from three core terms:
+#' These **site-to-bioregions** metrics include:  
 #' 
-#' - **n_gc**: Number of species belonging to cluster **c** that are present 
-#'   in site **g**.  
-#' - **n_g**: Total number of species present in site **g**.  
-#' - **n_c**: Total number of species belonging to cluster **c**.  
-#' 
-#' As for the first type, all indices (including their abundance-weighted 
-#' versions when `data_type = "abundance"` or `data_type = "both"`) can be 
-#' derived from these **site-to-clusters** relationships. Further 
-#' details, mathematical definitions, and examples are provided in the package 
-#' vignette.
-#' 
-#' The **third type** of indices provided by this function, not included by 
-#' default, is based on the contribution of each site to a given bioregion. This 
-#' is calculated from the bioregion assigned to each site (as defined in 
-#' `bioregionalization`) and a site–site similarity metric (`similarity`) (a 
-#' strict match between site IDs is required).
-#' 
-#' These **site-to-bioregion** indices include:  
-#' 
+#' - [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richness): 
+#'   The number of species present in a site. 
+#' - [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richendemics): 
+#'   The number of species present in a site that are endemic to a bioregion. 
+#' - [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#propendemics): 
+#'   The proportion of species present in a site that are endemic to a bioregion. 
 #' - [**MeanSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim): 
 #'   The mean similarity of each site to the sites of every bioregion.  
 #' - [**SdSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#sdsim): 
 #'   The corresponding standard deviation of similarity values.  
 #' 
-#' **Site-to-bioregionalization** indices can also be computed, such as:  
+#' **Site-to-bioregionalization** metrics can also be computed, such as:  
 #' 
 #' - [**Silhouette**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#silhouette), 
 #'   as described in Rousseeuw (1987) (similarity-based version).  
+#' 
+#' The **third type** of metrics provided by this function is based on the 
+#' contribution of each site to a given *chorotypes* (`cluster_on = "species"` 
+#' or `cluster = "both"`, only when a 
+#' cluster has been assigned to species in `bioregionalization`). 
+#' This is calculated from the chorotype assigned to each species (as defined in 
+#' `bioregionalization`) and an associated site–species co-occurrence matrix 
+#' (a strict match between species IDs is required).
+#' 
+#' In this case, occurrence-based metrics (`data_type = "occurrence"` or 
+#' `data_type = "both"`) are derived from three core terms:
+#' 
+#' - **n_gc**: Number of species belonging to chorotype **c** that are present 
+#'   in site **g**.  
+#' - **n_g**: Total number of species present in site **g**.  
+#' - **n_c**: Total number of species belonging to chorotype **c**.  
+#' 
+#' As for the first type, all metrics (including their abundance-weighted 
+#' versions when `data_type = "abundance"` or `data_type = "both"`) can be 
+#' derived from these **site-to-chorotypes** relationships. Further 
+#' details, mathematical definitions, and examples are provided in the package 
+#' vignette.
 #'   
 #' @note If `data_type = "auto"`, the choice between occurrence- or abundance-
-#' based indices will be determined automatically from the input data, and a
+#' based metrics will be determined automatically from the input data, and a
 #' message will explain the choice made.
 #'   
 #' @references
@@ -207,12 +228,13 @@
 #'                                        verbose = FALSE)
 #'                                      
 #' ind <- site_species_metrics(bioregionalization = bioregionalization,
-#'                              bioregion_indices = "all",
-#'                              bioregionalization_indices = "all",
+#'                              bioregion_metrics = "all",
+#'                              bioregionalization_metrics = "all",
 #'                              data_type = "auto",
-#'                              node_type = "site",
+#'                              cluster_on = "site",
 #'                              comat = fishmat,
 #'                              similarity = fishsim,
+#'                              include_cluster = TRUE,
 #'                              index = 3,
 #'                              verbose = TRUE)
 #'                                      
@@ -220,23 +242,24 @@
 #' 
 #' @export
 site_species_metrics <- function(bioregionalization,
-                                 bioregion_indices = c("Specificity", 
+                                 bioregion_metrics = c("Specificity", 
                                                        "NSpecificity", 
                                                        "Fidelity", 
                                                        "IndVal", 
                                                        "NIndVal", 
-                                                       "Rho", 
-                                                       "CoreTerms"),
-                                 bioregionalization_indices = "P",
+                                                       "Rho"),
+                                 bioregionalization_metrics = "P",
                                  data_type = "auto",
-                                 node_type = "site",
+                                 cluster_on = "site",
                                  comat,
                                  similarity = NULL,
+                                 include_cluster = FALSE,
                                  index = names(similarity)[3],
                                  verbose = TRUE){
   
-  # Control verbose
+  # Control verbose & include_cluster
   controls(args = verbose, data = NULL, type = "boolean")
+  controls(args = include_cluster, data = NULL, type = "boolean")
   
   # Control bioregionalization
   controls(args = NULL, 
@@ -257,190 +280,198 @@ site_species_metrics <- function(bioregionalization,
   # Extract data_type
   b_data_type <- bioregionalization$inputs$data_type 
   
-  # Control indices
-  
-  # list of acronyms used:
+  # List of acronyms
+  #
   # s = species
   # g = site
   # b = bioregion
-  # sb = species-to-bioregion and/or site-to-species cluster (gc) according to node_type
-  # gb = site-to-bioregion 
-  # sb_ind = indices based on species-to-bioregion relationships or 
-  #          site-to-species cluster relationships (gc)
-  # gb_ind = indices based on site-to-bioregion relationships
-  # ind = bioregion indices set by users
-  # sb_agind = indices based on species-to-bioregionalization relationships or 
-  #            site-to-species clustering relationships (gc)
-  # gb_agind = indices based on site-to-bioregionalization relationships
-  # agind = bioregionalization indices set by users
-  
+  #
+  # sb = species-to-bioregions/bioregionalization (sb) and/or 
+  #      site-to-chorotypes/chorological (gc) 
+  #      according to cluster_on
+  # gb = site-to-bioregions/bioregionalization 
+  #
+  # ind = bioregion metrics set by the user
+  # sb_ind = species-to-bioregions (sb) or site-to-chorotypes (gc) metrics
+  # gb_ind = site-to-bioregions metrics
+  #
+  # agind = bioregionalization metrics set by the user
+  # sb_agind = species-to-bioregionalization (sb) or 
+  #            site-to-chorological classification (gc) metrics
+  # gb_agind = site-to-bioregionalization metrics
+  #
+  # comat_metrics = comat-based metrics
+  # comat_gb_metrics = comat-based gb metrics
+  # similarity_metrics = similarity-based metrics
+
   sb_ind <- c("Specificity", "NSpecificity", 
               "Fidelity", 
               "IndVal", "NIndVal", 
               "Rho", 
               "CoreTerms")
-  gb_ind <- c("MeanSim", "SdSim")
-  
+  gb_ind <- c("Richness", "Rich_Endemics", "Prop_Endemics", 
+              "MeanSim", "SdSim")
   sb_agind <- c("P")
   gb_agind <- c("Silhouette")
+  comat_metrics <- c("Specificity", "NSpecificity", "Fidelity", "IndVal", 
+                     "NIndVal", "Rho", "CoreTerms", "Richness", "Rich_Endemics", 
+                     "Prop_Endemics", "P")
+  comat_gb_metrics <- c("Richness", "Rich_Endemics", "Prop_Endemics")
+  similarity_metrics <- c("MeanSim", "SdSim", "Silhouette")
   
-  indnull <- FALSE 
-  if(!is.null(bioregion_indices)){
-    controls(args = bioregion_indices, data = NULL, type = "character_vector")
-    if ("all" %in% bioregion_indices) {
+  # # Control bioregion_metrics and set ind
+  ind <- NULL
+  if(!is.null(bioregion_metrics)){
+    controls(args = bioregion_metrics, data = NULL, type = "character_vector")
+    if ("all" %in% bioregion_metrics) {
       ind <- c(sb_ind, gb_ind)
     }else{
-      ind <- bioregion_indices
+      ind <- bioregion_metrics
     }
     if (length(intersect(c(sb_ind, gb_ind), ind)) !=
         length(ind)) {
-      stop(paste0("One or several bioregion indices chosen are not", 
+      stop(paste0("One or several bioregion metrics chosen are not", 
                   " available.\n",
                   "Please choose from the following:\n",
                   "Specificity, NSpecificity, Fidelity, IndVal, NIndVal, ",
-                  "Rho and CoreTerms"),
+                  "Rho, CoreTerms, Richness, Rich_Endemics, Prop_Endemics ", 
+                  "MeanSim and SdSim"),
            call. = FALSE)
     }
-    # Check conflict between similarity, comat and ind
-    if(is.null(similarity) & length(intersect(ind, gb_ind))>0){
-      warning(paste0("Site-to-bioregion indices (", 
-                     paste(intersect(ind, gb_ind), collapse = ", "),
-                     ") were skipped because no similarity matrix was provided."),
-              call. = FALSE)
-      ind <- setdiff(ind, gb_ind)
-    }
-    if(is.null(comat) & length(intersect(ind, sb_ind))>0){
-      warning(paste0("Species-to-bioregion indices (", 
-                     paste(intersect(ind, sb_ind), collapse = ", "),
-                     ") were skipped because no co-occurrence matrix was provided."),
-              call. = FALSE)
-      ind <- setdiff(ind, sb_ind)
-    }
-    
-    # Check type of bioregion_indices (sb, gb or both)
-    typeind <- "both"
-    if(length(intersect(ind, gb_ind)) == 0){
-      typeind <- "sb"
-    }
-    if(length(intersect(ind, sb_ind)) == 0){
-      typeind <- "gb"
-    }
-  }else{
-    indnull <- TRUE
-    ind <- NULL
   }
   
-  agindnull <- FALSE
-  if(!is.null(bioregionalization_indices)){
-    controls(args = bioregionalization_indices, 
+  # Control bioregionalization_metrics and set agind
+  agind <- NULL
+  if(!is.null(bioregionalization_metrics)){
+    controls(args = bioregionalization_metrics, 
              data = NULL, 
              type = "character_vector")
-    if ("all" %in% bioregionalization_indices) {
+    if ("all" %in% bioregionalization_metrics) {
       agind <- c(sb_agind, gb_agind)
     }else{
-      agind <- bioregionalization_indices
+      agind <- bioregionalization_metrics
     }
     if (length(intersect(c(sb_agind, gb_agind), agind)) !=
         length(agind)) {
-      stop(paste0("One or several bioregionalization indices chosen are not", 
+      stop(paste0("One or several bioregionalization metrics chosen are not", 
                   " available.\n",
                   "Please choose from the following:\n",
-                  "P, Silhouette and Ratio"),
+                  "P and Silhouette"),
            call. = FALSE)
     }
-    # Check conflict between similarity, comat and ind
-    if(is.null(similarity) & length(intersect(agind, gb_agind))>0){
-      warning(paste0("Site-to-bioregionalization indices (", 
-                     paste(intersect(agind, gb_agind), collapse = ", "),
-                     ") were skipped because no similarity matrix was provided."),
-              call. = FALSE)
-      agind <- setdiff(agind, gb_agind)
-    }
-    if(is.null(comat) & length(intersect(agind, sb_agind))>0){
-      warning(paste0("Species-to-bioregionalization indices (", 
-                     paste(intersect(agind, sb_agind), collapse = ", "),
-                     ") were skipped because no co-occurrence matrix was provided."),
-              call. = FALSE)
-      agind <- setdiff(agind, sb_agind)
-    }
-    # Check type of bioregionalization_indices (sb, gb or both)
-    typeagind <- "both"
-    if(length(intersect(agind, gb_agind)) == 0){
-      typeagind <- "sb"
-    }
-    if(length(intersect(agind, sb_agind)) == 0){
-      typeagind <- "gb"
-    }
-  }else{
-    agindnull <- TRUE
-    agind <- NULL
   }
   
-  if(indnull & agindnull){
-    stop(paste0("At least one type of indices with the appropriate inputs ", 
-                "should be specified."),
+  # Check if comat and/or similarity are needed and for potential conflicts
+  metrics_needed <- c(ind, agind)
+  comat_needed <- FALSE
+  comat_gb_needed <- FALSE
+  if(length(intersect(comat_metrics, metrics_needed))>0){
+    comat_needed <- TRUE
+  }
+  if(length(intersect(comat_gb_metrics, metrics_needed))>0){
+    comat_gb_needed <- TRUE
+  }
+  similarity_needed <- FALSE
+  if(length(intersect(similarity_metrics, metrics_needed))>0){
+    similarity_needed <- TRUE
+  }
+  
+  if(is.null(comat) & is.null(similarity)){
+    stop(paste0("At least comat or similarity should be provided."),
          call. = FALSE)
   }
   
-  # Check type of indices needed (sb, gb or both)
+  if(is.null(comat) & comat_needed){
+    warning(paste0("Some metrics (", 
+                   paste(intersect(metrics_needed, comat_metrics), collapse = ", "),
+                   ") will be skipped because no co-occurrence matrix is provided."),
+            call. = FALSE)
+    ind <- setdiff(ind, comat_metrics)
+    if(length(ind)==0){
+      ind <- NULL
+    }
+    agind <- setdiff(agind, comat_metrics)
+    if(length(agind)==0){
+      agind <- NULL
+    }
+    comat_needed <- FALSE
+    comat_gb_needed <- FALSE
+  }
+  
+  if(is.null(similarity) & similarity_needed){
+    warning(paste0("Some metrics (", 
+                   paste(intersect(metrics_needed, similarity_metrics), collapse = ", "),
+                   ") will be skipped because no similarity is provided."),
+            call. = FALSE)
+    ind <- setdiff(ind, similarity_metrics)
+    if(length(ind)==0){
+      ind <- NULL
+    }
+    agind <- setdiff(agind, similarity_metrics)
+    if(length(agind)==0){
+      agind <- NULL
+    }
+    similarity_needed <- FALSE
+  }
+  
+  # Stop if no metrics
+  if(is.null(ind) & is.null(agind)){
+    stop(paste0("At least one type of metrics with the appropriate inputs ", 
+                "should be specified."),
+         call. = FALSE)
+  }
+
+  # Check type of metrics needed (sb, gb or both)
   type <- "both"
-  if(indnull){
-    type <- typeagind
+  if((length(intersect(ind, gb_ind)) == 0) & 
+     (length(intersect(agind, gb_agind)) == 0)){
+    type <- "sb"
   }
-  if(agindnull){
-    type <- typeind
-  }
-  if(!indnull & !agindnull){
-    if(typeind == "sb" & typeagind == "sb"){
-      type = "sb"
-    }
-    if(typeind == "gb" & typeagind == "gb"){
-      type = "gb"
-    }
+  if((length(intersect(ind, sb_ind)) == 0) & 
+     (length(intersect(agind, sb_agind)) == 0)){
+     type <- "gb"
   }
   
-  # Control node_type
-  if(type != "gb"){
-    controls(args = node_type, data = NULL, type = "character")
-    if (!(node_type %in% c("site", "species", "both"))) {
-      stop(paste0("Please choose node_type from the following:\n",
-                  "site, species or both."), 
-           call. = FALSE)
-    }
+  # Control cluster_on
+  controls(args = cluster_on, data = NULL, type = "character")
+  if (!(cluster_on %in% c("site", "species", "both"))) {
+    stop(paste0("Please choose cluster_on from the following:\n",
+                "site, species or both."), 
+          call. = FALSE)
   }
   
-  # Control conflicts
-  if(type == "gb" | type == "both"){ # site-to-bioregions (gb) included
-    if(b_node_type == "species"){
-      stop(paste0("Site-to-bioregion metrics are not available ",
-                  "when no bioregion are assigned to the site in ",
+  # Control conflicts between b_node_type and cluster_on
+  if(cluster_on != "species" & b_node_type == "species"){ 
+    if(type == "sb"){ # species-to-bioregions (sb)
+      stop(paste0("Species-to-bioregions/bioregionalization metrics are not ",
+                  "available when no bioregion are assigned to the site in ",
+                  "bioregionalization."
+      ), call. = FALSE)
+    } 
+    if(type == "gb"){ # site-to-bioregions (gb)
+      stop(paste0("Site-to-bioregions/bioregionalization metrics are not ",
+                  "available when no bioregion are assigned to the site in ",
                   "bioregionalization."
       ), call. = FALSE)
     }
+    if(type == "both"){ # both (gb & sb)
+      stop(paste0("Species/Site-to-bioregions/bioregionalization metrics are ",
+                  "not available when no bioregion are assigned to the site in ",
+                  "bioregionalization."
+      ), call. = FALSE)
+    }  
   }
-  if(type == "sb" | type == "both"){ # species-to-bioregions (sb) included
-    # and/or 
-    # site-to-species_clusters (gc) included
-    if(b_node_type == "site" & node_type != "site"){
-      stop(paste0("Site-to-species_cluster metrics are not available ",
-                  "when no clusters/bioregions are assigned to the species 
+  if(cluster_on != "site" & b_node_type == "site"){
+    if(type == "sb" | type == "both"){ # site-to-chorotypes (gc) 
+      stop(paste0("Site-to-chorotypes/chorological metrics are not available ",
+                  "when no chorotype are assigned to the species 
                   in bioregionalization."), 
            call. = FALSE)
-    }
-  }
-  if(type == "sb"){ # species-to-bioregions (sb) only
-    # and/or 
-    # site-to-species_clusters (gc) only
-    if(b_node_type == "species" & node_type != "species"){
-      stop(paste0("Species-to-bioregion metrics are not available ",
-                  "when no bioregion are assigned to the site in ",
-                  "bioregionalization."), 
-           call. = FALSE)
-    }
+    } 
   }
   
-  # Control comat only if species-to-bioregion needed (or site-to-species cluster)
-  if(type != "gb"){
+  # Control comat if needed
+  if(comat_needed){
     
     controls(args = NULL, data = comat, type = "input_matrix")
     minco <- min(comat)
@@ -462,7 +493,7 @@ site_species_metrics <- function(bioregionalization,
     comat_site <- rownames(comat)
     comat_species <- colnames(comat)
     
-    if(node_type != "species"){
+    if(cluster_on != "species"){
       # Check that comat_site are in bioregionalization
       if(length(intersect(b_site, comat_site)) == length(b_site) &
          length(b_site) == length(comat_site)){
@@ -476,24 +507,26 @@ site_species_metrics <- function(bioregionalization,
         comat_site <- rownames(comat)
       }
     }
-    if(node_type != "site"){
-      # Check that comat_species are in bioregionalization
-      if(length(intersect(b_species, comat_species)) == length(b_species) &
-         length(b_species) == length(comat_species)){
-        #print("match!")
-      }else{
-        stop("Species ID in bioregionalization and comat do not match!", 
-             call. = FALSE)
-      }
-      if(sum(b_species == comat_species) != length(b_species)){
-        comat <- comat[,match(b_species, comat_species)]
-        comat_species <- colnames(comat)
+    if(type != "gb"){
+      if(cluster_on != "site"){
+        # Check that comat_species are in bioregionalization
+        if(length(intersect(b_species, comat_species)) == length(b_species) &
+           length(b_species) == length(comat_species)){
+          #print("match!")
+        }else{
+          stop("Species ID in bioregionalization and comat do not match!", 
+               call. = FALSE)
+        }
+        if(sum(b_species == comat_species) != length(b_species)){
+          comat <- comat[,match(b_species, comat_species)]
+          comat_species <- colnames(comat)
+        }
       }
     }
   }
   
   # Control data_type
-  if(type != "gb"){
+  if(comat_needed){
     controls(args = data_type, data = NULL, type = "character")
     if (!(data_type %in% c("auto", "occurrence", "abundance", "both"))) {
       stop(paste0("Please choose data_type from the following:\n",
@@ -509,14 +542,14 @@ site_species_metrics <- function(bioregionalization,
           if(verbose){
             message(paste0("No data type detected in bioregionalization and ",
                            "comat is based on occurence data so occurrence-",
-                           "based indices will be computed."))
+                           "based metrics will be computed."))
           }
         }else{
           data_type <- "abundance"
           if(verbose){
             message(paste0("No data type detected in bioregionalization and ",
                            "comat is based on abundance data so abundance-",
-                           "based indices will be computed."))
+                           "based metrics will be computed."))
           }
         }
       }else{
@@ -526,13 +559,13 @@ site_species_metrics <- function(bioregionalization,
             if(verbose){
               message(paste0("The bioregionalization is based on occurence data ",
                              "and comat is based on occurence data so occurrence-",
-                             "based indices will be computed."))
+                             "based metrics will be computed."))
             }
           }else{
             if(verbose){
               message(paste0("The bioregionalization is based on occurence data ",
                              "but note that even if comat is based on abundance ", 
-                             "data, occurrence-based indices will be computed. ",
+                             "data, occurrence-based metrics will be computed. ",
                              "Change data_type to change this beavior."))
             }
           }
@@ -544,7 +577,7 @@ site_species_metrics <- function(bioregionalization,
             if(verbose){
               message(paste0("The bioregionalization is based on abundance data ",
                              "but comat is based on occurence data so ",
-                             "occurrence-based indices will be computed."))
+                             "occurrence-based metrics will be computed."))
             }
             
           }else{
@@ -552,7 +585,7 @@ site_species_metrics <- function(bioregionalization,
             if(verbose){
               message(paste0("The bioregionalization is based on abundance data ",
                              "and comat is based on abundance data so ",
-                             "abundance-based indices will be computed."))
+                             "abundance-based metrics will be computed."))
             }
           }
         }
@@ -562,14 +595,15 @@ site_species_metrics <- function(bioregionalization,
     #if(data_type == "abundance"  | data_type == "both"){
     #  if(bin){
     #    warning(paste0("comat is based on occurence data so abundance-based ",
-    #                   "indices won't be computed!"))
+    #                   "metrics won't be computed!"))
     #    data_type = "occurrence"
     #  }
     #}
   }
   
-  # Control similarity only if site-to-bioregion (gb) needed
-  if(type != "sb"){
+  # Control similarity if needed
+  if(similarity_needed){
+    
     controls(args = NULL, 
              data = similarity, 
              type = "input_conversion_similarity")
@@ -615,13 +649,13 @@ site_species_metrics <- function(bioregionalization,
     # sb or gc
     if(type != "gb"){
       # sb
-      if(node_type != "species"){
+      if(cluster_on != "species"){
         sb <- sbgc(clusters = bioregionalization[attr(bioregionalization, 
                                                       "node_type") == "site",
                                                  (k+1)], 
+                   bioregion_metrics = ind,
+                   bioregionalization_metrics = agind,
                    comat = comat,
-                   bioregion_indices = ind,
-                   bioregionalization_indices = agind,
                    type = "sb",
                    data = data_type)
         
@@ -633,33 +667,37 @@ site_species_metrics <- function(bioregionalization,
         }
       }
       # gc
-      if(node_type != "site"){
+      if(cluster_on != "site"){
         gc <- sbgc(clusters = bioregionalization[attr(bioregionalization, 
                                                       "node_type") == "species",
                                                  (k+1)], 
+                   bioregion_metrics = ind,
+                   bioregionalization_metrics = agind,
                    comat = comat,
-                   bioregion_indices = ind,
-                   bioregionalization_indices = agind,
                    type = "gc",
                    data = data_type)
         
         if(!is.null(gc$bioregion)){
-          output[[k]]$site_clusters <- gc$bioregion
+          output[[k]]$site_chorotypes <- gc$bioregion
         }
         if(!is.null(gc$bioregionalization)){
-          output[[k]]$site_clustering <- gc$bioregionalization
+          output[[k]]$site_chorological <- gc$bioregionalization
         }
       }
     }
     
     #gb
     if(type != "sb"){
+      
       gb <- gb(clusters = bioregionalization[attr(bioregionalization, 
                                                   "node_type") == "site",
-                                             (k+1)],  
+                                             (k+1)],
+               bioregion_metrics = ind,
+               bioregionalization_metrics = agind,
+               comat = comat,
                similarity = similarity,
-               bioregion_indices = ind,
-               bioregionalization_indices = agind)
+               #data = data_type,
+               include_cluster = include_cluster)
       
       if(!is.null(gb$bioregion)){
         output[[k]]$site_bioregions <- gb$bioregion
@@ -667,7 +705,6 @@ site_species_metrics <- function(bioregionalization,
       if(!is.null(gb$bioregionalization)){
         output[[k]]$site_bioregionalization <- gb$bioregionalization
       }
-      
     }
     
   }
@@ -678,7 +715,7 @@ site_species_metrics <- function(bioregionalization,
   }
   
   attr(output, "n_partitions") <- nb_partitions
-  attr(output, "node_type") <- if(type == "gb") "site" else node_type
+  attr(output, "cluster_on") <- if(type == "gb") "site" else cluster_on
   attr(output, "clustering_data_type") <- b_data_type
   attr(output, "index_data_type") <- if(type == "gb") NA else data_type
   attr(output, "has_similarity") <- type != "sb"
@@ -687,28 +724,28 @@ site_species_metrics <- function(bioregionalization,
   if(type != "gb") {
     sb_computed <- intersect(ind, sb_ind)
     if(data_type == "occurrence") {
-      attr(output, "bioregion_indices_occ") <- sb_computed
-      attr(output, "bioregion_indices_abd") <- character(0)
-      attr(output, "bioregionalization_indices_occ") <- intersect(agind, sb_agind)
-      attr(output, "bioregionalization_indices_abd") <- character(0)
+      attr(output, "bioregion_metrics_occ") <- sb_computed
+      attr(output, "bioregion_metrics_abd") <- character(0)
+      attr(output, "bioregionalization_metrics_occ") <- intersect(agind, sb_agind)
+      attr(output, "bioregionalization_metrics_abd") <- character(0)
     } else if(data_type == "abundance") {
-      attr(output, "bioregion_indices_occ") <- character(0)
-      attr(output, "bioregion_indices_abd") <- sb_computed
-      attr(output, "bioregionalization_indices_occ") <- character(0)
-      attr(output, "bioregionalization_indices_abd") <- intersect(agind, sb_agind)
+      attr(output, "bioregion_metrics_occ") <- character(0)
+      attr(output, "bioregion_metrics_abd") <- sb_computed
+      attr(output, "bioregionalization_metrics_occ") <- character(0)
+      attr(output, "bioregionalization_metrics_abd") <- intersect(agind, sb_agind)
     } else { # both
-      attr(output, "bioregion_indices_occ") <- sb_computed
-      attr(output, "bioregion_indices_abd") <- sb_computed
-      attr(output, "bioregionalization_indices_occ") <- intersect(agind, sb_agind)
-      attr(output, "bioregionalization_indices_abd") <- intersect(agind, sb_agind)
+      attr(output, "bioregion_metrics_occ") <- sb_computed
+      attr(output, "bioregion_metrics_abd") <- sb_computed
+      attr(output, "bioregionalization_metrics_occ") <- intersect(agind, sb_agind)
+      attr(output, "bioregionalization_metrics_abd") <- intersect(agind, sb_agind)
     }
   } else {
-    attr(output, "bioregion_indices_occ") <- character(0)
-    attr(output, "bioregion_indices_abd") <- character(0)
-    attr(output, "bioregionalization_indices_occ") <- character(0)
-    attr(output, "bioregionalization_indices_abd") <- character(0)
+    attr(output, "bioregion_metrics_occ") <- character(0)
+    attr(output, "bioregion_metrics_abd") <- character(0)
+    attr(output, "bioregionalization_metrics_occ") <- character(0)
+    attr(output, "bioregionalization_metrics_abd") <- character(0)
   }
-  attr(output, "similarity_indices") <- if(type != "sb") {
+  attr(output, "similarity_metrics") <- if(type != "sb") {
     c(intersect(ind, gb_ind), intersect(agind, gb_agind))
   } else character(0)
   

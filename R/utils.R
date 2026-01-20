@@ -956,14 +956,14 @@ seedrng <- function() {
   sample(1:10000, 1)
 }
 
-# Species to bioregions and bioregionalization metrics
-# Site to species_clusters and species_clustering metrics 
+# Species-to-bioregions/bioregionalization metrics
+# Site-to-chorotype/chorological metrics 
 sbgc <- function(clusters, 
+                 bioregion_metrics,
+                 bioregionalization_metrics,
                  comat,
-                 bioregion_indices,
-                 bioregionalization_indices,
-                 type = "sb",  # sb or gc
-                 data = "occurence"){ # occurence, abundance or both
+                 type,  # sb or gc
+                 data){ # occurrence, abundance or both
   
   # Initialization output
   res1 <- NULL
@@ -983,17 +983,17 @@ sbgc <- function(clusters,
   if(type == "gc"){
     comat <- t(comat)  
     col1 <- "Site"
-    col2 <- "Species_cluster"
+    col2 <- "Chorotypes"
     colcoren <- c("n_gc", "n_g", "n_c")
     colcorew <- c("w_gc", "w_g", "w_c")
   }
   
   # Occurrence
   if((data != "abundance") |
-     (data == "abundance" & "Rho" %in% bioregion_indices) |
-     (data == "abundance" & "NSpecificity" %in% bioregion_indices) |
-     (data == "abundance" & "Indval" %in% bioregion_indices) |
-     (data == "abundance" & "NIndval" %in% bioregion_indices)){
+     (data == "abundance" & "Rho" %in% bioregion_metrics) |
+     (data == "abundance" & "NSpecificity" %in% bioregion_metrics) |
+     (data == "abundance" & "Indval" %in% bioregion_metrics) |
+     (data == "abundance" & "NIndval" %in% bioregion_metrics)){
     
     # comat_bin
     comat_bin <- comat
@@ -1019,8 +1019,8 @@ sbgc <- function(clusters,
     n <- sum(nj_mat[1,])
     
     # Normalized for NSpecificity & NIndVal
-    if("NSpecificity" %in% bioregion_indices |
-       "NIndval" %in% bioregion_indices){
+    if("NSpecificity" %in% bioregion_metrics |
+       "NIndval" %in% bioregion_metrics){
       Nnij_mat <- nij_mat / nj_mat
       Nnij_mat <- Nnij_mat / apply(Nnij_mat, 1, sum)
       Nnij_mat[is.na(Nnij_mat)] <- 0
@@ -1028,7 +1028,7 @@ sbgc <- function(clusters,
 
     
     # Output bioregions
-    if(!is.null(bioregion_indices) & data != "abundance"){
+    if(!is.null(bioregion_metrics) & data != "abundance"){
       
       res11 <- cbind(mat_to_net(nij_mat, weight = TRUE, remove_zeroes = FALSE),
                      mat_to_net(ni_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
@@ -1040,12 +1040,12 @@ sbgc <- function(clusters,
       nj <- res11[,5]
 
       # Specificity 
-      if("Specificity" %in% bioregion_indices){
+      if("Specificity" %in% bioregion_metrics){
         res11$Specificity_occ <- nij / ni
       }
       
       # NSpecificity 
-      if("NSpecificity" %in% bioregion_indices){
+      if("NSpecificity" %in% bioregion_metrics){
         
         tempnspe <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
         
@@ -1053,17 +1053,17 @@ sbgc <- function(clusters,
       }
       
       # Fidelity 
-      if("Fidelity" %in% bioregion_indices){
+      if("Fidelity" %in% bioregion_metrics){
         res11$Fidelity_occ <- nij / nj
       }
       
       # IndVal 
-      if("IndVal" %in% bioregion_indices){
+      if("IndVal" %in% bioregion_metrics){
         res11$IndVal_occ <- (nij / ni) * (nij / nj)
       }
       
       # NIndVal 
-      if("NIndVal" %in% bioregion_indices){
+      if("NIndVal" %in% bioregion_metrics){
         
         tempniv <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
         
@@ -1071,7 +1071,7 @@ sbgc <- function(clusters,
       }
       
       # Rho
-      if("Rho" %in% bioregion_indices){
+      if("Rho" %in% bioregion_metrics){
         
         num <- nij-((ni*nj)/n)
         den <- sqrt((nj*(n-nj)/(n-1))*(ni/n)*(1-(ni/n)))
@@ -1081,19 +1081,19 @@ sbgc <- function(clusters,
       }
       
       # CoreTerms
-      if(!("CoreTerms" %in% bioregion_indices)){
+      if(!("CoreTerms" %in% bioregion_metrics)){
         res11 <- res11[,-c(3,4,5)]
       }
     }
     
     # Output bioregionalizations
-    if(!is.null(bioregionalization_indices) & data != "abundance"){
+    if(!is.null(bioregionalization_metrics) & data != "abundance"){
       
       res21 <- data.frame(nij_mat[,1],nij_mat[,1])
       res21[,1] <- rownames(nij_mat)
       colnames(res21) <- c(col1, "Dummy")
       
-      if("P" %in% bioregionalization_indices){
+      if("P" %in% bioregionalization_metrics){
         res21$P_occ <- 1 - apply((nij_mat / ni_mat)*(nij_mat / ni_mat), 1 , sum)
       }
       
@@ -1132,14 +1132,14 @@ sbgc <- function(clusters,
     colnames(wj_mat) <- colnames(wij_mat)
     
     # Normalized for NSpecificity & NIndVal
-    if("NSpecificity" %in% bioregion_indices |
-       "NIndval" %in% bioregion_indices){
+    if("NSpecificity" %in% bioregion_metrics |
+       "NIndval" %in% bioregion_metrics){
       Nwij_mat <- wij_mat / nj_mat
       Nwij_mat <- Nwij_mat / apply(Nwij_mat, 1, sum)
       Nwij_mat[is.na(Nwij_mat)] <- 0
     }
     
-    if("Rho" %in% bioregion_indices){
+    if("Rho" %in% bioregion_metrics){
       muij_mat <- wij_mat / nj_mat
       muij_mat[is.na(muij_mat)] <- 0
       
@@ -1148,7 +1148,7 @@ sbgc <- function(clusters,
     }
     
     # Output bioregions
-    if(!is.null(bioregion_indices)){
+    if(!is.null(bioregion_metrics)){
       
       res12 <- cbind(mat_to_net(wij_mat, weight = TRUE, remove_zeroes = FALSE),
                      mat_to_net(wi_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
@@ -1160,24 +1160,24 @@ sbgc <- function(clusters,
       wj <- res12[,5]
       
       # Specificity
-      if("Specificity" %in% bioregion_indices){
+      if("Specificity" %in% bioregion_metrics){
         res12$Specificity_abund <- wij / wi
       }
       
       # NSpecificity
-      if("NSpecificity" %in% bioregion_indices){
+      if("NSpecificity" %in% bioregion_metrics){
         tempnspe <- mat_to_net(Nwij_mat, weight = TRUE, remove_zeroes = FALSE)
         
         res12$NSpecificity_abund <- tempnspe[,3]
       }
       
       # Fidelity 
-      if("Fidelity" %in% bioregion_indices){
+      if("Fidelity" %in% bioregion_metrics){
         res12$Fidelity_abund <- wij / wj
       }
       
       # IndVal 
-      if("IndVal" %in% bioregion_indices){
+      if("IndVal" %in% bioregion_metrics){
         tempindval <- cbind(mat_to_net(nij_mat, weight = TRUE, 
                                        remove_zeroes = FALSE),
                             mat_to_net(nj_mat, weight = TRUE, 
@@ -1190,7 +1190,7 @@ sbgc <- function(clusters,
       }
       
       # NIndVal 
-      if("NIndVal" %in% bioregion_indices){
+      if("NIndVal" %in% bioregion_metrics){
         tempnindval <- cbind(mat_to_net(Nwij_mat, weight = TRUE, 
                                         remove_zeroes = FALSE),
                              mat_to_net(nij_mat, weight = TRUE, 
@@ -1206,7 +1206,7 @@ sbgc <- function(clusters,
       }
       
       # Rho
-      if("Rho" %in% bioregion_indices){
+      if("Rho" %in% bioregion_metrics){
         temprho <- cbind(mat_to_net(muij_mat, weight = TRUE, remove_zeroes = FALSE),
                          mat_to_net(mui_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
                          mat_to_net(vari_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
@@ -1225,19 +1225,19 @@ sbgc <- function(clusters,
       }
       
       # CoreTerms
-      if(!("CoreTerms" %in% bioregion_indices)){
+      if(!("CoreTerms" %in% bioregion_metrics)){
         res12 <- res12[,-c(3,4,5)]
       }
     }
     
     # Output bioregionalizations
-    if(!is.null(bioregionalization_indices)){
+    if(!is.null(bioregionalization_metrics)){
       
       res22 <- data.frame(wij_mat[,1],wij_mat[,1])
       res22[,1] <- rownames(wij_mat)
       colnames(res22) <- c(col1, "Dummy")
       
-      if("P" %in% bioregionalization_indices){
+      if("P" %in% bioregionalization_metrics){
         res22$P_abund <- 1 - apply((wij_mat / wi_mat)*(wij_mat / wi_mat),1,sum)
       }
       
@@ -1278,49 +1278,148 @@ sbgc <- function(clusters,
   
 }
 
-# Site to bioregions and bioregionalization metrics
+# Site-to-bioregions/bioregionalization metrics
 gb <- function(clusters,
+               bioregion_metrics,
+               bioregionalization_metrics,
+               comat,
                similarity,
-               bioregion_indices,
-               bioregionalization_indices){
+               #data,  # occurrence, abundance or both
+               include_cluster){ 
   
   # Initialization output
   res1 <- NULL
   res2 <- NULL
   
-  # Compute MeanSim and SdSim
-  diag(similarity) <- NA
+  # Check needed inputs
+  comat_needed <- (("Richness" %in% bioregion_metrics) |
+                   ("Rich_Endemics" %in% bioregion_metrics) |
+                   ("Prop_Endemics" %in% bioregion_metrics))
   
-  temp <- aggregate(similarity, list(clusters), mean, na.rm=TRUE)
-  muij_mat <- t(as.matrix(temp[,-1]))
-  rownames(muij_mat) <- colnames(temp)[-1]
-  colnames(muij_mat) <- temp[,1]
-  muij_mat[is.na(muij_mat)] <- 0
+  sim_needed <- (("MeanSim" %in% bioregion_metrics) |
+                 ("SdSim" %in% bioregion_metrics) |
+                 ("Silhouette" %in% bioregionalization_metrics))
   
-  temp <- aggregate(similarity, list(clusters), sd, na.rm=TRUE)
-  sdij_mat <- t(as.matrix(temp[,-1]))
-  rownames(sdij_mat) <- colnames(temp)[-1]
-  colnames(sdij_mat) <- temp[,1]
-  sdij_mat[is.na(sdij_mat)] <- 0
-  
-  # Output bioregion
-  if(!is.null(bioregion_indices)){
+  # Precompute muij if sim_needed
+  if(sim_needed){
     
-    res1 <- cbind(mat_to_net(muij_mat, weight = TRUE, remove_zeroes = FALSE),
-                  mat_to_net(sdij_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
-    colnames(res1) <- c("Site", "Bioregion", "MeanSim", "SdSim") 
+    diag(similarity) <- NA
     
-    if(!("MeanSim" %in% bioregion_indices)){
-      res1 <- res1[,-3]
+    temp <- aggregate(similarity, list(clusters), mean, na.rm=TRUE)
+    muij_mat <- t(as.matrix(temp[,-1]))
+    rownames(muij_mat) <- colnames(temp)[-1]
+    colnames(muij_mat) <- temp[,1]
+    muij_mat[is.na(muij_mat)] <- 0
+    
+  }
+  
+  # Output bioregions
+  if(!is.null(bioregion_metrics)){
+    
+    # Create base matrix site x site (diag=1, 0 otherwise)
+    if(comat_needed){
+      comat_bin <- comat
+      comat_bin[comat_bin > 0] <- 1
+      base <- comat_bin %*% t(comat_bin)
+      base[!diag(dim(base)[1])] <- 0
+    }else{
+      base <- similarity
+      base[!diag(dim(base)[1])] <- 0
+      diag(base) <- 1
     }
-    if(!("SdSim" %in% bioregion_indices)){
-      res1 <- res1[,-4]
+     
+    # Initialize res1
+    temp <- aggregate(base, list(clusters), sum)
+    res1 <- t(as.matrix(temp[,-1]))
+    res1[res1>0] <- 1
+    rownames(res1) <- colnames(temp)[-1]
+    colnames(res1) <- temp[,1]
+    
+    res1 <- mat_to_net(res1, weight=TRUE, remove_zeroes = FALSE)
+    colnames(res1) <- c("Site", "Bioregion", "Assigned")
+    
+    # Richness
+    if("Richness" %in% bioregion_metrics |
+       "Prop_Endemics" %in% bioregion_metrics){
+      
+      temp <- comat_bin %*% t(comat_bin)
+      temp[!diag(dim(temp)[1])] <- 0
+      temp <- aggregate(temp, list(clusters), sum)
+      
+      ng_mat <- t(as.matrix(temp[,-1]))
+      ng_mat[] <- apply(ng_mat, 1, sum)
+      
+      rownames(ng_mat) <- colnames(temp)[-1]
+      colnames(ng_mat) <- temp[,1]
+
+      res1$Richness <- mat_to_net(ng_mat, 
+                                  weight = TRUE, 
+                                  remove_zeroes = FALSE)[,3]
+    }
+      
+    # Rich_Endemics
+    if("Rich_Endemics" %in% bioregion_metrics|
+       "Prop_Endemics" %in% bioregion_metrics){
+      
+      # Species x cluster (1 if species in cluster)
+      temp <- aggregate(comat_bin, list(clusters), max)
+      is_sb <- t(as.matrix(temp[, -1]))
+      rownames(is_sb) <- colnames(temp)[-1]
+      colnames(is_sb) <- temp[,1]
+      
+      # Set 0 for none endemic
+      is_sb[apply(is_sb, 1, sum) > 1] = 0
+      
+      # Rich_Endemics
+      nge_mat <- comat_bin %*% is_sb
+
+      res1$Rich_Endemics <- mat_to_net(nge_mat, 
+                                       weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3]
+
+    }
+    
+    # Prop_Endemics
+    if("Prop_Endemics" %in% bioregion_metrics){
+      
+      res1$Prop_Endemics <- res1$Rich_Endemics / res1$Richness
+      
+      if(!("Richness" %in% bioregion_metrics)){
+        res1$Richness <- NULL
+      }
+      if(!("Rich_Endemics" %in% bioregion_metrics)){
+        res1$Rich_Endemics <- NULL
+      }
+      
+    }  
+    
+    if("MeanSim" %in% bioregion_metrics){
+      res1$MeanSim <- mat_to_net(muij_mat, 
+                                 weight = TRUE, 
+                                 remove_zeroes = FALSE)[,3]
+    }
+    if("SdSim" %in% bioregion_metrics){
+      
+      temp <- aggregate(similarity, list(clusters), sd, na.rm=TRUE)
+      sdij_mat <- t(as.matrix(temp[,-1]))
+      rownames(sdij_mat) <- colnames(temp)[-1]
+      colnames(sdij_mat) <- temp[,1]
+      sdij_mat[is.na(sdij_mat)] <- 0
+      
+      res1$SdSim <- mat_to_net(sdij_mat, 
+                               weight = TRUE, 
+                               remove_zeroes = FALSE)[,3]
+    }
+
+    # include_cluster
+    if(!include_cluster){
+      res1 <- res1[,-3]
     }
     
   }
   
   # Output bioregionalizations
-  if(!is.null(bioregionalization_indices)){
+  if(!is.null(bioregionalization_metrics)){
     
     res2 <- data.frame(muij_mat[,1], muij_mat, clusters)
     res2[,1] <- rownames(muij_mat)
@@ -1356,7 +1455,7 @@ gb <- function(clusters,
     
     res2 <- res2[, c(1, (dim(res2)[2]-1), dim(res2)[2])]
     
-    if("Silhouette" %in% bioregionalization_indices){
+    if("Silhouette" %in% bioregionalization_metrics){
       if(nob){
         res2$Silhouette <- NA
       }else{

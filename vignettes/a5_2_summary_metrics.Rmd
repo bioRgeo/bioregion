@@ -333,7 +333,7 @@ rather than in relation to each individual cluster.
 
 These metrics are computed when sites have clusters (i.e., `node_type = "site"`
 (or `"both"`)). In the following example, we compute all metrics 
-(`bioregion_indices = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
+(`bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
 "Rho", "CoreTerms")`). To compute these metrics, we need to provide `comat`.
 
 ### 6.1.1 Co-occurrence metrics: occurrence version 
@@ -346,11 +346,11 @@ if they want to obtain both versions of co-occurrence metrics.
 
 ```{r}
 nsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
+                            bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
     "Rho", "CoreTerms"),
-                            bioregionalization_indices = NULL,
+                            bioregionalization_metrics = NULL,
                             data_type = "occurrence",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL, # Name of similarity column
@@ -428,6 +428,7 @@ species $s$ in bioregion $b$ and the expected value under random association,
 providing a standardized measure of contribution to the bioregional structure.
 
 ### Co-occurrence metrics: abundance version 
+=======
 
 The occurrence metrics are computed when `data_type = "occurrence"`. By default,
 the function will detect the type of data used for the clustering. However, this 
@@ -437,7 +438,7 @@ for abundance clustering, and vice-versa.
 
 The abundance version of these metrics can also be computed when 
 `data_type = "abundance"` (or `data_type = "both"`). In this case the core terms 
-and associated indices are:
+and associated metrics are:
 
 - $w_{sb}$ is the sum of abundances of species **s** in sites of bioregion **b**. 
 - $w_s$ is the total abundance of species **s**.  
@@ -446,14 +447,14 @@ and associated indices are:
 
 ```{r}
 wsb <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = NULL,
+                            bioregionalization_metrics = NULL,
                             data_type = "abundance",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL, # Name of similarity column
                             index = NULL,
@@ -528,8 +529,8 @@ in the calculation for its own bioregion.
 
 ```{r}
 sim_metrics <- site_species_metrics(bioregionalization = vege_nhclu,
-                            bioregion_indices = c("MeanSim", "SdSim"),
-                            bioregionalization_indices = NULL,
+                            bioregion_metrics = c("MeanSim", "SdSim"),
+                            bioregionalization_metrics = NULL,
                             data_type = "occurrence",
                             node_type = "site",
                             comat = vegemat,
@@ -566,12 +567,12 @@ of species clusters (`node_type = "species"`).
 
 ```{r}
 gc <- site_species_metrics(bioregionalization = vege_netclubip,
-                            bioregion_indices = c("Specificity", "NSpecificity",
+                            bioregion_metrics = c("Specificity", "NSpecificity",
                                                   "Fidelity",
                                                   "IndVal", "NIndVal",
                                                   "Rho",
                                                   "CoreTerms"),
-                            bioregionalization_indices = "P",
+                            bioregionalization_metrics = "P",
                             data_type = "both",
                             node_type = "species",
                             comat = vegemat,
@@ -617,7 +618,7 @@ We can compute the participation coefficient $P_s$ of a species $s$ to the
 bioregionalization as described in [@Denelle2020], available in 
 both its occurrence and abundance versions.
 
-These indices measure whether a site has species from a single region or from 
+These metrics measure whether a site has species from a single region or from 
 multiple regions - useful when investigating transition zones [@Leroy2019]. 
 There are ranging from 0 to 1. Values close to 0 indicate that the site only has 
 species from a single chorotype (i.e., not a transition zone), whereas values 
@@ -656,17 +657,17 @@ $$
 P_s =  1 - \sum_{k=1}^K \left(\frac{w_{sk}}{w_s}\right)^2
 $$
 
-These indices measure how evenly a species is distributed among bioregions. 
+These metrics measure how evenly a species is distributed among bioregions. 
 There are ranging from 0 to 1. Values close to 0 indicate that the species is 
 largely restricted to a single bioregion, while values close to 1 indicate that 
 the species is evenly distributed across multiple bioregions.
 
 ```{r}
 ps <- site_species_metrics(bioregionalization = vege_nhclu,
-                           bioregion_indices = NULL,
-                            bioregionalization_indices = "P",
+                           bioregion_metrics = NULL,
+                            bioregionalization_metrics = "P",
                             data_type = "both",
-                            node_type = "site",
+                            cluster_on = "site",
                             comat = vegemat,
                             similarity = NULL,
                             index = NULL,

@@ -65,16 +65,17 @@ clualt2$inputs <- clualt2$inputs[-9]
 test_that("valid output", {
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "all",
-                              bioregionalization_indices = "all",
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = "all",
                               data_type = "both",
-                              node_type = "both",
+                              cluster_on = "both",
                               comat = vegemat,
                               similarity = vegesim,
+                              include_cluster = TRUE,
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$species_bioregions), 
-               c(dim(vegemat)[2]*cluinfo$cluster_info[1,2],20))
+               c(dim(vegemat)[2]*cluinfo$cluster_info[1,2], 20))
   expect_equal(colnames(ind$species_bioregions)[1:5], c("Species",
                                                         "Bioregion",
                                                         "n_sb","n_s","n_b"))
@@ -82,29 +83,33 @@ test_that("valid output", {
   expect_equal(dim(ind$species_bioregionalization), c(dim(vegemat)[2],3))
   expect_equal(colnames(ind$species_bioregionalization), c("Species",
                                                            "P_occ", "P_abund"))
-  expect_equal(dim(ind$site_clusters), 
+  expect_equal(dim(ind$site_chorotypes), 
                c(dim(vegemat)[1]*cluinfo$cluster_info[1,2],20))
-  expect_equal(colnames(ind$site_clusters)[1:5], c("Site",
-                                                   "Species_cluster",
-                                                   "n_gc","n_g","n_c"))
-  expect_equal(colnames(ind$site_clusters)[12:14], c("w_gc","w_g","w_c"))
-  expect_equal(dim(ind$site_clustering), c(dim(vegemat)[1],3))
-  expect_equal(colnames(ind$site_clustering), c("Site",
+  expect_equal(colnames(ind$site_chorotypes)[1:5], c("Site",
+                                                     "Chorotypes",
+                                                     "n_gc","n_g","n_c"))
+  expect_equal(colnames(ind$site_chorotypes)[12:14], c("w_gc","w_g","w_c"))
+  expect_equal(dim(ind$site_chorological), c(dim(vegemat)[1],3))
+  expect_equal(colnames(ind$site_chorological), c("Site",
                                                 "P_occ", "P_abund"))
   expect_equal(dim(ind$site_bioregions),
-               c(dim(vegemat)[1]*cluinfo$cluster_info[1,2],4))
+               c(dim(vegemat)[1]*cluinfo$cluster_info[1,2],8))
   expect_equal(colnames(ind$site_bioregions), c("Site",
                                                 "Bioregion",
+                                                "Assigned",
+                                                "Richness",
+                                                "Rich_Endemics",
+                                                "Prop_Endemics",
                                                 "MeanSim","SdSim"))
   expect_equal(dim(ind$site_bioregionalization), c(dim(vegemat)[1],2))
   expect_equal(colnames(ind$site_bioregionalization), c("Site",
                                                         "Silhouette"))
   
   ind_abund <- site_species_metrics(bioregionalization = cluinfo,
-                                    bioregion_indices = "all",
-                                    bioregionalization_indices = "all",
+                                    bioregion_metrics = "all",
+                                    bioregionalization_metrics = "all",
                                     data_type = "auto",
-                                    node_type = "both",
+                                    cluster_on = "both",
                                     comat = vegemat,
                                     similarity = vegesim,
                                     index = 3,
@@ -114,21 +119,22 @@ test_that("valid output", {
   
   
   ind_shuff <- site_species_metrics(bioregionalization = cluinfo,
-                                    bioregion_indices = "all",
-                                    bioregionalization_indices = "all",
+                                    bioregion_metrics = "all",
+                                    bioregionalization_metrics = "all",
                                     data_type = "both",
-                                    node_type = "both",
+                                    cluster_on = "both",
                                     comat = vegemat_shuff,
                                     similarity = vegesim_shuff,
+                                    include_cluster = TRUE,
                                     index = 3,
                                     verbose = FALSE)
   expect_equal(ind,ind_shuff)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "Rho",
-                              bioregionalization_indices = NULL,
+                              bioregion_metrics = "Rho",
+                              bioregionalization_metrics = NULL,
                               data_type = "occurrence",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -137,10 +143,10 @@ test_that("valid output", {
   expect_equal(names(ind$species_bioregions)[3], "Rho_occ")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "Rho",
-                              bioregionalization_indices = NULL,
+                              bioregion_metrics = "Rho",
+                              bioregionalization_metrics = NULL,
                               data_type = "abundance",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -149,10 +155,10 @@ test_that("valid output", {
   expect_equal(names(ind$species_bioregions)[3], "Rho_abund")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = NULL,
-                              bioregionalization_indices = "P",
+                              bioregion_metrics = NULL,
+                              bioregionalization_metrics = "P",
                               data_type = "occurrence",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -161,10 +167,10 @@ test_that("valid output", {
   expect_equal(names(ind$species_bioregionalization)[2], "P_occ")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "Rho",
-                              bioregionalization_indices = "P",
+                              bioregion_metrics = "Rho",
+                              bioregionalization_metrics = "P",
                               data_type = "abundance",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -175,10 +181,10 @@ test_that("valid output", {
   expect_equal(names(ind$species_bioregionalization)[2], "P_abund")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "MeanSim",
-                              bioregionalization_indices = NULL,
+                              bioregion_metrics = "MeanSim",
+                              bioregionalization_metrics = NULL,
                               data_type = "occurrence",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -187,22 +193,22 @@ test_that("valid output", {
   expect_equal(names(ind$site_bioregions)[3], "MeanSim")
 
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "all",
-                              bioregionalization_indices = "all",
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = "all",
                               data_type = "occurrence",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
                               verbose = FALSE)
-  expect_equal(ind$site_clusters, NULL)
-  expect_equal(ind$site_clustering, NULL)
+  expect_equal(ind$site_chorotypes, NULL)
+  expect_equal(ind$site_chorological, NULL)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "MeanSim",
-                              bioregionalization_indices = "Silhouette",
+                              bioregion_metrics = "MeanSim",
+                              bioregionalization_metrics = "Silhouette",
                               data_type = "occurrence",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -213,24 +219,24 @@ test_that("valid output", {
   expect_equal(names(ind$site_bioregionalization)[2], "Silhouette")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "all",
-                              bioregionalization_indices = NULL,
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = NULL,
                               data_type = "auto",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
                               verbose = FALSE)
   expect_equal(ind$species_bioregionalization, NULL)
   expect_equal(ind$site_bioregionalization, NULL)
-  expect_equal(ind$site_clusters, NULL)
-  expect_equal(ind$site_clustering, NULL)
+  expect_equal(ind$site_chorotypes, NULL)
+  expect_equal(ind$site_chorological, NULL)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "Fidelity",
-                              bioregionalization_indices = NULL,
+                              bioregion_metrics = "Fidelity",
+                              bioregionalization_metrics = NULL,
                               data_type = "auto",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = vegemat,
                               similarity = 1,
                               index = 3,
@@ -238,19 +244,60 @@ test_that("valid output", {
   expect_equal(ind$site_bioregions, NULL)
   expect_equal(ind$species_bioregionalization, NULL)
   expect_equal(ind$site_bioregionalization, NULL)
-  expect_equal(ind$site_clusters, NULL)
-  expect_equal(ind$site_clustering, NULL)
+  expect_equal(ind$site_chorotypes, NULL)
+  expect_equal(ind$site_chorological, NULL)
   
   ind <- site_species_metrics(bioregionalization = cluhier,
-                              bioregion_indices = "all",
-                              bioregionalization_indices = "all",
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = "all",
                               data_type = "auto",
-                              node_type = "site",
+                              cluster_on = "site",
                               comat = fishmat,
                               similarity = fishsim,
                               index = 3,
                               verbose = FALSE)
   expect_equal(length(ind), 3)
+  
+  ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = "MeanSim",
+                              bioregionalization_metrics = NULL,
+                              data_type = "both",
+                              cluster_on = "both",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = TRUE,
+                              index = 3,
+                              verbose = FALSE)
+  expect_equal(dim(ind$site_bioregions)[2], 4)
+  
+  ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = "MeanSim",
+                              bioregionalization_metrics = NULL,
+                              data_type = "both",
+                              cluster_on = "both",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = FALSE,
+                              index = 3,
+                              verbose = FALSE)
+  expect_equal(dim(ind$site_bioregions)[2], 3)
+  
+  ind_base <- site_species_metrics(bioregionalization = cluinfo,
+                                   bioregion_metrics = c("Richness","MeanSim"),
+                                   bioregionalization_metrics = NULL,
+                                   data_type = "both",
+                                   cluster_on = "both",
+                                   comat = vegemat,
+                                   similarity = vegesim,
+                                   include_cluster = FALSE,
+                                   index = 3,
+                                   verbose = FALSE)
+  expect_equal(dim(ind_base$site_bioregions)[2], 4)
+  expect_equal(identical(ind$site_bioregions, 
+                         ind_base$site_bioregions[,-3]), 
+               TRUE)
+  
+  
   
 })
 
@@ -270,6 +317,18 @@ test_that("invalid inputs", {
     fixed = TRUE)
   
   expect_error(
+    site_species_metrics(cluinfo,
+                         include_cluster = c(TRUE,1)),
+    "include_cluster must be of length 1.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(cluinfo,
+                         include_cluster = 1),
+    "include_cluster must be a boolean.",
+    fixed = TRUE)
+  
+  expect_error(
     site_species_metrics(1),
     "bioregionalization must be a bioregion.clusters object.",
     fixed = TRUE)
@@ -284,191 +343,312 @@ test_that("invalid inputs", {
 
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = 1,
-                         bioregionalization_indices = NULL),
-    "bioregion_indices must be a character.",
+                         bioregion_metrics = 1,
+                         bioregionalization_metrics = NULL),
+    "bioregion_metrics must be a character.",
     fixed = TRUE)
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = c("Rho","nistenu"),
-                         bioregionalization_indices = NULL),
-    "^One or several bioregion indices chosen are not")
+                         bioregion_metrics = c("Rho","nistenu"),
+                         bioregionalization_metrics = NULL),
+    "^One or several bioregion metrics chosen are not")
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = 1),
-    "bioregionalization_indices must be a character.",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = 1),
+    "bioregionalization_metrics must be a character.",
     fixed = TRUE)
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = c("P", "nistenu")),
-    "^One or several bioregionalization indices chosen are not")
-
-  quietly(  
-  expect_warning(
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = c("P", "nistenu")),
+    "^One or several bioregionalization metrics chosen are not")
+  
+  expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = c("Rho", "MeanSim"),
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = NULL,
                          comat = vegemat),
-    "^Site-to-bioregion indices ")
-  )
-
+    "At least one type of metrics with the appropriate inputs should be specified.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(cluinfo,
+                         bioregion_metrics = "all",
+                         bioregionalization_metrics = "all",
+                         comat = NULL,
+                         similarity = NULL),
+    "At least comat or similarity should be provided.", 
+    fixed = TRUE)
+  
   expect_warning(
     site_species_metrics(cluinfo,
-                         bioregion_indices = c("Rho", "MeanSim"),
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = c("Rho", "MeanSim"),
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim),
-    "^Species-to-bioregion indices ") 
-  
-  quietly(
-  expect_warning(
-    site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "all",
-                         comat = vegemat),
-    "^Site-to-bioregionalization indices ")
-  )
+    "^Some metrics ") 
   
   expect_warning(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "all",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "all",
                          comat = NULL,
                          similarity = vegesim),
-    "^Species-to-bioregionalization indices ")
-  
-  expect_error(
-    site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = NULL,
-                         comat = vegemat),
-    "At least one type of indices with the appropriate inputs should be specified.",
-    fixed = TRUE)
+    "^Some metrics ")
 
-  expect_error(
+  expect_warning(
     site_species_metrics(cluinfo,
-                         node_type = c(TRUE,1),
-                         comat = vegemat),
-    "node_type must be of length 1.",
+                         bioregion_metrics = c("Rho", "MeanSim"),
+                         bioregionalization_metrics = NULL,
+                         data_type = "abundance",
+                         comat = vegemat,
+                         similarity = NULL),
+    "^Some metrics ")
+
+  expect_warning(
+    site_species_metrics(cluinfo,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "all",
+                         data_type = "abundance",
+                         comat = vegemat,
+                         similarity = NULL),
+    "^Some metrics ")
+  
+  expect_error(
+    expect_warning(
+      site_species_metrics(cluinfo,
+                           bioregion_metrics = "MeanSim",
+                           bioregionalization_metrics = NULL,
+                           comat = vegemat,
+                           similarity = NULL),
+      "^Some metrics "),
+    "At least one type of metrics with the appropriate inputs should be specified.",
+    fixed = TRUE)
+  
+  expect_error(
+    expect_warning(
+      site_species_metrics(cluinfo,
+                           bioregion_metrics = NULL,
+                           bioregionalization_metrics = "Silhouette",
+                           comat = vegemat,
+                           similarity = NULL),
+      "^Some metrics "),
+    "At least one type of metrics with the appropriate inputs should be specified.",
+    fixed = TRUE)
+  
+  expect_error(
+    expect_warning(
+      site_species_metrics(cluinfo,
+                           bioregion_metrics = "Rho",
+                           bioregionalization_metrics = NULL,
+                           comat = NULL,
+                           similarity = vegesim),
+      "^Some metrics "),
+    "At least one type of metrics with the appropriate inputs should be specified.",
+    fixed = TRUE)
+  
+  expect_error(
+    expect_warning(
+      site_species_metrics(cluinfo,
+                           bioregion_metrics = "Richness",
+                           bioregionalization_metrics = NULL,
+                           comat = NULL,
+                           similarity = vegesim),
+      "^Some metrics "),
+    "At least one type of metrics with the appropriate inputs should be specified.",
+    fixed = TRUE)
+  
+  expect_error(
+    expect_warning(
+      site_species_metrics(cluinfo,
+                           bioregion_metrics = NULL,
+                           bioregionalization_metrics = "P",
+                           comat = NULL,
+                           similarity = vegesim),
+      "^Some metrics "),
+    "At least one type of metrics with the appropriate inputs should be specified.",
     fixed = TRUE)
   
   expect_error(
     site_species_metrics(cluinfo,
-                         node_type = 1,
+                         cluster_on = c(TRUE,1),
                          comat = vegemat),
-    "node_type must be a character.",
+    "cluster_on must be of length 1.",
     fixed = TRUE)
   
   expect_error(
     site_species_metrics(cluinfo,
-                         node_type = "iueui",
+                         cluster_on = 1,
                          comat = vegemat),
-    "^Please choose node_type from the following")
+    "cluster_on must be a character.",
+    fixed = TRUE)
+  
+  expect_error(
+    site_species_metrics(cluinfo,
+                         cluster_on = "iueui",
+                         comat = vegemat),
+    "^Please choose cluster_on from the following")
   
   expect_error(
     site_species_metrics(cluinfospe,
-                         bioregion_indices = "all",
-                         bioregionalization_indices = NULL,
-                         node_type = "site",
+                         bioregion_metrics = "CoreTerms",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregion metrics")
+    "^Species-to-bioregions/bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
-                         bioregion_indices = "all",
-                         bioregionalization_indices = NULL,
-                         node_type = "both",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
+                         cluster_on = "site",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregion metrics")
+    "^Species-to-bioregions/bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
-                         node_type = "site",                        
+                         bioregion_metrics = "CoreTerms",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregion metrics")
+    "^Species-to-bioregions/bioregionalization metrics")
   
   expect_error(
     site_species_metrics(cluinfospe,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "Silhouette",
-                         node_type = "site",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
+                         cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-bioregion metrics")
+    "^Species-to-bioregions/bioregionalization metrics")
   
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "site",
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "Silhouette",
+                         cluster_on = "site",
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "both",                        
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "Silhouette",
+                         cluster_on = "both",
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = "all",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "site",
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Species/Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "all",
+                         cluster_on = "site",
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Species/Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = "all",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "both",                        
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Species/Site-to-bioregions/bioregionalization metrics")
+  
+  expect_error(
+    site_species_metrics(cluinfospe,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "all",
+                         cluster_on = "both",
+                         comat = vegemat,
+                         similarity = vegesim),
+    "^Species/Site-to-bioregions/bioregionalization metrics")
   
   expect_error(
     site_species_metrics(clulouv,
-                         node_type = "species",
+                         bioregion_metrics = "CoreTerms",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "species",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-species_cluster metrics")
+    "^Site-to-chorotypes/chorological metrics")
   
   expect_error(
     site_species_metrics(clulouv,
-                         node_type = "both",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
+                         cluster_on = "species",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Site-to-species_cluster metrics")
+    "^Site-to-chorotypes/chorological metrics")
   
   expect_error(
-    site_species_metrics(cluinfospe,
-                         bioregion_indices = "CoreTerms",
-                         bioregionalization_indices = NULL,
-                         node_type = "site",
+    site_species_metrics(clulouv,
+                         bioregion_metrics = "CoreTerms",
+                         bioregionalization_metrics = NULL,
+                         cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species-to-bioregion metrics")
+    "^Site-to-chorotypes/chorological metrics")
   
   expect_error(
-    site_species_metrics(cluinfospe,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
-                         node_type = "site",
+    site_species_metrics(clulouv,
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
+                         cluster_on = "both",
                          comat = vegemat,
                          similarity = vegesim),
-    "^Species-to-bioregion metrics")
-  
-  expect_error(
-    site_species_metrics(cluinfospe,
-                         bioregion_indices = "CoreTerms",
-                         bioregionalization_indices = NULL,
-                         node_type = "both",
-                         comat = vegemat,
-                         similarity = vegesim),
-    "^Species-to-bioregion metrics")
-  
-  expect_error(
-    site_species_metrics(cluinfospe,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
-                         node_type = "both",
-                         comat = vegemat,
-                         similarity = vegesim),
-    "^Species-to-bioregion metrics")
-  
+    "^Site-to-chorotypes/chorological metrics")
+
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
                          comat=1),
     "comat must be a matrix.", 
     fixed = TRUE)
 
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
                          comat = comatneg),
     "Negative value(s) detected in comat!", 
     fixed = TRUE)
@@ -488,8 +668,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
                          comat = vegemat,
                          data_type = c(TRUE,1)),
     "data_type must be of length 1.",
@@ -497,8 +677,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
                          comat = vegemat,
                          data_type = 1),
     "data_type must be a character.",
@@ -506,8 +686,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = NULL,
-                         bioregionalization_indices = "P",
+                         bioregion_metrics = NULL,
+                         bioregionalization_metrics = "P",
                          comat = vegemat,
                          data_type = "iueui"),
     "^Please choose data_type from the following")
@@ -515,58 +695,58 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfona,
                          comat = vegemat_bin,
-                         bioregion_indices = "Rho",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "Rho",
+                         bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^No data type detected in bioregionalization and comat is based on occurence data")
   
   expect_message(
     site_species_metrics(cluinfona,
                          comat = vegemat,
-                         bioregion_indices = "Rho",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "Rho",
+                         bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^No data type detected in bioregionalization and comat is based on abundance data")
   
   expect_message(
     site_species_metrics(cluinfoocc,
                          comat = vegemat_bin,
-                         bioregion_indices = "Rho",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "Rho",
+                         bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on occurence data and comat is based on occurence data")
   
   expect_message(
     site_species_metrics(cluinfoocc,
                          comat = vegemat,
-                         bioregion_indices = "Rho",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "Rho",
+                         bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on occurence data but note that even if comat is based on abundance")
   
   expect_message(
     site_species_metrics(cluinfoabund,
                          comat = vegemat_bin,
-                         bioregion_indices = "Rho",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "Rho",
+                         bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on abundance data but comat is based on occurence data so occurrence")
   
   expect_message(
     site_species_metrics(cluinfoabund,
                          comat = vegemat,
-                         bioregion_indices = "Rho",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "Rho",
+                         bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on abundance data and comat is based on abundance")
   
   #expect_warning(
   #  site_species_metrics(cluinfo,
   #                       comat = vegemat_bin,
-  #                       bioregion_indices = "Rho",
-  #                       bioregionalization_indices = NULL,
+  #                       bioregion_metrics = "Rho",
+  #                       bioregionalization_metrics = NULL,
   #                       data_type = "abundance"),
-  #  "^comat is based on occurence data so abundance-based indices won't be computed!")
+  #  "^comat is based on occurence data so abundance-based metrics won't be computed!")
   
   expect_error(
     site_species_metrics(cluinfo,
@@ -584,7 +764,7 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         node_type = "species",
+                         cluster_on = "species",
                          comat = comatwnames1,
                          verbose = FALSE),
     "Species ID in bioregionalization and comat do not match!", 
@@ -592,7 +772,7 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         node_type = "species",
+                         cluster_on = "species",
                          comat = comatwnames2,
                          verbose = FALSE),
     "Species ID in bioregionalization and comat do not match!", 
@@ -600,8 +780,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "all",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "all",
+                         bioregionalization_metrics = NULL,
                          comat = vegemat,
                          similarity = "1",
                          verbose = FALSE),
@@ -609,16 +789,16 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = "1"),
     "^similarity should be a bioregion.pairwise object created by")
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim,
                          index = c("1", 1)),
@@ -626,8 +806,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim,
                          index = "zz"),
@@ -635,8 +815,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim,
                          index = "Site1"),
@@ -644,8 +824,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim,
                          index = 0.1),
@@ -653,8 +833,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim,
                          index = 1),
@@ -662,8 +842,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim,
                          index = 10),
@@ -671,8 +851,8 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_indices = "MeanSim",
-                         bioregionalization_indices = NULL,
+                         bioregion_metrics = "MeanSim",
+                         bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesimwnames),
     "Site ID in bioregionalization and similarity do not match!")

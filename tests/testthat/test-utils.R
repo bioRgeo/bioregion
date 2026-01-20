@@ -840,13 +840,13 @@ test_that("invalid inputs", {
 
   # sb
   sb <- sbgc(clusters_g, 
-             comat,
-             bioregion_indices = c("Specificity", "NSpecificity", 
+             bioregion_metrics = c("Specificity", "NSpecificity", 
                                    "Fidelity", 
                                    "IndVal", "NIndVal", 
                                    "Rho", 
                                    "CoreTerms"),
-             bioregionalization_indices = c("P"),
+             bioregionalization_metrics = c("P"),
+             comat,
              type = "sb", 
              data = "both")
   s <- sample(n_species, 1)
@@ -924,13 +924,13 @@ test_that("invalid inputs", {
   
   # gc
   gc <- sbgc(clusters_s, 
-             comat,
-             bioregion_indices = c("Specificity", "NSpecificity", 
+             bioregion_metrics = c("Specificity", "NSpecificity", 
                                    "Fidelity", 
                                    "IndVal", "NIndVal", 
                                    "Rho", 
                                    "CoreTerms"),
-             bioregionalization_indices = c("P"),
+             bioregionalization_metrics = c("P"),
+             comat,
              type = "gc", 
              data = "both")
   g <- sample(n_sites, 1)
@@ -1009,9 +1009,11 @@ test_that("invalid inputs", {
   
   # gb
   gb <- gb(as.character(clusters_g), 
+           bioregion_metrics = c("MeanSim", "SdSim"),
+           bioregionalization_metrics = c("Silhouette"),
+           comat = NULL,
            sim,
-           bioregion_indices = c("MeanSim", "SdSim"),
-           bioregionalization_indices = c("Silhouette"))
+           include_cluster = FALSE)
   
   tab <- cbind(clusters_g[-g], as.numeric(sim[-g,g]))
   agtab11 <- aggregate(tab[,2], list(tab[,1]), mean)

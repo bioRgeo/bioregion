@@ -15,10 +15,10 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
                             bipartite = TRUE)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_indices = "all",
-                              bioregionalization_indices = "all",
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = "all",
                               data_type = "both",
-                              node_type = "both",
+                              cluster_on = "both",
                               comat = vegemat,
                               similarity = vegesim,
                               index = 3,
@@ -31,7 +31,7 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   expect_output(print(ind), "Site and species contribution metrics")
   expect_output(print(ind), "Input summary:")
   expect_output(print(ind), "Node type:")
-  expect_output(print(ind), "Computed indices:")
+  expect_output(print(ind), "Computed metrics:")
   expect_output(print(ind), "Data preview:")
   expect_output(print(ind), "Access data with:")
   
@@ -62,8 +62,8 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   # Test attributes
   expect_true(!is.null(attr(ind, "n_partitions")))
-  expect_true(!is.null(attr(ind, "node_type")))
-  expect_equal(attr(ind, "node_type"), "both")
+  expect_true(!is.null(attr(ind, "cluster_on")))
+  expect_equal(attr(ind, "cluster_on"), "both")
   
   # Test with hierarchical clustering (multiple partitions)
   fishsim <- similarity(fishmat, metric = c("Jaccard", "Bray"))
@@ -81,10 +81,10 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
                               verbose = FALSE)
   
   ind_hier <- site_species_metrics(bioregionalization = cluhier,
-                                   bioregion_indices = "all",
-                                   bioregionalization_indices = "all",
+                                   bioregion_metrics = "all",
+                                   bioregionalization_metrics = "all",
                                    data_type = "auto",
-                                   node_type = "site",
+                                   cluster_on = "site",
                                    comat = fishmat,
                                    similarity = fishsim,
                                    index = 3,
@@ -110,10 +110,10 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   # Test with single node type (site only)
   ind_site <- site_species_metrics(bioregionalization = cluinfo,
-                                   bioregion_indices = "Rho",
-                                   bioregionalization_indices = "P",
+                                   bioregion_metrics = "Rho",
+                                   bioregionalization_metrics = "P",
                                    data_type = "occurrence",
-                                   node_type = "site",
+                                   cluster_on = "site",
                                    comat = vegemat,
                                    similarity = vegesim,
                                    index = 3,
@@ -126,10 +126,10 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   # Test with single node type (species only)
   ind_species <- site_species_metrics(bioregionalization = cluinfo,
-                                      bioregion_indices = "CoreTerms",
-                                      bioregionalization_indices = NULL,
+                                      bioregion_metrics = "CoreTerms",
+                                      bioregionalization_metrics = NULL,
                                       data_type = "occurrence",
-                                      node_type = "species",
+                                      cluster_on = "species",
                                       comat = vegemat,
                                       verbose = FALSE)
   
@@ -140,23 +140,23 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   # Test with abundance data type
   ind_abund <- site_species_metrics(bioregionalization = cluinfo,
-                                    bioregion_indices = "Rho",
-                                    bioregionalization_indices = "P",
+                                    bioregion_metrics = "Rho",
+                                    bioregionalization_metrics = "P",
                                     data_type = "abundance",
-                                    node_type = "site",
+                                    cluster_on = "site",
                                     comat = vegemat,
                                     verbose = FALSE)
   
   expect_s3_class(ind_abund, "bioregion.site.species.metrics")
   expect_output(print(ind_abund), "Site and species contribution metrics")
-  expect_output(print(ind_abund), "Bioregion indices \\(abundance\\):")
+  expect_output(print(ind_abund), "Bioregion metrics \\(abundance\\):")
   
   # Test with similarity-based metrics only
   ind_sim <- site_species_metrics(bioregionalization = cluinfo,
-                                  bioregion_indices = "MeanSim",
-                                  bioregionalization_indices = "Silhouette",
+                                  bioregion_metrics = "MeanSim",
+                                  bioregionalization_metrics = "Silhouette",
                                   data_type = "occurrence",
-                                  node_type = "site",
+                                  cluster_on = "site",
                                   comat = NULL,
                                   similarity = vegesim,
                                   index = 3,
@@ -164,7 +164,7 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   expect_s3_class(ind_sim, "bioregion.site.species.metrics")
   expect_output(print(ind_sim), "Site and species contribution metrics")
-  expect_output(print(ind_sim), "Similarity-based indices:")
+  expect_output(print(ind_sim), "Similarity-based metrics:")
   
 })
 
