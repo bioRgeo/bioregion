@@ -1271,8 +1271,8 @@ sbgc <- function(clusters,
   
   # Return output
   res <- list()
-  res$bioregion <- res1
-  res$bioregionalization <- res2
+  res$bioregion1 <- res1
+  res$bioregion2 <- res2
   
   return(res)
   
@@ -1470,8 +1470,8 @@ gb <- function(clusters,
   
   # Return output
   res <- list()
-  res$bioregion <- res1
-  res$bioregionalization <- res2
+  res$bioregion1 <- res1
+  res$bioregion2 <- res2
   
   return(res)
   
