@@ -275,7 +275,7 @@ A): \\B\_{A,C1} = \frac{n\_{A,C1}}{n_C1} = \frac{2}{2} = 1.00 \quad
 | Fidelity      | Species | Bioregion    | Co-occurrence |  ✓  |  ✓  | \\B\_{sb} = \frac{n\_{sb}}{n_b}\\                          | Fraction of bioregion’s sites with species                                            |
 | IndVal        | Species | Bioregion    | Co-occurrence |  ✓  |  ✓  | \\A\_{sb} \times B\_{sb}\\                                 | Indicator value (specificity × fidelity)                                              |
 | NIndVal       | Species | Bioregion    | Co-occurrence |  ✓  |  ✓  | \\\bar{A}\_{sb} \times B\_{sb}\\                           | Size-normalized indicator value                                                       |
-| Rho           | Species | Bioregion    | Co-occurrence |  ✓  |  ✓  | See section 6.1.1                                          | Standardized contribution index                                                       |
+| Rho           | Species | Bioregion    | Co-occurrence |  ✓  |  ✓  | See section 7.1.1                                          | Standardized contribution index                                                       |
 | CoreTerms     | Species | Bioregion    | Co-occurrence |  ✓  |  ✓  | \\n\\, \\n_b\\, \\n_s\\, \\n\_{sb}\\                       | Raw counts for custom calculations                                                    |
 |               |         |              |               |     |     |                                                            |                                                                                       |
 | Richness      | Site    | —            | Co-occurrence |  ✓  |  —  | \\S_g = n_g\\                                              | Number of species                                                                     |
@@ -283,7 +283,7 @@ A): \\B\_{A,C1} = \frac{n\_{A,C1}}{n_C1} = \frac{2}{2} = 1.00 \quad
 | Prop_Endemics | Site    | Bioregion    | Co-occurrence |  ✓  |  —  | \\\bar{PctEnd}\_{g} = \frac{E_g}{S_g}\\                    | Proportion of endemic species in the site                                             |
 |               |         |              |               |     |     |                                                            |                                                                                       |
 | MeanSim       | Site    | Bioregion    | Similarity    |  —  |  —  | \\\frac{1}{n_b - \delta} \sum\_{g' \neq g} sim\_{gg'}\\    | Mean similarity to bioregion                                                          |
-| SdSim         | Site    | Bioregion    | Similarity    |  —  |  —  | See section 6.2.1                                          | SD of similarity to bioregion                                                         |
+| SdSim         | Site    | Bioregion    | Similarity    |  —  |  —  | See section 7.2.1                                          | SD of similarity to bioregion                                                         |
 
 #### When clusters are assigned to species (`cluster_on = "species"` or `cluster_on = "both"`)
 
@@ -294,7 +294,7 @@ A): \\B\_{A,C1} = \frac{n\_{A,C1}}{n_C1} = \frac{2}{2} = 1.00 \quad
 | Fidelity     | Site   | Chorotype    | Co-occurrence |  ✓  |  ✓  | \\B\_{gc} = \frac{n\_{gc}}{n_c}\\                          | Fraction of cluster’s species in site    |
 | IndVal       | Site   | Chorotype    | Co-occurrence |  ✓  |  ✓  | \\A\_{gc} \times B\_{gc}\\                                 | Indicator value (specificity × fidelity) |
 | NIndVal      | Site   | Chorotype    | Co-occurrence |  ✓  |  ✓  | \\\bar{A}\_{gc} \times B\_{gc}\\                           | Size-normalized indicator value          |
-| Rho          | Site   | Chorotype    | Co-occurrence |  ✓  |  ✓  | See section 6.2.2                                          | Standardized contribution index          |
+| Rho          | Site   | Chorotype    | Co-occurrence |  ✓  |  ✓  | See section 7.2.2                                          | Standardized contribution index          |
 | CoreTerms    | Site   | Chorotype    | Co-occurrence |  ✓  |  ✓  | \\n\\, \\n_c\\, \\n_g\\, \\n\_{gc}\\                       | Raw counts for custom calculations       |
 
 ### Metrics in bioregionalization/clustering
@@ -315,9 +315,325 @@ clusters, rather than in relation to each individual cluster.
 |:-------|:-------|:--------------|:---:|:---:|:--------------------------------------------------|:-----------------------------------------|
 | P      | Site   | Co-occurrence |  ✓  |  ✓  | \\1 - \sum_k \left(\frac{n\_{gk}}{n_g}\right)^2\\ | Evenness of site across chorotypes (0–1) |
 
-## 6. Metrics per cluster
+## 6. Usage
 
-### 6.1 Species-per-bioregion metrics
+This section demonstrates how to use
+[`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
+with all metrics computed for both sites and species. This is only
+possible in a bipartite network clustering, where both sites and species
+receive clusters simultaneously.
+
+For this example, we will use the bipartite network bioregionalization
+from section 3, where both sites and species are assigned to the same
+clusters. We compute all available metrics for both sites and species.
+
+``` r
+all_metrics <- site_species_metrics(
+  bioregionalization = vege_netclubip,
+  bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", 
+                        "IndVal", "NIndVal", "Rho", "CoreTerms",
+                        "Richness", "Rich_Endemics", "Prop_Endemics",
+                        "MeanSim", "SdSim"),
+  bioregionalization_metrics = c("P", "Silhouette"),
+  data_type = "both",
+  cluster_on = "both",
+  comat = vegemat,
+  similarity = vegesim,
+  index = "Simpson",
+  verbose = FALSE)
+```
+
+Typing the name of the object in the console calls
+[`print()`](https://rdrr.io/r/base/print.html), which provides a concise
+overview of the output, including the settings used, a preview of
+available metrics, and instructions for accessing the data.
+
+``` r
+all_metrics
+```
+
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: both 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: both 
+    ## 
+    ## Computed metrics:
+    ##  - Per-cluster metrics (occurrence): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ##  - Per-cluster metrics (abundance): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ##  - Summary metrics (occurrence): P 
+    ##  - Summary metrics (abundance): P 
+    ##  - Similarity-based metrics: Richness, Rich_Endemics, Prop_Endemics, MeanSim, SdSim, Silhouette 
+    ## 
+    ## Data preview:
+    ## $species_bioregions (29576 rows x 20 cols):
+    ##  Species Bioregion n_sb n_s n_b Specificity_occ NSpecificity_occ Fidelity_occ
+    ##    10017         1  392 551 515           0.711            0.148        0.761
+    ##    10017         2   86 551  92           0.156            0.182        0.935
+    ##    10017         3   68 551  75           0.123            0.176        0.907
+    ##  IndVal_occ NIndVal_occ Rho_occ w_sb   w_s     w_b Specificity_abund
+    ##       0.542       0.113  -0.965 4545 10660 2831323             0.426
+    ##       0.146       0.170   4.009 5349 10660 1136829             0.502
+    ##       0.112       0.160   2.960  733 10660  137186             0.069
+    ##  NSpecificity_abund Fidelity_abund IndVal_abund NIndVal_abund Rho_abund
+    ##               0.082          0.002        0.325         0.063    -9.237
+    ##               0.542          0.005        0.469         0.507    15.718
+    ##               0.091          0.005        0.062         0.083    -1.663
+    ## # ... with 29573 more rows
+    ## 
+    ## $species_bioregionalization (3697 rows x 3 cols):
+    ##  Species P_occ P_abund
+    ##    10017 0.454   0.562
+    ##    10024 0.463   0.504
+    ##    10034 0.493   0.264
+    ## # ... with 3694 more rows
+    ## 
+    ## $site_chorotypes (5720 rows x 20 cols):
+    ##  Site Chorotypes n_gc n_g  n_c Specificity_occ NSpecificity_occ Fidelity_occ
+    ##    35          1    1 129 2219           0.008            0.003        0.000
+    ##    35          2  121 129  873           0.938            0.892        0.139
+    ##    35          3    7 129  430           0.054            0.105        0.016
+    ##  IndVal_occ NIndVal_occ Rho_occ w_gc w_g     w_c Specificity_abund
+    ##       0.000       0.000 -13.981    1 423 2873216             0.002
+    ##       0.130       0.124  19.103  411 423 1149003             0.972
+    ##       0.001       0.002  -2.237   11 423  103264             0.026
+    ##  NSpecificity_abund Fidelity_abund IndVal_abund NIndVal_abund Rho_abund
+    ##               0.001              0        0.000         0.000    -7.973
+    ##               0.948              0        0.135         0.131    11.313
+    ##               0.051              0        0.000         0.001    -1.840
+    ## # ... with 5717 more rows
+    ## 
+    ## $site_chorological (715 rows x 3 cols):
+    ##  Site P_occ P_abund
+    ##    35 0.117   0.055
+    ##    36 0.465   0.199
+    ##    37 0.350   0.082
+    ## # ... with 712 more rows
+    ## 
+    ## $site_bioregions (5720 rows x 7 cols):
+    ##  Site Bioregion Richness Rich_Endemics Prop_Endemics MeanSim SdSim
+    ##    35         1      129             0         0.000   0.116 0.123
+    ##    35         2      129             2         0.016   0.809 0.179
+    ##    35         3      129             0         0.000   0.264 0.189
+    ## # ... with 5717 more rows
+    ## 
+    ## $site_bioregionalization (715 rows x 2 cols):
+    ##  Site Silhouette
+    ##    35      0.540
+    ##    36      0.379
+    ##    37      0.511
+    ## # ... with 712 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$species_bioregions
+    ##   your_object$species_bioregionalization
+    ##   your_object$site_chorotypes
+    ##   your_object$site_chorological
+    ##   your_object$site_bioregions
+    ##   your_object$site_bioregionalization
+
+You can also run [`summary()`](https://rdrr.io/r/base/summary.html) oçn
+the object to quickly see a statistical summary for each output table,
+including the number of rows and summary statistics for numeric columns.
+
+``` r
+summary(all_metrics)
+```
+
+    ## 
+    ## Summary of site and species metrics
+    ## ===================================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Cluster based on: both 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: both 
+    ## 
+    ## Partition 1: Single partition (8 bioregions, 8 chorotypes)
+    ## ---------------------------------------------------------- 
+    ## 
+    ## Species-per-bioregion metrics ($species_bioregions):
+    ##              Metric      Min       Mean         Max
+    ##                n_sb    0.000     15.583     500.000
+    ##                 n_s    1.000    124.663     671.000
+    ##                 n_b    1.000     89.375     515.000
+    ##     Specificity_occ    0.000      0.125       1.000
+    ##    NSpecificity_occ    0.000      0.125       1.000
+    ##        Fidelity_occ    0.000      0.177       1.000
+    ##          IndVal_occ    0.000      0.036       0.844
+    ##         NIndVal_occ    0.000      0.059       0.996
+    ##             Rho_occ  -18.940     -0.022      24.233
+    ##                w_sb    0.000    143.432   22716.000
+    ##                 w_s    1.000   1147.455   27353.000
+    ##                 w_b 5558.000 530267.625 2831323.000
+    ##   Specificity_abund    0.000      0.125       1.000
+    ##  NSpecificity_abund    0.000      0.125       1.000
+    ##      Fidelity_abund    0.000      0.000       0.161
+    ##        IndVal_abund    0.000      0.039       0.973
+    ##       NIndVal_abund    0.000      0.058       1.000
+    ##           Rho_abund  -12.483      0.000      26.693
+    ## 
+    ## Top species by IndVal_occ:
+    ##   1. 12553 (Bioregion 2): 0.844
+    ##   2. 12749 (Bioregion 1): 0.841
+    ##   3. 11513 (Bioregion 1): 0.841
+    ##   4. 11285 (Bioregion 2): 0.838
+    ##   5. 13550 (Bioregion 2): 0.837
+    ## 
+    ## Species summary metrics ($species_bioregionalization):
+    ##   Metric Min  Mean   Max
+    ##    P_occ   0 0.269 0.719
+    ##  P_abund   0 0.216 0.739
+    ## 
+    ## Site-per-chorotype metrics ($site_chorotypes):
+    ##              Metric      Min       Mean         Max
+    ##                n_gc    0.000     80.573    1091.000
+    ##                 n_g    1.000    644.585    1221.000
+    ##                 n_c    3.000    462.125    2219.000
+    ##     Specificity_occ    0.000      0.125       1.000
+    ##    NSpecificity_occ    0.000      0.125       1.000
+    ##        Fidelity_occ    0.000      0.091       1.000
+    ##          IndVal_occ    0.000      0.032       0.524
+    ##         NIndVal_occ    0.000      0.033       0.661
+    ##             Rho_occ  -27.165     -0.927      39.347
+    ##                w_gc    0.000    741.633   38926.000
+    ##                 w_g    1.000   5933.064   43753.000
+    ##                 w_c 2942.000 530267.625 2873216.000
+    ##   Specificity_abund    0.000      0.125       1.000
+    ##  NSpecificity_abund    0.000      0.125       1.000
+    ##      Fidelity_abund    0.000      0.001       0.496
+    ##        IndVal_abund    0.000      0.034       0.701
+    ##       NIndVal_abund    0.000      0.036       0.991
+    ##           Rho_abund  -20.999     -0.462      43.653
+    ## 
+    ## Top sites by IndVal_occ:
+    ##   1. 238 (Chorotype 2): 0.524
+    ##   2. 433 (Chorotype 2): 0.522
+    ##   3. 286 (Chorotype 2): 0.497
+    ##   4. 86 (Chorotype 2): 0.488
+    ##   5. 384 (Chorotype 2): 0.482
+    ## 
+    ## Site chorological summary metrics ($site_chorological):
+    ##   Metric Min  Mean   Max
+    ##    P_occ   0 0.294 0.668
+    ##  P_abund   0 0.254 0.668
+    ## 
+    ## Site-per-bioregion metrics ($site_bioregions):
+    ##         Metric Min    Mean      Max
+    ##       Richness   1 644.585 1221.000
+    ##  Rich_Endemics   0   1.185   71.000
+    ##  Prop_Endemics   0   0.002    0.156
+    ##        MeanSim   0   0.439    1.000
+    ##          SdSim   0   0.059    0.500
+    ## 
+    ## Site summary metrics ($site_bioregionalization):
+    ##      Metric Min  Mean   Max
+    ##  Silhouette  -1 -0.02 0.789
+
+We can see it also displays the top sites or species for IndVal for a
+convenient quick look at our clustering structure.
+
+You can also use [`str()`](https://rdrr.io/r/utils/str.html) to display
+the internal structure of the object, showing the settings and the
+dimensions and column types of each data frame component.
+
+``` r
+str(all_metrics)
+```
+
+    ## bioregion.site.species.metrics object
+    ##  - Partitions: 1 
+    ##  - Cluster based on: both 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: both 
+    ##  - Per-cluster metrics (occurrence): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ##  - Per-cluster metrics (abundance): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ##  - Summary metrics (occurrence): P 
+    ##  - Summary metrics (abundance): P 
+    ##  - Similarity-based metrics: Richness, Rich_Endemics, Prop_Endemics, MeanSim, SdSim, Silhouette 
+    ## 
+    ## List of 6
+    ##  $ species_bioregions        :'data.frame':  29576 obs. of  20 variables:
+    ##   ..$ Species           : chr [1:29576] "10017" "10017" "10017" "10017" ...
+    ##   ..$ Bioregion         : chr [1:29576] "1" "2" "3" "4" ...
+    ##   ..$ n_sb              : num [1:29576] 392 86 68 1 2 1 0 1 153 74 ...
+    ##   ..$ n_s               : num [1:29576] 551 551 551 551 551 551 551 551 232 232 ...
+    ##   ..$ n_b               : int [1:29576] 515 92 75 26 4 1 1 1 515 92 ...
+    ##   ..$ Specificity_occ   : num [1:29576] 0.71143 0.15608 0.12341 0.00181 0.00363 ...
+    ##   ..$ NSpecificity_occ  : num [1:29576] 0.14806 0.18183 0.17636 0.00748 0.09726 ...
+    ##   ..$ Fidelity_occ      : num [1:29576] 0.7612 0.9348 0.9067 0.0385 0.5 ...
+    ##   ..$ IndVal_occ        : num [1:29576] 5.42e-01 1.46e-01 1.12e-01 6.98e-05 1.81e-03 ...
+    ##   ..$ NIndVal_occ       : num [1:29576] 0.112695 0.169968 0.159897 0.000288 0.048628 ...
+    ##   ..$ Rho_occ           : num [1:29576] -0.965 4.009 2.96 -9.04 -1.29 ...
+    ##   ..$ w_sb              : int [1:29576] 4545 5349 733 1 2 18 0 12 3781 3549 ...
+    ##   ..$ w_s               : int [1:29576] 10660 10660 10660 10660 10660 10660 10660 10660 7361 7361 ...
+    ##   ..$ w_b               : int [1:29576] 2831323 1136829 137186 83829 26975 12303 8138 5558 2831323 1136829 ...
+    ##   ..$ Specificity_abund : num [1:29576] 4.26e-01 5.02e-01 6.88e-02 9.38e-05 1.88e-04 ...
+    ##   ..$ NSpecificity_abund: num [1:29576] 0.082265 0.541967 0.091103 0.000359 0.004661 ...
+    ##   ..$ Fidelity_abund    : num [1:29576] 1.61e-03 4.71e-03 5.34e-03 1.19e-05 7.41e-05 ...
+    ##   ..$ IndVal_abund      : num [1:29576] 3.25e-01 4.69e-01 6.23e-02 3.61e-06 9.38e-05 ...
+    ##   ..$ NIndVal_abund     : num [1:29576] 6.26e-02 5.07e-01 8.26e-02 1.38e-05 2.33e-03 ...
+    ##   ..$ Rho_abund         : num [1:29576] -9.24 15.72 -1.66 -2.73 -1.02 ...
+    ##  $ species_bioregionalization:'data.frame':  3697 obs. of  3 variables:
+    ##   ..$ Species: chr [1:3697] "10017" "10024" "10034" "10035" ...
+    ##   ..$ P_occ  : num [1:3697] 0.4542 0.4631 0.4929 0.0588 0.3132 ...
+    ##   ..$ P_abund: num [1:3697] 0.5617 0.5037 0.26396 0.00308 0.05098 ...
+    ##  $ site_chorotypes           :'data.frame':  5720 obs. of  20 variables:
+    ##   ..$ Site              : chr [1:5720] "35" "35" "35" "35" ...
+    ##   ..$ Chorotypes        : chr [1:5720] "1" "2" "3" "4" ...
+    ##   ..$ n_gc              : num [1:5720] 1 121 7 0 0 0 0 0 241 585 ...
+    ##   ..$ n_g               : num [1:5720] 129 129 129 129 129 129 129 129 867 867 ...
+    ##   ..$ n_c               : int [1:5720] 2219 873 430 137 16 16 3 3 2219 873 ...
+    ##   ..$ Specificity_occ   : num [1:5720] 0.00775 0.93798 0.05426 0 0 ...
+    ##   ..$ NSpecificity_occ  : num [1:5720] 0.0029 0.8923 0.1048 0 0 ...
+    ##   ..$ Fidelity_occ      : num [1:5720] 0.000451 0.138603 0.016279 0 0 ...
+    ##   ..$ IndVal_occ        : num [1:5720] 3.49e-06 1.30e-01 8.83e-04 0.00 0.00 ...
+    ##   ..$ NIndVal_occ       : num [1:5720] 1.31e-06 1.24e-01 1.71e-03 0.00 0.00 ...
+    ##   ..$ Rho_occ           : num [1:5720] -13.981 19.103 -2.237 -2.268 -0.762 ...
+    ##   ..$ w_gc              : int [1:5720] 1 411 11 0 0 0 0 0 4139 38926 ...
+    ##   ..$ w_g               : int [1:5720] 423 423 423 423 423 423 423 423 43753 43753 ...
+    ##   ..$ w_c               : int [1:5720] 2873216 1149003 103264 85285 16026 9049 3356 2942 2873216 1149003 ...
+    ##   ..$ Specificity_abund : num [1:5720] 0.00236 0.97163 0.026 0 0 ...
+    ##   ..$ NSpecificity_abund: num [1:5720] 0.000907 0.947603 0.05149 0 0 ...
+    ##   ..$ Fidelity_abund    : num [1:5720] 3.48e-07 3.58e-04 1.07e-04 0.00 0.00 ...
+    ##   ..$ IndVal_abund      : num [1:5720] 1.07e-06 1.35e-01 4.23e-04 0.00 0.00 ...
+    ##   ..$ NIndVal_abund     : num [1:5720] 4.09e-07 1.31e-01 8.38e-04 0.00 0.00 ...
+    ##   ..$ Rho_abund         : num [1:5720] -7.973 11.313 -1.84 -1.282 -0.431 ...
+    ##  $ site_chorological         :'data.frame':  715 obs. of  3 variables:
+    ##   ..$ Site   : chr [1:715] "35" "36" "37" "38" ...
+    ##   ..$ P_occ  : num [1:715] 0.117 0.465 0.35 0.293 0.387 ...
+    ##   ..$ P_abund: num [1:715] 0.0553 0.1993 0.0825 0.0694 0.1883 ...
+    ##  $ site_bioregions           :'data.frame':  5720 obs. of  7 variables:
+    ##   ..$ Site         : chr [1:5720] "35" "35" "35" "35" ...
+    ##   ..$ Bioregion    : chr [1:5720] "1" "2" "3" "4" ...
+    ##   ..$ Richness     : num [1:5720] 129 129 129 129 129 129 129 129 867 867 ...
+    ##   ..$ Rich_Endemics: num [1:5720] 0 2 0 0 0 0 0 0 0 43 ...
+    ##   ..$ Prop_Endemics: num [1:5720] 0 0.0155 0 0 0 ...
+    ##   ..$ MeanSim      : num [1:5720] 0.1156 0.8088 0.2635 0.0143 0.0291 ...
+    ##   ..$ SdSim        : num [1:5720] 0.12299 0.17917 0.18876 0.01273 0.00742 ...
+    ##  $ site_bioregionalization   :'data.frame':  715 obs. of  2 variables:
+    ##   ..$ Site      : chr [1:715] "35" "36" "37" "38" ...
+    ##   ..$ Silhouette: num [1:715] 0.54 0.379 0.511 0.541 0.433 ...
+    ##  - attr(*, "n_partitions")= num 1
+    ##  - attr(*, "cluster_on")= chr "both"
+    ##  - attr(*, "clustering_data_type")= chr "abundance"
+    ##  - attr(*, "index_data_type")= chr "both"
+    ##  - attr(*, "has_similarity")= logi TRUE
+    ##  - attr(*, "has_comat")= logi TRUE
+    ##  - attr(*, "bioregion_metrics_occ")= chr [1:7] "Specificity" "NSpecificity" "Fidelity" "IndVal" ...
+    ##  - attr(*, "bioregion_metrics_abd")= chr [1:7] "Specificity" "NSpecificity" "Fidelity" "IndVal" ...
+    ##  - attr(*, "bioregionalization_metrics_occ")= chr "P"
+    ##  - attr(*, "bioregionalization_metrics_abd")= chr "P"
+    ##  - attr(*, "similarity_metrics")= chr [1:6] "Richness" "Rich_Endemics" "Prop_Endemics" "MeanSim" ...
+    ##  - attr(*, "class")= chr [1:2] "bioregion.site.species.metrics" "list"
+
+## 7. Metrics per cluster
+
+### 7.1 Species-per-bioregion metrics
 
 These metrics are computed when sites have clusters (i.e.,
 `cluster_on = "site"` (or `"both"`)). In the following example, we
@@ -325,7 +641,7 @@ compute all metrics
 (`bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal", "Rho", "CoreTerms")`).
 To compute these metrics, we need to provide `comat`.
 
-#### 6.1.1 Co-occurrence metrics: occurrence version
+#### 7.1.1 Co-occurrence metrics: occurrence version
 
 The occurrence metrics are computed when `data_type = "occurrence"`. By
 default, the function will detect the type of data used for the
@@ -348,31 +664,35 @@ nsb <- site_species_metrics(bioregionalization = vege_nhclu,
                             index = NULL, # Name of similarity column
                             verbose = FALSE)
 
-nsb$species_bioregions[1:10,]
+nsb
 ```
 
-    ##    Species Bioregion n_sb n_s n_b Specificity_occ NSpecificity_occ Fidelity_occ
-    ## 1    10001         1   27 254 358      0.10629921       0.05586158  0.075418994
-    ## 2    10001         2   97 254 150      0.38188976       0.47897510  0.646666667
-    ## 3    10001         3  130 254 207      0.51181102       0.46516332  0.628019324
-    ## 4    10002         1    5  19 358      0.26315789       0.16739339  0.013966480
-    ## 5    10002         2    1  19 150      0.05263158       0.07990244  0.006666667
-    ## 6    10002         3   13  19 207      0.68421053       0.75270417  0.062801932
-    ## 7    10003         1   82  86 358      0.95348837       0.92219928  0.229050279
-    ## 8    10003         2    0  86 150      0.00000000       0.00000000  0.000000000
-    ## 9    10003         3    4  86 207      0.04651163       0.07780072  0.019323671
-    ## 10   10004         1  205 438 358      0.46803653       0.31989959  0.572625698
-    ##      IndVal_occ NIndVal_occ    Rho_occ
-    ## 1  0.0080169797 0.004213024 -15.645265
-    ## 2  0.2469553806 0.309737230   8.383617
-    ## 3  0.3214272129 0.292131557   9.721763
-    ## 4  0.0036753896 0.002337896  -2.097447
-    ## 5  0.0003508772 0.000532683  -1.704102
-    ## 6  0.0429697432 0.047271276   3.842178
-    ## 7  0.2183967780 0.211230003   8.947452
-    ## 8  0.0000000000 0.000000000  -5.090898
-    ## 9  0.0008987754 0.001503396  -5.293785
-    ## 10 0.2680097446 0.183182724  -2.194976
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: occurrence 
+    ##  - Metric data type: occurrence 
+    ## 
+    ## Computed metrics:
+    ##  - Per-cluster metrics (occurrence): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ## 
+    ## Data preview:
+    ## $species_bioregions (11091 rows x 11 cols):
+    ##  Species Bioregion n_sb n_s n_b Specificity_occ NSpecificity_occ Fidelity_occ
+    ##    10001         1   27 254 358           0.106            0.056        0.075
+    ##    10001         2   97 254 150           0.382            0.479        0.647
+    ##    10001         3  130 254 207           0.512            0.465        0.628
+    ##  IndVal_occ NIndVal_occ Rho_occ
+    ##       0.008       0.004 -15.645
+    ##       0.247       0.310   8.384
+    ##       0.321       0.292   9.722
+    ## # ... with 11088 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$species_bioregions
 
 ##### Specificity (occurrence)
 
@@ -476,31 +796,35 @@ wsb <- site_species_metrics(bioregionalization = vege_nhclu,
                             index = NULL,
                             verbose = FALSE)
 
-wsb$species_bioregions[1:10,]
+wsb
 ```
 
-    ##    Species Bioregion w_sb  w_s     w_b Specificity_abund NSpecificity_abund
-    ## 1    10001         1   85 6255 1889243        0.01358913        0.006665761
-    ## 2    10001         2 3037 6255 1081424        0.48553157        0.568417434
-    ## 3    10001         3 3133 6255 1271474        0.50087930        0.424916804
-    ## 4    10002         1   81  295 1889243        0.27457627        0.178777214
-    ## 5    10002         2    3  295 1081424        0.01016949        0.015803023
-    ## 6    10002         3  211  295 1271474        0.71525424        0.805419763
-    ## 7    10003         1  439  444 1889243        0.98873874        0.980682689
-    ## 8    10003         2    0  444 1081424        0.00000000        0.000000000
-    ## 9    10003         3    5  444 1271474        0.01126126        0.019317311
-    ## 10   10004         1 2227 7476 1889243        0.29788657        0.187592363
-    ##    Fidelity_abund IndVal_abund NIndVal_abund Rho_abund
-    ## 1    4.499157e-05 1.024878e-03  0.0005027250 -6.805816
-    ## 2    2.808334e-03 3.139771e-01  0.3675766076  4.731084
-    ## 3    2.464069e-03 3.145619e-01  0.2668559641  3.255761
-    ## 4    4.287432e-05 3.834864e-03  0.0024968885 -1.446975
-    ## 5    2.774120e-06 6.779661e-05  0.0001053535 -1.568655
-    ## 6    1.659491e-04 4.491935e-02  0.0505819175  3.003468
-    ## 7    2.323682e-04 2.264709e-01  0.2246256438  4.175535
-    ## 8    0.000000e+00 0.000000e+00  0.0000000000 -2.204186
-    ## 9    3.932444e-06 2.176089e-04  0.0003732814 -2.624519
-    ## 10   1.178779e-03 1.705775e-01  0.1074202078 -5.624022
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: occurrence 
+    ##  - Metric data type: abundance 
+    ## 
+    ## Computed metrics:
+    ##  - Per-cluster metrics (abundance): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ## 
+    ## Data preview:
+    ## $species_bioregions (11091 rows x 11 cols):
+    ##  Species Bioregion w_sb  w_s     w_b Specificity_abund NSpecificity_abund
+    ##    10001         1   85 6255 1889243             0.014              0.007
+    ##    10001         2 3037 6255 1081424             0.486              0.568
+    ##    10001         3 3133 6255 1271474             0.501              0.425
+    ##  Fidelity_abund IndVal_abund NIndVal_abund Rho_abund
+    ##           0.000        0.001         0.001    -6.806
+    ##           0.003        0.314         0.368     4.731
+    ##           0.002        0.315         0.267     3.256
+    ## # ... with 11088 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$species_bioregions
 
 ##### Specificity (abundance)
 
@@ -536,7 +860,7 @@ n_b}{n-1}\right) \left(\frac{{\sigma_s}^2}{n_b}\right)}}\\ where
 - \\\mu_s = \frac{w_s}{n}\\ the average abundance of species \\s\\
 - \\\sigma_s\\ the associated standard deviation.
 
-### 6.2 Site metrics
+### 7.2 Site metrics
 
 For sites, two types of metrics can be computed, depending on whether
 the clustering is based on site or species:
@@ -549,7 +873,7 @@ the clustering is based on site or species:
   other similar metrics. The conceptual interpretation differs in this
   case.
 
-#### 6.2.1 Diversity & endemicity site metrics
+#### 7.2.1 Diversity & endemicity site metrics
 
 When clusters are assigned to sites (bioregions), we can compute basic
 diversity metrics:
@@ -572,22 +896,32 @@ sim_metrics <- site_species_metrics(bioregionalization = vege_nhclu,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-sim_metrics$site_bioregions[1:10,]
+sim_metrics
 ```
 
-    ##    Site Bioregion Richness Rich_Endemics Prop_Endemics
-    ## 1    35         1      129             0    0.00000000
-    ## 2    35         2      129             2    0.01550388
-    ## 3    35         3      129             0    0.00000000
-    ## 4    36         1      867             0    0.00000000
-    ## 5    36         2      867            24    0.02768166
-    ## 6    36         3      867             0    0.00000000
-    ## 7    37         1      659             0    0.00000000
-    ## 8    37         2      659            28    0.04248862
-    ## 9    37         3      659             0    0.00000000
-    ## 10   38         1      562             0    0.00000000
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: occurrence 
+    ## 
+    ## Computed metrics:
+    ##  - Similarity-based metrics: Richness, Rich_Endemics, Prop_Endemics 
+    ## 
+    ## Data preview:
+    ## $site_bioregions (2145 rows x 5 cols):
+    ##  Site Bioregion Richness Rich_Endemics Prop_Endemics
+    ##    35         1      129             0         0.000
+    ##    35         2      129             2         0.016
+    ##    35         3      129             0         0.000
+    ## # ... with 2142 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$site_bioregions
 
-#### 6.2.2 Similarity-based site metrics
+#### 7.2.2 Similarity-based site metrics
 
 To compute similarity-based metrics for sites, we need to provide the
 site similarity matrix (`vegesim`).
@@ -611,20 +945,30 @@ sim_metrics <- site_species_metrics(bioregionalization = vege_nhclu,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-sim_metrics$site_bioregions[1:10,]
+sim_metrics
 ```
 
-    ##    Site Bioregion    MeanSim      SdSim
-    ## 1    35         1 0.05505001 0.03334749
-    ## 2    35         2 0.55413137 0.34023380
-    ## 3    35         3 0.25070767 0.19491881
-    ## 4    36         1 0.21852554 0.06086231
-    ## 5    36         2 0.63174150 0.19172348
-    ## 6    36         3 0.43691643 0.11753321
-    ## 7    37         1 0.12094558 0.05025788
-    ## 8    37         2 0.57121940 0.23598380
-    ## 9    37         3 0.31929608 0.13362203
-    ## 10   38         1 0.08133525 0.03614405
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: occurrence 
+    ## 
+    ## Computed metrics:
+    ##  - Similarity-based metrics: MeanSim, SdSim 
+    ## 
+    ## Data preview:
+    ## $site_bioregions (2145 rows x 4 cols):
+    ##  Site Bioregion MeanSim SdSim
+    ##    35         1   0.055 0.033
+    ##    35         2   0.554 0.340
+    ##    35         3   0.251 0.195
+    ## # ... with 2142 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$site_bioregions
 
 ##### MeanSim
 
@@ -648,7 +992,7 @@ is the number of sites in bioregion \\b\\, and \\\delta\_{g \in b}\\ is
 1 if site \\g\\ belongs to bioregion \\b\\ (to exclude itself), 0
 otherwise.
 
-#### 6.2.3 Chorotype/Cluster-based site metrics
+#### 7.2.3 Chorotype/Cluster-based site metrics
 
 In the following example we compute only metrics for sites, on the basis
 of species clusters (`cluster_on = "species"`).
@@ -668,62 +1012,54 @@ gc <- site_species_metrics(bioregionalization = vege_netclubip,
                             index = NULL,
                             verbose = FALSE)
 
-gc$site_chorotypes[1:10,]
+gc
 ```
 
-    ##    Site Chorotypes n_gc n_g  n_c Specificity_occ NSpecificity_occ Fidelity_occ
-    ## 1    35          1    1 129 2219     0.007751938      0.002901223 0.0004506534
-    ## 2    35          2  121 129  873     0.937984496      0.892297163 0.1386025200
-    ## 3    35          3    7 129  430     0.054263566      0.104801614 0.0162790698
-    ## 4    35          4    0 129  137     0.000000000      0.000000000 0.0000000000
-    ## 5    35          5    0 129   16     0.000000000      0.000000000 0.0000000000
-    ## 6    35          6    0 129   16     0.000000000      0.000000000 0.0000000000
-    ## 7    35          7    0 129    3     0.000000000      0.000000000 0.0000000000
-    ## 8    35          8    0 129    3     0.000000000      0.000000000 0.0000000000
-    ## 9    36          1  241 867 2219     0.277970012      0.116252995 0.1086074808
-    ## 10   36          2  585 867  873     0.674740484      0.717275560 0.6701030928
-    ##      IndVal_occ  NIndVal_occ     Rho_occ  w_gc   w_g     w_c Specificity_abund
-    ## 1  3.493438e-06 1.307446e-06 -13.9811951     1   423 2873216       0.002364066
-    ## 2  1.300070e-01 1.236746e-01  19.1029702   411   423 1149003       0.971631206
-    ## 3  8.833604e-04 1.706073e-03  -2.2372244    11   423  103264       0.026004728
-    ## 4  0.000000e+00 0.000000e+00  -2.2676901     0   423   85285       0.000000000
-    ## 5  0.000000e+00 0.000000e+00  -0.7621238     0   423   16026       0.000000000
-    ## 6  0.000000e+00 0.000000e+00  -0.7621238     0   423    9049       0.000000000
-    ## 7  0.000000e+00 0.000000e+00  -0.3294281     0   423    3356       0.000000000
-    ## 8  0.000000e+00 0.000000e+00  -0.3294281     0   423    2942       0.000000000
-    ## 9  3.018962e-02 1.262594e-02 -22.1362445  4139 43753 2873216       0.094599227
-    ## 10 4.521457e-01 4.806486e-01  34.7507328 38926 43753 1149003       0.889676136
-    ##    NSpecificity_abund Fidelity_abund IndVal_abund NIndVal_abund   Rho_abund
-    ## 1        0.0009070715   3.480421e-07 1.065375e-06  4.087749e-07  -7.9728244
-    ## 2        0.9476029112   3.577014e-04 1.346705e-01  1.313402e-01  11.3128933
-    ## 3        0.0514900173   1.065231e-04 4.233328e-04  8.382096e-04  -1.8400980
-    ## 4        0.0000000000   0.000000e+00 0.000000e+00  0.000000e+00  -1.2815040
-    ## 5        0.0000000000   0.000000e+00 0.000000e+00  0.000000e+00  -0.4306870
-    ## 6        0.0000000000   0.000000e+00 0.000000e+00  0.000000e+00  -0.4306870
-    ## 7        0.0000000000   0.000000e+00 0.000000e+00  0.000000e+00  -0.1861645
-    ## 8        0.0000000000   0.000000e+00 0.000000e+00  0.000000e+00  -0.1861645
-    ## 9        0.0387188108   1.440546e-03 1.027418e-02  4.205153e-03 -14.0235465
-    ## 10       0.9255703214   3.387807e-02 5.961747e-01  6.202275e-01  20.9066178
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: species 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: both 
+    ## 
+    ## Computed metrics:
+    ##  - Per-cluster metrics (occurrence): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ##  - Per-cluster metrics (abundance): Specificity, NSpecificity, Fidelity, IndVal, NIndVal, Rho, CoreTerms 
+    ##  - Summary metrics (occurrence): P 
+    ##  - Summary metrics (abundance): P 
+    ## 
+    ## Data preview:
+    ## $site_chorotypes (5720 rows x 20 cols):
+    ##  Site Chorotypes n_gc n_g  n_c Specificity_occ NSpecificity_occ Fidelity_occ
+    ##    35          1    1 129 2219           0.008            0.003        0.000
+    ##    35          2  121 129  873           0.938            0.892        0.139
+    ##    35          3    7 129  430           0.054            0.105        0.016
+    ##  IndVal_occ NIndVal_occ Rho_occ w_gc w_g     w_c Specificity_abund
+    ##       0.000       0.000 -13.981    1 423 2873216             0.002
+    ##       0.130       0.124  19.103  411 423 1149003             0.972
+    ##       0.001       0.002  -2.237   11 423  103264             0.026
+    ##  NSpecificity_abund Fidelity_abund IndVal_abund NIndVal_abund Rho_abund
+    ##               0.001              0        0.000         0.000    -7.973
+    ##               0.948              0        0.135         0.131    11.313
+    ##               0.051              0        0.000         0.001    -1.840
+    ## # ... with 5717 more rows
+    ## 
+    ## $site_chorological (715 rows x 3 cols):
+    ##  Site P_occ P_abund
+    ##    35 0.117   0.055
+    ##    36 0.465   0.199
+    ##    37 0.350   0.082
+    ## # ... with 712 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$site_chorotypes
+    ##   your_object$site_chorological
 
-``` r
-gc$site_chorological[1:10,]
-```
+## 8. Metrics over the entire bioregionalization (i.e., over all clusters)
 
-    ##    Site     P_occ    P_abund
-    ## 1    35 0.1171805 0.05525097
-    ## 2    36 0.4653281 0.19928153
-    ## 3    37 0.3498196 0.08246363
-    ## 4    38 0.2925811 0.06936005
-    ## 5    39 0.3870672 0.18829826
-    ## 6    84 0.4950958 0.41403147
-    ## 7    85 0.4611738 0.31729045
-    ## 8    86 0.4555509 0.17223117
-    ## 9    87 0.5147554 0.29310903
-    ## 10   88 0.4965267 0.30487674
-
-## 7. Metrics over the entire bioregionalization (i.e., over all clusters)
-
-### 7.1 Site metrics
+### 8.1 Site metrics
 
 Based on \\MeanSim\\, it is possible to derive aggregated metrics that
 assess  
@@ -762,20 +1098,30 @@ sil_metrics <- site_species_metrics(bioregionalization = vege_nhclu,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-sil_metrics$site_bioregionalization[1:10,]
+sil_metrics
 ```
 
-    ##    Site Silhouette
-    ## 1    35 0.54756636
-    ## 2    36 0.30839365
-    ## 3    37 0.44102725
-    ## 4    38 0.54025960
-    ## 5    39 0.37117843
-    ## 6    84 0.05207862
-    ## 7    85 0.26743108
-    ## 8    86 0.35331378
-    ## 9    87 0.25830421
-    ## 10   88 0.28035626
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: occurrence 
+    ## 
+    ## Computed metrics:
+    ##  - Similarity-based metrics: Silhouette 
+    ## 
+    ## Data preview:
+    ## $site_bioregionalization (715 rows x 2 cols):
+    ##  Site Silhouette
+    ##    35      0.548
+    ##    36      0.308
+    ##    37      0.441
+    ## # ... with 712 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$site_bioregionalization
 
 #### Site participation coefficient
 
@@ -806,20 +1152,31 @@ p_occ_site <- site_species_metrics(bioregionalization = vege_netclubip,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-p_occ_site$site_chorological[1:10,]
+p_occ_site
 ```
 
-    ##    Site     P_occ
-    ## 1    35 0.1171805
-    ## 2    36 0.4653281
-    ## 3    37 0.3498196
-    ## 4    38 0.2925811
-    ## 5    39 0.3870672
-    ## 6    84 0.4950958
-    ## 7    85 0.4611738
-    ## 8    86 0.4555509
-    ## 9    87 0.5147554
-    ## 10   88 0.4965267
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: species 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: occurrence 
+    ## 
+    ## Computed metrics:
+    ##  - Summary metrics (occurrence): P 
+    ## 
+    ## Data preview:
+    ## $site_chorological (715 rows x 2 cols):
+    ##  Site P_occ
+    ##    35 0.117
+    ##    36 0.465
+    ##    37 0.350
+    ## # ... with 712 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$site_chorological
 
 #### P (abundance)
 
@@ -836,22 +1193,33 @@ p_ab_site <- site_species_metrics(bioregionalization = vege_netclubip,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-p_ab_site$site_chorological[1:10,]
+p_ab_site
 ```
 
-    ##    Site    P_abund
-    ## 1    35 0.05525097
-    ## 2    36 0.19928153
-    ## 3    37 0.08246363
-    ## 4    38 0.06936005
-    ## 5    39 0.18829826
-    ## 6    84 0.41403147
-    ## 7    85 0.31729045
-    ## 8    86 0.17223117
-    ## 9    87 0.29310903
-    ## 10   88 0.30487674
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: species 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: abundance 
+    ## 
+    ## Computed metrics:
+    ##  - Summary metrics (abundance): P 
+    ## 
+    ## Data preview:
+    ## $site_chorological (715 rows x 2 cols):
+    ##  Site P_abund
+    ##    35   0.055
+    ##    36   0.199
+    ##    37   0.082
+    ## # ... with 712 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$site_chorological
 
-### 7.2 Species metrics
+### 8.2 Species metrics
 
 We can compute the participation coefficient \\P_s\\ of a species \\s\\
 to the bioregionalization for species as well.
@@ -871,20 +1239,31 @@ p_occ_sp <- site_species_metrics(bioregionalization = vege_netclubip,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-p_occ_sp$species_bioregionalization[1:10,]
+p_occ_sp
 ```
 
-    ##    Species      P_occ
-    ## 1    10001 0.59811520
-    ## 2    10002 0.18836565
-    ## 3    10003 0.06787453
-    ## 4    10004 0.29062155
-    ## 5    10005 0.16566163
-    ## 6    10006 0.29637642
-    ## 7    10007 0.44808648
-    ## 8    10008 0.51907253
-    ## 9    10009 0.00000000
-    ## 10   10010 0.07249541
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: occurrence 
+    ## 
+    ## Computed metrics:
+    ##  - Summary metrics (occurrence): P 
+    ## 
+    ## Data preview:
+    ## $species_bioregionalization (3697 rows x 2 cols):
+    ##  Species P_occ
+    ##    10001 0.598
+    ##    10002 0.188
+    ##    10003 0.068
+    ## # ... with 3694 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$species_bioregionalization
 
 #### P (abundance)
 
@@ -901,20 +1280,31 @@ p_ab_sp <- site_species_metrics(bioregionalization = vege_netclubip,
                             index = "Simpson", # Name of similarity column
                             verbose = FALSE)
 
-p_ab_sp$species_bioregionalization[1:10,]
+p_ab_sp
 ```
 
-    ##    Species    P_abund
-    ## 1    10001 0.50904954
-    ## 2    10002 0.09041080
-    ## 3    10003 0.02230947
-    ## 4    10004 0.31682118
-    ## 5    10005 0.04592151
-    ## 6    10006 0.19857965
-    ## 7    10007 0.44297818
-    ## 8    10008 0.48782839
-    ## 9    10009 0.00000000
-    ## 10   10010 0.03312698
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: abundance 
+    ##  - Metric data type: abundance 
+    ## 
+    ## Computed metrics:
+    ##  - Summary metrics (abundance): P 
+    ## 
+    ## Data preview:
+    ## $species_bioregionalization (3697 rows x 2 cols):
+    ##  Species P_abund
+    ##    10001   0.509
+    ##    10002   0.090
+    ##    10003   0.022
+    ## # ... with 3694 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$species_bioregionalization
 
 These metrics measure how evenly a species is distributed among
 bioregions. There are ranging from 0 to 1. Values close to 0 indicate
@@ -935,22 +1325,34 @@ ps <- site_species_metrics(bioregionalization = vege_nhclu,
                             index = NULL,
                             verbose = FALSE)
 
-ps$species_bioregionalization[1:10,]
+ps
 ```
 
-    ##    Species      P_occ    P_abund
-    ## 1    10001 0.58091016 0.51319436
-    ## 2    10002 0.45983380 0.41291583
-    ## 3    10003 0.08869659 0.02226889
-    ## 4    10004 0.59334668 0.55362167
-    ## 5    10005 0.53267897 0.50874080
-    ## 6    10006 0.59944565 0.48784442
-    ## 7    10007 0.60353798 0.59088266
-    ## 8    10008 0.61624257 0.53496844
-    ## 9    10009 0.44444444 0.44444444
-    ## 10   10010 0.18447026 0.11565410
+    ## Site and species metrics
+    ## ========================
+    ## 
+    ## Settings:
+    ##  - Number of partitions: 1 
+    ##  - Clusters based on: site 
+    ##  - Clustering data type: occurrence 
+    ##  - Metric data type: both 
+    ## 
+    ## Computed metrics:
+    ##  - Summary metrics (occurrence): P 
+    ##  - Summary metrics (abundance): P 
+    ## 
+    ## Data preview:
+    ## $species_bioregionalization (3697 rows x 3 cols):
+    ##  Species P_occ P_abund
+    ##    10001 0.581   0.513
+    ##    10002 0.460   0.413
+    ##    10003 0.089   0.022
+    ## # ... with 3694 more rows
+    ## 
+    ## Access data with:
+    ##   your_object$species_bioregionalization
 
-## 8. Bioregion metrics & spatial coherence
+## 9. Bioregion metrics & spatial coherence
 
 At the granularity of bioregions, we can calculate the number of sites
 it contains and the number of species present in those sites. The number
@@ -1009,9 +1411,9 @@ ggplot(vegemap) +
   theme(legend.position = "bottom")
 ```
 
-![](a5_2_summary_metrics_files/figure-html/unnamed-chunk-16-1.png)
+![](a5_2_summary_metrics_files/figure-html/unnamed-chunk-20-1.png)
 
-## 9. References
+## 10. References
 
 Baroni Urbani C, Ruffo S & Vigna Taglianti A (1978) Materiali per una
 biogeografia italiana fondata su alcuni generi di coleotteri

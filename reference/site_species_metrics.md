@@ -254,13 +254,13 @@ These metrics can be found in the output slot `species_bioregions`.
 **Site-per-bioregion metrics** characterize sites relative to
 bioregions:
 
-- [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richness):
+- [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
   Number of species in the site.
 
-- [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#richendemics):
+- [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
   Number of species in the site that are endemic to one bioregion.
 
-- [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#propendemics):
+- [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
   Proportion of endemic species in the site.
 
 - [**MeanSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim):
@@ -278,7 +278,7 @@ across all clusters, rather than in relation to each individual cluster.
 
 *Species-level summary metric:*
 
-- [**P**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#participation-occurrence)
+- [**P**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#p-occurrence-1)
   (Participation): Evenness of species distribution across bioregions
   (Denelle et al. 2020). Found in output slot
   `species_bioregionalization`.
