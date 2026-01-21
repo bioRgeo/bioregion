@@ -41,7 +41,7 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## The folder has been successfully downloaded to /tmp/RtmpRHR4rX.
+    ## The folder has been successfully downloaded to /tmp/RtmpWU2c5m.
 
     ## 
 
@@ -49,7 +49,7 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## The folder has been successfully unzipped in /tmp/RtmpRHR4rX.
+    ## The folder has been successfully unzipped in /tmp/RtmpWU2c5m.
 
     ## 
 
@@ -57,29 +57,29 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.1.0/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.1.0/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.1.0/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.1.0/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.6.0/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.6.0/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.6.0/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.6.0/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.7.1/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.7.1/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.7.1/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.7.1/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.8.0/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.8.0/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/INFOMAP/2.8.0/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/INFOMAP/2.8.0/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/LOUVAIN/convert_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/LOUVAIN/convert_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/LOUVAIN/louvain_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/LOUVAIN/louvain_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/OSLOM/oslom_dir_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/OSLOM/oslom_dir_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpRHR4rX/bin/OSLOM/oslom_undir_lin as program: denied.
+    ## Permission to execute /tmp/RtmpWU2c5m/bin/OSLOM/oslom_undir_lin as program: denied.
 
     ## 
 
@@ -87,29 +87,29 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.1.0/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.1.0/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.1.0/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.1.0/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.6.0/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.6.0/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.6.0/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.6.0/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.7.1/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.7.1/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.7.1/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.7.1/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.8.0/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.8.0/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/INFOMAP/2.8.0/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/INFOMAP/2.8.0/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/LOUVAIN/convert_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/LOUVAIN/convert_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/LOUVAIN/louvain_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/LOUVAIN/louvain_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/OSLOM/oslom_dir_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/OSLOM/oslom_dir_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpRHR4rX/bin/OSLOM/oslom_undir_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpWU2c5m/bin/OSLOM/oslom_undir_lin can now be executed as progam.
 
     ## 
 
