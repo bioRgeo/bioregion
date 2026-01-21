@@ -965,6 +965,24 @@ sbgc <- function(clusters,
                  type,  # sb or gc
                  data){ # occurrence, abundance or both
   
+  # Update bioregion_metrics
+  available_bioregion_metrics<- c("Specificity", "NSpecificity", 
+                                  "Fidelity", 
+                                  "IndVal", "NIndVal", 
+                                  "Rho", 
+                                  "CoreTerms")
+  if(length(intersect(available_bioregion_metrics,
+                      bioregion_metrics))==0){
+    bioregion_metrics = NULL
+  }
+  
+  # Update bioregionalization_metrics
+  available_bioregionalization_metrics<- c("P")
+  if(length(intersect(available_bioregionalization_metrics,
+                      bioregionalization_metrics))==0){
+    bioregionalization_metrics = NULL
+  }
+  
   # Initialization output
   res1 <- NULL
   res12 <- NULL
@@ -1286,6 +1304,21 @@ gb <- function(clusters,
                similarity,
                #data,  # occurrence, abundance or both
                include_cluster){ 
+  
+  # Update bioregion_metrics
+  available_bioregion_metrics<- c("Richness", "Rich_Endemics", "Prop_Endemics", 
+                                  "MeanSim", "SdSim")
+  if(length(intersect(available_bioregion_metrics,
+                      bioregion_metrics))==0){
+    bioregion_metrics = NULL
+  }
+  
+  # Update bioregionalization_metrics
+  available_bioregionalization_metrics<- c("Silhouette")
+  if(length(intersect(available_bioregionalization_metrics,
+                      bioregionalization_metrics))==0){
+    bioregionalization_metrics = NULL
+  }
   
   # Initialization output
   res1 <- NULL

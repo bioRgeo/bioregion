@@ -378,7 +378,6 @@ site_species_metrics <- function(bioregionalization,
   comat_metrics <- c("Specificity", "NSpecificity", "Fidelity", "IndVal", 
                      "NIndVal", "Rho", "CoreTerms", "Richness", "Rich_Endemics", 
                      "Prop_Endemics", "P")
-  comat_gb_metrics <- c("Richness", "Rich_Endemics", "Prop_Endemics")
   similarity_metrics <- c("MeanSim", "SdSim", "Silhouette")
   
   # Control bioregion_metrics and set ind
@@ -426,12 +425,8 @@ site_species_metrics <- function(bioregionalization,
   # Check if comat and/or similarity are needed and for potential conflicts
   metrics_needed <- c(ind, agind)
   comat_needed <- FALSE
-  comat_gb_needed <- FALSE
   if(length(intersect(comat_metrics, metrics_needed))>0){
     comat_needed <- TRUE
-  }
-  if(length(intersect(comat_gb_metrics, metrics_needed))>0){
-    comat_gb_needed <- TRUE
   }
   similarity_needed <- FALSE
   if(length(intersect(similarity_metrics, metrics_needed))>0){
@@ -457,7 +452,6 @@ site_species_metrics <- function(bioregionalization,
       agind <- NULL
     }
     comat_needed <- FALSE
-    comat_gb_needed <- FALSE
   }
   
   if(is.null(similarity) & similarity_needed){

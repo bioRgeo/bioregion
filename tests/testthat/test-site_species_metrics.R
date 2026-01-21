@@ -3,7 +3,7 @@ data("fishmat")
 data("vegemat")
 data("vegedf")
 
-quietly(install_binaries(verbose = FALSE))
+install_binaries(verbose = FALSE)
 
 comatneg <- vegemat
 comatneg[1,1] <- -1
@@ -65,17 +65,6 @@ clualt2$inputs <- clualt2$inputs[-9]
 test_that("valid output", {
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = NULL,
-                              bioregionalization_metrics = "Silhouette",
-                              data_type = "occurrence",
-                              cluster_on = "site",
-                              comat = vegemat,
-                              similarity = vegesim,
-                              include_cluster = TRUE,
-                              index = 3,
-                              verbose = FALSE)
-  
-  ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = "all",
                               bioregionalization_metrics = "all",
                               data_type = "both",
@@ -127,7 +116,6 @@ test_that("valid output", {
                                     verbose = FALSE)
   expect_equal(ind_abund$species_bioregions[,1:5], 
                ind$species_bioregions[,c(1,2,12:14)])
-  
   
   ind_shuff <- site_species_metrics(bioregionalization = cluinfo,
                                     bioregion_metrics = "all",
@@ -308,7 +296,49 @@ test_that("valid output", {
                          ind_base$site_bioregions[,-3]), 
                TRUE)
   
+  ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = "Silhouette",
+                              data_type = "occurrence",
+                              cluster_on = "site",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = TRUE,
+                              index = 3,
+                              verbose = FALSE)
   
+  ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = "all",
+                              bioregionalization_metrics = "P",
+                              data_type = "occurrence",
+                              cluster_on = "site",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = TRUE,
+                              index = 3,
+                              verbose = FALSE)
+  
+  ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = "MeanSim",
+                              bioregionalization_metrics = "all",
+                              data_type = "occurrence",
+                              cluster_on = "site",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = TRUE,
+                              index = 3,
+                              verbose = FALSE)
+  
+  ind <- site_species_metrics(bioregionalization = cluinfo,
+                              bioregion_metrics = "Fidelity",
+                              bioregionalization_metrics = "all",
+                              data_type = "occurrence",
+                              cluster_on = "site",
+                              comat = vegemat,
+                              similarity = vegesim,
+                              include_cluster = TRUE,
+                              index = 3,
+                              verbose = FALSE)
   
 })
 
