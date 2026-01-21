@@ -342,7 +342,7 @@ all_metrics <- site_species_metrics(
   bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", 
                         "IndVal", "NIndVal", "Rho", "CoreTerms",
                         "Richness", "Rich_Endemics", "Prop_Endemics",
-                        "MeanSim", "SdSim"),
+                        "MeanSim", "SdSim"), # You can also simply write "all"
   bioregionalization_metrics = c("P", "Silhouette"),
   data_type = "both",
   cluster_on = "both",

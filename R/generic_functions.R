@@ -819,7 +819,8 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   n_part <- attr(x, "n_partitions")
   cat(" - Number of partitions:", n_part, "\n")
   cluster_on <- attr(x, "cluster_on")
-  cat(" - Clusters based on:", cluster_on, "\n")
+  cluster_on_display <- if(cluster_on == "both") "sites and species" else cluster_on
+  cat(" - Clusters based on:", cluster_on_display, "\n")
   
   clust_dt <- attr(x, "clustering_data_type")
   if(!is.null(clust_dt) && !is.na(clust_dt)) {
@@ -828,7 +829,8 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   
   idx_dt <- attr(x, "index_data_type")
   if(!is.null(idx_dt) && !is.na(idx_dt)) {
-    cat(" - Metric data type:", idx_dt, "\n")
+    idx_dt_display <- if(idx_dt == "both") "occurrence and abundance" else idx_dt
+    cat(" - Metric data type:", idx_dt_display, "\n")
   }
   cat("\n")
   
@@ -840,16 +842,27 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   bioreg_abd <- attr(x, "bioregionalization_metrics_abd")
   sim_idx <- attr(x, "similarity_metrics")
   
+  
+  # similarity_metrics attribute currently groups richness & sim metrics
+  # so we need to split
+  sim_per_cluster <- intersect(sim_idx, c("MeanSim", "SdSim"))
+  sim_bioreg <- intersect(sim_idx, c("Silhouette"))
+  richness_metrics <- intersect(sim_idx, c("Richness", "Rich_Endemics", "Prop_Endemics"))
+  
   if(length(bio_occ) > 0)
-    cat(" - Per-cluster metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
+    cat(" - Per-cluster co-occurrence metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
   if(length(bio_abd) > 0)
-    cat(" - Per-cluster metrics (abundance):", paste(bio_abd, collapse = ", "), "\n")
+    cat(" - Per-cluster co-occurrence metrics (abundance):", paste(bio_abd, collapse = ", "), "\n")
+  if(length(richness_metrics) > 0)
+    cat(" - Per-cluster richness & endemism metrics:", paste(richness_metrics, collapse = ", "), "\n")
+  if(length(sim_per_cluster) > 0)
+    cat(" - Per-cluster similarity-based metrics:", paste(sim_per_cluster, collapse = ", "), "\n")
   if(length(bioreg_occ) > 0)
-    cat(" - Summary metrics (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
+    cat(" - Bioregionalization co-occurrence metrics (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
   if(length(bioreg_abd) > 0)
-    cat(" - Summary metrics (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
-  if(length(sim_idx) > 0)
-    cat(" - Similarity-based metrics:", paste(sim_idx, collapse = ", "), "\n")
+    cat(" - Bioregionalization co-occurrence metrics (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
+  if(length(sim_bioreg) > 0)
+    cat(" - Bioregionalization similarity-based metrics:", paste(sim_bioreg, collapse = ", "), "\n")
   cat("\n")
   
   print_df_preview <- function(df, name, n_rows) {
@@ -928,15 +941,20 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
 str.bioregion.site.species.metrics <- function(object, ...) {
   cat("bioregion.site.species.metrics object\n")
   cat(" - Partitions:", attr(object, "n_partitions"), "\n")
-  cat(" - Cluster based on:", attr(object, "cluster_on"), "\n")
+  cluster_on <- attr(object, "cluster_on")
+  
+  cluster_on_display <- if(cluster_on == "both") "sites and species" else cluster_on
+  cat(" - Cluster based on:", cluster_on_display, "\n")
   
   clust_dt <- attr(object, "clustering_data_type")
   if(!is.null(clust_dt) && !is.na(clust_dt))
     cat(" - Clustering data type:", clust_dt, "\n")
     
   idx_dt <- attr(object, "index_data_type")
-  if(!is.null(idx_dt) && !is.na(idx_dt))
-    cat(" - Metric data type:", idx_dt, "\n")
+  if(!is.null(idx_dt) && !is.na(idx_dt)) {
+    idx_dt_display <- if(idx_dt == "both") "occurrence and abundance" else idx_dt
+    cat(" - Metric data type:", idx_dt_display, "\n")
+  }
   
   bio_occ <- attr(object, "bioregion_metrics_occ")
   bio_abd <- attr(object, "bioregion_metrics_abd")
@@ -944,16 +962,26 @@ str.bioregion.site.species.metrics <- function(object, ...) {
   bioreg_abd <- attr(object, "bioregionalization_metrics_abd")
   sim_idx <- attr(object, "similarity_metrics")
   
+  # similarity_metrics attribute currently groups richness & sim metrics
+  # so we need to split
+  sim_per_cluster <- intersect(sim_idx, c("MeanSim", "SdSim"))
+  sim_bioreg <- intersect(sim_idx, c("Silhouette"))
+  richness_metrics <- intersect(sim_idx, c("Richness", "Rich_Endemics", "Prop_Endemics"))
+  
   if(length(bio_occ) > 0)
-    cat(" - Per-cluster metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
+    cat(" - Per-cluster co-occurrence metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
   if(length(bio_abd) > 0)
-    cat(" - Per-cluster metrics (abundance):", paste(bio_abd, collapse = ", "), "\n")
+    cat(" - Per-cluster co-occurrence metrics (abundance):", paste(bio_abd, collapse = ", "), "\n")
+  if(length(richness_metrics) > 0)
+    cat(" - Per-cluster richness & endemism metrics:", paste(richness_metrics, collapse = ", "), "\n")
+  if(length(sim_per_cluster) > 0)
+    cat(" - Per-cluster similarity-based metrics:", paste(sim_per_cluster, collapse = ", "), "\n")
   if(length(bioreg_occ) > 0)
-    cat(" - Summary metrics (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
+    cat(" - Bioregionalization co-occurrence metrics (occurrence):", paste(bioreg_occ, collapse = ", "), "\n")
   if(length(bioreg_abd) > 0)
-    cat(" - Summary metrics (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
-  if(length(sim_idx) > 0)
-    cat(" - Similarity-based metrics:", paste(sim_idx, collapse = ", "), "\n")
+    cat(" - Bioregionalization co-occurrence metrics (abundance):", paste(bioreg_abd, collapse = ", "), "\n")
+  if(length(sim_bioreg) > 0)
+    cat(" - Bioregionalization similarity-based metrics:", paste(sim_bioreg, collapse = ", "), "\n")
   cat("\n")
   
   args <- list(...)
@@ -984,11 +1012,16 @@ str.bioregion.site.species.metrics <- function(object, ...) {
     x <- x[!is.na(x)]
     if(length(x) == 0) NA_real_ else mean(x)
   }
+  safe_median <- function(x) {
+    x <- x[!is.na(x)]
+    if(length(x) == 0) NA_real_ else median(x)
+  }
   
   stats <- data.frame(
     Metric = metric_cols,
     Min = sapply(df[metric_cols], safe_min),
     Mean = sapply(df[metric_cols], safe_mean),
+    Median = sapply(df[metric_cols], safe_median),
     Max = sapply(df[metric_cols], safe_max),
     row.names = NULL
   )
@@ -1010,15 +1043,18 @@ summary.bioregion.site.species.metrics <- function(object,
   n_part <- attr(object, "n_partitions")
   cat(" - Number of partitions:", n_part, "\n")
   cluster_on <- attr(object, "cluster_on")
-  cat(" - Cluster based on:", cluster_on, "\n")
+  cluster_on_display <- if(cluster_on == "both") "sites and species" else cluster_on
+  cat(" - Cluster based on:", cluster_on_display, "\n")
   
   clust_dt <- attr(object, "clustering_data_type")
   if(!is.null(clust_dt) && !is.na(clust_dt))
     cat(" - Clustering data type:", clust_dt, "\n")
     
   idx_dt <- attr(object, "index_data_type")
-  if(!is.null(idx_dt) && !is.na(idx_dt))
-    cat(" - Metric data type:", idx_dt, "\n")
+  if(!is.null(idx_dt) && !is.na(idx_dt)) {
+    idx_dt_display <- if(idx_dt == "both") "occurrence and abundance" else idx_dt
+    cat(" - Metric data type:", idx_dt_display, "\n")
+  }
   cat("\n")
   
   n_to_show <- min(n_partitions, n_part)
@@ -1064,6 +1100,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
+        stats$Mean <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }
@@ -1095,6 +1132,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
+        stats$Median <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }
@@ -1108,6 +1146,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
+        stats$Median <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }
@@ -1139,6 +1178,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
+        stats$Median <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }
@@ -1152,6 +1192,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
+        stats$Median <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }
@@ -1165,6 +1206,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
+        stats$Median <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }

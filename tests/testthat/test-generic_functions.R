@@ -149,7 +149,7 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   expect_s3_class(ind_abund, "bioregion.site.species.metrics")
   expect_output(print(ind_abund), "Site and species metrics")
-  expect_output(print(ind_abund), "Per-cluster metrics \\(abundance\\):")
+  expect_output(print(ind_abund), "Per-cluster co-occurrence metrics \\(abundance\\):")
   
   # Test with similarity-based metrics only
   ind_sim <- site_species_metrics(bioregionalization = cluinfo,
@@ -164,7 +164,7 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
   
   expect_s3_class(ind_sim, "bioregion.site.species.metrics")
   expect_output(print(ind_sim), "Site and species metrics")
-  expect_output(print(ind_sim), "Similarity-based metrics:")
+  expect_output(print(ind_sim), "similarity-based metrics:")
   
 })
 
