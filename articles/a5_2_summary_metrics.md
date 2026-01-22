@@ -83,7 +83,7 @@ vegesim <- dissimilarity_to_similarity(vegedissim)
 
 We use the same three bioregionalization algorithms as in the
 [visualization
-vignette](https://biorgeo.github.io/bioregion/articles/a5_visualization.html),
+vignette](https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html),
 i.e., non-hierarchical, hierarchical, and network bioregionalizations.
 In addition, we include a network bioregionalization algorithm based on
 a bipartite network, which assigns clusters to both sites and species.
