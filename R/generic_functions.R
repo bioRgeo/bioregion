@@ -1014,7 +1014,7 @@ str.bioregion.site.species.metrics <- function(object, ...) {
   }
   safe_median <- function(x) {
     x <- x[!is.na(x)]
-    if(length(x) == 0) NA_real_ else median(x)
+    if(length(x) == 0) NA_real_ else stats::median(x)
   }
   
   stats <- data.frame(
