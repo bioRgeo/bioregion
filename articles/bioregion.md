@@ -155,17 +155,17 @@ This [tutorial
 page](https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html)
 details different ways to plot your bioregionalization.
 
-## 5.2 Compare bioregionalizations
-
-In this section, we look at how sites are assigned to bioregions within
-a single bioregionalization and also compare this assignment across
-different bioregionalizations. The following
-[page](https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html)
-illustrates this.
-
-## 5.3 Summary metrics
+## 5.2 Summary metrics
 
 In this section, we compute summary statistics at different scales,
 either at the bioregion or at the site or species level. Related
 functions are detailed in this
-[page](https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html).
+[page](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html).
+
+## 5.3 Compare bioregionalizations
+
+In this section, we look at how sites are assigned to bioregions within
+a single bioregionalization and also compare this assignment across
+different bioregionalizations. The following
+[page](https://biorgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html)
+illustrates this.

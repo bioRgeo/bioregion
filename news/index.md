@@ -1,10 +1,17 @@
 # Changelog
 
-## bioregion 1.2.0.9000
+## bioregion 1.3.0.9000
 
 This is a list of changes made in the development/GitHub version of the
-package between bioregion 1.2.0 (CRAN release 2025-01-31) and the next
-CRAN release.
+package between **bioregion 1.3.0** (CRAN release 2026-01-23) and the
+next CRAN release.
+
+- 
+
+## bioregion 1.3.0
+
+This is a list of changes made between **bioregion 1.2.0** (CRAN release
+2025-01-31) and **bioregion 1.3.0** (CRAN release 2026-01-23).
 
 ***Function changes***
 
@@ -21,9 +28,9 @@ CRAN release.
 
 - [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
   has been thoroughly reformatted and now provides:
-  species-to-bioregions metrics, species-to-bioregionalization metrics,
-  site-to-chorotypes metrics, site-to-chorological classification
-  metrics, site-to-bioregions metrics, and site-to-bioregionalization
+  species-per-bioregions metrics, species-in-bioregionalization metrics,
+  site-per-chorotypes metrics, site-in-chorological classification
+  metrics, site-per-bioregions metrics, and site-in-bioregionalization
   metrics, all of which are rigorously defined in the corresponding
   vignette.
 

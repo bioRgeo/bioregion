@@ -41,7 +41,7 @@ bioregion.
 ## See also
 
 For more details illustrated with a practical example, see the vignette:
-<https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html>.
+<https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html>.
 
 Associated functions:
 [site_species_metrics](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
