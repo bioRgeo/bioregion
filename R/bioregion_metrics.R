@@ -25,7 +25,7 @@
 #' @seealso 
 #' For more details illustrated with a practical example, 
 #' see the vignette: 
-#' \url{https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html}.
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}.
 #' 
 #' Associated functions: 
 #' [site_species_metrics] [bioregionalization_metrics]
