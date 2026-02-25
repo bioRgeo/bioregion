@@ -168,22 +168,27 @@ dissimilarity <- similarity_to_dissimilarity(simil)
 tree1 <- hclu_hierarclust(dissimilarity,
                           n_clust = 5)
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-#> Error in if (nrow(dist_matrix) > 2) {    subclusters <- stable_binary_split(dist_matrix, method = method,         n_runs = n_runs, binsplit = "tree")} else {    subclusters <- list(attr(dist_matrix, "Labels")[1], attr(dist_matrix,         "Labels")[2])}: argument is of length zero
+#> 
+#> Final tree has a 0.699 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Determining the cut height to reach 5 groups...
+#> --> 0.30859375
 tree2 <- cut_tree(tree1, cut_height = .05)
-#> Error: object 'tree1' not found
 tree3 <- cut_tree(tree1, n_clust = c(3, 5, 10))
-#> Error: object 'tree1' not found
+#> Determining the cut height to reach 3 groups...
+#> --> 0.34375
+#> Determining the cut height to reach 5 groups...
+#> --> 0.30859375
+#> Determining the cut height to reach 10 groups...
+#> --> 0.234375
 tree4 <- cut_tree(tree1, cut_height = c(.05, .1, .15, .2, .25))
-#> Error: object 'tree1' not found
 tree5 <- cut_tree(tree1, n_clust = c(3, 5, 10), find_h = FALSE)
-#> Error: object 'tree1' not found
 
 hclust_tree <- tree2$algorithm$final.tree
-#> Error: object 'tree2' not found
 clusters_2 <- cut_tree(hclust_tree, n_clust = 10)
-#> Error: object 'hclust_tree' not found
+#> Determining the cut height to reach 10 groups...
+#> --> 0.234375
 
 cluster_dynamic <- cut_tree(tree1, dynamic_tree_cut = TRUE,
                             dissimilarity = dissimilarity)
-#> Error: object 'tree1' not found
+#> Some sites were not assigned to any cluster. They will have a NA in the cluster data.frame.
 ```

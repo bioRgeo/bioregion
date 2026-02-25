@@ -18,6 +18,7 @@ hclu_hierarclust(
   index = names(dissimilarity)[3],
   method = "average",
   randomize = TRUE,
+  seed = NULL,
   n_runs = 100,
   keep_trials = "no",
   optimal_tree_method = "iterative_consensus_tree",
@@ -62,6 +63,11 @@ hclu_hierarclust(
   A `boolean` indicating whether the dissimilarity matrix should be
   randomized to account for the order of sites in the dissimilarity
   matrix.
+
+- seed:
+
+  A value for the random number generator (`NULL` for random by
+  default).
 
 - n_runs:
 
@@ -271,38 +277,177 @@ dissim <- dissimilarity(comat, metric = "Simpson")
 tree1 <- hclu_hierarclust(dissim, 
                           n_clust = 5)
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-#> Error in if (nrow(dist_matrix) > 2) {    subclusters <- stable_binary_split(dist_matrix, method = method,         n_runs = n_runs, binsplit = "tree")} else {    subclusters <- list(attr(dist_matrix, "Labels")[1], attr(dist_matrix,         "Labels")[2])}: argument is of length zero
+#> 
+#> Final tree has a 0.5104 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Determining the cut height to reach 5 groups...
+#> --> 0.1171875
 tree1
-#> Error: object 'tree1' not found
+#> Clustering results for algorithm : hclu_hierarclust 
+#>  (hierarchical clustering based on a dissimilarity matrix)
+#>  - Number of sites:  20 
+#>  - Name of dissimilarity metric:  Simpson 
+#>  - Tree construction method:  average 
+#>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
+#>  - Method to compute the final tree:  Iterative hierarchical consensus tree 
+#>  - Cophenetic correlation coefficient:  0.51 
+#>  - Number of clusters requested by the user:  5 
+#> Clustering results:
+#>  - Number of partitions:  1 
+#>  - Number of clusters:  5 
+#>  - Height of cut of the hierarchical tree: 0.117 
 plot(tree1)
-#> Error: object 'tree1' not found
+
 str(tree1)
-#> Error: object 'tree1' not found
+#> List of 6
+#>  $ name        : chr "hclu_hierarclust"
+#>  $ args        :List of 16
+#>   ..$ index              : chr "Simpson"
+#>   ..$ method             : chr "average"
+#>   ..$ randomize          : logi TRUE
+#>   ..$ seed               : NULL
+#>   ..$ n_runs             : num 100
+#>   ..$ optimal_tree_method: chr "iterative_consensus_tree"
+#>   ..$ keep_trials        : chr "no"
+#>   ..$ n_clust            : num 5
+#>   ..$ cut_height         : NULL
+#>   ..$ find_h             : logi TRUE
+#>   ..$ h_max              : num 1
+#>   ..$ h_min              : num 0
+#>   ..$ consensus_p        : num 0.5
+#>   ..$ show_hierarchy     : logi FALSE
+#>   ..$ verbose            : logi TRUE
+#>   ..$ dynamic_tree_cut   : logi FALSE
+#>  $ inputs      :List of 9
+#>   ..$ bipartite      : logi FALSE
+#>   ..$ weight         : logi TRUE
+#>   ..$ pairwise       : logi TRUE
+#>   ..$ pairwise_metric: chr "Simpson"
+#>   ..$ dissimilarity  : logi TRUE
+#>   ..$ nb_sites       : int 20
+#>   ..$ data_type      : chr "occurrence"
+#>   ..$ node_type      : chr "site"
+#>   ..$ hierarchical   : logi FALSE
+#>  $ algorithm   :List of 6
+#>   ..$ final.tree         :List of 5
+#>   .. ..- attr(*, "class")= chr "hclust"
+#>   ..$ final.tree.coph.cor: num 0.51
+#>   ..$ final.tree.msd     : num 0.00259
+#>   ..$ output_n_clust     : int 5
+#>   ..$ output_cut_height  : Named num 0.117
+#>   .. ..- attr(*, "names")= chr "k_5"
+#>   ..$ trials             : chr "Trials not stored in output"
+#>  $ clusters    :'data.frame':    20 obs. of  2 variables:
+#>   ..$ ID : chr [1:20] "Site1" "Site10" "Site11" "Site12" ...
+#>   ..$ K_5: chr [1:20] "1" "1" "1" "1" ...
+#>   ..- attr(*, "node_type")= chr [1:20] "site" "site" "site" "site" ...
+#>  $ cluster_info:'data.frame':    1 obs. of  4 variables:
+#>   ..$ partition_name   : chr "K_5"
+#>   ..$ n_clust          : int 5
+#>   ..$ requested_n_clust: num 5
+#>   ..$ output_cut_height: num 0.117
+#>  - attr(*, "class")= chr [1:2] "bioregion.clusters" "list"
 tree1$clusters
-#> Error: object 'tree1' not found
+#>            ID K_5
+#> Site1   Site1   1
+#> Site10 Site10   1
+#> Site11 Site11   1
+#> Site12 Site12   1
+#> Site13 Site13   1
+#> Site14 Site14   1
+#> Site15 Site15   1
+#> Site16 Site16   1
+#> Site17 Site17   2
+#> Site18 Site18   1
+#> Site19 Site19   1
+#> Site2   Site2   3
+#> Site20 Site20   1
+#> Site3   Site3   1
+#> Site4   Site4   4
+#> Site5   Site5   1
+#> Site6   Site6   4
+#> Site7   Site7   4
+#> Site8   Site8   1
+#> Site9   Site9   5
 
 # User-defined height cut
 # Only one height
 tree2 <- hclu_hierarclust(dissim, 
                           cut_height = .05)
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-#> Error in if (nrow(dist_matrix) > 2) {    subclusters <- stable_binary_split(dist_matrix, method = method,         n_runs = n_runs, binsplit = "tree")} else {    subclusters <- list(attr(dist_matrix, "Labels")[1], attr(dist_matrix,         "Labels")[2])}: argument is of length zero
+#> 
+#> Final tree has a 0.5104 cophenetic correlation coefficient with the initial dissimilarity matrix
 tree2
-#> Error: object 'tree2' not found
+#> Clustering results for algorithm : hclu_hierarclust 
+#>  (hierarchical clustering based on a dissimilarity matrix)
+#>  - Number of sites:  20 
+#>  - Name of dissimilarity metric:  Simpson 
+#>  - Tree construction method:  average 
+#>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
+#>  - Method to compute the final tree:  Iterative hierarchical consensus tree 
+#>  - Cophenetic correlation coefficient:  0.51 
+#>  - Heights of cut requested by the user:  0.05 
+#> Clustering results:
+#>  - Number of partitions:  1 
+#>  - Number of clusters:  15 
+#>  - Height of cut of the hierarchical tree: 0.05 
 tree2$clusters
-#> Error: object 'tree2' not found
+#>        ID K_15
+#> 1   Site1    1
+#> 2  Site10    1
+#> 3  Site11    2
+#> 4  Site12    3
+#> 5  Site13    4
+#> 6  Site14    5
+#> 7  Site15    5
+#> 8  Site16    6
+#> 9  Site17    7
+#> 10 Site18    8
+#> 11 Site19    2
+#> 12  Site2    9
+#> 13 Site20   10
+#> 14  Site3   11
+#> 15  Site4   12
+#> 16  Site5    1
+#> 17  Site6   13
+#> 18  Site7   14
+#> 19  Site8    3
+#> 20  Site9   15
 
 # Multiple heights
 tree3 <- hclu_hierarclust(dissim, 
                           cut_height = c(.05, .15, .25))
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-#> Error in if (nrow(dist_matrix) > 2) {    subclusters <- stable_binary_split(dist_matrix, method = method,         n_runs = n_runs, binsplit = "tree")} else {    subclusters <- list(attr(dist_matrix, "Labels")[1], attr(dist_matrix,         "Labels")[2])}: argument is of length zero
+#> 
+#> Final tree has a 0.5104 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
-#> Error: object 'tree3' not found
+#>            ID K_1 K_3 K_15
+#> Site1   Site1   1   1    1
+#> Site10 Site10   1   1    1
+#> Site11 Site11   1   1    2
+#> Site12 Site12   1   1    3
+#> Site13 Site13   1   1    4
+#> Site14 Site14   1   1    5
+#> Site15 Site15   1   1    5
+#> Site16 Site16   1   1    6
+#> Site17 Site17   1   2    7
+#> Site18 Site18   1   1    8
+#> Site19 Site19   1   1    2
+#> Site2   Site2   1   1    9
+#> Site20 Site20   1   1   10
+#> Site3   Site3   1   1   11
+#> Site4   Site4   1   1   12
+#> Site5   Site5   1   1    1
+#> Site6   Site6   1   1   13
+#> Site7   Site7   1   1   14
+#> Site8   Site8   1   1    3
+#> Site9   Site9   1   3   15
 # Info on each partition can be found in table cluster_info
 tree3$cluster_info
-#> Error: object 'tree3' not found
+#>        partition_name n_clust requested_cut_height
+#> h_0.25            K_1       1                 0.25
+#> h_0.15            K_3       3                 0.15
+#> h_0.05           K_15      15                 0.05
 plot(tree3)
-#> Error: object 'tree3' not found
+
 ```

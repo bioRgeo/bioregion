@@ -109,15 +109,15 @@ clu_multi <- hclu_hierarclust(dissim,
                               optimal_tree_method = "best",
                               n_clust = c(2, 4, 10))
 #> Randomizing the dissimilarity matrix with 100 trials
-#>  -- range of cophenetic correlation coefficients among trials: 0.8263 - 0.8586
+#>  -- range of cophenetic correlation coefficients among trials: 0.8218 - 0.8529
 #> 
-#> Final tree has a 0.8586 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.8529 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 2 groups...
 #> --> 0.9921875
 #> Determining the cut height to reach 4 groups...
 #> --> 0.96875
 #> Determining the cut height to reach 10 groups...
-#> --> 0.765625
+#> --> 0.75
 map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3),
  plot = TRUE)  # By index
 

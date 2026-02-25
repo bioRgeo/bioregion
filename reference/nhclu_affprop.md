@@ -205,24 +205,12 @@ clust2 <- nhclu_affprop(sim, q = 1)
 
 # Fixed number of clusters 
 clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
-#> Trying p = 0.9930872 
-#>    Number of clusters: 6 
-#> Trying p = 0.9308716 
-#>    Number of clusters: 6 
-#> Trying p = 0.3087157 
-#>    Number of clusters: 1 
-#> Trying p = 0.6543579 (bisection step no. 1 )
-#>    Number of clusters: 1 
-#> Trying p = 0.8271789 (bisection step no. 2 )
-#>    Number of clusters: 3 
-#> Trying p = 0.7407684 (bisection step no. 3 )
-#>    Number of clusters: 1 
-#> Trying p = 0.7839737 (bisection step no. 4 )
-#>    Number of clusters: 1 
-#> Trying p = 0.8055763 (bisection step no. 5 )
-#>    Number of clusters: 3 
-#> Trying p = 0.794775 (bisection step no. 6 )
+#> Trying p = 0.993553 
+#>    Number of clusters: 7 
+#> Trying p = 0.9355303 
+#>    Number of clusters: 7 
+#> Trying p = 0.355303 
 #>    Number of clusters: 2 
 #> 
-#> Number of clusters: 2 for p = 0.794775 
+#> Number of clusters: 2 for p = 0.355303 
 ```

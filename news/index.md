@@ -6,7 +6,8 @@ This is a list of changes made in the development/GitHub version of the
 package between **bioregion 1.3.0** (CRAN release 2026-01-23) and the
 next CRAN release.
 
-- 
+- Added `seed` argument to
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
 
 ## bioregion 1.3.0
 

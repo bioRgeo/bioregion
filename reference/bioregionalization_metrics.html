@@ -19,7 +19,7 @@ matrix, or the initial species-site table."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -223,9 +223,35 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">10</span><span class="op">:</span><span class="fl">15</span>, </span></span>
 <span class="r-in"><span>                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (nrow(dist_matrix) &gt; 2) {    subclusters &lt;- stable_binary_split(dist_matrix, method = method,         n_runs = n_runs, binsplit = "tree")} else {    subclusters &lt;- list(attr(dist_matrix, "Labels")[1], attr(dist_matrix,         "Labels")[2])}:</span> argument is of length zero</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.4728 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.046875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 11 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.04541015625</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 12 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0390625</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 13 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.03125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 14 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0234375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 15 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.015625</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'tree1' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of sites:  20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Name of dissimilarity metric:  Simpson </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Iterative hierarchical consensus tree </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.473 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  10 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  10 11 12 13 14 15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.047 0.045 0.039 0.031 0.023 0.016 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">bioregionalization_metrics</span><span class="op">(</span><span class="va">tree1</span>, </span></span>
 <span class="r-in"><span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span></span>
@@ -236,9 +262,26 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                                                <span class="st">"avg_endemism"</span>,</span></span>
 <span class="r-in"><span>                                                <span class="st">"pc_distance"</span>, </span></span>
 <span class="r-in"><span>                                                <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'tree1' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing similarity-based metrics...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   - pc_distance OK</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   - anosim OK</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing composition-based metrics...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   - avg_endemism OK</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   - tot_endemism OK</span>
 <span class="r-in"><span><span class="va">a</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'a' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Partition metrics:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - 6  partition(s) evaluated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  10  to  15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      tot_endemism avg_endemism pc_distance    anosim</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min             0            0   0.9679293 0.7697059</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean            0            0   0.9848448 0.8451739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Max             0            0   1.0000000 0.9621622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each bioregionalization are available in</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         your_object$endemism_results</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
