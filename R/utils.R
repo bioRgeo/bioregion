@@ -956,6 +956,42 @@ seedrng <- function() {
   sample(1:10000, 1)
 }
 
+# randomize_dist
+randomize_dist <- function(dist_mat){
+  ord <- sample(rownames(dist_mat))
+  return(dist_mat[ord, ord])
+}
+
+# tree_eval
+tree_eval <- function(tree, 
+                      dist_mat, 
+                      method = "pearson") {
+  
+  if(inherits(dist_mat, "dist")){
+    dist_mat <- as.matrix(dist_mat)
+  }
+  
+  coph <- as.matrix(stats::cophenetic(tree))
+  coph <- coph[match(rownames(dist_mat), rownames(coph)), 
+               match(rownames(dist_mat), colnames(coph))]
+
+  lower_tri_idx <- lower.tri(dist_mat)
+  
+  # cophcor
+  cophcor <- stats::cor(dist_mat[lower_tri_idx],
+                        coph[lower_tri_idx], 
+                        method = method)
+  
+  # msd
+  diff_matrix <- dist_mat - coph
+  msd <- mean(diff_matrix[lower_tri_idx]^2)
+  
+  # cophcor: Sokal & Rohlf 1962 Taxon
+  # msd: Maire et al. 2015 GEB
+  return(list(cophcor = cophcor, 
+              msd = msd))
+}
+
 # Species-to-bioregions/bioregionalization metrics
 # Site-to-chorotype/chorological metrics 
 sbgc <- function(clusters, 
@@ -1509,6 +1545,8 @@ gb <- function(clusters,
   return(res)
   
 }
+
+
 
 
 

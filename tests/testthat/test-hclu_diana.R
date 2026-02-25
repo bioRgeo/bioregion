@@ -108,6 +108,13 @@ test_that("valid output", {
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
   
+  clust2 <- hclu_diana(dissim,
+                      index = "Euclidean",
+                      n_clust = c(10,5),
+                      find_h = FALSE,
+                      verbose = FALSE)
+  expect_equal(clust, clust2)
+  
   # Test data_type with different dissimilarity metrics
   # We expect warnings here as the algo cannot find 3 clusters with those metrics
   # on this dataset

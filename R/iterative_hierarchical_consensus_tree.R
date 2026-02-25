@@ -1,7 +1,7 @@
 iterative_consensus_tree <- function(
     dissim, 
     sites = unique(c(dissim[, 1],
-                            dissim[, 2])), 
+                     dissim[, 2])), 
     index = colnames(dissim)[3],
     method = "average",
     depth = 1, 
@@ -10,7 +10,7 @@ iterative_consensus_tree <- function(
     n_runs = 100,
     max_remaining_size = length(sites),
     monotonicity_direction = c("top-down", "bottom-up")) {
-
+  
   if(inherits(dissim, "bioregion.pairwise") |
      inherits(dissim, "data.frame")) {
     dissim[, 3] <- dissim[, index]
@@ -86,7 +86,7 @@ iterative_consensus_tree <- function(
   
   # Compute squared Euclidean distance between centroids
   centroid_distance <- sum((centroid1 - centroid2)^2)
-
+  
   # Compute height based on the selected method
   calculated_height <- switch(
     method,
@@ -161,6 +161,11 @@ subset_dist <- function(d, indices) {
   as.dist(d_subset)
 }
 
+.randomizeDistance <- function(distmatrix){
+  distmatrix <- as.matrix(distmatrix)
+  ord <- sample(rownames(distmatrix))
+  return(stats::as.dist(distmatrix[ord, ord]))
+}
 
 # Function to find the majority vote for a binary split among many trees
 stable_binary_split <- function(dist.obj,
@@ -226,7 +231,7 @@ stable_binary_split <- function(dist.obj,
     groups <- cluster::pam(dist_pw_prop, k = 2)$clustering
   }
   groups <- data.frame(Site = names(groups), cluster = groups)
-
+  
   # tree_eval_cur <- tree_eval(pw_tree,
   #                            dist_pw_prop)$cophcor
   # cat ("Tree eval :", tree_eval_cur, "\n")
@@ -260,8 +265,8 @@ stable_binary_split <- function(dist.obj,
   # # }
   # It is not necessary to randomize the tree here 
   # because it does not impact the tree topology
-
-
+  
+  
   # png(paste0("temp/", as.numeric(Sys.time()), ".png"))
   # plot(pw_tree)
   # dev.off()

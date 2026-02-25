@@ -229,9 +229,9 @@ hclu_optics <- function(dissimilarity,
   }
   
   outputs$algorithm <- dbscan::optics(x = dist.obj,
-                                             minPts = minPts,
-                                             eps = eps,
-                                             ...)
+                                      minPts = minPts,
+                                      eps = eps,
+                                      ...)
   outputs$algorithm <-
     dbscan::extractXi(outputs$algorithm,
                       xi = xi,
