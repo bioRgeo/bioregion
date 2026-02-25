@@ -117,8 +117,11 @@ Color palettes from the `rcartocolor` package: Nowosad J (2018).
 
 ## See also
 
-[`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
-for visualizing colored clusters on maps
+For more details illustrated with a practical example, see the vignette:
+<https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html>.
+
+Associated functions:
+[map_bioregions](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
 
 ## Author
 

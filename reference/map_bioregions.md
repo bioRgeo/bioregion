@@ -75,6 +75,14 @@ mapped. The function automatically filters to site nodes using the
 these colors will be automatically used for plotting. Otherwise, the
 default `sf` color scheme will be applied.
 
+## See also
+
+For more details illustrated with a practical example, see the vignette:
+<https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html>.
+
+Associated functions:
+[bioregion_colors](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
+
 ## Author
 
 Maxime Lenormand (<maxime.lenormand@inrae.fr>)  
