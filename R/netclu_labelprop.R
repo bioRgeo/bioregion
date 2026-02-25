@@ -247,13 +247,13 @@ netclu_labelprop <- function(net,
   
   # Run algo (with seed)
   net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-  if(is.null(seed)){
-    outalg <- igraph::cluster_label_prop(net)
-  }else{
-    set.seed(seed)
-    outalg <- igraph::cluster_label_prop(net)
-    rm(.Random.seed, envir=globalenv())
-  }
+  
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outalg <- igraph::cluster_label_prop(net)
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+  
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
   
   com <- data.frame(ID = idnode[, 2], Com = NA)

@@ -427,7 +427,8 @@ hclu_hierarclust <- function(dissimilarity,
                 "with IHCT - final height calculations are approximated into UPGMA.")
       }
 
-      if (!is.null(seed)) set.seed(seed)
+      if (!is.null(seed)) set.seed(seed) # generate seed
+      
       # consensus_tree <- iterative_consensus_tree(dissimilarity, 
       #                                            sites = unique(c(dissimilarity[, 1],
       #                                                             dissimilarity[, 2])), 
@@ -438,12 +439,15 @@ hclu_hierarclust <- function(dissimilarity,
       #                                            verbose = verbose,
       #                                            n_runs = n_runs,
       #                                            monotonicity_direction = "bottom-up")
+      
       consensus_tree <- IHCT(dist_mat, 
                              method = method,
                              n_runs = n_runs,
                              monotonicity_direction = "bottom-up",
                              verbose = verbose)
-      if (!is.null(seed)) rm(.Random.seed, envir = globalenv())
+      
+      if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+      
       consensus_tree <- reconstruct_hclust_bis(consensus_tree)
 
       # Compute hierarchical tree

@@ -286,26 +286,19 @@ CPM or modularity", call. = FALSE)
   
   # Run algo (with seed)
   net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-  if(is.null(seed)){
-    outalg <- igraph::cluster_leiden(
-      graph = net,
-      objective_function = objective_function,
-      resolution = resolution_parameter,
-      beta = beta,
-      n_iterations = n_iterations,
-      vertex_weights = vertex_weights)
-  }else{
-    set.seed(seed)
-    outalg <- igraph::cluster_leiden(
-      graph = net,
-      objective_function = objective_function,
-      resolution = resolution_parameter,
-      beta = beta,
-      n_iterations = n_iterations,
-      vertex_weights = vertex_weights)
-    rm(.Random.seed, envir=globalenv())
-  }
-
+  
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outalg <- igraph::cluster_leiden(
+    graph = net,
+    objective_function = objective_function,
+    resolution = resolution_parameter,
+    beta = beta,
+    n_iterations = n_iterations,
+    vertex_weights = vertex_weights)
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+  
   comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
   
   com <- data.frame(ID = idnode[, 2], Com = NA)

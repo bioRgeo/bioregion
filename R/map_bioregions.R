@@ -42,6 +42,14 @@
 #' `bioregion_colors()`), these colors will be automatically used for plotting. 
 #' Otherwise, the default `sf` color scheme will be applied.
 #' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
+#' 
+#' Associated functions: 
+#' [bioregion_colors]
+#' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr

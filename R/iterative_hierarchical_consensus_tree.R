@@ -126,6 +126,7 @@ iterative_consensus_tree <- function(
     child_structure <- iterative_consensus_tree(
       dissim = dissim,
       sites = subcluster,
+      n_runs = n_runs,
       # index = index,
       method = method,
       depth = depth + 1,

@@ -197,26 +197,19 @@ nhclu_kmeans <- function(dissimilarity,
     outputs$clustering_algorithms$pcoa <- ape::pcoa(dist.obj)
   }
   
-  # Performing the kmeans on the PCoA with all axes
-  if(is.null(seed)){
-    outputs$algorithm <- lapply(n_clust,
-                                function(x)
-                                  stats::kmeans(dist.obj,
-                                                centers = x,
-                                                iter.max = iter_max,
-                                                nstart = nstart,
-                                                algorithm = algorithm))
-  }else{
-    set.seed(seed)
-    outputs$algorithm <- lapply(n_clust,
-                                function(x)
-                                  stats::kmeans(dist.obj,
-                                                centers = x,
-                                                iter.max = iter_max,
-                                                nstart = nstart,
-                                                algorithm = algorithm))
-    rm(.Random.seed, envir=globalenv())
-  }
+  # Performing the kmeans on the PCoA with all axes (with seed)
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outputs$algorithm <- lapply(n_clust,
+                              function(x)
+                                stats::kmeans(dist.obj,
+                                              centers = x,
+                                              iter.max = iter_max,
+                                              nstart = nstart,
+                                              algorithm = algorithm))
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+  
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(

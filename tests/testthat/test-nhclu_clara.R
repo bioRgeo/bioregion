@@ -155,7 +155,7 @@ test_that("valid output", {
    clust2 <- nhclu_clara(dissim,
                          index = "Euclidean",
                          n_clust = c(5,10))
-   #expect_equal(sum(clust1$clusters$K_5==clust2$clusters$K_5), 338)
+   expect_equal(sum(clust1$clusters$K_5==clust2$clusters$K_5) == 338, FALSE)
    
    r1 <- runif(1)
    clust1 <- nhclu_clara(dissim,

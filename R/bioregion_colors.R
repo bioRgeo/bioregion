@@ -75,8 +75,12 @@
 #' which will automatically detect and apply the color scheme when present.
 #' 
 #' @seealso 
-#' [map_bioregions()] for visualizing colored clusters on maps
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
 #' 
+#' Associated functions: 
+#' [map_bioregions]
 #' 
 #' @references
 #' Color palettes from the `rcartocolor` package:

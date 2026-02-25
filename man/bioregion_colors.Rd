@@ -131,7 +131,12 @@ Nowosad J (2018). "CARTOColors: color palettes inspired by CARTO."
 \url{https://github.com/Nowosad/rcartocolor}
 }
 \seealso{
-\code{\link[=map_bioregions]{map_bioregions()}} for visualizing colored clusters on maps
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
+
+Associated functions:
+\link{map_bioregions}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

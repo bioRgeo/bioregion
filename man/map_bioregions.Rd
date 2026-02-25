@@ -87,6 +87,14 @@ map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"),
 plot = TRUE)  # By name
 
 }
+\seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
+
+Associated functions:
+\link{bioregion_colors}
+}
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

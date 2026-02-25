@@ -165,28 +165,21 @@ nhclu_clarans <- function(dissimilarity,
   
   outputs$clusters$name <- labels(dist.obj)
   
-  # CLARANS algorithm
+  # CLARANS algorithm (with seed)
+  claraseed <- sample(1:10000, 1)
   if(!is.null(seed)){
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclarans(rdist = dist.obj,
-                                         n = nrow(dist.obj),
-                                         k = x,
-                                         numlocal = numlocal,
-                                         maxneighbor = maxneighbor,
-                                         seed = seed))
-  }else{
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclarans(rdist = dist.obj,
-                                         n = nrow(dist.obj),
-                                         k = x,
-                                         numlocal = numlocal,
-                                         maxneighbor = maxneighbor,
-                                         seed = seedrng()))
-  }  
+    claraseed <- seed
+  }
+  outputs$algorithm <-
+    lapply(n_clust,
+           function(x)
+             fastkmedoids::fastclarans(rdist = dist.obj,
+                                       n = nrow(dist.obj),
+                                       k = x,
+                                       numlocal = numlocal,
+                                       maxneighbor = maxneighbor,
+                                       seed = claraseed))
+  
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(
