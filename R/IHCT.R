@@ -2,11 +2,17 @@ IHCT <- function(dist_mat,
                  sites = rownames(dist_mat),
                  method = "average",
                  n_runs = 100,
+                 n_splits = 2,
                  depth = 1, 
                  previous_height = Inf, 
                  max_remaining_size = length(sites),
                  monotonicity_direction = c("top-down", "bottom-up"),
                  verbose = TRUE) {
+  
+  # n_runs & n_splits
+  if(n_splits > n_runs){
+    n_splits <- n_runs
+  }
 
   # Progress info because the algorithm is quite long to run
   if (verbose && interactive()) {
@@ -41,6 +47,7 @@ IHCT <- function(dist_mat,
     subclusters <- coassign_binary_split(dist_mat_d, 
                                          method = method,
                                          n_runs = n_runs,
+                                         n_splits = n_splits,
                                          binsplit = "tree")
   } else { # if 2 sites only we already have the subclusters
     subclusters <- list(rownames(dist_mat_d)[1],
@@ -106,6 +113,7 @@ IHCT <- function(dist_mat,
                             sites = subcluster,
                             method = method,
                             n_runs = n_runs,
+                            n_splits = n_splits,
                             depth = depth + 1,
                             previous_height = height,
                             max_remaining_size = max_remaining_size,
@@ -135,6 +143,7 @@ IHCT <- function(dist_mat,
 coassign_binary_split <- function(dist_mat,
                                   method = "average", 
                                   n_runs = 100,
+                                  n_splits = 2,
                                   binsplit = "tree") {
   
   # Number of sites
@@ -142,11 +151,16 @@ coassign_binary_split <- function(dist_mat,
   
   # Step 1: randomize distance matrices and generate trees
   trees <- list()
+  ccc <- NULL
   for (run in 1:n_runs) {
     trees[[run]] <- list()
-    trees[[run]] <- fastcluster::hclust(as.dist(randomize_dist(dist_mat)), 
+    rand_dist_mat <- as.dist(randomize_dist(dist_mat))
+    trees[[run]] <- fastcluster::hclust(rand_dist_mat, 
                                         method = method)
+    ccc <- c(ccc, suppressWarnings(tree_eval(trees[[run]], 
+                                             rand_dist_mat)$cophcor))
   }
+  trees <- trees[order(ccc, decreasing = TRUE)[1:n_splits]]
   
   # Step 2: cut trees at 2 clusters for each run
   clusts <- lapply(trees, function(tree) {cut_tree(stats::as.hclust(tree), 

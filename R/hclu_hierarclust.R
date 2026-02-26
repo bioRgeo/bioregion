@@ -443,6 +443,7 @@ hclu_hierarclust <- function(dissimilarity,
       consensus_tree <- IHCT(dist_mat, 
                              method = method,
                              n_runs = n_runs,
+                             n_splits = 2,
                              monotonicity_direction = "bottom-up",
                              verbose = verbose)
       
