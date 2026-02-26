@@ -7,7 +7,12 @@ package between **bioregion 1.3.0** (CRAN release 2026-01-23) and the
 next CRAN release.
 
 - Added `seed` argument to
-  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
+  (issue [\#10](https://github.com/bioRgeo/bioregion/issues/10)).
+
+- Fixed invalid input, control and output in
+  [`nhclu_affprop()`](https://bioRgeo.github.io/bioregion/reference/nhclu_affprop.md)
+  (issue [\#14](https://github.com/bioRgeo/bioregion/issues/14)).
 
 ## bioregion 1.3.0
 
