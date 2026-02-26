@@ -2,18 +2,8 @@
 sim <- similarity(fishmat, 
                   metric = "all")
 dissim <- similarity_to_dissimilarity(sim)
-                  
-df <- data.frame(ID1 = sim$Site1, ID2 = sim$Site2, W = sim$Simpson)
 
-d <- dist(fishmat)
-mat <- fishmat
-rownames(mat) <- NULL
-colnames(mat) <- NULL
-d2 <- dist(mat)
-d3 <- d
-d3[1] <- "1"
-d4 <- d
-d4[1] <- NA
+df <- data.frame(ID1 = sim$Site1, ID2 = sim$Site2, W = sim$Simpson)
 
 uni <- data.frame(
   Site1 = c("c", "b", "a"),
@@ -201,25 +191,6 @@ test_that("valid output", {
   expect_equal(clust$cluster_info[1,1], "K_16")
   expect_equal(clust$cluster_info[1,2], 16)
   
-  clust <- nhclu_affprop(d,
-                         index = "Simpson",
-                         seed = 2,
-                         p = NA,
-                         q = NA,
-                         maxits = 1000,
-                         convits = 100,
-                         lam = 0.9,
-                         details = FALSE,
-                         nonoise = FALSE,
-                         K = NULL,
-                         prc = NULL,
-                         bimaxit = NULL,
-                         exact = NULL,
-                         algorithm_in_output = TRUE,
-                         verbose = FALSE)
-  expect_equal(clust$cluster_info[1,1], "K_2")
-  expect_equal(clust$cluster_info[1,2], 2)
-  
   quietly(
     clust1 <- nhclu_affprop(sim,
                             index = "Simpson",
@@ -348,7 +319,8 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_affprop("zz"),
-    "^similarity is not a bioregion.pairwise object")
+    "similarity must be a data.frame.",
+    fixed = TRUE)
   
   expect_error(
     nhclu_affprop(dissim),
@@ -392,22 +364,7 @@ test_that("invalid inputs", {
     nhclu_affprop(unichar),
     "The weight column must be numeric.",
     fixed = TRUE)  
-  
-  expect_message(
-    nhclu_affprop(d2),
-    "No labels detected, they have been assigned automatically.",
-    fixed = TRUE) 
-  
-  expect_error(
-    nhclu_affprop(d3),
-    "similarity must be numeric.",
-    fixed = TRUE) 
-  
-  expect_error(
-    nhclu_affprop(d4),
-    "NA(s) detected in similarity.",
-    fixed = TRUE) 
-  
+
   expect_error(
     nhclu_affprop(sim, 
                   seed =  c("zz","zz")),
