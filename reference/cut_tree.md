@@ -169,15 +169,15 @@ tree1 <- hclu_hierarclust(dissimilarity,
                           n_clust = 5)
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 #> 
-#> Final tree has a 0.699 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.7008 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 5 groups...
-#> --> 0.30859375
+#> --> 0.3046875
 tree2 <- cut_tree(tree1, cut_height = .05)
 tree3 <- cut_tree(tree1, n_clust = c(3, 5, 10))
 #> Determining the cut height to reach 3 groups...
 #> --> 0.34375
 #> Determining the cut height to reach 5 groups...
-#> --> 0.30859375
+#> --> 0.3046875
 #> Determining the cut height to reach 10 groups...
 #> --> 0.234375
 tree4 <- cut_tree(tree1, cut_height = c(.05, .1, .15, .2, .25))

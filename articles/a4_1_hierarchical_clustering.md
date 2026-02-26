@@ -127,7 +127,7 @@ tree1 <- hclu_hierarclust(dissim)
     ## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 
     ## 
-    ## Final tree has a 0.6861 cophenetic correlation coefficient with the initial dissimilarity matrix
+    ## Final tree has a 0.7005 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 The function gives us some information as it proceeds. Notably, it talks
 about a randomization of the dissimilarity matrix - this is a very
@@ -137,7 +137,7 @@ the function performs a randomization of the order of sites in the
 distance matrix with 30 trials ([more information in the randomization
 section](#randomization)). It also tells us that it built a consensus
 tree based on an iterative hierarchical consensus algorithm, and it
-found a tree with a cophenetic correlation coefficient of 0.69.
+found a tree with a cophenetic correlation coefficient of 0.7.
 
 We can see type the name of the object in the console to see more
 information:
@@ -153,7 +153,7 @@ tree1
     ##  - Tree construction method:  average 
     ##  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
     ##  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-    ##  - Cophenetic correlation coefficient:  0.686 
+    ##  - Cophenetic correlation coefficient:  0.7 
     ## Clustering procedure incomplete - no clusters yet
 
 The last line tells us that the the clustering procedure is incomplete:
@@ -172,10 +172,10 @@ tree1 <- cut_tree(tree1,
 
     ## Determining the cut height to reach 3 groups...
 
-    ## --> 0.564453125
+    ## --> 0.546875
 
 Here, we asked for 3 clusters, and the algorithm automatically finds the
-height at which 3 clusters are found (h = 0.564).
+height at which 3 clusters are found (h = 0.547).
 
 ``` r
 tree1
@@ -188,12 +188,12 @@ tree1
     ##  - Tree construction method:  average 
     ##  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
     ##  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-    ##  - Cophenetic correlation coefficient:  0.686 
+    ##  - Cophenetic correlation coefficient:  0.7 
     ##  - Number of clusters requested by the user:  3 
     ## Clustering results:
     ##  - Number of partitions:  1 
     ##  - Number of clusters:  3 
-    ##  - Height of cut of the hierarchical tree: 0.564
+    ##  - Height of cut of the hierarchical tree: 0.547
 
 When we type again the name of the object in the console, it gives us
 the results of the clustering: we have
@@ -204,7 +204,7 @@ the results of the clustering: we have
   asked for 3, and we obtained 3, which is good. Sometimes, however, we
   cannot get the number of clusters we asked for - in which case the
   outcome will be indicated.
-- **a height of cut at 0.564**: this is the height of cut at which we
+- **a height of cut at 0.547**: this is the height of cut at which we
   can obtain 4 clusters in our tree.
 
 We can make a quick plot of our partitioned tree with
@@ -252,11 +252,11 @@ tree1 <- cut_tree(tree1,
 
     ## Determining the cut height to reach 3 groups...
 
-    ## --> 0.564453125
+    ## --> 0.546875
 
     ## Determining the cut height to reach 12 groups...
 
-    ## --> 0.453125
+    ## --> 0.46484375
 
 ``` r
 plot(tree1, cex = .2)
@@ -285,54 +285,54 @@ summary(tree1)
     ## ------------------------- 
     ## Total clusters:  2 
     ## Top 2 clusters by size:
-    ##   Cluster 1: 528 items
-    ##   Cluster 2: 187 items
+    ##   Cluster 1: 538 items
+    ##   Cluster 2: 177 items
     ## 
     ## Bioregionalization 2: K_3
     ## ------------------------- 
     ## Total clusters:  3 
     ## Top 3 clusters by size:
-    ##   Cluster 1: 528 items
-    ##   Cluster 3: 114 items
-    ##   Cluster 2: 73 items
+    ##   Cluster 1: 538 items
+    ##   Cluster 3: 113 items
+    ##   Cluster 2: 64 items
     ## 
     ## Bioregionalization 3: K_12
     ## -------------------------- 
     ## Total clusters:  12 
     ## Top 10 clusters by size:
-    ##   Cluster 2: 349 items
-    ##   Cluster 4: 112 items
-    ##   Cluster 6: 99 items
-    ##   Cluster 1: 64 items
-    ##   Cluster 3: 55 items
-    ##   Cluster 7: 15 items
-    ##   Cluster 5: 14 items
-    ##   Cluster 11: 2 items
-    ##   Cluster 8: 2 items
-    ##   Cluster 10: 1 items
+    ##   Cluster 2: 414 items
+    ##   Cluster 8: 99 items
+    ##   Cluster 1: 63 items
+    ##   Cluster 5: 62 items
+    ##   Cluster 3: 36 items
+    ##   Cluster 7: 14 items
+    ##   Cluster 11: 10 items
+    ##   Cluster 6: 8 items
+    ##   Cluster 4: 5 items
+    ##   Cluster 12: 2 items
     ##   ... and 2 more cluster(s)
     ## 
     ## Hierarchical structure
     ## ======================
     ## 
-    ## 1 (n=528)
-    ## └─1 (n=528)
-    ##   ├─1 (n=64)
-    ##   ├─11 (n=2)
-    ##   ├─12 (n=1)
-    ##   ├─2 (n=349)
-    ##   └─4 (n=112)
+    ## 1 (n=538)
+    ## └─1 (n=538)
+    ##   ├─1 (n=63)
+    ##   ├─11 (n=10)
+    ##   ├─12 (n=2)
+    ##   ├─2 (n=414)
+    ##   ├─3 (n=36)
+    ##   ├─4 (n=5)
+    ##   └─6 (n=8)
     ## 
-    ## 2 (n=187)
-    ## ├─2 (n=73)
-    ## │ ├─3 (n=55)
-    ## │ ├─7 (n=15)
-    ## │ ├─8 (n=2)
+    ## 2 (n=177)
+    ## ├─2 (n=64)
+    ## │ ├─10 (n=1)
+    ## │ ├─5 (n=62)
     ## │ └─9 (n=1)
-    ## └─3 (n=114)
-    ##   ├─10 (n=1)
-    ##   ├─5 (n=14)
-    ##   └─6 (n=99)
+    ## └─3 (n=113)
+    ##   ├─7 (n=14)
+    ##   └─8 (n=99)
 
 However, it may be more useful to choose the heights of cut, rather than
 the number of clusters. We could, for example, cut the tree at heights
@@ -361,17 +361,17 @@ tree1
     ##  - Tree construction method:  average 
     ##  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
     ##  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-    ##  - Cophenetic correlation coefficient:  0.686 
+    ##  - Cophenetic correlation coefficient:  0.7 
     ##  - Heights of cut requested by the user:  0.4 0.5 0.6 
     ## Clustering results:
     ##  - Number of partitions:  3 
     ##  - Partitions are hierarchical
-    ##  - Number of clusters:  2 7 22 
+    ##  - Number of clusters:  2 9 24 
     ##  - Height of cut of the hierarchical tree: 0.6 0.5 0.4
 
 From the result, we can read that for the deep cut partition (h = 0.6)
-we have clusters, for the intermediate cut partition (h = 0.5) we have 7
-clusters and for the shallow cut partition (h = 0.4) we have 22
+we have clusters, for the intermediate cut partition (h = 0.5) we have 9
+clusters and for the shallow cut partition (h = 0.4) we have 24
 clusters.
 
 Let’s look at the hierarchical structure of clusters with
@@ -394,72 +394,78 @@ summary(tree1)
     ## ------------------------- 
     ## Total clusters:  2 
     ## Top 2 clusters by size:
-    ##   Cluster 1: 528 items
-    ##   Cluster 2: 187 items
+    ##   Cluster 1: 538 items
+    ##   Cluster 2: 177 items
     ## 
-    ## Bioregionalization 2: K_7
+    ## Bioregionalization 2: K_9
     ## ------------------------- 
-    ## Total clusters:  7 
-    ## Top 7 clusters by size:
-    ##   Cluster 2: 462 items
-    ##   Cluster 4: 113 items
-    ##   Cluster 3: 72 items
-    ##   Cluster 1: 64 items
-    ##   Cluster 7: 2 items
-    ##   Cluster 5: 1 items
-    ##   Cluster 6: 1 items
+    ## Total clusters:  9 
+    ## Top 9 clusters by size:
+    ##   Cluster 2: 450 items
+    ##   Cluster 6: 113 items
+    ##   Cluster 1: 63 items
+    ##   Cluster 4: 62 items
+    ##   Cluster 5: 18 items
+    ##   Cluster 3: 5 items
+    ##   Cluster 9: 2 items
+    ##   Cluster 7: 1 items
+    ##   Cluster 8: 1 items
     ## 
-    ## Bioregionalization 3: K_22
+    ## Bioregionalization 3: K_24
     ## -------------------------- 
-    ## Total clusters:  22 
+    ## Total clusters:  24 
     ## Top 10 clusters by size:
-    ##   Cluster 3: 277 items
-    ##   Cluster 15: 100 items
-    ##   Cluster 9: 99 items
-    ##   Cluster 1: 60 items
-    ##   Cluster 4: 58 items
-    ##   Cluster 5: 50 items
-    ##   Cluster 8: 14 items
-    ##   Cluster 11: 13 items
-    ##   Cluster 6: 12 items
-    ##   Cluster 10: 10 items
-    ##   ... and 12 more cluster(s)
+    ##   Cluster 3: 296 items
+    ##   Cluster 8: 106 items
+    ##   Cluster 12: 97 items
+    ##   Cluster 1: 59 items
+    ##   Cluster 6: 49 items
+    ##   Cluster 4: 33 items
+    ##   Cluster 9: 14 items
+    ##   Cluster 13: 11 items
+    ##   Cluster 22: 10 items
+    ##   Cluster 10: 6 items
+    ##   ... and 14 more cluster(s)
     ## 
     ## Hierarchical structure
     ## ======================
     ## 
-    ## 1 (n=528)
-    ## ├─1 (n=64)
-    ## │ ├─1 (n=60)
+    ## 1 (n=538)
+    ## ├─1 (n=63)
+    ## │ ├─1 (n=59)
     ## │ └─2 (n=4)
-    ## ├─2 (n=462)
-    ## │ ├─10 (n=10)
-    ## │ ├─15 (n=100)
-    ## │ ├─22 (n=1)
-    ## │ ├─3 (n=277)
-    ## │ ├─4 (n=58)
-    ## │ ├─6 (n=12)
-    ## │ └─7 (n=4)
-    ## └─7 (n=2)
-    ##   └─19 (n=2)
+    ## ├─2 (n=450)
+    ## │ ├─11 (n=3)
+    ## │ ├─13 (n=11)
+    ## │ ├─24 (n=1)
+    ## │ ├─3 (n=296)
+    ## │ ├─4 (n=33)
+    ## │ └─8 (n=106)
+    ## ├─3 (n=5)
+    ## │ └─5 (n=5)
+    ## ├─5 (n=18)
+    ## │ ├─10 (n=6)
+    ## │ ├─22 (n=10)
+    ## │ └─7 (n=2)
+    ## └─9 (n=2)
+    ##   └─23 (n=2)
     ## 
-    ## 2 (n=187)
-    ## ├─3 (n=72)
-    ## │ ├─11 (n=13)
-    ## │ ├─12 (n=2)
-    ## │ ├─14 (n=3)
-    ## │ ├─16 (n=1)
-    ## │ ├─17 (n=1)
+    ## 2 (n=177)
+    ## ├─4 (n=62)
+    ## │ ├─14 (n=4)
+    ## │ ├─15 (n=3)
+    ## │ ├─18 (n=4)
+    ## │ ├─19 (n=1)
     ## │ ├─20 (n=1)
-    ## │ ├─21 (n=1)
-    ## │ └─5 (n=50)
-    ## ├─4 (n=113)
-    ## │ ├─8 (n=14)
-    ## │ └─9 (n=99)
-    ## ├─5 (n=1)
-    ## │ └─13 (n=1)
-    ## └─6 (n=1)
-    ##   └─18 (n=1)
+    ## │ └─6 (n=49)
+    ## ├─6 (n=113)
+    ## │ ├─12 (n=97)
+    ## │ ├─17 (n=2)
+    ## │ └─9 (n=14)
+    ## ├─7 (n=1)
+    ## │ └─16 (n=1)
+    ## └─8 (n=1)
+    ##   └─21 (n=1)
 
 Here is how the maps look like:
 
@@ -516,20 +522,20 @@ str(tree1)
     ##  $ algorithm   :List of 6
     ##   ..$ final.tree         :List of 5
     ##   .. ..- attr(*, "class")= chr "hclust"
-    ##   ..$ final.tree.coph.cor: num 0.686
-    ##   ..$ final.tree.msd     : num 0.023
+    ##   ..$ final.tree.coph.cor: num 0.7
+    ##   ..$ final.tree.msd     : num 0.0221
     ##   ..$ trials             : chr "Trials not stored in output"
-    ##   ..$ output_n_clust     : Named int [1:3] 2 7 22
+    ##   ..$ output_n_clust     : Named int [1:3] 2 9 24
     ##   .. ..- attr(*, "names")= chr [1:3] "h_0.6" "h_0.5" "h_0.4"
     ##   ..$ output_cut_height  : num [1:3] 0.6 0.5 0.4
     ##  $ clusters    :'data.frame':    715 obs. of  4 variables:
     ##   ..$ ID  : chr [1:715] "1003" "1004" "1005" "1006" ...
     ##   ..$ K_2 : chr [1:715] "1" "1" "1" "1" ...
-    ##   ..$ K_7 : chr [1:715] "1" "1" "1" "1" ...
-    ##   ..$ K_22: chr [1:715] "1" "1" "1" "1" ...
+    ##   ..$ K_9 : chr [1:715] "1" "1" "1" "1" ...
+    ##   ..$ K_24: chr [1:715] "1" "1" "1" "1" ...
     ##  $ cluster_info:'data.frame':    3 obs. of  3 variables:
-    ##   ..$ partition_name      : chr [1:3] "K_2" "K_7" "K_22"
-    ##   ..$ n_clust             : int [1:3] 2 7 22
+    ##   ..$ partition_name      : chr [1:3] "K_2" "K_9" "K_24"
+    ##   ..$ n_clust             : int [1:3] 2 9 24
     ##   ..$ requested_cut_height: num [1:3] 0.6 0.5 0.4
     ##  - attr(*, "class")= chr [1:2] "bioregion.clusters" "list"
 
@@ -559,8 +565,8 @@ tree1$cluster_info
 
     ##       partition_name n_clust requested_cut_height
     ## h_0.6            K_2       2                  0.6
-    ## h_0.5            K_7       7                  0.5
-    ## h_0.4           K_22      22                  0.4
+    ## h_0.5            K_9       9                  0.5
+    ## h_0.4           K_24      24                  0.4
 
 It shows the name of the partition (corresponding to column names in
 `tree1$clusters`), the number of clusters in each partition, and the cut
@@ -600,7 +606,7 @@ tree3 <- hclu_hierarclust(dissim_random,
                           randomize = FALSE)
 ```
 
-    ## Output tree has a 0.6812 cophenetic correlation coefficient with the initial
+    ## Output tree has a 0.6786 cophenetic correlation coefficient with the initial
     ##                    dissimilarity matrix
 
 ``` r
@@ -658,10 +664,10 @@ tree_best <- hclu_hierarclust(dissim_random,
 
     ## Randomizing the dissimilarity matrix with 100 trials
 
-    ##  -- range of cophenetic correlation coefficients among trials: 0.6727 - 0.6944
+    ##  -- range of cophenetic correlation coefficients among trials: 0.6337 - 0.6931
 
     ## 
-    ## Final tree has a 0.6944 cophenetic correlation coefficient with the initial dissimilarity matrix
+    ## Final tree has a 0.6931 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 Another possible approach is to build a simple consensus tree among all
 the trials. However, we generally do not recommend constructing a
@@ -679,7 +685,7 @@ tree_consensus <- hclu_hierarclust(dissim_random,
     ## Randomizing the dissimilarity matrix with 100 trials
 
     ## 
-    ## Final tree has a 0.2022 cophenetic correlation coefficient with the initial dissimilarity matrix
+    ## Final tree has a 0.2025 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 See how the cophenetic correlation coefficient for the consensus tree is
 terrible compared to the IHCT and best tree ?
@@ -816,15 +822,31 @@ tree4 <- hclu_hierarclust(dissim,
     ## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 
     ## 
-    ## Final tree has a 0.6876 cophenetic correlation coefficient with the initial dissimilarity matrix
+    ## Final tree has a 0.6972 cophenetic correlation coefficient with the initial dissimilarity matrix
 
     ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 14. Closest number
-    ## found: 15
+    ## requested number of cluster could not be found for k = 3. Closest number found:
+    ## 2
 
     ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 48. Closest number
-    ## found: 47
+    ## requested number of cluster could not be found for k = 28. Closest number
+    ## found: 29
+
+    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
+    ## requested number of cluster could not be found for k = 56. Closest number
+    ## found: 57
+
+    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
+    ## requested number of cluster could not be found for k = 97. Closest number
+    ## found: 100
+
+    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
+    ## requested number of cluster could not be found for k = 98. Closest number
+    ## found: 100
+
+    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
+    ## requested number of cluster could not be found for k = 99. Closest number
+    ## found: 100
 
 ``` r
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013
@@ -849,7 +871,7 @@ opti_n_tree4 <- find_optimal_n(eval_tree4)
 
     ##    * elbow found at:
 
-    ## pc_distance 15
+    ## pc_distance 14
 
     ## Plotting results...
 
@@ -867,7 +889,7 @@ opti_n_tree4
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 15
+    ## pc_distance - 14
 
 ``` r
 # Step 5. Extract the optimal number of clusters
@@ -877,13 +899,13 @@ K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_d
 head(tree4$clusters[, c("ID", K_name)])
 ```
 
-    ##        ID K_15_1 K_15_2
-    ## 1003 1003      1      1
-    ## 1004 1004      1      1
-    ## 1005 1005      1      1
-    ## 1006 1006      1      1
-    ## 1007 1007      1      1
-    ## 1008 1008      1      1
+    ##        ID K_14
+    ## 1003 1003    1
+    ## 1004 1004    1
+    ## 1005 1005    1
+    ## 1006 1006    1
+    ## 1007 1007    2
+    ## 1008 1008    2
 
 ``` r
 # Make a map of the clusters
@@ -958,9 +980,9 @@ bioregionalization_metrics(tree4,
     ##  - Requested metric(s):  pc_distance anosim 
     ##  - Metric summary:
     ##      pc_distance    anosim
-    ## Min    0.4982831 0.6968281
-    ## Mean   0.8978935 0.8043389
-    ## Max    0.9793377 0.8614194
+    ## Min    0.5039255 0.7038453
+    ## Mean   0.8871858 0.8130640
+    ## Max    0.9805066 0.8635191
     ## 
     ## Access the data.frame of metrics with your_object$evaluation_df
 
@@ -986,9 +1008,9 @@ bioregionalization_metrics(tree4,
     ##  - Requested metric(s):  avg_endemism tot_endemism 
     ##  - Metric summary:
     ##      avg_endemism tot_endemism
-    ## Min   0.001210594   0.04977008
-    ## Mean  0.008202283   0.08175889
-    ## Max   0.181513150   0.31539086
+    ## Min   0.001285513   0.05490939
+    ## Mean  0.008681167   0.08088732
+    ## Max   0.177309950   0.30916960
     ## 
     ## Access the data.frame of metrics with your_object$evaluation_df
     ## Details of endemism % for each bioregionalization are available in
@@ -1069,10 +1091,10 @@ find_optimal_n(eval_tree4)
 
     ##    * elbow found at:
 
-    ## pc_distance 15
-    ## anosim 16
-    ## avg_endemism 9
-    ## tot_endemism 15
+    ## pc_distance 14
+    ## anosim 35
+    ## avg_endemism 10
+    ## tot_endemism 14
 
     ## Warning in find_optimal_n(eval_tree4): The elbow method is likely not suitable
     ## for the ANOSIM metric. You should rather look for leaps in the curve (see
@@ -1090,19 +1112,19 @@ find_optimal_n(eval_tree4)
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 15
-    ## anosim - 16
-    ## avg_endemism - 9
-    ## tot_endemism - 15
+    ## pc_distance - 14
+    ## anosim - 35
+    ## avg_endemism - 10
+    ## tot_endemism - 14
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png)
 
 In our example above, the optimal number of clusters varies depending on
-the metric, from a minimum of 9 to a maximum of 16. The final choice
+the metric, from a minimum of 10 to a maximum of 35. The final choice
 depends on your metric preferences with respect to metrics, and your
 objectives with the clustering. Alternatively, two cut-offs could be
-used, a deep cut-off based on the endemism metrics e.g. at a value of 9,
-and a shallow cutoff based on `pc_distance`, at 15.
+used, a deep cut-off based on the endemism metrics e.g. at a value of
+10, and a shallow cutoff based on `pc_distance`, at 14.
 
 #### 3.2.2 Step method
 
@@ -1145,8 +1167,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 9
-    ## pc_distance - 9
+    ## anosim - 14
+    ## pc_distance - 10
 
 ``` r
 find_optimal_n(eval_tree4,
@@ -1206,8 +1228,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 9 15 86
-    ## pc_distance - 4 9 15
+    ## anosim - 5 14 35
+    ## pc_distance - 4 10 14
 
 Note that these steps generally correspond to large jumps in the tree,
 which is why we like this approach as it fits well with the hierarchical
@@ -1242,8 +1264,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.95  (i.e., only the top 5 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 4 9 15 31 86
-    ## pc_distance - 3 4 9 15 49
+    ## anosim - 5 10 14 35 100
+    ## pc_distance - 4 5 10 14 57
 
 Finally, a question that may arise is which cluster number to select
 when a large step occurs. For example, if the largest step occurs
@@ -1280,8 +1302,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  decreasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## avg_endemism - 3
-    ## tot_endemism - 3
+    ## avg_endemism - 2
+    ## tot_endemism - 2
 
 #### 3.2.3 Cutting at different cut-off values
 
@@ -1342,7 +1364,7 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  cutoff 
     ##    --> cutoff(s) chosen:  0.6 0.8 0.9 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 4 11 39
+    ## pc_distance - 4 14 42
 
 #### 3.2.4 Cutting at the maximum or minimum metric value
 
@@ -1413,10 +1435,10 @@ find_optimal_n(eval_tree5,
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 13
-    ## anosim - 94
+    ## pc_distance - 17
+    ## anosim - 69
     ## avg_endemism - 2
-    ## tot_endemism - 2
+    ## tot_endemism - 6
 
 We can ask for a higher number of breaks:
 
@@ -1451,10 +1473,10 @@ find_optimal_n(eval_tree5,
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 9 79
-    ## anosim - 17 173
-    ## avg_endemism - 2 6
-    ## tot_endemism - 2 7
+    ## pc_distance - 14 102
+    ## anosim - 21 172
+    ## avg_endemism - 2 17
+    ## tot_endemism - 2 90
 
 - 3 breaks
 
@@ -1487,10 +1509,10 @@ find_optimal_n(eval_tree5,
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 9 50 115
-    ## anosim - 17 162 599
-    ## avg_endemism - 2 4 17
-    ## tot_endemism - 2 5 94
+    ## pc_distance - 14 64 116
+    ## anosim - 13 15 162
+    ## avg_endemism - 2 15 60
+    ## tot_endemism - 2 15 138
 
 Increasing the number of breaks can be useful in situations where you
 have, for example, non-linear silhouettes of metric ~ n clusters.
