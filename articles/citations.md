@@ -1,5 +1,17 @@
 # Citing articles
 
+## 2026
+
+- Daumantas L (2026) [The HespDiv Method: Revealing the Hierarchical
+  Organization of Biota in Space and
+  Time.](https://newshub.vu.lt/uploads/DAUMANTAS_Liudas_4329761c68.pdf)
+  *PhD thesis*, Vilnius University, Vilnius, Lithuania.
+
+- Lampou A, Skoulikidis N & Bonada N (2026) [Biogeographical Regions in
+  the Aegean Archipelago: An Assessment for Freshwater
+  Macroinvertebrates.](https://onlinelibrary.wiley.com/doi/full/10.1111/jbi.70117)
+  *Journal of Biogeography* 53, e70117.
+
 ## 2025
 
 - Albouy C, Fopp F, Brun P, Descombes P, Altermatt F, Pellissier L &
@@ -12,7 +24,7 @@
 - Zhang B, Zhou M, Xie Z, Zhang L, Duan H, Yu J & He J (2025) [Updated
   Chorotypes of Terrestrial Vertebrates Shed New Light on
   Zoogeographical Regions in
-  China](https://onlinelibrary.wiley.com/doi/full/10.1111/1749-4877.70025)
+  China.](https://onlinelibrary.wiley.com/doi/full/10.1111/1749-4877.70025)
   *Integrative Zoology* (early view).
 
 - Renan M, Roll U, Grabovsky VI, Shenbrot GI & Krasnov BR (2025)
@@ -20,11 +32,6 @@
   Approaches: A Case Study with Fleas and Their Rodent Hosts from
   Mongolia.](https://www.cambridge.org/core/journals/parasitology/article/phylogenetic-regionalization-of-ectoparasites-and-their-hosts-using-2-approaches-a-case-study-with-fleas-and-their-rodent-hosts-from-mongolia/4651F529F56A669986F9CA4F1FF23E66)
   *Parasitology* (early view).
-
-- Lampou A, Skoulikidis N & Bonada N (2025) [Biogeographical Regions in
-  the Aegean Archipelago: An Assessment for Freshwater
-  Macroinvertebrates](https://onlinelibrary.wiley.com/doi/full/10.1111/jbi.70117)
-  *Journal of Biogeography* 53, e70117.
 
 - Lenormand M, Féret JB, Papuga G, Alleaume S & Luque S (2025) [Coupling
   in situ and remote sensing data to assess α- and β-diversity over
@@ -50,3 +57,7 @@
   Framework for
   Conservation.](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.70010)
   *Diversity and Distributions* 31, e70010.
+
+- Lenormand M (2025) [Contributions to spatial interaction analysis and
+  modeling.](https://hal.science/tel-05061592) *HDR thesis*, University
+  of Montpellier, Montpellier, France.
