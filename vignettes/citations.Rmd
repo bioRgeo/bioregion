@@ -23,7 +23,7 @@ vignette: >
 
 * Daumantas L (2026) [The HespDiv Method: Revealing the Hierarchical Organization 
 of Biota in Space and Time.](https://newshub.vu.lt/uploads/DAUMANTAS_Liudas_4329761c68.pdf)
-*PhD thesis*, Vilnius University, Vilnius, Lithuania.
+*PhD thesis*, Vilnius University, Vilnius, Lithuania. 
 
 * Lampou A, Skoulikidis N & Bonada N (2026)
 [Biogeographical Regions in the Aegean Archipelago: An Assessment for Freshwater Macroinvertebrates.](https://onlinelibrary.wiley.com/doi/full/10.1111/jbi.70117)
