@@ -102,10 +102,6 @@
 #' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 
 #' clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
 #'
-#' @importFrom stats as.dist
-#' @importFrom dbscan kNNdist dbscan
-#' @importFrom graphics abline text
-#'
 #' @export
 
 nhclu_dbscan <- function(dissimilarity,
@@ -232,7 +228,7 @@ nhclu_dbscan <- function(dissimilarity,
     
     # Trying to find the knee, and not the elbow
     if (is.null(eps)) {
-      knee <- .elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
+      knee <- elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
       
       eps <- knee[2]
     }

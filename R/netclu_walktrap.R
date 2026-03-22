@@ -101,8 +101,6 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_walktrap(net_bip, bipartite = TRUE)
 #' 
-#' @importFrom igraph graph_from_data_frame cluster_walktrap
-#' 
 #' @export
 netclu_walktrap <- function(net,
                             weight = TRUE,

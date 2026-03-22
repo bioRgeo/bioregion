@@ -154,11 +154,11 @@ coassign_binary_split <- function(dist_mat,
   ccc <- NULL
   for (run in 1:n_runs) {
     trees[[run]] <- list()
-    rand_dist_mat <- as.dist(randomize_dist(dist_mat))
+    rand_dist_mat <- stats::as.dist(randomize_dist(dist_mat))
     trees[[run]] <- fastcluster::hclust(rand_dist_mat, 
                                         method = method)
     ccc <- c(ccc, suppressWarnings(tree_eval(trees[[run]], 
-                                             rand_dist_mat)$cophcor))
+                                             dist_mat)$cophcor))
   }
   trees <- trees[order(ccc, decreasing = TRUE)[1:n_splits]]
   
@@ -184,7 +184,7 @@ coassign_binary_split <- function(dist_mat,
   rownames(coassign) <- fixed_order
   colnames(coassign) <- fixed_order
   
-  coassign <- as.dist(coassign)
+  coassign <- stats::as.dist(coassign)
   
   # Step 5: Split into two clusters form the coassign matrix
   if (binsplit == "tree") {

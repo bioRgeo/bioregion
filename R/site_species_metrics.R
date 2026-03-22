@@ -299,8 +299,6 @@
 #'                              include_cluster = TRUE,
 #'                              index = 3,
 #'                              verbose = TRUE)
-#'                                      
-#' @importFrom stats aggregate sd
 #' 
 #' @export
 site_species_metrics <- function(bioregionalization,

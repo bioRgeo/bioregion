@@ -116,8 +116,6 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_leiden(net_bip, bipartite = TRUE)
 #' 
-#' @importFrom igraph graph_from_data_frame cluster_leiden
-#' 
 #' @export
 
 netclu_leiden <- function(net,

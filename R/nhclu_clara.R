@@ -85,9 +85,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' #clust <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
-#'    
-#' @importFrom stats as.dist
-#' @importFrom fastkmedoids fastclara    
 #'                    
 #' @export
 

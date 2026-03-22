@@ -8,7 +8,7 @@
 #' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com})
 #' @useDynLib bioregion, .registration=TRUE
-#' @import mathjaxr Rdpack rmarkdown
+#' @import bipartite data.table mathjaxr Rdpack rmarkdown stats 
 #' @name bioregion
 #' @noRd
 NULL

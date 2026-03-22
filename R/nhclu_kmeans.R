@@ -82,9 +82,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #' 
 #' clust <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")
-#'
-#' @importFrom stats as.dist kmeans
-#' @importFrom ape pcoa
 #'         
 #' @export
 

@@ -2,33 +2,48 @@
 % Please edit documentation in R/bioregion_metrics.R
 \name{bioregion_metrics}
 \alias{bioregion_metrics}
-\title{Calculate contribution metrics for bioregions}
+\title{Calculate metrics for bioregions}
 \usage{
 bioregion_metrics(bioregionalization, comat, map = NULL, col_bioregion = NULL)
 }
 \arguments{
 \item{bioregionalization}{A \code{bioregion.clusters} object.}
 
-\item{comat}{A co-occurrence \code{matrix} with sites as rows and species as
+\item{comat}{A site-species \code{matrix} with sites as rows and species as
 columns.}
 
-\item{map}{A spatial \verb{sf data.frame} with sites and bioregions. It is the
-output of the function \code{map_bioregions}. \code{NULL} by default.}
+\item{map}{A spatial object that can be handled by \code{sf} or \code{terra}.
+The first attribute or layer should correspond to the sites' ID
+(see Details). Needed only for the spatial coherence (\code{NULL} by default).}
 
-\item{col_bioregion}{An \code{integer} specifying the column position of the
-bioregion.}
+\item{col_bioregion}{Deprecated.}
 }
 \value{
-A \code{data.frame} with 5 columns, or 6 if spatial coherence is computed.
+A \code{data.frame} with 5 columns (Bioregion ID and metrics described below) or
+7 if spatial coherence is computed.
+\itemize{
+\item \strong{NbSites}: Number of sites per bioregion
+\item \strong{Richness}: Number of distinct species per bioregion.
+\item \strong{Rich_Endemics}: Number of species found only in the bioregion.
+\item \strong{Prop_Endemics}: Fraction of endemics species.
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}{\strong{SC_size}}:
+Spatial coherence based on size, fraction of the number of site contained in the bioregion's largest contiguous patch.
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}{\strong{SC_area}}:
+Spatial coherence based on area, fraction of the bioregion area contained in its largest contiguous patch.
+}
+
+Note that if \code{bioregionalization} contains multiple partitions
+(i.e., if \code{dim(bioregionalization$clusters) > 2}), a list will be
+returned.
 }
 \description{
-This function calculates the number of sites per bioregion, as well as the
-number of species these sites have, the number of endemic species, and the
-proportion of endemism.
+This function calculates the number of sites, the number of species,
+the number of endemic species and the proportion of endemism per bioregion. The
+spatial coherence can be optionally computed if a spatial object is provided.
 }
 \details{
-Endemic species are species found only in the sites belonging to one
-bioregion.
+\code{map} should be the output of
+\code{map_bioregions(bioregionalization,    geometry, write_clusters = TRUE)}
 }
 \examples{
 comat <- matrix(sample(1000, 50), 5, 10)

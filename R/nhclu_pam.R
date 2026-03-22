@@ -84,9 +84,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #' 
 #' clust <- nhclu_pam(dissim, n_clust = 2:15, index = "Simpson")
-#'    
-#' @importFrom stats as.dist
-#' @importFrom cluster pam    
 #'                    
 #' @export
 nhclu_pam <- function(dissimilarity,

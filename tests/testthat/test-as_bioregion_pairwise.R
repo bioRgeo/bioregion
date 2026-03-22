@@ -81,6 +81,7 @@ test_that("valid output", {
 
 # Tests for external packages --------------------------------------------------
 test_that("adespatial", {
+  
   skip_if_not_installed_quiet("adespatial")
   quietly(library(adespatial))
 
@@ -93,15 +94,15 @@ test_that("adespatial", {
     fixed = TRUE)
 
   expect_error(
-    as_bioregion_pairwise(beta.div(comatbin),
+    as_bioregion_pairwise(adespatial::beta.div(comatbin),
                           metric_name = NULL,
                           pkg = "adespatial",
                           is_similarity = FALSE),
     "D is NULL. Check that save.D=TRUE.",
     fixed = TRUE)
   
-  pair <- as_bioregion_pairwise(beta.div(comatbin,
-                                         save.D = TRUE),
+  pair <- as_bioregion_pairwise(adespatial::beta.div(comatbin,
+                                                     save.D = TRUE),
                                 metric_name = NULL,
                                 pkg = "adespatial",
                                 is_similarity = FALSE)
@@ -112,7 +113,7 @@ test_that("adespatial", {
   expect_equal(colnames(pair)[3], "hellinger")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(beta.div.comp(comatbin),
+  pair <- as_bioregion_pairwise(adespatial::beta.div.comp(comatbin),
                                 metric_name = NULL,
                                 pkg = "adespatial",
                                 is_similarity = FALSE)
@@ -123,8 +124,8 @@ test_that("adespatial", {
   expect_equal(colnames(pair)[3], "Podani family, Jaccard")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(beta.div.comp(comatbin,
-                                              save.abc = TRUE),
+  pair <- as_bioregion_pairwise(adespatial::beta.div.comp(comatbin,
+                                                          save.abc = TRUE),
                                 metric_name = NULL,
                                 pkg = "adespatial",
                                 is_similarity = FALSE)
@@ -140,6 +141,7 @@ test_that("adespatial", {
 })
 
 test_that("betapart", {
+  
   skip_if_not_installed_quiet("betapart")
   quietly(library(betapart))
 
@@ -151,7 +153,7 @@ test_that("betapart", {
     "mat does not seem to be an output from the betapart package.",
     fixed = TRUE)
 
-  pair <- as_bioregion_pairwise(beta.pair(comatbin),
+  pair <- as_bioregion_pairwise(betapart::beta.pair(comatbin),
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
@@ -163,8 +165,8 @@ test_that("betapart", {
   expect_equal(colnames(pair)[3], "beta.sim")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(beta.pair(comatbin,
-                                          index.family = "jaccard"),
+  pair <- as_bioregion_pairwise(betapart::beta.pair(comatbin,
+                                                    index.family = "jaccard"),
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
@@ -176,7 +178,7 @@ test_that("betapart", {
   expect_equal(colnames(pair)[3], "beta.jtu")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(beta.pair.abund(comat),
+  pair <- as_bioregion_pairwise(betapart::beta.pair.abund(comat),
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
@@ -188,7 +190,7 @@ test_that("betapart", {
   expect_equal(colnames(pair)[3], "beta.bray.bal")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(betapart.core(comatbin),
+  pair <- as_bioregion_pairwise(betapart::betapart.core(comatbin),
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
@@ -200,7 +202,7 @@ test_that("betapart", {
   expect_equal(colnames(pair)[3], "a")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(betapart.core.abund(comat),
+  pair <- as_bioregion_pairwise(betapart::betapart.core.abund(comat),
                                 metric_name = NULL,
                                 pkg = "betapart",
                                 is_similarity = FALSE)
@@ -215,8 +217,10 @@ test_that("betapart", {
 })
 
 test_that("ecodist", {
+  
   skip_if_not_installed_quiet("ecodist")
   quietly(library(ecodist))
+
   quietly(registerS3method("dim", "dist", get("dim.dist",
                                               envir = asNamespace("proxy"))))
 
@@ -228,8 +232,8 @@ test_that("ecodist", {
     "mat does not seem to be an output from the ecodist package.",
     fixed = TRUE)
 
-  pair <- as_bioregion_pairwise(distance(comatbin,
-                                         method = "jaccard"),
+  pair <- as_bioregion_pairwise(ecodist::distance(comatbin,
+                                                  method = "jaccard"),
                                 metric_name = NULL,
                                 pkg = "ecodist",
                                 is_similarity = FALSE)
@@ -241,7 +245,7 @@ test_that("ecodist", {
   expect_equal(colnames(pair)[3], "jaccard")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(bcdist(comat),
+  pair <- as_bioregion_pairwise(ecodist::bcdist(comat),
                                 metric_name = NULL,
                                 pkg = "ecodist",
                                 is_similarity = FALSE)
@@ -256,8 +260,10 @@ test_that("ecodist", {
 })
 
 test_that("vegan", {
+  
   skip_if_not_installed_quiet("vegan")
   quietly(library(vegan))
+    
   expect_error(
     as_bioregion_pairwise(mat0,
                           metric_name = NULL,
@@ -266,8 +272,8 @@ test_that("vegan", {
     "mat does not seem to be an output from the vegan package.",
     fixed = TRUE)
 
-  pair <- as_bioregion_pairwise(vegdist(comatbin,
-                                        method = "jaccard"),
+  pair <- as_bioregion_pairwise(vegan::vegdist(comatbin,
+                                               method = "jaccard"),
                                 metric_name = NULL,
                                 pkg = "vegan",
                                 is_similarity = FALSE)
@@ -279,9 +285,9 @@ test_that("vegan", {
   expect_equal(colnames(pair)[3], "jaccard")
   expect_equal(pair[1,1], "s1")
 
-  pair <- as_bioregion_pairwise(designdist(comatbin,
-                                           method = "(A+B-2*J)/(A+B-J)",
-                                           terms = "binary"),
+  pair <- as_bioregion_pairwise(vegan::designdist(comatbin,
+                                                  method = "(A+B-2*J)/(A+B-J)",
+                                                  terms = "binary"),
                                 metric_name = NULL,
                                 pkg = "vegan",
                                 is_similarity = FALSE)

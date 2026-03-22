@@ -140,7 +140,7 @@ compare_bioregionalizations(compare_df)
 # Find out which bioregionalizations are most representative
 compare_bioregionalizations(compare_df,
                             cor_frequency = TRUE)
-                                
+  
 }
 \seealso{
 For more details illustrated with a practical example,

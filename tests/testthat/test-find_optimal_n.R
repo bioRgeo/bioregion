@@ -1,10 +1,10 @@
 # Inputs -----------------------------------------------------------------------
 dissim <- dissimilarity(fishmat, metric = "all")
 
-set.seed(1)
 tree1 <- hclu_hierarclust(dissim, 
                           n_clust = 2:48, 
                           index = "Simpson",
+                          seed = 1,
                           optimal_tree_method = "best",
                           verbose = FALSE)
 

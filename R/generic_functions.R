@@ -1224,7 +1224,8 @@ summary.bioregion.site.species.metrics <- function(object,
 
 #' @export
 #' @method as.dist bioregion.pairwise
-as.dist.bioregion.pairwise <- function(m, diag = FALSE,
+as.dist.bioregion.pairwise <- function(m,
+                                       diag = FALSE,
                                        upper = FALSE) {
   if (ncol(x) > 3) {
     message(

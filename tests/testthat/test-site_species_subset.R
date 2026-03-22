@@ -51,7 +51,7 @@ test_that("indalid inputs", {
   
   expect_error(
     site_species_subset("1"),
-    "clusters must be a bioregion.clusters object.",
+    "bioregionalization must be a bioregion.clusters object.",
     fixed = TRUE)
 
   expect_error(
@@ -74,7 +74,7 @@ test_that("indalid inputs", {
   expect_error(
     site_species_subset(clu4, 
                         node_type = "site"),
-    "clusters must contain both types of node.",
+    "bioregionalization must contain both types of node.",
     fixed = TRUE)
 
 })

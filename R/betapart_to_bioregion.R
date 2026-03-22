@@ -29,46 +29,14 @@
 #' colnames(comat) <- paste0("Species", 1:10)
 #' 
 #' \dontrun{
-#' beta_div <- betapart::beta.pair.abund(comat)
-#' betapart_to_bioregion(beta_div)
+#'   beta_div <- betapart::beta.pair.abund(comat)
+#'   betapart_to_bioregion(beta_div)
 #' }
 #' 
 #' @export
 betapart_to_bioregion <- function(betapart_result) {
   
-  .Deprecated("as_bioregion_pairwise")
-  
-  if (!inherits(betapart_result, "list")) {
-    stop("betapart_result must be a valid object from the betapart package.",
-         call. = FALSE)
-  }
- 
-  nb_sites <- nrow(betapart_result[[1]])
-  
-  site_labels <- attr(betapart_result[[1]], "Labels")
-  metric_names <- names(betapart_result)
-  
-  result_df <-  mat_to_net(as.matrix(betapart_result[[1]]), 
-                           weight = TRUE, 
-                           remove_zeroes = FALSE, 
-                           include_lower = FALSE, 
-                           include_diag = FALSE)
-  
-  # Loop over other metrics and extract pairwise values
-  for (metric_name in metric_names[2:length(metric_names)]) {
-    metric_values <-  mat_to_net(as.matrix(betapart_result[[metric_name]]), 
-                                 weight = TRUE, 
-                                 remove_zeroes = FALSE, 
-                                 include_lower = FALSE, 
-                                 include_diag = FALSE)
-    result_df[[metric_name]] <- metric_values$Weight
-  }
-  
-  attr(result_df, "type") <- "dissimilarity"
-  attr(result_df, "nb_sites") <- nb_sites
-  attr(result_df, "nb_species") <- NA
-  
-  class(result_df) <- append("bioregion.pairwise", class(result_df))
-  
-  return(result_df)
+  stop("This function is deprecated, please use as_bioregion_pairwise instead.",
+       call. = FALSE)
+
 }

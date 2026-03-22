@@ -100,8 +100,6 @@
 #' 
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_labelprop(net_bip, bipartite = TRUE)
-#
-#' @importFrom igraph graph_from_data_frame cluster_label_prop
 #' 
 #' @export
 netclu_labelprop <- function(net,

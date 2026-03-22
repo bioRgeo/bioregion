@@ -48,8 +48,6 @@
 #'
 #' net <- mat_to_net(mat, weight = TRUE)
 #'
-#' @importFrom tidyr pivot_longer
-#'
 #' @export
 mat_to_net <- function(mat,
                        weight = FALSE,

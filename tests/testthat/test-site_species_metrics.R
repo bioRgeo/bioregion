@@ -60,6 +60,25 @@ clualt1 <- clulouv
 clualt1$inputs <- clualt1$inputs[-8]
 clualt2 <- clulouv
 clualt2$inputs <- clualt2$inputs[-9]
+clualt3 <- clulouv
+clualt3$inputs$data_type <- "unsitneits"
+clualt4 <- clulouv
+clualt4$inputs$node_type <- "unsitneits"
+
+cluhiernoclust <- hclu_hierarclust(similarity_to_dissimilarity(fishsim),
+                                   index = "Jaccard",
+                                   method = "average",
+                                   randomize = FALSE,
+                                   optimal_tree_method = "best",
+                                   n_clust = NULL,
+                                   cut_height = NULL,
+                                   verbose = FALSE)
+
+clualt5 <- cluhiernoclust
+clualt5$name <- NULL
+clualt6 <- cluhiernoclust
+clualt6$name <- "ansitniesti"
+
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
@@ -381,6 +400,26 @@ test_that("invalid inputs", {
   expect_error(
     site_species_metrics(clualt2),
     "^bioregionalization is a bioregion.cluster object but it has been altered")
+  
+  expect_error(
+    site_species_metrics(clualt3),
+    "^bioregionalization is a bioregion.cluster object but it has been altered")
+  
+  expect_error(
+    site_species_metrics(clualt4),
+    "^bioregionalization is a bioregion.cluster object but it has been altered")
+  
+  expect_error(
+    site_species_metrics(cluhiernoclust),
+    "^No clusters have been generated for your hierarchical")
+  
+  expect_error(
+    site_species_metrics(clualt5),
+    "^bioregionalization is a bioregion.cluster object but it has been altered")
+  
+  expect_error(
+    site_species_metrics(clualt6),
+    "^bioregionalization does not have the expected type of")
 
   expect_error(
     site_species_metrics(cluinfo,

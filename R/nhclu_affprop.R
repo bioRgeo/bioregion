@@ -129,8 +129,6 @@
 #' 
 #' # Fixed number of clusters 
 #' clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
-#' 
-#' @importFrom apcluster apcluster apclusterK
 #'         
 #' @export
 nhclu_affprop <- function(similarity, 

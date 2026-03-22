@@ -128,11 +128,7 @@
 #'                                 eval_metric = "anosim")
 #'                                    
 #' find_optimal_n(a, criterion = 'increasing_step', plot = FALSE)
-#'
-#' @importFrom stats predict quantile
-#' @importFrom tidyr pivot_longer
-#' @importFrom ggplot2 ggplot aes geom_line facet_wrap geom_vline
-#' @importFrom ggplot2 theme_bw
+#' 
 #' @importFrom rlang .data
 #' 
 #' @export
@@ -338,7 +334,7 @@ find_optimal_n <- function(bioregionalizations,
       
       #Rounding to get the closest bioregionalization
       optim_n <- lapply(optim_n, round)
-      if(any(!(na.omit(unlist(optim_n)) %in% bioregionalizations$evaluation_df$n_clusters))) {
+      if(any(!(stats::na.omit(unlist(optim_n)) %in% bioregionalizations$evaluation_df$n_clusters))) {
         if(verbose){
           message("Exact break point not in the list of bioregionalizations: finding the",
                   " closest bioregionalization...\n")
@@ -374,9 +370,9 @@ find_optimal_n <- function(bioregionalizations,
     if(criterion == "elbow"){
       optim_n <- lapply(metrics_to_use,
                         function(x, eval_df) {
-                          .elbow_finder(eval_df$n_clusters,
-                                        eval_df[, x],
-                                        correct_decrease = TRUE)[1]
+                          elbow_finder(eval_df$n_clusters,
+                                       eval_df[, x],
+                                       correct_decrease = TRUE)[1]
                         }, eval_df = bioregionalizations$evaluation_df)
       names(optim_n) <- metrics_to_use
       

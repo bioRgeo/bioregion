@@ -164,8 +164,6 @@
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_louvain(net, lang = "igraph")
 #'
-#' @importFrom igraph graph_from_data_frame cluster_louvain
-#'
 #' @export
 
 netclu_louvain <- function(net,

@@ -3,6 +3,19 @@
 This is a list of changes made in the development/GitHub version of the package 
 between **bioregion 1.3.0** (CRAN release 2026-01-23) and the next CRAN release.
 
+* `bioregion_metrics()` has been updated. It now supports multiple bioregion  
+partitions and spatial coherence can be computed using either the size or  
+the area of the largest contiguous component. The `col_bioregion` argument  
+is now deprecated.
+
+* `map_bioregion()` has been reformatted: `bioregionnalization`
+argument changed to `partition_index`, `clusters` to `bioregionnalization`,
+`geomatry` to `map` and `write_clusters` to `map_as_output`.
+
+* `map_bioregion()` can now handle `terra` inputs (`terra` added in `Suggests`).
+
+* `clusters` argument changed to `bioregionnalization` in `site_species_subset()`. 
+
 * Added `seed` argument to `hclu_hierarclust()` (issue #10).
 
 * Fixed invalid input, control and output in `nhclu_affprop()` (issue #14).

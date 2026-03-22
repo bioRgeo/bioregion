@@ -96,8 +96,6 @@
 #'
 #' com <- netclu_beckett(net)
 #' 
-#' @importFrom bipartite computeModules
-#' 
 #' @export
 netclu_beckett <- function(net,
                            weight = TRUE,

@@ -4,14 +4,16 @@
 \alias{site_species_subset}
 \title{Extract a subset of sites or species from a \code{bioregion.clusters} object}
 \usage{
-site_species_subset(clusters, node_type = "site")
+site_species_subset(bioregionalization, node_type = "site", clusters = NULL)
 }
 \arguments{
-\item{clusters}{An object of class \code{bioregion.clusters}.}
+\item{bioregionalization}{An object of class \code{bioregion.clusters}.}
 
 \item{node_type}{A \code{character} string indicating the type of nodes to
 extract. Possible values are \code{"site"} or \code{"species"}. The default is
 \code{"site"}.}
+
+\item{clusters}{Deprecated. Use \code{bioregionalization} instead.}
 }
 \value{
 An object of class \code{bioregion.clusters} containing only the specified
@@ -37,9 +39,9 @@ net <- data.frame(
   Weight = c(10, 100, 1, 20, 50, 10, 20)
 )
 
-clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
+clu <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 
-clusters_sites <- site_species_subset(clusters, node_type = "site")
+clu_sites <- site_species_subset(clu, node_type = "site")
 
 }
 \author{

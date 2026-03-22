@@ -85,10 +85,6 @@
 #' fishdissim <- dissimilarity(fishmat)
 #' fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 #' 
-#' 
-#' @importFrom cluster diana
-#' @importFrom stats as.dist cophenetic cor
-#' 
 #' @export
 
 hclu_diana <- function(dissimilarity,

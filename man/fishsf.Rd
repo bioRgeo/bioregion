@@ -5,9 +5,9 @@
 \alias{fishsf}
 \title{Spatial distribution of fish in Europe}
 \format{
-A
+A \code{sf} \code{data.frame} with 338 rows and 2 columns:
 \describe{
-\item{ID}{Unique site identifier}
+\item{Site}{Unique site identifier}
 \item{geometry}{Geometry of the site}
 }
 }

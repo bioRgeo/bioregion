@@ -298,7 +298,7 @@ ind <- site_species_metrics(bioregionalization = bioregionalization,
                              include_cluster = TRUE,
                              index = 3,
                              verbose = TRUE)
-                                     
+
 }
 \references{
 De Cáceres M & Legendre P (2009) Associations between species and groups of

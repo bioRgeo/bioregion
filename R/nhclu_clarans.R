@@ -72,9 +72,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' #clust <- nhclu_clarans(dissim, index = "Simpson", n_clust = 5)
-#'    
-#' @importFrom stats as.dist
-#' @importFrom fastkmedoids fastclarans    
 #'                    
 #' @export
 nhclu_clarans <- function(dissimilarity,

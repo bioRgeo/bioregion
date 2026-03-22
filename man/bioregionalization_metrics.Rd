@@ -125,8 +125,7 @@ a <- bioregionalization_metrics(tree1,
                                                 "avg_endemism",
                                                 "pc_distance", 
                                                 "anosim"))
-a
-
+                                                
 }
 \references{
 Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity measures

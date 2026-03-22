@@ -4,11 +4,13 @@
 #' `"species"`) from a `bioregion.clusters` object, which contains both types of 
 #' nodes (sites and species).
 #'
-#' @param clusters An object of class `bioregion.clusters`.
+#' @param bioregionalization An object of class `bioregion.clusters`.
 #' 
 #' @param node_type A `character` string indicating the type of nodes to 
 #' extract. Possible values are `"site"` or `"species"`. The default is 
 #' `"site"`.
+#' 
+#' @param clusters Deprecated. Use `bioregionalization` instead.
 #'
 #' @return 
 #' An object of class `bioregion.clusters` containing only the specified 
@@ -34,17 +36,24 @@
 #'   Weight = c(10, 100, 1, 20, 50, 10, 20)
 #' )
 #'
-#' clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
+#' clu <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 #' 
-#' clusters_sites <- site_species_subset(clusters, node_type = "site")
+#' clu_sites <- site_species_subset(clu, node_type = "site")
 #'
 #' @export
-site_species_subset <- function(clusters, 
-                                node_type = "site") {
+site_species_subset <- function(bioregionalization, 
+                                node_type = "site",
+                                clusters = NULL) {
+  
+  # Deprecated arguments
+  if (!is.null(clusters)) {
+    stop("clusters is deprecated. It has been replaced by bioregionalization.", 
+         call. = FALSE)
+  }
 
-  # Control clusters
+  # Control bioregionalization
   controls(args = NULL, 
-           data = clusters, 
+           data = bioregionalization, 
            type ="input_bioregionalization")
   
   # Control node_type
@@ -55,29 +64,29 @@ site_species_subset <- function(clusters,
                 call. = FALSE)
   }
   
-  # Control node_type in clusters
-  if(clusters$inputs$node_type != "both"){
-    stop("clusters must contain both types of node.",
+  # Control node_type in bioregionalization
+  if(bioregionalization$inputs$node_type != "both"){
+    stop("bioregionalization must contain both types of node.",
          call. = FALSE
     )
   }
   
   # Get type
   if(node_type == "site"){
-    clusters$clusters <- clusters$clusters[
-      attributes(clusters$clusters)$node_type == "site", ]
+    bioregionalization$clusters <- bioregionalization$clusters[
+      attributes(bioregionalization$clusters)$node_type == "site", ]
   }
   if(node_type == "species"){
-    clusters$clusters <- clusters$clusters[
-      attributes(clusters$clusters)$node_type == "species", ]
+    bioregionalization$clusters <- bioregionalization$clusters[
+      attributes(bioregionalization$clusters)$node_type == "species", ]
   }
   
   # Update return_node_type
-  clusters$inputs$node_type <- node_type
+  bioregionalization$inputs$node_type <- node_type
   #if(!is.null(clusters$args$return_node_type)){
   #  clusters$args$return_node_type <- node_type
   #}
   
   # Return output
-  return(clusters)
+  return(bioregionalization)
 }

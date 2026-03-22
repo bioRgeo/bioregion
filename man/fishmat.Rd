@@ -6,8 +6,8 @@
 \title{Spatial distribution of fish in Europe (co-occurrence matrix)}
 \format{
 A co-occurrence \code{matrix} with sites as rows and species as
-columns. Each element of the matrix
-represents the abundance of the species in the site.
+columns. Each element of the matrix represents the abundance of the species
+in the site.
 }
 \usage{
 fishmat

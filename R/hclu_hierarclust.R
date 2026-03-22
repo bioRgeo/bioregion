@@ -225,9 +225,6 @@
 #' tree3$cluster_info
 #' plot(tree3)
 #' 
-#' @importFrom stats as.dist cophenetic cor
-#' @importFrom fastcluster hclust
-#' 
 #' @export
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
@@ -474,7 +471,7 @@ hclu_hierarclust <- function(dissimilarity,
 
         trial$dist_mat <- randomize_dist(dist_mat)
 
-        trial$hierartree <- fastcluster::hclust(as.dist(trial$dist_mat), 
+        trial$hierartree <- fastcluster::hclust(stats::as.dist(trial$dist_mat), 
                                                 method = method)
 
         evals <- tree_eval(trial$hierartree, trial$dist_mat)
@@ -514,7 +511,7 @@ hclu_hierarclust <- function(dissimilarity,
         trees <- lapply(results, function(trial) ape::as.phylo(trial$hierartree))
 
         consensus_tree <- ape::consensus(trees, p = 0.5)
-        consensus_tree <- phangorn::nnls.tree(as.dist(dist_mat), 
+        consensus_tree <- phangorn::nnls.tree(stats::as.dist(dist_mat), 
                                               consensus_tree, 
                                               method = "ultrametric", 
                                               trace = 0)
@@ -549,7 +546,7 @@ hclu_hierarclust <- function(dissimilarity,
     }
 
   } else  {
-    outputs$algorithm$final.tree <- fastcluster::hclust(as.dist(dist_mat),
+    outputs$algorithm$final.tree <- fastcluster::hclust(stats::as.dist(dist_mat),
                                                         method = method)
     
     

@@ -65,6 +65,7 @@ Suggests:
     microbenchmark,
     rnaturalearth,
     rnaturalearthdata,
+    terra,
     testthat (>= 3.0.0),
     vegan
 VignetteBuilder: knitr

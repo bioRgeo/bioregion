@@ -20,6 +20,8 @@ navbar:
     tutorials:
       text: "Tutorials"
       menu:
+        - text: "0. A note on terminology"
+          href: articles/a0_terminology.html  
         - text: "1. Installation of the binary files"
           href: articles/a1_install_binary_files.html      
         - text: "2. Matrix and network formats"
@@ -128,6 +130,7 @@ reference:
 articles:
   - title: "Tutorials"
     contents:
+      - a0_terminology
       - a1_install_binary_files
       - a2_matrix_and_network_formats
       - a3_pairwise_metrics
