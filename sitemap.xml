@@ -1,6 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://bioRgeo.github.io/bioregion/404.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/LICENSE-text.html</loc></url>
+<url><loc>https://bioRgeo.github.io/bioregion/articles/a0_terminology.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html</loc></url>
 <url><loc>https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html</loc></url>

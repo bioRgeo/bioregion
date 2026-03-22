@@ -2,6 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  a0_terminology: a0_terminology.html
   a1_install_binary_files: a1_install_binary_files.html
   a2_matrix_and_network_formats: a2_matrix_and_network_formats.html
   a3_pairwise_metrics: a3_pairwise_metrics.html
@@ -14,7 +15,7 @@ articles:
   a5_3_compare_bioregionalizations: a5_3_compare_bioregionalizations.html
   bioregion: bioregion.html
   citations: citations.html
-last_built: 2026-02-27T10:31Z
+last_built: 2026-03-22T13:39Z
 urls:
   reference: https://bioRgeo.github.io/bioregion/reference
   article: https://bioRgeo.github.io/bioregion/articles

@@ -48,7 +48,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
+<li><a class="dropdown-item" href="articles/a0_terminology.html">0. A note on terminology</a></li>
+    <li><a class="dropdown-item" href="articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
     <li><a class="dropdown-item" href="articles/a2_matrix_and_network_formats.html">2. Matrix and network formats</a></li>
     <li><a class="dropdown-item" href="articles/a3_pairwise_metrics.html">3. Pairwise similarity/dissimilarity metrics</a></li>
     <li><a class="dropdown-item" href="articles/a4_1_hierarchical_clustering.html">4.1 Hierarchical clustering</a></li>
@@ -120,6 +121,7 @@
 </h2>
 <p>We wrote several vignettes that will help you using the <strong>bioregion R package</strong>. Vignettes available are the following ones: <br></p>
 <ul>
+<li><strong><a href="https://bioRgeo.github.io/bioregion/articles/a0_terminology.html">0. A note on terminology</a></strong></li>
 <li>
 <strong><a href="https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html">1. Installation of the executable binary files</a></strong><br>
 </li>
@@ -133,14 +135,6 @@
 <li><strong><a href="https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></strong></li>
 <li><strong><a href="https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></strong></li>
 </ul>
-<p>Alternatively, if you prefer to view the vignettes in R, you can install the package with <code>build_vignettes = TRUE</code>. But be aware that some vignettes can be slow to generate.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bioRgeo/bioregion"</span>,</span>
-<span>                        dependencies <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                        upgrade <span class="op">=</span> <span class="st">"ask"</span>, </span>
-<span>                        build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"bioregion"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="desktop_computer-functions">
@@ -155,7 +149,7 @@
 <p>Thank you for finding it. Head over to the GitHub Issues tab and let us know about it. Alternatively, you can also send us an e-mail. We will try to get to it as soon as we can!</p>
 </div>
 <div class="section level2">
-<h2 id="references-and-dependencies">References and dependencies<a class="anchor" aria-label="anchor" href="#references-and-dependencies"></a>
+<h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
 </h2>
 <p><code>bioregion</code> depends on <code>ape</code>, <code>apcluster</code>, <code>bipartite</code>, <code>cluster</code>, <code>data.table</code>, <code>dbscan</code>, <code>dynamicTreeCut</code>, <code>fastcluster</code>, <code>fastkmedoids</code>, <code>ggplot2</code>, <code>grDevices</code>, <code>httr</code>, <code>igraph</code>, <code>mathjaxr</code>, <code>Matrix</code>, <code>phangorn</code>, <code>rcartocolor</code>, <code>Rdpack</code>, <code>rlang</code>, <code>rmarkdown</code>, <code>segmented</code>,<code>sf</code>, <code>stats</code>, <code>tidyr</code> and <code>utils</code>.</p>
 </div>

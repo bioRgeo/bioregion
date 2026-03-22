@@ -2,6 +2,8 @@
 
 ### Tutorials
 
+- [0. A note on
+  terminology](https://bioRgeo.github.io/bioregion/articles/a0_terminology.md):
 - [1. Installation of the binary
   files](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.md):
 - [2. Matrix and network

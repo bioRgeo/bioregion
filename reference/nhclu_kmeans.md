@@ -134,4 +134,5 @@ comnet <- mat_to_net(comat)
 dissim <- dissimilarity(comat, metric = "all")
 
 clust <- nhclu_kmeans(dissim, n_clust = 2:10, index = "Simpson")
+        
 ```

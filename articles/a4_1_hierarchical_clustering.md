@@ -29,8 +29,6 @@ In the example below, we use the vegetation dataset from the package to
 compute distance metrics.
 
 ``` r
-library("bioregion")
-
 # Work with the vegetation dataset we include in the package
 data(vegemat)
 
@@ -124,11 +122,6 @@ The basic use of the function is as follows:
 tree1 <- hclu_hierarclust(dissim)
 ```
 
-    ## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-
-    ## 
-    ## Final tree has a 0.7005 cophenetic correlation coefficient with the initial dissimilarity matrix
-
 The function gives us some information as it proceeds. Notably, it talks
 about a randomization of the dissimilarity matrix - this is a very
 important feature because hierarchical clustering is strongly influenced
@@ -169,10 +162,6 @@ function:
 tree1 <- cut_tree(tree1,
                   n_clust = 3)
 ```
-
-    ## Determining the cut height to reach 3 groups...
-
-    ## --> 0.546875
 
 Here, we asked for 3 clusters, and the algorithm automatically finds the
 height at which 3 clusters are found (h = 0.547).
@@ -219,17 +208,9 @@ plot(tree1, cex = .2)
 Let’s see how it looks like on a map:
 
 ``` r
-data(vegesf)
-library(sf)
+#data(vegesf)
+#map_bioregions(tree1, map = vegesf)
 ```
-
-    ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
-
-``` r
-map_bioregions(tree1$clusters[, c("ID", "K_3")], vegesf)
-```
-
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-8-1.png)
 
 Now, this is a hierarchical tree, and cutting it only once (= only 1
 partition) oversimplifies the result of the tree. Why not cut it
@@ -244,21 +225,7 @@ We can specify, e.g. 4, 10 and 20 clusters:
 # Ask for 4, 10 and 20 clusters
 tree1 <- cut_tree(tree1,
                   n_clust = c(2, 3, 12))
-```
 
-    ## Determining the cut height to reach 2 groups...
-
-    ## --> 0.625
-
-    ## Determining the cut height to reach 3 groups...
-
-    ## --> 0.546875
-
-    ## Determining the cut height to reach 12 groups...
-
-    ## --> 0.46484375
-
-``` r
 plot(tree1, cex = .2)
 ```
 
@@ -470,12 +437,10 @@ summary(tree1)
 Here is how the maps look like:
 
 ``` r
-for(i in 2:ncol(tree1$clusters)){
-  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
-}
+#for(i in 2:ncol(tree1$clusters)){
+#  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
+#}
 ```
-
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-1.png)![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-2.png)![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-14-3.png)
 
 In the next section we will see what are the default settings and why we
 chose them, and then we will see how to find optimal numbers of
@@ -583,12 +548,6 @@ hierarchical tree. Let’s see that with an example:
 # Compute the tree without randomizing the distance matrix
 tree2 <- hclu_hierarclust(dissim,
                           randomize = FALSE)
-```
-
-    ## Output tree has a 0.6849 cophenetic correlation coefficient with the initial
-    ##                    dissimilarity matrix
-
-``` r
 plot(tree2, cex = .1)
 ```
 
@@ -604,12 +563,6 @@ dissim_random <- dissim[sample(1:nrow(dissim)), ]
 # Recompute the tree
 tree3 <- hclu_hierarclust(dissim_random,
                           randomize = FALSE)
-```
-
-    ## Output tree has a 0.6786 cophenetic correlation coefficient with the initial
-    ##                    dissimilarity matrix
-
-``` r
 plot(tree3, cex = .1)
 ```
 
@@ -662,13 +615,6 @@ tree_best <- hclu_hierarclust(dissim_random,
                               keep_trials = "all")
 ```
 
-    ## Randomizing the dissimilarity matrix with 100 trials
-
-    ##  -- range of cophenetic correlation coefficients among trials: 0.6337 - 0.6931
-
-    ## 
-    ## Final tree has a 0.6931 cophenetic correlation coefficient with the initial dissimilarity matrix
-
 Another possible approach is to build a simple consensus tree among all
 the trials. However, we generally do not recommend constructing a
 consensus tree, because the topology of simple consensus trees can be
@@ -681,11 +627,6 @@ tree_consensus <- hclu_hierarclust(dissim_random,
                                    optimal_tree_method = "consensus",
                                    keep_trials = "no")
 ```
-
-    ## Randomizing the dissimilarity matrix with 100 trials
-
-    ## 
-    ## Final tree has a 0.2025 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 See how the cophenetic correlation coefficient for the consensus tree is
 terrible compared to the IHCT and best tree ?
@@ -770,11 +711,7 @@ The function `hclu_diana` performs the Diana divisive clustering.
 ``` r
 # Compute the tree with the Diana algorithm
 tree_diana <- hclu_diana(dissim)
-```
 
-    ## Output tree has a 0.41 cophenetic correlation coefficient with the initial dissimilarity matrix
-
-``` r
 plot(tree_diana)
 ```
 
@@ -817,63 +754,16 @@ dissim <- dissimilarity(vegemat)
 # Step 1 & 2. Compute the tree and cut it into many different partitions
 tree4 <- hclu_hierarclust(dissim,
                           n_clust = 2:100)
-```
 
-    ## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-
-    ## 
-    ## Final tree has a 0.6972 cophenetic correlation coefficient with the initial dissimilarity matrix
-
-    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 3. Closest number found:
-    ## 2
-
-    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 28. Closest number
-    ## found: 29
-
-    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 56. Closest number
-    ## found: 57
-
-    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 97. Closest number
-    ## found: 100
-
-    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 98. Closest number
-    ## found: 100
-
-    ## Warning in cut_tree(outputs, n_clust = n_clust, cut_height = cut_height, : The
-    ## requested number of cluster could not be found for k = 99. Closest number
-    ## found: 100
-
-``` r
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013
 eval_tree4 <- bioregionalization_metrics(
   tree4, 
   dissimilarity = dissim, # Provide distances to compute the metrics
   eval_metric = "pc_distance")
-```
 
-    ## Computing similarity-based metrics...
-
-    ##   - pc_distance OK
-
-``` r
 # Step 4. Find the optimal number of clusters
 opti_n_tree4 <- find_optimal_n(eval_tree4)
 ```
-
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the elbow method
-
-    ##    * elbow found at:
-
-    ## pc_distance 14
-
-    ## Plotting results...
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-1.png)
 
@@ -909,12 +799,10 @@ head(tree4$clusters[, c("ID", K_name)])
 
 ``` r
 # Make a map of the clusters
-data("vegesf")
-library("sf")
-map_bioregions(tree4$clusters[, c("ID", K_name)], vegesf)
+#data("vegesf")
+#library("sf")
+#map_bioregions(tree4$clusters[, c("ID", K_name)], vegesf)
 ```
-
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-2.png)
 
 Or if you are allergic to lines of code, you could also simply recut
 your tree at the identified optimal number of cut-offs with
@@ -968,12 +856,6 @@ bioregionalization_metrics(tree4,
                            eval_metric = c("pc_distance", "anosim"))
 ```
 
-    ## Computing similarity-based metrics...
-
-    ##   - pc_distance OK
-
-    ##   - anosim OK
-
     ## Partition metrics:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
@@ -995,12 +877,6 @@ bioregionalization_metrics(tree4,
                            net = vegenet, 
                            eval_metric = c("avg_endemism", "tot_endemism"))
 ```
-
-    ## Computing composition-based metrics...
-
-    ##   - avg_endemism OK
-
-    ##   - tot_endemism OK
 
     ## Partition metrics:
     ##  - 99  partition(s) evaluated
@@ -1052,18 +928,6 @@ eval_tree4 <- bioregionalization_metrics(tree4,
                                                          "avg_endemism", "tot_endemism"))
 ```
 
-    ## Computing similarity-based metrics...
-
-    ##   - pc_distance OK
-
-    ##   - anosim OK
-
-    ## Computing composition-based metrics...
-
-    ##   - avg_endemism OK
-
-    ##   - tot_endemism OK
-
 #### 3.2.1 Elbow method
 
 The elbow method consists in find the ‘elbow’ in the form of the
@@ -1084,23 +948,6 @@ it may give spurious results.
 ``` r
 find_optimal_n(eval_tree4)
 ```
-
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the elbow method
-
-    ##    * elbow found at:
-
-    ## pc_distance 14
-    ## anosim 35
-    ## avg_endemism 10
-    ## tot_endemism 14
-
-    ## Warning in find_optimal_n(eval_tree4): The elbow method is likely not suitable
-    ## for the ANOSIM metric. You should rather look for leaps in the curve (see
-    ## criterion = 'increasing_step' or decreasing_step)
-
-    ## Plotting results...
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-27-1.png)
 
@@ -1148,14 +995,6 @@ find_optimal_n(eval_tree4,
                criterion = "increasing_step")
 ```
 
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the increasing_step method
-
-    ##  - Step method
-
-    ## Plotting results...
-
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-1.png)
 
     ## Search for an optimal number of clusters:
@@ -1175,14 +1014,6 @@ find_optimal_n(eval_tree4,
                metrics_to_use = c("avg_endemism", "tot_endemism"),
                criterion = "decreasing_step")
 ```
-
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the decreasing_step method
-
-    ##  - Step method
-
-    ## Plotting results...
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-2.png)
 
@@ -1208,14 +1039,6 @@ find_optimal_n(eval_tree4,
                criterion = "increasing_step",
                step_levels = 3)
 ```
-
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the increasing_step method
-
-    ##  - Step method
-
-    ## Plotting results...
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-30-1.png)
 
@@ -1244,14 +1067,6 @@ find_optimal_n(eval_tree4,
                criterion = "increasing_step",
                step_quantile = 0.95)
 ```
-
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the increasing_step method
-
-    ##  - Step method
-
-    ## Plotting results...
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-31-1.png)
 
@@ -1282,14 +1097,6 @@ find_optimal_n(eval_tree4,
                criterion = "decreasing_step",
                step_round_above = FALSE)
 ```
-
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the decreasing_step method
-
-    ##  - Step method
-
-    ## Plotting results...
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-32-1.png)
 
@@ -1345,14 +1152,6 @@ find_optimal_n(eval_tree4,
                metric_cutoffs = c(.6, .8, .9))
 ```
 
-    ## Number of bioregionalizations: 99
-
-    ## Searching for potential optimal number(s) of clusters based on the cutoff method
-
-    ##  - Cutoff method
-
-    ## Plotting results...
-
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-33-1.png)
 
     ## Search for an optimal number of clusters:
@@ -1393,37 +1192,10 @@ eval_tree5 <- bioregionalization_metrics(tree5,
                                          net = vegenet, 
                                          eval_metric = c("pc_distance", "anosim",
                                                          "avg_endemism", "tot_endemism"))
-```
 
-    ## Computing similarity-based metrics...
-
-    ##   - pc_distance OK
-
-    ##   - anosim OK
-
-    ## Computing composition-based metrics...
-
-    ##   - avg_endemism OK
-
-    ##   - tot_endemism OK
-
-``` r
 find_optimal_n(eval_tree5,
                criterion = "breakpoints")
 ```
-
-    ## Number of bioregionalizations: 100
-
-    ## Searching for potential optimal number(s) of clusters based on the breakpoints method
-
-    ## Exact break point not in the list of bioregionalizations: finding the closest bioregionalization...
-
-    ## Plotting results...
-
-    ##    (the red line is the prediction from the segmented regression)
-
-    ## Warning: Removed 1 row containing missing values or values outside the scale range
-    ## (`geom_line()`).
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-34-1.png)
 
@@ -1450,19 +1222,6 @@ find_optimal_n(eval_tree5,
                n_breakpoints = 2)
 ```
 
-    ## Number of bioregionalizations: 100
-
-    ## Searching for potential optimal number(s) of clusters based on the breakpoints method
-
-    ## Exact break point not in the list of bioregionalizations: finding the closest bioregionalization...
-
-    ## Plotting results...
-
-    ##    (the red line is the prediction from the segmented regression)
-
-    ## Warning: Removed 1 row containing missing values or values outside the scale range
-    ## (`geom_line()`).
-
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-35-1.png)
 
     ## Search for an optimal number of clusters:
@@ -1485,19 +1244,6 @@ find_optimal_n(eval_tree5,
                criterion = "breakpoints",
                n_breakpoints = 3)
 ```
-
-    ## Number of bioregionalizations: 100
-
-    ## Searching for potential optimal number(s) of clusters based on the breakpoints method
-
-    ## Exact break point not in the list of bioregionalizations: finding the closest bioregionalization...
-
-    ## Plotting results...
-
-    ##    (the red line is the prediction from the segmented regression)
-
-    ## Warning: Removed 1 row containing missing values or values outside the scale range
-    ## (`geom_line()`).
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-36-1.png)
 

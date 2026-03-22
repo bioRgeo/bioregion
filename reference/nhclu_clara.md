@@ -143,5 +143,5 @@ colnames(comat) <- paste0("Species",1:25)
 dissim <- dissimilarity(comat, metric = "all")
 
 #clust <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
-   
+                   
 ```

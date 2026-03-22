@@ -1,52 +1,67 @@
 # Create a map of bioregions
 
 This plot function can be used to visualize bioregions based on a
-`bioregion.clusters` object combined with a geometry (`sf` objects).
+`bioregion.clusters` object combined with a spatial object (`sf` or
+`terra`).
 
 ## Usage
 
 ``` r
 map_bioregions(
-  clusters,
-  geometry,
-  bioregionalization = NULL,
-  write_clusters = FALSE,
+  bioregionalization,
+  map,
+  partition_index = NULL,
+  map_as_output = FALSE,
   plot = TRUE,
+  clusters = NULL,
+  geometry = NULL,
+  write_clusters = NULL,
   ...
 )
 ```
 
 ## Arguments
 
-- clusters:
-
-  An object of class `bioregion.clusters` or a `data.frame`. If a
-  `data.frame` is used, the first column should represent the sites' ID,
-  and the subsequent column(s) should represent the clusters.
-
-- geometry:
-
-  A spatial object that can be handled by the `sf` package. The first
-  attribute should correspond to the sites' ID (see Details).
-
 - bioregionalization:
 
+  A `bioregion.clusters` object.
+
+- map:
+
+  A spatial object that can be handled by `sf` or `terra`. The first
+  attribute or layer should correspond to the sites' ID (see Details).
+
+- partition_index:
+
   An `integer`, `character`, or `NULL` specifying which
-  bioregionalization(s) to plot. If `NULL` (default), all
-  bioregionalizations are plotted. If an `integer` or vector of
-  `integers`, bioregionalization(s) are selected by column number(s) in
-  the `clusters` data.frame (starting from 1 after the ID column). If a
-  `character` or vector of `characters`, bioregionalization(s) are
-  selected by name(s) matching column names in `clusters`.
+  `bioregionalization`'s partition(s) to plot. By default (`NULL`), all
+  partitions are plotted. If an `integer` or vector of `integers` is
+  provided, partition(s) are selected by column number(s) in the
+  `bioregionalization` data.frame (starting from 1 after the ID column).
+  If a `character` or vector of `characters`, partition(s) are selected
+  by name(s) matching column names in `bioregionalization`.
 
-- write_clusters:
+- map_as_output:
 
-  A `boolean` indicating if the `clusters` should be added to the
-  `geometry`.
+  A `boolean` indicating if the `sf` `data.frame` object used for the
+  plot should be returned.
 
 - plot:
 
   A `boolean` indicating if the plot should be drawn.
+
+- clusters:
+
+  Deprecated. Use `bioregionalization` instead. The former
+  `bioregionalization` has been replaced by `partition_index`.
+
+- geometry:
+
+  Deprecated. Use `map` instead.
+
+- write_clusters:
+
+  Deprecated. Use `map_as_output` instead.
 
 - ...:
 
@@ -55,22 +70,25 @@ map_bioregions(
 
 ## Value
 
-One or several maps of bioregions if `plot = TRUE` and the geometry with
-additional clusters' attributes if `write_clusters = TRUE`.
+One or several maps of bioregions if `plot = TRUE` and the `sf`
+`data.frame` object used for the plot if `map_as_output = TRUE`.
 
 ## Details
 
-The `clusters` and `geometry` site IDs should correspond. They should
-have the same type (i.e., `character` if `clusters` is a
-`bioregion.clusters` object) and the sites of `clusters` should be
-included in the sites of `geometry`.
+The site IDs in `bioregionalization` and `map` should correspond. They
+must have the same type (i.e., `character` if `bioregionalization` is a
+`bioregion.clusters` object), and the sites in `bioregionalization`
+should be included among the sites in `map`. If `map` is an `sf` or a
+`SpatVector` (`terra`) object, it should contain an attribute table with
+the IDs in the first column. If `map` is a `SpatRaster` (`terra`)
+object, it should contain the IDs in the first layer.
 
-**Bipartite networks**: If the `clusters` object is from a bipartite
-network (containing both sites and species), only site nodes will be
-mapped. The function automatically filters to site nodes using the
-`node_type` attribute.
+If the `bioregionalization` object contains both types of nodes (sites
+and species), only site will be mapped. The function automatically
+filters to site nodes using the `node_type` attribute.
 
-**Colors**: If the `clusters` object contains colors (added via
+**Colors**: If the `bioregionalization` object contains colors (added
+via
 [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)),
 these colors will be automatically used for plotting. Otherwise, the
 default `sf` color scheme will be applied.
@@ -93,43 +111,20 @@ Pierre Denelle (<pierre.denelle@gmail.com>)
 
 ``` r
 data(fishmat)
-data(fishdf) # (data.frame version of fishmat)
 data(fishsf)
 
 net <- similarity(fishmat, metric = "Simpson")
 clu <- netclu_greedy(net)
-map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
+mapclu <- map_bioregions(clu, 
+                         map = fishsf, 
+                         map_as_output = TRUE, 
+                         plot = FALSE)
 
 # With colors
 clu_colored <- bioregion_colors(clu)
-map_bioregions(clu_colored, fishsf, plot = TRUE)
-
-
-# With bipartite network (sites and species)
-clu_bip <- netclu_greedy(fishdf, bipartite = TRUE)
-clu_bip_colored <- bioregion_colors(clu_bip)
-map_bioregions(clu_bip_colored, fishsf, plot = TRUE)
-
-
-# With multiple bioregionalizations, plot only specific ones
-dissim <- dissimilarity(fishmat, metric = "Simpson")
-clu_multi <- hclu_hierarclust(dissim,
-                              optimal_tree_method = "best",
-                              n_clust = c(2, 4, 10))
-#> Randomizing the dissimilarity matrix with 100 trials
-#>  -- range of cophenetic correlation coefficients among trials: 0.8218 - 0.8529
-#> 
-#> Final tree has a 0.8529 cophenetic correlation coefficient with the initial dissimilarity matrix
-#> Determining the cut height to reach 2 groups...
-#> --> 0.9921875
-#> Determining the cut height to reach 4 groups...
-#> --> 0.96875
-#> Determining the cut height to reach 10 groups...
-#> --> 0.75
-map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3),
- plot = TRUE)  # By index
-
-map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), 
-plot = TRUE)  # By name
-
+mapclu <- map_bioregions(clu_colored, 
+                         map = fishsf, 
+                         map_as_output = TRUE, 
+                         plot = FALSE)
+           
 ```

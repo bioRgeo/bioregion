@@ -45,7 +45,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
+<li><a class="dropdown-item" href="../articles/a0_terminology.html">0. A note on terminology</a></li>
+    <li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
     <li><a class="dropdown-item" href="../articles/a2_matrix_and_network_formats.html">2. Matrix and network formats</a></li>
     <li><a class="dropdown-item" href="../articles/a3_pairwise_metrics.html">3. Pairwise similarity/dissimilarity metrics</a></li>
     <li><a class="dropdown-item" href="../articles/a4_1_hierarchical_clustering.html">4.1 Hierarchical clustering</a></li>
@@ -98,7 +99,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2026-02-27</h4>
+            <h4 data-toc-skip class="date">2026-03-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_1_visualization.Rmd" class="external-link"><code>vignettes/a5_1_visualization.Rmd</code></a></small>
       <div class="d-none name"><code>a5_1_visualization.Rmd</code></div>
@@ -119,9 +120,10 @@ of vascular plants in the Mediterranean part of France. We first load
 the matrix format of this dataset, computes the dissimilarity matrix out
 of it and also load the data.frame format of the data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
-<span><span class="va">vegedissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegedf</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegedf</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">vegedissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span>, metric <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
 <p>Since we aim at plotting the result, we also need the object
 <code>vegesf</code> linking each site of the dataset to a geometry.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -131,7 +133,7 @@ of it and also load the data.frame format of the data.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_coastline.html" class="external-link">ne_coastline</a></span><span class="op">(</span>returnclass <span class="op">=</span> <span class="st">"sf"</span>, scale <span class="op">=</span> <span class="st">"medium"</span><span class="op">)</span></span>
 <span><span class="co"># Align the CRS of both objects</span></span>
-<span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu">st_crs</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plots">2. Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
@@ -146,14 +148,17 @@ directly provide a plot of each site colored according to the cluster
 they belong to. <br> Let’s take an example with a K-means clustering,
 with a number of clusters set to 3.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, </span>
+<span>                                  n_clust <span class="op">=</span> <span class="fl">3</span>, </span>
+<span>                                  index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
+<span>                                  seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> function can now simply takes the
 object <code>fish_nhclu_kmeans</code>, which is of
 <code>bioregion.clusters</code> class, and the spatial distribution of
 sites, stored in <code>fishsf</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level3">
@@ -189,7 +194,9 @@ different palettes:</p>
 <span><span class="co">## 3       2 #A5AA99</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Map with Vivid colors</span></span>
-<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_vivid</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_vivid</span>, </span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span>, </span>
+<span>               plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="576"></p>
 <p>Note that vege_kmeans_vivid is identical to vege_kmeans with two new
 slots: * colors: a small data.frame summarising the color assigned to
@@ -214,7 +221,9 @@ slot, but with content modified to include colors</p>
 <span><span class="co">## 3       2 #A5AA99</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Map with Bold colors</span></span>
-<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_bold</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_bold</span>, </span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span>, </span>
+<span>               plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level5">
@@ -224,8 +233,8 @@ slot, but with content modified to include colors</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Apply the Safe palette</span></span>
 <span><span class="va">vege_kmeans_safe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
-<span>                                      palette <span class="op">=</span> <span class="st">"Safe"</span>,</span>
-<span>                                      cluster_ordering <span class="op">=</span> <span class="st">"n_sites"</span><span class="op">)</span></span>
+<span>                                     palette <span class="op">=</span> <span class="st">"Safe"</span>,</span>
+<span>                                     cluster_ordering <span class="op">=</span> <span class="st">"n_sites"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View the color assignments</span></span>
 <span><span class="va">vege_kmeans_safe</span><span class="op">$</span><span class="va">colors</span></span></code></pre></div>
@@ -236,7 +245,9 @@ slot, but with content modified to include colors</p>
 <span><span class="co">## 3       2 #888888</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Map with Safe colors</span></span>
-<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_safe</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_safe</span>, </span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span>, </span>
+<span>               plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 </div>
@@ -253,9 +264,9 @@ same colors as the map:</p>
 <span><span class="va">clusters_df</span> <span class="op">&lt;-</span> <span class="va">vege_kmeans_vivid</span><span class="op">$</span><span class="va">clusters</span></span>
 <span></span>
 <span><span class="co"># Count number of sites per bioregion</span></span>
-<span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="va">clusters_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">K_3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span>n_sites <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="va">clusters_df</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">K_3</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>n_sites <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">n_sites</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Another simpler option: dplyr::count(clusters_df, K_3)</span></span>
 <span></span>
@@ -292,8 +303,10 @@ default option, <code><a href="../reference/map_bioregions.html">map_bioregions(
 to extract each site as well as its geometry and cluster number.<br>
 For this purpose, you can set the arguments like in the chunk below:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, geometry <span class="op">=</span> <span class="va">vegesf</span>,</span>
-<span>                         write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
+<span>                         map <span class="op">=</span> <span class="va">vegesf</span>,</span>
+<span>                         map_as_output <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                         plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">custom</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 715 features and 2 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
@@ -301,17 +314,17 @@ For this purpose, you can set the arguments like in the chunk below:</p>
 <span><span class="co">## Bounding box:  xmin: 1.686171 ymin: 42.29604 xmax: 7.798711 ymax: 45.13742</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">## First 10 features:</span></span>
-<span><span class="co">##    ID K_3                       geometry</span></span>
-<span><span class="co">## 1  35   2 POLYGON ((6.098099 45.13742...</span></span>
-<span><span class="co">## 2  36   2 POLYGON ((6.22521 45.13381,...</span></span>
-<span><span class="co">## 3  37   2 POLYGON ((6.352304 45.13007...</span></span>
-<span><span class="co">## 4  38   2 POLYGON ((6.47938 45.12617,...</span></span>
-<span><span class="co">## 5  39   2 POLYGON ((6.606438 45.12213...</span></span>
-<span><span class="co">## 6  84   2 POLYGON ((6.093117 45.04745...</span></span>
-<span><span class="co">## 7  85   2 POLYGON ((6.220024 45.04385...</span></span>
-<span><span class="co">## 8  86   2 POLYGON ((6.346914 45.04011...</span></span>
-<span><span class="co">## 9  87   2 POLYGON ((6.473786 45.03622...</span></span>
-<span><span class="co">## 10 88   2 POLYGON ((6.600641 45.03219...</span></span></code></pre>
+<span><span class="co">##    Site K_3                       geometry</span></span>
+<span><span class="co">## 1    35   2 POLYGON ((6.098099 45.13742...</span></span>
+<span><span class="co">## 2    36   2 POLYGON ((6.22521 45.13381,...</span></span>
+<span><span class="co">## 3    37   2 POLYGON ((6.352304 45.13007...</span></span>
+<span><span class="co">## 4    38   2 POLYGON ((6.47938 45.12617,...</span></span>
+<span><span class="co">## 5    39   2 POLYGON ((6.606438 45.12213...</span></span>
+<span><span class="co">## 6    84   2 POLYGON ((6.093117 45.04745...</span></span>
+<span><span class="co">## 7    85   2 POLYGON ((6.220024 45.04385...</span></span>
+<span><span class="co">## 8    86   2 POLYGON ((6.346914 45.04011...</span></span>
+<span><span class="co">## 9    87   2 POLYGON ((6.473786 45.03622...</span></span>
+<span><span class="co">## 10   88   2 POLYGON ((6.600641 45.03219...</span></span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
 <span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">custom</span><span class="op">)</span><span class="op">)</span></span>
@@ -337,10 +350,11 @@ implemented in <code>ggplot2</code>. <br></p>
 using other algorithms. <br></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Hierarchical clustering</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>,</span>
-<span>                                          index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span>,</span>
-<span>                                          method <span class="op">=</span> <span class="st">"mcquitty"</span>, n_clust <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                          index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
+<span>                                          seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                          method <span class="op">=</span> <span class="st">"mcquitty"</span>, </span>
+<span>                                          n_clust <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                                          optimal_tree_method <span class="op">=</span> <span class="st">"best"</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu_hierarclust</span><span class="op">$</span><span class="va">cluster_info</span></span></code></pre></div>
 <pre><code><span><span class="co">##   partition_name n_clust requested_n_clust output_cut_height</span></span>
@@ -348,9 +362,9 @@ using other algorithms. <br></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Walktrap network bioregionalization</span></span>
 <span><span class="va">vegesim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">vege_netclu_walktrap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_walktrap.html">netclu_walktrap</a></span><span class="op">(</span><span class="va">vegesim</span>,</span>
-<span>                                        index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vegesim</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span></span>
+<span>                                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span>
 <span><span class="va">vege_netclu_walktrap</span><span class="op">$</span><span class="va">cluster_info</span> <span class="co"># 3</span></span></code></pre></div>
 <pre><code><span><span class="co">##     partition_name n_clust</span></span>
 <span><span class="co">## K_3            K_3       3</span></span></code></pre>
@@ -378,8 +392,8 @@ indicating the algorithm used.</p>
 spatial.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_long_sf</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">all_long</span>,</span>
-<span>                                <span class="va">vegesf</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"geometry"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                                by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
+<span>                                <span class="va">vegesf</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="st">"geometry"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>                                <span class="fu">join_by</span><span class="op">(</span><span class="va">ID</span> <span class="op">==</span> <span class="va">Site</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">all_long_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">)</span></span></code></pre></div>
 <p>Now that we have a long-format spatial <code>data.frame</code>, we
 can take advantage of the facets implemented in
@@ -404,17 +418,17 @@ can take advantage of the facets implemented in
 <span>                                               returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Background box</span></span>
-<span><span class="va">xmin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"xmin"</span><span class="op">]</span><span class="op">]</span>; <span class="va">xmax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"xmax"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">ymin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"ymin"</span><span class="op">]</span><span class="op">]</span>; <span class="va">ymax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"ymax"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">xmin</span>,</span>
+<span><span class="va">xmin</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"xmin"</span><span class="op">]</span><span class="op">]</span>; <span class="va">xmax</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"xmax"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">ymin</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"ymin"</span><span class="op">]</span><span class="op">]</span>; <span class="va">ymax</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"ymax"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="fu">st_bbox</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">xmin</span>,</span>
 <span>                                              xmax <span class="op">=</span> <span class="va">xmax</span>,</span>
 <span>                                              ymax <span class="op">=</span> <span class="va">ymax</span>,</span>
 <span>                                              ymin <span class="op">=</span> <span class="va">ymin</span><span class="op">)</span>,</span>
-<span>                                            crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                            crs <span class="op">=</span> <span class="fu">st_crs</span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                                    n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
-<span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu">st_crs</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">larger_bbox</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vegesf</span><span class="op">)</span></span>
 <span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span>
 <span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">42.15</span></span>
@@ -422,7 +436,7 @@ can take advantage of the facets implemented in
 <span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">45.3</span></span>
 <span></span>
 <span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">larger_bbox</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/s2.html" class="external-link">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">sf_use_s2</span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">europe_countries</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world_countries</span>, <span class="va">larger_bbox</span><span class="op">)</span></span>
 <span><span class="va">europe_bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">larger_bbox</span><span class="op">)</span></span>
 <span></span>
@@ -455,14 +469,14 @@ can take advantage of the facets implemented in
 <span></span>
 <span><span class="co"># Cropping with borders of France</span></span>
 <span><span class="va">all_long_sf_france</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">all_long_sf</span>,</span>
+<span>  <span class="fu">st_intersection</span><span class="op">(</span><span class="va">all_long_sf</span>,</span>
 <span>                  <span class="va">europe_countries</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">europe_countries</span><span class="op">$</span><span class="va">sovereignt</span> <span class="op">==</span> <span class="st">"France"</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="va">final_plot</span> <span class="op">&lt;-</span> <span class="va">plot_basis</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">all_long_sf_france</span>,</span>
 <span>          <span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">bioregion</span>, fill <span class="op">=</span> <span class="va">bioregion</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="va">all_long_sf_france</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"NA"</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">st_union</span><span class="op">(</span><span class="va">all_long_sf_france</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"NA"</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe</span>, fill <span class="op">=</span> <span class="st">"gray50"</span>, linewidth <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_color_viridis_d</span><span class="op">(</span><span class="st">"Bioregion"</span>, option <span class="op">=</span> <span class="st">"magma"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="st">"Bioregion"</span>, option <span class="op">=</span> <span class="st">"magma"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -570,7 +584,7 @@ their bioregion assignment:</p>
 <span>                                   cluster_ordering <span class="op">=</span> <span class="st">"n_both"</span><span class="op">)</span> <span class="co"># Order clusters by total size (sites + species)</span></span>
 <span></span>
 <span><span class="co"># Let's make the map for the first bioregionalization</span></span>
-<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">fish_netclu</span>, geometry <span class="op">=</span> <span class="va">fishsf</span>,</span>
+<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">fish_netclu</span>, map <span class="op">=</span> <span class="va">fishsf</span>,</span>
 <span>                partition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Export the first bioregionalization to GDF with colors and attributes</span></span>

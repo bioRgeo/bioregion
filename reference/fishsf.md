@@ -10,9 +10,9 @@ fishsf
 
 ## Format
 
-A
+A `sf` `data.frame` with 338 rows and 2 columns:
 
-- ID:
+- Site:
 
   Unique site identifier
 

@@ -31,7 +31,8 @@ matrix, or the initial species-site table."><meta property="og:image" content="h
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/a0_terminology.html">0. A note on terminology</a></li>
+    <li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
     <li><a class="dropdown-item" href="../articles/a2_matrix_and_network_formats.html">2. Matrix and network formats</a></li>
     <li><a class="dropdown-item" href="../articles/a3_pairwise_metrics.html">3. Pairwise similarity/dissimilarity metrics</a></li>
     <li><a class="dropdown-item" href="../articles/a4_1_hierarchical_clustering.html">4.1 Hierarchical clustering</a></li>
@@ -224,19 +225,20 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.4728 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.4889 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.046875</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 11 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.04541015625</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 12 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0390625</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 13 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 12 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.03125</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 14 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 13 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0234375</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 15 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 14 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.015625</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 15 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 3.0549363634996e-151</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The requested number of cluster could not be found for k = 15. Closest number found: 14</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -245,13 +247,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Iterative hierarchical consensus tree </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.473 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.489 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  6 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  10 11 12 13 14 15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.047 0.045 0.039 0.031 0.023 0.016 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  10 11 12 13 14 14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.047 0.039 0.031 0.023 0.016 0 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">bioregionalization_metrics</span><span class="op">(</span><span class="va">tree1</span>, </span></span>
 <span class="r-in"><span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span></span>
@@ -268,21 +270,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing composition-based metrics...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - avg_endemism OK</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   - tot_endemism OK</span>
-<span class="r-in"><span><span class="va">a</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Partition metrics:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - 6  partition(s) evaluated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Range of clusters explored: from  10  to  15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Metric summary:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      tot_endemism avg_endemism pc_distance    anosim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min             0            0   0.9679293 0.7697059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean            0            0   0.9848448 0.8451739</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Max             0            0   1.0000000 0.9621622</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Access the data.frame of metrics with your_object$evaluation_df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Details of endemism % for each bioregionalization are available in</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         your_object$endemism_results</span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span>                                                </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

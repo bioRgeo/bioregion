@@ -26,6 +26,10 @@ steps:
 
   
 
+Please see this [tutorial
+page](https://bioRgeo.github.io/bioregion/articles/a0_terminology.html)
+for notes on the terminology used in the package.
+
 ## 1. Install binary files
 
 Some functions or at least part of them (listed below) require binary
@@ -36,7 +40,7 @@ files to run.
   (Cpp version)
 - [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)
 
-Please check this [tutorial
+Please see this [tutorial
 page](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html)
 to get instructions regarding the installation of the binary files.
 
@@ -51,7 +55,7 @@ and
 , it handles both the matrix and network formats throughout the
 workflow.
 
-Please have a look at this [tutorial
+Please see this [tutorial
 page](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html)
 to better understand how these two functions work.
 
@@ -80,7 +84,7 @@ matrices into a `bioregion.pairwise` object compatible with the
 `bioregion` package. The input can come from base R, `dist` objects, or
 outputs from other packages.
 
-Please have a look at this [tutorial
+Please see this [tutorial
 page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html)
 to better understand how these functions work.
 
@@ -105,7 +109,7 @@ dendrogram that ranges from two extremes: all sites belong to the same
 bioregion (top of the tree) or all sites belong to a different bioregion
 (bottom of the tree).
 
-See the following [tutorial
+Please see this [tutorial
 page](https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html)
 for more details.
 
@@ -116,7 +120,7 @@ The functions relying on hierarchical clustering start with the prefix
 number of clusters, although this number can be determined by estimating
 the optimal bioregionalization.
 
-See this [tutorial
+Please see this [tutorial
 page](https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)
 for more details.
 

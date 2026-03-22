@@ -7,12 +7,12 @@ types of nodes (sites and species).
 ## Usage
 
 ``` r
-site_species_subset(clusters, node_type = "site")
+site_species_subset(bioregionalization, node_type = "site", clusters = NULL)
 ```
 
 ## Arguments
 
-- clusters:
+- bioregionalization:
 
   An object of class `bioregion.clusters`.
 
@@ -20,6 +20,10 @@ site_species_subset(clusters, node_type = "site")
 
   A `character` string indicating the type of nodes to extract. Possible
   values are `"site"` or `"species"`. The default is `"site"`.
+
+- clusters:
+
+  Deprecated. Use `bioregionalization` instead.
 
 ## Value
 
@@ -51,7 +55,7 @@ net <- data.frame(
   Weight = c(10, 100, 1, 20, 50, 10, 20)
 )
 
-clusters <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
+clu <- netclu_louvain(net, lang = "igraph", bipartite = TRUE)
 
-clusters_sites <- site_species_subset(clusters, node_type = "site")
+clu_sites <- site_species_subset(clu, node_type = "site")
 ```

@@ -176,21 +176,21 @@ tree <- hclu_hierarclust(dissim,
                           optimal_tree_method = "best",
                           n_clust = 5:10)
 #> Randomizing the dissimilarity matrix with 100 trials
-#>  -- range of cophenetic correlation coefficients among trials: 0.8885 - 0.8899
+#>  -- range of cophenetic correlation coefficients among trials: 0.8356 - 0.8401
 #> 
-#> Final tree has a 0.8899 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.8401 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 5 groups...
-#> --> 0.28125
+#> --> 0.234375
 #> Determining the cut height to reach 6 groups...
-#> --> 0.25
-#> Determining the cut height to reach 7 groups...
-#> --> 0.23046875
-#> Determining the cut height to reach 8 groups...
-#> --> 0.228515625
-#> Determining the cut height to reach 9 groups...
 #> --> 0.21875
-#> Determining the cut height to reach 10 groups...
+#> Determining the cut height to reach 7 groups...
 #> --> 0.203125
+#> Determining the cut height to reach 8 groups...
+#> --> 0.1875
+#> Determining the cut height to reach 9 groups...
+#> --> 0.171875
+#> Determining the cut height to reach 10 groups...
+#> --> 0.15625
 tree
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
@@ -199,13 +199,13 @@ tree
 #>  - Tree construction method:  average 
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient 
-#>  - Cophenetic correlation coefficient:  0.89 
+#>  - Cophenetic correlation coefficient:  0.84 
 #>  - Number of clusters requested by the user:  5 
 #> Clustering results:
 #>  - Number of partitions:  6 
 #>  - Partitions are hierarchical
 #>  - Number of clusters:  5 6 7 8 9 10 
-#>  - Height of cut of the hierarchical tree: 0.281 0.25 0.23 0.229 0.219 0.203 
+#>  - Height of cut of the hierarchical tree: 0.234 0.219 0.203 0.188 0.172 0.156 
 
 a <- bioregionalization_metrics(tree,
                                 dissimilarity = dissim,
@@ -229,5 +229,5 @@ find_optimal_n(a, criterion = 'increasing_step', plot = FALSE)
 #>  - Criterion chosen to optimise the number of clusters:  increasing_step 
 #>    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
 #>  - Optimal partition(s) of clusters for each metric:
-#> anosim - 9
+#> anosim - 6
 ```

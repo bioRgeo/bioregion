@@ -134,5 +134,4 @@ data("fishmat")
 fishdissim <- dissimilarity(fishmat)
 fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 #> Output tree has a 0.51 cophenetic correlation coefficient with the initial dissimilarity matrix
-
 ```

@@ -13,9 +13,10 @@ matrix format of this dataset, computes the dissimilarity matrix out of
 it and also load the data.frame format of the data.
 
 ``` r
-data(vegemat)
-vegedissim <- dissimilarity(vegemat, metric = "all")
 data(vegedf)
+data(vegemat)
+
+vegedissim <- dissimilarity(vegemat, metric = "Simpson")
 ```
 
 Since we aim at plotting the result, we also need the object `vegesf`
@@ -48,8 +49,10 @@ Let’s take an example with a K-means clustering, with a number of
 clusters set to 3.
 
 ``` r
-set.seed(1)
-vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, n_clust = 3, index = "Simpson")
+vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, 
+                                  n_clust = 3, 
+                                  index = "Simpson",
+                                  seed = 1)
 ```
 
 [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
@@ -58,7 +61,8 @@ of `bioregion.clusters` class, and the spatial distribution of sites,
 stored in `fishsf`.
 
 ``` r
-map_bioregions(vege_nhclu_kmeans, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_nhclu_kmeans, 
+               map = vegesf)
 ```
 
 ![](a5_1_visualization_files/figure-html/unnamed-chunk-5-1.png)
@@ -98,7 +102,9 @@ vege_kmeans_vivid$colors
 
 ``` r
 # Map with Vivid colors
-map_bioregions(vege_kmeans_vivid, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_kmeans_vivid, 
+               map = vegesf, 
+               plot = TRUE)
 ```
 
 ![](a5_1_visualization_files/figure-html/unnamed-chunk-6-1.png)
@@ -128,7 +134,9 @@ vege_kmeans_bold$colors
 
 ``` r
 # Map with Bold colors
-map_bioregions(vege_kmeans_bold, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_kmeans_bold, 
+               map = vegesf, 
+               plot = TRUE)
 ```
 
 ![](a5_1_visualization_files/figure-html/unnamed-chunk-7-1.png)
@@ -140,8 +148,8 @@ The Safe palette is designed to be colorblind-friendly.
 ``` r
 # Apply the Safe palette
 vege_kmeans_safe <- bioregion_colors(vege_nhclu_kmeans, 
-                                      palette = "Safe",
-                                      cluster_ordering = "n_sites")
+                                     palette = "Safe",
+                                     cluster_ordering = "n_sites")
 
 # View the color assignments
 vege_kmeans_safe$colors
@@ -155,7 +163,9 @@ vege_kmeans_safe$colors
 
 ``` r
 # Map with Safe colors
-map_bioregions(vege_kmeans_safe, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_kmeans_safe, 
+               map = vegesf, 
+               plot = TRUE)
 ```
 
 ![](a5_1_visualization_files/figure-html/unnamed-chunk-8-1.png)
@@ -218,8 +228,10 @@ and cluster number.
 For this purpose, you can set the arguments like in the chunk below:
 
 ``` r
-custom <- map_bioregions(vege_nhclu_kmeans, geometry = vegesf,
-                         write_clusters = TRUE, plot = FALSE)
+custom <- map_bioregions(vege_nhclu_kmeans, 
+                         map = vegesf,
+                         map_as_output = TRUE, 
+                         plot = FALSE)
 custom
 ```
 
@@ -229,17 +241,17 @@ custom
     ## Bounding box:  xmin: 1.686171 ymin: 42.29604 xmax: 7.798711 ymax: 45.13742
     ## Geodetic CRS:  WGS 84
     ## First 10 features:
-    ##    ID K_3                       geometry
-    ## 1  35   2 POLYGON ((6.098099 45.13742...
-    ## 2  36   2 POLYGON ((6.22521 45.13381,...
-    ## 3  37   2 POLYGON ((6.352304 45.13007...
-    ## 4  38   2 POLYGON ((6.47938 45.12617,...
-    ## 5  39   2 POLYGON ((6.606438 45.12213...
-    ## 6  84   2 POLYGON ((6.093117 45.04745...
-    ## 7  85   2 POLYGON ((6.220024 45.04385...
-    ## 8  86   2 POLYGON ((6.346914 45.04011...
-    ## 9  87   2 POLYGON ((6.473786 45.03622...
-    ## 10 88   2 POLYGON ((6.600641 45.03219...
+    ##    Site K_3                       geometry
+    ## 1    35   2 POLYGON ((6.098099 45.13742...
+    ## 2    36   2 POLYGON ((6.22521 45.13381,...
+    ## 3    37   2 POLYGON ((6.352304 45.13007...
+    ## 4    38   2 POLYGON ((6.47938 45.12617,...
+    ## 5    39   2 POLYGON ((6.606438 45.12213...
+    ## 6    84   2 POLYGON ((6.093117 45.04745...
+    ## 7    85   2 POLYGON ((6.220024 45.04385...
+    ## 8    86   2 POLYGON ((6.346914 45.04011...
+    ## 9    87   2 POLYGON ((6.473786 45.03622...
+    ## 10   88   2 POLYGON ((6.600641 45.03219...
 
 ``` r
 # Crop world coastlines to the extent of the sf object of interest
@@ -268,10 +280,11 @@ using other algorithms.
 
 ``` r
 # Hierarchical clustering
-set.seed(1)
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
-                                          index = names(vegedissim)[6],
-                                          method = "mcquitty", n_clust = 3,
+                                          index = "Simpson",
+                                          seed = 1,
+                                          method = "mcquitty", 
+                                          n_clust = 3,
                                           optimal_tree_method = "best")
 vege_hclu_hierarclust$cluster_info
 ```
@@ -282,9 +295,9 @@ vege_hclu_hierarclust$cluster_info
 ``` r
 # Walktrap network bioregionalization
 vegesim <- dissimilarity_to_similarity(vegedissim)
-set.seed(1)
+
 vege_netclu_walktrap <- netclu_walktrap(vegesim,
-                                        index = names(vegesim)[6])
+                                          index = "Simpson")
 vege_netclu_walktrap$cluster_info # 3
 ```
 
@@ -321,8 +334,8 @@ spatial.
 
 ``` r
 all_long_sf <- dplyr::left_join(all_long,
-                                vegesf[, c("ID", "geometry")],
-                                by = "ID")
+                                vegesf[, c("Site", "geometry")],
+                                join_by(ID == Site))
 all_long_sf <- sf::st_as_sf(all_long_sf)
 ```
 
@@ -527,7 +540,7 @@ fish_netclu <- bioregion_colors(fish_nhclu, # Assign colors to bioregions
                                    cluster_ordering = "n_both") # Order clusters by total size (sites + species)
 
 # Let's make the map for the first bioregionalization
-map_bioregions(fish_netclu, geometry = fishsf,
+map_bioregions(fish_netclu, map = fishsf,
                 partition = 1)
 
 # Export the first bioregionalization to GDF with colors and attributes

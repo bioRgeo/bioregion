@@ -163,19 +163,20 @@ tree1 <- hclu_hierarclust(dissim,
                           index = "Simpson")
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 #> 
-#> Final tree has a 0.4728 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.4889 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 10 groups...
 #> --> 0.046875
 #> Determining the cut height to reach 11 groups...
-#> --> 0.04541015625
-#> Determining the cut height to reach 12 groups...
 #> --> 0.0390625
-#> Determining the cut height to reach 13 groups...
+#> Determining the cut height to reach 12 groups...
 #> --> 0.03125
-#> Determining the cut height to reach 14 groups...
+#> Determining the cut height to reach 13 groups...
 #> --> 0.0234375
-#> Determining the cut height to reach 15 groups...
+#> Determining the cut height to reach 14 groups...
 #> --> 0.015625
+#> Determining the cut height to reach 15 groups...
+#> --> 3.0549363634996e-151
+#> Warning: The requested number of cluster could not be found for k = 15. Closest number found: 14
 tree1
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
@@ -184,13 +185,13 @@ tree1
 #>  - Tree construction method:  average 
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-#>  - Cophenetic correlation coefficient:  0.473 
+#>  - Cophenetic correlation coefficient:  0.489 
 #>  - Number of clusters requested by the user:  10 
 #> Clustering results:
 #>  - Number of partitions:  6 
 #>  - Partitions are hierarchical
-#>  - Number of clusters:  10 11 12 13 14 15 
-#>  - Height of cut of the hierarchical tree: 0.047 0.045 0.039 0.031 0.023 0.016 
+#>  - Number of clusters:  10 11 12 13 14 14 
+#>  - Height of cut of the hierarchical tree: 0.047 0.039 0.031 0.023 0.016 0 
 
 a <- bioregionalization_metrics(tree1, 
                                 dissimilarity = dissim, 
@@ -207,18 +208,5 @@ a <- bioregionalization_metrics(tree1,
 #> Computing composition-based metrics...
 #>   - avg_endemism OK
 #>   - tot_endemism OK
-a
-#> Partition metrics:
-#>  - 6  partition(s) evaluated
-#>  - Range of clusters explored: from  10  to  15 
-#>  - Requested metric(s):  tot_endemism avg_endemism pc_distance anosim 
-#>  - Metric summary:
-#>      tot_endemism avg_endemism pc_distance    anosim
-#> Min             0            0   0.9679293 0.7697059
-#> Mean            0            0   0.9848448 0.8451739
-#> Max             0            0   1.0000000 0.9621622
-#> 
-#> Access the data.frame of metrics with your_object$evaluation_df
-#> Details of endemism % for each bioregionalization are available in
-#>         your_object$endemism_results
+                                                
 ```

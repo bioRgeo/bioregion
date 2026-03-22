@@ -45,7 +45,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
+<li><a class="dropdown-item" href="../articles/a0_terminology.html">0. A note on terminology</a></li>
+    <li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
     <li><a class="dropdown-item" href="../articles/a2_matrix_and_network_formats.html">2. Matrix and network formats</a></li>
     <li><a class="dropdown-item" href="../articles/a3_pairwise_metrics.html">3. Pairwise similarity/dissimilarity metrics</a></li>
     <li><a class="dropdown-item" href="../articles/a4_1_hierarchical_clustering.html">4.1 Hierarchical clustering</a></li>
@@ -98,7 +99,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2026-02-27</h4>
+            <h4 data-toc-skip class="date">2026-03-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_2_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_2_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_2_summary_metrics.Rmd</code></div>
@@ -252,9 +253,9 @@ non-hierarchical and hierarchical bioregionalizations. <br></p>
 <span><span class="co">## K_3            K_3       3</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Hierarchical bioregionalization</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>,</span>
 <span>                              index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
+<span>                              seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                              method <span class="op">=</span> <span class="st">"average"</span>, </span>
 <span>                              n_clust <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                              optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span>
@@ -264,7 +265,6 @@ non-hierarchical and hierarchical bioregionalizations. <br></p>
 <span><span class="co">## 1            K_3       3                 3            0.5625</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Network bioregionalization</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">vege_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_walktrap.html">netclu_walktrap</a></span><span class="op">(</span><span class="va">vegesim</span>,</span>
 <span>                               index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span>
 <span><span class="va">vege_netclu</span><span class="op">$</span><span class="va">cluster_info</span> </span></code></pre></div>
@@ -1877,13 +1877,13 @@ multiple bioregions.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_species_metrics.html">site_species_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
 <span>                           bioregion_metrics <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                            bioregionalization_metrics <span class="op">=</span> <span class="st">"P"</span>,</span>
-<span>                            data_type <span class="op">=</span> <span class="st">"both"</span>,</span>
-<span>                            cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
-<span>                            comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
-<span>                            similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                            index <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                            verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                           bioregionalization_metrics <span class="op">=</span> <span class="st">"P"</span>,</span>
+<span>                           data_type <span class="op">=</span> <span class="st">"both"</span>,</span>
+<span>                           cluster_on <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>                           comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
+<span>                           similarity <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                           index <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                           verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ps</span></span></code></pre></div>
 <pre><code><span><span class="co">## Site and species metrics</span></span>
@@ -1915,50 +1915,52 @@ multiple bioregions.</p>
 <div class="section level2">
 <h2 id="bioregion-metrics-spatial-coherence">9. Bioregion metrics &amp; spatial coherence<a class="anchor" aria-label="anchor" href="#bioregion-metrics-spatial-coherence"></a>
 </h2>
-<p>At the granularity of bioregions, we can calculate the number of
-sites it contains and the number of species present in those sites. The
-number and proportion of endemic species are also computed. Endemic
-species are defined as those occurring only in sites assigned to a
-particular bioregion (i.e., species that occur in only one
-bioregion).</p>
+<p>At the bioregion level, we can compute the number of sites and the
+total<br>
+species richness across those sites. We can also derived the number
+and<br>
+proportion of endemic species, defined (as above) as species occurring
+exclusively<br>
+within a single bioregion (i.e., not found in any other bioregion).</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">vege_nhclu</span>,</span>
+<code class="sourceCode R"><span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span><span class="va">vege_nhclu</span>,</span>
 <span>                                       comat <span class="op">=</span> <span class="va">vegemat</span><span class="op">)</span></span>
 <span><span class="va">bioregion_summary</span></span></code></pre></div>
-<pre><code><span><span class="co">##   Bioregion Site_number Species_number Endemics Percentage_Endemic</span></span>
-<span><span class="co">## 1         2         150           2688      133           4.947917</span></span>
-<span><span class="co">## 2         3         207           3090       58           1.877023</span></span>
-<span><span class="co">## 3         1         358           2821      407          14.427508</span></span></code></pre>
-<p>We use the metric of spatial coherence as in <span class="citation">(Divíšek <em>et al.</em>, 2016)</span>, except that we
-replace the number of pixels per bioregion with the area of each
-coherent part.</p>
-<p>The spatial coherence is expressed in percentage, and has the
-following formula:</p>
-<p><span class="math display">\[SC_j = 100 \times
-\frac{LargestPatch_j}{Area_j}\]</span></p>
-<p>where <span class="math inline">\(j\)</span> is a bioregion.</p>
-<p>Here is an example with the vegetation dataset.</p>
+<pre><code><span><span class="co">##   Bioregion NbSites Richness Rich_Endemics Prop_Endemics</span></span>
+<span><span class="co">## 1         1     358     2821           407    0.14427508</span></span>
+<span><span class="co">## 2         2     150     2688           133    0.04947917</span></span>
+<span><span class="co">## 3         3     207     3090            58    0.01877023</span></span></code></pre>
+<p>We also use the metric of spatial coherence following <span class="citation">(Divíšek <em>et al.</em>, 2016)</span>.<br>
+Spatial coherence quantifies how contiguous the sites of a bioregion
+are.<br>
+Two variants are computed:</p>
+<ul>
+<li><p><strong>SC_size</strong>: the fraction of the bioregion’s sites
+contained in its largest<br>
+contiguous patch, calculated based on site counts rather than
+area.</p></li>
+<li><p><strong>SC_area</strong>: the fraction of the bioregion’s total
+area contained in its<br>
+largest spatially contiguous patch, calculated from polygon
+geometries.</p></li>
+</ul>
+<p>Both metrics range from 0 to 1, with 1 indicating a fully contiguous
+bioregion. Here is an example with the vegetation dataset.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Spatial coherence</span></span>
-<span><span class="va">vegedissim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
-<span><span class="va">hclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">vegemap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">hclu</span>, <span class="va">vegesf</span>, write_clusters <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegesf</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">hclu</span>, comat <span class="op">=</span> <span class="va">vegemat</span>, map <span class="op">=</span> <span class="va">vegemap</span>,</span>
-<span>col_bioregion <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> </span></code></pre></div>
-<pre><code><span><span class="co">##   Bioregion Site_number Species_number Endemics Percentage_Endemic Coherence</span></span>
-<span><span class="co">## 1         2         128           2527       90           3.561535  49.21875</span></span>
-<span><span class="co">## 2         1         169           2983       45           1.508548  56.21302</span></span>
-<span><span class="co">## 3         4         298           2936       56           1.907357  98.99329</span></span>
-<span><span class="co">## 4         3         120           2262       67           2.961981  79.16667</span></span></code></pre>
-<p>The bioregion 4 is almost constituted of one homogeneous block, which
-is why the spatial coherence is very close to 100 %.</p>
+<span><span class="fu"><a href="../reference/bioregion_metrics.html">bioregion_metrics</a></span><span class="op">(</span><span class="va">vege_nhclu</span>, </span>
+<span>                  comat <span class="op">=</span> <span class="va">vegemat</span>,</span>
+<span>                  map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">##   Bioregion NbSites Richness Rich_Endemics Prop_Endemics   SC_Size   SC_Area</span></span>
+<span><span class="co">## 1         1     358     2821           407    0.14427508 0.9972067 0.9972067</span></span>
+<span><span class="co">## 2         2     150     2688           133    0.04947917 0.5400000 0.5400000</span></span>
+<span><span class="co">## 3         3     207     3090            58    0.01877023 0.5555556 0.5555556</span></span></code></pre>
+<p>The bioregion 1 is almost constituted of one homogeneous block, which
+is why the spatial coherence is very close to 1.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">vegemap</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">K_4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="st">"Bioregion"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu</span>,</span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a5_2_summary_metrics_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">

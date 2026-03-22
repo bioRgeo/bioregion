@@ -1,4 +1,4 @@
-# Spatial distribution of Mediterranean vegetation (spatial grid)
+# Spatial distribution of Mediterranean vegetation (sf data.frame)
 
 A dataset containing the geometry of the 715 sites.
 
@@ -10,9 +10,9 @@ vegesf
 
 ## Format
 
-A
+A `sf` `data.frame` with 715 rows and 2 columns:
 
-- ID:
+- Site:
 
   Unique site identifier
 

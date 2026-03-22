@@ -136,13 +136,12 @@ Rosvall & Bergstrom (2008)
   should be identifiable in the outputs (FALSE by default).
 
 ``` r
-set.seed(1)
 ex_infomap <- netclu_infomap(fish_simil,
                              weight = TRUE,
                              index = names(fish_simil)[3],
                              nbmod = 0,
                              markovtime = 1,
-                             seed = NULL,
+                             seed = 1,
                              numtrials = 1,
                              twolevel = FALSE,
                              show_hierarchy = FALSE,
@@ -162,7 +161,7 @@ table(ex_infomap$clusters$K_5)
 
     ## 
     ##   1   2   3   4   5 
-    ## 290  14  23   9   2
+    ## 290  23  14   9   2
 
 ### 2.2 OSLOM
 
@@ -186,14 +185,13 @@ modules or their union (default value is 0.5, bigger value leads to
 bigger clusters).
 
 ``` r
-set.seed(1)
 ex_oslom <- netclu_oslom(fish_simil,
                          weight = TRUE,
                          index = names(fish_simil)[3],
                          reassign = "no",
                          r = 10,
                          hr = 50,
-                         seed = NULL,
+                         seed = 1,
                          t = 0.1,
                          cp = 0.5,
                          directed = FALSE,
@@ -220,7 +218,6 @@ Blondel *et al.* (2008)
   \> 0, 1 is chosen by default)
 
 ``` r
-set.seed(1)
 ex_louvain <- netclu_louvain(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
@@ -239,11 +236,7 @@ ex_louvain <- netclu_louvain(fishdf,
 table(ex_louvain$clusters$K_23)
 ```
 
-    ## 
-    ##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 
-    ##   6   3  11   4 133  47  99  16  39  14  48   9   4   4   2   3  17  10  10  20 
-    ##   7   8   9 
-    ##  27   2   5
+    ## < table of extent 0 >
 
 ## 3. Functions from the igraph package
 
@@ -252,7 +245,6 @@ table(ex_louvain$clusters$K_23)
 Clauset *et al.* (2004)
 
 ``` r
-set.seed(1)
 ex_greedy <- netclu_greedy(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
@@ -273,10 +265,10 @@ table(ex_greedy$clusters$K_5)
 Raghavan *et al.* (2007)
 
 ``` r
-set.seed(1)
 ex_labelprop <- netclu_labelprop(fishdf,
                                  weight = TRUE,
                                  index = names(fishdf)[3],
+                                 seed = 1,
                                  bipartite = FALSE,
                                  site_col = 1,
                                  species_col = 2,
@@ -292,10 +284,10 @@ table(ex_labelprop$clusters$K_11)
 Traag *et al.* (2019)
 
 ``` r
-set.seed(1)
 ex_leiden <- netclu_leiden(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
+                           seed =1,
                            objective_function = "CPM",
                            resolution_parameter = 1,
                            beta = 0.01,
@@ -316,7 +308,6 @@ length(unique(ex_leiden$clusters$K_505))
 Newman (2006)
 
 ``` r
-set.seed(1)
 ex_leadingeigen <- netclu_leadingeigen(fishdf,
                                        weight = TRUE,
                                        index = names(fishdf)[3],
@@ -328,14 +319,15 @@ ex_leadingeigen <- netclu_leadingeigen(fishdf,
 table(ex_leadingeigen$clusters$K_17)
 ```
 
-    ## < table of extent 0 >
+    ## 
+    ##   1  10  11  12  13  14  15  16  17   2   3   4   5   6   7   8   9 
+    ## 108   2   2   1   2   1   1   1   2 136  81  69  34  22  28   1  42
 
 ### 3.5 Walktrap
 
 Pons & Latapy (2005)
 
 ``` r
-set.seed(1)
 ex_walktrap <- netclu_walktrap(fishdf,
                                weight = TRUE,
                                index = names(fishdf)[3],
@@ -361,10 +353,10 @@ Update of the QuanBiMo algorithm developed by Dormann & Strauss (2014).
 Beckett (2016)
 
 ``` r
-set.seed(1)
 ex_beckett <- netclu_beckett(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
+                             seed = 1,
                              site_col = 1,
                              species_col = 2,
                              return_node_type = "both",

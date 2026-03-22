@@ -97,7 +97,7 @@
   : Calculate metrics for sites and species relative to bioregions and
   chorotypes
 - [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
-  : Calculate contribution metrics for bioregions
+  : Calculate metrics for bioregions
 - [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md)
   : Calculate metrics for one or several bioregionalizations
 - [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
@@ -129,4 +129,4 @@
   : Spatial distribution of Mediterranean vegetation (co-occurrence
   matrix)
 - [`vegesf`](https://bioRgeo.github.io/bioregion/reference/vegesf.md) :
-  Spatial distribution of Mediterranean vegetation (spatial grid)
+  Spatial distribution of Mediterranean vegetation (sf data.frame)

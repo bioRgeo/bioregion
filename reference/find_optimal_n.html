@@ -33,7 +33,8 @@ from k-means or PAM. Users should exercise caution in other cases
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/a0_terminology.html">0. A note on terminology</a></li>
+    <li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
     <li><a class="dropdown-item" href="../articles/a2_matrix_and_network_formats.html">2. Matrix and network formats</a></li>
     <li><a class="dropdown-item" href="../articles/a3_pairwise_metrics.html">3. Pairwise similarity/dissimilarity metrics</a></li>
     <li><a class="dropdown-item" href="../articles/a4_1_hierarchical_clustering.html">4.1 Hierarchical clustering</a></li>
@@ -236,21 +237,21 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-in"><span>                          optimal_tree_method <span class="op">=</span> <span class="st">"best"</span>,</span></span>
 <span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Randomizing the dissimilarity matrix with 100 trials</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among trials: 0.8885 - 0.8899</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  -- range of cophenetic correlation coefficients among trials: 0.8356 - 0.8401</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.8899 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.8401 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.28125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.234375</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 6 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 7 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.23046875</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 8 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.228515625</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 9 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.21875</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 7 groups...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.203125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 8 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.1875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 9 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.171875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.15625</span>
 <span class="r-in"><span><span class="va">tree</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -259,13 +260,13 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.89 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.84 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  6 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Partitions are hierarchical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  5 6 7 8 9 10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.281 0.25 0.23 0.229 0.219 0.203 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.234 0.219 0.203 0.188 0.172 0.156 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">tree</span>,</span></span>
 <span class="r-in"><span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span></span>
@@ -289,7 +290,7 @@ Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Criterion chosen to optimise the number of clusters:  increasing_step </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimal partition(s) of clusters for each metric:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anosim - 6</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

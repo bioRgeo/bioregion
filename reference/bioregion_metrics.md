@@ -1,8 +1,9 @@
-# Calculate contribution metrics for bioregions
+# Calculate metrics for bioregions
 
-This function calculates the number of sites per bioregion, as well as
-the number of species these sites have, the number of endemic species,
-and the proportion of endemism.
+This function calculates the number of sites, the number of species, the
+number of endemic species and the proportion of endemism per bioregion.
+The spatial coherence can be optionally computed if a spatial object is
+provided.
 
 ## Usage
 
@@ -18,25 +19,46 @@ bioregion_metrics(bioregionalization, comat, map = NULL, col_bioregion = NULL)
 
 - comat:
 
-  A co-occurrence `matrix` with sites as rows and species as columns.
+  A site-species `matrix` with sites as rows and species as columns.
 
 - map:
 
-  A spatial `sf data.frame` with sites and bioregions. It is the output
-  of the function `map_bioregions`. `NULL` by default.
+  A spatial object that can be handled by `sf` or `terra`. The first
+  attribute or layer should correspond to the sites' ID (see Details).
+  Needed only for the spatial coherence (`NULL` by default).
 
 - col_bioregion:
 
-  An `integer` specifying the column position of the bioregion.
+  Deprecated.
 
 ## Value
 
-A `data.frame` with 5 columns, or 6 if spatial coherence is computed.
+A `data.frame` with 5 columns (Bioregion ID and metrics described below)
+or 7 if spatial coherence is computed.
+
+- **NbSites**: Number of sites per bioregion
+
+- **Richness**: Number of distinct species per bioregion.
+
+- **Rich_Endemics**: Number of species found only in the bioregion.
+
+- **Prop_Endemics**: Fraction of endemics species.
+
+- [**SC_size**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence):
+  Spatial coherence based on size, fraction of the number of site
+  contained in the bioregion's largest contiguous patch.
+
+- [**SC_area**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence):
+  Spatial coherence based on area, fraction of the bioregion area
+  contained in its largest contiguous patch.
+
+Note that if `bioregionalization` contains multiple partitions (i.e., if
+`dim(bioregionalization$clusters) > 2`), a list will be returned.
 
 ## Details
 
-Endemic species are species found only in the sites belonging to one
-bioregion.
+`map` should be the output of
+`map_bioregions(bioregionalization, geometry, write_clusters = TRUE)`
 
 ## See also
 
@@ -65,6 +87,6 @@ clust <- netclu_louvain(net)
 
 bioregion_metrics(bioregionalization = clust, 
                   comat = comat) 
-#>   Bioregion Site_number Species_number Endemics Percentage_Endemic
-#> 1         1           5             10       10                100
+#>   Bioregion NbSites Richness Rich_Endemics Prop_Endemics
+#> 1         1       5       10            10             1
 ```

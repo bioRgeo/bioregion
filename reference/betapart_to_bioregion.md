@@ -47,7 +47,7 @@ rownames(comat) <- paste0("Site", 1:5)
 colnames(comat) <- paste0("Species", 1:10)
 
 if (FALSE) { # \dontrun{
-beta_div <- betapart::beta.pair.abund(comat)
-betapart_to_bioregion(beta_div)
+  beta_div <- betapart::beta.pair.abund(comat)
+  betapart_to_bioregion(beta_div)
 } # }
 ```

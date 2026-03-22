@@ -389,5 +389,4 @@ ind <- site_species_metrics(bioregionalization = bioregionalization,
                              index = 3,
                              verbose = TRUE)
 #> The bioregionalization is based on occurence data and comat is based on occurence data so occurrence-based metrics will be computed.
-                                     
 ```

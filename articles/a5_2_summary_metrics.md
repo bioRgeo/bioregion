@@ -104,9 +104,9 @@ vege_nhclu$cluster_info
 
 ``` r
 # Hierarchical bioregionalization
-set.seed(1)
 vege_hclu <- hclu_hierarclust(dissimilarity = vegedissim,
                               index = "Simpson",
+                              seed = 1,
                               method = "average", 
                               n_clust = 3,
                               optimal_tree_method = "best",
@@ -119,7 +119,6 @@ vege_hclu$cluster_info
 
 ``` r
 # Network bioregionalization
-set.seed(1)
 vege_netclu <- netclu_walktrap(vegesim,
                                index = "Simpson")
 vege_netclu$cluster_info 
@@ -1321,13 +1320,13 @@ Calculations on both occurrence & abundance at the same time:
 ``` r
 ps <- site_species_metrics(bioregionalization = vege_nhclu,
                            bioregion_metrics = NULL,
-                            bioregionalization_metrics = "P",
-                            data_type = "both",
-                            cluster_on = "site",
-                            comat = vegemat,
-                            similarity = NULL,
-                            index = NULL,
-                            verbose = FALSE)
+                           bioregionalization_metrics = "P",
+                           data_type = "both",
+                           cluster_on = "site",
+                           comat = vegemat,
+                           similarity = NULL,
+                           index = NULL,
+                           verbose = FALSE)
 
 ps
 ```
@@ -1358,61 +1357,62 @@ ps
 
 ## 9. Bioregion metrics & spatial coherence
 
-At the granularity of bioregions, we can calculate the number of sites
-it contains and the number of species present in those sites. The number
-and proportion of endemic species are also computed. Endemic species are
-defined as those occurring only in sites assigned to a particular
-bioregion (i.e., species that occur in only one bioregion).
+At the bioregion level, we can compute the number of sites and the
+total  
+species richness across those sites. We can also derived the number
+and  
+proportion of endemic species, defined (as above) as species occurring
+exclusively  
+within a single bioregion (i.e., not found in any other bioregion).
 
 ``` r
-bioregion_summary <- bioregion_metrics(bioregionalization = vege_nhclu,
+bioregion_summary <- bioregion_metrics(vege_nhclu,
                                        comat = vegemat)
 bioregion_summary
 ```
 
-    ##   Bioregion Site_number Species_number Endemics Percentage_Endemic
-    ## 1         2         150           2688      133           4.947917
-    ## 2         3         207           3090       58           1.877023
-    ## 3         1         358           2821      407          14.427508
+    ##   Bioregion NbSites Richness Rich_Endemics Prop_Endemics
+    ## 1         1     358     2821           407    0.14427508
+    ## 2         2     150     2688           133    0.04947917
+    ## 3         3     207     3090            58    0.01877023
 
-We use the metric of spatial coherence as in (Divíšek *et al.*, 2016),
-except that we replace the number of pixels per bioregion with the area
-of each coherent part.
+We also use the metric of spatial coherence following (Divíšek *et al.*,
+2016).  
+Spatial coherence quantifies how contiguous the sites of a bioregion
+are.  
+Two variants are computed:
 
-The spatial coherence is expressed in percentage, and has the following
-formula:
+- **SC_size**: the fraction of the bioregion’s sites contained in its
+  largest  
+  contiguous patch, calculated based on site counts rather than area.
 
-\\SC_j = 100 \times \frac{LargestPatch_j}{Area_j}\\
+- **SC_area**: the fraction of the bioregion’s total area contained in
+  its  
+  largest spatially contiguous patch, calculated from polygon
+  geometries.
 
-where \\j\\ is a bioregion.
-
-Here is an example with the vegetation dataset.
+Both metrics range from 0 to 1, with 1 indicating a fully contiguous
+bioregion. Here is an example with the vegetation dataset.
 
 ``` r
-# Spatial coherence
-vegedissim <- dissimilarity(vegemat)
-hclu <- nhclu_kmeans(dissimilarity = vegedissim, n_clust = 4)
-vegemap <- map_bioregions(hclu, vegesf, write_clusters = TRUE, plot = FALSE)
+data(vegesf)
 
-bioregion_metrics(bioregionalization = hclu, comat = vegemat, map = vegemap,
-col_bioregion = 2) 
+bioregion_metrics(vege_nhclu, 
+                  comat = vegemat,
+                  map = vegesf) 
 ```
 
-    ##   Bioregion Site_number Species_number Endemics Percentage_Endemic Coherence
-    ## 1         2         128           2527       90           3.561535  49.21875
-    ## 2         1         169           2983       45           1.508548  56.21302
-    ## 3         4         298           2936       56           1.907357  98.99329
-    ## 4         3         120           2262       67           2.961981  79.16667
+    ##   Bioregion NbSites Richness Rich_Endemics Prop_Endemics   SC_Size   SC_Area
+    ## 1         1     358     2821           407    0.14427508 0.9972067 0.9972067
+    ## 2         2     150     2688           133    0.04947917 0.5400000 0.5400000
+    ## 3         3     207     3090            58    0.01877023 0.5555556 0.5555556
 
-The bioregion 4 is almost constituted of one homogeneous block, which is
-why the spatial coherence is very close to 100 %.
+The bioregion 1 is almost constituted of one homogeneous block, which is
+why the spatial coherence is very close to 1.
 
 ``` r
-ggplot(vegemap) +
-  geom_sf(aes(fill = as.factor(K_4))) +
-  scale_fill_viridis_d("Bioregion") +
-  theme_bw() +
-  theme(legend.position = "bottom")
+map_bioregions(vege_nhclu,
+               map = vegesf)
 ```
 
 ![](a5_2_summary_metrics_files/figure-html/unnamed-chunk-20-1.png)

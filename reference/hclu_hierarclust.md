@@ -278,9 +278,9 @@ tree1 <- hclu_hierarclust(dissim,
                           n_clust = 5)
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 #> 
-#> Final tree has a 0.5008 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.5026 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 5 groups...
-#> --> 0.08984375
+#> --> 0.109375
 tree1
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
@@ -289,12 +289,12 @@ tree1
 #>  - Tree construction method:  average 
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-#>  - Cophenetic correlation coefficient:  0.501 
+#>  - Cophenetic correlation coefficient:  0.503 
 #>  - Number of clusters requested by the user:  5 
 #> Clustering results:
 #>  - Number of partitions:  1 
 #>  - Number of clusters:  5 
-#>  - Height of cut of the hierarchical tree: 0.09 
+#>  - Height of cut of the hierarchical tree: 0.109 
 plot(tree1)
 
 str(tree1)
@@ -330,44 +330,44 @@ str(tree1)
 #>  $ algorithm   :List of 6
 #>   ..$ final.tree         :List of 5
 #>   .. ..- attr(*, "class")= chr "hclust"
-#>   ..$ final.tree.coph.cor: num 0.501
-#>   ..$ final.tree.msd     : num 0.0018
+#>   ..$ final.tree.coph.cor: num 0.503
+#>   ..$ final.tree.msd     : num 0.00277
 #>   ..$ output_n_clust     : int 5
-#>   ..$ output_cut_height  : Named num 0.0898
+#>   ..$ output_cut_height  : Named num 0.109
 #>   .. ..- attr(*, "names")= chr "k_5"
 #>   ..$ trials             : chr "Trials not stored in output"
 #>  $ clusters    :'data.frame':    20 obs. of  2 variables:
 #>   ..$ ID : chr [1:20] "Site1" "Site10" "Site11" "Site12" ...
-#>   ..$ K_5: chr [1:20] "1" "1" "2" "1" ...
+#>   ..$ K_5: chr [1:20] "1" "2" "2" "2" ...
 #>   ..- attr(*, "node_type")= chr [1:20] "site" "site" "site" "site" ...
 #>  $ cluster_info:'data.frame':    1 obs. of  4 variables:
 #>   ..$ partition_name   : chr "K_5"
 #>   ..$ n_clust          : int 5
 #>   ..$ requested_n_clust: num 5
-#>   ..$ output_cut_height: num 0.0898
+#>   ..$ output_cut_height: num 0.109
 #>  - attr(*, "class")= chr [1:2] "bioregion.clusters" "list"
 tree1$clusters
 #>            ID K_5
 #> Site1   Site1   1
-#> Site10 Site10   1
+#> Site10 Site10   2
 #> Site11 Site11   2
-#> Site12 Site12   1
-#> Site13 Site13   1
-#> Site14 Site14   1
-#> Site15 Site15   1
-#> Site16 Site16   3
-#> Site17 Site17   4
-#> Site18 Site18   1
-#> Site19 Site19   5
-#> Site2   Site2   1
-#> Site20 Site20   5
-#> Site3   Site3   1
-#> Site4   Site4   1
+#> Site12 Site12   2
+#> Site13 Site13   3
+#> Site14 Site14   2
+#> Site15 Site15   2
+#> Site16 Site16   2
+#> Site17 Site17   2
+#> Site18 Site18   2
+#> Site19 Site19   2
+#> Site2   Site2   2
+#> Site20 Site20   2
+#> Site3   Site3   3
+#> Site4   Site4   2
 #> Site5   Site5   1
-#> Site6   Site6   1
-#> Site7   Site7   1
-#> Site8   Site8   1
-#> Site9   Site9   1
+#> Site6   Site6   4
+#> Site7   Site7   5
+#> Site8   Site8   3
+#> Site9   Site9   4
 
 # User-defined height cut
 # Only one height
@@ -375,7 +375,7 @@ tree2 <- hclu_hierarclust(dissim,
                           cut_height = .05)
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 #> 
-#> Final tree has a 0.5008 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.5026 cophenetic correlation coefficient with the initial dissimilarity matrix
 tree2
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
@@ -384,70 +384,70 @@ tree2
 #>  - Tree construction method:  average 
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-#>  - Cophenetic correlation coefficient:  0.501 
+#>  - Cophenetic correlation coefficient:  0.503 
 #>  - Heights of cut requested by the user:  0.05 
 #> Clustering results:
 #>  - Number of partitions:  1 
-#>  - Number of clusters:  9 
+#>  - Number of clusters:  13 
 #>  - Height of cut of the hierarchical tree: 0.05 
 tree2$clusters
-#>        ID K_9
-#> 1   Site1   1
-#> 2  Site10   2
-#> 3  Site11   3
-#> 4  Site12   2
-#> 5  Site13   1
-#> 6  Site14   4
-#> 7  Site15   4
-#> 8  Site16   5
-#> 9  Site17   6
-#> 10 Site18   1
-#> 11 Site19   7
-#> 12  Site2   1
-#> 13 Site20   7
-#> 14  Site3   1
-#> 15  Site4   1
-#> 16  Site5   8
-#> 17  Site6   1
-#> 18  Site7   1
-#> 19  Site8   1
-#> 20  Site9   9
+#>        ID K_13
+#> 1   Site1    1
+#> 2  Site10    2
+#> 3  Site11    3
+#> 4  Site12    2
+#> 5  Site13    4
+#> 6  Site14    5
+#> 7  Site15    2
+#> 8  Site16    6
+#> 9  Site17    6
+#> 10 Site18    7
+#> 11 Site19    6
+#> 12  Site2    3
+#> 13 Site20    3
+#> 14  Site3    8
+#> 15  Site4    5
+#> 16  Site5    9
+#> 17  Site6   10
+#> 18  Site7   11
+#> 19  Site8   12
+#> 20  Site9   13
 
 # Multiple heights
 tree3 <- hclu_hierarclust(dissim, 
                           cut_height = c(.05, .15, .25))
 #> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
 #> 
-#> Final tree has a 0.5008 cophenetic correlation coefficient with the initial dissimilarity matrix
+#> Final tree has a 0.5026 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 tree3$clusters # Mind the order of height cuts: from deep to shallow cuts
-#>            ID K_1_1 K_1_2 K_9
-#> Site1   Site1     1     1   1
-#> Site10 Site10     1     1   2
-#> Site11 Site11     1     1   3
-#> Site12 Site12     1     1   2
-#> Site13 Site13     1     1   1
-#> Site14 Site14     1     1   4
-#> Site15 Site15     1     1   4
-#> Site16 Site16     1     1   5
-#> Site17 Site17     1     1   6
-#> Site18 Site18     1     1   1
-#> Site19 Site19     1     1   7
-#> Site2   Site2     1     1   1
-#> Site20 Site20     1     1   7
-#> Site3   Site3     1     1   1
-#> Site4   Site4     1     1   1
-#> Site5   Site5     1     1   8
-#> Site6   Site6     1     1   1
-#> Site7   Site7     1     1   1
-#> Site8   Site8     1     1   1
-#> Site9   Site9     1     1   9
+#>            ID K_1_1 K_1_2 K_13
+#> Site1   Site1     1     1    1
+#> Site10 Site10     1     1    2
+#> Site11 Site11     1     1    3
+#> Site12 Site12     1     1    2
+#> Site13 Site13     1     1    4
+#> Site14 Site14     1     1    5
+#> Site15 Site15     1     1    2
+#> Site16 Site16     1     1    6
+#> Site17 Site17     1     1    6
+#> Site18 Site18     1     1    7
+#> Site19 Site19     1     1    6
+#> Site2   Site2     1     1    3
+#> Site20 Site20     1     1    3
+#> Site3   Site3     1     1    8
+#> Site4   Site4     1     1    5
+#> Site5   Site5     1     1    9
+#> Site6   Site6     1     1   10
+#> Site7   Site7     1     1   11
+#> Site8   Site8     1     1   12
+#> Site9   Site9     1     1   13
 # Info on each partition can be found in table cluster_info
 tree3$cluster_info
 #>        partition_name n_clust requested_cut_height
 #> h_0.25          K_1_1       1                 0.25
 #> h_0.15          K_1_2       1                 0.15
-#> h_0.05            K_9       9                 0.05
+#> h_0.05           K_13      13                 0.05
 plot(tree3)
 
 ```

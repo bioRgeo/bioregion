@@ -38,8 +38,8 @@ vege_nhclu_kmeans$cluster_info # 3
 
 ``` r
 # Hierarchical bioregionalization
-set.seed(1)
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
+                                          seed = 1,
                                           method = "mcquitty", n_clust = 3,
                                           optimal_tree_method = "best")
 vege_hclu_hierarclust$cluster_info # 3
@@ -50,7 +50,6 @@ vege_hclu_hierarclust$cluster_info # 3
 
 ``` r
 # Network bioregionalization
-set.seed(1)
 vege_netclu_walktrap <- netclu_walktrap(vegesim,
                                         index = names(vegesim)[3])
 vege_netclu_walktrap$cluster_info # 3

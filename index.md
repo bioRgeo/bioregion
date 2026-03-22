@@ -30,6 +30,8 @@ devtools::install_github("bioRgeo/bioregion")
 We wrote several vignettes that will help you using the **bioregion R
 package**. Vignettes available are the following ones:  
 
+- **[0. A note on
+  terminology](https://bioRgeo.github.io/bioregion/articles/a0_terminology.html)**
 - **[1. Installation of the executable binary
   files](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html)**  
 - **[2. Matrix and network
@@ -51,19 +53,6 @@ package**. Vignettes available are the following ones:
 - **[5.3 Compare
   bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html)**
 
-Alternatively, if you prefer to view the vignettes in R, you can install
-the package with `build_vignettes = TRUE`. But be aware that some
-vignettes can be slow to generate.
-
-``` r
-remotes::install_github("bioRgeo/bioregion",
-                        dependencies = TRUE, 
-                        upgrade = "ask", 
-                        build_vignettes = TRUE)
-
-vignette("bioregion")
-```
-
 ## 🖥️ Functions
 
 An overview of all functions and data is given
@@ -75,7 +64,7 @@ Thank you for finding it. Head over to the GitHub Issues tab and let us
 know about it. Alternatively, you can also send us an e-mail. We will
 try to get to it as soon as we can!
 
-## References and dependencies
+## Dependencies
 
 `bioregion` depends on `ape`, `apcluster`, `bipartite`, `cluster`,
 `data.table`, `dbscan`, `dynamicTreeCut`, `fastcluster`, `fastkmedoids`,

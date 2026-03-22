@@ -45,7 +45,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
+<li><a class="dropdown-item" href="../articles/a0_terminology.html">0. A note on terminology</a></li>
+    <li><a class="dropdown-item" href="../articles/a1_install_binary_files.html">1. Installation of the binary files</a></li>
     <li><a class="dropdown-item" href="../articles/a2_matrix_and_network_formats.html">2. Matrix and network formats</a></li>
     <li><a class="dropdown-item" href="../articles/a3_pairwise_metrics.html">3. Pairwise similarity/dissimilarity metrics</a></li>
     <li><a class="dropdown-item" href="../articles/a4_1_hierarchical_clustering.html">4.1 Hierarchical clustering</a></li>
@@ -98,7 +99,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2026-02-27</h4>
+            <h4 data-toc-skip class="date">2026-03-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_2_non_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_2_non_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_2_non_hierarchical_clustering.Rmd</code></div>
@@ -354,15 +355,11 @@ containing a large number of objects (more than several thousand
 observations) in order to reduce the computational time and the RAM
 storage problem. This is achieved by using the sampling approach.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ex_clara</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_clara.html">nhclu_clara</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
-<span>                        n_clust <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>                        maxiter <span class="op">=</span> <span class="fl">0L</span>, initializer <span class="op">=</span> <span class="st">"LAB"</span>, fasttol <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                        numsamples <span class="op">=</span> <span class="fl">5L</span>, sampling <span class="op">=</span> <span class="fl">0.25</span>, independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                        seed <span class="op">=</span> <span class="fl">123456789L</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_clara</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_5</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##   1   2   3   4   5 </span></span>
-<span><span class="co">## 241  21  16  50  10</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># ex_clara &lt;- nhclu_clara(dissim,</span></span>
+<span><span class="co">#                         index = "Simpson",</span></span>
+<span><span class="co">#                         seed = 1,</span></span>
+<span><span class="co">#                         n_clust = 5)</span></span>
+<span><span class="co"># table(ex_clara$clusters$K_5)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="clustering-large-applications-based-on-randomized-search-clarans">2.2.3. Clustering Large Applications based on RANdomized Search
@@ -371,15 +368,12 @@ storage problem. This is achieved by using the sampling approach.</p>
 <p>CLARANS (Clustering Large Applications based on RANdomized Search,
 (Ng and Han 2002)) is an extension of the k-medoids (PAM) methods
 combined with the CLARA algorithm.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ex_clarans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_clarans.html">nhclu_clarans</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
-<span>                        n_clust <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>                        numlocal <span class="op">=</span> <span class="fl">2L</span>, maxneighbor <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>                        seed <span class="op">=</span> <span class="fl">123456789L</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_clara</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_5</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##   1   2   3   4   5 </span></span>
-<span><span class="co">## 241  21  16  50  10</span></span></code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ex_clarans &lt;- nhclu_clarans(dissim,</span></span>
+<span><span class="co">#                             index = "Simpson",</span></span>
+<span><span class="co">#                             seed = 1,</span></span>
+<span><span class="co">#                             n_clust = 5)</span></span>
+<span><span class="co"># table(ex_clara$clusters$K_5)</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -432,7 +426,7 @@ covered.</p></li>
 arguments presented above, <code>minPts</code> and <code>eps</code>,
 then the function will provide a knee curve helping the search of an
 optimal <code>eps</code> value. <br></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_dbscan</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_dbscan.html">nhclu_dbscan</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, minPts <span class="op">=</span> <span class="cn">NULL</span>, eps <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                          plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Trying to find a knee in the curve to search for an optimal eps value...</span></span>
@@ -448,18 +442,18 @@ optimal <code>eps</code> value. <br></p>
 <span><span class="co">##            /</span></span></code></pre>
 <p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="576"></p>
 <p>Here, we see that we can set <code>eps</code> to 1.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_dbscan2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_dbscan.html">nhclu_dbscan</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, minPts <span class="op">=</span> <span class="cn">NULL</span>, eps <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                           plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>With this set of parameters, we only get one cluster.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">ex_dbscan2</span><span class="op">$</span><span class="va">clusters</span><span class="op">$</span><span class="va">K_1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##   1 </span></span>
 <span><span class="co">## 338</span></span></code></pre>
 <p>If we decrease the <code>eps</code> value and increase
 <code>minPts</code>, we can get more clusters.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_dbscan3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_dbscan.html">nhclu_dbscan</a></span><span class="op">(</span><span class="va">dissim</span>, index <span class="op">=</span> <span class="st">"Simpson"</span>, minPts <span class="op">=</span> <span class="fl">4</span>, eps <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                           plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -474,7 +468,7 @@ optimal <code>eps</code> value. <br></p>
 &amp; Dueck (2007)</span> and relies on the R package <a href="https://cran.r-project.org/package=apcluster" class="external-link">apcluster</a></p>
 <p>Unlike the previous algorithms in this vignette, this algorithm and
 its associated function use a similarity matrix.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Similarity matrix</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">dissim</span><span class="op">)</span></span>
 <span></span>
@@ -491,7 +485,7 @@ bioregions structuring the site-species matrix.</p>
 <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code>.</p>
 <p><code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> calcultes several metrics
 based on the previous clustering attempts.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span>
 <span>                           eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Partition metrics:</span></span>
@@ -508,7 +502,7 @@ based on the previous clustering attempts.</p>
 <p>*Note For the two metrics <code>tot_endemism</code> and
 <code>avg_endemism</code>, you also need to provide the site-species
 matrix.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span>
 <span>                                species_col <span class="op">=</span> <span class="st">"Species"</span>, site_col <span class="op">=</span> <span class="st">"Site"</span>,</span>
 <span>                                eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span>
@@ -517,7 +511,7 @@ matrix.</p>
 calculated the partitioning metrics, we can call
 <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> to get the optimal number of clusters.
 <br></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Number of bioregionalizations: 24</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>

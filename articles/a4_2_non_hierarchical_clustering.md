@@ -321,17 +321,12 @@ order to reduce the computational time and the RAM storage problem. This
 is achieved by using the sampling approach.
 
 ``` r
-ex_clara <- nhclu_clara(dissim, index = "Simpson",
-                        n_clust = 5,
-                        maxiter = 0L, initializer = "LAB", fasttol = 1,
-                        numsamples = 5L, sampling = 0.25, independent = FALSE,
-                        seed = 123456789L)
-table(ex_clara$clusters$K_5)
+# ex_clara <- nhclu_clara(dissim,
+#                         index = "Simpson",
+#                         seed = 1,
+#                         n_clust = 5)
+# table(ex_clara$clusters$K_5)
 ```
-
-    ## 
-    ##   1   2   3   4   5 
-    ## 241  21  16  50  10
 
 #### 2.2.3. Clustering Large Applications based on RANdomized Search (CLARANS)
 
@@ -340,16 +335,12 @@ and Han 2002)) is an extension of the k-medoids (PAM) methods combined
 with the CLARA algorithm.
 
 ``` r
-ex_clarans <- nhclu_clarans(dissim, index = "Simpson",
-                        n_clust = 5,
-                        numlocal = 2L, maxneighbor = 0.025,
-                        seed = 123456789L)
-table(ex_clara$clusters$K_5)
+# ex_clarans <- nhclu_clarans(dissim,
+#                             index = "Simpson",
+#                             seed = 1,
+#                             n_clust = 5)
+# table(ex_clara$clusters$K_5)
 ```
-
-    ## 
-    ##   1   2   3   4   5 
-    ## 241  21  16  50  10
 
 ## 3. Density-based clustering
 
