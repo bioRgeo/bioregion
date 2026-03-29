@@ -21,7 +21,7 @@ editor_options:
     wrap: 72
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
                       fig.width = 8, fig.height = 8)
@@ -62,13 +62,14 @@ and
 [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)
 as follows.
 
-```{r install_binaries, results='markup', message=TRUE, warning=TRUE, echo=TRUE}
+```{r install_binaries, message = TRUE}
 install_binaries(binpath = "tempdir" ,
                  download_only =  FALSE,
                  infomap_version = c("2.1.0", 
                                      "2.6.0",
                                      "2.7.1",
-                                     "2.8.0"))
+                                     "2.8.0"),
+                 verbose = TRUE)
 ```
 
 The function has three parameters. `binpath` indicating the path to the
@@ -133,7 +134,8 @@ install_binaries(binpath = "myfolder" ,
                  infomap_version = c("2.1.0", 
                                      "2.6.0",
                                      "2.7.1",
-                                     "2.8.0"))
+                                     "2.8.0"),
+                 verbose = FALSE)
 
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)

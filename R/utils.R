@@ -74,6 +74,13 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
                call. = FALSE)
         }
       }
+      if (is.null(attr(data$clusters, "node_type"))) {
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
       if(is.null(data$inputs$data_type)){
         stop(paste0(deparse(substitute(data)),
                     " is a bioregion.cluster object but it has been altered ",
@@ -935,6 +942,7 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
 # Additional functions                                                                            #
 #  - reformat_hierarchy                                                                           #                                                                           
 #  - knbclu                                                                                       #
+#  - reorder                                                                                      #
 #  - make.unique.2                                                                                #
 #  - tree_eval                                                                                    #
 #  - sbgc [Species-to-bioregions/bioregionalization & Site-to-chorotype/chorological metrics]     #
@@ -1056,6 +1064,59 @@ knbclu <- function(partitions,
   
   partitions
 }
+################################################################################
+
+# reorder ######################################################################
+reorder <- function(tab,
+                    col = 1) {
+  
+  # data.frame
+  if(inherits(tab, "data.frame")) {
+    if(dim(tab)[1] > 1){
+      if(col == 1){
+        if(suppressWarnings(sum(is.na(as.numeric(tab[,1])))>0)){
+          tab <- tab[order(tab[,1]),]
+        }else{
+          tab <- tab[order(as.numeric(tab[,1])),]        
+        }
+      }
+      if(col == 2){
+        if(suppressWarnings(sum(is.na(as.numeric(tab[,1])))>0) |
+           suppressWarnings(sum(is.na(as.numeric(tab[,2])))>0)){
+          tab <- tab[order(tab[,1], tab[,2]),]
+        }else{
+          tab <- tab[order(as.numeric(tab[,1]), 
+                           as.numeric(tab[,2])),]        
+        }
+      }
+      rownames(tab) <- 1:dim(tab)[1]
+    }
+  }
+  
+  # matrix
+  if(inherits(tab, "matrix")){
+    
+    if(!is.null(rownames(tab)) & (dim(tab)[1] > 1)){
+      if(suppressWarnings(sum(is.na(as.numeric(rownames(tab))))>0)){
+        tab <- tab[order(rownames(tab)), , drop = FALSE]
+      }else{
+        tab <- tab[order(as.numeric(rownames(tab))), , drop = FALSE]
+      }
+    }  
+    
+    if(!is.null(colnames(tab)) & (dim(tab)[2] > 1)){
+      if(suppressWarnings(sum(is.na(as.numeric(colnames(tab))))>0)){
+        tab <- tab[, order(colnames(tab)), drop = FALSE]
+      }else{
+        tab <- tab[, order(as.numeric(colnames(tab))), drop = FALSE]
+      }
+    }
+    
+  }
+  
+  return(tab)
+  
+}  
 ################################################################################
 
 # make.unique.2 ################################################################
@@ -1756,4 +1817,5 @@ elbow_finder <- function(x_values, y_values, correct_decrease = FALSE) {
   return(c(x_max_dist, y_max_dist))
 }
 ################################################################################
+
 

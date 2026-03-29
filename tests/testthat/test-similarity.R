@@ -28,10 +28,9 @@ comat3[1,1] <- NA
 comat4 <- comat
 comat4[1,1] <- -1
 
-
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
-  
+
   quietly(
     simil <- similarity(comat0, metric = c("abc", "ABC", "Euclidean"))
   )

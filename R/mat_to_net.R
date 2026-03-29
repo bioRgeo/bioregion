@@ -111,6 +111,9 @@ mat_to_net <- function(mat,
   # Transform the two first columns in character
   net[, 1] <- as.character(net[, 1])
   net[, 2] <- as.character(net[, 2])
+  
+  # Reorder
+  #net <- reorder(net, col = 2)
 
   # Return the data.frame
   return(net)

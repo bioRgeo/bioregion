@@ -270,7 +270,6 @@ test_that("valid output", {
                              keep_trials = "no",
                              optimal_tree_method = "iterative_consensus_tree",
                              verbose = FALSE)
-  
   clust22 <- hclu_hierarclust(dissim,
                              index = "Simpson",
                              method = "average",

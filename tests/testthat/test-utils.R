@@ -818,8 +818,15 @@ test_that("strict_positive_integer", {
   
 })
 
-# Tests for species/sites metrics ----------------------------------------------
-test_that("invalid inputs", {
+# Tests for reorder ------------------------------------------------------------
+test_that("invalid outputs", {
+  
+  
+  
+}) 
+
+# Tests for sbgc & gb ----------------------------------------------------------
+test_that("invalid outputs", {
   
   # Inputs
   n_sites  <- sample(100:1000, 1)     

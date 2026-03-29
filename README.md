@@ -31,8 +31,8 @@ install.packages("bioregion")
 or from GitHub
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("bioRgeo/bioregion")
+# install.packages("pak")
+pak::pak("bioRgeo/bioregion")
 ```
 
 ## :scroll: Vignettes
