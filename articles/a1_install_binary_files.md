@@ -32,7 +32,8 @@ install_binaries(binpath = "tempdir" ,
                  infomap_version = c("2.1.0", 
                                      "2.6.0",
                                      "2.7.1",
-                                     "2.8.0"))
+                                     "2.8.0"),
+                 verbose = TRUE)
 ```
 
     ## 
@@ -41,7 +42,7 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## The folder has been successfully downloaded to /tmp/RtmpbBlFWa.
+    ## The folder has been successfully downloaded to /tmp/RtmpkTZap3.
 
     ## 
 
@@ -49,7 +50,7 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## The folder has been successfully unzipped in /tmp/RtmpbBlFWa.
+    ## The folder has been successfully unzipped in /tmp/RtmpkTZap3.
 
     ## 
 
@@ -57,29 +58,29 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.1.0/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.1.0/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.1.0/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.1.0/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.6.0/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.6.0/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.6.0/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.6.0/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.7.1/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.7.1/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.7.1/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.7.1/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.8.0/infomap_omp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.8.0/infomap_omp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/INFOMAP/2.8.0/infomap_noomp_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/INFOMAP/2.8.0/infomap_noomp_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/LOUVAIN/convert_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/LOUVAIN/convert_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/LOUVAIN/louvain_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/LOUVAIN/louvain_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/OSLOM/oslom_dir_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/OSLOM/oslom_dir_lin as program: denied.
 
-    ## Permission to execute /tmp/RtmpbBlFWa/bin/OSLOM/oslom_undir_lin as program: denied.
+    ## Permission to execute /tmp/RtmpkTZap3/bin/OSLOM/oslom_undir_lin as program: denied.
 
     ## 
 
@@ -87,29 +88,29 @@ install_binaries(binpath = "tempdir" ,
 
     ## 
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.1.0/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.1.0/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.1.0/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.1.0/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.6.0/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.6.0/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.6.0/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.6.0/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.7.1/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.7.1/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.7.1/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.7.1/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.8.0/infomap_omp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.8.0/infomap_omp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/INFOMAP/2.8.0/infomap_noomp_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/INFOMAP/2.8.0/infomap_noomp_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/LOUVAIN/convert_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/LOUVAIN/convert_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/LOUVAIN/louvain_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/LOUVAIN/louvain_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/OSLOM/oslom_dir_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/OSLOM/oslom_dir_lin can now be executed as progam.
 
-    ## Automatic change of permission succeed, /tmp/RtmpbBlFWa/bin/OSLOM/oslom_undir_lin can now be executed as progam.
+    ## Automatic change of permission succeed, /tmp/RtmpkTZap3/bin/OSLOM/oslom_undir_lin can now be executed as progam.
 
     ## 
 
@@ -208,7 +209,8 @@ install_binaries(binpath = "myfolder" ,
                  infomap_version = c("2.1.0", 
                                      "2.6.0",
                                      "2.7.1",
-                                     "2.8.0"))
+                                     "2.8.0"),
+                 verbose = FALSE)
 
 comat <- matrix(sample(1000, 50), 5, 10)
 rownames(comat) <- paste0("Site", 1:5)

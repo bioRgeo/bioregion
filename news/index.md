@@ -1,10 +1,17 @@
 # Changelog
 
-## bioregion 1.3.0.9000
+## bioregion 1.4.0.9000
 
 This is a list of changes made in the development/GitHub version of the
-package between **bioregion 1.3.0** (CRAN release 2026-01-23) and the
+package between **bioregion 1.4.0** (CRAN release 2026-03-29) and the
 next CRAN release.
+
+- 
+
+## bioregion 1.4.0
+
+This is a list of changes made between **bioregion 1.3.0** (CRAN release
+2026-01-23) and **bioregion 1.4.0** (CRAN release 2026-03-29).
 
 - [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
   has been updated. It now supports multiple bioregion  
@@ -14,9 +21,9 @@ next CRAN release.
   argument  
   is now deprecated.
 
-- `map_bioregion()` has been reformatted: `bioregionnalization` argument
-  changed to `partition_index`, `clusters` to `bioregionnalization`,
-  `geomatry` to `map` and `write_clusters` to `map_as_output`.
+- `map_bioregion()` has been reformatted: `bioregionalization` argument
+  changed to `partition_index`, `clusters` to `bioregionalization`,
+  `geometry` to `map` and `write_clusters` to `map_as_output`.
 
 - `map_bioregion()` can now handle `terra` inputs (`terra` added in
   `Suggests`).
