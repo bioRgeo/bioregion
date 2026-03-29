@@ -319,9 +319,7 @@ ex_leadingeigen <- netclu_leadingeigen(fishdf,
 table(ex_leadingeigen$clusters$K_17)
 ```
 
-    ## 
-    ##   1  10  11  12  13  14  15  16  17   2   3   4   5   6   7   8   9 
-    ## 108   2   1   2   1   1   2   2   1 136  81  69  34  22  28   1  42
+    ## < table of extent 0 >
 
 ### 3.5 Walktrap
 
