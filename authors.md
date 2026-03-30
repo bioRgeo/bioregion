@@ -12,7 +12,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/bioRgeo/bioregion/blob/v1.4.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/bioRgeo/bioregion/blob/master/inst/CITATION)
 
 Denelle P, Leroy B & Lenormand M (2025) Bioregionalization analyses with
 the bioregion R package. Methods in Ecology and Evolution 16, 496-506.

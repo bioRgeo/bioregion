@@ -6,7 +6,10 @@ This is a list of changes made in the development/GitHub version of the
 package between **bioregion 1.4.0** (CRAN release 2026-03-29) and the
 next CRAN release.
 
-- 
+- Relaxed matching controls in
+  [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
+  and
+  [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md).
 
 ## bioregion 1.4.0
 
@@ -28,7 +31,7 @@ This is a list of changes made between **bioregion 1.3.0** (CRAN release
 - `map_bioregion()` can now handle `terra` inputs (`terra` added in
   `Suggests`).
 
-- `clusters` argument changed to `bioregionnalization` in
+- `clusters` argument changed to `bioregionalization` in
   [`site_species_subset()`](https://bioRgeo.github.io/bioregion/reference/site_species_subset.md).
 
 - Added `seed` argument to
