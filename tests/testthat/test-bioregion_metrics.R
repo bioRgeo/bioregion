@@ -138,14 +138,12 @@ test_that("invalid inputs", {
   expect_error(
     bioregion_metrics(cluinfo,
                       comat = comatwnames1),
-    "Site ID in bioregionalization and comat do not match!",
-    fixed = TRUE)
+    "^Some sites are not found in comat:")
 
   expect_error(
     bioregion_metrics(cluinfo,
                       comat = comatwnames2),
-    "Site ID in bioregionalization and comat do not match!",
-    fixed = TRUE)
+    "^Some sites are not found in comat:")
 
   expect_error(
     bioregion_metrics(cluinfo,

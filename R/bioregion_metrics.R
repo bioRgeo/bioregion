@@ -100,18 +100,30 @@ bioregion_metrics <- function(bioregionalization,
   }
   comat_site <- rownames(comat)
   
-  # Check comat_site & b_site
-  if(length(intersect(b_site, comat_site)) == length(b_site) &
-     length(b_site) == length(comat_site)){
-    #print("match!")
-  }else{
-    stop("Site ID in bioregionalization and comat do not match!", 
+  # Check that comat_site are in bioregionalization 
+  missing_sites <- setdiff(b_site, comat_site)
+  if(length(missing_sites) > 0){
+    stop(paste0("Some sites are not found in comat:\n",
+                "  Missing sites: ", paste(utils::head(missing_sites, 10), collapse = ", "),
+                if(length(missing_sites) > 10) paste0(" ... (", length(missing_sites) - 10, " more)") else "",
+                "\n  Please ensure that all sites in 'bioregionalization' have corresponding entries in 'comat'."),
          call. = FALSE)
   }
-  if(sum(b_site == comat_site) != length(b_site)){
-    comat <- comat[match(b_site, comat_site),]
-    comat_site <- rownames(comat)
-  }
+  comat <- comat[match(b_site, comat_site),]
+  comat_site <- rownames(comat)
+  
+  # # Check comat_site & b_site
+  # if(length(intersect(b_site, comat_site)) == length(b_site) &
+  #    length(b_site) == length(comat_site)){
+  #   #print("match!")
+  # }else{
+  #   stop("Site ID in bioregionalization and comat do not match!", 
+  #        call. = FALSE)
+  # }
+  # if(sum(b_site == comat_site) != length(b_site)){
+  #   comat <- comat[match(b_site, comat_site),]
+  #   comat_site <- rownames(comat)
+  # }
   
   # Control map
   if(!is.null(map)){

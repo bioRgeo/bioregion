@@ -25,7 +25,7 @@ vegesim <- similarity(vegemat, metric = c("Jaccard", "Simpson", "Sorensen"))
 fishsim <- similarity(fishmat, metric = c("Jaccard", "Bray"))
 
 vegesimwnames <- vegesim
-vegesimwnames[1,1] <- "einuastnie"
+vegesimwnames[vegesimwnames == "35"] <- "einuastnie"
 
 vegesim_shuff <- vegesim[sample(dim(vegesim)[1],dim(vegesim)[1]),]
 
@@ -78,7 +78,6 @@ clualt5 <- cluhiernoclust
 clualt5$name <- NULL
 clualt6 <- cluhiernoclust
 clualt6$name <- "ansitniesti"
-
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
@@ -832,31 +831,27 @@ test_that("invalid inputs", {
     site_species_metrics(cluinfo,
                          comat = comatwnames1,
                          verbose = FALSE),
-    "Site ID in bioregionalization and comat do not match!", 
-    fixed = TRUE)
+    "^Some sites are not found in comat:")
   
   expect_error(
     site_species_metrics(cluinfo,
                          comat = comatwnames2,
                          verbose = FALSE),
-    "Site ID in bioregionalization and comat do not match!", 
-    fixed = TRUE)
+    "^Some sites are not found in comat:")
   
   expect_error(
     site_species_metrics(cluinfo,
                          cluster_on = "species",
                          comat = comatwnames1,
                          verbose = FALSE),
-    "Species ID in bioregionalization and comat do not match!", 
-    fixed = TRUE)
+    "^Some species are not found in comat:")
   
   expect_error(
     site_species_metrics(cluinfo,
                          cluster_on = "species",
                          comat = comatwnames2,
                          verbose = FALSE),
-    "Species ID in bioregionalization and comat do not match!", 
-    fixed = TRUE)
+    "^Some species are not found in comat:")
   
   expect_error(
     site_species_metrics(cluinfo,
@@ -935,6 +930,6 @@ test_that("invalid inputs", {
                          bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesimwnames),
-    "Site ID in bioregionalization and similarity do not match!")
+    "^Some sites are not found in similarity:")
 
 })

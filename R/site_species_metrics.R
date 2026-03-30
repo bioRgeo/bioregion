@@ -548,33 +548,61 @@ site_species_metrics <- function(bioregionalization,
     comat_species <- colnames(comat)
     
     if(cluster_on != "species"){
-      # Check that comat_site are in bioregionalization
-      if(length(intersect(b_site, comat_site)) == length(b_site) &
-         length(b_site) == length(comat_site)){
-        #print("match!")
-      }else{
-        stop("Site ID in bioregionalization and comat do not match!", 
+      
+      # Check that comat_site are in bioregionalization 
+      missing_sites <- setdiff(b_site, comat_site)
+      if(length(missing_sites) > 0){
+        stop(paste0("Some sites are not found in comat:\n",
+                    "  Missing sites: ", paste(utils::head(missing_sites, 10), collapse = ", "),
+                    if(length(missing_sites) > 10) paste0(" ... (", length(missing_sites) - 10, " more)") else "",
+                    "\n  Please ensure that all sites in 'bioregionalization' have corresponding entries in 'comat'."),
              call. = FALSE)
       }
-      if(sum(b_site == comat_site) != length(b_site)){
-        comat <- comat[match(b_site, comat_site),]
-        comat_site <- rownames(comat)
-      }
+      comat <- comat[match(b_site, comat_site),]
+      comat_site <- rownames(comat)
+      
+      # # Check that comat_site are in bioregionalization
+      # if(length(intersect(b_site, comat_site)) == length(b_site) &
+      #    length(b_site) == length(comat_site)){
+      #   #print("match!")
+      # }else{
+      #   stop("Site ID in bioregionalization and comat do not match!", 
+      #        call. = FALSE)
+      # }
+      # if(sum(b_site == comat_site) != length(b_site)){
+      #   comat <- comat[match(b_site, comat_site),]
+      #   comat_site <- rownames(comat)
+      # }
+      
     }
     if(type != "gb"){
       if(cluster_on != "site"){
-        # Check that comat_species are in bioregionalization
-        if(length(intersect(b_species, comat_species)) == length(b_species) &
-           length(b_species) == length(comat_species)){
-          #print("match!")
-        }else{
-          stop("Species ID in bioregionalization and comat do not match!", 
+        
+        # Check that comat_site are in bioregionalization 
+        missing_species <- setdiff(b_species, comat_species)
+        if(length(missing_species) > 0){
+          stop(paste0("Some species are not found in comat:\n",
+                      "  Missing species: ", paste(utils::head(missing_species, 10), collapse = ", "),
+                      if(length(missing_species) > 10) paste0(" ... (", length(missing_species) - 10, " more)") else "",
+                      "\n  Please ensure that all species in 'bioregionalization' have corresponding entries in 'comat'."),
                call. = FALSE)
         }
-        if(sum(b_species == comat_species) != length(b_species)){
-          comat <- comat[,match(b_species, comat_species)]
-          comat_species <- colnames(comat)
-        }
+        comat <- comat[,match(b_species, comat_species)]
+        comat_species <- colnames(comat)
+        
+        # # Check that comat_species are in bioregionalization
+        # if(length(intersect(b_species, comat_species)) == length(b_species) &
+        #    length(b_species) == length(comat_species)){
+        #   #print("match!")
+        # }else{
+        #   stop("Species ID in bioregionalization and comat do not match!", 
+        #        call. = FALSE)
+        # }
+        # if(sum(b_species == comat_species) != length(b_species)){
+        #   comat <- comat[,match(b_species, comat_species)]
+        #   comat_species <- colnames(comat)
+        # }
+        
       }
     }
   }
@@ -675,19 +703,32 @@ site_species_metrics <- function(bioregionalization,
     
     sim_site <- rownames(similarity)
     
-    if(length(intersect(b_site, sim_site)) == length(b_site) &
-       length(b_site) == length(sim_site)){
-      #print("match!")
-    }else{
-      stop("Site ID in bioregionalization and similarity do not match!", 
+    # Check that sim_site are in bioregionalization 
+    missing_sites <- setdiff(b_site, sim_site)
+    if(length(missing_sites) > 0){
+      stop(paste0("Some sites are not found in similarity:\n",
+                  "  Missing sites: ", paste(utils::head(missing_sites, 10), collapse = ", "),
+                  if(length(missing_sites) > 10) paste0(" ... (", length(missing_sites) - 10, " more)") else "",
+                  "\n  Please ensure that all sites in 'bioregionalization' have corresponding entries in 'dissimilarity'."),
            call. = FALSE)
     }
+    similarity <- similarity[match(b_site, sim_site), 
+                             match(b_site, sim_site)]
+    sim_site <- rownames(similarity)
     
-    if(sum(b_site == sim_site) != length(b_site)){
-      similarity <- similarity[match(b_site, sim_site), 
-                               match(b_site, sim_site)]
-      sim_site <- rownames(similarity)
-    }
+    # if(length(intersect(b_site, sim_site)) == length(b_site) &
+    #    length(b_site) == length(sim_site)){
+    #   #print("match!")
+    # }else{
+    #   stop("Site ID in bioregionalization and similarity do not match!", 
+    #        call. = FALSE)
+    # }
+    # if(sum(b_site == sim_site) != length(b_site)){
+    #   similarity <- similarity[match(b_site, sim_site), 
+    #                            match(b_site, sim_site)]
+    #   sim_site <- rownames(similarity)
+    # }
+    
   }  
   
   # Loop over partitions
