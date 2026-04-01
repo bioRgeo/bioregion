@@ -5,16 +5,17 @@
 \title{Add color palettes to bioregion cluster objects}
 \usage{
 bioregion_colors(
-  clusters,
+  bioregionalization,
   palette = "Vivid",
   cluster_ordering = "n_sites",
-  cutoff_insignificant = NULL
+  cutoff_insignificant = NULL,
+  clusters = NULL
 )
 }
 \arguments{
-\item{clusters}{An object of class \code{bioregion.clusters}, typically output
-from clustering functions such as \code{\link[=netclu_infomap]{netclu_infomap()}}, \code{\link[=hclu_hierarclust]{hclu_hierarclust()}},
-or \code{\link[=nhclu_pam]{nhclu_pam()}}.}
+\item{bioregionalization}{An object of class \code{bioregion.clusters}, typically
+output from clustering functions such as \code{\link[=netclu_infomap]{netclu_infomap()}},
+\code{\link[=hclu_hierarclust]{hclu_hierarclust()}}, or \code{\link[=nhclu_pam]{nhclu_pam()}}.}
 
 \item{palette}{A \code{character} string indicating which color palette from
 \code{rcartocolor} to use. Default is \code{"Vivid"}. Other qualitative palettes
@@ -34,6 +35,8 @@ specified, clusters with values at or below this threshold (based on the
 \code{cluster_ordering} criterion) are considered insignificant and colored
 black, reducing visual clutter on maps. If \code{NULL}, all clusters receive
 distinct colors.}
+
+\item{clusters}{Deprecated. Use \code{bioregionalization} instead.}
 }
 \value{
 A modified \code{bioregion.clusters} object with two additional elements:
@@ -70,10 +73,12 @@ Clusters with values at or below the threshold are assigned black (#000000).
 
 Remaining clusters are ranked by the \code{cluster_ordering} criterion:
 \itemize{
-\item \strong{Top clusters} (up to 12): Receive distinct colors from the chosen
-palette. This limit is because above 12 the human eye struggles to
-distinguish between colors.
-\item \strong{Remaining clusters} (beyond top 12): Receive shades of grey from
+\item \strong{Top clusters} (up to 11 for qualitative CARTO palettes, or the
+palette maximum for other palettes): Receive distinct colors from the
+chosen palette. For the qualitative palettes (\code{"Vivid"}, \code{"Bold"},
+\code{"Prism"}, \code{"Safe"}, \code{"Antique"}, \code{"Pastel"}), the 12th color is
+always a grey/neutral tone and is automatically excluded.
+\item \strong{Remaining clusters}: Receive shades of grey from
 light (#CCCCCC) to dark (#404040), maintaining visual distinction but
 with less prominence.
 }

@@ -6,9 +6,9 @@
 #' important clusters (based on size), grey shades to less important clusters,
 #' and optionally black to insignificant clusters.
 #'
-#' @param clusters An object of class `bioregion.clusters`, typically output
-#' from clustering functions such as [netclu_infomap()], [hclu_hierarclust()],
-#' or [nhclu_pam()].
+#' @param bioregionalization An object of class `bioregion.clusters`, typically
+#' output from clustering functions such as [netclu_infomap()],
+#' [hclu_hierarclust()], or [nhclu_pam()].
 #' 
 #' @param palette A `character` string indicating which color palette from
 #' `rcartocolor` to use. Default is `"Vivid"`. Other qualitative palettes 
@@ -28,6 +28,8 @@
 #' `cluster_ordering` criterion) are considered insignificant and colored
 #' black, reducing visual clutter on maps. If `NULL`, all clusters receive
 #' distinct colors.
+#'
+#' @param clusters Deprecated. Use `bioregionalization` instead.
 #' 
 #' @return 
 #' A modified `bioregion.clusters` object with two additional elements:
@@ -132,21 +134,31 @@
 #' }
 #' 
 #' @export
-bioregion_colors <- function(clusters,
+bioregion_colors <- function(bioregionalization,
                              palette = "Vivid",
                              cluster_ordering = "n_sites",
-                             cutoff_insignificant = NULL) {
-  
-  # 1. Input validation --------------------------------------------------------
-  
-  # Check that clusters is a bioregion.clusters object
-  if (!inherits(clusters, "bioregion.clusters")) {
-    stop("clusters must be a bioregion.clusters object.", call. = FALSE)
+                             cutoff_insignificant = NULL,
+                             clusters = NULL) {
+
+  # Deprecated arguments
+  if (!is.null(clusters)) {
+    stop("clusters is deprecated. It has been replaced by bioregionalization.",
+         call. = FALSE)
   }
-  
-  # Check that clusters has a clusters element
-  if (is.null(clusters$clusters) || !inherits(clusters$clusters, "data.frame")) {
-    stop("clusters object must contain a clusters data.frame.", call. = FALSE)
+
+  # 1. Input validation --------------------------------------------------------
+
+  # Check that bioregionalization is a bioregion.clusters object
+  if (!inherits(bioregionalization, "bioregion.clusters")) {
+    stop("bioregionalization must be a bioregion.clusters object.",
+         call. = FALSE)
+  }
+
+  # Check that bioregionalization has a clusters element
+  if (is.null(bioregionalization$clusters) ||
+      !inherits(bioregionalization$clusters, "data.frame")) {
+    stop("bioregionalization object must contain a clusters data.frame.",
+         call. = FALSE)
   }
   
   # Validate palette parameter
@@ -170,7 +182,7 @@ bioregion_colors <- function(clusters,
   
   # Check bipartite requirements for n_species and n_both
   if (cluster_ordering %in% c("n_species", "n_both")) {
-    if (is.null(clusters$inputs$bipartite) || !clusters$inputs$bipartite) {
+    if (is.null(bioregionalization$inputs$bipartite) || !bioregionalization$inputs$bipartite) {
       stop(paste0("cluster_ordering '", cluster_ordering, 
                   "' can only be used with bipartite clustering."),
            call. = FALSE)
@@ -190,13 +202,13 @@ bioregion_colors <- function(clusters,
   # 2. Extract cluster information ---------------------------------------------
   
   # Get cluster columns (exclude first column which is ID)
-  cluster_cols <- clusters$clusters[, 2:ncol(clusters$clusters), drop = FALSE]
+  cluster_cols <- bioregionalization$clusters[, 2:ncol(bioregionalization$clusters), drop = FALSE]
   nb_partitions <- ncol(cluster_cols)
   partition_names <- names(cluster_cols)
   
   # Initialize list to store colors for each partition
   colors_list <- list()
-  clusters_colors <- clusters$clusters
+  clusters_colors <- bioregionalization$clusters
   
   # Process each partition separately
   for (part_idx in seq_len(nb_partitions)) {
@@ -220,7 +232,7 @@ bioregion_colors <- function(clusters,
     } else if (cluster_ordering == "n_species") {
       # For bipartite networks, count species in each cluster
       # Need to access node_type attribute
-      node_type <- attr(clusters$clusters, "node_type")
+      node_type <- attr(bioregionalization$clusters, "node_type")
       if (is.null(node_type)) {
         warning(paste0("node_type attribute not found in clusters object. ",
                        "Falling back to n_sites ordering."))
@@ -404,10 +416,10 @@ bioregion_colors <- function(clusters,
   
   # 8. Add new elements to clusters object -------------------------------------
   
-  clusters$colors <- colors_list
-  clusters$clusters_colors <- clusters_colors
-  
+  bioregionalization$colors <- colors_list
+  bioregionalization$clusters_colors <- clusters_colors
+
   # 9. Return enhanced object --------------------------------------------------
-  
-  return(clusters)
+
+  return(bioregionalization)
 }
