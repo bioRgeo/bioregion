@@ -175,16 +175,13 @@ hclu_diana <- function(dissimilarity,
   # Output of the function
   outputs <- list(name = "hclu_diana")
   
-  # Adding dynamic_tree_cut = FALSE for compatibility with generic functions
-  dynamic_tree_cut <- FALSE
   outputs$args <- list(index = index,
                        n_clust = n_clust,
                        cut_height = cut_height,
                        find_h = find_h,
                        h_max = h_max,
                        h_min = h_min,
-                       verbose = verbose,
-                       dynamic_tree_cut = dynamic_tree_cut)
+                       verbose = verbose)
   
   # Determine pairwise_metric and data_type
   pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
@@ -232,7 +229,6 @@ hclu_diana <- function(dissimilarity,
                                  find_h = find_h,
                                  h_max = h_max,
                                  h_min = h_min,
-                                 dynamic_tree_cut = dynamic_tree_cut,
                                  verbose = verbose)
     
     outputs$cluster_info <- data.frame(

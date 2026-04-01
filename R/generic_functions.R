@@ -332,7 +332,7 @@ print.bioregion.clusters <- function(x, ...) {
           ), "\n"
         )
       }
-      if (x$args$dynamic_tree_cut) {
+      if (isTRUE(x$args$dynamic_tree_cut)) {
         cat(paste0(
           " - Dynamic tree cut method chosen: '", x$args$dynamic_method,
           "', with minimum cluster size ", x$args$dynamic_minClusterSize,
@@ -490,7 +490,7 @@ plot.bioregion.clusters <- function(x, ...) {
           border = "#377eb8"
         )
       }
-    } else if (x$args$dynamic_tree_cut) {
+    } else if (isTRUE(x$args$dynamic_tree_cut)) {
       # Adding rectangles for dynamic tree cut
       vect_clust <- x$clusters[, 2]
       names(vect_clust) <- x$clusters[, 1]
@@ -566,7 +566,7 @@ plot.bioregion.clusters <- function(x, ...) {
           border = "#377eb8"
         )
       }
-    } else if (x$args$dynamic_tree_cut) {
+    } else if (isTRUE(x$args$dynamic_tree_cut)) {
       # Adding rectangles for dynamic tree cut
       vect_clust <- x$clusters[, 2]
       names(vect_clust) <- x$clusters[, 1]

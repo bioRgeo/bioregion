@@ -366,9 +366,6 @@ hclu_hierarclust <- function(dissimilarity,
   # 2. Function ---------------------------------------------------------------
   outputs <- list(name = "hclu_hierarclust")
   
-  # Adding dynamic_tree_cut = FALSE for compatibility with generic functions
-  dynamic_tree_cut <- FALSE
-  
   # Outputs args
   outputs$args <- list(index = index,
                        method = method,
@@ -384,8 +381,7 @@ hclu_hierarclust <- function(dissimilarity,
                        h_min = h_min,
                        consensus_p = consensus_p,
                        show_hierarchy = show_hierarchy,
-                       verbose = verbose,
-                       dynamic_tree_cut = dynamic_tree_cut)
+                       verbose = verbose)
   
   # Determine pairwise_metric and data_type
   pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
@@ -574,7 +570,6 @@ hclu_hierarclust <- function(dissimilarity,
                         find_h = find_h,
                         h_max = h_max,
                         h_min = h_min,
-                        dynamic_tree_cut = dynamic_tree_cut,
                         show_hierarchy = show_hierarchy,
                         verbose = verbose)
     
