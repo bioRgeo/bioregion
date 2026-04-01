@@ -136,7 +136,7 @@
 #' # Find out which bioregionalizations are most representative
 #' compare_bioregionalizations(compare_df,
 #'                             cor_frequency = TRUE)
-#'                                 
+#'   
 #' @export
 compare_bioregionalizations <- function(bioregionalizations,
                                         indices = c("rand", "jaccard"),
@@ -305,7 +305,7 @@ compare_bioregionalizations <- function(bioregionalizations,
     }
 
     bioregionalization_freq_cor <- as.vector(suppressWarnings(
-      cor(item_pw_mb, item_pw_mb_freq)))
+      stats::cor(item_pw_mb, item_pw_mb_freq)))
     bioregionalization_freq_cor[is.na(bioregionalization_freq_cor)] <- 0
     names(bioregionalization_freq_cor) <- colnames(clusters)
   }

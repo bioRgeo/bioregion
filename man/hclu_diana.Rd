@@ -84,7 +84,6 @@ data("fishmat")
 fishdissim <- dissimilarity(fishmat)
 fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 
-
 }
 \references{
 Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to

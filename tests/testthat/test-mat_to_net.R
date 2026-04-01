@@ -72,6 +72,11 @@ test_that("valid outputs", {
   expect_equal(dim(net2)[1], 55)
   expect_equal(dim(net2)[2], 2)
   
+  # mat with 1 site and/or 1 species
+  net <- mat_to_net(mat[1, 1, drop=FALSE])
+  net <- mat_to_net(mat[1:2, 1, drop=FALSE])
+  net <- mat_to_net(mat[1, 1:2, drop=FALSE])
+  
 
 })
 

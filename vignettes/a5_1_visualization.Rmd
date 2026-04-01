@@ -26,6 +26,7 @@ suppressPackageStartupMessages({
     library("dplyr")
     library("rnaturalearth")
     library("sf")
+    library("terra")
     library("tidyr")
   })
 })
@@ -46,9 +47,10 @@ format of this dataset, computes the dissimilarity matrix out of it and also
 load the data.frame format of the data.
 
 ```{r}
-data(vegemat)
-vegedissim <- dissimilarity(vegemat, metric = "all")
 data(vegedf)
+data(vegemat)
+
+vegedissim <- dissimilarity(vegemat, metric = "Simpson")
 ```
 
 Since we aim at plotting the result, we also need the object `vegesf` linking
@@ -81,8 +83,10 @@ Let's take an example with a K-means clustering, with a number of clusters set
 to 3.
 
 ```{r}
-set.seed(1)
-vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, n_clust = 3, index = "Simpson")
+vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, 
+                                  n_clust = 3, 
+                                  index = "Simpson",
+                                  seed = 1)
 ```
 
 `map_bioregions()` function can now simply takes the object `fish_nhclu_kmeans`,
@@ -90,7 +94,8 @@ which is of `bioregion.clusters` class, and the spatial distribution of sites,
 stored in `fishsf`.
 
 ```{r}
-map_bioregions(vege_nhclu_kmeans, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_nhclu_kmeans, 
+               map = vegesf)
 ```
 
 ## 2.2 Color palettes with bioregion_colors()
@@ -119,7 +124,9 @@ vege_kmeans_vivid <- bioregion_colors(vege_nhclu_kmeans,
 vege_kmeans_vivid$colors
 
 # Map with Vivid colors
-map_bioregions(vege_kmeans_vivid, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_kmeans_vivid, 
+               map = vegesf, 
+               plot = TRUE)
 ```
 
 Note that vege_kmeans_vivid is identical to vege_kmeans with two new slots:
@@ -139,7 +146,9 @@ vege_kmeans_bold <- bioregion_colors(vege_nhclu_kmeans,
 vege_kmeans_bold$colors
 
 # Map with Bold colors
-map_bioregions(vege_kmeans_bold, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_kmeans_bold, 
+               map = vegesf, 
+               plot = TRUE)
 ```
 
 #### Example 3: Safe palette
@@ -149,14 +158,16 @@ The Safe palette is designed to be colorblind-friendly.
 ```{r}
 # Apply the Safe palette
 vege_kmeans_safe <- bioregion_colors(vege_nhclu_kmeans, 
-                                      palette = "Safe",
-                                      cluster_ordering = "n_sites")
+                                     palette = "Safe",
+                                     cluster_ordering = "n_sites")
 
 # View the color assignments
 vege_kmeans_safe$colors
 
 # Map with Safe colors
-map_bioregions(vege_kmeans_safe, geometry = vegesf, plot = TRUE)
+map_bioregions(vege_kmeans_safe, 
+               map = vegesf, 
+               plot = TRUE)
 
 ```
 
@@ -211,8 +222,10 @@ as its geometry and cluster number.
 For this purpose, you can set the arguments like in the chunk below:
 
 ```{r}
-custom <- map_bioregions(vege_nhclu_kmeans, geometry = vegesf,
-                         write_clusters = TRUE, plot = FALSE)
+custom <- map_bioregions(vege_nhclu_kmeans, 
+                         map = vegesf,
+                         map_as_output = TRUE, 
+                         plot = FALSE)
 custom
 
 # Crop world coastlines to the extent of the sf object of interest
@@ -241,18 +254,19 @@ other algorithms.
 
 ```{r}
 # Hierarchical clustering
-set.seed(1)
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
-                                          index = names(vegedissim)[6],
-                                          method = "mcquitty", n_clust = 3,
+                                          index = "Simpson",
+                                          seed = 1,
+                                          method = "mcquitty", 
+                                          n_clust = 3,
                                           optimal_tree_method = "best")
 vege_hclu_hierarclust$cluster_info
 
 # Walktrap network bioregionalization
 vegesim <- dissimilarity_to_similarity(vegedissim)
-set.seed(1)
+
 vege_netclu_walktrap <- netclu_walktrap(vegesim,
-                                        index = names(vegesim)[6])
+                                          index = "Simpson")
 vege_netclu_walktrap$cluster_info # 3
 ```
 
@@ -285,8 +299,8 @@ We now add back the geometry as an extra column to make this object spatial.
 
 ```{r}
 all_long_sf <- dplyr::left_join(all_long,
-                                vegesf[, c("ID", "geometry")],
-                                by = "ID")
+                                vegesf[, c("Site", "geometry")],
+                                join_by(ID == Site))
 all_long_sf <- sf::st_as_sf(all_long_sf)
 ```
 
@@ -490,7 +504,7 @@ fish_netclu <- bioregion_colors(fish_nhclu, # Assign colors to bioregions
                                    cluster_ordering = "n_both") # Order clusters by total size (sites + species)
 
 # Let's make the map for the first bioregionalization
-map_bioregions(fish_netclu, geometry = fishsf,
+map_bioregions(fish_netclu, map = fishsf,
                 partition = 1)
 
 # Export the first bioregionalization to GDF with colors and attributes

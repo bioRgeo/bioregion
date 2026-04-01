@@ -111,12 +111,7 @@
 #' clust1 <- hclu_optics(dissim, index = "Simpson", show_hierarchy = TRUE)
 #' clust1
 #' 
-#' @importFrom stats as.dist
-#' @importFrom dbscan optics extractXi
-#' @importFrom tidyr separate
-#' 
 #' @export
-
 hclu_optics <- function(dissimilarity,
                         index = names(dissimilarity)[3],
                         minPts = NULL,
@@ -229,9 +224,9 @@ hclu_optics <- function(dissimilarity,
   }
   
   outputs$algorithm <- dbscan::optics(x = dist.obj,
-                                             minPts = minPts,
-                                             eps = eps,
-                                             ...)
+                                      minPts = minPts,
+                                      eps = eps,
+                                      ...)
   outputs$algorithm <-
     dbscan::extractXi(outputs$algorithm,
                       xi = xi,

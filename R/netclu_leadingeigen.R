@@ -96,8 +96,6 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_leadingeigen(net_bip, bipartite = TRUE)
 #' 
-#' @importFrom igraph graph_from_data_frame cluster_leading_eigen
-#' 
 #' @export
 
 netclu_leadingeigen <- function(net,

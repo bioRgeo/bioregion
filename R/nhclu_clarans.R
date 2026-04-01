@@ -72,9 +72,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' #clust <- nhclu_clarans(dissim, index = "Simpson", n_clust = 5)
-#'    
-#' @importFrom stats as.dist
-#' @importFrom fastkmedoids fastclarans    
 #'                    
 #' @export
 nhclu_clarans <- function(dissimilarity,
@@ -165,28 +162,21 @@ nhclu_clarans <- function(dissimilarity,
   
   outputs$clusters$name <- labels(dist.obj)
   
-  # CLARANS algorithm
+  # CLARANS algorithm (with seed)
+  claraseed <- sample(1:10000, 1)
   if(!is.null(seed)){
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclarans(rdist = dist.obj,
-                                         n = nrow(dist.obj),
-                                         k = x,
-                                         numlocal = numlocal,
-                                         maxneighbor = maxneighbor,
-                                         seed = seed))
-  }else{
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclarans(rdist = dist.obj,
-                                         n = nrow(dist.obj),
-                                         k = x,
-                                         numlocal = numlocal,
-                                         maxneighbor = maxneighbor,
-                                         seed = seedrng()))
-  }  
+    claraseed <- seed
+  }
+  outputs$algorithm <-
+    lapply(n_clust,
+           function(x)
+             fastkmedoids::fastclarans(rdist = dist.obj,
+                                       n = nrow(dist.obj),
+                                       k = x,
+                                       numlocal = numlocal,
+                                       maxneighbor = maxneighbor,
+                                       seed = claraseed))
+  
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(

@@ -2,6 +2,8 @@
 controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   lstype <- c("input_bioregionalization",
+              "input_partition_index",
+              "input_map",
               "input_nhandhclu",
               "input_similarity",
               "input_dissimilarity",
@@ -51,6 +53,34 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
                   " must be a bioregion.clusters object."),
            call. = FALSE)
     }else{
+      if(is.null(data$name)){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+      if(!inherits(data$clusters, "data.frame")) {
+        if(data$name == "hclu_hierarclust" |
+            data$name == "hclu_diana") {
+          stop(paste0("No clusters have been generated for your hierarchical ",
+                      "tree, please extract clusters from the tree.\n",
+                      "See ?hclu_hierarclust, ?hclu_diana or ?cut_tree."), 
+               call. = FALSE)
+        }else{
+          stop(paste0(deparse(substitute(data)),
+                      " does not have the expected type of ",
+                      "'clusters' slot."), 
+               call. = FALSE)
+        }
+      }
+      if (is.null(attr(data$clusters, "node_type"))) {
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
       if(is.null(data$inputs$data_type)){
         stop(paste0(deparse(substitute(data)),
                     " is a bioregion.cluster object but it has been altered ",
@@ -81,10 +111,96 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
                     " data type and node type are missing."),
              call. = FALSE)
       }
-
-      
     }
   }
+  
+  # Input partition index ######################################################
+  if (type == "input_partition_index") {
+    partition_name <- colnames(data)[-1]
+    if(sum(duplicated(args))!=0){
+      stop(paste0("Duplicated values detected in ", deparse(substitute(args)),
+                  "."), 
+           call. = FALSE)
+    }
+    if (is.character(args)) {
+      check <- match(args, partition_name)
+      if (sum(is.na(check)!=0)) {
+        stop(paste0("If ", deparse(substitute(args)),
+                    " is a character, it should be a ",
+                    "column name (not the first)."), 
+             call. = FALSE)
+      }
+    } else if (is.numeric(args)) {
+      if (sum(args %% 1 != 0) > 0) {
+        stop(paste0("If ", 
+                    deparse(substitute(args)),
+                    " is numeric, it should be an integer."), 
+             call. = FALSE)
+      } else {
+        if (sum(args <= 1) != 0) {
+          stop(paste0(deparse(substitute(args)),
+                      " should be strictly higher than 1."), 
+               call. = FALSE)
+        }
+        if (sum(args > dim(data)[2]) != 0) {
+          stop(paste0(deparse(substitute(args)),
+                      " should be lower or equal to ", 
+                      dim(data)[2], "."),
+               call. = FALSE)
+        }
+      }
+    } else {
+      stop(paste0(deparse(substitute(args)),
+                  " should be numeric or character."), 
+           call. = FALSE)
+    }
+  }
+  
+  # Input map ##################################################################
+  if (type == "input_map") {
+    
+    if(inherits(data, "sf") | 
+       inherits(data, "SpatVector") | 
+       inherits(data, "SpatRaster")){
+      
+      # sf
+      if(inherits(data, "sf")){
+        if(!inherits(data, "data.frame") ){
+          stop(paste0(deparse(substitute(data)),
+                      " must be a sf data.frame."),
+               call. = FALSE)
+        }else{
+          if(ncol(data) == 1){
+            stop(paste0(deparse(substitute(data)),
+                        " must be a sf data.frame with ",
+                        "at least two columns (ID and geometry).\n",
+                        "The first column is used as ID"),
+                 call. = FALSE)
+          }
+        }
+      }
+      
+      # SpatVector
+      if(inherits(data, "SpatVector")){
+        if(ncol(data) == 0){
+          stop(paste0(deparse(substitute(data)),
+                      " must be a SpatVector with ",
+                      "at least one column for the ID.\n",
+                      "The first column is used as ID"),
+               call. = FALSE)
+        }
+      }
+      
+    }else{
+      stop(paste0(deparse(substitute(data)),
+                  " must be a sf or terra object."),
+           call. = FALSE)
+    }
+    
+    
+
+
+  }  
   
   # Input nhandhclu ############################################################
   if (type == "input_nhandhclu") {
@@ -822,9 +938,20 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   }
 }
 
-# Additional functions #########################################################
+###################################################################################################
+# Additional functions                                                                            #
+#  - reformat_hierarchy                                                                           #                                                                           
+#  - knbclu                                                                                       #
+#  - reorder                                                                                      #
+#  - make.unique.2                                                                                #
+#  - tree_eval                                                                                    #
+#  - sbgc [Species-to-bioregions/bioregionalization & Site-to-chorotype/chorological metrics]     #
+#  - gb [Site-to-bioregions/bioregionalization metrics]                                           #
+#  - detect_data_type_from_metric                                                                 #   
+#  - elbow_finder                                                                                 #
+###################################################################################################
 
-# reformat_hierarchy
+# reformat_hierarchy ###########################################################
 reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
   # Infomap
@@ -896,8 +1023,9 @@ reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
   return(output)
 }
+################################################################################
 
-# knbclu
+# knbclu #######################################################################
 knbclu <- function(partitions, 
                    reorder = TRUE, 
                    rename_duplicates = TRUE) {
@@ -936,8 +1064,62 @@ knbclu <- function(partitions,
   
   partitions
 }
+################################################################################
 
-# make.unique.2
+# reorder ######################################################################
+reorder <- function(tab,
+                    col = 1) {
+  
+  # data.frame
+  if(inherits(tab, "data.frame")) {
+    if(dim(tab)[1] > 1){
+      if(col == 1){
+        if(suppressWarnings(sum(is.na(as.numeric(tab[,1])))>0)){
+          tab <- tab[order(tab[,1]),]
+        }else{
+          tab <- tab[order(as.numeric(tab[,1])),]        
+        }
+      }
+      if(col == 2){
+        if(suppressWarnings(sum(is.na(as.numeric(tab[,1])))>0) |
+           suppressWarnings(sum(is.na(as.numeric(tab[,2])))>0)){
+          tab <- tab[order(tab[,1], tab[,2]),]
+        }else{
+          tab <- tab[order(as.numeric(tab[,1]), 
+                           as.numeric(tab[,2])),]        
+        }
+      }
+      rownames(tab) <- 1:dim(tab)[1]
+    }
+  }
+  
+  # matrix
+  if(inherits(tab, "matrix")){
+    
+    if(!is.null(rownames(tab)) & (dim(tab)[1] > 1)){
+      if(suppressWarnings(sum(is.na(as.numeric(rownames(tab))))>0)){
+        tab <- tab[order(rownames(tab)), , drop = FALSE]
+      }else{
+        tab <- tab[order(as.numeric(rownames(tab))), , drop = FALSE]
+      }
+    }  
+    
+    if(!is.null(colnames(tab)) & (dim(tab)[2] > 1)){
+      if(suppressWarnings(sum(is.na(as.numeric(colnames(tab))))>0)){
+        tab <- tab[, order(colnames(tab)), drop = FALSE]
+      }else{
+        tab <- tab[, order(as.numeric(colnames(tab))), drop = FALSE]
+      }
+    }
+    
+  }
+  
+  return(tab)
+  
+}  
+################################################################################
+
+# make.unique.2 ################################################################
 # from https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
 make.unique.2 <- function(x, sep = ".") {
   stats::ave(x, x, FUN = function(a) {
@@ -949,15 +1131,45 @@ make.unique.2 <- function(x, sep = ".") {
   })
 }
 
-# seedrng
-seedrng <- function() {
-  # as.numeric(as.POSIXct(Sys.time())) + sample(-10:10, 1)
-  #sample(1:(.Machine$integer.max), 1)
-  sample(1:10000, 1)
+# randomize_dist
+randomize_dist <- function(dist_mat){
+  ord <- sample(rownames(dist_mat))
+  return(dist_mat[ord, ord])
 }
+################################################################################
 
-# Species-to-bioregions/bioregionalization metrics
-# Site-to-chorotype/chorological metrics 
+# tree_eval ####################################################################
+tree_eval <- function(tree, 
+                      dist_mat, 
+                      method = "pearson") {
+  
+  if(inherits(dist_mat, "dist")){
+    dist_mat <- as.matrix(dist_mat)
+  }
+  
+  coph <- as.matrix(stats::cophenetic(tree))
+  coph <- coph[match(rownames(dist_mat), rownames(coph)), 
+               match(rownames(dist_mat), colnames(coph))]
+
+  lower_tri_idx <- lower.tri(dist_mat)
+  
+  # cophcor
+  cophcor <- stats::cor(dist_mat[lower_tri_idx],
+                        coph[lower_tri_idx], 
+                        method = method)
+  
+  # msd
+  diff_matrix <- dist_mat - coph
+  msd <- mean(diff_matrix[lower_tri_idx]^2)
+  
+  # cophcor: Sokal & Rohlf 1962 Taxon
+  # msd: Maire et al. 2015 GEB
+  return(list(cophcor = cophcor, 
+              msd = msd))
+}
+################################################################################
+
+# sbgc #########################################################################
 sbgc <- function(clusters, 
                  bioregion_metrics,
                  bioregionalization_metrics,
@@ -1018,7 +1230,7 @@ sbgc <- function(clusters,
     comat_bin[comat_bin > 0] <- 1
   
     # CoreTerms
-    temp <- aggregate(comat_bin, list(clusters), sum)
+    temp <- stats::aggregate(comat_bin, list(clusters), sum)
     nij_mat <- t(as.matrix(temp[,-1]))
     rownames(nij_mat) <- colnames(temp)[-1]
     colnames(nij_mat) <- temp[,1]
@@ -1029,7 +1241,7 @@ sbgc <- function(clusters,
     rownames(ni_mat) <- rownames(nij_mat)
     colnames(ni_mat) <- colnames(nij_mat)
     
-    temp <- aggregate(comat_bin, list(clusters), length)
+    temp <- stats::aggregate(comat_bin, list(clusters), length)
     nj_mat <- t(as.matrix(temp[,-1]))
     rownames(nj_mat) <- rownames(nij_mat)
     colnames(nj_mat) <- colnames(nij_mat)
@@ -1125,7 +1337,7 @@ sbgc <- function(clusters,
   if(data != "occurrence"){
     
     # CoreTerms
-    temp <- aggregate(comat, list(clusters), sum)
+    temp <- stats::aggregate(comat, list(clusters), sum)
     wij_mat <- t(as.matrix(temp[,-1]))
     rownames(wij_mat) <- colnames(temp)[-1]
     colnames(wij_mat) <- temp[,1]
@@ -1295,8 +1507,9 @@ sbgc <- function(clusters,
   return(res)
   
 }
+################################################################################
 
-# Site-to-bioregions/bioregionalization metrics
+# gb ###########################################################################
 gb <- function(clusters,
                bioregion_metrics,
                bioregionalization_metrics,
@@ -1338,7 +1551,7 @@ gb <- function(clusters,
     
     diag(similarity) <- NA
     
-    temp <- aggregate(similarity, list(clusters), mean, na.rm=TRUE)
+    temp <- stats::aggregate(similarity, list(clusters), mean, na.rm=TRUE)
     muij_mat <- t(as.matrix(temp[,-1]))
     rownames(muij_mat) <- colnames(temp)[-1]
     colnames(muij_mat) <- temp[,1]
@@ -1362,7 +1575,7 @@ gb <- function(clusters,
     }
      
     # Initialize res1
-    temp <- aggregate(base, list(clusters), sum)
+    temp <- stats::aggregate(base, list(clusters), sum)
     res1 <- t(as.matrix(temp[,-1]))
     res1[res1>0] <- 1
     rownames(res1) <- colnames(temp)[-1]
@@ -1377,7 +1590,7 @@ gb <- function(clusters,
       
       temp <- comat_bin %*% t(comat_bin)
       temp[!diag(dim(temp)[1])] <- 0
-      temp <- aggregate(temp, list(clusters), sum)
+      temp <- stats::aggregate(temp, list(clusters), sum)
       
       ng_mat <- t(as.matrix(temp[,-1]))
       ng_mat[] <- apply(ng_mat, 1, sum)
@@ -1395,7 +1608,7 @@ gb <- function(clusters,
        "Prop_Endemics" %in% bioregion_metrics){
       
       # Species x cluster (1 if species in cluster)
-      temp <- aggregate(comat_bin, list(clusters), max)
+      temp <- stats::aggregate(comat_bin, list(clusters), max)
       is_sb <- t(as.matrix(temp[, -1]))
       rownames(is_sb) <- colnames(temp)[-1]
       colnames(is_sb) <- temp[,1]
@@ -1433,7 +1646,7 @@ gb <- function(clusters,
     }
     if("SdSim" %in% bioregion_metrics){
       
-      temp <- aggregate(similarity, list(clusters), sd, na.rm=TRUE)
+      temp <- stats::aggregate(similarity, list(clusters), stats::sd, na.rm=TRUE)
       sdij_mat <- t(as.matrix(temp[,-1]))
       rownames(sdij_mat) <- colnames(temp)[-1]
       colnames(sdij_mat) <- temp[,1]
@@ -1510,18 +1723,13 @@ gb <- function(clusters,
   
 }
 
-
-
-################################################################################
-
-#' Detect data type from metric name
-#' 
-#' Determines whether a similarity/dissimilarity metric is based on
+# detect_data_type_from_metric #################################################
+# Determines whether a similarity/dissimilarity metric is based on
 #' occurrence (presence/absence) or abundance (quantitative) data.
 #' 
 #' @param metric Character string with metric name
 #' 
-#' @return Character: "occurrence", "abundance", or "unknown"
+#' @return Character: "occurrence", "abundance" or NA
 #' 
 #' @details
 #' Occurrence metrics (using abc): Jaccard, Jaccardturn, Sorensen, Simpson, abc
@@ -1563,3 +1771,51 @@ detect_data_type_from_metric <- function(metric) {
     return(NA)
   }
 }
+################################################################################
+
+# elbow_finder #################################################################
+# Credit to Jonas for original idea and Esben Eickhardt for R implementation
+# https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve
+elbow_finder <- function(x_values, y_values, correct_decrease = FALSE) {
+  if(correct_decrease){
+    test_increase <- stats::lm(y_values ~ x_values)
+    if (stats::coef(test_increase)[2] > 0) {
+      y_values <- -y_values
+    }
+  }
+  
+  # Max values to create line
+  max_x_x <- max(x_values)
+  max_x_y <- y_values[which.max(x_values)]
+  max_y_y <- max(y_values)
+  max_y_x <- x_values[which.max(y_values)]
+  max_df <- data.frame(x = c(max_y_x, max_x_x),
+                       y = c(max_y_y, max_x_y))
+  
+  # Creating straight line between the max values
+  fit <- stats::lm(max_df$y ~ max_df$x)
+  
+  # Distance from point to line
+  distances <- c()
+  for (i in seq_along(x_values)){
+    distances <- c(
+      distances,
+      abs(stats::coef(fit)[2] * x_values[i] - y_values[i] +
+            stats::coef(fit)[1]) / sqrt(stats::coef(fit)[2]^2 + 1^2))
+  }
+  
+  # Max distance point
+  x_max_dist <- x_values[which.max(distances)]
+  y_max_dist <- y_values[which.max(distances)]
+  
+  if(correct_decrease){
+    if (stats::coef(test_increase)[2] > 0) {
+      y_max_dist <- -y_max_dist
+    }
+  }
+  
+  return(c(x_max_dist, y_max_dist))
+}
+################################################################################
+
+

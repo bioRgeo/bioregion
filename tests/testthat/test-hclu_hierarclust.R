@@ -50,6 +50,7 @@ test_that("valid output", {
                        index = "Simpson",
                        method = "average",
                        randomize = TRUE,
+                       seed = NULL,
                        n_runs = 30,
                        keep_trials = "no",
                        optimal_tree_method = "best",
@@ -64,6 +65,7 @@ test_that("valid output", {
   expect_equal(clust$args$index, "Simpson")
   expect_equal(clust$args$method, "average")
   expect_equal(clust$args$randomize, TRUE)
+  expect_equal(clust$args$seed, NULL)
   expect_equal(clust$args$n_runs, 30)
   expect_equal(clust$args$keep_trials, "no")
   expect_equal(clust$args$optimal_tree_method, "best")
@@ -195,6 +197,97 @@ test_that("valid output", {
   expect_equal(colnames(clust$clusters)[2], "K_5")
   expect_equal(colnames(clust$clusters)[3], "K_10")
   
+  # Test seed
+  clust11 <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = TRUE,
+                            seed = NULL,
+                            n_runs = 10,
+                            keep_trials = "no",
+                            optimal_tree_method = "best",
+                            verbose = FALSE)
+  clust21 <- hclu_hierarclust(dissim,
+                            index = "Simpson",
+                            method = "average",
+                            randomize = TRUE,
+                            seed = NULL,
+                            n_runs = 10,
+                            keep_trials = "no",
+                            optimal_tree_method = "best",
+                            verbose = FALSE)
+  expect_equal(identical(clust11$algorithm$final.tree,
+                         clust21$algorithm$final.tree), FALSE)
+  
+  clust11 <- hclu_hierarclust(dissim,
+                             index = "Simpson",
+                             method = "average",
+                             randomize = TRUE,
+                             seed = 1,
+                             n_runs = 10,
+                             keep_trials = "no",
+                             optimal_tree_method = "best",
+                             verbose = FALSE)
+  clust21 <- hclu_hierarclust(dissim,
+                             index = "Simpson",
+                             method = "average",
+                             randomize = TRUE,
+                             seed = 1,
+                             n_runs = 10,
+                             keep_trials = "no",
+                             optimal_tree_method = "best",
+                             verbose = FALSE)
+  expect_equal(identical(clust11$algorithm$final.tree,
+                         clust21$algorithm$final.tree), TRUE)
+  
+  clust12 <- hclu_hierarclust(dissim,
+                             index = "Simpson",
+                             method = "average",
+                             randomize = TRUE,
+                             seed = NULL,
+                             n_runs = 10,
+                             keep_trials = "no",
+                             optimal_tree_method = "iterative_consensus_tree",
+                             verbose = FALSE)
+  clust22 <- hclu_hierarclust(dissim,
+                             index = "Simpson",
+                             method = "average",
+                             randomize = TRUE,
+                             seed = NULL,
+                             n_runs = 10,
+                             keep_trials = "no",
+                             optimal_tree_method = "iterative_consensus_tree",
+                             verbose = FALSE)
+  expect_equal(identical(clust12$algorithm$final.tree,
+                         clust22$algorithm$final.tree), FALSE)
+  
+  clust12 <- hclu_hierarclust(dissim,
+                             index = "Simpson",
+                             method = "average",
+                             randomize = TRUE,
+                             seed = 3,
+                             n_runs = 10,
+                             keep_trials = "no",
+                             optimal_tree_method = "iterative_consensus_tree",
+                             verbose = FALSE)
+  clust22 <- hclu_hierarclust(dissim,
+                             index = "Simpson",
+                             method = "average",
+                             randomize = TRUE,
+                             seed = 3,
+                             n_runs = 10,
+                             keep_trials = "no",
+                             optimal_tree_method = "iterative_consensus_tree",
+                             verbose = FALSE)
+  clust22$algorithm$final.tree.coph.cor
+  
+  expect_equal(identical(clust12$algorithm$final.tree,
+                         clust22$algorithm$final.tree), TRUE)
+  
+  #expect_equal(clust11$algorithm$final.tree.coph.cor < 0.86, TRUE)
+  #expect_equal(clust22$algorithm$final.tree.coph.cor > 0.86, TRUE)
+  
+  
   # Test data_type with different dissimilarity metrics
   clust <- hclu_hierarclust(dissim, index = "Simpson", n_clust = 3, 
                             optimal_tree_method = "best", verbose = FALSE)
@@ -280,12 +373,14 @@ test_that("invalid inputs", {
     "The weight column must be numeric.",
     fixed = TRUE)
 
-  expect_message(
-    hclu_hierarclust(d2,
-                     optimal_tree_method = "best",
-                     verbose = FALSE),
-    "No labels detected, they have been assigned automatically.",
-    fixed = TRUE)
+  quietly(
+    expect_message(
+      hclu_hierarclust(d2,
+                       optimal_tree_method = "best",
+                       verbose = TRUE),
+      "No labels detected, they have been assigned automatically.",
+      fixed = TRUE)
+  )
 
   expect_error(
     hclu_hierarclust(d3,
@@ -385,6 +480,51 @@ test_that("invalid inputs", {
                      verbose = FALSE),
     "randomize must be of length 1.",
     fixed = TRUE)
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     randomize = TRUE,
+                     seed = c("zz","zz"),
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "seed must be of length 1.",
+    fixed = TRUE)  
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     randomize = TRUE,
+                     seed = "zz",
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "seed must be numeric.",
+    fixed = TRUE)  
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     randomize = TRUE,
+                     seed = 1.1,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "seed must be an integer.",
+    fixed = TRUE)  
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     randomize = TRUE,
+                     seed = -1,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
+  
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     randomize = TRUE,
+                     seed = 0,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "seed must be strictly higher than 0.",
+    fixed = TRUE) 
 
   expect_error(
     hclu_hierarclust(dissim, 

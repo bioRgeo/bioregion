@@ -164,8 +164,6 @@
 #' net <- similarity(comat, metric = "Simpson")
 #' com <- netclu_louvain(net, lang = "igraph")
 #'
-#' @importFrom igraph graph_from_data_frame cluster_louvain
-#'
 #' @export
 
 netclu_louvain <- function(net,
@@ -344,13 +342,13 @@ netclu_louvain <- function(net,
     
     # Run algo (with seed)
     net <- igraph::graph_from_data_frame(netemp, directed = FALSE)
-    if(is.null(seed)){
-      outalg <- igraph::cluster_louvain(net, resolution = resolution)
-    }else{
-      set.seed(seed)
-      outalg <- igraph::cluster_louvain(net, resolution = resolution)
-      rm(.Random.seed, envir=globalenv())
-    }
+    
+    if (!is.null(seed)) set.seed(seed) # generate seed
+    
+    outalg <- igraph::cluster_louvain(net, resolution = resolution)
+    
+    if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+
     comtemp <- cbind(as.numeric(outalg$names), as.numeric(outalg$membership))
 
     com <- data.frame(ID = idnode[, 2], Com = NA)

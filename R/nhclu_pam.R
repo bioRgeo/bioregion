@@ -84,9 +84,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #' 
 #' clust <- nhclu_pam(dissim, n_clust = 2:15, index = "Simpson")
-#'    
-#' @importFrom stats as.dist
-#' @importFrom cluster pam    
 #'                    
 #' @export
 nhclu_pam <- function(dissimilarity,
@@ -188,33 +185,22 @@ nhclu_pam <- function(dissimilarity,
   
   outputs$clusters$name <- labels(dist.obj)
   
-  if(is.null(seed)){
-    outputs$algorithm <- lapply(n_clust,
-                                function(x)
-                                  cluster::pam(dist.obj,
-                                               k = x,
-                                               diss = TRUE,
-                                               keep.diss = FALSE,
-                                               keep.data = FALSE,
-                                               nstart = nstart,
-                                               variant = variant,
-                                               cluster.only = cluster_only,
-                                               ...))
-  }else{
-    set.seed(seed)
-    outputs$algorithm <- lapply(n_clust,
-                                function(x)
-                                  cluster::pam(dist.obj,
-                                               k = x,
-                                               diss = TRUE,
-                                               keep.diss = FALSE,
-                                               keep.data = FALSE,
-                                               nstart = nstart,
-                                               variant = variant,
-                                               cluster.only = cluster_only,
-                                               ...))
-    rm(.Random.seed, envir=globalenv())
-  }
+  
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outputs$algorithm <- lapply(n_clust,
+                              function(x)
+                                cluster::pam(dist.obj,
+                                             k = x,
+                                             diss = TRUE,
+                                             keep.diss = FALSE,
+                                             keep.data = FALSE,
+                                             nstart = nstart,
+                                             variant = variant,
+                                             cluster.only = cluster_only,
+                                             ...))
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
   
   names(outputs$algorithm) <- paste0("K_", n_clust)
   

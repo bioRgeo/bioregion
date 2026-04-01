@@ -84,7 +84,7 @@ comnet <- mat_to_net(comat)
 dissim <- dissimilarity(comat, metric = "all")
 
 clust <- nhclu_pam(dissim, n_clust = 2:15, index = "Simpson")
-   
+                   
 }
 \references{
 Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction to

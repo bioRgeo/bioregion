@@ -85,10 +85,6 @@
 #' fishdissim <- dissimilarity(fishmat)
 #' fish_diana <- hclu_diana(fishdissim, index = "Simpson")
 #' 
-#' 
-#' @importFrom cluster diana
-#' @importFrom stats as.dist cophenetic cor
-#' 
 #' @export
 
 hclu_diana <- function(dissimilarity,
@@ -212,25 +208,12 @@ hclu_diana <- function(dissimilarity,
                                 trace.lev = 0)
   
   outputs$algorithm$final.tree <- diana_clust
-  # outputs$diana <- diana_clust
-  
-  # Evaluation
-  # coph <- as.matrix(stats::cophenetic(outputs$algorithm$final.tree))
-  # coph <- coph[match(attr(dist.obj, "Labels"), rownames(coph)),
-  #              match(attr(dist.obj, "Labels"), colnames(coph))]
-  # dist.mat <- as.matrix(dist.obj)
-  
-  
+
   evals <- tree_eval(outputs$algorithm$final.tree,
                      dist.obj)
   
   outputs$algorithm$final.tree.coph.cor <- evals$cophcor
-  # outputs$algorithm$final.tree.2norm <- evals$norm2
   outputs$algorithm$final.tree.msd <- evals$msd
-  
-  # outputs$algorithm$final.tree.coph.cor <-
-  #   stats::cor(dist.mat[lower.tri(dist.mat)], coph[lower.tri(coph)],
-  #              method = "spearman")
   
   if(verbose){
     message(paste0("Output tree has a ",

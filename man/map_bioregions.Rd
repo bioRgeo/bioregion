@@ -5,87 +5,97 @@
 \title{Create a map of bioregions}
 \usage{
 map_bioregions(
-  clusters,
-  geometry,
-  bioregionalization = NULL,
-  write_clusters = FALSE,
+  bioregionalization,
+  map,
+  partition_index = NULL,
+  map_as_output = FALSE,
   plot = TRUE,
+  clusters = NULL,
+  geometry = NULL,
+  write_clusters = NULL,
   ...
 )
 }
 \arguments{
-\item{clusters}{An object of class \code{bioregion.clusters} or a \code{data.frame}.
-If a \code{data.frame} is used, the first column should represent the sites'
-ID, and the subsequent column(s) should represent the clusters.}
+\item{bioregionalization}{A \code{bioregion.clusters} object.}
 
-\item{geometry}{A spatial object that can be handled by the \code{sf} package.
-The first attribute should correspond to the sites' ID (see Details).}
+\item{map}{A spatial object that can be handled by \code{sf} or \code{terra}.
+The first attribute or layer should correspond to the sites' ID
+(see Details).}
 
-\item{bioregionalization}{An \code{integer}, \code{character}, or \code{NULL} specifying
-which bioregionalization(s) to plot. If \code{NULL} (default), all
-bioregionalizations are plotted. If an \code{integer} or vector of \code{integers},
-bioregionalization(s) are selected by column number(s) in the \code{clusters}
+\item{partition_index}{An \code{integer}, \code{character}, or \code{NULL} specifying
+which \code{bioregionalization}'s partition(s) to plot. By default (\code{NULL}), all
+partitions are plotted. If an \code{integer} or vector of \code{integers} is provided,
+partition(s) are selected by column number(s) in the \code{bioregionalization}
 data.frame (starting from 1 after the ID column). If a \code{character} or
-vector of \code{characters}, bioregionalization(s) are selected by name(s)
-matching column names in \code{clusters}.}
+vector of \code{characters}, partition(s) are selected by name(s)
+matching column names in \code{bioregionalization}.}
 
-\item{write_clusters}{A \code{boolean} indicating if the \code{clusters} should be
-added to the \code{geometry}.}
+\item{map_as_output}{A \code{boolean} indicating if the \code{sf} \code{data.frame} object
+used for the plot should be returned.}
 
 \item{plot}{A \code{boolean} indicating if the plot should be drawn.}
+
+\item{clusters}{Deprecated. Use \code{bioregionalization} instead. The former
+\code{bioregionalization} has been replaced by \code{partition_index}.}
+
+\item{geometry}{Deprecated. Use \code{map} instead.}
+
+\item{write_clusters}{Deprecated. Use \code{map_as_output} instead.}
 
 \item{...}{Further arguments to be passed to \code{sf::plot()}.}
 }
 \value{
 One or several maps of bioregions if \code{plot = TRUE} and the
-geometry with additional clusters' attributes if \code{write_clusters = TRUE}.
+\code{sf} \code{data.frame} object used for the plot if \code{map_as_output = TRUE}.
 }
 \description{
 This plot function can be used to visualize bioregions based on a
-\code{bioregion.clusters} object combined with a geometry (\code{sf} objects).
+\code{bioregion.clusters} object combined with a spatial object (\code{sf} or \code{terra}).
 }
 \details{
-The \code{clusters} and \code{geometry} site IDs should correspond. They should
-have the same type (i.e., \code{character} if \code{clusters} is a
-\code{bioregion.clusters} object) and the sites of \code{clusters} should be
-included in the sites of \code{geometry}.
+The site IDs in \code{bioregionalization} and \code{map} should correspond. They must
+have the same type (i.e., \code{character} if \code{bioregionalization} is a
+\code{bioregion.clusters} object), and the sites in \code{bioregionalization} should be
+included among the sites in \code{map}. If \code{map} is an \code{sf} or a \code{SpatVector}
+(\code{terra}) object, it should contain an attribute table with the IDs in the
+first column. If \code{map} is a \code{SpatRaster} (\code{terra}) object, it should contain
+the IDs in the first layer.
 
-\strong{Bipartite networks}: If the \code{clusters} object is from a bipartite network
-(containing both sites and species), only site nodes will be mapped. The
-function automatically filters to site nodes using the \code{node_type} attribute.
+If the \code{bioregionalization} object contains both types of nodes (sites and
+species), only site  will be mapped. The function automatically filters to
+site nodes using the \code{node_type} attribute.
 
-\strong{Colors}: If the \code{clusters} object contains colors (added via
+\strong{Colors}: If the \code{bioregionalization} object contains colors (added via
 \code{bioregion_colors()}), these colors will be automatically used for plotting.
 Otherwise, the default \code{sf} color scheme will be applied.
 }
 \examples{
 data(fishmat)
-data(fishdf) # (data.frame version of fishmat)
 data(fishsf)
 
 net <- similarity(fishmat, metric = "Simpson")
 clu <- netclu_greedy(net)
-map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
+mapclu <- map_bioregions(clu, 
+                         map = fishsf, 
+                         map_as_output = TRUE, 
+                         plot = FALSE)
 
 # With colors
 clu_colored <- bioregion_colors(clu)
-map_bioregions(clu_colored, fishsf, plot = TRUE)
+mapclu <- map_bioregions(clu_colored, 
+                         map = fishsf, 
+                         map_as_output = TRUE, 
+                         plot = FALSE)
+           
+}
+\seealso{
+For more details illustrated with a practical example,
+see the vignette:
+\url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
 
-# With bipartite network (sites and species)
-clu_bip <- netclu_greedy(fishdf, bipartite = TRUE)
-clu_bip_colored <- bioregion_colors(clu_bip)
-map_bioregions(clu_bip_colored, fishsf, plot = TRUE)
-
-# With multiple bioregionalizations, plot only specific ones
-dissim <- dissimilarity(fishmat, metric = "Simpson")
-clu_multi <- hclu_hierarclust(dissim,
-                              optimal_tree_method = "best",
-                              n_clust = c(2, 4, 10))
-map_bioregions(clu_multi, fishsf, bioregionalization = c(1, 3),
- plot = TRUE)  # By index
-map_bioregions(clu_multi, fishsf, bioregionalization = c("K_2", "K_4"), 
-plot = TRUE)  # By name
-
+Associated functions:
+\link{bioregion_colors}
 }
 \author{
 Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr

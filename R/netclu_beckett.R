@@ -96,8 +96,6 @@
 #'
 #' com <- netclu_beckett(net)
 #' 
-#' @importFrom bipartite computeModules
-#' 
 #' @export
 netclu_beckett <- function(net,
                            weight = TRUE,
@@ -212,13 +210,12 @@ netclu_beckett <- function(net,
   }
   
   # Run algo (with seed)
-  if(is.null(seed)){
-    outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
-  }else{
-    set.seed(seed)
-    outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
-    rm(.Random.seed, envir=globalenv())
-  }
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+
   comtemp <- outalg@modules[-1, -c(1, 2)]
   comtemp <- cbind(c(as.numeric(rownames(comat)),
                      as.numeric(colnames(comat))),

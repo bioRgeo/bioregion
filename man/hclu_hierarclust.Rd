@@ -9,6 +9,7 @@ hclu_hierarclust(
   index = names(dissimilarity)[3],
   method = "average",
   randomize = TRUE,
+  seed = NULL,
   n_runs = 100,
   keep_trials = "no",
   optimal_tree_method = "iterative_consensus_tree",
@@ -41,6 +42,9 @@ default, the third column name of \code{dissimilarity} is used.}
 \item{randomize}{A \code{boolean} indicating whether the dissimilarity matrix
 should be randomized to account for the order of sites in the dissimilarity
 matrix.}
+
+\item{seed}{A value for the random number generator (\code{NULL} for random by
+default).}
 
 \item{n_runs}{The number of trials for randomizing the dissimilarity matrix.}
 

@@ -95,6 +95,11 @@ test_that("valid outputs", {
   expect_equal(max(mat), max(net6[,3]))
   expect_equal(sum(sort(mat[upper.tri(mat)]) != sort(mat[upper.tri(mat)])), 0)
   
+  # net with 1 site and/or 1 species
+  mat <- net_to_mat(net[1,])
+  mat <- net_to_mat(net[c(1,2),])
+  mat <- net_to_mat(net[c(1,3),])
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------

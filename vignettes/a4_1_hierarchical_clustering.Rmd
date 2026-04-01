@@ -17,9 +17,23 @@ vignette: >
   %\VignetteIndexEntry{4.1 Hierarchical clustering}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
- chunk_output_type: console
 ---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 8)
+# Packages --------------------------------------------------------------------
+suppressPackageStartupMessages({
+  suppressWarnings({
+    library(bioregion)
+    library(sf)
+  })
+})
+
+options(tinytex.verbose = TRUE)
+
+```
   
 Hierarchical clustering consists in creating a hierarchical tree from a 
 matrix of distances (or beta-diversities). From this hierarchical tree, clusters
@@ -50,8 +64,6 @@ In the example below, we use the vegetation dataset from the package to
 compute distance metrics.
   
 ```{r}
-library("bioregion")
-
 # Work with the vegetation dataset we include in the package
 data(vegemat)
 
@@ -59,7 +71,6 @@ data(vegemat)
 vegemat[1:10, 1:10]
 
 ```
-
 
 We are going to compute the $\beta_{sim}$ diversity metric, which is a 
 presence-absence dissimilarity index. The formula is as follows:
@@ -177,9 +188,8 @@ plot(tree1, cex = .2)
 Let's see how it looks like on a map:
 
 ```{r, fig.width=6, fig.height=4}
-data(vegesf)
-library(sf)
-map_bioregions(tree1$clusters[, c("ID", "K_3")], vegesf)
+#data(vegesf)
+#map_bioregions(tree1, map = vegesf)
 ```
 
 Now, this is a hierarchical tree, and cutting it only once (= only 1 partition)
@@ -237,9 +247,9 @@ summary(tree1)
 Here is how the maps look like:
 
 ```{r, fig.width=6, fig.height=4}
-for(i in 2:ncol(tree1$clusters)){
-  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
-}
+#for(i in 2:ncol(tree1$clusters)){
+#  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
+#}
 ```
 
 
@@ -537,9 +547,9 @@ K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_d
 head(tree4$clusters[, c("ID", K_name)])
 
 # Make a map of the clusters
-data("vegesf")
-library("sf")
-map_bioregions(tree4$clusters[, c("ID", K_name)], vegesf)
+#data("vegesf")
+#library("sf")
+#map_bioregions(tree4$clusters[, c("ID", K_name)], vegesf)
 ```
 
 Or if you are allergic to lines of code, you could also simply recut your tree 

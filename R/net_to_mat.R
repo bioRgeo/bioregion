@@ -168,6 +168,9 @@ net_to_mat <- function(net,
   #  mat <- mat[rowSums(mat) > 0,]
   #  mat <- mat[, colSums(mat) > 0]
   # }
+  
+  # Reorder
+  #mat <- reorder(mat)
 
   # Return the contingency matrix
   return(mat)

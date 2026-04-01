@@ -98,8 +98,6 @@
 #' net_bip <- mat_to_net(comat, weight = TRUE)
 #' clust2 <- netclu_greedy(net_bip, bipartite = TRUE)
 #' 
-#' @importFrom igraph graph_from_data_frame cluster_fast_greedy
-#' 
 #' @export
 netclu_greedy <- function(net,
                           weight = TRUE,

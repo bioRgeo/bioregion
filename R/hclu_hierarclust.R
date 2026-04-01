@@ -27,6 +27,9 @@
 #' @param randomize A `boolean` indicating whether the dissimilarity matrix 
 #' should be randomized to account for the order of sites in the dissimilarity
 #'  matrix.
+#'  
+#' @param seed A value for the random number generator (`NULL` for random by 
+#' default).
 #' 
 #' @param n_runs The number of trials for randomizing the dissimilarity matrix.
 #' 
@@ -222,14 +225,12 @@
 #' tree3$cluster_info
 #' plot(tree3)
 #' 
-#' @importFrom stats as.dist cophenetic cor
-#' @importFrom fastcluster hclust
-#' 
 #' @export
 hclu_hierarclust <- function(dissimilarity,
                              index = names(dissimilarity)[3],
                              method = "average",
                              randomize = TRUE,
+                             seed = NULL,
                              n_runs = 100,
                              keep_trials = "no",
                              optimal_tree_method = "iterative_consensus_tree", 
@@ -263,24 +264,29 @@ hclu_hierarclust <- function(dissimilarity,
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
-    dist.obj <- stats::as.dist(
-      net_to_mat(net,
-                 weight = TRUE, squared = TRUE, symmetrical = TRUE))
+    dist_mat <- net_to_mat(net,
+                           weight = TRUE, 
+                           squared = TRUE, 
+                           symmetrical = TRUE)
   } else {
     controls(args = NULL, data = dissimilarity, type = "input_dist")
-    dist.obj <- dissimilarity
-    if(is.null(labels(dist.obj))){
-      attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
-      message("No labels detected, they have been assigned automatically.")
+    dist_mat <- as.matrix(dissimilarity)
+    if(is.null(names(dist_mat))){
+      rownames(dist_mat) <- paste0(1:dim(dist_mat)[1])
+      colnames(dist_mat) <- rownames(dist_mat)
+      if(verbose){
+        message("No labels detected, they have been assigned automatically.")
+      }
     }
-    dissimilarity <- mat_to_net(as.matrix(dissimilarity), weight = TRUE)
+    dissimilarity <- mat_to_net(dist_mat, weight = TRUE)
     if(is.null(index)) {
-      colnames(dissimilarity)[3] <- "Dissimiliraty"
+      colnames(dissimilarity)[3] <- "Dissimilarity"
     } else {
       colnames(dissimilarity)[3] <- index
     }
     colnameindex <- NA
   }
+  nsites <- dim(dist_mat)[1]
 
   
   controls(args = method, data = NULL, type = "character")
@@ -292,6 +298,9 @@ hclu_hierarclust <- function(dissimilarity,
          call. = FALSE)
   }
   controls(args = randomize, data = NULL, type = "boolean")
+  if(randomize & !is.null(seed)){
+    controls(args = seed, data = NULL, type = "strict_positive_integer")
+  }
   controls(args = n_runs, data = NULL, type = "strict_positive_integer")
   controls(args = keep_trials, data = NULL, type = "character")
   if(!(keep_trials %in% c("no", "all", "metrics"))){
@@ -364,6 +373,7 @@ hclu_hierarclust <- function(dissimilarity,
   outputs$args <- list(index = index,
                        method = method,
                        randomize = randomize,
+                       seed = seed,
                        n_runs = n_runs,
                        optimal_tree_method = optimal_tree_method,
                        keep_trials = keep_trials,
@@ -389,11 +399,9 @@ hclu_hierarclust <- function(dissimilarity,
                          pairwise = TRUE,
                          pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
-                         nb_sites = attr(dist.obj, "Size"),
+                         nb_sites = nsites,
                          data_type = data_type,
                          node_type = "site")
-  
-  # outputs$dist.matrix <- dist.obj
   
   if(randomize) {
     if(optimal_tree_method == "iterative_consensus_tree") {
@@ -415,57 +423,68 @@ hclu_hierarclust <- function(dissimilarity,
                 "Hence, it is not possible to exactly compute WPGMA calculations ",
                 "with IHCT - final height calculations are approximated into UPGMA.")
       }
+
+      if (!is.null(seed)) set.seed(seed) # generate seed
       
-      consensus_tree <- iterative_consensus_tree(dissimilarity, 
-                                                 sites = unique(c(dissimilarity[, 1],
-                                                                  dissimilarity[, 2])), 
-                                                 index = index,
-                                                 method = method,
-                                                 depth = 1, 
-                                                 # tree_structure = list(), 
-                                                 previous_height = Inf, 
-                                                 verbose = verbose,
-                                                 n_runs = n_runs,
-                                                 monotonicity_direction = "bottom-up")
-      consensus_tree <- reconstruct_hclust(consensus_tree)
+      # consensus_tree <- iterative_consensus_tree(dissimilarity, 
+      #                                            sites = unique(c(dissimilarity[, 1],
+      #                                                             dissimilarity[, 2])), 
+      #                                            index = index,
+      #                                            method = method,
+      #                                            depth = 1, 
+      #                                            previous_height = Inf, 
+      #                                            verbose = verbose,
+      #                                            n_runs = n_runs,
+      #                                            monotonicity_direction = "bottom-up")
       
+      consensus_tree <- IHCT(dist_mat, 
+                             method = method,
+                             n_runs = n_runs,
+                             n_splits = 2,
+                             monotonicity_direction = "bottom-up",
+                             verbose = verbose)
+      
+      if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+      
+      consensus_tree <- reconstruct_hclust_bis(consensus_tree)
+
       # Compute hierarchical tree
       outputs$algorithm$final.tree <- consensus_tree
       
       evals <- tree_eval(consensus_tree,
-                         dist.obj)
+                         dist_mat)
       
       outputs$algorithm$final.tree.coph.cor <- evals$cophcor
-      # outputs$algorithm$final.tree.2norm <- evals$norm2
       outputs$algorithm$final.tree.msd <- evals$msd
       
-
     } else {
       if(verbose){
         message(paste0("Randomizing the dissimilarity matrix with ", 
                        n_runs,
                        " trials"))
       }
+
+      if (!is.null(seed)) set.seed(seed)
       results <- vector("list", n_runs)
-      
       for (run in 1:n_runs) {
         trial <- list()
 
-        trial$dist.matrix <- .randomizeDistance(dist.obj)
+        trial$dist_mat <- randomize_dist(dist_mat)
 
-        trial$hierartree <- fastcluster::hclust(trial$dist.matrix, method = method)
+        trial$hierartree <- fastcluster::hclust(stats::as.dist(trial$dist_mat), 
+                                                method = method)
 
-        evals <- tree_eval(trial$hierartree, trial$dist.matrix)
+        evals <- tree_eval(trial$hierartree, trial$dist_mat)
         trial$cophcor <- evals$cophcor
-        # trial$`2norm` <- evals$norm2
         trial$msd <- evals$msd
         
         if(keep_trials != "all"){
-          trial$dist.matrix <- 0
+          trial$dist_mat <- 0
         }
 
         results[[run]] <- trial
       }
+      if (!is.null(seed)) rm(.Random.seed, envir = globalenv())
       
       if (optimal_tree_method == "best") {
         coph.coeffs <- sapply(results, function(x) x$cophcor)
@@ -492,16 +511,18 @@ hclu_hierarclust <- function(dissimilarity,
         trees <- lapply(results, function(trial) ape::as.phylo(trial$hierartree))
 
         consensus_tree <- ape::consensus(trees, p = 0.5)
-        consensus_tree <- phangorn::nnls.tree(dist.obj, consensus_tree, method = "ultrametric", trace = 0)
+        consensus_tree <- phangorn::nnls.tree(stats::as.dist(dist_mat), 
+                                              consensus_tree, 
+                                              method = "ultrametric", 
+                                              trace = 0)
         consensus_tree <- ape::multi2di(consensus_tree)
 
         tree_ape_for_coph <- consensus_tree
         consensus_tree <- ape::as.hclust.phylo(consensus_tree)
         
         final.tree <- consensus_tree
-        evals <- tree_eval(tree_ape_for_coph, dist.obj)
+        evals <- tree_eval(tree_ape_for_coph, dist_mat)
         final.tree.metrics <- list(cophcor = evals$cophcor, 
-                                   # `2norm` = evals$norm2, 
                                    msd = evals$msd)
       }
       
@@ -514,7 +535,6 @@ hclu_hierarclust <- function(dissimilarity,
 
       outputs$algorithm$final.tree <- final.tree
       outputs$algorithm$final.tree.coph.cor <- final.tree.metrics$cophcor
-      # outputs$algorithm$final.tree.2norm <- final.tree.metrics$`2norm`
       outputs$algorithm$final.tree.msd <- final.tree.metrics$msd
 
     }
@@ -526,15 +546,14 @@ hclu_hierarclust <- function(dissimilarity,
     }
 
   } else  {
-    outputs$algorithm$final.tree <- fastcluster::hclust(dist.obj,
+    outputs$algorithm$final.tree <- fastcluster::hclust(stats::as.dist(dist_mat),
                                                         method = method)
     
     
     evals <- tree_eval(outputs$algorithm$final.tree,
-                       dist.obj)
+                       dist_mat)
     
     outputs$algorithm$final.tree.coph.cor <- evals$cophcor
-    # outputs$algorithm$final.tree.2norm <- evals$norm2
     outputs$algorithm$final.tree.msd <- evals$msd
     
     if(verbose){
@@ -589,68 +608,3 @@ hclu_hierarclust <- function(dissimilarity,
   return(outputs)
 }
 
-.randomizeDistance <- function(distmatrix){
-  distmatrix <- as.matrix(distmatrix)
-  ord <- sample(rownames(distmatrix))
-  return(stats::as.dist(distmatrix[ord, ord]))
-}
-
-# squared_2norm <- function(D, U) {
-#   diff_matrix <- D - U
-#   singular_values <- svd(diff_matrix)$d
-#   return(max(singular_values)^2)
-# }
-# 
-# tree_eval <- function(tree, dist.obj, method = "pearson") {
-#   coph <- as.matrix(
-#     stats::cophenetic(tree))
-#   
-#   # Correct site order to not mess the correlation
-#   coph <- coph[match(attr(dist.obj,
-#                           "Labels"),
-#                      rownames(coph)),
-#                match(attr(dist.obj,
-#                           "Labels"),
-#                      colnames(coph))]
-#   dist.mat <- as.matrix(dist.obj)
-#   
-#   return(list(cophcor = stats::cor(dist.mat[lower.tri(dist.mat)],
-#                                    coph[lower.tri(coph)],
-#                                    method = method),
-#               norm2 = squared_2norm (dist.mat, coph),
-#               msd = mean((dist.mat - coph)^2)
-#   ))
-# 
-#   # cophcor: Sokal & Rohlf 1962 Taxon
-#   # norm2: Mérigot et al. 2010 Ecology
-#   # msd: Maire et al. 2015 GEB
-# }
-
-
-# Try to optimize tree_eval for faster calculations
-tree_eval <- function(tree, dist.obj, method = "pearson") {
-  coph <- as.matrix(stats::cophenetic(tree))
-
-  labels <- attr(dist.obj, "Labels")
-  coph <- coph[match(labels, rownames(coph)), 
-               match(labels, colnames(coph))]
-  
-  dist.mat <- as.matrix(dist.obj)
-  
-  lower_tri_idx <- lower.tri(dist.mat)
-
-  cophcor <- stats::cor(dist.mat[lower_tri_idx],
-                        coph[lower_tri_idx], method = method)
-  diff_matrix <- dist.mat - coph
-  
-  # singular_values <- svd(diff_matrix, nu = 0, nv = 0)$d
-  # norm2 <- max(singular_values)^2
-  
-  msd <- mean(diff_matrix[lower_tri_idx]^2)
-  #   # cophcor: Sokal & Rohlf 1962 Taxon
-  #   # norm2: Mérigot et al. 2010 Ecology
-  #   # msd: Maire et al. 2015 GEB
-  return(list(cophcor = cophcor, 
-              # norm2 = norm2,
-              msd = msd))
-}

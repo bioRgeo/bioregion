@@ -79,8 +79,6 @@ pair <- as_bioregion_pairwise(list(mat,mat,mat),
                               pkg = NULL,
                               is_similarity = FALSE)
                               
-pair
-
 }
 \seealso{
 For more details illustrated with a practical example,

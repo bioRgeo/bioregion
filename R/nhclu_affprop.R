@@ -129,8 +129,6 @@
 #' 
 #' # Fixed number of clusters 
 #' clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
-#' 
-#' @importFrom apcluster apcluster apclusterK
 #'         
 #' @export
 nhclu_affprop <- function(similarity, 
@@ -152,41 +150,29 @@ nhclu_affprop <- function(similarity,
                           verbose = TRUE){
   
   # 1. Controls ---------------------------------------------------------------
-  controls(args = NULL, data = similarity, type = "input_nhandhclu")
-  if(!inherits(similarity, "dist")){
-    controls(args = NULL, data = similarity, type = "input_similarity")
-    controls(args = NULL, data = similarity, 
-             type = "input_data_frame_nhandhclu")
-    controls(args = index, data = similarity, type = "input_net_index")
-    net <- similarity
-    # Convert tibble into dataframe
-    if(inherits(net, "tbl_df")){
-      net <- as.data.frame(net)
-    }
-    colnameindex <- index
-    if(is.numeric(colnameindex)){
-      colnameindex <- colnames(net)[index]
-      if(is.null(colnameindex)){
-        colnameindex <- NA
-      }
-    }
-    net[, 3] <- net[, index]
-    net <- net[, 1:3]
-    controls(args = NULL, data = net, type = "input_net_index_value")
-    dist.obj <- stats::as.dist(
-      net_to_mat(net,
-                 weight = TRUE, 
-                 squared = TRUE, 
-                 symmetrical = TRUE))
-  } else {
-    controls(args = NULL, data = similarity, type = "input_dist")
-    dist.obj <- similarity
-    if(is.null(labels(dist.obj))){
-      attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
-      message("No labels detected, they have been assigned automatically.")
-    }
-    colnameindex <- NA
+  controls(args = NULL, data = similarity, type = "input_similarity")
+  controls(args = NULL, data = similarity, 
+           type = "input_data_frame_nhandhclu")
+  controls(args = index, data = similarity, type = "input_net_index")
+  net <- similarity
+  # Convert tibble into dataframe
+  if(inherits(net, "tbl_df")){
+    net <- as.data.frame(net)
   }
+  colnameindex <- index
+  if(is.numeric(colnameindex)){
+    colnameindex <- colnames(net)[index]
+    if(is.null(colnameindex)){
+      colnameindex <- NA
+    }
+  }
+  net[, 3] <- net[, index]
+  net <- net[, 1:3]
+  controls(args = NULL, data = net, type = "input_net_index_value")
+  sim_square <-net_to_mat(net, 
+                          weight = TRUE, 
+                          squared = TRUE, 
+                          symmetrical = TRUE)
   
   if(!is.null(seed)){
     controls(args = seed, data = NULL, type = "strict_positive_integer")
@@ -313,27 +299,13 @@ nhclu_affprop <- function(similarity,
                          pairwise = TRUE,
                          pairwise_metric = pairwise_metric,
                          dissimilarity = FALSE,
-                         nb_sites = attr(dist.obj, "Size"),
+                         nb_sites = dim(sim_square)[1],
                          hierarchical = FALSE,
                          data_type = data_type,
                          node_type = "site")
   
   outputs$algorithm <- list()
-  
-  outputs$clusters <- data.frame(matrix(ncol = 1,
-                                        nrow = length(labels(dist.obj)),
-                                        dimnames = list(labels(dist.obj),
-                                                        "name")))
-  
-  outputs$clusters$name <- labels(dist.obj)
-  
-  # Square similarity matrix
-  #sim_square <- net_to_mat(similarity, 
-  #                         weight = TRUE, 
-  #                         squared = TRUE,
-  #                         symmetrical = TRUE)
-  sim_square <- as.matrix(dist.obj)
-  
+
   ## 2.1. apclusterK ----------------------------------------------------------
   if(!is.null(K)){
     if(is.null(seed)){
@@ -436,23 +408,20 @@ nhclu_affprop <- function(similarity,
     }
   }
   
-  # names(outputs$algorithm) <- paste0("K_", n_clust)
-  
   # Convert output of apcluster into a data.frame with bioregions per site
   names(outputs$algorithm@clusters) <-
     paste0("K_", 1:length(outputs$algorithm@clusters))
   outputs$algorithm@clusters <- lapply(outputs$algorithm@clusters, names)
   
   outputs_df <- mapply(cbind, outputs$algorithm@clusters,
-                       "K_" = names(outputs$algorithm@clusters),
+                       "K" = names(outputs$algorithm@clusters),
                        SIMPLIFY = FALSE)
-  outputs_df <- do.call(rbind, outputs_df)
+  outputs_df <- as.data.frame(do.call(rbind, outputs_df))
+  outputs_df$K <- substr(outputs_df$K, 3, nchar(outputs_df$K))
   colnames(outputs_df) <- c("Site",
                             paste0("K_", length(outputs$algorithm@clusters)))
   
-  outputs$clusters <- as.data.frame(outputs_df) 
-  #data.frame(outputs$clusters,
-  # outputs_df)
+  outputs$clusters <- outputs_df 
   
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
   

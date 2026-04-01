@@ -164,13 +164,12 @@ partition of the network (default is multi-level).
 identifiable in the outputs (FALSE by default).  
 
 ```{r}
-set.seed(1)
 ex_infomap <- netclu_infomap(fish_simil,
                              weight = TRUE,
                              index = names(fish_simil)[3],
                              nbmod = 0,
                              markovtime = 1,
-                             seed = NULL,
+                             seed = 1,
                              numtrials = 1,
                              twolevel = FALSE,
                              show_hierarchy = FALSE,
@@ -207,14 +206,13 @@ more modules.
 or their union (default value is 0.5, bigger value leads to bigger clusters).  
 
 ```{r, eval = FALSE}
-set.seed(1)
 ex_oslom <- netclu_oslom(fish_simil,
                          weight = TRUE,
                          index = names(fish_simil)[3],
                          reassign = "no",
                          r = 10,
                          hr = 50,
-                         seed = NULL,
+                         seed = 1,
                          t = 0.1,
                          cp = 0.5,
                          directed = FALSE,
@@ -241,7 +239,6 @@ is chosen by default, see Details).
 1 is chosen by default)
 
 ```{r}
-set.seed(1)
 ex_louvain <- netclu_louvain(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
@@ -267,7 +264,6 @@ table(ex_louvain$clusters$K_23)
 
 @Clauset2004
 ```{r}
-set.seed(1)
 ex_greedy <- netclu_greedy(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
@@ -284,10 +280,10 @@ table(ex_greedy$clusters$K_5)
 @Raghavan2007
 
 ```{r}
-set.seed(1)
 ex_labelprop <- netclu_labelprop(fishdf,
                                  weight = TRUE,
                                  index = names(fishdf)[3],
+                                 seed = 1,
                                  bipartite = FALSE,
                                  site_col = 1,
                                  species_col = 2,
@@ -301,10 +297,10 @@ table(ex_labelprop$clusters$K_11)
 @Traag2019
 
 ```{r}
-set.seed(1)
 ex_leiden <- netclu_leiden(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
+                           seed =1,
                            objective_function = "CPM",
                            resolution_parameter = 1,
                            beta = 0.01,
@@ -323,7 +319,6 @@ length(unique(ex_leiden$clusters$K_505))
 @Newman2006
 
 ```{r}
-set.seed(1)
 ex_leadingeigen <- netclu_leadingeigen(fishdf,
                                        weight = TRUE,
                                        index = names(fishdf)[3],
@@ -340,7 +335,6 @@ table(ex_leadingeigen$clusters$K_17)
 @Pons2005
 
 ```{r}
-set.seed(1)
 ex_walktrap <- netclu_walktrap(fishdf,
                                weight = TRUE,
                                index = names(fishdf)[3],
@@ -362,10 +356,10 @@ Update of the QuanBiMo algorithm developed by Dormann & Strauss (2014).
 @Beckett2016
 
 ```{r}
-set.seed(1)
 ex_beckett <- netclu_beckett(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
+                             seed = 1,
                              site_col = 1,
                              species_col = 2,
                              return_node_type = "both",

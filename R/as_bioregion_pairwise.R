@@ -76,8 +76,6 @@
 #'                               pkg = NULL,
 #'                               is_similarity = FALSE)
 #'                               
-#' pair
-#' 
 #' @export
 as_bioregion_pairwise <- function(mat,
                                   metric_name = NULL,
