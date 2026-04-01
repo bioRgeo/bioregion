@@ -32,3 +32,4 @@ Rplot*.pdf
 bioregion.Rcheck/*
 .github/*.md
 dev_scripts/
+vignettes/*.html

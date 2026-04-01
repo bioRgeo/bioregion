@@ -57,10 +57,12 @@
 #' 
 #' Remaining clusters are ranked by the `cluster_ordering` criterion:
 #' \itemize{
-#'   \item **Top clusters** (up to 12): Receive distinct colors from the chosen
-#'     palette. This limit is because above 12 the human eye struggles to 
-#'     distinguish between colors.
-#'   \item **Remaining clusters** (beyond top 12): Receive shades of grey from
+#'   \item **Top clusters** (up to 11 for qualitative CARTO palettes, or the
+#'     palette maximum for other palettes): Receive distinct colors from the
+#'     chosen palette. For the qualitative palettes (`"Vivid"`, `"Bold"`,
+#'     `"Prism"`, `"Safe"`, `"Antique"`, `"Pastel"`), the 12th color is
+#'     always a grey/neutral tone and is automatically excluded.
+#'   \item **Remaining clusters**: Receive shades of grey from
 #'     light (#CCCCCC) to dark (#404040), maintaining visual distinction but
 #'     with less prominence.
 #' }
@@ -75,8 +77,12 @@
 #' which will automatically detect and apply the color scheme when present.
 #' 
 #' @seealso 
-#' [map_bioregions()] for visualizing colored clusters on maps
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
 #' 
+#' Associated functions: 
+#' [map_bioregions]
 #' 
 #' @references
 #' Color palettes from the `rcartocolor` package:
@@ -262,7 +268,22 @@ bioregion_colors <- function(clusters,
     
     # 6. Assign colors ---------------------------------------------------------
     
-    max_vivid_colors <- 12
+    # Some CARTO qualitative palettes (Vivid, Bold, Prism, Safe, Antique,
+    # Pastel) always include a grey/neutral tone as their last color.
+    # For these palettes we request n+1 colors and drop the last one so
+    # that only vivid, distinguishable colors are assigned.
+    grey_palettes <- c("Vivid", "Bold", "Prism", "Safe", "Antique", "Pastel")
+    has_trailing_grey <- palette %in% grey_palettes
+    
+    if (has_trailing_grey) {
+      # Max usable vivid colors is 11 (12 minus the trailing grey)
+      max_vivid_colors <- 11L
+    } else {
+      # For other palettes, use all available colors
+      max_palette <- length(rcartocolor::carto_pal(name = palette))
+      max_vivid_colors <- max_palette
+    }
+    
     nb_significant <- length(ranked_clusters)
     
     # Initialize colors data frame for this partition
@@ -286,13 +307,18 @@ bioregion_colors <- function(clusters,
     if (nb_significant > 0) {
       if (nb_significant <= max_vivid_colors) {
         # All significant clusters get vivid colors
-        # rcartocolor requires at least 3 colors, so we handle small cases
-        if (nb_significant < 3) {
-          # For 1-2 clusters, get 3 colors and use the first ones
-          all_vivid_colors <- rcartocolor::carto_pal(n = 3, name = palette)
-          vivid_colors <- all_vivid_colors[1:nb_significant]
+        if (has_trailing_grey) {
+          # Request one extra color and drop the trailing grey
+          n_request <- min(nb_significant + 1L, 12L)
+          vivid_colors <- rcartocolor::carto_pal(n = n_request, 
+                                                 name = palette)
+          vivid_colors <- vivid_colors[-length(vivid_colors)]
+          vivid_colors <- vivid_colors[seq_len(nb_significant)]
         } else {
-          vivid_colors <- rcartocolor::carto_pal(n = nb_significant, name = palette)
+          n_request <- max(nb_significant, 3L)
+          vivid_colors <- rcartocolor::carto_pal(n = n_request, 
+                                                 name = palette)
+          vivid_colors <- vivid_colors[seq_len(nb_significant)]
         }
         significant_colors <- data.frame(
           cluster = ranked_clusters,
@@ -302,11 +328,18 @@ bioregion_colors <- function(clusters,
         partition_colors_df <- rbind(partition_colors_df, significant_colors)
         
       } else {
-        # Top 12 get vivid colors, rest get grey shades
-        vivid_colors <- rcartocolor::carto_pal(n = max_vivid_colors, name = palette)
+        # Top clusters get vivid colors, rest get grey shades
+        if (has_trailing_grey) {
+          all_palette_colors <- rcartocolor::carto_pal(n = 12, 
+                                                       name = palette)
+          all_palette_colors <- all_palette_colors[-length(all_palette_colors)]
+        } else {
+          all_palette_colors <- rcartocolor::carto_pal(
+            n = max_vivid_colors, name = palette)
+        }
         top_colors <- data.frame(
-          cluster = ranked_clusters[1:max_vivid_colors],
-          color = vivid_colors,
+          cluster = ranked_clusters[seq_len(max_vivid_colors)],
+          color = all_palette_colors,
           stringsAsFactors = FALSE
         )
         
@@ -323,12 +356,22 @@ bioregion_colors <- function(clusters,
           stringsAsFactors = FALSE
         )
         
-        partition_colors_df <- rbind(partition_colors_df, top_colors, remaining_colors)
+        partition_colors_df <- rbind(partition_colors_df, top_colors, 
+                                    remaining_colors)
       }
     }
     
     # Ensure cluster column is character
     partition_colors_df$cluster <- as.character(partition_colors_df$cluster)
+    
+    # Reorder by cluster ID (numeric order if possible, otherwise 
+    # alphabetical)
+    cluster_order <- tryCatch(
+      order(as.numeric(partition_colors_df$cluster)),
+      warning = function(w) order(partition_colors_df$cluster)
+    )
+    partition_colors_df <- partition_colors_df[cluster_order, , drop = FALSE]
+    rownames(partition_colors_df) <- NULL
     
     # Store colors for this partition
     colors_list[[partition_name]] <- partition_colors_df
