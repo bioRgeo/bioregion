@@ -97,8 +97,8 @@ vege_kmeans_vivid$colors
     ## $K_3
     ##   cluster   color
     ## 1       1 #E58606
-    ## 2       3 #5D69B1
-    ## 3       2 #A5AA99
+    ## 2       2 #52BCA3
+    ## 3       3 #5D69B1
 
 ``` r
 # Map with Vivid colors
@@ -129,8 +129,8 @@ vege_kmeans_bold$colors
     ## $K_3
     ##   cluster   color
     ## 1       1 #7F3C8D
-    ## 2       3 #11A579
-    ## 3       2 #A5AA99
+    ## 2       2 #3969AC
+    ## 3       3 #11A579
 
 ``` r
 # Map with Bold colors
@@ -158,8 +158,8 @@ vege_kmeans_safe$colors
     ## $K_3
     ##   cluster   color
     ## 1       1 #88CCEE
-    ## 2       3 #CC6677
-    ## 3       2 #888888
+    ## 2       2 #DDCC77
+    ## 3       3 #CC6677
 
 ``` r
 # Map with Safe colors

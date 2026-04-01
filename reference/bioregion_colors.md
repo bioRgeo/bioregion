@@ -10,16 +10,17 @@ clusters, and optionally black to insignificant clusters.
 
 ``` r
 bioregion_colors(
-  clusters,
+  bioregionalization,
   palette = "Vivid",
   cluster_ordering = "n_sites",
-  cutoff_insignificant = NULL
+  cutoff_insignificant = NULL,
+  clusters = NULL
 )
 ```
 
 ## Arguments
 
-- clusters:
+- bioregionalization:
 
   An object of class `bioregion.clusters`, typically output from
   clustering functions such as
@@ -56,6 +57,10 @@ bioregion_colors(
   visual clutter on maps. If `NULL`, all clusters receive distinct
   colors.
 
+- clusters:
+
+  Deprecated. Use `bioregionalization` instead.
+
 ## Value
 
 A modified `bioregion.clusters` object with two additional elements:
@@ -89,13 +94,15 @@ black (#000000).
 
 Remaining clusters are ranked by the `cluster_ordering` criterion:
 
-- **Top clusters** (up to 12): Receive distinct colors from the chosen
-  palette. This limit is because above 12 the human eye struggles to
-  distinguish between colors.
+- **Top clusters** (up to 11 for qualitative CARTO palettes, or the
+  palette maximum for other palettes): Receive distinct colors from the
+  chosen palette. For the qualitative palettes (`"Vivid"`, `"Bold"`,
+  `"Prism"`, `"Safe"`, `"Antique"`, `"Pastel"`), the 12th color is
+  always a grey/neutral tone and is automatically excluded.
 
-- **Remaining clusters** (beyond top 12): Receive shades of grey from
-  light (#CCCCCC) to dark (#404040), maintaining visual distinction but
-  with less prominence.
+- **Remaining clusters**: Receive shades of grey from light (#CCCCCC) to
+  dark (#404040), maintaining visual distinction but with less
+  prominence.
 
 **Multiple partitions**: If the cluster object contains multiple
 partitions (e.g., from hierarchical clustering with different k values),
