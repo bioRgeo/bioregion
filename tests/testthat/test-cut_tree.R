@@ -265,7 +265,164 @@ test_that("show_hierarchy argument works in cut_tree", {
                    verbose = FALSE)
   expect_equal(cut6$args$show_hierarchy, TRUE)
   quietly(expect_no_error(summary(cut6)))
-  
+
+})
+
+# Tests for node_type attribute ------------------------------------------------
+test_that("node_type attribute is set when hclu_hierarclust has n_clust", {
+
+  tree_with_clust <- hclu_hierarclust(dissim,
+                                      n_clust = 5,
+                                      verbose = FALSE)
+
+  nt <- attr(tree_with_clust$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(tree_with_clust$clusters))
+})
+
+test_that("node_type is set after cut_tree with single n_clust", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  # Before cut_tree, clusters is NA
+
+  expect_true(is.na(tree_no_cut$clusters))
+
+  result <- cut_tree(tree_no_cut, n_clust = 3, verbose = FALSE)
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with multiple n_clust", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- cut_tree(tree_no_cut, n_clust = c(3, 5, 10), verbose = FALSE)
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with n_clust and find_h = FALSE", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- cut_tree(tree_no_cut, n_clust = 5, find_h = FALSE, verbose = FALSE)
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with multiple n_clust and find_h = FALSE", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- cut_tree(tree_no_cut, n_clust = c(3, 5), find_h = FALSE,
+                     verbose = FALSE)
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with single cut_height", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- cut_tree(tree_no_cut, cut_height = 0.3, verbose = FALSE)
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with multiple cut_height", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- cut_tree(tree_no_cut, cut_height = c(0.1, 0.3, 0.5),
+                     verbose = FALSE)
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with dynamic_tree_cut", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- suppressMessages(
+    cut_tree(tree_no_cut, dynamic_tree_cut = TRUE, verbose = FALSE))
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type is set after cut_tree with dynamic_tree_cut hybrid", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+
+  result <- suppressMessages(
+    cut_tree(tree_no_cut, dynamic_tree_cut = TRUE,
+             dynamic_method = "hybrid",
+             dissimilarity = dissim,
+             verbose = FALSE))
+
+  nt <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt))
+  expect_equal(unique(nt), "site")
+  expect_equal(length(nt), nrow(result$clusters))
+})
+
+test_that("node_type persists after successive cut_tree calls", {
+
+  tree_with_clust <- hclu_hierarclust(dissim, n_clust = 5, verbose = FALSE)
+
+  # First check after initial hierarclust
+  nt1 <- attr(tree_with_clust$clusters, "node_type")
+  expect_false(is.null(nt1))
+
+  # Re-cut with a different n_clust
+  result <- cut_tree(tree_with_clust, n_clust = 3, verbose = FALSE)
+
+  nt2 <- attr(result$clusters, "node_type")
+  expect_false(is.null(nt2))
+  expect_equal(unique(nt2), "site")
+  expect_equal(length(nt2), nrow(result$clusters))
+
+  # Re-cut again with cut_height
+  result2 <- cut_tree(result, cut_height = 0.3, verbose = FALSE)
+
+  nt3 <- attr(result2$clusters, "node_type")
+  expect_false(is.null(nt3))
+  expect_equal(unique(nt3), "site")
+  expect_equal(length(nt3), nrow(result2$clusters))
+})
+
+test_that("node_type is not set when cut_tree is used on raw hclust object", {
+
+  tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
+  hclust_tree <- tree_no_cut$algorithm$final.tree
+
+  # cut_tree on a raw hclust returns a plain data.frame, no node_type
+  result <- cut_tree(hclust_tree, n_clust = 5, verbose = FALSE)
+
+  expect_true(is.data.frame(result))
+  expect_true(is.null(attr(result, "node_type")))
 })
 
 

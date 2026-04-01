@@ -399,6 +399,9 @@ cut_tree <- function(tree,
   if(inherits(tree, "bioregion.clusters")) {
     cur.tree$args$cut_height <- cut_height
     tree$clusters <- clusters
+    # Set node_type attribute based on inputs
+    attr(tree$clusters, "node_type") <- rep(
+      tree$inputs$node_type, nrow(tree$clusters))
     tree$algorithm$output_n_clust <- output_n_clust
     tree$algorithm$output_cut_height <- output_cut_height
     
