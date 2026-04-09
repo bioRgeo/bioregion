@@ -68,10 +68,26 @@
 #' consensus tree.
 #' 
 #' @param show_hierarchy A `boolean` specifying if the hierarchy of clusters
-#' should be identifiable in the outputs (`FALSE` by default). This argument is 
+#' should be identifiable in the outputs (`FALSE` by default). This argument is
 #' only used if the tree is cut (i.e., `n_clust` or `cut_height` is provided).
-#'  
-#' @param verbose A `boolean` indicating whether to 
+#'
+#' @param stable_shortcircuit A `boolean` indicating whether to enable the
+#' stable sub-tree short-circuit optimization for the iterative consensus tree
+#' method (`FALSE` by default). When enabled, if the randomized trees agree on
+#' the sub-tree topology for a subcluster, the algorithm skips further recursive
+#' consensus calls on that subcluster and directly reuses the agreed-upon tree.
+#' This can substantially speed up computation when many subclusters are stable.
+#' NOTE that enabling this changes the random number generator trajectory, so
+#' results with the same seed will differ if this setting differs.
+#' Only used when `optimal_tree_method = "iterative_consensus_tree"`.
+#'
+#' @param stability_check A `character` string indicating which trees to compare
+#' when checking sub-tree stability. Possible values are `"top_n_trees"`
+#' (default), which checks only the best trees selected by cophenetic
+#' correlation, or `"all"`, which checks all `n_runs` trees. 
+#' Only used when `stable_shortcircuit = TRUE`.
+#'
+#' @param verbose A `boolean` indicating whether to
 #' display progress messages. Set to `FALSE` to suppress these messages.
 #' 
 #' @return
@@ -241,6 +257,8 @@ hclu_hierarclust <- function(dissimilarity,
                              h_min = 0,
                              consensus_p = 0.5,
                              show_hierarchy = FALSE,
+                             stable_shortcircuit = FALSE,
+                             stability_check = "top_n_trees",
                              verbose = TRUE){
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
@@ -433,11 +451,13 @@ hclu_hierarclust <- function(dissimilarity,
       #                                            n_runs = n_runs,
       #                                            monotonicity_direction = "bottom-up")
       
-      consensus_tree <- IHCT(dist_mat, 
+      consensus_tree <- IHCT(dist_mat,
                              method = method,
                              n_runs = n_runs,
-                             n_splits = 2,
+                             top_n_trees = 2,
                              monotonicity_direction = "bottom-up",
+                             stable_shortcircuit = stable_shortcircuit,
+                             stability_check = stability_check,
                              verbose = verbose)
       
       if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
