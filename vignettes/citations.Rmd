@@ -21,6 +21,10 @@ vignette: >
 
 # 2026
 
+* Parrinha D, Marques MP, Bauer AM, Ceríaco LMP (2026)
+[An Updated Checklist and Atlas of the Reptiles of Namibe Province, Southwestern Angola.](https://doi.org/10.2992/007.091.0401)
+*Annals of Carnegie Museum* 91, 319-397.
+
 * Ahuatzin-Hernández JM, Morrone JJ, Vidal-Martínez VM, & Souza AJ (2026)
 [Combining Historical and Ecological Methods Provides New Insights for the Recognition 
 of Biogeographical Areas and Their Relationships: The Case of the Gulf of Mexico.](https://onlinelibrary.wiley.com/doi/10.1111/jbi.70190)

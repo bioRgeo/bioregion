@@ -877,6 +877,16 @@ test_that("invalid outputs", {
   den <- sqrt((n_b*(n_sites - n_b)/(n_sites - 1))*
               (n_s / n_sites)*
               (1 - (n_s / n_sites)))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_b among n_sites)
+    mub <- c(mub, sum(comat_bin[sample(n_sites, n_b), s]))
+  }
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
   Rho_occ <- num / den
   
   tab <- cbind(clusters_g, as.numeric(comat[,s]))
@@ -896,6 +906,16 @@ test_that("invalid outputs", {
   num <- (w_sb / n_b) - mean(tab[,2])
   den <- sqrt(((n_sites - n_b)/(n_sites - 1))*
                 (var(tab[,2]) / n_b))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_b among n_sites)
+    mub <- c(mub, mean(comat[sample(n_sites, n_b), s]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
   Rho_abund <- num / den
   
   test <- c(s, b,
@@ -961,6 +981,16 @@ test_that("invalid outputs", {
   den <- sqrt((n_c*(n_species - n_c)/(n_species - 1))*
                 (n_g / n_species)*
                 (1 - (n_g / n_species)))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_c among n_species)
+    mub <- c(mub, sum(comat_bin[sample(n_species, n_c), g]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
   Rho_occ <- num / den
   
   comat <- t(comat)
@@ -981,6 +1011,16 @@ test_that("invalid outputs", {
   num <- (w_gc / n_c) - mean(tab[,2])
   den <- sqrt(((n_species - n_c)/(n_species - 1))*
                 (var(tab[,2]) / n_c))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_c among n_species)
+    mub <- c(mub, mean(comat[sample(n_species, n_c), g]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
   Rho_abund <- num / den
   
   test <- c(g, c,

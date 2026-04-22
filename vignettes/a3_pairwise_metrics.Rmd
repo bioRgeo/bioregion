@@ -634,9 +634,8 @@ dissim2 <- as_bioregion_pairwise(designdist(comat,
                                  pkg = "vegan")
 
 dissim <- bind_pairwise(primary_metrics = dissim1,
-                                     secondary_metrics = dissim2,
-                                     new_metrics = c("(B + C) / (2*A + B + C)",
-                                                     "Bray*Bray"))
+                        secondary_metrics = dissim2,
+                        new_metrics = c("(B + C) / (2*A + B + C)", "Bray*Bray"))
 
 dissim[1:10,]
 

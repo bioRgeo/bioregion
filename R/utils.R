@@ -1305,8 +1305,8 @@ sbgc <- function(clusters,
         
         num <- nij-((ni*nj)/n)
         den <- sqrt((nj*(n-nj)/(n-1))*(ni/n)*(1-(ni/n)))
-        # den[is.na(den)] <- ??
-        
+        den[num==0] <- 1
+
         res11$Rho_occ <- num/den
       }
       
@@ -1449,7 +1449,7 @@ sbgc <- function(clusters,
         
         num <- muij-mui
         den <- sqrt((n-nj)/(n-1)*(vari/nj))
-        # den[is.na(den)] <- ??
+        den[num==0] <- 1
         
         res12$Rho_abund <- num/den
       }
