@@ -74,6 +74,7 @@ In this vignette, we directly load the network format for the
 distribution of fish in European basins.
 
 ``` r
+
 library("bioregion")
 data("fishdf")
 ```
@@ -82,6 +83,7 @@ Some network algorithms work with the similarity matrix between each
 pair of sites.
 
 ``` r
+
 data("fishmat")
 fish_simil <- similarity(fishmat, metric = "Simpson")
 ```
@@ -115,6 +117,7 @@ removed
 ## 2. Binary files
 
 ``` r
+
 install_binaries(binpath = "tempdir", infomap_version = c("2.1.0", "2.6.0"))
 ```
 
@@ -136,6 +139,7 @@ Rosvall & Bergstrom (2008)
   should be identifiable in the outputs (FALSE by default).
 
 ``` r
+
 ex_infomap <- netclu_infomap(fish_simil,
                              weight = TRUE,
                              index = names(fish_simil)[3],
@@ -185,6 +189,7 @@ modules or their union (default value is 0.5, bigger value leads to
 bigger clusters).
 
 ``` r
+
 ex_oslom <- netclu_oslom(fish_simil,
                          weight = TRUE,
                          index = names(fish_simil)[3],
@@ -218,6 +223,7 @@ Blondel *et al.* (2008)
   \> 0, 1 is chosen by default)
 
 ``` r
+
 ex_louvain <- netclu_louvain(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],
@@ -236,11 +242,7 @@ ex_louvain <- netclu_louvain(fishdf,
 table(ex_louvain$clusters$K_23)
 ```
 
-    ## 
-    ##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 
-    ##   6   4   3  16   3   4  20 119 103  43   7  38   2   5  11   3  55   5  17   8 
-    ##   7   8   9 
-    ##   8   4  49
+    ## < table of extent 0 >
 
 ## 3. Functions from the igraph package
 
@@ -249,6 +251,7 @@ table(ex_louvain$clusters$K_23)
 Clauset *et al.* (2004)
 
 ``` r
+
 ex_greedy <- netclu_greedy(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
@@ -269,6 +272,7 @@ table(ex_greedy$clusters$K_5)
 Raghavan *et al.* (2007)
 
 ``` r
+
 ex_labelprop <- netclu_labelprop(fishdf,
                                  weight = TRUE,
                                  index = names(fishdf)[3],
@@ -288,6 +292,7 @@ table(ex_labelprop$clusters$K_11)
 Traag *et al.* (2019)
 
 ``` r
+
 ex_leiden <- netclu_leiden(fishdf,
                            weight = TRUE,
                            index = names(fishdf)[3],
@@ -312,6 +317,7 @@ length(unique(ex_leiden$clusters$K_505))
 Newman (2006)
 
 ``` r
+
 ex_leadingeigen <- netclu_leadingeigen(fishdf,
                                        weight = TRUE,
                                        index = names(fishdf)[3],
@@ -323,13 +329,16 @@ ex_leadingeigen <- netclu_leadingeigen(fishdf,
 table(ex_leadingeigen$clusters$K_17)
 ```
 
-    ## < table of extent 0 >
+    ## 
+    ##   1  10  11  12  13  14  15  16  17   2   3   4   5   6   7   8   9 
+    ## 108   2   2   1   1   2   1   1   2 136  81  69  34  22  28   1  42
 
 ### 3.5 Walktrap
 
 Pons & Latapy (2005)
 
 ``` r
+
 ex_walktrap <- netclu_walktrap(fishdf,
                                weight = TRUE,
                                index = names(fishdf)[3],
@@ -355,6 +364,7 @@ Update of the QuanBiMo algorithm developed by Dormann & Strauss (2014).
 Beckett (2016)
 
 ``` r
+
 ex_beckett <- netclu_beckett(fishdf,
                              weight = TRUE,
                              index = names(fishdf)[3],

@@ -18,8 +18,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="3. Pairwise similarity/dissimilarity metrics">
 </head>
@@ -100,7 +100,7 @@
                         <h4 data-toc-skip class="author">Maxime
 Lenormand, Boris Leroy and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2026-04-22</h4>
+            <h4 data-toc-skip class="date">2026-07-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a3_pairwise_metrics.Rmd" class="external-link"><code>vignettes/a3_pairwise_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a3_pairwise_metrics.Rmd</code></div>
@@ -543,21 +543,21 @@ matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_j</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 374.578654 379.770595 386.799686 380.341682 399.949283</span></span>
-<span><span class="co">##        betapart   1.750376   1.846739   1.919337   1.895661   1.946797</span></span>
-<span><span class="co">##       bioregion  10.165968  10.757765  15.576713  15.122754  16.099398</span></span>
-<span><span class="co">##    ecodist_dist 131.995970 138.549378 155.295125 162.314686 164.472357</span></span>
-<span><span class="co">##  ecodist_bcdist   3.755600   4.267179   4.223762   4.308921   4.339176</span></span>
-<span><span class="co">##       vegan_veg   1.339206   1.480526   2.104646   2.448081   2.487559</span></span>
-<span><span class="co">##    vegan_design   1.331485   1.375119   1.460751   1.427452   1.464072</span></span>
+<span><span class="co">##      adespatial 370.345862 380.390821 382.104360 381.728988 387.134188</span></span>
+<span><span class="co">##        betapart   1.737504   1.867456   1.936809   1.924225   1.954595</span></span>
+<span><span class="co">##       bioregion  14.440248  15.112824  16.984381  15.584658  16.071444</span></span>
+<span><span class="co">##    ecodist_dist 139.444967 162.844204 161.966290 166.469995 168.681150</span></span>
+<span><span class="co">##  ecodist_bcdist   3.904884   4.240751   4.249565   4.289103   4.308011</span></span>
+<span><span class="co">##       vegan_veg   1.342719   1.451360   2.084140   2.435137   2.461786</span></span>
+<span><span class="co">##    vegan_design   1.324242   1.330761   1.411749   1.393484   1.406373</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  405.694343    10</span></span>
-<span><span class="co">##    2.323956    10</span></span>
-<span><span class="co">##   30.591132    10</span></span>
-<span><span class="co">##  167.641306    10</span></span>
-<span><span class="co">##    4.380777    10</span></span>
-<span><span class="co">##    2.530252    10</span></span>
-<span><span class="co">##    1.896523    10</span></span></code></pre>
+<span><span class="co">##  389.167170    10</span></span>
+<span><span class="co">##    2.324873    10</span></span>
+<span><span class="co">##   29.692739    10</span></span>
+<span><span class="co">##  169.880646    10</span></span>
+<span><span class="co">##    4.347409    10</span></span>
+<span><span class="co">##    2.505872    10</span></span>
+<span><span class="co">##    1.781319    10</span></span></code></pre>
 <p>On this very small example, the functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> outperform the
 others in terms of computation time. They are followed by
 <code>bcdist</code> and <code>beta.pair</code>. Our
@@ -644,21 +644,21 @@ dissimilarity matrix,</p>
 <code class="sourceCode R"><span><span class="va">comp_bc</span></span></code></pre></div>
 <pre><code><span><span class="co">## Unit: milliseconds</span></span>
 <span><span class="co">##            expr        min         lq       mean     median         uq</span></span>
-<span><span class="co">##      adespatial 373.675785 379.891514 389.812351 387.130185 390.105223</span></span>
-<span><span class="co">##        betapart 303.265097 323.110850 332.169562 330.188102 342.424015</span></span>
-<span><span class="co">##       bioregion  12.253364  12.288566  12.949820  12.503975  12.951028</span></span>
-<span><span class="co">##    ecodist_dist  94.769917  98.526560 146.381366 101.657197 127.226015</span></span>
-<span><span class="co">##  ecodist_bcdist   6.624615   6.650814   6.858526   6.868898   7.057206</span></span>
-<span><span class="co">##       vegan_veg   1.334329   1.376792   1.809709   1.411143   2.451846</span></span>
-<span><span class="co">##    vegan_design   1.246088   1.407447   1.509779   1.450422   1.730527</span></span>
+<span><span class="co">##      adespatial 367.074538 367.933189 377.267609 379.435261 382.667993</span></span>
+<span><span class="co">##        betapart 297.285290 314.129158 324.167720 318.240577 336.929709</span></span>
+<span><span class="co">##       bioregion  11.718947  11.967155  12.638151  12.155043  12.613001</span></span>
+<span><span class="co">##    ecodist_dist  94.049791  97.093248 143.584659 105.262858 120.833151</span></span>
+<span><span class="co">##  ecodist_bcdist   6.639133   6.664211   6.870140   6.893180   7.071063</span></span>
+<span><span class="co">##       vegan_veg   1.325053   1.363960   1.803075   1.421310   2.430190</span></span>
+<span><span class="co">##    vegan_design   1.275219   1.366474   1.504754   1.437744   1.775079</span></span>
 <span><span class="co">##         max neval</span></span>
-<span><span class="co">##  439.551699    10</span></span>
-<span><span class="co">##  365.061869    10</span></span>
-<span><span class="co">##   14.871086    10</span></span>
-<span><span class="co">##  468.948138    10</span></span>
-<span><span class="co">##    7.102153    10</span></span>
-<span><span class="co">##    2.474049    10</span></span>
-<span><span class="co">##    1.819930    10</span></span></code></pre>
+<span><span class="co">##  391.728633    10</span></span>
+<span><span class="co">##  354.668142    10</span></span>
+<span><span class="co">##   14.768274    10</span></span>
+<span><span class="co">##  471.216656    10</span></span>
+<span><span class="co">##    7.085505    10</span></span>
+<span><span class="co">##    2.480334    10</span></span>
+<span><span class="co">##    1.796991    10</span></span></code></pre>
 <p>The functions from <a href="https://cran.r-project.org/package=vegan" class="external-link">vegan</a> continue to
 outperform the others. They are again followed by <code>bcdist</code>,
 while our <code>dissimilarity</code> function remains slightly slower.
@@ -1323,7 +1323,7 @@ Ecology and Biogeography</em> 21, 1223–1232.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

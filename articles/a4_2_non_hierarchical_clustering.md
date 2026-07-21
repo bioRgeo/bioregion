@@ -54,6 +54,7 @@ In the example below, we use the fish dataset from the package to
 compute distance metrics.
 
 ``` r
+
 library("bioregion")
 data("fishmat")
 
@@ -84,6 +85,7 @@ the clustering procedure, so we recommend that you choose carefully
 depending on your research question.
 
 ``` r
+
 dissim <- dissimilarity(fishmat, metric = "Simpson")
 
 dissim[1:3, ]
@@ -177,6 +179,7 @@ used.
 Let’s start by setting both `iter_max` and `nstart` to 1.
 
 ``` r
+
 ex_kmeans <- nhclu_kmeans(dissim, index = "Simpson", n_clust = 3, iter_max = 1,
                           nstart = 1, algorithm = "Hartigan-Wong")
 ```
@@ -186,6 +189,7 @@ saying that the algorithm did not converge.
 We therefore need to increase the value of `iter_max`.
 
 ``` r
+
 ex_kmeans <- nhclu_kmeans(dissim, index = "Simpson", n_clust = 3, iter_max = 3,
                           nstart = 1, algorithm = "Hartigan-Wong")
 ```
@@ -196,6 +200,7 @@ it contains several parts. The clusters assigned to each site are
 accessible in the `$clusters` part of the output:
 
 ``` r
+
 ex_kmeans$clusters[1:3, ]
 ```
 
@@ -205,6 +210,7 @@ ex_kmeans$clusters[1:3, ]
     ## Acheloos Acheloos   2
 
 ``` r
+
 table(ex_kmeans$clusters$K_3)
 ```
 
@@ -219,6 +225,7 @@ This assignment can change depending on the two other main arguments of
 the functions, `iter_max` and `nstart`.
 
 ``` r
+
 ex_kmeans2 <- nhclu_kmeans(dissim, index = "Simpson", n_clust = 3,
                            iter_max = 100, nstart = 1,
                            algorithm = "Hartigan-Wong")
@@ -233,6 +240,7 @@ appears quite homogeneous with our three examples but some discrepancies
 emerge.
 
 ``` r
+
 table(ex_kmeans$clusters$K_3, ex_kmeans2$clusters$K_3)
 ```
 
@@ -243,6 +251,7 @@ table(ex_kmeans$clusters$K_3, ex_kmeans2$clusters$K_3)
     ##   3   0   9  94
 
 ``` r
+
 table(ex_kmeans$clusters$K_3, ex_kmeans3$clusters$K_3)
 ```
 
@@ -300,6 +309,7 @@ with the argument `variant` (see
 details).
 
 ``` r
+
 ex_pam <- nhclu_pam(dissim, index = "Simpson", n_clust = 2:25, nstart = 1,
                     variant = "faster", cluster_only = FALSE)
 table(ex_pam$clusters$K_2)
@@ -321,6 +331,7 @@ order to reduce the computational time and the RAM storage problem. This
 is achieved by using the sampling approach.
 
 ``` r
+
 # ex_clara <- nhclu_clara(dissim,
 #                         index = "Simpson",
 #                         seed = 1,
@@ -335,6 +346,7 @@ and Han 2002)) is an extension of the k-medoids (PAM) methods combined
 with the CLARA algorithm.
 
 ``` r
+
 # ex_clarans <- nhclu_clarans(dissim,
 #                             index = "Simpson",
 #                             seed = 1,
@@ -398,6 +410,7 @@ and `eps`, then the function will provide a knee curve helping the
 search of an optimal `eps` value.  
 
 ``` r
+
 ex_dbscan <- nhclu_dbscan(dissim, index = "Simpson", minPts = NULL, eps = NULL,
                           plot = TRUE)
 ```
@@ -419,6 +432,7 @@ ex_dbscan <- nhclu_dbscan(dissim, index = "Simpson", minPts = NULL, eps = NULL,
 Here, we see that we can set `eps` to 1.
 
 ``` r
+
 ex_dbscan2 <- nhclu_dbscan(dissim, index = "Simpson", minPts = NULL, eps = 1,
                            plot = FALSE)
 ```
@@ -426,6 +440,7 @@ ex_dbscan2 <- nhclu_dbscan(dissim, index = "Simpson", minPts = NULL, eps = 1,
 With this set of parameters, we only get one cluster.
 
 ``` r
+
 table(ex_dbscan2$clusters$K_1)
 ```
 
@@ -437,6 +452,7 @@ If we decrease the `eps` value and increase `minPts`, we can get more
 clusters.
 
 ``` r
+
 ex_dbscan3 <- nhclu_dbscan(dissim, index = "Simpson", minPts = 4, eps = 0.5,
                            plot = FALSE)
 
@@ -455,6 +471,7 @@ Unlike the previous algorithms in this vignette, this algorithm and its
 associated function use a similarity matrix.
 
 ``` r
+
 # Similarity matrix
 sim <- dissimilarity_to_similarity(dissim)
 
@@ -476,6 +493,7 @@ and
 calcultes several metrics based on the previous clustering attempts.
 
 ``` r
+
 bioregionalization_metrics(ex_pam, dissimilarity = dissim,
                            eval_metric = "pc_distance")
 ```
@@ -496,6 +514,7 @@ bioregionalization_metrics(ex_pam, dissimilarity = dissim,
 need to provide the site-species matrix.
 
 ``` r
+
 a <- bioregionalization_metrics(ex_pam, dissimilarity = dissim, net = fishdf,
                                 species_col = "Species", site_col = "Site",
                                 eval_metric = c("tot_endemism", "avg_endemism",
@@ -509,6 +528,7 @@ function has calculated the partitioning metrics, we can call
 to get the optimal number of clusters.  
 
 ``` r
+
 find_optimal_n(a)
 ```
 

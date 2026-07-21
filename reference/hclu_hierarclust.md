@@ -298,7 +298,6 @@ tree1
 plot(tree1)
 
 str(tree1)
-#> List of 6
 #>  $ name        : chr "hclu_hierarclust"
 #>  $ args        :List of 16
 #>   ..$ index              : chr "Simpson"
@@ -345,7 +344,6 @@ str(tree1)
 #>   ..$ n_clust          : int 5
 #>   ..$ requested_n_clust: num 5
 #>   ..$ output_cut_height: num 0.109
-#>  - attr(*, "class")= chr [1:2] "bioregion.clusters" "list"
 tree1$clusters
 #>            ID K_5
 #> Site1   Site1   1

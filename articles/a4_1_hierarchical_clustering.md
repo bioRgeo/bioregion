@@ -29,6 +29,7 @@ In the example below, we use the vegetation dataset from the package to
 compute distance metrics.
 
 ``` r
+
 # Work with the vegetation dataset we include in the package
 data(vegemat)
 
@@ -68,6 +69,7 @@ important for the outcome of the clustering procedure, so we recommend
 that you choose carefully depending on your research question.
 
 ``` r
+
 dissim <- dissimilarity(vegemat)
 
 head(dissim)
@@ -119,6 +121,7 @@ the divisive method.
 The basic use of the function is as follows:
 
 ``` r
+
 tree1 <- hclu_hierarclust(dissim)
 ```
 
@@ -136,6 +139,7 @@ We can see type the name of the object in the console to see more
 information:
 
 ``` r
+
 tree1
 ```
 
@@ -158,6 +162,7 @@ To cut the tree, we can use the
 function:
 
 ``` r
+
 # Ask for 3 clusters
 tree1 <- cut_tree(tree1,
                   n_clust = 3)
@@ -167,6 +172,7 @@ Here, we asked for 3 clusters, and the algorithm automatically finds the
 height at which 3 clusters are found (h = 0.547).
 
 ``` r
+
 tree1
 ```
 
@@ -199,6 +205,7 @@ the results of the clustering: we have
 We can make a quick plot of our partitioned tree with
 
 ``` r
+
 # We reduced the size of text labels with cex = .2, because there are too many sites
 plot(tree1, cex = .2)
 ```
@@ -208,6 +215,7 @@ plot(tree1, cex = .2)
 Let’s see how it looks like on a map:
 
 ``` r
+
 #data(vegesf)
 #map_bioregions(tree1, map = vegesf)
 ```
@@ -222,6 +230,7 @@ our tree.
 We can specify, e.g. 4, 10 and 20 clusters:
 
 ``` r
+
 # Ask for 4, 10 and 20 clusters
 tree1 <- cut_tree(tree1,
                   n_clust = c(2, 3, 12))
@@ -236,6 +245,7 @@ the tree, with info on each cluster, by using the convenient
 [`summary()`](https://rdrr.io/r/base/summary.html) function.
 
 ``` r
+
 summary(tree1)
 ```
 
@@ -306,6 +316,7 @@ the number of clusters. We could, for example, cut the tree at heights
 0.4 (shallow cut), 0.5 (intermediate cut) and 0.6 (deep cut):
 
 ``` r
+
 tree1 <- cut_tree(tree1,
                   cut_height = c(.4, .5, .6))
 
@@ -318,6 +329,7 @@ The plot is not easy to read because of the large number of sites. We
 can rather extract the information directly from the object:
 
 ``` r
+
 tree1
 ```
 
@@ -345,6 +357,7 @@ Let’s look at the hierarchical structure of clusters with
 [`summary()`](https://rdrr.io/r/base/summary.html):
 
 ``` r
+
 summary(tree1)
 ```
 
@@ -437,6 +450,7 @@ summary(tree1)
 Here is how the maps look like:
 
 ``` r
+
 #for(i in 2:ncol(tree1$clusters)){
 #  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
 #}
@@ -452,10 +466,10 @@ To explore the object, you can use
 [`str()`](https://rdrr.io/r/utils/str.html) to see the object structure:
 
 ``` r
+
 str(tree1)
 ```
 
-    ## List of 6
     ##  $ name        : chr "hclu_hierarclust"
     ##  $ args        :List of 16
     ##   ..$ index              : chr "Simpson"
@@ -503,7 +517,6 @@ str(tree1)
     ##   ..$ partition_name      : chr [1:3] "K_2" "K_9" "K_24"
     ##   ..$ n_clust             : int [1:3] 2 9 24
     ##   ..$ requested_cut_height: num [1:3] 0.6 0.5 0.4
-    ##  - attr(*, "class")= chr [1:2] "bioregion.clusters" "list"
 
 It show you the different slots in the object, and how you can access
 them. For example, if I want to access the `clusters` slot, I have to
@@ -526,6 +539,7 @@ type `tree1$clusters`.
   like this:
 
 ``` r
+
 tree1$cluster_info
 ```
 
@@ -546,6 +560,7 @@ The order of sites in the distance matrix influences the outcome of the
 hierarchical tree. Let’s see that with an example:
 
 ``` r
+
 # Compute the tree without randomizing the distance matrix
 tree2 <- hclu_hierarclust(dissim,
                           randomize = FALSE)
@@ -558,6 +573,7 @@ This is how the tree looks like when the matrix is not randomized. Now
 let’s randomize it and regenerate the tree:
 
 ``` r
+
 # This line randomizes the order of rows in the distance matrix
 dissim_random <- dissim[sample(1:nrow(dissim)), ]
 
@@ -610,6 +626,7 @@ used to
 keep only the metrics associated with each tree.
 
 ``` r
+
 tree_best <- hclu_hierarclust(dissim_random,
                               randomize = TRUE,
                               optimal_tree_method = "best",
@@ -623,6 +640,7 @@ very problematic if there are a lot of ties in the distance matrix.
 Let’s see it in action here:
 
 ``` r
+
 tree_consensus <- hclu_hierarclust(dissim_random,
                                    randomize = TRUE,
                                    optimal_tree_method = "consensus",
@@ -637,6 +655,7 @@ matrix. This is because its topology is terribly wrong, see how the tree
 looks like:
 
 ``` r
+
 plot(tree_consensus)
 ```
 
@@ -710,6 +729,7 @@ split into two clusters.
 The function `hclu_diana` performs the Diana divisive clustering.
 
 ``` r
+
 # Compute the tree with the Diana algorithm
 tree_diana <- hclu_diana(dissim)
 
@@ -747,6 +767,7 @@ of distances between clusters). Then we will choose the optimal number
 of clusters as the elbow of the evaluation plot.
 
 ``` r
+
 data(vegemat)
 
 # Calculate dissimilarities
@@ -769,6 +790,7 @@ opti_n_tree4 <- find_optimal_n(eval_tree4)
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-1.png)
 
 ``` r
+
 opti_n_tree4
 ```
 
@@ -783,6 +805,7 @@ opti_n_tree4
     ## pc_distance - 14
 
 ``` r
+
 # Step 5. Extract the optimal number of clusters
 # We get the name of the correct partition in the next line
 K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_distance]
@@ -799,6 +822,7 @@ head(tree4$clusters[, c("ID", K_name)])
     ## 1008 1008    2
 
 ``` r
+
 # Make a map of the clusters
 #data("vegesf")
 #library("sf")
@@ -851,6 +875,7 @@ Let’s see that in practice. Depending on the size of your dataset,
 computing endemism-based metrics can take a while.
 
 ``` r
+
 # Calculate pc_distance and anosim
 bioregionalization_metrics(tree4, 
                            dissimilarity = dissim, 
@@ -870,6 +895,7 @@ bioregionalization_metrics(tree4,
     ## Access the data.frame of metrics with your_object$evaluation_df
 
 ``` r
+
 # Calculate avg_endemism and tot_endemism
 # I have an abundance matrix, I need to convert it into network format first:
 vegenet <- mat_to_net(vegemat)
@@ -921,6 +947,7 @@ Before we look at these different methods, we will compute all the
 evaluation metrics and store them in `eval_tree4`:
 
 ``` r
+
 vegenet <- mat_to_net(vegemat)
 eval_tree4 <- bioregionalization_metrics(tree4, 
                                          dissimilarity = dissim, 
@@ -947,6 +974,7 @@ There are no parameters to adjust it. If the curve is not elbow-shaped,
 it may give spurious results.
 
 ``` r
+
 find_optimal_n(eval_tree4)
 ```
 
@@ -991,6 +1019,7 @@ ways.
 By default, the function selects the top 1% steps:
 
 ``` r
+
 find_optimal_n(eval_tree4,
                metrics_to_use = c("anosim", "pc_distance"),
                criterion = "increasing_step")
@@ -1011,6 +1040,7 @@ find_optimal_n(eval_tree4,
     ## pc_distance - 10
 
 ``` r
+
 find_optimal_n(eval_tree4,
                metrics_to_use = c("avg_endemism", "tot_endemism"),
                criterion = "decreasing_step")
@@ -1035,6 +1065,7 @@ of steps to select, e.g. to select the largest 3 steps, use
 `step_levels = 3`:
 
 ``` r
+
 find_optimal_n(eval_tree4,
                metrics_to_use = c("anosim", "pc_distance"),
                criterion = "increasing_step",
@@ -1063,6 +1094,7 @@ Second, you can set a quantile of steps to select, e.g. to select the 5%
 largest steps set the quantile to 0.95 (`step_quantile = 0.95`):
 
 ``` r
+
 find_optimal_n(eval_tree4,
                metrics_to_use = c("anosim", "pc_distance"),
                criterion = "increasing_step",
@@ -1093,6 +1125,7 @@ in our example above). You can change this by setting
 `step_round_above = FALSE`:
 
 ``` r
+
 find_optimal_n(eval_tree4,
                metrics_to_use = c("avg_endemism", "tot_endemism"),
                criterion = "decreasing_step",
@@ -1147,6 +1180,7 @@ use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and 0.9
 (shallow cutoff).
 
 ``` r
+
 find_optimal_n(eval_tree4,
                metrics_to_use = "pc_distance",
                criterion = "cutoff",
@@ -1184,6 +1218,7 @@ appropriate number of clusters. In our example here, we make 100 cuts in
 the tree to have enough values.
 
 ``` r
+
 tree5 <- cut_tree(tree4,
                   cut_height = seq(0, max(tree4$algorithm$final.tree$height), 
                                    length = 100)) 
@@ -1218,6 +1253,7 @@ We can ask for a higher number of breaks:
 - 2 breaks
 
 ``` r
+
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
                n_breakpoints = 2)
@@ -1241,6 +1277,7 @@ find_optimal_n(eval_tree5,
 - 3 breaks
 
 ``` r
+
 find_optimal_n(eval_tree5,
                criterion = "breakpoints",
                n_breakpoints = 3)
@@ -1282,6 +1319,7 @@ To run the optics algorithm, use the
 function:
 
 ``` r
+
 data(vegemat)
 
 # Calculate dissimilarities

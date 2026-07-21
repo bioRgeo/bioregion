@@ -124,7 +124,7 @@ it works, and what the clusters mean.
 To extract the clusters, we use the
 [extractXi](https://rdrr.io/pkg/dbscan/man/optics.html) function which
 is based on the steepness of the reachability plot (see
-[optics](https://rdrr.io/pkg/dbscan/man/optics.html))
+[optics](https://rdrr.io/pkg/dbscan/man/optics.html)).
 
 ## References
 

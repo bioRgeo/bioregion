@@ -13,6 +13,7 @@ matrix format of this dataset, computes the dissimilarity matrix out of
 it and also load the data.frame format of the data.
 
 ``` r
+
 data(vegedf)
 data(vegemat)
 
@@ -23,6 +24,7 @@ Since we aim at plotting the result, we also need the object `vegesf`
 linking each site of the dataset to a geometry.
 
 ``` r
+
 data(vegesf)
 ```
 
@@ -30,6 +32,7 @@ We also import the world coastlines, available from the `rnaturalearth`
 R package.
 
 ``` r
+
 world <- rnaturalearth::ne_coastline(returnclass = "sf", scale = "medium")
 # Align the CRS of both objects
 vegesf <- st_transform(vegesf, crs = st_crs(world))
@@ -49,6 +52,7 @@ Let’s take an example with a K-means clustering, with a number of
 clusters set to 3.
 
 ``` r
+
 vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, 
                                   n_clust = 3, 
                                   index = "Simpson",
@@ -61,6 +65,7 @@ of `bioregion.clusters` class, and the spatial distribution of sites,
 stored in `fishsf`.
 
 ``` r
+
 map_bioregions(vege_nhclu_kmeans, 
                map = vegesf)
 ```
@@ -85,6 +90,7 @@ package. Let’s explore a few examples with different palettes:
 ##### Example 1: Vivid palette (default)
 
 ``` r
+
 # Apply the Vivid palette (default)
 vege_kmeans_vivid <- bioregion_colors(vege_nhclu_kmeans, 
                                       palette = "Vivid",
@@ -101,6 +107,7 @@ vege_kmeans_vivid$colors
     ## 3       3 #5D69B1
 
 ``` r
+
 # Map with Vivid colors
 map_bioregions(vege_kmeans_vivid, 
                map = vegesf, 
@@ -117,6 +124,7 @@ clusters slot, but with content modified to include colors
 ##### Example 2: Bold palette
 
 ``` r
+
 # Apply the Bold palette
 vege_kmeans_bold <- bioregion_colors(vege_nhclu_kmeans, 
                                      palette = "Bold",
@@ -133,6 +141,7 @@ vege_kmeans_bold$colors
     ## 3       3 #11A579
 
 ``` r
+
 # Map with Bold colors
 map_bioregions(vege_kmeans_bold, 
                map = vegesf, 
@@ -146,6 +155,7 @@ map_bioregions(vege_kmeans_bold,
 The Safe palette is designed to be colorblind-friendly.
 
 ``` r
+
 # Apply the Safe palette
 vege_kmeans_safe <- bioregion_colors(vege_nhclu_kmeans, 
                                      palette = "Safe",
@@ -162,6 +172,7 @@ vege_kmeans_safe$colors
     ## 3       3 #CC6677
 
 ``` r
+
 # Map with Safe colors
 map_bioregions(vege_kmeans_safe, 
                map = vegesf, 
@@ -178,6 +189,7 @@ a summary bar chart showing the number of sites per bioregion with the
 same colors as the map:
 
 ``` r
+
 # Use the colored cluster object (e.g., with Vivid palette)
 # Extract cluster assignments
 clusters_df <- vege_kmeans_vivid$clusters
@@ -228,6 +240,7 @@ and cluster number.
 For this purpose, you can set the arguments like in the chunk below:
 
 ``` r
+
 custom <- map_bioregions(vege_nhclu_kmeans, 
                          map = vegesf,
                          map_as_output = TRUE, 
@@ -254,6 +267,7 @@ custom
     ## 10   88   2 POLYGON ((6.600641 45.03219...
 
 ``` r
+
 # Crop world coastlines to the extent of the sf object of interest
 europe <- sf::st_crop(world, sf::st_bbox(custom))
 
@@ -279,6 +293,7 @@ We first compute a few more bioregionalizations on the same dataset
 using other algorithms.  
 
 ``` r
+
 # Hierarchical clustering
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
                                           index = "Simpson",
@@ -293,6 +308,7 @@ vege_hclu_hierarclust$cluster_info
     ## 1            K_3       3                 3             0.625
 
 ``` r
+
 # Walktrap network bioregionalization
 vegesim <- dissimilarity_to_similarity(vegedissim)
 
@@ -308,6 +324,7 @@ We can now make a single `data.frame` with an extra-column indicating
 the algorithm used.
 
 ``` r
+
 vege_kmeans <- vege_nhclu_kmeans$clusters
 colnames(vege_kmeans)<- c("ID", "NHCLU_KMEANS")
 vege_hieraclust <- vege_hclu_hierarclust$clusters
@@ -322,6 +339,7 @@ all_clusters <- dplyr::left_join(all_clusters, vege_walktrap, by = "ID")
 We now convert this `data.frame` into a long-format `data.frame`.
 
 ``` r
+
 all_long <- tidyr::pivot_longer(data = all_clusters,
                                 cols = dplyr::contains("_"),
                                 names_to = "Algorithm",
@@ -333,6 +351,7 @@ We now add back the geometry as an extra column to make this object
 spatial.
 
 ``` r
+
 all_long_sf <- dplyr::left_join(all_long,
                                 vegesf[, c("Site", "geometry")],
                                 join_by(ID == Site))
@@ -343,6 +362,7 @@ Now that we have a long-format spatial `data.frame`, we can take
 advantage of the facets implemented in `ggplot2`.
 
 ``` r
+
 ggplot(all_long_sf) +
   geom_sf(aes(color = Clusters, fill = Clusters)) +
   geom_sf(data = europe, fill = "gray80") +
@@ -363,6 +383,7 @@ We can refine the above map by:
   
 
 ``` r
+
 world_countries <- rnaturalearth::ne_countries(scale = "medium",
                                                returnclass = "sf")
 
@@ -449,6 +470,7 @@ For these examples, we will use the fish dataset which provides a
 clearer network structure that is easier to visualize:
 
 ``` r
+
 # Load the fish dataset
 data(fishdf)
 data(fishmat)
@@ -460,6 +482,7 @@ Let’s start by creating a simple bipartite network from the fish data
 and exporting it without weights or colors:
 
 ``` r
+
 # Export the entire bipartite (site-species) fish network to GDF format 
 exportGDF(fishdf,
           col1 = "Site",
@@ -483,6 +506,7 @@ where sites are connected based on shared species richness. Edge weights
 represent the number of species shared between pairs of sites:
 
 ``` r
+
 # Create a site-to-site network based on shared species
 # First, convert the matrix to a dissimilarity object
 fish_dissim_jac <- dissimilarity(fishmat, metric = "Jaccard")
@@ -518,6 +542,7 @@ and colors. For example, we can color sites according to their bioregion
 assignment:
 
 ``` r
+
 # Install binaries if not already installed
 install_binaries(binpath = "tempdir")
 

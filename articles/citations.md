@@ -2,15 +2,24 @@
 
 ## 2026
 
-- Parrinha D, Marques MP, Bauer AM, Ceríaco LMP (2026) [An Updated
+- Prater DR & Suissa JS (2026) [Global Patterns of Range Size in
+  Ferns.](https://doi.org/10.1111/jbi.70245.) *Journal of Biogeography*
+  53, e70245.
+
+- Salariato DL & Zuloaga FO (2026) [Uneven impacts of climate change on
+  angiosperm diversity across the South American Temperate Grasslands
+  biome.](https://doi.org/10.1016/j.ppees.2026.125935) *Perspectives in
+  Plant Ecology, Evolution and Systematics* 17, 125935.
+
+- Parrinha D, Marques MP, Bauer AM & Ceríaco LMP (2026) [An Updated
   Checklist and Atlas of the Reptiles of Namibe Province, Southwestern
   Angola.](https://doi.org/10.2992/007.091.0401) *Annals of Carnegie
   Museum* 91, 319-397.
 
-- Ahuatzin-Hernández JM, Morrone JJ, Vidal-Martínez VM, & Souza
-  AJ (2026) [Combining Historical and Ecological Methods Provides New
-  Insights for the Recognition of Biogeographical Areas and Their
-  Relationships: The Case of the Gulf of
+- Ahuatzin-Hernández JM, Morrone JJ, Vidal-Martínez VM & Souza AJ (2026)
+  [Combining Historical and Ecological Methods Provides New Insights for
+  the Recognition of Biogeographical Areas and Their Relationships: The
+  Case of the Gulf of
   Mexico.](https://onlinelibrary.wiley.com/doi/10.1111/jbi.70190)
   *Journal of Biogeography* 53, e70190.
 
@@ -19,13 +28,13 @@
   Fay, MF Mendieta-Leiva G & Ramírez-Marcial N (2026) [A global
   bioregionalisation for
   orchids.](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.71093)
-  *New Phytologyst* (early view).
+  *New Phytologyst* 250, 3444-3459.
 
 - Greentree W, Duguid W, Quindazzi M, Maher B & Juanes F (2026) [Using
   the Diet Composition of Adult Chinook Salmon to Understand the
   Regional Structure of Salish Sea Forage
   Communities.](https://onlinelibrary.wiley.com/doi/10.1111/fog.70038)
-  *Fisheries Oceanography* (early view).
+  *Fisheries Oceanography* 35, 565-579.
 
 - Daumantas L (2026) [The HespDiv Method: Revealing the Hierarchical
   Organization of Biota in Space and
@@ -36,6 +45,12 @@
   the Aegean Archipelago: An Assessment for Freshwater
   Macroinvertebrates.](https://onlinelibrary.wiley.com/doi/full/10.1111/jbi.70117)
   *Journal of Biogeography* 53, e70117.
+
+- Renan M, Roll U, Grabovsky VI, Shenbrot GI & Krasnov BR (2026)
+  [Phylogenetic Regionalization of Ectoparasites and Their Hosts Using 2
+  Approaches: A Case Study with Fleas and Their Rodent Hosts from
+  Mongolia.](https://www.cambridge.org/core/journals/parasitology/article/phylogenetic-regionalization-of-ectoparasites-and-their-hosts-using-2-approaches-a-case-study-with-fleas-and-their-rodent-hosts-from-mongolia/4651F529F56A669986F9CA4F1FF23E66)
+  *Parasitology* 153, 89-102.
 
 ## 2025
 
@@ -51,12 +66,6 @@
   Zoogeographical Regions in
   China.](https://onlinelibrary.wiley.com/doi/full/10.1111/1749-4877.70025)
   *Integrative Zoology* (early view).
-
-- Renan M, Roll U, Grabovsky VI, Shenbrot GI & Krasnov BR (2025)
-  [Phylogenetic Regionalization of Ectoparasites and Their Hosts Using 2
-  Approaches: A Case Study with Fleas and Their Rodent Hosts from
-  Mongolia.](https://www.cambridge.org/core/journals/parasitology/article/phylogenetic-regionalization-of-ectoparasites-and-their-hosts-using-2-approaches-a-case-study-with-fleas-and-their-rodent-hosts-from-mongolia/4651F529F56A669986F9CA4F1FF23E66)
-  *Parasitology* (early view).
 
 - Lenormand M, Féret JB, Papuga G, Alleaume S & Luque S (2025) [Coupling
   in situ and remote sensing data to assess α- and β-diversity over

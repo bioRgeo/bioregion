@@ -26,6 +26,7 @@ co-occurrence `matrix` containing the same information gathered in a
 `matrix` with 715 rows and 3,697 columns.
 
 ``` r
+
 data("vegedf")
 data("vegemat")
 
@@ -39,6 +40,7 @@ The second dataset also comes available with `bioregion` and contains
 distribution of 195 freshwater fish distributed in the basins of Europe.
 
 ``` r
+
 data("fishmat")
 fishdissim <- dissimilarity(fishmat, metric = "all")
 data("fishdf")
@@ -51,6 +53,7 @@ It contains the distribution of 82 alpine plants in 75 sites distributed
 in the French Alps.
 
 ``` r
+
 data("aravo")
 aravo <- as.matrix(aravo$spe)
 dim(aravo)
@@ -59,6 +62,7 @@ dim(aravo)
     ## [1] 75 82
 
 ``` r
+
 ara_dissim <- dissimilarity(aravo, metric = "all")
 
 ara_df <- mat_to_net(aravo, weight = TRUE, remove_zeroes = TRUE)
@@ -70,6 +74,7 @@ We here assess the time needed by each clustering algorithm on the three
 datasets loaded above.
 
 ``` r
+
 install_binaries()
 
 mbm <- suppressMessages(
@@ -154,6 +159,7 @@ mbm_plot$time_sec <- mbm_plot$time / 1e9
 Plotting the results.
 
 ``` r
+
 ggplot(mbm_plot[which(mbm_plot$dataset == "Aravo (6150 cells)"), ],
        aes(reorder(algorithm, time_sec), time_sec)) +
   geom_boxplot(aes(color = reorder(algorithm, time_sec),
@@ -169,6 +175,7 @@ ggplot(mbm_plot[which(mbm_plot$dataset == "Aravo (6150 cells)"), ],
 ![](a4_4_microbenchmark_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
+
 ggplot(mbm_plot[which(mbm_plot$dataset == "Fish (65910 cells)"), ],
        aes(reorder(algorithm, time_sec), time_sec)) +
   geom_boxplot(aes(color = reorder(algorithm, time_sec),
@@ -187,6 +194,7 @@ ggplot(mbm_plot[which(mbm_plot$dataset == "Fish (65910 cells)"), ],
 OSLOM and Beckett too slow, not ran so far on the Vegetation data.
 
 ``` r
+
 ggplot(mbm_plot[which(mbm_plot$dataset == "Vegetation (2643355 cells)"), ],
        aes(reorder(algorithm, time_min), time_min)) +
   geom_boxplot(aes(color = reorder(algorithm, time_min),

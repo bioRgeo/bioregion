@@ -10,6 +10,7 @@ function
 We use the vegetation dataset that comes with `bioregion`.
 
 ``` r
+
 data("vegedf")
 data("vegemat")
 
@@ -28,6 +29,7 @@ We chose 3 bioregions for the non-hierarchical and hierarchical
 bioregionalizations.  
 
 ``` r
+
 # Non hierarchical bioregionalization
 vege_nhclu_kmeans <- nhclu_kmeans(vegedissim, n_clust = 3, index = "Simpson")
 vege_nhclu_kmeans$cluster_info # 3
@@ -37,6 +39,7 @@ vege_nhclu_kmeans$cluster_info # 3
     ## K_3            K_3       3
 
 ``` r
+
 # Hierarchical bioregionalization
 vege_hclu_hierarclust <- hclu_hierarclust(dissimilarity = vegedissim,
                                           seed = 1,
@@ -49,6 +52,7 @@ vege_hclu_hierarclust$cluster_info # 3
     ## 1            K_3       3                 3             0.625
 
 ``` r
+
 # Network bioregionalization
 vege_netclu_walktrap <- netclu_walktrap(vegesim,
                                         index = names(vegesim)[3])
@@ -64,6 +68,7 @@ Before comparing the bioregionalizations, we build a common `data.frame`
 containing the three distinct bioregionalizations.  
 
 ``` r
+
 comp <- dplyr::left_join(vege_hclu_hierarclust$clusters,
                          vege_netclu_walktrap$clusters,
                          by = "ID")
@@ -88,6 +93,7 @@ We can now run the function
 [`compare_bioregionalizations()`](https://bioRgeo.github.io/bioregion/reference/compare_bioregionalizations.md).
 
 ``` r
+
 hclu_vs_netclu <- compare_bioregionalizations(
   bioregionalizations = comp[, c("K_3_hclu", "K_3_netclu", "K_3_nhclu")],
   store_pairwise_membership = TRUE,
@@ -141,6 +147,7 @@ So in our case, where we have 715 sites, we do end up with 2.55255^{5}
 pairwise combinations.
 
 ``` r
+
 nrow(hclu_vs_netclu$pairwise_membership) == nrow(comp)*(nrow(comp)-1)/2
 ```
 
@@ -151,6 +158,7 @@ assigned to the same or to a different bioregion. Let’s look at the
 sites 1 and 9 across the different bioregionalization:
 
 ``` r
+
 comp[c(1, 9), ]
 ```
 
@@ -165,6 +173,7 @@ The `$pairwise_membership` output of
 shows this as a `TRUE/FALSE` statement.
 
 ``` r
+
 hclu_vs_netclu$pairwise_membership[8:10, ]
 ```
 
@@ -178,6 +187,7 @@ sum of rows of the table in `$pairwise_membership`) is available in the
 `$freq_item_pw_membership` output:
 
 ``` r
+
 hclu_vs_netclu$freq_item_pw_membership[c(1, 8)]
 ```
 
@@ -190,6 +200,7 @@ bioregion in two bioregionalizations. If we look at the total
 frequencies:
 
 ``` r
+
 table(hclu_vs_netclu$freq_item_pw_membership)
 ```
 
@@ -214,6 +225,7 @@ bioregionalization 2 . \\d\\ number of pairs of sites not grouped in
 both bioregionalization 1 & 2
 
 ``` r
+
 hclu_vs_netclu$confusion_matrix
 ```
 
@@ -261,6 +273,7 @@ across all bioregionalizations. This correlation can be requested with
 `cor_frequency = TRUE`.
 
 ``` r
+
 hclu_vs_netclu$bioregionalization_freq_cor
 ```
 

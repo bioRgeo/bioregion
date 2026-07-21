@@ -15,12 +15,14 @@ session:
 From the CRAN
 
 ``` r
+
 install.packages("bioregion")
 ```
 
 or from GitHub
 
 ``` r
+
 # install.packages("pak")
 pak::pak("bioRgeo/bioregion")
 ```

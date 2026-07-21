@@ -106,6 +106,7 @@ Pierre Denelle (<pierre.denelle@gmail.com>)
 ## Examples
 
 ``` r
+
 mat <- matrix(runif(100), 10, 10)
 rownames(mat) <- paste0("s",1:10)
 

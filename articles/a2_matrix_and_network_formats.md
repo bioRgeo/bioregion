@@ -12,6 +12,7 @@ is composed of three files,
 Abundance),
 
 ``` r
+
 data(vegedf)
 head(vegedf)
 ```
@@ -25,18 +26,21 @@ head(vegedf)
     ## 6   35   10080         3
 
 ``` r
+
 dim(vegedf)
 ```
 
     ## [1] 460878      3
 
 ``` r
+
 sum(!duplicated(vegedf[,1]))
 ```
 
     ## [1] 715
 
 ``` r
+
 sum(!duplicated(vegedf[,2]))
 ```
 
@@ -47,6 +51,7 @@ co-occurrence `matrix` containing the same information gathered in a
 `matrix` with 715 rows and 3,697 columns,
 
 ``` r
+
 data(vegemat)
 vegemat[1:10,1:10]
 ```
@@ -65,6 +70,7 @@ vegemat[1:10,1:10]
     ##   88   228     0     0     0     0     0     0     5     0     0
 
 ``` r
+
 dim(vegemat)
 ```
 
@@ -84,6 +90,7 @@ this case). If `weight = TRUE` a third column is added with the values
 contained in the `matrix`.
 
 ``` r
+
 net <- mat_to_net(vegemat, weight = TRUE, remove_zeroes = FALSE)
 ```
 
@@ -91,6 +98,7 @@ In line with the network format, the two first columns are named `Node1`
 and `Node2` by default.
 
 ``` r
+
 head(net)
 ```
 
@@ -103,6 +111,7 @@ head(net)
     ## 6    35 10006      0
 
 ``` r
+
 dim(net)
 ```
 
@@ -112,10 +121,12 @@ If `remove_zeroes = TRUE` the pairs of nodes with a weight equal to 0
 will be removed from the output.
 
 ``` r
+
 net <- mat_to_net(vegemat, weight = TRUE, remove_zeroes = TRUE)
 ```
 
 ``` r
+
 head(net)
 ```
 
@@ -128,6 +139,7 @@ head(net)
     ## 80    35 10080      3
 
 ``` r
+
 dim(net)
 ```
 
@@ -145,10 +157,12 @@ into a co-occurrence `matrix` (such as
 this case).
 
 ``` r
+
 mat <- net_to_mat(vegedf, weight = TRUE, squared = FALSE, symmetrical = FALSE, missing_value = 0)
 ```
 
 ``` r
+
 mat[1:5,1:5]
 ```
 
@@ -160,6 +174,7 @@ mat[1:5,1:5]
     ## 39    17    17    34     3     8
 
 ``` r
+
 dim(mat)
 ```
 
@@ -170,10 +185,12 @@ colnames will correspond to the concatenation without duplicates of the
 two first columns of the `data.frame`.
 
 ``` r
+
 mat <- net_to_mat(vegedf, weight = TRUE, squared = TRUE, symmetrical = FALSE, missing_value = 0)
 ```
 
 ``` r
+
 mat[1:5,1:5]
 ```
 
@@ -185,6 +202,7 @@ mat[1:5,1:5]
     ## 39  0  0  0  0  0
 
 ``` r
+
 dim(mat)
 ```
 
@@ -195,12 +213,14 @@ nodes not present in the input network. The default value is 0 but any
 other numeric value can be used.
 
 ``` r
+
 temp <- data.frame(Site=c("35","36","36","38","39"), Species=c("36","35","37","37","39"), Abundance=c(1,2,3,4,0))
 net <- rbind(temp,vegedf)
 mat <- net_to_mat(net, weight = TRUE, squared = TRUE, symmetrical = FALSE, missing_value = -1)
 ```
 
 ``` r
+
 mat[1:5,1:5]
 ```
 
@@ -217,10 +237,12 @@ matrix will be symmetrical, except for the symmetrical pairs of nodes
 already present in the input network (35 \<-\> 36) in the example below.
 
 ``` r
+
 mat <- net_to_mat(net, weight = TRUE, squared = TRUE, symmetrical = TRUE, missing_value = 0)
 ```
 
 ``` r
+
 mat[1:5,1:5]
 ```
 

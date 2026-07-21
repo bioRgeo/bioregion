@@ -11,6 +11,7 @@ In the example below, the `Simpson` similarity index is computed between
 each pair of sites.
 
 ``` r
+
 sim <- similarity(vegemat, 
                   metric = "Simpson", 
                   formula = NULL, 
@@ -89,6 +90,7 @@ include the possibility of returning the quantities \\a\\, \\b\\ and
 interesting to compute similarity metrics on large co-occurrence matrix.
 
 ``` r
+
 sim <- similarity(vegemat, 
                   metric = c("abc","ABC","Simpson","Bray"), 
                   formula = c("1 - pmin(b,c) / (a + pmin(b,c))", "1 - (B + C) / (2*A + B + C)"))
@@ -142,6 +144,7 @@ minus the similarity metrics, except for the Euclidean dissimilarity,
 which corresponds to the Euclidean distance (i.e. \\d\_{ij}\\).
 
 ``` r
+
 dissim <- dissimilarity(vegemat, 
                         metric = "Sorensen", 
                         formula = "(b + c) / (2*a + b + c)")
@@ -177,6 +180,7 @@ and can be used to switch easily switch between similarity and
 dissimilarity metrics.
 
 ``` r
+
 sim1 <- similarity(vegemat, 
                   metric = c("abc","Sorensen"), 
                   formula = "1 - (b + c) / (2*a + b + c)")
@@ -203,6 +207,7 @@ sim1[1:10,]
     ## 11    35    89 0.4467005  88 41 177                   0.4467005
 
 ``` r
+
 dissim1 <- dissimilarity(vegemat, 
                          metric = c("abc","Sorensen"), 
                          formula = "(b + c) / (2*a + b + c)")
@@ -229,6 +234,7 @@ dissim1[1:10,]
     ## 11    35    89 0.5532995  88 41 177               0.5532995
 
 ``` r
+
 dissim2 <- similarity_to_dissimilarity(sim1)
 dissim2[1:10,]
 ```
@@ -253,6 +259,7 @@ dissim2[1:10,]
     ## 11    35    89 0.5532995  88 41 177                   0.5532995
 
 ``` r
+
 sim2 <- dissimilarity_to_similarity(dissim1)
 sim2[1:10,]
 ```
@@ -308,12 +315,12 @@ using the `beta.div.comp` function, and in
 `designdist` function, also allows the extraction of the `a`, `b`, `c`,
 `A`, `B` or `C` components separately.
 
-|                     | adespatial (0.3-28) | betapart (1.6)   | bioregion (1.2.0)    | ecodist (2.1.3) | vegan (2.6-10)           |
-|---------------------|---------------------|------------------|----------------------|-----------------|--------------------------|
-| **Format**          | matrix              | matrix           | data.frame (network) | matrix          | matrix                   |
-| **Custom formulas** | no                  | no               | yes                  | no              | yes                      |
-| **abc/ABC**         | yes (abc or ABC)    | yes (abc or ABC) | yes (abc and ABC)    | no              | yes (a, b, c, A, B or C) |
-| **Several metrics** | no                  | no               | yes                  | no              | no                       |
+|  | adespatial (0.3-28) | betapart (1.6) | bioregion (1.2.0) | ecodist (2.1.3) | vegan (2.6-10) |
+|----|----|----|----|----|----|
+| **Format** | matrix | matrix | data.frame (network) | matrix | matrix |
+| **Custom formulas** | no | no | yes | no | yes |
+| **abc/ABC** | yes (abc or ABC) | yes (abc or ABC) | yes (abc and ABC) | no | yes (a, b, c, A, B or C) |
+| **Several metrics** | no | no | yes | no | no |
 
 ### 4.1 Basic comparison (Jaccard and Bray-Curtis)
 
@@ -322,6 +329,7 @@ metrics, Jaccard and Bray-Curtis, based on a small co-occurrence
 `matrix`.
 
 ``` r
+
 nbsite <- 100
 nbsp <- 200
 
@@ -354,6 +362,7 @@ use the two available functions, `vegdist` and `designdist`, from the
 [vegan](https://cran.r-project.org/package=vegan) package.
 
 ``` r
+
 dissim <- list()
 
 comp_j <- microbenchmark(
@@ -408,6 +417,7 @@ After ensuring that all the functions return the same dissimilarity
 matrix,
 
 ``` r
+
 all_identical <- all(
   identical(trunc(dissim$adespatial, digits=4), 
             trunc(dissim$betapart, digits=4)),
@@ -430,26 +440,27 @@ print(all_identical)
 we proceed with a comparison of their computation times.
 
 ``` r
+
 comp_j
 ```
 
     ## Unit: milliseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 374.578654 379.770595 386.799686 380.341682 399.949283
-    ##        betapart   1.750376   1.846739   1.919337   1.895661   1.946797
-    ##       bioregion  10.165968  10.757765  15.576713  15.122754  16.099398
-    ##    ecodist_dist 131.995970 138.549378 155.295125 162.314686 164.472357
-    ##  ecodist_bcdist   3.755600   4.267179   4.223762   4.308921   4.339176
-    ##       vegan_veg   1.339206   1.480526   2.104646   2.448081   2.487559
-    ##    vegan_design   1.331485   1.375119   1.460751   1.427452   1.464072
+    ##      adespatial 370.345862 380.390821 382.104360 381.728988 387.134188
+    ##        betapart   1.737504   1.867456   1.936809   1.924225   1.954595
+    ##       bioregion  14.440248  15.112824  16.984381  15.584658  16.071444
+    ##    ecodist_dist 139.444967 162.844204 161.966290 166.469995 168.681150
+    ##  ecodist_bcdist   3.904884   4.240751   4.249565   4.289103   4.308011
+    ##       vegan_veg   1.342719   1.451360   2.084140   2.435137   2.461786
+    ##    vegan_design   1.324242   1.330761   1.411749   1.393484   1.406373
     ##         max neval
-    ##  405.694343    10
-    ##    2.323956    10
-    ##   30.591132    10
-    ##  167.641306    10
-    ##    4.380777    10
-    ##    2.530252    10
-    ##    1.896523    10
+    ##  389.167170    10
+    ##    2.324873    10
+    ##   29.692739    10
+    ##  169.880646    10
+    ##    4.347409    10
+    ##    2.505872    10
+    ##    1.781319    10
 
 On this very small example, the functions from
 [vegan](https://cran.r-project.org/package=vegan) outperform the others
@@ -465,6 +476,7 @@ We present below a similar example using the Bray-Curtis dissimilarity
 metric, based on the `comat` defined above.
 
 ``` r
+
 dissim <- list()
 
 comp_bc <- microbenchmark(
@@ -519,6 +531,7 @@ Here again after ensuring that all the functions return the same
 dissimilarity matrix,
 
 ``` r
+
 all_identical <- all(
   identical(trunc(dissim$adespatial, digits=4), 
             trunc(dissim$betapart, digits=4)),
@@ -541,26 +554,27 @@ print(all_identical)
 we proceed with a comparison of their computation times.
 
 ``` r
+
 comp_bc
 ```
 
     ## Unit: milliseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 373.675785 379.891514 389.812351 387.130185 390.105223
-    ##        betapart 303.265097 323.110850 332.169562 330.188102 342.424015
-    ##       bioregion  12.253364  12.288566  12.949820  12.503975  12.951028
-    ##    ecodist_dist  94.769917  98.526560 146.381366 101.657197 127.226015
-    ##  ecodist_bcdist   6.624615   6.650814   6.858526   6.868898   7.057206
-    ##       vegan_veg   1.334329   1.376792   1.809709   1.411143   2.451846
-    ##    vegan_design   1.246088   1.407447   1.509779   1.450422   1.730527
+    ##      adespatial 367.074538 367.933189 377.267609 379.435261 382.667993
+    ##        betapart 297.285290 314.129158 324.167720 318.240577 336.929709
+    ##       bioregion  11.718947  11.967155  12.638151  12.155043  12.613001
+    ##    ecodist_dist  94.049791  97.093248 143.584659 105.262858 120.833151
+    ##  ecodist_bcdist   6.639133   6.664211   6.870140   6.893180   7.071063
+    ##       vegan_veg   1.325053   1.363960   1.803075   1.421310   2.430190
+    ##    vegan_design   1.275219   1.366474   1.504754   1.437744   1.775079
     ##         max neval
-    ##  439.551699    10
-    ##  365.061869    10
-    ##   14.871086    10
-    ##  468.948138    10
-    ##    7.102153    10
-    ##    2.474049    10
-    ##    1.819930    10
+    ##  391.728633    10
+    ##  354.668142    10
+    ##   14.768274    10
+    ##  471.216656    10
+    ##    7.085505    10
+    ##    2.480334    10
+    ##    1.796991    10
 
 The functions from [vegan](https://cran.r-project.org/package=vegan)
 continue to outperform the others. They are again followed by `bcdist`,
@@ -607,6 +621,7 @@ This function can take as input `matrix`, a `dist` object, or a `list`
 of these
 
 ``` r
+
 dissim1 <- dissimilarity(vegemat, 
                          metric = "Euclidean")
 dissim1[1:10,]
@@ -632,6 +647,7 @@ dissim1[1:10,]
     ## 11    35    89  226.8237
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(dist(vegemat),
                                  metric_name = "Euclidean")
 dissim2[1:10,]
@@ -665,6 +681,7 @@ but also outputs from 10 functions provided by the packages
 ### 5.1 adespatial::beta.div
 
 ``` r
+
 dissim1 <- dissimilarity(comat, 
                          metric = "Euclidean")
 dissim1[1:10,]
@@ -690,6 +707,7 @@ dissim1[1:10,]
     ## 11    s1   s11  6.001393
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(beta.div(comat,
                                           method = "euclidean",
                                           save.D = TRUE),
@@ -719,6 +737,7 @@ dissim2[1:10,]
 ### 5.2 adespatial::beta.div.comp
 
 ``` r
+
 dissim1 <- dissimilarity(comatbin, 
                          metric = c("Jaccard","abc"))
 dissim1[1:10,]
@@ -744,6 +763,7 @@ dissim1[1:10,]
     ## 11    s1   s11 0.8666667 14 45 46
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(beta.div.comp(comatbin,
                                                save.abc = TRUE),
                                  pkg = "adespatial")
@@ -772,6 +792,7 @@ dissim2[1:10,]
 ### 5.3 betapart::beta.pair
 
 ``` r
+
 dissim1 <- dissimilarity(comatbin, 
                          metric = c("Jaccard","Jaccardturn"))
 dissim1[1:10,]
@@ -797,6 +818,7 @@ dissim1[1:10,]
     ## 11    s1   s11 0.8666667   0.8653846
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(beta.pair(comatbin,
                                            index.family = "jaccard"),
                                  pkg = "betapart")
@@ -825,6 +847,7 @@ dissim2[1:10,]
 ### 5.4 betapart::beta.pair.abund
 
 ``` r
+
 dissim1 <- dissimilarity(comat, 
                          metric = c("Brayturn","Bray"))
 dissim1[1:10,]
@@ -850,6 +873,7 @@ dissim1[1:10,]
     ## 10    s1   s11 0.3523224 0.3505070
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(beta.pair.abund(comat,
                                                  index.family = "bray"),
                                  pkg = "betapart")
@@ -878,6 +902,7 @@ dissim2[1:10,]
 ### 5.5 betapart::betapart.core
 
 ``` r
+
 dissim1 <- dissimilarity(comatbin, 
                          metric = "abc",
                          formula = c("pmin(b,c)","pmax(b,c)","b+c"))
@@ -904,6 +929,7 @@ dissim1[1:10,]
     ## 11    s1   s11 14 45 46        45        46  91
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(betapart.core(comatbin),
                                  pkg = "betapart")
 dissim2[1:10,]
@@ -931,6 +957,7 @@ dissim2[1:10,]
 ### 5.6 betapart::betapart.core.abund
 
 ``` r
+
 dissim1 <- dissimilarity(comat, 
                          metric = "ABC",
                          formula = c("pmin(B,C)","pmax(B,C)","B+C"))
@@ -957,6 +984,7 @@ dissim1[1:10,]
     ## 11    s1   s11 64.31719 35.26470 34.70958  34.70958  35.26470 69.97427
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(betapart.core.abund(comat),
                                  pkg = "betapart")
 dissim2[1:10,]
@@ -984,6 +1012,7 @@ dissim2[1:10,]
 ### 5.7 ecodist::distance
 
 ``` r
+
 dissim1 <- dissimilarity(comatbin, 
                          metric = "Jaccard")
 dissim1[1:10,]
@@ -1009,6 +1038,7 @@ dissim1[1:10,]
     ## 11    s1   s11 0.8666667
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(distance(comatbin,
                                           method="jaccard"),
                                  pkg = "ecodist")
@@ -1037,6 +1067,7 @@ dissim2[1:10,]
 ### 5.8 ecodist::bcdist
 
 ``` r
+
 dissim1 <- dissimilarity(comat, 
                          metric = "Bray")
 dissim1[1:10,]
@@ -1062,6 +1093,7 @@ dissim1[1:10,]
     ## 10    s1   s11 0.3523224
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(bcdist(comat),
                                  pkg = "ecodist")
 dissim2[1:10,]
@@ -1089,6 +1121,7 @@ dissim2[1:10,]
 ### 5.9 vegan::vegdist
 
 ``` r
+
 dissim1 <- dissimilarity(comatbin, 
                          metric = "Jaccard")
 dissim1[1:10,]
@@ -1114,6 +1147,7 @@ dissim1[1:10,]
     ## 11    s1   s11 0.8666667
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(vegdist(comatbin,
                                          method="jaccard"),
                                  pkg = "vegan")
@@ -1142,6 +1176,7 @@ dissim2[1:10,]
 ### 5.10 vegan::designdist
 
 ``` r
+
 dissim1 <- dissimilarity(comat, 
                          metric = "Bray",
                          formula = "(B + C) / (2*A + B + C)")
@@ -1168,6 +1203,7 @@ dissim1[1:10,]
     ## 10    s1   s11 0.3523224               0.3523224
 
 ``` r
+
 dissim2 <- as_bioregion_pairwise(designdist(comat,
                                             method = "(A+B-2*J)/(A+B)",
                                             terms = "minimum"),
@@ -1205,6 +1241,7 @@ particularly useful for deriving new metrics from the components \\a\\,
 components required significant computation time.
 
 ``` r
+
 dissim1 <- dissimilarity(comat, 
                          metric = c("ABC","Bray"),
                          formula = "(B + C) / (2*A + B + C)")
