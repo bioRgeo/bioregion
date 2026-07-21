@@ -171,7 +171,7 @@ included
 in the final consensus tree.
 Consensus trees lack an inherent height because they represent a majority
 structure rather than an actual hierarchical clustering. To assign heights,
-we use a non-negative least squares method (\link[phangorn:designTree]{nnls.tree})
+we use a non-negative least squares method (\link[phangorn:nnls.tree]{nnls.tree})
 based on the initial distance matrix, ensuring that the consensus
 tree preserves
 approximate distances among clusters.}
