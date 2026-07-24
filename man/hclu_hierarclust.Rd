@@ -20,6 +20,8 @@ hclu_hierarclust(
   h_min = 0,
   consensus_p = 0.5,
   show_hierarchy = FALSE,
+  stable_shortcircuit = FALSE,
+  stability_check = "top_n_trees",
   verbose = TRUE
 )
 }
@@ -85,6 +87,22 @@ consensus tree.}
 \item{show_hierarchy}{A \code{boolean} specifying if the hierarchy of clusters
 should be identifiable in the outputs (\code{FALSE} by default). This argument is
 only used if the tree is cut (i.e., \code{n_clust} or \code{cut_height} is provided).}
+
+\item{stable_shortcircuit}{A \code{boolean} indicating whether to enable the
+stable sub-tree short-circuit optimization for the iterative consensus tree
+method (\code{FALSE} by default). When enabled, if the randomized trees agree on
+the sub-tree topology for a subcluster, the algorithm skips further recursive
+consensus calls on that subcluster and directly reuses the agreed-upon tree.
+This can substantially speed up computation when many subclusters are stable.
+NOTE that enabling this changes the random number generator trajectory, so
+results with the same seed will differ if this setting differs.
+Only used when \code{optimal_tree_method = "iterative_consensus_tree"}.}
+
+\item{stability_check}{A \code{character} string indicating which trees to compare
+when checking sub-tree stability. Possible values are \code{"top_n_trees"}
+(default), which checks only the best trees selected by cophenetic
+correlation, or \code{"all"}, which checks all \code{n_runs} trees.
+Only used when \code{stable_shortcircuit = TRUE}.}
 
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}
@@ -171,7 +189,7 @@ included
 in the final consensus tree.
 Consensus trees lack an inherent height because they represent a majority
 structure rather than an actual hierarchical clustering. To assign heights,
-we use a non-negative least squares method (\link[phangorn:designTree]{nnls.tree})
+we use a non-negative least squares method (\link[phangorn:nnls.tree]{nnls.tree})
 based on the initial distance matrix, ensuring that the consensus
 tree preserves
 approximate distances among clusters.}
