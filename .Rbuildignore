@@ -41,3 +41,4 @@ LICENSE
 ^test_.*\.R$
 ^dev_scripts/
 ^documents/
+^\.claude$
