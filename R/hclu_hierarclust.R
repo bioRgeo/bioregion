@@ -78,6 +78,15 @@
 #' best tree; with more, sites are grouped according to how often they fall on
 #' the same side in these trees (`2` by default).
 #'
+#' @param height_rule A `character` string (applicable only if
+#' `optimal_tree_method = "iterative_consensus_tree"`) indicating how the
+#' heights of the tree are made monotone, i.e. how a division that comes out
+#' lower than a division it contains is corrected. With `"least_squares"`
+#' (default), the heights are moved as little as possible, which gives the best
+#' cophenetic correlation obtainable on the tree at hand; with `"max_child"`,
+#' each division is raised to the highest division it contains, as in bioregion
+#' 1.4.0 and earlier. See Details.
+#'
 #' @param verbose A `boolean` indicating whether to
 #' display progress messages. Set to `FALSE` to suppress these messages.
 #' 
@@ -137,7 +146,22 @@
 #' node heights to produce a coherent tree structure. 
 #' This approach provides a robust, hierarchical representation of site 
 #' relationships, balancing 
-#' cluster stability and hierarchical constraints.}
+#' cluster stability and hierarchical constraints.
+#' 
+#' Because each division is decided from its own randomizations, a division can
+#' come out lower than a division it contains. `height_rule` decides how these
+#' inversions are removed. `"max_child"` raises every division to the highest
+#' division it contains, which is simple but pushes a division far above the
+#' dissimilarities it summarizes as soon as one small group deep in the tree is
+#' high. `"least_squares"` (default) instead returns the monotone heights
+#' closest to the divisions' own heights, each weighted by the number of site
+#' pairs it summarizes (isotonic regression on the tree). With UPGMA
+#' (`method = "average"`), where a division's height is the mean dissimilarity
+#' between the two groups it separates, these heights are those that fit the
+#' dissimilarities best on the topology at hand, so the cophenetic correlation
+#' is never below the one `"max_child"` gives and is usually above it. With the
+#' other linkage methods the same pooling is applied to the heights the linkage
+#' defines, without such a guarantee.}
 #' 
 #' \item{`optimal_tree_method = "best"`: This method selects one tree among with 
 #' the highest cophenetic correlation coefficient, representing the best fit 
@@ -249,6 +273,7 @@ hclu_hierarclust <- function(dissimilarity,
                              consensus_p = 0.5,
                              show_hierarchy = FALSE,
                              top_n_trees = 2,
+                             height_rule = "least_squares",
                              verbose = TRUE){
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
@@ -311,6 +336,12 @@ hclu_hierarclust <- function(dissimilarity,
   }
   controls(args = n_runs, data = NULL, type = "strict_positive_integer")
   controls(args = top_n_trees, data = NULL, type = "strict_positive_integer")
+  controls(args = height_rule, data = NULL, type = "character")
+  if(!(height_rule %in% c("least_squares", "max_child"))){
+    stop(paste0("Please choose height_rule from the following:\n",
+                "least_squares or max_child"),
+         call. = FALSE)
+  }
   controls(args = keep_trials, data = NULL, type = "character")
   if(!(keep_trials %in% c("no", "all", "metrics"))){
     stop(paste0("Please choose keep_trials from the following:\n",
@@ -391,6 +422,7 @@ hclu_hierarclust <- function(dissimilarity,
                        consensus_p = consensus_p,
                        show_hierarchy = show_hierarchy,
                        top_n_trees = top_n_trees,
+                       height_rule = height_rule,
                        verbose = verbose)
   
   # Determine pairwise_metric and data_type
@@ -436,6 +468,7 @@ hclu_hierarclust <- function(dissimilarity,
                              method = method,
                              n_runs = n_runs,
                              top_n_trees = top_n_trees,
+                             height_rule = height_rule,
                              verbose = verbose)
       
       if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed

@@ -22,6 +22,17 @@
 #   quality, and that a resulting tree difference can be traced to such a pick.
 #   A difference that cannot be traced to a tie IS a failure.
 #
+# ON HEIGHTS -- what is pinned and what is compared
+#   The old implementation raised every division to the highest division it
+#   contained ("max_child"); the current default instead moves the heights as
+#   little as possible ("least_squares", see make_heights_monotone). The rule is
+#   applied once the whole topology is decided and draws no random numbers, so
+#   it cannot change a single division. Every test that asks for the OLD tree
+#   therefore pins height_rule = "max_child" and stays an exact identity check,
+#   and expect_equivalent_trees() additionally runs the current default against
+#   the same old tree: the shape must be the one the old code produced, and the
+#   cophenetic correlation must not be lower.
+#
 # These tests need a git checkout of the package: they skip on CRAN, and
 # wherever git or the pinned commit cannot be reached (a tarball build, for
 # instance). Running them takes several minutes, mostly in the old
@@ -148,11 +159,26 @@ run_legacy <- function(D, method = "average", n_runs = 100,
   legacy$reconstruct_hclust_bis(tr)
 }
 
+# the current IHCT with the legacy height rule, so that the trees can be
+# compared division by division AND height by height
 run_current <- function(D, method = "average", n_runs = 100,
-                        top_n_trees = 2, seed = 1) {
+                        top_n_trees = 2, seed = 1,
+                        height_rule = "max_child") {
   set.seed(seed)
   IHCT(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
-       verbose = FALSE)
+       height_rule = height_rule, verbose = FALSE)
+}
+
+# the groups of sites of every node, as a set. Two trees of the same shape have
+# the same one whatever their heights, which is what changing the height rule
+# may not alter (nodes are numbered by height, so the merge matrices can differ)
+clades <- function(hc) {
+  members <- vector("list", nrow(hc$merge))
+  for (k in seq_len(nrow(hc$merge))) {
+    side <- lapply(hc$merge[k, ], function(j) if (j < 0) hc$labels[-j] else members[[j]])
+    members[[k]] <- sort(unlist(side))
+  }
+  sort(vapply(members, paste, "", collapse = ","))
 }
 
 trees_identical <- function(a, b) {
@@ -310,6 +336,22 @@ expect_equivalent_trees <- function(D, method = "average", n_runs = 100,
                                     top_n_trees = 2, seed = 1, label = "") {
   hc_old <- run_legacy(D, method, n_runs, top_n_trees, seed)
   hc_new <- run_current(D, method, n_runs, top_n_trees, seed)
+
+  # The current default height rule, on the very same run: it may change the
+  # heights (that is its purpose) but never a division, so the tree must keep
+  # the shape it has under the legacy rule, and where the heights are mean
+  # dissimilarities it can only fit the data better. Checked on every dataset
+  # and linkage the suite visits, and needs no extra run of the old code.
+  hc_ls <- run_current(D, method, n_runs, top_n_trees, seed,
+                       height_rule = "least_squares")
+  expect_identical(clades(hc_ls), clades(hc_new),
+                   label = paste0(label, ": groups of sites of the ",
+                                  "least-squares tree"))
+  if (method %in% c("average", "mcquitty")) {
+    expect_gte(tree_eval(hc_ls, D)$cophcor, tree_eval(hc_new, D)$cophcor,
+               label = paste0(label, ": cophenetic correlation with ",
+                              "least-squares heights"))
+  }
 
   if (trees_identical(hc_old, hc_new)) {
     succeed()
@@ -608,9 +650,9 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
   # The new code changed two things about ranking: it scores UPGMA trees with a
   # closed form rather than the cophenetic correlation, and it treats near-equal
   # scores as ties. Put the old key (the exact correlation, for every linkage)
-  # and the old tie-break (order(), no tolerance) back in: what is left is the
-  # rewritten machinery -- the work list, integer site handling, the C++
-  # helpers, the monotone heights, the hclust reconstruction.
+  # and the old tie-break (order(), no tolerance) back in, and ask for the old
+  # height rule: what is left is the rewritten machinery -- the work list,
+  # integer site handling, the C++ helpers, the hclust reconstruction.
   run_old_ranking <- function(D, method, n_runs, top_n_trees, seed) {
     ns <- asNamespace("bioregion")
     fit_ccc <- function(tree, d, method) {
@@ -621,7 +663,7 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
       with_traced(ns, "rank_by_score", rank_exact, {
         set.seed(seed)
         IHCT(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
-             verbose = FALSE)
+             height_rule = "max_child", verbose = FALSE)
       }))
   }
 

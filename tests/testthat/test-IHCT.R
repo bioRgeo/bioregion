@@ -69,6 +69,134 @@ test_that("rank_by_score treats nearly equal scores as ties, earlier runs first"
   expect_equal(rank_by_score(c(5, 4, 6)), c(3, 1, 2))
 })
 
+# a random binary tree in the node table format make_heights_monotone() takes:
+# heights drawn at random, so parents are routinely lower than their children
+random_node_table <- function(n) {
+  height <- 0; left <- 0L; right <- 0L; site <- 0L; pairs <- 0
+  sites_of <- list(seq_len(n)); n_nodes <- 1L; work <- 1L
+  while (length(work)) {
+    id <- work[1]; work <- work[-1]
+    s <- sites_of[[id]]
+    if (length(s) == 1) { site[id] <- s; next }
+    k <- sample(seq_len(length(s) - 1), 1)
+    for (g in list(s[seq_len(k)], s[-seq_len(k)])) {
+      n_nodes <- n_nodes + 1L
+      sites_of[[n_nodes]] <- g
+      height[n_nodes] <- 0; pairs[n_nodes] <- 0
+      left[n_nodes] <- 0L; right[n_nodes] <- 0L; site[n_nodes] <- 0L
+      if (left[id] == 0L) left[id] <- n_nodes else right[id] <- n_nodes
+    }
+    height[id] <- runif(1)
+    pairs[id] <- k * (length(s) - k)
+    work <- c(work, left[id], right[id])
+  }
+  list(height = height, left = as.integer(left), right = as.integer(right),
+       site = as.integer(site), pairs = pairs)
+}
+
+# weighted distance to the divisions' own heights, the quantity least_squares
+# minimizes (and, for UPGMA, the fit of the tree to the dissimilarities up to a
+# constant)
+height_sse <- function(h, tr) sum(tr$pairs * (h - tr$height)^2)
+
+expect_monotone <- function(h, tr) {
+  groups <- which(tr$left > 0)
+  expect_true(all(h[groups] >= h[tr$left[groups]] - 1e-12))
+  expect_true(all(h[groups] >= h[tr$right[groups]] - 1e-12))
+  expect_true(all(h >= 0))
+}
+
+test_that("least-squares heights are the known optimum on hand-made trees", {
+  # a 3-site tree: the root separates one site from two (2 pairs) at 0.2, the
+  # division inside the pair (1 pair) is at 0.5. Minimizing
+  # 2 (h_root - 0.2)^2 + (h_pair - 0.5)^2 under h_root >= h_pair pools both at
+  # (2 x 0.2 + 0.5) / 3 = 0.3
+  tr <- list(height = c(0.2, 0, 0.5, 0, 0), left = c(2L, 0L, 4L, 0L, 0L),
+             right = c(3L, 0L, 5L, 0L, 0L), pairs = c(2, 0, 1, 0, 0))
+  expect_equal(make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                                     "least_squares"),
+               c(0.3, 0, 0.3, 0, 0))
+  expect_equal(make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                                     "max_child"),
+               c(0.5, 0, 0.5, 0, 0))
+
+  # heights already monotone: nothing moves, whatever the rule
+  tr$height <- c(0.6, 0, 0.5, 0, 0)
+  for (rule in c("least_squares", "max_child")) {
+    expect_equal(make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                                       rule), tr$height)
+  }
+
+  # a chain of three divisions, one pair each: correcting the middle one (0.1)
+  # against its child (0.5) puts it at 0.3, which is now above its own parent
+  # (0.2), so the correction has to cascade and the three pool together at the
+  # mean of 0.2, 0.1 and 0.5
+  tr <- list(height = c(0.2, 0, 0.1, 0, 0.5, 0, 0),
+             left  = c(2L, 0L, 4L, 0L, 6L, 0L, 0L),
+             right = c(3L, 0L, 5L, 0L, 7L, 0L, 0L),
+             pairs = c(1, 0, 1, 0, 1, 0, 0))
+  h <- make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                             "least_squares")
+  expect_equal(h[c(1, 3, 5)], rep(0.8 / 3, 3))
+  expect_monotone(h, tr)
+  # one violation only: the child is pooled with its parent, the root stays put
+  tr$height <- c(0.9, 0, 0.1, 0, 0.5, 0, 0)
+  h <- make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                             "least_squares")
+  expect_equal(h[c(1, 3, 5)], c(0.9, 0.3, 0.3))
+  expect_monotone(h, tr)
+})
+
+test_that("least-squares heights are monotone and fit better than max_child", {
+  set.seed(4)
+  for (i in 1:20) {
+    tr <- random_node_table(sample(2:40, 1))
+    h_ls <- make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                                  "least_squares")
+    h_mc <- make_heights_monotone(tr$height, tr$left, tr$right, tr$pairs,
+                                  "max_child")
+    expect_monotone(h_ls, tr)
+    expect_monotone(h_mc, tr)
+    expect_lte(height_sse(h_ls, tr), height_sse(h_mc, tr) + 1e-12)
+    # nothing is moved above the highest or below the lowest division
+    groups <- which(tr$left > 0)
+    expect_true(all(h_ls[groups] <= max(tr$height[groups]) + 1e-12))
+    expect_true(all(h_ls[groups] >= min(tr$height[groups]) - 1e-12))
+  }
+})
+
+# the groups of sites of every node, as a set; two trees with the same shape
+# have the same one, whatever the heights (which decide how nodes are numbered)
+clades <- function(hc) {
+  members <- vector("list", nrow(hc$merge))
+  for (k in seq_len(nrow(hc$merge))) {
+    side <- lapply(hc$merge[k, ], function(j) {
+      if (j < 0) hc$labels[-j] else members[[j]]
+    })
+    members[[k]] <- sort(unlist(side))
+  }
+  sort(vapply(members, paste, "", collapse = ","))
+}
+
+test_that("the height rule changes the heights of an IHCT tree but not its shape", {
+  d <- make_matrix()
+  set.seed(7); ls <- IHCT(d, n_runs = 20, height_rule = "least_squares", verbose = FALSE)
+  set.seed(7); mc <- IHCT(d, n_runs = 20, height_rule = "max_child", verbose = FALSE)
+  expect_valid_tree(ls, d)
+  expect_valid_tree(mc, d)
+  # the rule is applied once the topology is decided, so both trees have the
+  # same nodes; only the heights, and hence the order the nodes are numbered
+  # in, can differ
+  expect_identical(clades(ls), clades(mc))
+  # a division is never moved above the highest division it contains, so the
+  # least-squares heights are never above the max_child ones, and here some
+  # division is strictly lower, i.e. inversions did occur on this matrix
+  expect_true(all(ls$height <= mc$height + 1e-12))
+  expect_true(any(ls$height < mc$height))
+  expect_gte(tree_eval(ls, d)$cophcor, tree_eval(mc, d)$cophcor)
+  expect_error(IHCT(d, n_runs = 5, height_rule = "highest", verbose = FALSE))
+})
+
 test_that("IHCT returns a valid hclust tree, reproducible with a seed", {
   d <- make_matrix()
   set.seed(10); hc1 <- IHCT(d, method = "average", n_runs = 20, top_n_trees = 2, verbose = FALSE)

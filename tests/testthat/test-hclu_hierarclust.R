@@ -611,6 +611,29 @@ test_that("invalid inputs", {
 
   expect_error(
     hclu_hierarclust(dissim, 
+                     height_rule = 1,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "height_rule must be a character.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     height_rule = c("least_squares", "max_child"),
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "height_rule must be of length 1.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     height_rule = "zz",
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "^Please choose height_rule from the following")
+
+  expect_error(
+    hclu_hierarclust(dissim, 
                      n_clust = "zz",
                      optimal_tree_method = "best",
                      verbose = FALSE),

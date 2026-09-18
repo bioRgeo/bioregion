@@ -21,6 +21,7 @@ hclu_hierarclust(
   consensus_p = 0.5,
   show_hierarchy = FALSE,
   top_n_trees = 2,
+  height_rule = "least_squares",
   verbose = TRUE
 )
 }
@@ -94,6 +95,15 @@ division of the tree. With \code{1}, each division is the top division of the
 best tree; with more, sites are grouped according to how often they fall on
 the same side in these trees (\code{2} by default).}
 
+\item{height_rule}{A \code{character} string (applicable only if
+\code{optimal_tree_method = "iterative_consensus_tree"}) indicating how the
+heights of the tree are made monotone, i.e. how a division that comes out
+lower than a division it contains is corrected. With \code{"least_squares"}
+(default), the heights are moved as little as possible, which gives the best
+cophenetic correlation obtainable on the tree at hand; with \code{"max_child"},
+each division is raised to the highest division it contains, as in bioregion
+1.4.0 and earlier. See Details.}
+
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
@@ -163,7 +173,22 @@ and enforces monotonic constraints on
 node heights to produce a coherent tree structure.
 This approach provides a robust, hierarchical representation of site
 relationships, balancing
-cluster stability and hierarchical constraints.}
+cluster stability and hierarchical constraints.
+
+Because each division is decided from its own randomizations, a division can
+come out lower than a division it contains. \code{height_rule} decides how these
+inversions are removed. \code{"max_child"} raises every division to the highest
+division it contains, which is simple but pushes a division far above the
+dissimilarities it summarizes as soon as one small group deep in the tree is
+high. \code{"least_squares"} (default) instead returns the monotone heights
+closest to the divisions' own heights, each weighted by the number of site
+pairs it summarizes (isotonic regression on the tree). With UPGMA
+(\code{method = "average"}), where a division's height is the mean dissimilarity
+between the two groups it separates, these heights are those that fit the
+dissimilarities best on the topology at hand, so the cophenetic correlation
+is never below the one \code{"max_child"} gives and is usually above it. With the
+other linkage methods the same pooling is applied to the heights the linkage
+defines, without such a guarantee.}
 
 \item{\code{optimal_tree_method = "best"}: This method selects one tree among with
 the highest cophenetic correlation coefficient, representing the best fit

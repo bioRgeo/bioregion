@@ -28,6 +28,13 @@
 # groups are single sites, heights are made monotone (a group is never lower
 # than the groups it contains) and the tree is returned as an hclust object.
 #
+# Divisions are decided independently at each group, from different randomized
+# trees, so a division can come out lower than a division inside one of its
+# groups. Two rules remove these inversions (see make_heights_monotone):
+# "least_squares" (default) moves the offending heights as little as possible,
+# "max_child" raises a division to the highest division it contains (the rule
+# used up to bioregion 1.4.0).
+#
 # Implementation notes (2026-09):
 # - Sites are handled as integer positions in dist_mat; names are only used to
 #   sort sites (the co-assignment step works on sites sorted by name, as we
@@ -42,9 +49,11 @@ IHCT <- function(dist_mat,
                  method = "average",
                  n_runs = 100,
                  top_n_trees = 2,
-                 height_rule = "max_child",
+                 height_rule = c("least_squares", "max_child"),
                  verbose = TRUE) {
 
+  # checked here rather than where it is used, at the end of the run
+  height_rule <- match.arg(height_rule)
   n <- nrow(dist_mat)
   site_names <- rownames(dist_mat)
   if (top_n_trees > n_runs) top_n_trees <- n_runs
@@ -57,6 +66,7 @@ IHCT <- function(dist_mat,
   node_left <- integer(n_max)          # child nodes (0 for sites)
   node_right <- integer(n_max)
   node_site <- integer(n_max)          # site number for single-site nodes, 0 otherwise
+  node_pairs <- numeric(n_max)         # site pairs joined at the division (0 for sites)
   node_sites <- vector("list", n_max)  # sites of groups still to be divided
   n_nodes <- 1L
   node_sites[[1]] <- seq_len(n)        # the root holds every site, in matrix order
@@ -91,6 +101,7 @@ IHCT <- function(dist_mat,
     if (length(groups[[1]]) > length(groups[[2]])) groups <- rev(groups)
 
     node_height[id] <- division_height(dist_mat, groups[[1]], groups[[2]], sites, method)
+    node_pairs[id] <- length(groups[[1]]) * length(groups[[2]])
     node_left[id] <- new_node(groups[[1]])
     node_right[id] <- new_node(groups[[2]])
     # the smaller group is divided first: put it last in the work list
@@ -105,23 +116,13 @@ IHCT <- function(dist_mat,
   if (verbose && interactive()) cat("\n")
 
   # --- Monotone heights ------------------------------------------------------
-  # A division can end up lower than a division inside one of its groups,
-  # because groups are decided from different randomized trees. Heights are
-  # corrected from the bottom of the tree to the top; child nodes always have
-  # larger ids than their parent, so decreasing ids go from bottom to top.
-  is_group <- node_left[seq_len(n_nodes)] > 0
-  if (height_rule == "max_child") {
-    # a division is raised to the highest division it contains
-    for (id in rev(which(is_group))) {
-      node_height[id] <- max(node_height[id],
-                             node_height[node_left[id]], node_height[node_right[id]])
-    }
-  } else {
-    stop("height_rule must be 'max_child'")
-  }
+  keep <- seq_len(n_nodes)
+  height <- make_heights_monotone(node_height[keep], node_left[keep],
+                                  node_right[keep], node_pairs[keep],
+                                  rule = height_rule)
 
-  nodes_to_hclust(node_height[seq_len(n_nodes)], node_left[seq_len(n_nodes)],
-                  node_right[seq_len(n_nodes)], node_site[seq_len(n_nodes)], site_names)
+  nodes_to_hclust(height, node_left[keep], node_right[keep], node_site[keep],
+                  site_names)
 }
 
 # Divide a group of sites (integer positions) in two, from n_runs randomized
@@ -219,6 +220,90 @@ division_height <- function(dist_mat, group1, group2, sites, method) {
               "median" = 0.5 * centroid_distance,
               stop("method argument is not valid"))
   max(h, 0)
+}
+
+# Remove the inversions of a tree, i.e. the divisions that are lower than a
+# division they contain, and return the corrected heights.
+#
+# The tree is given as a node table: for every node, `height` (0 for a single
+# site), `left` and `right` (the child nodes, 0 for a single site) and `pairs`
+# (the number of site pairs joined at the division, i.e. the number of sites on
+# the left times the number of sites on the right). Children always have larger
+# node numbers than their parent, so decreasing node numbers go from the bottom
+# of the tree to the top.
+#
+# Two rules:
+#
+# "max_child" raises every division to the highest division it contains. Simple,
+# but it moves a division far above the dissimilarities it summarizes whenever a
+# single small group deep in the tree is high.
+#
+# "least_squares" instead moves the heights as little as possible: it returns the
+# monotone heights closest to the divisions' own heights, each weighted by the
+# number of site pairs it summarizes. For UPGMA ("average", and "mcquitty" which
+# uses the same height here) a division's height is the mean dissimilarity
+# between the two groups, cophenetic distances are then group means of the
+# dissimilarities, and the sum of squared differences between dissimilarities and
+# cophenetic distances is
+#     constant + sum over divisions of pairs_k * (height_k - mean_k)^2,
+# so these heights are the ones that fit the dissimilarities best on the tree at
+# hand: the cophenetic correlation is never below what "max_child" gives, and
+# usually above. For the other linkages the same pooling is applied to the
+# heights the linkage defines, which keeps them as close to the linkage as
+# monotonicity allows but carries no such guarantee.
+#
+# How it works (isotonic regression on a tree, Pardalos & Xue 1999): heights are
+# handled in blocks of divisions that share a common height, starting with one
+# block per division. Nodes are visited from the bottom of the tree to the top;
+# at each node, as long as a block just below is higher than the node's own
+# block, the two are merged and the merged block takes the weighted mean of their
+# heights, which may bring further blocks below into conflict. A node is left
+# once no block below it is higher, so the heights are monotone at the end.
+make_heights_monotone <- function(height, left, right, pairs,
+                                  rule = c("least_squares", "max_child")) {
+  rule <- match.arg(rule)
+  is_group <- left > 0
+  bottom_up <- rev(which(is_group))
+
+  if (rule == "max_child") {
+    for (id in bottom_up) {
+      height[id] <- max(height[id], height[left[id]], height[right[id]])
+    }
+    return(height)
+  }
+
+  # weight and total height of each block, blocks named after their highest node
+  weight <- pairs
+  total <- pairs * height
+  below <- vector("list", length(height))   # blocks directly below each block
+  absorbed_by <- integer(length(height))    # 0 while a block still exists
+
+  for (id in bottom_up) {
+    # single sites have no height and so never conflict with a division
+    conflicting <- c(left[id], right[id])
+    conflicting <- conflicting[is_group[conflicting]]
+    while (length(conflicting) > 0) {
+      heights_below <- total[conflicting] / weight[conflicting]
+      highest <- which.max(heights_below)
+      if (heights_below[highest] <= total[id] / weight[id]) break
+      block <- conflicting[highest]
+      weight[id] <- weight[id] + weight[block]
+      total[id] <- total[id] + total[block]
+      absorbed_by[block] <- id
+      conflicting <- c(conflicting[-highest], below[[block]])
+      below[block] <- list(NULL)
+    }
+    below[[id]] <- conflicting
+  }
+
+  # a block absorbed into another always has a larger node number than the
+  # block that absorbed it, so going top-down resolves the chains in one pass
+  final <- integer(length(height))
+  for (id in which(is_group)) {
+    final[id] <- if (absorbed_by[id] == 0L) id else final[absorbed_by[id]]
+  }
+  height[is_group] <- (total / weight)[final[is_group]]
+  height
 }
 
 # Turn the node table into an hclust object. Internal nodes are numbered in
