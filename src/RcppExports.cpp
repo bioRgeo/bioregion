@@ -21,9 +21,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ihct_node_sizes
+List ihct_node_sizes(IntegerMatrix merge);
+RcppExport SEXP _bioregion_ihct_node_sizes(SEXP mergeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type merge(mergeSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_node_sizes(merge));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ihct_cophenetic_correlation
+double ihct_cophenetic_correlation(IntegerMatrix merge, NumericVector height, NumericMatrix d);
+RcppExport SEXP _bioregion_ihct_cophenetic_correlation(SEXP mergeSEXP, SEXP heightSEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type merge(mergeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type height(heightSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_cophenetic_correlation(merge, height, d));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_bioregion_abc", (DL_FUNC) &_bioregion_abc, 1},
+    {"_bioregion_ihct_node_sizes", (DL_FUNC) &_bioregion_ihct_node_sizes, 1},
+    {"_bioregion_ihct_cophenetic_correlation", (DL_FUNC) &_bioregion_ihct_cophenetic_correlation, 3},
     {NULL, NULL, 0}
 };
 

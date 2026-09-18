@@ -5,3 +5,11 @@ abc <- function(comat) {
     .Call(`_bioregion_abc`, comat)
 }
 
+ihct_node_sizes <- function(merge) {
+    .Call(`_bioregion_ihct_node_sizes`, merge)
+}
+
+ihct_cophenetic_correlation <- function(merge, height, d) {
+    .Call(`_bioregion_ihct_cophenetic_correlation`, merge, height, d)
+}
+

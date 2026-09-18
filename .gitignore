@@ -12,6 +12,7 @@ src/bioregion.so
 src/bioregion.dll
 src/prodmat.o
 src/RcppExports.o
+src/ihct_trees.o
 src/RcppExports.gcda
 src/RcppExports.gcno
 
