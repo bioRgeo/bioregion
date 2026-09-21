@@ -64,21 +64,65 @@ List ihct_node_sizes(IntegerMatrix merge) {
   return List::create(_["size"] = size, _["pairs"] = pairs);
 }
 
+// The dissimilarities of a group of sites, in the order they are given, as the
+// vector stats::dist uses: the lower triangle read column by column.
+//
+// `sites` holds the rows of `dist_mat` the group is made of, already shuffled
+// by the caller, so the result is exactly what stats::as.dist(dist_mat[sites,
+// sites]) returns. Going straight from the full matrix to that vector saves
+// the two square copies the R route makes (the sub-matrix, then the index
+// matrices as.dist() builds with row() and col()), which together cost about
+// twice as much as the clustering they feed.
+// [[Rcpp::export]]
+NumericVector ihct_shuffled_dist(NumericMatrix dist_mat, IntegerVector sites) {
+  int m = sites.size();
+  int n = dist_mat.nrow();
+  std::vector<int> row(m);
+  for (int i = 0; i < m; i++) row[i] = sites[i] - 1;   // 1-based rows from R
+
+  NumericVector out(((R_xlen_t) m * (m - 1)) / 2);
+  const double* src = &dist_mat[0];
+  R_xlen_t k = 0;
+  for (int j = 0; j < m - 1; j++) {
+    const double* column = src + (R_xlen_t) row[j] * n;
+    for (int i = j + 1; i < m; i++) out[k++] = column[row[i]];
+  }
+  out.attr("Size") = m;
+  out.attr("Diag") = false;
+  out.attr("Upper") = false;
+  out.attr("method") = "user";
+  out.attr("class") = "dist";
+  return out;
+}
+
 // Cophenetic correlation of a tree with a dissimilarity matrix, computed by
 // listing every pair of sites once. The cophenetic distance of two sites is
 // the height of the node where they are first joined.
 //
-// `d` must be the dissimilarity matrix in the order of the tree's sites (site
-// number i in `merge` is row/column i of `d`). Works for any linkage method,
-// at a cost proportional to the number of pairs.
+// By default `d` is the dissimilarity matrix in the order of the tree's sites
+// (site number i in `merge` is row/column i of `d`). Give `leaf_site` -- the
+// row of `d` each site of the tree stands for, as ihct_prune_tree() takes it --
+// to read the dissimilarities from a larger matrix instead, which saves
+// building the sub-matrix of the group. Works for any linkage method, at a
+// cost proportional to the number of pairs.
 // [[Rcpp::export]]
 double ihct_cophenetic_correlation(IntegerMatrix merge, NumericVector height,
-                                   NumericMatrix d) {
+                                   NumericMatrix d,
+                                   Nullable<IntegerVector> leaf_site = R_NilValue) {
   int n_nodes = merge.nrow();
   int n = n_nodes + 1;
   // the sites of every node are then the block of positions lo[k]..hi[k]
   std::vector<int> lo(n_nodes), hi(n_nodes), position(n), site_at(n);
   tree_blocks(merge, lo, hi, position, site_at);
+
+  // where each site of the tree sits in `d`
+  std::vector<int> row(n);
+  if (leaf_site.isNull()) {
+    for (int i = 0; i < n; i++) row[i] = i;
+  } else {
+    IntegerVector site(leaf_site);
+    for (int i = 0; i < n; i++) row[i] = site[i] - 1;
+  }
 
   long double sum_d = 0, sum_d2 = 0, sum_c = 0, sum_c2 = 0, sum_dc = 0;
   double n_pairs = 0;
@@ -90,9 +134,9 @@ double ihct_cophenetic_correlation(IntegerMatrix merge, NumericVector height,
     int b_lo = b < 0 ? position[-b - 1] : lo[b - 1];
     int b_hi = b < 0 ? position[-b - 1] : hi[b - 1];
     for (int p = a_lo; p <= a_hi; p++) {
-      int i = site_at[p];
+      int i = row[site_at[p]];
       for (int q = b_lo; q <= b_hi; q++) {
-        double dij = d(i, site_at[q]);
+        double dij = d(i, row[site_at[q]]);
         sum_d += dij; sum_d2 += dij * dij;
         sum_c += h; sum_c2 += h * h; sum_dc += dij * h;
         n_pairs += 1;

@@ -63,6 +63,63 @@ test_that("pair-enumeration cophenetic correlation equals tree_eval for any link
   }
 })
 
+test_that("ihct_shuffled_dist gives what as.dist of the shuffled sub-matrix gives", {
+  d <- make_matrix(40)
+  n <- nrow(d)
+  set.seed(3)
+  for (i in 1:20) {
+    # the whole matrix shuffled, and a group of it shuffled
+    sites <- if (i %% 2) sample.int(n) else sample.int(n, sample(2:n, 1))
+    expected <- stats::as.dist(d[sites, sites])
+    got <- ihct_shuffled_dist(d, sites)
+    expect_s3_class(got, "dist")
+    expect_equal(as.numeric(got), as.numeric(expected), tolerance = 0)
+    expect_equal(attr(got, "Size"), length(sites))
+    expect_false(attr(got, "Diag"))
+    expect_false(attr(got, "Upper"))
+    # what it is there for: the same tree, without the square copy
+    expect_equal(fastcluster::hclust(got, "average")$merge,
+                 fastcluster::hclust(expected, "average")$merge)
+  }
+  # the smallest group a tree is built on
+  expect_equal(as.numeric(ihct_shuffled_dist(d, c(7L, 2L))), d[7, 2], tolerance = 0)
+})
+
+test_that("cophenetic correlation reads the whole matrix when given leaf_site", {
+  d <- make_matrix()
+  n <- nrow(d)
+  set.seed(4)
+  for (method in c("average", "complete", "single", "mcquitty")) {
+    for (i in 1:5) {
+      sites <- sample.int(n, sample(5:n, 1))
+      sub <- d[sites, sites]
+      hc <- fastcluster::hclust(stats::as.dist(sub), method)
+      # site i of the tree is row i of `sub`, or row sites[i] of `d`
+      expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d, sites),
+                   ihct_cophenetic_correlation(hc$merge, hc$height, sub),
+                   tolerance = 1e-12)
+      expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d, sites),
+                   tree_eval(hc, sub)$cophcor, tolerance = 1e-12)
+    }
+  }
+  # leaf_site left out is the same as the identity
+  hc <- fastcluster::hclust(stats::as.dist(d), "complete")
+  expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d, seq_len(n)),
+               ihct_cophenetic_correlation(hc$merge, hc$height, d))
+})
+
+test_that("tree_fit_score scores a tree the same way from either matrix", {
+  d <- make_matrix()
+  n <- nrow(d)
+  set.seed(5)
+  for (method in c("average", "complete", "ward.D2")) {
+    sites <- sample.int(n)
+    hc <- fastcluster::hclust(ihct_shuffled_dist(d, sites), method)
+    expect_equal(tree_fit_score(hc, d, method, sites),
+                 tree_fit_score(hc, d[sites, sites], method), tolerance = 1e-12)
+  }
+})
+
 test_that("rank_by_score treats nearly equal scores as ties, earlier runs first", {
   expect_equal(rank_by_score(c(1, 3, 3 + 1e-14, 2)), c(2, 3, 4, 1))
   expect_equal(rank_by_score(c(0, 0, 0)), 1:3)

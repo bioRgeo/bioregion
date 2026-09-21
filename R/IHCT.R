@@ -390,19 +390,24 @@ is_tied_block <- function(dist_mat, sites) {
 }
 
 # n_runs trees for a group of sites (integer positions), each built by
-# fastcluster on a copy of the sub-matrix whose sites were shuffled at random,
-# and scored by its fit to the dissimilarities.
+# fastcluster on the dissimilarities of the group with its sites shuffled at
+# random, and scored by its fit to the dissimilarities.
+#
+# The shuffled dissimilarities are read straight out of `dist_mat` into the
+# vector fastcluster expects (ihct_shuffled_dist), and the score reads out of
+# `dist_mat` too, so the square sub-matrix of the group is never built. The
+# random draw, and therefore the trees, are the same as when it was.
 fresh_trees <- function(dist_mat, sites, method, n_runs) {
   m <- length(sites)
   trees <- vector("list", n_runs)
   for (run in seq_len(n_runs)) {
     shuffled <- sites[sample.int(m)]
-    d_run <- dist_mat[shuffled, shuffled]
-    tree <- fastcluster::hclust(stats::as.dist(d_run), method = method)
+    tree <- fastcluster::hclust(ihct_shuffled_dist(dist_mat, shuffled),
+                                method = method)
     trees[[run]] <- list(merge = tree$merge, height = tree$height,
                          pairs = ihct_node_sizes(tree$merge)$pairs,
                          leaf_site = shuffled,
-                         score = tree_fit_score(tree, d_run, method))
+                         score = tree_fit_score(tree, dist_mat, method, shuffled))
   }
   trees
 }
@@ -474,12 +479,16 @@ divide_sites <- function(dist_mat, sites, site_names, method, n_runs,
 #
 # For other linkages the cophenetic correlation is computed exactly, by
 # listing all pairs of sites (in C++).
-tree_fit_score <- function(tree, d, method) {
+#
+# `d` holds the dissimilarities in the order of the tree's own sites, unless
+# `leaf_site` says which row of `d` each site of the tree stands for, in which
+# case `d` can be the whole matrix.
+tree_fit_score <- function(tree, d, method, leaf_site = NULL) {
   if (method == "average") {
     sizes <- ihct_node_sizes(tree$merge)
     sum(sizes$pairs * tree$height^2)
   } else {
-    ihct_cophenetic_correlation(tree$merge, tree$height, d)
+    ihct_cophenetic_correlation(tree$merge, tree$height, d, leaf_site)
   }
 }
 

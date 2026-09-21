@@ -674,8 +674,8 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
   # integer site handling, the C++ helpers, the hclust reconstruction.
   run_old_ranking <- function(D, method, n_runs, top_n_trees, seed) {
     ns <- asNamespace("bioregion")
-    fit_ccc <- function(tree, d, method) {
-      ihct_cophenetic_correlation(tree$merge, tree$height, d)
+    fit_ccc <- function(tree, d, method, leaf_site = NULL) {
+      ihct_cophenetic_correlation(tree$merge, tree$height, d, leaf_site)
     }
     rank_exact <- function(scores, tolerance = 1e-10) order(scores, decreasing = TRUE)
     with_traced(ns, "tree_fit_score", fit_ccc,

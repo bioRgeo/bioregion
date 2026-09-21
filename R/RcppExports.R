@@ -9,8 +9,12 @@ ihct_node_sizes <- function(merge) {
     .Call(`_bioregion_ihct_node_sizes`, merge)
 }
 
-ihct_cophenetic_correlation <- function(merge, height, d) {
-    .Call(`_bioregion_ihct_cophenetic_correlation`, merge, height, d)
+ihct_shuffled_dist <- function(dist_mat, sites) {
+    .Call(`_bioregion_ihct_shuffled_dist`, dist_mat, sites)
+}
+
+ihct_cophenetic_correlation <- function(merge, height, d, leaf_site = NULL) {
+    .Call(`_bioregion_ihct_cophenetic_correlation`, merge, height, d, leaf_site)
 }
 
 ihct_prune_tree <- function(merge, height, pairs, leaf_site, keep, d) {
