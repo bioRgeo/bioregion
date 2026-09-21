@@ -71,21 +71,39 @@
 #' should be identifiable in the outputs (`FALSE` by default). This argument is
 #' only used if the tree is cut (i.e., `n_clust` or `cut_height` is provided).
 #'
-#' @param top_n_trees An `integer` (applicable only if
-#' `optimal_tree_method = "iterative_consensus_tree"`) giving the number of
-#' best randomized trees, ranked by cophenetic correlation, used to decide each
-#' division of the tree. With `1`, each division is the top division of the
-#' best tree; with more, sites are grouped according to how often they fall on
-#' the same side in these trees (`2` by default).
+#' @param IHCT_top_n_trees An `integer` (applicable only if
+#' `optimal_tree_method = "iterative_consensus_tree"`) indicating how many of
+#' the best randomized trees are used to decide each division of the tree
+#' (`2` by default). See Details.
 #'
-#' @param height_rule A `character` string (applicable only if
+#' @param IHCT_variation_drop A `numeric` value between 0 and 1 (applicable
+#' only if `optimal_tree_method = "iterative_consensus_tree"` and
+#' `method = "average"`). This is an optimization parameter: it reduces the
+#' number of times the dissimilarity matrix is randomized while the tree is
+#' built, which makes the tree faster to obtain for a very small cost in its
+#' fit to the data. Its rule is based on variation: new randomizations are made
+#' once a group of sites has lost this share of the variation that was left to
+#' decide when they were last made. The default `0.2` therefore means
+#' "randomize again once a fifth of what was left to decide has been decided".
+#' Set it to `0` to randomize at every division, or to `1` to switch this rule
+#' off and leave `IHCT_sites_drop` to decide on its own. See Details.
+#'
+#' @param IHCT_sites_drop A `numeric` value of 0 or more (applicable only if
+#' `optimal_tree_method = "iterative_consensus_tree"`, `method = "average"` and
+#' `IHCT_variation_drop > 0`). This is a second optimization parameter, used
+#' together with `IHCT_variation_drop`, with a rule based on sites rather than
+#' on variation: new randomizations are also made once a group of sites has
+#' lost this many sites since they were last made (`10` by default). Set it to
+#' `0` or `1` to randomize at every division, or to `Inf` to switch this rule
+#' off and leave `IHCT_variation_drop` to decide on its own. See Details.
+#'
+#' @param IHCT_height_rule A `character` string (applicable only if
 #' `optimal_tree_method = "iterative_consensus_tree"`) indicating how the
-#' heights of the tree are made monotone, i.e. how a division that comes out
-#' lower than a division it contains is corrected. With `"least_squares"`
-#' (default), the heights are moved as little as possible, which gives the best
-#' cophenetic correlation obtainable on the tree at hand; with `"max_child"`,
-#' each division is raised to the highest division it contains, as in bioregion
-#' 1.4.0 and earlier. See Details.
+#' heights of the tree are corrected when a division comes out lower than a
+#' division it contains. With `"least_squares"` (default) the heights are moved
+#' as little as possible, which fits the dissimilarities better; with
+#' `"max_child"` each division is raised to the highest division it contains,
+#' as in bioregion 1.4.0 and earlier. See Details.
 #'
 #' @param verbose A `boolean` indicating whether to
 #' display progress messages. Set to `FALSE` to suppress these messages.
@@ -148,20 +166,82 @@
 #' relationships, balancing 
 #' cluster stability and hierarchical constraints.
 #' 
+#' `IHCT_top_n_trees` sets how many of the randomized trees, ranked by how well
+#' they fit the dissimilarities, are used to decide a division: with `1` the
+#' division is the top division of the best tree; with more, sites are grouped
+#' according to how often they fall on the same side in these trees.
+#'
+#' Every division is decided from `n_runs` randomized trees, and building new
+#' trees at every division is what makes this method slow on large datasets. A
+#' group of sites can instead reuse the trees of the group it was split from,
+#' cut down to its own sites, which costs almost nothing. Reused trees get a
+#' little coarser every time they are cut down, so they are only used where the
+#' division no longer changes much: `IHCT_variation_drop` and
+#' `IHCT_sites_drop` decide where that is, the first from how much of the
+#' variation of the dissimilarity matrix is still held between the sites of the
+#' group being divided, the second from how many sites the group has lost. Two
+#' criteria are needed because species composition data usually gives trees
+#' that peel one site off at a time: on such a tree the variation falls very
+#' slowly, and counting sites is what catches the divisions near the top of the
+#' tree, which are the ones worth deciding well.
+#'
+#' With their defaults (`IHCT_variation_drop = 0.2`, `IHCT_sites_drop = 10`)
+#' the tree is built about 1.5 times faster than with
+#' `IHCT_variation_drop = 0`, for a cophenetic correlation lower by less than
+#' 0.001 on each of the thirteen datasets they were tested on, and the saving
+#' grows with the number of sites. Reusing trees requires the height of a
+#' division to be the mean dissimilarity between the two groups it separates,
+#' which is what UPGMA gives, so it only applies to `method = "average"`.
+#'
+#' The two arguments work as a pair, and each of them can be set so that the
+#' other no longer has any effect. A new randomization is made as soon as
+#' *either* of them asks for one, so whichever of the two asks more often is
+#' the one that decides:
+#' \itemize{
+#' \item{`IHCT_sites_drop = 1` (or `0`) asks for one at every division, since
+#' a division always removes at least one site from a group. Randomizations are
+#' then made everywhere and `IHCT_variation_drop` is never used.}
+#' \item{`IHCT_variation_drop = 0` likewise asks for one at every division, and
+#' `IHCT_sites_drop` is then never used.}
+#' \item{`IHCT_variation_drop = 1` never asks for one, leaving
+#' `IHCT_sites_drop` to decide on its own, and `IHCT_sites_drop = Inf` never
+#' asks for one, leaving `IHCT_variation_drop` to decide on its own.}
+#' \item{Both switched off (`IHCT_variation_drop = 1` and
+#' `IHCT_sites_drop = Inf`) randomizes once, at the first division, and reuses
+#' those trees for the whole tree. This is the fastest setting and the one that
+#' fits the data least well.}}
+#'
+#' To reproduce the tree that bioregion 1.4.0 and earlier produced, for the
+#' same `seed`, use:
+#'
+#' \preformatted{
+#' hclu_hierarclust(dissimilarity,
+#'                  method = "average",
+#'                  optimal_tree_method = "iterative_consensus_tree",
+#'                  n_runs = 100,
+#'                  IHCT_top_n_trees = 2,
+#'                  IHCT_variation_drop = 0,
+#'                  IHCT_height_rule = "max_child")
+#' }
+#'
+#' `IHCT_sites_drop` may be left at any value here, since
+#' `IHCT_variation_drop = 0` already randomizes at every division. One
+#' difference with those versions remains: a group of sites whose
+#' dissimilarities are all equal is resolved directly, at that value, instead
+#' of being divided from randomized trees. Every tree on such a group fits its
+#' dissimilarities equally well, so this does not change how well the tree fits
+#' the data, but it does change the shape of that part of the tree, and
+#' therefore which sites are grouped together if the tree is cut there.
+#'
 #' Because each division is decided from its own randomizations, a division can
-#' come out lower than a division it contains. `height_rule` decides how these
-#' inversions are removed. `"max_child"` raises every division to the highest
-#' division it contains, which is simple but pushes a division far above the
-#' dissimilarities it summarizes as soon as one small group deep in the tree is
-#' high. `"least_squares"` (default) instead returns the monotone heights
-#' closest to the divisions' own heights, each weighted by the number of site
-#' pairs it summarizes (isotonic regression on the tree). With UPGMA
-#' (`method = "average"`), where a division's height is the mean dissimilarity
-#' between the two groups it separates, these heights are those that fit the
-#' dissimilarities best on the topology at hand, so the cophenetic correlation
-#' is never below the one `"max_child"` gives and is usually above it. With the
-#' other linkage methods the same pooling is applied to the heights the linkage
-#' defines, without such a guarantee.}
+#' come out lower than a division it contains. `IHCT_height_rule` decides how
+#' these inversions are removed. `"max_child"` raises every division to the
+#' highest division it contains, which is simple but can push a division far
+#' above the dissimilarities it summarizes. `"least_squares"` (default) instead
+#' moves the heights as little as possible, which with `method = "average"`
+#' gives the heights that fit the dissimilarities best on the topology at hand,
+#' so the cophenetic correlation is never below the one `"max_child"` gives and
+#' is usually above it.}
 #' 
 #' \item{`optimal_tree_method = "best"`: This method selects one tree among with 
 #' the highest cophenetic correlation coefficient, representing the best fit 
@@ -272,8 +352,10 @@ hclu_hierarclust <- function(dissimilarity,
                              h_min = 0,
                              consensus_p = 0.5,
                              show_hierarchy = FALSE,
-                             top_n_trees = 2,
-                             height_rule = "least_squares",
+                             IHCT_top_n_trees = 2,
+                             IHCT_variation_drop = 0.2,
+                             IHCT_sites_drop = 10,
+                             IHCT_height_rule = "least_squares",
                              verbose = TRUE){
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
@@ -335,10 +417,22 @@ hclu_hierarclust <- function(dissimilarity,
     controls(args = seed, data = NULL, type = "strict_positive_integer")
   }
   controls(args = n_runs, data = NULL, type = "strict_positive_integer")
-  controls(args = top_n_trees, data = NULL, type = "strict_positive_integer")
-  controls(args = height_rule, data = NULL, type = "character")
-  if(!(height_rule %in% c("least_squares", "max_child"))){
-    stop(paste0("Please choose height_rule from the following:\n",
+  controls(args = IHCT_top_n_trees, data = NULL, type = "strict_positive_integer")
+  controls(args = IHCT_variation_drop, data = NULL, type = "positive_numeric")
+  if(IHCT_variation_drop > 1) {
+    stop("IHCT_variation_drop must be between 0 and 1.",
+         call. = FALSE)
+  }
+  if(!is.numeric(IHCT_sites_drop) || length(IHCT_sites_drop) != 1 || is.na(IHCT_sites_drop) ||
+     IHCT_sites_drop < 0) {
+    stop(paste0("IHCT_sites_drop must be a single number of sites, 0 or more ",
+                "(0 or 1 to randomize at every division, Inf to leave the ",
+                "randomizations to IHCT_variation_drop)."),
+         call. = FALSE)
+  }
+  controls(args = IHCT_height_rule, data = NULL, type = "character")
+  if(!(IHCT_height_rule %in% c("least_squares", "max_child"))){
+    stop(paste0("Please choose IHCT_height_rule from the following:\n",
                 "least_squares or max_child"),
          call. = FALSE)
   }
@@ -421,8 +515,10 @@ hclu_hierarclust <- function(dissimilarity,
                        h_min = h_min,
                        consensus_p = consensus_p,
                        show_hierarchy = show_hierarchy,
-                       top_n_trees = top_n_trees,
-                       height_rule = height_rule,
+                       IHCT_top_n_trees = IHCT_top_n_trees,
+                       IHCT_variation_drop = IHCT_variation_drop,
+                       IHCT_sites_drop = IHCT_sites_drop,
+                       IHCT_height_rule = IHCT_height_rule,
                        verbose = verbose)
   
   # Determine pairwise_metric and data_type
@@ -462,13 +558,25 @@ hclu_hierarclust <- function(dissimilarity,
                 "with IHCT - final height calculations are approximated into UPGMA.")
       }
 
+      # Placeholder of a message to inform users of possible optimizations of
+      # computing times when distance matrices are large (> 1000 sites)
+      # Currently disabled since we have optimized defaults already
+      # We may want to add it back at some point if computation time is too 
+      # slow
+      # if(verbose && IHCT_variation_drop > 0 && method == "average" &&
+      #    nrow(dist_mat) > 1000) {
+      #   message("")
+      # }
+
       if (!is.null(seed)) set.seed(seed) # generate seed
       
       consensus_tree <- IHCT(dist_mat,
                              method = method,
                              n_runs = n_runs,
-                             top_n_trees = top_n_trees,
-                             height_rule = height_rule,
+                             top_n_trees = IHCT_top_n_trees,
+                             variation_drop = IHCT_variation_drop,
+                             sites_drop = IHCT_sites_drop,
+                             height_rule = IHCT_height_rule,
                              verbose = verbose)
       
       if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed

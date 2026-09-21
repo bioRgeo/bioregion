@@ -201,10 +201,19 @@ test_that("IHCT returns a valid hclust tree, reproducible with a seed", {
   d <- make_matrix()
   set.seed(10); hc1 <- IHCT(d, method = "average", n_runs = 20, top_n_trees = 2, verbose = FALSE)
   set.seed(10); hc2 <- IHCT(d, method = "average", n_runs = 20, top_n_trees = 2, verbose = FALSE)
-  set.seed(11); hc3 <- IHCT(d, method = "average", n_runs = 20, top_n_trees = 2, verbose = FALSE)
   expect_valid_tree(hc1, d)
   expect_identical(hc1, hc2)
-  expect_false(identical(hc1$merge, hc3$merge) && identical(hc1$height, hc3$height))
+  # the seed matters. Checked with every source of randomness on: the trees
+  # rebuilt at every division (variation_drop = 0) and the tied blocks divided
+  # from them rather than resolved directly (tie_block_resolution = FALSE).
+  # Both shortcuts draw far fewer random numbers, and on a matrix this small
+  # two seeds can then end on the same tree.
+  set.seed(10); seed10 <- IHCT(d, n_runs = 20, variation_drop = 0,
+                               tie_block_resolution = FALSE, verbose = FALSE)
+  set.seed(11); seed11 <- IHCT(d, n_runs = 20, variation_drop = 0,
+                               tie_block_resolution = FALSE, verbose = FALSE)
+  expect_false(identical(seed10$merge, seed11$merge) &&
+                 identical(seed10$height, seed11$height))
   # the tree fits the dissimilarities at least as well as a single UPGMA tree
   single <- fastcluster::hclust(stats::as.dist(d), "average")
   expect_gte(tree_eval(hc1, d)$cophcor, tree_eval(single, d)$cophcor - 1e-8)
@@ -243,4 +252,353 @@ test_that("a deep chain-shaped tree does not exhaust the call stack", {
   hc <- IHCT(d, n_runs = 2, verbose = FALSE)
   expect_valid_tree(hc, d)
   expect_equal(tree_eval(hc, d)$cophcor, 1, tolerance = 1e-8)
+})
+
+# --- inherited trees (pruning) and the variation cutoff --------------------------
+
+test_that("pruning a tree gives the induced tree with mean-dissimilarity heights", {
+  d <- make_matrix(n_sites = 40, seed = 2)
+  set.seed(5)
+  for (i in 1:30) {
+    sites <- sample(nrow(d), sample(8:nrow(d), 1))
+    tree <- fresh_trees(d, sites, "average", 1)[[1]]
+    keep <- logical(nrow(d))
+    keep[sample(sites, sample(3:length(sites), 1))] <- TRUE
+    pruned <- ihct_prune_tree(tree$merge, tree$height, tree$pairs,
+                              tree$leaf_site, keep, d)
+    expect_setequal(pruned$leaf_site, sites[keep[sites]])
+    # the sites, height and number of pairs of every node, against a pure-R
+    # pruning of the same tree (helper-ihct.R)
+    expect_identical(ref_tree_key(pruned$merge, pruned$height, pruned$pairs,
+                                  pruned$leaf_site),
+                     ref_prune_tree(tree$merge, tree$leaf_site, keep, d))
+    # pruning again is pruning once to the smaller set
+    keep2 <- keep
+    keep2[sample(pruned$leaf_site, 2)] <- FALSE
+    twice <- ihct_prune_tree(pruned$merge, pruned$height, pruned$pairs,
+                             pruned$leaf_site, keep2, d)
+    expect_identical(ref_tree_key(twice$merge, twice$height, twice$pairs,
+                                  twice$leaf_site),
+                     ref_prune_tree(tree$merge, tree$leaf_site, keep2, d))
+  }
+})
+
+test_that("pruning to a clade gives the UPGMA tree of the sub-matrix", {
+  # the sites of a clade of a UPGMA tree only ever join each other, so the
+  # sub-tree on them is the UPGMA tree of their sub-matrix. Ties would let the
+  # two runs break them differently, so the matrix is jittered to remove them.
+  d <- make_matrix(n_sites = 50, seed = 4)
+  set.seed(6)
+  noise <- matrix(runif(nrow(d)^2, 0, 1e-6), nrow(d))
+  noise[lower.tri(noise)] <- t(noise)[lower.tri(noise)]
+  d <- d + noise
+  diag(d) <- 0
+
+  tree <- fresh_trees(d, seq_len(nrow(d)), "average", 1)[[1]]
+  members <- ref_node_members(tree$merge, tree$leaf_site)
+  clade_nodes <- which(lengths(members) >= 4 & lengths(members) <= nrow(d) - 2)
+  expect_gt(length(clade_nodes), 5)
+  for (k in clade_nodes) {
+    keep <- logical(nrow(d))
+    keep[members[[k]]] <- TRUE
+    pruned <- ihct_prune_tree(tree$merge, tree$height, tree$pairs,
+                              tree$leaf_site, keep, d)
+    sites <- members[[k]]
+    upgma <- fastcluster::hclust(stats::as.dist(d[sites, sites]), "average")
+    expect_identical(ref_tree_key(pruned$merge, pruned$height, pruned$pairs,
+                                  pruned$leaf_site),
+                     ref_tree_key(upgma$merge, upgma$height,
+                                  ihct_node_sizes(upgma$merge)$pairs, sites))
+  }
+})
+
+test_that("ihct_top_division gives the two branches of the root, as cutree does", {
+  d <- make_matrix(n_sites = 30, seed = 5)
+  set.seed(8)
+  for (i in 1:20) {
+    sites <- sample(nrow(d), sample(4:nrow(d), 1))
+    tree <- fresh_trees(d, sites, "average", 1)[[1]]
+    division <- ihct_top_division(tree$merge, tree$leaf_site)
+    expect_setequal(unlist(division), sites)
+    expect_equal(lapply(division, sort),
+                 lapply(ref_top_division(tree$merge, tree$leaf_site), sort))
+    # cutree(k = 2) cuts a tree above its last merge, i.e. at its root
+    hc <- structure(list(merge = tree$merge, height = sort(tree$height),
+                         order = seq_along(tree$leaf_site),
+                         labels = as.character(tree$leaf_site),
+                         method = "average"), class = "hclust")
+    groups <- stats::cutree(hc, k = 2)
+    expect_setequal(as.integer(names(groups)[groups == groups[1]]),
+                    if (as.integer(names(groups)[1]) %in% division[[1]])
+                      division[[1]] else division[[2]])
+  }
+})
+
+test_that("a group whose dissimilarities are all equal is recognized", {
+  d <- make_matrix(n_sites = 20, seed = 6)
+  flat <- matrix(0.4, 5, 5); diag(flat) <- 0
+  expect_true(is_tied_block(flat, 1:5))
+  expect_true(is_tied_block(flat, c(2, 4, 5)))
+  flat[1, 3] <- flat[3, 1] <- 0.6
+  expect_false(is_tied_block(flat, 1:5))
+  expect_true(is_tied_block(flat, c(2, 4, 5)))
+  expect_false(is_tied_block(d, seq_len(nrow(d))))
+})
+
+test_that("groups with all dissimilarities equal become a chain at that height", {
+  # sites that share no species at all are all at dissimilarity 1 from each
+  # other: every tree on them is as good as any other, and IHCT peels them off
+  # one by one instead of randomizing
+  d <- matrix(1, 8, 8, dimnames = list(letters[1:8], letters[1:8]))
+  diag(d) <- 0
+  set.seed(1)
+  hc <- IHCT(d, n_runs = 20, variation_drop = 0.2, verbose = FALSE)
+  expect_valid_tree(hc, d)
+  expect_equal(hc$height, rep(1, 7))
+  # a chain: every merge but the first joins a single site to what came before
+  expect_equal(sum(hc$merge[, 1] < 0 & hc$merge[, 2] < 0), 1)
+  # the same with identical sites, which are all at dissimilarity 0
+  d0 <- matrix(0, 6, 6, dimnames = list(letters[1:6], letters[1:6]))
+  set.seed(1)
+  hc <- IHCT(d0, n_runs = 20, variation_drop = 0.2, verbose = FALSE)
+  expect_valid_tree(hc, d0)
+  expect_equal(hc$height, rep(0, 5))
+})
+
+test_that("inherited trees give valid trees for every division rule", {
+  d <- make_matrix(n_sites = 50, seed = 7)
+  for (cutoff in c(0, 0.1, 0.5, 1)) {
+    for (top_n_trees in c(1, 2, 3)) {
+      set.seed(3)
+      hc <- IHCT(d, n_runs = 20, top_n_trees = top_n_trees, variation_drop = cutoff,
+                 verbose = FALSE)
+      expect_valid_tree(hc, d)
+      # inheriting trees must not undo what the randomization is for: the tree
+      # still has to fit the dissimilarities at least as well as a single one
+      expect_gte(tree_eval(hc, d)$cophcor,
+                 tree_eval(fastcluster::hclust(stats::as.dist(d), "average"),
+                           d)$cophcor - 1e-8)
+    }
+  }
+})
+
+test_that("the variation cutoff changes the trees, saves runs, and is reproducible", {
+  d <- make_matrix(n_sites = 60, seed = 8)
+  set.seed(3); a <- IHCT(d, n_runs = 20, variation_drop = 0.3, verbose = FALSE)
+  set.seed(3); b <- IHCT(d, n_runs = 20, variation_drop = 0.3, verbose = FALSE)
+  set.seed(3); none <- IHCT(d, n_runs = 20, variation_drop = 0, verbose = FALSE)
+  expect_identical(a, b)
+  expect_false(identical(clades(a), clades(none)))
+
+  # count the divisions that built their own trees instead of taking their
+  # parent's, by watching the only function that builds them
+  count_fresh <- function(cutoff) {
+    n <- 0L
+    build <- fresh_trees
+    local_mocked_bindings(
+      fresh_trees = function(...) { n <<- n + 1L; build(...) },
+      .package = "bioregion")
+    set.seed(3)
+    IHCT(d, n_runs = 20, variation_drop = cutoff, verbose = FALSE)
+    n
+  }
+  expect_lt(count_fresh(0.3), count_fresh(0))
+})
+
+test_that("only average linkage inherits trees, and the cutoff is checked", {
+  d <- make_matrix(n_sites = 30, seed = 9)
+  # the heights a pruned tree gets are mean dissimilarities, which is what
+  # UPGMA defines; the other methods keep building their trees afresh, so
+  # the cutoff makes no difference to them
+  for (method in c("complete", "ward.D2")) {
+    set.seed(2)
+    with_cutoff <- suppressMessages(
+      IHCT(d, method = method, n_runs = 10, variation_drop = 1, verbose = FALSE))
+    set.seed(2)
+    without <- IHCT(d, method = method, n_runs = 10, variation_drop = 0, verbose = FALSE)
+    expect_identical(with_cutoff, without)
+  }
+  expect_message(IHCT(d, method = "complete", n_runs = 5, variation_drop = 0.5,
+                      verbose = TRUE),
+                 "only available with method")
+  expect_error(IHCT(d, n_runs = 5, variation_drop = 2, verbose = FALSE),
+               "between 0 and 1")
+  expect_error(IHCT(d, n_runs = 5, variation_drop = -0.1, verbose = FALSE),
+               "between 0 and 1")
+  expect_error(IHCT(d, n_runs = 5, variation_drop = NA, verbose = FALSE),
+               "between 0 and 1")
+})
+
+test_that("sites_drop builds trees again after a number of sites is lost", {
+  # A matrix whose tree peels a single site off at a time: site n is further
+  # from everything than site n - 1, and so on, so every division separates the
+  # highest site from the rest. This is the shape sites_drop is for -- the group
+  # barely changes from one division to the next, so its share of the variation
+  # falls too slowly for variation_drop to rebuild anything near the top.
+  n <- 60
+  d <- outer(seq_len(n), seq_len(n), function(i, j) pmax(i, j) / n)
+  diag(d) <- 0
+  dimnames(d) <- list(sprintf("s%02d", seq_len(n)), sprintf("s%02d", seq_len(n)))
+  count_fresh <- function(...) {
+    k <- 0L
+    build <- fresh_trees
+    local_mocked_bindings(
+      fresh_trees = function(...) { k <<- k + 1L; build(...) },
+      .package = "bioregion")
+    set.seed(3)
+    IHCT(d, n_runs = 20, verbose = FALSE, ...)
+    k
+  }
+  # the second criterion can only add rebuilds, never remove any
+  variation_only <- count_fresh(variation_drop = 0.2, sites_drop = Inf)
+  expect_gt(count_fresh(variation_drop = 0.2, sites_drop = 5), variation_only)
+  # and the smaller the count, the more often trees are built again
+  expect_gt(count_fresh(variation_drop = 0.2, sites_drop = 2),
+            count_fresh(variation_drop = 0.2, sites_drop = 10))
+  # a plain count of sites: a division always removes at least one site from a
+  # group, so 1 or less asks for fresh trees everywhere, exactly as
+  # variation_drop = 0 does
+  expect_equal(count_fresh(variation_drop = 0.2, sites_drop = 1),
+               count_fresh(variation_drop = 0, sites_drop = 10))
+  expect_equal(count_fresh(variation_drop = 0.2, sites_drop = 0),
+               count_fresh(variation_drop = 0, sites_drop = 10))
+  # never more than building them at every division
+  expect_lte(count_fresh(variation_drop = 0.2, sites_drop = 2),
+             count_fresh(variation_drop = 0))
+
+  # variation_drop = 0 means "build them everywhere", whatever sites_drop says
+  set.seed(3); with_count <- IHCT(d, n_runs = 20, variation_drop = 0,
+                                  sites_drop = 5, verbose = FALSE)
+  set.seed(3); without <- IHCT(d, n_runs = 20, variation_drop = 0,
+                               sites_drop = Inf, verbose = FALSE)
+  expect_identical(with_count, without)
+
+  # reproducible, and still a valid tree
+  set.seed(4); a <- IHCT(d, n_runs = 20, sites_drop = 5, verbose = FALSE)
+  set.seed(4); b <- IHCT(d, n_runs = 20, sites_drop = 5, verbose = FALSE)
+  expect_identical(a, b)
+  expect_valid_tree(a, d)
+
+  expect_error(IHCT(d, n_runs = 5, sites_drop = -1, verbose = FALSE),
+               "sites_drop must be a single number")
+  expect_error(IHCT(d, n_runs = 5, sites_drop = NA, verbose = FALSE),
+               "sites_drop must be a single number")
+  expect_error(IHCT(d, n_runs = 5, sites_drop = c(2, 3), verbose = FALSE),
+               "sites_drop must be a single number")
+})
+
+test_that("sites_drop rarely fires on a tree that splits into balanced halves", {
+  # a group there loses many sites at a time, so its share of the variation has
+  # already fallen and variation_drop has rebuilt the trees anyway: the count
+  # costs nothing on this shape of data, which is why it can be on by default
+  d <- make_matrix(n_sites = 60, seed = 8)
+  count_fresh <- function(...) {
+    k <- 0L
+    build <- fresh_trees
+    local_mocked_bindings(
+      fresh_trees = function(...) { k <<- k + 1L; build(...) },
+      .package = "bioregion")
+    set.seed(3)
+    IHCT(d, n_runs = 20, verbose = FALSE, ...)
+    k
+  }
+  expect_equal(count_fresh(variation_drop = 0.2, sites_drop = 5),
+               count_fresh(variation_drop = 0.2, sites_drop = Inf))
+})
+
+test_that("the defaults reuse trees and fit the dissimilarities about as well", {
+  d <- make_matrix(n_sites = 60, seed = 8)
+  expect_equal(formals(IHCT)$variation_drop, 0.2)
+  expect_equal(formals(IHCT)$sites_drop, 10)
+  set.seed(5); default <- IHCT(d, n_runs = 20, verbose = FALSE)
+  set.seed(5); everywhere <- IHCT(d, n_runs = 20, variation_drop = 0, verbose = FALSE)
+  expect_valid_tree(default, d)
+  # the whole point of the defaults: nearly the same fit for less work
+  expect_gt(tree_eval(default, d)$cophcor,
+            tree_eval(everywhere, d)$cophcor - 0.01)
+})
+
+# Tests for tie_block_resolution ----------------------------------------------
+test_that("a tied block is resolved as a rake at its own dissimilarity", {
+  # three sites all at 0.4 from each other, joined to a fourth further away
+  d <- matrix(0.9, 4, 4); diag(d) <- 0
+  d[1:3, 1:3] <- 0.4; diag(d) <- 0
+  rownames(d) <- colnames(d) <- paste0("s", 1:4)
+
+  expect_true(is_tied_block(d, 1:3))
+  expect_false(is_tied_block(d, 1:4))
+
+  set.seed(1); hc <- IHCT(d, n_runs = 10, verbose = FALSE)
+  expect_valid_tree(hc, d)
+  # the block's two divisions both sit at its common value
+  expect_equal(sort(hc$height), c(0.4, 0.4, 0.9))
+})
+
+test_that("tie_block_resolution = FALSE divides tied blocks from trees instead", {
+  d <- make_matrix(n_sites = 40, seed = 4)
+  set.seed(6); on  <- IHCT(d, n_runs = 20, verbose = FALSE)
+  set.seed(6); off <- IHCT(d, n_runs = 20, tie_block_resolution = FALSE,
+                           verbose = FALSE)
+  expect_valid_tree(on, d)
+  expect_valid_tree(off, d)
+  # it changes the shape of the tree inside the tied blocks ...
+  expect_false(identical(on$merge, off$merge))
+  # ... but every tree on a tied block reproduces its dissimilarities exactly,
+  # so it is not a way of fitting the data better or worse
+  expect_equal(tree_eval(on, d)$cophcor, tree_eval(off, d)$cophcor,
+               tolerance = 0.01)
+
+  # it is the switch that has to be off to get the bioregion 1.4.0 algorithm
+  set.seed(6); legacy_settings <- IHCT(d, n_runs = 20, variation_drop = 0,
+                                       height_rule = "max_child",
+                                       tie_block_resolution = FALSE,
+                                       verbose = FALSE)
+  expect_valid_tree(legacy_settings, d)
+
+  expect_error(IHCT(d, n_runs = 5, tie_block_resolution = NA, verbose = FALSE),
+               "tie_block_resolution must be TRUE or FALSE")
+  expect_error(IHCT(d, n_runs = 5, tie_block_resolution = "yes", verbose = FALSE),
+               "tie_block_resolution must be TRUE or FALSE")
+})
+
+test_that("tied blocks are only resolved where the linkage gives them their own height", {
+  d <- matrix(0.9, 6, 6); d[1:4, 1:4] <- 0.4; diag(d) <- 0
+  rownames(d) <- colnames(d) <- paste0("s", 1:6)
+  # min, max and mean of a tied block all return its common value
+  for (meth in c("single", "complete", "average", "mcquitty")) {
+    set.seed(2); hc <- IHCT(d, method = meth, n_runs = 10, verbose = FALSE)
+    expect_true(sum(abs(hc$height - 0.4) < 1e-12) >= 3,
+                label = paste0(meth, ": divisions of the tied block at 0.4"))
+  }
+  # the centroid-based linkages define their heights otherwise, so the block is
+  # divided from randomised trees like any other group and the user is told
+  expect_message(IHCT(d, method = "ward.D2", n_runs = 5, verbose = TRUE),
+                 "only available with method")
+  set.seed(2)
+  expect_silent(IHCT(d, method = "ward.D2", n_runs = 5,
+                     tie_block_resolution = FALSE, verbose = FALSE))
+})
+
+test_that("either criterion at its 'randomize always' value switches reuse off", {
+  d <- make_matrix(n_sites = 40, seed = 9)
+  # no trees are ever passed down, so the two shortcuts cannot differ
+  set.seed(7); by_variation <- IHCT(d, n_runs = 20, variation_drop = 0,
+                                    sites_drop = 10, verbose = FALSE)
+  set.seed(7); by_sites <- IHCT(d, n_runs = 20, variation_drop = 0.2,
+                                sites_drop = 1, verbose = FALSE)
+  set.seed(7); by_sites0 <- IHCT(d, n_runs = 20, variation_drop = 0.2,
+                                 sites_drop = 0, verbose = FALSE)
+  expect_identical(by_variation, by_sites)
+  expect_identical(by_variation, by_sites0)
+
+  # and at the other end, both switched off builds the trees once, at the root
+  k <- 0L
+  build <- fresh_trees
+  local_mocked_bindings(
+    fresh_trees = function(...) { k <<- k + 1L; build(...) },
+    .package = "bioregion")
+  set.seed(7); once <- IHCT(d, n_runs = 20, variation_drop = 1,
+                            sites_drop = Inf, verbose = FALSE)
+  expect_equal(k, 1L)
+  expect_valid_tree(once, d)
 })

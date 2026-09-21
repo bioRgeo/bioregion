@@ -20,8 +20,10 @@ hclu_hierarclust(
   h_min = 0,
   consensus_p = 0.5,
   show_hierarchy = FALSE,
-  top_n_trees = 2,
-  height_rule = "least_squares",
+  IHCT_top_n_trees = 2,
+  IHCT_variation_drop = 0.2,
+  IHCT_sites_drop = 10,
+  IHCT_height_rule = "least_squares",
   verbose = TRUE
 )
 }
@@ -88,21 +90,39 @@ consensus tree.}
 should be identifiable in the outputs (\code{FALSE} by default). This argument is
 only used if the tree is cut (i.e., \code{n_clust} or \code{cut_height} is provided).}
 
-\item{top_n_trees}{An \code{integer} (applicable only if
-\code{optimal_tree_method = "iterative_consensus_tree"}) giving the number of
-best randomized trees, ranked by cophenetic correlation, used to decide each
-division of the tree. With \code{1}, each division is the top division of the
-best tree; with more, sites are grouped according to how often they fall on
-the same side in these trees (\code{2} by default).}
+\item{IHCT_top_n_trees}{An \code{integer} (applicable only if
+\code{optimal_tree_method = "iterative_consensus_tree"}) indicating how many of
+the best randomized trees are used to decide each division of the tree
+(\code{2} by default). See Details.}
 
-\item{height_rule}{A \code{character} string (applicable only if
+\item{IHCT_variation_drop}{A \code{numeric} value between 0 and 1 (applicable
+only if \code{optimal_tree_method = "iterative_consensus_tree"} and
+\code{method = "average"}). This is an optimization parameter: it reduces the
+number of times the dissimilarity matrix is randomized while the tree is
+built, which makes the tree faster to obtain for a very small cost in its
+fit to the data. Its rule is based on variation: new randomizations are made
+once a group of sites has lost this share of the variation that was left to
+decide when they were last made. The default \code{0.2} therefore means
+"randomize again once a fifth of what was left to decide has been decided".
+Set it to \code{0} to randomize at every division, or to \code{1} to switch this rule
+off and leave \code{IHCT_sites_drop} to decide on its own. See Details.}
+
+\item{IHCT_sites_drop}{A \code{numeric} value of 0 or more (applicable only if
+\code{optimal_tree_method = "iterative_consensus_tree"}, \code{method = "average"} and
+\code{IHCT_variation_drop > 0}). This is a second optimization parameter, used
+together with \code{IHCT_variation_drop}, with a rule based on sites rather than
+on variation: new randomizations are also made once a group of sites has
+lost this many sites since they were last made (\code{10} by default). Set it to
+\code{0} or \code{1} to randomize at every division, or to \code{Inf} to switch this rule
+off and leave \code{IHCT_variation_drop} to decide on its own. See Details.}
+
+\item{IHCT_height_rule}{A \code{character} string (applicable only if
 \code{optimal_tree_method = "iterative_consensus_tree"}) indicating how the
-heights of the tree are made monotone, i.e. how a division that comes out
-lower than a division it contains is corrected. With \code{"least_squares"}
-(default), the heights are moved as little as possible, which gives the best
-cophenetic correlation obtainable on the tree at hand; with \code{"max_child"},
-each division is raised to the highest division it contains, as in bioregion
-1.4.0 and earlier. See Details.}
+heights of the tree are corrected when a division comes out lower than a
+division it contains. With \code{"least_squares"} (default) the heights are moved
+as little as possible, which fits the dissimilarities better; with
+\code{"max_child"} each division is raised to the highest division it contains,
+as in bioregion 1.4.0 and earlier. See Details.}
 
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}
@@ -175,20 +195,82 @@ This approach provides a robust, hierarchical representation of site
 relationships, balancing
 cluster stability and hierarchical constraints.
 
+\code{IHCT_top_n_trees} sets how many of the randomized trees, ranked by how well
+they fit the dissimilarities, are used to decide a division: with \code{1} the
+division is the top division of the best tree; with more, sites are grouped
+according to how often they fall on the same side in these trees.
+
+Every division is decided from \code{n_runs} randomized trees, and building new
+trees at every division is what makes this method slow on large datasets. A
+group of sites can instead reuse the trees of the group it was split from,
+cut down to its own sites, which costs almost nothing. Reused trees get a
+little coarser every time they are cut down, so they are only used where the
+division no longer changes much: \code{IHCT_variation_drop} and
+\code{IHCT_sites_drop} decide where that is, the first from how much of the
+variation of the dissimilarity matrix is still held between the sites of the
+group being divided, the second from how many sites the group has lost. Two
+criteria are needed because species composition data usually gives trees
+that peel one site off at a time: on such a tree the variation falls very
+slowly, and counting sites is what catches the divisions near the top of the
+tree, which are the ones worth deciding well.
+
+With their defaults (\code{IHCT_variation_drop = 0.2}, \code{IHCT_sites_drop = 10})
+the tree is built about 1.5 times faster than with
+\code{IHCT_variation_drop = 0}, for a cophenetic correlation lower by less than
+0.001 on each of the thirteen datasets they were tested on, and the saving
+grows with the number of sites. Reusing trees requires the height of a
+division to be the mean dissimilarity between the two groups it separates,
+which is what UPGMA gives, so it only applies to \code{method = "average"}.
+
+The two arguments work as a pair, and each of them can be set so that the
+other no longer has any effect. A new randomization is made as soon as
+\emph{either} of them asks for one, so whichever of the two asks more often is
+the one that decides:
+\itemize{
+\item{\code{IHCT_sites_drop = 1} (or \code{0}) asks for one at every division, since
+a division always removes at least one site from a group. Randomizations are
+then made everywhere and \code{IHCT_variation_drop} is never used.}
+\item{\code{IHCT_variation_drop = 0} likewise asks for one at every division, and
+\code{IHCT_sites_drop} is then never used.}
+\item{\code{IHCT_variation_drop = 1} never asks for one, leaving
+\code{IHCT_sites_drop} to decide on its own, and \code{IHCT_sites_drop = Inf} never
+asks for one, leaving \code{IHCT_variation_drop} to decide on its own.}
+\item{Both switched off (\code{IHCT_variation_drop = 1} and
+\code{IHCT_sites_drop = Inf}) randomizes once, at the first division, and reuses
+those trees for the whole tree. This is the fastest setting and the one that
+fits the data least well.}}
+
+To reproduce the tree that bioregion 1.4.0 and earlier produced, for the
+same \code{seed}, use:
+
+\preformatted{
+hclu_hierarclust(dissimilarity,
+                 method = "average",
+                 optimal_tree_method = "iterative_consensus_tree",
+                 n_runs = 100,
+                 IHCT_top_n_trees = 2,
+                 IHCT_variation_drop = 0,
+                 IHCT_height_rule = "max_child")
+}
+
+\code{IHCT_sites_drop} may be left at any value here, since
+\code{IHCT_variation_drop = 0} already randomizes at every division. One
+difference with those versions remains: a group of sites whose
+dissimilarities are all equal is resolved directly, at that value, instead
+of being divided from randomized trees. Every tree on such a group fits its
+dissimilarities equally well, so this does not change how well the tree fits
+the data, but it does change the shape of that part of the tree, and
+therefore which sites are grouped together if the tree is cut there.
+
 Because each division is decided from its own randomizations, a division can
-come out lower than a division it contains. \code{height_rule} decides how these
-inversions are removed. \code{"max_child"} raises every division to the highest
-division it contains, which is simple but pushes a division far above the
-dissimilarities it summarizes as soon as one small group deep in the tree is
-high. \code{"least_squares"} (default) instead returns the monotone heights
-closest to the divisions' own heights, each weighted by the number of site
-pairs it summarizes (isotonic regression on the tree). With UPGMA
-(\code{method = "average"}), where a division's height is the mean dissimilarity
-between the two groups it separates, these heights are those that fit the
-dissimilarities best on the topology at hand, so the cophenetic correlation
-is never below the one \code{"max_child"} gives and is usually above it. With the
-other linkage methods the same pooling is applied to the heights the linkage
-defines, without such a guarantee.}
+come out lower than a division it contains. \code{IHCT_height_rule} decides how
+these inversions are removed. \code{"max_child"} raises every division to the
+highest division it contains, which is simple but can push a division far
+above the dissimilarities it summarizes. \code{"least_squares"} (default) instead
+moves the heights as little as possible, which with \code{method = "average"}
+gives the heights that fit the dissimilarities best on the topology at hand,
+so the cophenetic correlation is never below the one \code{"max_child"} gives and
+is usually above it.}
 
 \item{\code{optimal_tree_method = "best"}: This method selects one tree among with
 the highest cophenetic correlation coefficient, representing the best fit

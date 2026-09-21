@@ -611,26 +611,58 @@ test_that("invalid inputs", {
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     height_rule = 1,
+                     IHCT_height_rule = 1,
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "height_rule must be a character.",
+    "IHCT_height_rule must be a character.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     height_rule = c("least_squares", "max_child"),
+                     IHCT_height_rule = c("least_squares", "max_child"),
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "height_rule must be of length 1.",
+    "IHCT_height_rule must be of length 1.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     height_rule = "zz",
+                     IHCT_height_rule = "zz",
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "^Please choose height_rule from the following")
+    "^Please choose IHCT_height_rule from the following")
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     IHCT_variation_drop = "zz",
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "IHCT_variation_drop must be numeric.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     IHCT_variation_drop = c(0.1, 0.2),
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "IHCT_variation_drop must be of length 1.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     IHCT_variation_drop = -0.1,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "IHCT_variation_drop must be higher than 0.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     IHCT_variation_drop = 1.5,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "IHCT_variation_drop must be between 0 and 1.",
+    fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
@@ -975,4 +1007,32 @@ test_that("summary works on uncut hclu_hierarclust tree", {
   expect_true(is.data.frame(tree_cut$clusters))
   expect_equal(ncol(tree_cut$clusters), 2) # ID + 1 partition
   
+})
+
+# Tests for the IHCT_variation_drop argument -----------------------------------------------
+test_that("IHCT_variation_drop reaches IHCT and is reported", {
+  # IHCT_variation_drop = 0 rebuilds the randomised trees at every division, as bioregion
+  # 1.4.0 and earlier did; the default lets a group of sites reuse its parent's
+  # trees, which changes the tree it ends up with
+  old_way <- hclu_hierarclust(dissim,
+                              index = "Simpson",
+                              optimal_tree_method = "iterative_consensus_tree",
+                              n_runs = 20,
+                              IHCT_variation_drop = 0,
+                              seed = 1,
+                              verbose = FALSE)
+  inherited <- hclu_hierarclust(dissim,
+                                index = "Simpson",
+                                optimal_tree_method = "iterative_consensus_tree",
+                                n_runs = 20,
+                                IHCT_variation_drop = 0.5,
+                                seed = 1,
+                                verbose = FALSE)
+  expect_equal(old_way$args$IHCT_variation_drop, 0)
+  expect_equal(inherited$args$IHCT_variation_drop, 0.5)
+  expect_false(identical(old_way$algorithm$final.tree$merge,
+                         inherited$algorithm$final.tree$merge))
+  # the shortcut may not cost much of the fit of the tree to the data
+  expect_gt(inherited$algorithm$final.tree.coph.cor,
+            old_way$algorithm$final.tree.coph.cor - 0.01)
 })
