@@ -105,6 +105,14 @@
 #' `"max_child"` each division is raised to the highest division it contains,
 #' as in bioregion 1.4.0 and earlier. See Details.
 #'
+#' @param IHCT_n_workers An `integer` of 1 or more (applicable only if
+#' `optimal_tree_method = "iterative_consensus_tree"`) indicating how many
+#' processes of your computer may build the randomized trees at the same time.
+#' With `1` (default) they are built one after another, as before. Higher
+#' values are worth it on large matrices only, and they do not change the
+#' tree: the same `seed` gives the same result whatever this is set to. See
+#' Details.
+#'
 #' @param verbose A `boolean` indicating whether to
 #' display progress messages. Set to `FALSE` to suppress these messages.
 #' 
@@ -241,7 +249,39 @@
 #' moves the heights as little as possible, which with `method = "average"`
 #' gives the heights that fit the dissimilarities best on the topology at hand,
 #' so the cophenetic correlation is never below the one `"max_child"` gives and
-#' is usually above it.}
+#' is usually above it.
+#'
+#' On a large matrix, `IHCT_sites_drop` is worth reconsidering. Because a
+#' bioregionalization tree usually separates a few sites at a time rather than
+#' splitting the data in half, a group of sites stays close to its full size
+#' for a long way down the tree, so a rule that randomizes again every ten
+#' sites lost keeps randomizing on nearly the whole dataset. On simulated
+#' matrices of 2,000 to 10,000 sites, setting `IHCT_sites_drop = Inf` (which
+#' leaves the randomizations to `IHCT_variation_drop` alone) built the tree
+#' about two to three times faster, and the resulting trees fitted the
+#' dissimilarities just as well: the cophenetic correlation differed by less
+#' than 0.001, against a difference of about 0.003 between one random seed and
+#' another. Those tests were on simulated data only, so treat this as a
+#' suggestion rather than a settled rule, and compare the two settings on your
+#' own data if the difference matters to you. Below about 2,000 sites the
+#' default `IHCT_sites_drop = 10` costs little and is the better choice.
+#'
+#' Most of the waiting is spent building the randomized trees, and the runs of
+#' one group do not depend on each other, so `IHCT_n_workers` can share them
+#' between several processes of your computer. This only pays on large
+#' matrices, where a single run is slow enough to be worth sending to another
+#' process: groups of fewer than 200 sites are always done in one process, and
+#' small datasets should be left at `IHCT_n_workers = 1`. Four workers give
+#' most of what there is to gain (about three times faster on a 5,000-site
+#' matrix); beyond that the processes spend their time waiting for memory
+#' rather than computing, and on a 10,000-site matrix going from four workers
+#' to eight gained only a fifth while doubling the memory needed. Each worker also needs its own copy of the
+#' dissimilarity matrix on Windows, about 200 MB for 5,000 sites and 800 MB
+#' for 10,000, so ask for fewer workers than your memory allows copies.
+#' Whatever you set, the tree is the same: the random shuffles are always drawn
+#' in the same order by the main process, and only the building of the trees is
+#' handed out. If the workers cannot be started, a warning says so and the runs
+#' are made one after another instead.}
 #' 
 #' \item{`optimal_tree_method = "best"`: This method selects one tree among with 
 #' the highest cophenetic correlation coefficient, representing the best fit 
@@ -356,6 +396,7 @@ hclu_hierarclust <- function(dissimilarity,
                              IHCT_variation_drop = 0.2,
                              IHCT_sites_drop = 10,
                              IHCT_height_rule = "least_squares",
+                             IHCT_n_workers = 1,
                              verbose = TRUE){
   # 1. Controls ---------------------------------------------------------------
   controls(args = NULL, data = dissimilarity, type = "input_nhandhclu")
@@ -418,6 +459,7 @@ hclu_hierarclust <- function(dissimilarity,
   }
   controls(args = n_runs, data = NULL, type = "strict_positive_integer")
   controls(args = IHCT_top_n_trees, data = NULL, type = "strict_positive_integer")
+  controls(args = IHCT_n_workers, data = NULL, type = "strict_positive_integer")
   controls(args = IHCT_variation_drop, data = NULL, type = "positive_numeric")
   if(IHCT_variation_drop > 1) {
     stop("IHCT_variation_drop must be between 0 and 1.",
@@ -558,15 +600,23 @@ hclu_hierarclust <- function(dissimilarity,
                 "with IHCT - final height calculations are approximated into UPGMA.")
       }
 
-      # Placeholder of a message to inform users of possible optimizations of
-      # computing times when distance matrices are large (> 1000 sites)
-      # Currently disabled since we have optimized defaults already
-      # We may want to add it back at some point if computation time is too 
-      # slow
-      # if(verbose && IHCT_variation_drop > 0 && method == "average" &&
-      #    nrow(dist_mat) > 1000) {
-      #   message("")
-      # }
+      # On a large matrix, most of the computing time goes into the fresh
+      # randomizations IHCT_sites_drop asks for: the tree peels sites off a few
+      # at a time, so that rule fires on groups that still hold nearly every
+      # site, over and over. What it adds to the fit of the tree is too small
+      # for us to measure at those sizes (tests on 2,000 to 10,000
+      # simulated sites, always under 0.001 of cophenetic correlation), so we
+      # recommend to switch it off above 2,000 sites
+      if(verbose && method == "average" && IHCT_variation_drop > 0 &&
+         is.finite(IHCT_sites_drop) && nrow(dist_mat) > 2000) {
+        message(paste0("This dissimilarity matrix has ", nrow(dist_mat),
+                       " sites. On matrices this large, setting ",
+                       "IHCT_sites_drop = Inf builds the tree about two to ",
+                       "three times faster, and in our tests the tree fitted ",
+                       "the dissimilarities just as well (cophenetic ",
+                       "correlation differed by less than 0.001). See the ",
+                       "Details section of ?hclu_hierarclust."))
+      }
 
       if (!is.null(seed)) set.seed(seed) # generate seed
       
@@ -577,6 +627,7 @@ hclu_hierarclust <- function(dissimilarity,
                              variation_drop = IHCT_variation_drop,
                              sites_drop = IHCT_sites_drop,
                              height_rule = IHCT_height_rule,
+                             n_workers = IHCT_n_workers,
                              verbose = verbose)
       
       if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed

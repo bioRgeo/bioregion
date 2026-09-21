@@ -292,9 +292,10 @@ trace_current <- function(D, method, n_runs, top_n_trees, seed, keys_at = NULL) 
   log <- list()
 
   traced <- function(dist_mat, sites, site_names, method, n_runs, top_n_trees,
-                     trees = NULL) {
+                     trees = NULL, workers = NULL) {
     before <- rng_get()
-    division <- orig(dist_mat, sites, site_names, method, n_runs, top_n_trees, trees)
+    division <- orig(dist_mat, sites, site_names, method, n_runs, top_n_trees,
+                     trees, workers)
     g <- division$groups
     k <- NULL
     if (!is.null(keys_at) && length(log) + 1L == keys_at) {

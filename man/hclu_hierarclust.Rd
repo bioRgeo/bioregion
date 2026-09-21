@@ -24,6 +24,7 @@ hclu_hierarclust(
   IHCT_variation_drop = 0.2,
   IHCT_sites_drop = 10,
   IHCT_height_rule = "least_squares",
+  IHCT_n_workers = 1,
   verbose = TRUE
 )
 }
@@ -123,6 +124,14 @@ division it contains. With \code{"least_squares"} (default) the heights are move
 as little as possible, which fits the dissimilarities better; with
 \code{"max_child"} each division is raised to the highest division it contains,
 as in bioregion 1.4.0 and earlier. See Details.}
+
+\item{IHCT_n_workers}{An \code{integer} of 1 or more (applicable only if
+\code{optimal_tree_method = "iterative_consensus_tree"}) indicating how many
+processes of your computer may build the randomized trees at the same time.
+With \code{1} (default) they are built one after another, as before. Higher
+values are worth it on large matrices only, and they do not change the
+tree: the same \code{seed} gives the same result whatever this is set to. See
+Details.}
 
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}
@@ -270,7 +279,39 @@ above the dissimilarities it summarizes. \code{"least_squares"} (default) instea
 moves the heights as little as possible, which with \code{method = "average"}
 gives the heights that fit the dissimilarities best on the topology at hand,
 so the cophenetic correlation is never below the one \code{"max_child"} gives and
-is usually above it.}
+is usually above it.
+
+On a large matrix, \code{IHCT_sites_drop} is worth reconsidering. Because a
+bioregionalization tree usually separates a few sites at a time rather than
+splitting the data in half, a group of sites stays close to its full size
+for a long way down the tree, so a rule that randomizes again every ten
+sites lost keeps randomizing on nearly the whole dataset. On simulated
+matrices of 2,000 to 10,000 sites, setting \code{IHCT_sites_drop = Inf} (which
+leaves the randomizations to \code{IHCT_variation_drop} alone) built the tree
+about two to three times faster, and the resulting trees fitted the
+dissimilarities just as well: the cophenetic correlation differed by less
+than 0.001, against a difference of about 0.003 between one random seed and
+another. Those tests were on simulated data only, so treat this as a
+suggestion rather than a settled rule, and compare the two settings on your
+own data if the difference matters to you. Below about 2,000 sites the
+default \code{IHCT_sites_drop = 10} costs little and is the better choice.
+
+Most of the waiting is spent building the randomized trees, and the runs of
+one group do not depend on each other, so \code{IHCT_n_workers} can share them
+between several processes of your computer. This only pays on large
+matrices, where a single run is slow enough to be worth sending to another
+process: groups of fewer than 200 sites are always done in one process, and
+small datasets should be left at \code{IHCT_n_workers = 1}. Four workers give
+most of what there is to gain (about three times faster on a 5,000-site
+matrix); beyond that the processes spend their time waiting for memory
+rather than computing, and on a 10,000-site matrix going from four workers
+to eight gained only a fifth while doubling the memory needed. Each worker also needs its own copy of the
+dissimilarity matrix on Windows, about 200 MB for 5,000 sites and 800 MB
+for 10,000, so ask for fewer workers than your memory allows copies.
+Whatever you set, the tree is the same: the random shuffles are always drawn
+in the same order by the main process, and only the building of the trees is
+handed out. If the workers cannot be started, a warning says so and the runs
+are made one after another instead.}
 
 \item{\code{optimal_tree_method = "best"}: This method selects one tree among with
 the highest cophenetic correlation coefficient, representing the best fit

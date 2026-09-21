@@ -63,6 +63,81 @@ test_that("pair-enumeration cophenetic correlation equals tree_eval for any link
   }
 })
 
+# Can a worker process build a tree with the version of the package under test?
+# A worker loads the *installed* bioregion, so during development it may be an
+# older one that does not have the pieces these tests are about, and there is
+# then nothing to check rather than something to fail.
+workers_can_build <- function() {
+  if (!requireNamespace("parallel", quietly = TRUE)) return(FALSE)
+  cl <- tryCatch(parallel::makePSOCKcluster(1), error = function(e) NULL)
+  if (is.null(cl)) return(FALSE)
+  on.exit(try(parallel::stopCluster(cl), silent = TRUE))
+  isTRUE(tryCatch(
+    parallel::clusterEvalQ(cl, {
+      requireNamespace("bioregion", quietly = TRUE) &&
+        exists("one_tree", envir = asNamespace("bioregion"))
+    })[[1]],
+    error = function(e) FALSE))
+}
+
+test_that("IHCT rejects impossible numbers of workers", {
+  d <- make_matrix(10)
+  expect_error(IHCT(d, n_workers = 0), "n_workers")
+  expect_error(IHCT(d, n_workers = -1), "n_workers")
+  expect_error(IHCT(d, n_workers = c(2, 3)), "n_workers")
+  expect_error(IHCT(d, n_workers = NA), "n_workers")
+  expect_error(IHCT(d, size_parallel = 1), "size_parallel")
+  expect_error(IHCT(d, size_parallel = NA), "size_parallel")
+})
+
+test_that("one worker means no pool at all", {
+  d <- make_matrix(10)
+  expect_null(start_workers(1, d, 200, verbose = FALSE))
+  expect_silent(stop_workers(NULL))
+  # and the runs then go down the path they always went down
+  set.seed(1); with_pool <- IHCT(d, n_runs = 5, n_workers = 1, verbose = FALSE)
+  set.seed(1); without <- IHCT(d, n_runs = 5, verbose = FALSE)
+  expect_identical(with_pool, without)
+})
+
+test_that("workers change the time, never the tree", {
+  skip_on_cran()
+  skip_if_not(workers_can_build(),
+              "the installed bioregion is older than the source tree")
+  d <- make_matrix(60, 80)
+  # size_parallel is low so that the groups really do go to the workers
+  for (method in c("average", "complete")) {
+    set.seed(8)
+    alone <- IHCT(d, method = method, n_runs = 15, n_workers = 1,
+                  size_parallel = 5, verbose = FALSE)
+    set.seed(8)
+    shared <- IHCT(d, method = method, n_runs = 15, n_workers = 2,
+                   size_parallel = 5, verbose = FALSE)
+    expect_identical(alone, shared)
+  }
+  # and the random numbers of this process carry on where they left off
+  set.seed(8); invisible(IHCT(d, n_runs = 15, n_workers = 1, size_parallel = 5,
+                              verbose = FALSE))
+  after_alone <- get(".Random.seed", envir = globalenv())
+  set.seed(8); invisible(IHCT(d, n_runs = 15, n_workers = 2, size_parallel = 5,
+                              verbose = FALSE))
+  expect_identical(after_alone, get(".Random.seed", envir = globalenv()))
+})
+
+test_that("size_parallel moves work between processes without moving the tree", {
+  skip_on_cran()
+  skip_if_not(workers_can_build(),
+              "the installed bioregion is older than the source tree")
+  d <- make_matrix(50, 80)
+  set.seed(9)
+  all_shared <- IHCT(d, n_runs = 10, n_workers = 2, size_parallel = 5,
+                     verbose = FALSE)
+  set.seed(9)
+  none_shared <- IHCT(d, n_runs = 10, n_workers = 2, size_parallel = 1e6,
+                      verbose = FALSE)
+  expect_identical(all_shared, none_shared)
+})
+
 test_that("ihct_shuffled_dist gives what as.dist of the shuffled sub-matrix gives", {
   d <- make_matrix(40)
   n <- nrow(d)

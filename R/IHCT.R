@@ -120,6 +120,9 @@
 # - For UPGMA, the cophenetic correlation of a tree is obtained from the merge
 #   sizes and heights only (see tree_fit_score), which avoids computing the
 #   full cophenetic matrix of every randomized tree.
+# - The randomized runs of a large group can be shared between worker processes
+#   (n_workers). The permutations are always drawn on this process, so the tree
+#   is the same however many workers there are (see start_workers).
 
 IHCT <- function(dist_mat,
                  method = "average",
@@ -129,6 +132,8 @@ IHCT <- function(dist_mat,
                  sites_drop = 10,
                  height_rule = c("least_squares", "max_child"),
                  tie_block_resolution = TRUE,
+                 n_workers = 1,
+                 size_parallel = 200,
                  verbose = TRUE) {
 
   # checked here rather than where it is used, at the end of the run
@@ -150,6 +155,15 @@ IHCT <- function(dist_mat,
       is.na(tie_block_resolution)) {
     stop("tie_block_resolution must be TRUE or FALSE.")
   }
+  if (length(n_workers) != 1 || is.na(n_workers) || !is.numeric(n_workers) ||
+      n_workers < 1) {
+    stop("n_workers must be a single number of processes, 1 or more.")
+  }
+  if (length(size_parallel) != 1 || is.na(size_parallel) ||
+      !is.numeric(size_parallel) || size_parallel < 2) {
+    stop("size_parallel must be a single number of sites, 2 or more.")
+  }
+  n_workers <- as.integer(n_workers)
   # Pruning a tree gives every node that lost sites the mean dissimilarity
   # between the two groups it still joins, which is the height UPGMA gives it;
   # the other linkage methods define their heights otherwise, so with them the
@@ -186,6 +200,11 @@ IHCT <- function(dist_mat,
   needs_fresh <- function(m, share, mark_share, mark_sites) {
     share <= keep_share * mark_share || (mark_sites - m) >= sites_drop
   }
+
+  # Worker processes for the randomized runs of the large groups, if asked for
+  # and if they can be had; NULL means every run is made here, one at a time.
+  workers <- start_workers(n_workers, dist_mat, size_parallel, verbose)
+  on.exit(stop_workers(workers), add = TRUE)
 
   # --- The tree under construction -------------------------------------------
   # One row per node (groups of sites and single sites alike), at most 2n - 1.
@@ -290,7 +309,8 @@ IHCT <- function(dist_mat,
         next
       }
       division <- divide_sites(dist_mat, sites, site_names, method, n_runs,
-                               top_n_trees, if (build_fresh) NULL else trees)
+                               top_n_trees, if (build_fresh) NULL else trees,
+                               workers)
       groups <- division$groups
       trees <- division$trees
     }
@@ -389,27 +409,128 @@ is_tied_block <- function(dist_mat, sites) {
   TRUE
 }
 
-# n_runs trees for a group of sites (integer positions), each built by
-# fastcluster on the dissimilarities of the group with its sites shuffled at
-# random, and scored by its fit to the dissimilarities.
+# One randomized tree: the group's dissimilarities with its sites in the order
+# `shuffled` gives, clustered, and scored by its fit to the dissimilarities.
 #
 # The shuffled dissimilarities are read straight out of `dist_mat` into the
 # vector fastcluster expects (ihct_shuffled_dist), and the score reads out of
-# `dist_mat` too, so the square sub-matrix of the group is never built. The
-# random draw, and therefore the trees, are the same as when it was.
-fresh_trees <- function(dist_mat, sites, method, n_runs) {
+# `dist_mat` too, so the square sub-matrix of the group is never built.
+one_tree <- function(shuffled, dist_mat, method) {
+  tree <- fastcluster::hclust(ihct_shuffled_dist(dist_mat, shuffled),
+                              method = method)
+  list(merge = tree$merge, height = tree$height,
+       pairs = ihct_node_sizes(tree$merge)$pairs,
+       leaf_site = shuffled,
+       score = tree_fit_score(tree, dist_mat, method, shuffled))
+}
+
+# n_runs trees for a group of sites (integer positions), each built on the
+# group's sites shuffled at random.
+#
+# The shuffles are drawn here, one after another, exactly as a single process
+# would draw them, and only the building of the trees is handed to the workers.
+# That is what makes the result independent of `n_workers`: the same seed gives
+# the same shuffles, hence the same trees, hence the same tree in the end.
+fresh_trees <- function(dist_mat, sites, method, n_runs, workers = NULL) {
   m <- length(sites)
-  trees <- vector("list", n_runs)
-  for (run in seq_len(n_runs)) {
-    shuffled <- sites[sample.int(m)]
-    tree <- fastcluster::hclust(ihct_shuffled_dist(dist_mat, shuffled),
-                                method = method)
-    trees[[run]] <- list(merge = tree$merge, height = tree$height,
-                         pairs = ihct_node_sizes(tree$merge)$pairs,
-                         leaf_site = shuffled,
-                         score = tree_fit_score(tree, dist_mat, method, shuffled))
+  shuffles <- lapply(seq_len(n_runs), function(run) sites[sample.int(m)])
+  if (is.null(workers) || m < workers$size_parallel) {
+    return(lapply(shuffles, one_tree, dist_mat = dist_mat, method = method))
+  }
+  # A worker must not disturb the random numbers of this process: the next
+  # group has to be drawn where this one left off, whoever built the trees.
+  seed_before <- if (exists(".Random.seed", globalenv())) {
+    get(".Random.seed", globalenv())
+  }
+  trees <- if (workers$kind == "fork") {
+    # a forked worker already sees this process's memory, matrix included
+    parallel::mclapply(shuffles, one_tree, dist_mat = dist_mat, method = method,
+                       mc.cores = workers$n)
+  } else {
+    # a worker of the socket pool was given the matrix once, when the pool was
+    # started; only the site numbers of each run travel now
+    parallel::parLapply(workers$cl, shuffles, one_tree_on_worker, method = method)
+  }
+  if (!is.null(seed_before)) assign(".Random.seed", seed_before, globalenv())
+  # a worker that failed returns the error instead of a tree
+  failed <- vapply(trees, inherits, TRUE, what = "try-error")
+  if (any(failed)) {
+    stop("Building the randomized trees on ", workers$n, " processes failed: ",
+         conditionMessage(attr(trees[[which(failed)[1]]], "condition")),
+         "\nRun again with n_workers = 1.", call. = FALSE)
   }
   trees
+}
+
+# What a worker of the socket pool runs. It lives here, at the top level of the
+# package, on purpose: a function defined inside fresh_trees() would carry that
+# call's variables -- the whole dissimilarity matrix among them -- to the
+# workers at every group, which is the cost the pool exists to avoid. Written
+# this way, only the function's name travels, and the matrix is the copy the
+# worker was given once (see start_workers).
+one_tree_on_worker <- function(shuffled, method) {
+  one_tree(shuffled, get(".ihct_dist_mat", envir = globalenv()), method)
+}
+
+# A pool of worker processes for the randomized runs, or NULL when they are all
+# to be made on this process.
+#
+# The two families of operating systems need different pools. On Unix a worker
+# is a fork of this process: it already sees the dissimilarity matrix and
+# nothing has to be set up. On Windows there is no fork, so the workers are
+# fresh R processes, and each is given the matrix once, here, rather than at
+# every group -- which is why a large matrix costs as much memory again per
+# worker.
+#
+# Anything that goes wrong (the parallel package missing, sockets refused,
+# which happens on managed installations, the package not loadable in a worker)
+# is reported once and the runs are simply made here instead. The trees do not
+# depend on this, only the time they take.
+start_workers <- function(n_workers, dist_mat, size_parallel, verbose) {
+  if (n_workers <= 1) return(NULL)
+  give_up <- function(why) {
+    warning("The randomized trees are built one after another on this ",
+            "process: ", why, " Set n_workers = 1 to silence this.",
+            call. = FALSE)
+    NULL
+  }
+  if (!requireNamespace("parallel", quietly = TRUE)) {
+    return(give_up("the parallel package is not installed."))
+  }
+  if (.Platform$OS.type != "windows") {
+    return(list(kind = "fork", n = n_workers, cl = NULL,
+                size_parallel = size_parallel))
+  }
+  cl <- tryCatch(parallel::makePSOCKcluster(n_workers), error = function(e) e)
+  if (inherits(cl, "error")) {
+    return(give_up(paste0("the worker processes could not be started (",
+                          conditionMessage(cl), ").")))
+  }
+  ready <- tryCatch({
+    parallel::clusterEvalQ(cl, library(bioregion))
+    # the matrix goes to the workers once, under a name of our own
+    holder <- new.env(parent = emptyenv())
+    assign(".ihct_dist_mat", dist_mat, envir = holder)
+    parallel::clusterExport(cl, ".ihct_dist_mat", envir = holder)
+    TRUE
+  }, error = function(e) e)
+  if (inherits(ready, "error")) {
+    parallel::stopCluster(cl)
+    return(give_up(paste0("the workers could not be prepared (",
+                          conditionMessage(ready), ").")))
+  }
+  if (verbose) {
+    message("Randomized trees for groups of ", size_parallel, " sites or more ",
+            "are built on ", n_workers, " processes.")
+  }
+  list(kind = "socket", n = n_workers, cl = cl, size_parallel = size_parallel)
+}
+
+stop_workers <- function(workers) {
+  if (!is.null(workers) && workers$kind == "socket") {
+    try(parallel::stopCluster(workers$cl), silent = TRUE)
+  }
+  invisible(NULL)
 }
 
 # Pass a group's trees down to one of its two halves: every tree is pruned to
@@ -428,13 +549,21 @@ prune_trees <- function(trees, keep, dist_mat) {
 }
 
 # Divide a group of sites (integer positions) in two, from n_runs candidate
-# trees: the ones given in `trees`, or fresh ones when it is NULL. Returns the
-# two groups, each sorted by site name, and the trees the division was read
-# from, which the two groups may inherit.
+# trees: the ones given in `trees`, or fresh ones when it is NULL, built on the
+# worker processes of `workers` if the group is large enough for that to pay.
+# Returns the two groups, each sorted by site name, and the trees the division
+# was read from, which the two groups may inherit.
+#
+# The random draw of a division happens here, inside this call, and not in the
+# loop that decides when to rebuild: that is what lets a caller record the
+# state of the random numbers before a division and replay it afterwards, which
+# is how the tests recover which randomized trees a division was read from.
 divide_sites <- function(dist_mat, sites, site_names, method, n_runs,
-                         top_n_trees, trees = NULL) {
+                         top_n_trees, trees = NULL, workers = NULL) {
   m <- length(sites)
-  if (is.null(trees)) trees <- fresh_trees(dist_mat, sites, method, n_runs)
+  if (is.null(trees)) {
+    trees <- fresh_trees(dist_mat, sites, method, n_runs, workers)
+  }
 
   # 1. keep the best trees (in case of equal scores, the first runs)
   scores <- vapply(trees, function(tree) tree$score, 0)

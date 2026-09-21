@@ -1036,3 +1036,35 @@ test_that("IHCT_variation_drop reaches IHCT and is reported", {
   expect_gt(inherited$algorithm$final.tree.coph.cor,
             old_way$algorithm$final.tree.coph.cor - 0.01)
 })
+
+
+test_that("large matrices are told about IHCT_sites_drop = Inf", {
+  # A matrix whose dissimilarities are all the same value is resolved in one
+  # step, without any randomization, so a matrix large enough to trigger the
+  # message costs almost nothing to cluster here.
+  flat <- function(n) {
+    d <- matrix(0.5, n, n)
+    diag(d) <- 0
+    dimnames(d) <- list(sprintf("s%05d", seq_len(n)), sprintf("s%05d", seq_len(n)))
+    stats::as.dist(d)
+  }
+  advice <- "IHCT_sites_drop = Inf"
+  # The tree of a matrix like this has one height throughout, so there is no
+  # variation for a cophenetic correlation to be computed from and no way to
+  # cut it into two groups. Both complain, and neither has anything to do with
+  # what is being tested here, so the tree is left uncut and the warnings are
+  # set aside.
+  run <- function(...) suppressWarnings(hclu_hierarclust(n_runs = 1, ...))
+
+  # the message is about the size of the matrix
+  expect_message(run(flat(2010)), advice)
+  expect_no_message(run(flat(2000)), message = advice)
+
+  # ...and only when the rule it is about is doing anything
+  expect_no_message(run(flat(2010), IHCT_sites_drop = Inf), message = advice)
+  expect_no_message(run(flat(2010), IHCT_variation_drop = 0), message = advice)
+  # the rebuild rules only apply to average linkage
+  expect_no_message(run(flat(2010), method = "complete"), message = advice)
+  # and it is a message, so verbose switches it off
+  expect_no_message(run(flat(2010), verbose = FALSE), message = advice)
+})
