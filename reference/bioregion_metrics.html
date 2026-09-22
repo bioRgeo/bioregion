@@ -42,10 +42,6 @@ spatial coherence can be optionally computed if a spatial object is provided."><
     <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/citations.html">Citing articles</a></li>
-  </ul></li>
-<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
     <li><a class="external-link dropdown-item" href="https://github.com/bioRgeo/bioregion/releases/tag/v1.4.0">Version 1.4.0</a></li>
@@ -109,13 +105,13 @@ The first attribute or layer should correspond to the sites' ID
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>data.frame</code> with 5 columns (Bioregion ID and metrics described below) or
-7 if spatial coherence is computed.</p><ul><li><p><strong>NbSites</strong>: Number of sites per bioregion</p></li>
-<li><p><strong>Richness</strong>: Number of distinct species per bioregion.</p></li>
-<li><p><strong>Rich_Endemics</strong>: Number of species found only in the bioregion.</p></li>
-<li><p><strong>Prop_Endemics</strong>: Fraction of endemics species.</p></li>
-<li><p><a href="https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence" class="external-link"><strong>SC_size</strong></a>:
+7 if spatial coherence is computed.</p><ul><li><p><strong>n_sites</strong>: Number of sites per bioregion</p></li>
+<li><p><strong>richness</strong>: Number of distinct species per bioregion.</p></li>
+<li><p><strong>rich_endemics</strong>: Number of species found only in the bioregion.</p></li>
+<li><p><strong>prop_endemics</strong>: Fraction of endemics species.</p></li>
+<li><p><a href="https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence" class="external-link"><strong>sc_size</strong></a>:
 Spatial coherence based on size, fraction of the number of site contained in the bioregion's largest contiguous patch.</p></li>
-<li><p><a href="https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence" class="external-link"><strong>SC_area</strong></a>:
+<li><p><a href="https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence" class="external-link"><strong>sc_area</strong></a>:
 Spatial coherence based on area, fraction of the bioregion area contained in its largest contiguous patch.</p></li>
 </ul><p>Note that if <code>bioregionalization</code> contains multiple partitions
 (i.e., if <code>dim(bioregionalization$clusters) &gt; 2</code>), a list will be
@@ -130,15 +126,15 @@ returned.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>For more details illustrated with a practical example,
 see the vignette:
-<a href="https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html</a>.</p>
+<a href="https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion" class="external-link">https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion</a>.</p>
 <p>Associated functions:
 <a href="site_species_metrics.html">site_species_metrics</a> <a href="bioregionalization_metrics.html">bioregionalization_metrics</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>) <br>
-Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>) <br>
-Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>)</p>
+    <p>Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@inrae.fr</a>) <br>
+Pierre Denelle (<a href="mailto:pierre.denelle@gmail.com">pierre.denelle@gmail.com</a>) <br>
+Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</p>
     </div>
 
     <div class="section level2">
@@ -152,7 +148,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">bioregion_metrics</span><span class="op">(</span>bioregionalization <span class="op">=</span> <span class="va">clust</span>, </span></span>
 <span class="r-in"><span>                  comat <span class="op">=</span> <span class="va">comat</span><span class="op">)</span> </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Bioregion NbSites Richness Rich_Endemics Prop_Endemics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bioregion n_sites richness rich_endemics prop_endemics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         1       5       10            10             1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

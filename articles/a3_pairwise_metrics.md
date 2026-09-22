@@ -72,7 +72,7 @@ to handle co-occurrence matrix with a large number of sites and/or
 species.
 
 The second kind of metrics such as Bray-Curtis and the turnover
-component of Bray-Curtis (Baselga, 2012) are based on abundance data
+component of Bray-Curtis (Baselga, 2013) are based on abundance data
 with \\A\\ the sum of the lesser values for common species shared by a
 pair of sites. \\B\\ and \\C\\ are the total number of specimens counted
 at both sites minus \\A\\. Only three loops function is available for
@@ -446,21 +446,21 @@ comp_j
 
     ## Unit: milliseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 370.345862 380.390821 382.104360 381.728988 387.134188
-    ##        betapart   1.737504   1.867456   1.936809   1.924225   1.954595
-    ##       bioregion  14.440248  15.112824  16.984381  15.584658  16.071444
-    ##    ecodist_dist 139.444967 162.844204 161.966290 166.469995 168.681150
-    ##  ecodist_bcdist   3.904884   4.240751   4.249565   4.289103   4.308011
-    ##       vegan_veg   1.342719   1.451360   2.084140   2.435137   2.461786
-    ##    vegan_design   1.324242   1.330761   1.411749   1.393484   1.406373
+    ##      adespatial 284.975426 285.499855 288.538976 289.071690 289.462740
+    ##        betapart   1.669264   1.807282   1.897866   1.839402   1.965177
+    ##       bioregion   9.583934  11.229355  15.632511  15.892803  17.072159
+    ##    ecodist_dist 122.983621 126.790526 152.837472 163.454234 165.989545
+    ##  ecodist_bcdist   3.361293   3.574210   3.598349   3.630014   3.637818
+    ##       vegan_veg   1.226268   1.289216   1.973602   2.353683   2.372157
+    ##    vegan_design   1.264580   1.287403   1.368142   1.319748   1.373974
     ##         max neval
-    ##  389.167170    10
-    ##    2.324873    10
-    ##   29.692739    10
-    ##  169.880646    10
-    ##    4.347409    10
-    ##    2.505872    10
-    ##    1.781319    10
+    ##  294.541969    10
+    ##    2.390030    10
+    ##   26.982593    10
+    ##  170.516854    10
+    ##    3.689174    10
+    ##    2.395119    10
+    ##    1.782697    10
 
 On this very small example, the functions from
 [vegan](https://cran.r-project.org/package=vegan) outperform the others
@@ -560,21 +560,21 @@ comp_bc
 
     ## Unit: milliseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 367.074538 367.933189 377.267609 379.435261 382.667993
-    ##        betapart 297.285290 314.129158 324.167720 318.240577 336.929709
-    ##       bioregion  11.718947  11.967155  12.638151  12.155043  12.613001
-    ##    ecodist_dist  94.049791  97.093248 143.584659 105.262858 120.833151
-    ##  ecodist_bcdist   6.639133   6.664211   6.870140   6.893180   7.071063
-    ##       vegan_veg   1.325053   1.363960   1.803075   1.421310   2.430190
-    ##    vegan_design   1.275219   1.366474   1.504754   1.437744   1.775079
+    ##      adespatial 282.266311 290.825102 292.490723 293.014313 295.863615
+    ##        betapart 300.299803 311.992423 327.554448 316.112166 348.904474
+    ##       bioregion  10.273242  10.438971  11.288525  10.659417  10.822336
+    ##    ecodist_dist  86.705312  87.186019 126.979980  94.536601 121.513228
+    ##  ecodist_bcdist   6.013742   6.024552   6.117398   6.087240   6.244292
+    ##       vegan_veg   1.212764   1.248339   1.691696   1.293073   2.344585
+    ##    vegan_design   1.219125   1.263348   1.434647   1.353476   1.713247
     ##         max neval
-    ##  391.728633    10
-    ##  354.668142    10
-    ##   14.768274    10
-    ##  471.216656    10
-    ##    7.085505    10
-    ##    2.480334    10
-    ##    1.796991    10
+    ##  300.050779    10
+    ##  366.445168    10
+    ##   14.214365    10
+    ##  359.308790    10
+    ##    6.279848    10
+    ##    2.385902    10
+    ##    1.732964    10
 
 The functions from [vegan](https://cran.r-project.org/package=vegan)
 continue to outperform the others. They are again followed by `bcdist`,
@@ -1293,3 +1293,7 @@ dissim[1:10,]
 Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. *Global Ecology
 and Biogeography* 21, 1223–1232.
+
+Baselga A (2013) Separating the two components of abundance-based
+dissimilarity: Balanced changes in abundance vs. Abundance gradients.
+*Methods in Ecology and Evolution* 4, 552–557.

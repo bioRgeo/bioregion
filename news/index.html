@@ -37,10 +37,6 @@
     <li><a class="dropdown-item" href="../articles/a5_2_summary_metrics.html">5.2 Summary metrics</a></li>
     <li><a class="dropdown-item" href="../articles/a5_3_compare_bioregionalizations.html">5.3 Compare bioregionalizations</a></li>
   </ul></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications"><li><a class="dropdown-item" href="../articles/citations.html">Citing articles</a></li>
-  </ul></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
@@ -70,7 +66,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0.9000" id="bioregion-1409000">bioregion 1.4.0.9000<a class="anchor" aria-label="anchor" href="#bioregion-1409000"></a></h2>
 <p>This is a list of changes made in the development/GitHub version of the package between <strong>bioregion 1.4.0</strong> (CRAN release 2026-03-29) and the next CRAN release.</p>
-<ul><li>Relaxed matching controls in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> and <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code>.</li>
+<ul><li><p>Metric names have been changed to snake_case in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>, <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code> and <code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code>. The package is being progressively standardized on snake_case metric names. Old metric names are still accepted as inputs but are converted to snake_case in outputs.</p></li>
+<li><p><code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> has been updated. <code>bioregionalizations</code>argument changed to <code>evaluation_df</code>.</p></li>
+<li><p><code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> has been updated. The <code>anosim</code> metric (along with the associated p-value) is now computed with <code>vegan</code>. The <code>eval_metric</code> argument changed to <code>eval_metrics</code> and <code>net</code> to <code>comat</code>. <code>col_sites</code>, and<br><code>col_species</code> arguments are now deprecated.</p></li>
+<li><p>Relaxed matching controls in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> and <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="bioregion-140">bioregion 1.4.0<a class="anchor" aria-label="anchor" href="#bioregion-140"></a></h2>

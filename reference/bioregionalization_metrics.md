@@ -1,21 +1,23 @@
-# Calculate metrics for one or several bioregionalizations
+# Calculate metrics for a bioregionalization
 
-This function calculates metrics for one or several bioregionalizations,
-typically based on outputs from `netclu_`, `hclu_`, or `nhclu_`
-functions. Some metrics may require users to provide either a similarity
-or dissimilarity matrix, or the initial species-site table.
+This function calculates metrics at the bioregionalization level. These
+evaluation metrics can be used to assess and select a partition based on
+the optimal number of clusters.
 
 ## Usage
 
 ``` r
 bioregionalization_metrics(
   bioregionalization,
-  dissimilarity = NULL,
-  dissimilarity_index = NULL,
+  eval_metrics = c("prop_between_dissim", "Anosim"),
+  dissimilarity,
+  dissimilarity_index = names(dissimilarity)[3],
+  comat = NULL,
+  anosim_permutations = 1,
+  eval_metric = NULL,
   net = NULL,
-  site_col = 1,
-  species_col = 2,
-  eval_metric = "all"
+  site_col = NULL,
+  species_col = NULL
 )
 ```
 
@@ -25,101 +27,89 @@ bioregionalization_metrics(
 
   A `bioregion.clusters` object.
 
+- eval_metrics:
+
+  A `character` vector or a single `character` string indicating the
+  metric(s) to be calculated. Available options are
+  `"prop_between_dissim"`, `"anosim"`, `"mean_endemics"` or
+  `"tot_endemics"`. Use `"all"` to compute all available metrics. See
+  Details for metric descriptions.
+
 - dissimilarity:
 
-  A `dist` object or a `bioregion.pairwise` object (output from
-  [`similarity_to_dissimilarity()`](https://bioRgeo.github.io/bioregion/reference/similarity_to_dissimilarity.md)).
-  Required if `eval_metric` includes `"pc_distance"` and `tree` is not a
-  `bioregion.hierar.tree` object.
+  A site-by-site dissimilarity object from
+  [`dissimilarity()`](https://bioRgeo.github.io/bioregion/reference/dissimilarity.md)
+  or
+  [`dissimilarity_to_similarity()`](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.md).
+  Required only for `"prop_between_dissim"` and `"anosim"`.
 
 - dissimilarity_index:
 
-  A `character` string indicating the dissimilarity (beta-diversity)
-  index to use if dissimilarity is a `data.frame` with multiple
-  dissimilarity indices.
+  The name or number of the column to use as dissimilarity. By default,
+  the third column name of `dissimilarity` is used.
 
-- net:
+- comat:
 
-  The site-species network (i.e., bipartite network). Should be provided
-  as a `data.frame` if `eval_metric` includes `"avg_endemism"` or
+  A site-species `matrix` with sites as rows and species as columns.
+  Should be provided if `eval_metrics` includes `"avg_endemism"` or
   `"tot_endemism"`.
 
-- site_col:
+- anosim_permutations:
 
-  The name or index of the column representing site nodes (i.e., primary
-  nodes). Should be provided if `eval_metric` includes `"avg_endemism"`
-  or `"tot_endemism"`.
-
-- species_col:
-
-  The name or index of the column representing species nodes (i.e.,
-  feature nodes). Should be provided if `eval_metric` includes
-  `"avg_endemism"` or `"tot_endemism"`.
+  The number of permutations used to compute the p-value associated with
+  the ANOSIM statistic. Defaults to 1, in which case no p-value is
+  returned.
 
 - eval_metric:
 
-  A `character` vector or a single `character` string indicating the
-  metric(s) to be calculated to assess the effect of different numbers
-  of clusters. Available options are `"pc_distance"`, `"anosim"`,
-  `"avg_endemism"`, or `"tot_endemism"`. If `"all"` is specified, all
-  metrics will be calculated.
+  Deprecated.
+
+- net:
+
+  Deprecated.
+
+- site_col:
+
+  Deprecated.
+
+- species_col:
+
+  Deprecated.
 
 ## Value
 
-A `list` of class `bioregion.bioregionalization.metrics` with two to
-three elements:
-
-- `args`: Input arguments.
-
-- `evaluation_df`: A `data.frame` containing the `eval_metric` values
-  for all explored numbers of clusters.
-
-- `endemism_results`: If endemism calculations are requested, a list
-  with the endemism results for each bioregionalization.
+A `data.frame` containing the `eval_metrics` values for a
+bioregionalization and its partition(s).
 
 ## Details
 
 **Evaluation metrics:**
 
-- `pc_distance`: This metric, as used by Holt et al. (2013), is the
-  ratio of the between-cluster sum of dissimilarities (beta-diversity)
-  to the total sum of dissimilarities for the full dissimilarity matrix.
-  It is calculated in two steps:
+- [**prop_between_dissim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#prop_between_dissim):
+  The proportion of total dissimilarity occurring between bioregions,
+  following Holt et al. (2013), calculated as the sum of
+  between-bioregion dissimilarities divided by the total sum of
+  dissimilarities.
 
-  - Compute the total sum of dissimilarities by summing all elements of
-    the dissimilarity matrix.
-
-  - Compute the between-cluster sum of dissimilarities by setting
-    within-cluster dissimilarities to zero and summing the matrix. The
-    `pc_distance` ratio is obtained by dividing the between-cluster sum
-    of dissimilarities by the total sum of dissimilarities.
-
-- `anosim`: This metric is the statistic used in the Analysis of
-  Similarities, as described in Castro-Insua et al. (2018). It compares
-  between-cluster and within-cluster dissimilarities. The statistic is
-  computed as: R = (r_B - r_W) / (N (N-1) / 4), where r_B and r_W are
-  the average ranks of between-cluster and within-cluster
-  dissimilarities, respectively, and N is the total number of sites.
-  Note: This function does not estimate significance; for significance
-  testing, use
+- [**anosim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#anosim):
+  The Analysis of Similarities (ANOSIM) statistic, based on
   [vegan::anosim()](https://vegandevs.github.io/vegan/reference/anosim.html).
+  It measures the separation between within- and between-bioregion
+  dissimilarities. When `permutation > 1`, a p-value is calculated using
+  permutation testing.
 
-- `avg_endemism`: This metric is the average percentage of endemism in
-  clusters, as recommended by Kreft & Jetz (2010). It is calculated as:
-  End_mean = sum_i (E_i / S_i) / K, where E_i is the number of endemic
-  species in cluster i, S_i is the number of species in cluster i, and K
-  is the total number of clusters.
+- [**mean_endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#mean_endemics):
+  The mean proportion of endemic species across bioregions, following
+  Kreft & Jetz (2010). For each bioregion, the proportion of endemic
+  species is calculated and then averaged across bioregions.
 
-- `tot_endemism`: This metric is the total endemism across all clusters,
-  as recommended by Kreft & Jetz (2010). It is calculated as: End_tot =
-  E / C, where E is the total number of endemic species (i.e., species
-  found in only one cluster) and C is the number of non-endemic species.
+- [**tot_endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#tot_endemics):
+  The proportion of endemic species across all bioregion. It is
+  calculated as the total number of endemic species divided by the total
+  number of species. Endemic species are those occurring in only one
+  bioregion.
 
 ## References
-
-Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity
-measures affected by richness differences yield biased delimitations of
-biogeographic realms. *Nature Communications* 9, 9-11.
 
 Holt BG, Lessard J, Borregaard MK, Fritz SA, Araújo MB, Dimitrov D,
 Fabre P, Graham CH, Graves GR, Jønsson Ka, Nogués-Bravo D, Wang Z,
@@ -133,7 +123,7 @@ regions based on species distributions. *Journal of Biogeography* 37,
 ## See also
 
 For more details illustrated with a practical example, see the vignette:
-<https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html#optimaln>.
+<https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregionalization>.
 
 Associated functions:
 [compare_bioregionalizations](https://bioRgeo.github.io/bioregion/reference/compare_bioregionalizations.md)
@@ -153,60 +143,32 @@ comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
 rownames(comat) <- paste0("Site",1:20)
 colnames(comat) <- paste0("Species",1:25)
 
-comnet <- mat_to_net(comat)
-
 dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
-tree1 <- hclu_hierarclust(dissim, 
-                          n_clust = 10:15, 
-                          index = "Simpson")
-#> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
-#> 
-#> Final tree has a 0.4889 cophenetic correlation coefficient with the initial dissimilarity matrix
-#> Determining the cut height to reach 10 groups...
-#> --> 0.046875
-#> Determining the cut height to reach 11 groups...
-#> --> 0.0390625
-#> Determining the cut height to reach 12 groups...
-#> --> 0.03125
-#> Determining the cut height to reach 13 groups...
-#> --> 0.0234375
-#> Determining the cut height to reach 14 groups...
-#> --> 0.015625
-#> Determining the cut height to reach 15 groups...
-#> --> 3.0549363634996e-151
+bioreg <- hclu_hierarclust(dissim, 
+                           n_clust = 10:15, 
+                           index = "Simpson",
+                           verbose = FALSE)
 #> Warning: The requested number of cluster could not be found for k = 15. Closest number found: 14
-tree1
-#> Clustering results for algorithm : hclu_hierarclust 
-#>  (hierarchical clustering based on a dissimilarity matrix)
-#>  - Number of sites:  20 
-#>  - Name of dissimilarity metric:  Simpson 
-#>  - Tree construction method:  average 
-#>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
-#>  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-#>  - Cophenetic correlation coefficient:  0.489 
-#>  - Number of clusters requested by the user:  10 
-#> Clustering results:
-#>  - Number of partitions:  6 
-#>  - Partitions are hierarchical
-#>  - Number of clusters:  10 11 12 13 14 14 
-#>  - Height of cut of the hierarchical tree: 0.047 0.039 0.031 0.023 0.016 0 
 
-a <- bioregionalization_metrics(tree1, 
-                                dissimilarity = dissim, 
-                                net = comnet,
-                                site_col = "Node1", 
-                                species_col = "Node2",
-                                eval_metric = c("tot_endemism", 
-                                                "avg_endemism",
-                                                "pc_distance", 
-                                                "anosim"))
-#> Computing similarity-based metrics...
-#>   - pc_distance OK
-#>   - anosim OK
-#> Computing composition-based metrics...
-#>   - avg_endemism OK
-#>   - tot_endemism OK
-                                                
+met <- bioregionalization_metrics(bioreg,
+                                  eval_metrics = "all",
+                                  dissimilarity = dissim,
+                                  comat = comat)
+met
+#>   partition n_bioregions prop_between_dissim    anosim mean_endemics
+#> 1      K_10           10           0.9481112 0.6405984             0
+#> 2      K_11           11           0.9573228 0.6034903             0
+#> 3      K_12           12           0.9679755 0.6109700             0
+#> 4      K_13           13           0.9768659 0.6856967             0
+#> 5    K_14_1           14           0.9821236 0.6588603             0
+#> 6    K_14_2           14           0.9821236 0.6588603             0
+#>   tot_endemics
+#> 1            0
+#> 2            0
+#> 3            0
+#> 4            0
+#> 5            0
+#> 6            0
 ```

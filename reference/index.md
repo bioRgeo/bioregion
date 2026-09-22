@@ -99,10 +99,9 @@
 - [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
   : Calculate metrics for bioregions
 - [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md)
-  : Calculate metrics for one or several bioregionalizations
+  : Calculate metrics for a bioregionalization
 - [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
-  : Search for an optimal number of clusters in a list of
-  bioregionalizations
+  : Search for an optimal number of bioregions in a bioregionalization
 - [`compare_bioregionalizations()`](https://bioRgeo.github.io/bioregion/reference/compare_bioregionalizations.md)
   : Compare cluster memberships among multiple bioregionalizations
 

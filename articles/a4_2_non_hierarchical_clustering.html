@@ -59,12 +59,6 @@
   </ul>
 </li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-applications" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Applications</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-applications">
-<li><a class="dropdown-item" href="../articles/citations.html">Citing articles</a></li>
-  </ul>
-</li>
-<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news">
 <li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
@@ -100,7 +94,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2026-07-21</h4>
+            <h4 data-toc-skip class="date">2026-09-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_2_non_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_2_non_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_2_non_hierarchical_clustering.Rmd</code></div>
@@ -487,54 +481,65 @@ bioregions structuring the site-species matrix.</p>
 <p><code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> calcultes several metrics
 based on the previous clustering attempts.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>,</span>
-<span>                           eval_metric <span class="op">=</span> <span class="st">"pc_distance"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Partition metrics:</span></span>
-<span><span class="co">##  - 24  partition(s) evaluated</span></span>
-<span><span class="co">##  - Range of clusters explored: from  2  to  25 </span></span>
-<span><span class="co">##  - Requested metric(s):  pc_distance </span></span>
-<span><span class="co">##  - Metric summary:</span></span>
-<span><span class="co">##      pc_distance</span></span>
-<span><span class="co">## Min    0.5464742</span></span>
-<span><span class="co">## Mean   0.8022971</span></span>
-<span><span class="co">## Max    0.8949633</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Access the data.frame of metrics with your_object$evaluation_df</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, </span>
+<span>                           eval_metrics <span class="op">=</span> <span class="st">"prop_between_dissim"</span>,</span>
+<span>                           dissimilarity <span class="op">=</span> <span class="va">dissim</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      partition n_bioregions prop_between_dissim</span></span>
+<span><span class="co">## K_2        K_2            2           0.5464742</span></span>
+<span><span class="co">## K_3        K_3            3           0.6990204</span></span>
+<span><span class="co">## K_4        K_4            4           0.6169429</span></span>
+<span><span class="co">## K_5        K_5            5           0.8011952</span></span>
+<span><span class="co">## K_6        K_6            6           0.8110943</span></span>
+<span><span class="co">## K_7        K_7            7           0.8409687</span></span>
+<span><span class="co">## K_8        K_8            8           0.8436454</span></span>
+<span><span class="co">## K_9        K_9            9           0.7656336</span></span>
+<span><span class="co">## K_10      K_10           10           0.7818119</span></span>
+<span><span class="co">## K_11      K_11           11           0.7821537</span></span>
+<span><span class="co">## K_12      K_12           12           0.7827123</span></span>
+<span><span class="co">## K_13      K_13           13           0.7813637</span></span>
+<span><span class="co">## K_14      K_14           14           0.7857775</span></span>
+<span><span class="co">## K_15      K_15           15           0.8817548</span></span>
+<span><span class="co">## K_16      K_16           16           0.7874855</span></span>
+<span><span class="co">## K_17      K_17           17           0.8822984</span></span>
+<span><span class="co">## K_18      K_18           18           0.8024194</span></span>
+<span><span class="co">## K_19      K_19           19           0.8823401</span></span>
+<span><span class="co">## K_20      K_20           20           0.8949633</span></span>
+<span><span class="co">## K_21      K_21           21           0.8810018</span></span>
+<span><span class="co">## K_22      K_22           22           0.8853041</span></span>
+<span><span class="co">## K_23      K_23           23           0.8629863</span></span>
+<span><span class="co">## K_24      K_24           24           0.7882333</span></span>
+<span><span class="co">## K_25      K_25           25           0.8675503</span></span></code></pre>
 <p>*Note For the two metrics <code>tot_endemism</code> and
 <code>avg_endemism</code>, you also need to provide the site-species
 matrix.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, dissimilarity <span class="op">=</span> <span class="va">dissim</span>, net <span class="op">=</span> <span class="va">fishdf</span>,</span>
-<span>                                species_col <span class="op">=</span> <span class="st">"Species"</span>, site_col <span class="op">=</span> <span class="st">"Site"</span>,</span>
-<span>                                eval_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tot_endemism"</span>, <span class="st">"avg_endemism"</span>,</span>
-<span>                                                <span class="st">"pc_distance"</span>, <span class="st">"anosim"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics</a></span><span class="op">(</span><span class="va">ex_pam</span>, </span>
+<span>                                eval_metrics <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>                                dissimilarity <span class="op">=</span> <span class="va">dissim</span>, </span>
+<span>                                comat <span class="op">=</span> <span class="va">fishmat</span><span class="op">)</span></span></code></pre></div>
 <p>Once the <code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> function has
 calculated the partitioning metrics, we can call
 <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> to get the optimal number of clusters.
 <br></p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of bioregionalizations: 24</span></span></code></pre>
+<pre><code><span><span class="co">## Number of partitions: 24</span></span></code></pre>
 <pre><code><span><span class="co">## Searching for potential optimal number(s) of clusters based on the elbow method</span></span></code></pre>
 <pre><code><span><span class="co">##    * elbow found at:</span></span></code></pre>
-<pre><code><span><span class="co">## tot_endemism 4</span></span>
-<span><span class="co">## avg_endemism 4</span></span>
-<span><span class="co">## pc_distance 7</span></span>
-<span><span class="co">## anosim 2</span></span></code></pre>
+<pre><code><span><span class="co">## prop_between_dissim 7</span></span>
+<span><span class="co">## anosim 2</span></span>
+<span><span class="co">## mean_endemics 4</span></span>
+<span><span class="co">## tot_endemics 4</span></span></code></pre>
 <pre><code><span><span class="co">## Plotting results...</span></span></code></pre>
 <p><img src="a4_2_non_hierarchical_clustering_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="576"></p>
 <pre><code><span><span class="co">## Search for an optimal number of clusters:</span></span>
 <span><span class="co">##  - 24  partition(s) evaluated</span></span>
 <span><span class="co">##  - Range of clusters explored: from  2  to  25 </span></span>
-<span><span class="co">##  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim </span></span>
+<span><span class="co">##  - Evaluated metric(s):  prop_between_dissim anosim mean_endemics tot_endemics </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
-<span><span class="co">## tot_endemism - 4</span></span>
-<span><span class="co">## avg_endemism - 4</span></span>
-<span><span class="co">## pc_distance - 7</span></span>
-<span><span class="co">## anosim - 2</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
 <p>Based on the metric selected, the optimal number of clusters can
 vary.</p>
 </div>

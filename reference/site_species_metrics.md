@@ -11,9 +11,9 @@ clusters), or both.
 ``` r
 site_species_metrics(
   bioregionalization,
-  bioregion_metrics = c("Specificity", "NSpecificity", "Fidelity", "IndVal", "NIndVal",
-    "Rho"),
-  bioregionalization_metrics = "P",
+  bioregion_metrics = c("specificity", "n_specificity", "fidelity", "ind_val",
+    "n_ind_val", "rho"),
+  bioregionalization_metrics = "p",
   data_type = "auto",
   cluster_on = "site",
   comat,
@@ -37,15 +37,15 @@ site_species_metrics(
   type of clustering (see arg `cluster_on`):
 
   - **When sites are clustered into bioregions** (default case):
-    species-level metrics include `"Specificity"`, `"NSpecificity"`,
-    `"Fidelity"`, `"IndVal"`, `"NIndVal"`, `"Rho"`, and `"CoreTerms"`.
-    Site-level metrics include `"Richness"`, `"Rich_Endemics"`,
-    `"Prop_Endemics"`, `"MeanSim"`, and `"SdSim"`.
+    species-level metrics include `"specificity"`, `"n_specificity"`,
+    `"fidelity"`, `"ind_val"`, `"n_ind_val"`, `"rho"`, and
+    `"core_terms"`. Site-level metrics include `"richness"`,
+    `"rich_endemics"`, `"prop_endemics"`, `"mean_sim"`, and `"sd_sim"`.
 
   - **When species are clustered into chorotypes** (e.g., bipartite
-    network clustering): site-level metrics include `"Specificity"`,
-    `"NSpecificity"`, `"Fidelity"`, `"IndVal"`, `"NIndVal"`, `"Rho"`,
-    and `"CoreTerms"`.
+    network clustering): site-level metrics include `"specificity"`,
+    `"n_specificity"`, `"fidelity"`, `"ind_val"`, `"n_ind_val"`,
+    `"rho"`, and `"core_terms"`.
 
   Use `"all"` to compute all available metrics. See Details for metric
   descriptions.
@@ -57,11 +57,11 @@ site_species_metrics(
   entity (species or site) is distributed across the entire
   bioregionalization, rather than relative to each individual cluster:
 
-  - `"P"`: Participation coefficient measuring how evenly a species or
+  - `"p"`: Participation coefficient measuring how evenly a species or
     site is distributed across clusters (0 = restricted to one cluster,
     1 = evenly spread).
 
-  - `"Silhouette"`: How well a site fits its assigned bioregion compared
+  - `"silhouette"`: How well a site fits its assigned bioregion compared
     to the nearest alternative bioregion (requires similarity data).
 
   Use `"all"` to compute all available metrics.
@@ -70,8 +70,8 @@ site_species_metrics(
 
   A `character` string specifying whether metrics should be computed
   based on presence/absence (`"occurrence"`) or abundance values
-  (`"abundance"`). This affects how Specificity, Fidelity, IndVal, Rho
-  and CoreTerms are calculated:
+  (`"abundance"`). This affects how specificity, fidelity, ind_val, rho
+  and core_terms are calculated:
 
   - `"auto"` (default): Automatically detected from input data
     (`bioregionalization` and/or `comat`).
@@ -111,8 +111,8 @@ site_species_metrics(
   [`similarity()`](https://bioRgeo.github.io/bioregion/reference/similarity.md)
   or
   [`dissimilarity_to_similarity()`](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.md).
-  Required only for similarity-based metrics (`"MeanSim"`, `"SdSim"`,
-  `"Silhouette"`).
+  Required only for similarity-based metrics (`"mean_sim"`, `"sd_sim"`,
+  `"silhouette"`).
 
 - include_cluster:
 
@@ -139,7 +139,7 @@ selected metrics and clustering type:
 **When sites are clustered (`cluster_on = "site"`):**
 
 - **species_bioregions**: Metrics for each species x bioregion
-  combination (e.g., Specificity, IndVal). One row per species x
+  combination (e.g., specificity, ind_val). One row per species x
   bioregion pair.
 
 - **species_bioregionalization**: Summary metrics for each species
@@ -147,15 +147,15 @@ selected metrics and clustering type:
   species.
 
 - **site_bioregions**: Metrics for each site x bioregion combination
-  (e.g., MeanSim, Richness). One row per site x bioregion pair.
+  (e.g., mean_sim, richness). One row per site x bioregion pair.
 
 - **site_bioregionalization**: Summary metrics for each site (e.g.,
-  Silhouette). One row per site.
+  silhouette). One row per site.
 
 **When species are clustered (`cluster_on = "species"`):**
 
 - **site_chorotypes**: Metrics for each site x chorotype combination
-  (e.g., Specificity, IndVal). One row per site x chorotype pair.
+  (e.g., specificity, ind_val). One row per site x chorotype pair.
 
 - **site_chorological**: Summary metrics for each site across all
   chorotypes (e.g., Participation coefficient). One row per site.
@@ -220,53 +220,54 @@ Abundance version of these core terms can also be calculated when
 The species-per-bioregion metrics are (click on metric names to access
 formulas):
 
-- [**Specificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence):
+- [**specificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#specificity-occurrence):
   Fraction of a species' occurrences found in a given bioregion (De
   Cáceres & Legendre 2009). A value of 1 means the species occurs only
   in that bioregion.
 
-- [**NSpecificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#nspecificity-occurrence):
+- [**n_specificity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#n_specificity-occurrence):
   Normalized specificity that accounts for differences in bioregion size
   (De Cáceres & Legendre 2009).
 
-- [**Fidelity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#fidelity-occurrence):
+- [**fidelity**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#fidelity-occurrence):
   Fraction of sites in a bioregion where the species occurs (De Cáceres
   & Legendre 2009). A value of 1 means the species is present in all
   sites of that bioregion.
 
-- [**IndVal**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#indval-occurrence):
-  Indicator Value = Specificity × Fidelity (De Cáceres & Legendre 2009).
-  High values identify species that are both restricted to and frequent
-  within a bioregion.
+- [**ind_val**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#ind_val-occurrence):
+  Indicator value (ind_val = specificity × fidelity) as defined in (De
+  Cáceres & Legendre 2009). High values identify species that are both
+  restricted to and frequent within a bioregion.
 
-- [**NIndVal**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#nindval-occurrence):
-  Normalized IndVal accounting for bioregion size (De Cáceres & Legendre
-  2009).
+- [**n_ind_val**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#n_ind_val-occurrence):
+  Normalized ind_val accounting for bioregion size (De Cáceres &
+  Legendre 2009).
 
-- [**Rho**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#rho-occurrence):
+- [**rho**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#rho-occurrence):
   Standardized contribution index comparing observed vs. expected
   co-occurrence under random association (Lenormand 2019).
 
-- **CoreTerms**: Raw counts (n, n_b, n_s, n_sb) for custom calculations.
+- **core_terms**: Raw counts (n, n_b, n_s, n_sb) for custom
+  calculations.
 
 These metrics can be found in the output slot `species_bioregions`.
 
 **Site-per-bioregion metrics** characterize sites relative to
 bioregions:
 
-- [**Richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
+- [**richness**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
   Number of species in the site.
 
-- [**Rich_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
+- [**rich_endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
   Number of species in the site that are endemic to one bioregion.
 
-- [**Prop_Endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
+- [**prop_endemics**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#diversity-endemicity-site-metrics):
   Proportion of endemic species in the site.
 
-- [**MeanSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#meansim):
+- [**mean_sim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#mean_sim):
   Mean similarity of a site to all sites in each bioregion.
 
-- [**SdSim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#sdsim):
+- [**sd_sim**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#sd_sim):
   Standard deviation of similarity values.
 
 These metrics can be found in the output slot `site_bioregions`.
@@ -278,14 +279,14 @@ across all clusters, rather than in relation to each individual cluster.
 
 *Species-level summary metric:*
 
-- [**P**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#p-occurrence-1)
+- [**p**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#p-occurrence-1)
   (Participation): Evenness of species distribution across bioregions
   (Denelle et al. 2020). Found in output slot
   `species_bioregionalization`.
 
 *Site-level summary metric:*
 
-- [**Silhouette**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#silhouette):
+- [**silhouette**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#silhouette):
   How well a site fits its assigned bioregion vs. the nearest
   alternative (Rousseeuw 1987). Found in output slot
   `site_bioregionalization`.
@@ -295,7 +296,7 @@ across all clusters, rather than in relation to each individual cluster.
 **Site-per-chorotype metrics** quantify how each site relates to species
 clusters (chorotypes).
 
-The same metrics as above (Specificity, Fidelity, IndVal, etc.) can be
+The same metrics as above (specificity, fidelity, ind_val, etc.) can be
 computed, but their interpretation is inverted. These metrics are based
 on the following core terms:
 
@@ -312,14 +313,14 @@ Abundance version of these core terms can also be calculated when
 
 Their interpretation changes, for example:
 
-- **Specificity**: Fraction of a site's species belonging to a
+- **specificity**: Fraction of a site's species belonging to a
   chorotype.
 
-- **Fidelity**: Fraction of a chorotype's species present in the site.
+- **fidelity**: Fraction of a chorotype's species present in the site.
 
-- **IndVal**: Indicator value for site-chorotype associations.
+- **ind_val**: Indicator value for site-chorotype associations.
 
-- **P**: Evenness of sites across chorotypes
+- **p**: Evenness of sites across chorotypes
 
 ## Note
 

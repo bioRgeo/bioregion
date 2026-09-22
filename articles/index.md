@@ -24,8 +24,3 @@
   metrics](https://bioRgeo.github.io/bioregion/articles/a5_2_summary_metrics.md):
 - [5.3 Compare
   bioregionalizations](https://bioRgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.md):
-
-### Applications
-
-- [Citing
-  articles](https://bioRgeo.github.io/bioregion/articles/citations.md):

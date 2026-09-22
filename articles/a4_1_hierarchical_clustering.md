@@ -740,7 +740,8 @@ plot(tree_diana)
 
 ## 3. How to find an optimal number of clusters?
 
-![](../reference/figures/find_optimal_n.png)
+![How to find an optimal number of
+clusters?](../reference/figures/find_optimal_n.png)
 
 1.  Step 1. **Build a tree** with
     [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
@@ -761,10 +762,10 @@ plot(tree_diana)
 ### 3.1 A practical example
 
 In this example we will compute the evaluation metric used by Holt *et
-al.* (2013), which compares the total dissimilarity of the distance
-matrix (sum of all distances) with the inter-cluster dissimilarity (sum
-of distances between clusters). Then we will choose the optimal number
-of clusters as the elbow of the evaluation plot.
+al.* (2013), which compares the total dissimilarity with the
+inter-cluster dissimilarity (sum of distances between clusters). Then we
+will choose the optimal number of clusters as the elbow of the
+evaluation plot.
 
 ``` r
 
@@ -778,10 +779,9 @@ tree4 <- hclu_hierarclust(dissim,
                           n_clust = 2:100)
 
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013
-eval_tree4 <- bioregionalization_metrics(
-  tree4, 
-  dissimilarity = dissim, # Provide distances to compute the metrics
-  eval_metric = "pc_distance")
+eval_tree4 <- bioregionalization_metrics(tree4, 
+                                         eval_metrics = "prop_between_dissim",
+                                         dissimilarity = dissim)
 
 # Step 4. Find the optimal number of clusters
 opti_n_tree4 <- find_optimal_n(eval_tree4)
@@ -797,18 +797,17 @@ opti_n_tree4
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  pc_distance 
+    ##  - Evaluated metric(s):  prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 14
 
 ``` r
 
 # Step 5. Extract the optimal number of clusters
 # We get the name of the correct partition in the next line
-K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_distance]
+K_name <- opti_n_tree4$evaluation_df$partition[opti_n_tree4$evaluation_df$optimal_n_prop_between_dissim]
 # Look at the site-cluster table
 head(tree4$clusters[, c("ID", K_name)])
 ```
@@ -835,89 +834,239 @@ your tree at the identified optimal number of cut-offs with
 
 ### 3.2 Evaluation metrics
 
-Currently, there are four evaluation metrics available in the package:
-
-1.  `pc_distance`: \\\sum{between-cluster\beta\_{sim }} /
-    \sum{\beta\_{sim}}\\ This metric is the metric computed in Holt *et
-    al.* (2013).
-
-2.  `anosim`: this the statistic used in Analysis of Similarities, as
-    suggested in Castro-Insua *et al.* (2018). It compares the
-    between-cluster dissimilarities to the within-cluster
-    dissimilarities. It is based on the difference of mean ranks between
-    groups and within groups with the following formula:
-    \\R=(r_B-r_W)/(N(N-1)/4)\\ where \\r_B\\ and \\r_W\\ are the average
-    ranks between and within clusters respectively, and \\N\\ is the
-    total number of sites.
-
-3.  `avg_endemism`: it is the average percentage of endemism in clusters
-    (Kreft & Jetz, 2010). It is calculated as follows: \\End\_{mean} =
-    \frac{\sum\_{i=1}^K E_i / S_i}{K}\\ where \\E_i\\ is the number of
-    endemic species in cluster \\i\\, \\S_i\\ is the number of species
-    in cluster \\i\\, and \\K\\ the maximum number of clusters.
-
-4.  `tot_endemism`: it is the total endemism across all clusters (Kreft
-    & Jetz, 2010). It is calculated as follows: \\End\_{tot} = E / C\\
-    where \\E\\ is the total number of endemic species (i.e., species
-    occurring in only one cluster) and \\C\\ is the number of non-
-    endemic species.
+Currently, there are four evaluation metrics available in the package
+described
+[here](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregionalization).
 
 **Important note**
 
-To be able to calculate `pc_distance` and `anosim`, you need to provide
-your dissimilarity object to the argument `dissimilarity`. In addition,
-to be able to calculate `avg_endemism` and `tot_endemism`, you need to
-provide your species-site network to the argument `net` (don’t panick if
-you only have a species x site matrix! We have a function to make the
-conversion).
+To be able to calculate `prop_between_dissim` and `anosim`, you need to
+provide your dissimilarity object to the argument `dissimilarity`. In
+addition, to be able to calculate `mean_endemics` and `tot_endemics`,
+you need to provide your species-site co-occurrence matrix to the
+argument `comat`.
 
 Let’s see that in practice. Depending on the size of your dataset,
 computing endemism-based metrics can take a while.
 
 ``` r
 
-# Calculate pc_distance and anosim
+# Calculate prop_between_dissim and anosim
 bioregionalization_metrics(tree4, 
-                           dissimilarity = dissim, 
-                           eval_metric = c("pc_distance", "anosim"))
+                           eval_metrics = c("prop_between_dissim", "anosim"),
+                           dissimilarity = dissim)
 ```
 
-    ## Partition metrics:
-    ##  - 99  partition(s) evaluated
-    ##  - Range of clusters explored: from  2  to  100 
-    ##  - Requested metric(s):  pc_distance anosim 
-    ##  - Metric summary:
-    ##      pc_distance    anosim
-    ## Min    0.5039255 0.7038453
-    ## Mean   0.8871858 0.8130640
-    ## Max    0.9805066 0.8635191
-    ## 
-    ## Access the data.frame of metrics with your_object$evaluation_df
+    ##    partition n_bioregions prop_between_dissim    anosim
+    ## 1      K_2_1            2           0.5039255 0.7038453
+    ## 2      K_2_2            2           0.5039255 0.7038453
+    ## 3        K_4            4           0.6115668 0.7055336
+    ## 4        K_5            5           0.6476470 0.7255243
+    ## 5        K_6            6           0.6490485 0.7262948
+    ## 6        K_7            7           0.6494868 0.7264502
+    ## 7        K_8            8           0.6497724 0.7265047
+    ## 8        K_9            9           0.6521960 0.7267220
+    ## 9       K_10           10           0.7797049 0.7412313
+    ## 10      K_11           11           0.7810061 0.7419956
+    ## 11      K_12           12           0.7820362 0.7425334
+    ## 12      K_13           13           0.7866725 0.7452144
+    ## 13      K_14           14           0.8304847 0.7763484
+    ## 14      K_15           15           0.8311333 0.7767871
+    ## 15      K_16           16           0.8321952 0.7774242
+    ## 16      K_17           17           0.8339339 0.7784386
+    ## 17      K_18           18           0.8341172 0.7785430
+    ## 18      K_19           19           0.8422558 0.7829579
+    ## 19      K_20           20           0.8462671 0.7855295
+    ## 20      K_21           21           0.8586412 0.7937815
+    ## 21      K_22           22           0.8601130 0.7949075
+    ## 22      K_23           23           0.8601494 0.7949336
+    ## 23      K_24           24           0.8601767 0.7949526
+    ## 24      K_25           25           0.8665417 0.7995322
+    ## 25      K_26           26           0.8665682 0.7995448
+    ## 26      K_27           27           0.8665800 0.7995504
+    ## 27    K_29_1           29           0.8670966 0.7996385
+    ## 28    K_29_2           29           0.8670966 0.7996385
+    ## 29      K_30           30           0.8682584 0.8000748
+    ## 30      K_31           31           0.8683940 0.8001369
+    ## 31      K_32           32           0.8684170 0.8001458
+    ## 32      K_33           33           0.8684199 0.8001461
+    ## 33      K_34           34           0.8701128 0.8004195
+    ## 34      K_35           35           0.8987808 0.8176325
+    ## 35      K_36           36           0.8987950 0.8176437
+    ## 36      K_37           37           0.8992759 0.8181359
+    ## 37      K_38           38           0.8995875 0.8183957
+    ## 38      K_39           39           0.8997950 0.8185833
+    ## 39      K_40           40           0.8998033 0.8185881
+    ## 40      K_41           41           0.8998339 0.8186134
+    ## 41      K_42           42           0.9010559 0.8195488
+    ## 42      K_43           43           0.9010752 0.8195687
+    ## 43      K_44           44           0.9010917 0.8195774
+    ## 44      K_45           45           0.9011191 0.8195968
+    ## 45      K_46           46           0.9012094 0.8196792
+    ## 46      K_47           47           0.9012203 0.8196847
+    ## 47      K_48           48           0.9053491 0.8222804
+    ## 48      K_49           49           0.9055867 0.8223740
+    ## 49      K_50           50           0.9056719 0.8224158
+    ## 50      K_51           51           0.9063492 0.8225512
+    ## 51      K_52           52           0.9063730 0.8225596
+    ## 52      K_53           53           0.9068066 0.8226861
+    ## 53      K_54           54           0.9068429 0.8226932
+    ## 54      K_55           55           0.9068585 0.8226927
+    ## 55    K_57_1           57           0.9407998 0.8318092
+    ## 56    K_57_2           57           0.9407998 0.8318092
+    ## 57      K_58           58           0.9408908 0.8320144
+    ## 58      K_59           59           0.9409134 0.8320387
+    ## 59      K_60           60           0.9411474 0.8322919
+    ## 60      K_61           61           0.9411549 0.8322979
+    ## 61      K_62           62           0.9417502 0.8330224
+    ## 62      K_63           63           0.9417724 0.8330419
+    ## 63      K_64           64           0.9418020 0.8330797
+    ## 64      K_65           65           0.9419761 0.8332177
+    ## 65      K_66           66           0.9419908 0.8332309
+    ## 66      K_67           67           0.9420202 0.8332548
+    ## 67      K_68           68           0.9431480 0.8342166
+    ## 68      K_69           69           0.9431504 0.8342171
+    ## 69      K_70           70           0.9431697 0.8342267
+    ## 70      K_71           71           0.9475710 0.8369940
+    ## 71      K_72           72           0.9504739 0.8397503
+    ## 72      K_73           73           0.9504787 0.8397522
+    ## 73      K_74           74           0.9505097 0.8397891
+    ## 74      K_75           75           0.9526047 0.8419845
+    ## 75      K_76           76           0.9526546 0.8421129
+    ## 76      K_77           77           0.9534397 0.8428665
+    ## 77      K_78           78           0.9534469 0.8428795
+    ## 78      K_79           79           0.9534516 0.8428818
+    ## 79      K_80           80           0.9547543 0.8441475
+    ## 80      K_81           81           0.9547590 0.8441498
+    ## 81      K_82           82           0.9547637 0.8441521
+    ## 82      K_83           83           0.9548903 0.8442458
+    ## 83      K_84           84           0.9552727 0.8444641
+    ## 84      K_85           85           0.9552958 0.8444718
+    ## 85      K_86           86           0.9597738 0.8475812
+    ## 86      K_87           87           0.9597784 0.8475819
+    ## 87      K_88           88           0.9598124 0.8476134
+    ## 88      K_89           89           0.9601166 0.8478113
+    ## 89      K_90           90           0.9601437 0.8478264
+    ## 90      K_91           91           0.9603125 0.8480385
+    ## 91      K_92           92           0.9603147 0.8480383
+    ## 92      K_93           93           0.9619450 0.8493302
+    ## 93      K_94           94           0.9624150 0.8501088
+    ## 94      K_95           95           0.9637310 0.8511409
+    ## 95      K_96           96           0.9637467 0.8511462
+    ## 96   K_100_1          100           0.9805066 0.8635191
+    ## 97   K_100_2          100           0.9805066 0.8635191
+    ## 98   K_100_3          100           0.9805066 0.8635191
+    ## 99   K_100_4          100           0.9805066 0.8635191
 
 ``` r
 
-# Calculate avg_endemism and tot_endemism
-# I have an abundance matrix, I need to convert it into network format first:
-vegenet <- mat_to_net(vegemat)
-
-bioregionalization_metrics(tree4, 
-                           net = vegenet, 
-                           eval_metric = c("avg_endemism", "tot_endemism"))
+# Calculate mean_endemics and tot_endemics
+bioregionalization_metrics(tree4,
+                           eval_metrics = c("mean_endemics", "tot_endemics"),
+                           dissimilarity = NULL,
+                           comat = vegemat)
 ```
 
-    ## Partition metrics:
-    ##  - 99  partition(s) evaluated
-    ##  - Range of clusters explored: from  2  to  100 
-    ##  - Requested metric(s):  avg_endemism tot_endemism 
-    ##  - Metric summary:
-    ##      avg_endemism tot_endemism
-    ## Min   0.001285513   0.05490939
-    ## Mean  0.008681167   0.08088732
-    ## Max   0.177309950   0.30916960
-    ## 
-    ## Access the data.frame of metrics with your_object$evaluation_df
-    ## Details of endemism % for each bioregionalization are available in
-    ##         your_object$endemism_results
+    ##    partition n_bioregions mean_endemics tot_endemics
+    ## 1      K_2_1            2   0.177309950   0.30916960
+    ## 2      K_2_2            2   0.177309950   0.30916960
+    ## 3        K_4            4   0.046560673   0.15120368
+    ## 4        K_5            5   0.032444543   0.12388423
+    ## 5        K_6            6   0.026866440   0.12253178
+    ## 6        K_7            7   0.023071178   0.12253178
+    ## 7        K_8            8   0.020189595   0.12253178
+    ## 8        K_9            9   0.017978651   0.12226129
+    ## 9       K_10           10   0.015228298   0.10738437
+    ## 10      K_11           11   0.013815277   0.10711388
+    ## 11      K_12           12   0.012589709   0.10657290
+    ## 12      K_13           13   0.012022577   0.10035164
+    ## 13      K_14           14   0.010259001   0.08520422
+    ## 14      K_15           15   0.009604125   0.08520422
+    ## 15      K_16           16   0.009003867   0.08520422
+    ## 16      K_17           17   0.008520651   0.08520422
+    ## 17      K_18           18   0.007993111   0.08466324
+    ## 18      K_19           19   0.007539460   0.08412226
+    ## 19      K_20           20   0.007131691   0.08358128
+    ## 20      K_21           21   0.006761121   0.08222883
+    ## 21      K_22           22   0.006487602   0.08222883
+    ## 22      K_23           23   0.006208174   0.08222883
+    ## 23      K_24           24   0.005950796   0.08222883
+    ## 24      K_25           25   0.005719272   0.08195834
+    ## 25      K_26           26   0.005500096   0.08195834
+    ## 26      K_27           27   0.005296389   0.08195834
+    ## 27    K_29_1           29   0.004932414   0.08195834
+    ## 28    K_29_2           29   0.004932414   0.08195834
+    ## 29      K_30           30   0.004766607   0.08141737
+    ## 30      K_31           31   0.004613189   0.08141737
+    ## 31      K_32           32   0.004470415   0.08141737
+    ## 32      K_33           33   0.004334948   0.08141737
+    ## 33      K_34           34   0.004225648   0.08114688
+    ## 34      K_35           35   0.004094471   0.07952394
+    ## 35      K_36           36   0.003982291   0.07952394
+    ## 36      K_37           37   0.003863717   0.07898296
+    ## 37      K_38           38   0.003748818   0.07871247
+    ## 38      K_39           39   0.003641791   0.07844198
+    ## 39      K_40           40   0.003550746   0.07844198
+    ## 40      K_41           41   0.003468117   0.07844198
+    ## 41      K_42           42   0.003413486   0.07844198
+    ## 42      K_43           43   0.003334384   0.07844198
+    ## 43      K_44           44   0.003267420   0.07844198
+    ## 44      K_45           45   0.003195549   0.07844198
+    ## 45      K_46           46   0.003099440   0.07790100
+    ## 46      K_47           47   0.003033494   0.07790100
+    ## 47      K_48           48   0.002947683   0.07654855
+    ## 48      K_49           49   0.002879376   0.07627806
+    ## 49      K_50           50   0.002877231   0.07600757
+    ## 50      K_51           51   0.002859146   0.07600757
+    ## 51      K_52           52   0.002809455   0.07600757
+    ## 52      K_53           53   0.002758729   0.07600757
+    ## 53      K_54           54   0.002709092   0.07600757
+    ## 54      K_55           55   0.002660079   0.07600757
+    ## 55    K_57_1           57   0.002562755   0.07519610
+    ## 56    K_57_2           57   0.002562755   0.07519610
+    ## 57      K_58           58   0.002566416   0.07519610
+    ## 58      K_59           59   0.002524111   0.07519610
+    ## 59      K_60           60   0.002513575   0.07465513
+    ## 60      K_61           61   0.002472369   0.07465513
+    ## 61      K_62           62   0.002442548   0.07465513
+    ## 62      K_63           63   0.002407113   0.07465513
+    ## 63      K_64           64   0.002369502   0.07465513
+    ## 64      K_65           65   0.002326499   0.07438464
+    ## 65      K_66           66   0.002275835   0.07411415
+    ## 66      K_67           67   0.002245839   0.07411415
+    ## 67      K_68           68   0.002218461   0.07411415
+    ## 68      K_69           69   0.002189388   0.07411415
+    ## 69      K_70           70   0.002159766   0.07411415
+    ## 70      K_71           71   0.002129981   0.07411415
+    ## 71      K_72           72   0.001772702   0.05788477
+    ## 72      K_73           73   0.001760624   0.05788477
+    ## 73      K_74           74   0.001722344   0.05734379
+    ## 74      K_75           75   0.001704328   0.05734379
+    ## 75      K_76           76   0.001685072   0.05734379
+    ## 76      K_77           77   0.001663286   0.05734379
+    ## 77      K_78           78   0.001641962   0.05734379
+    ## 78      K_79           79   0.001621178   0.05734379
+    ## 79      K_80           80   0.001605577   0.05707330
+    ## 80      K_81           81   0.001585755   0.05707330
+    ## 81      K_82           82   0.001566417   0.05707330
+    ## 82      K_83           83   0.001547566   0.05707330
+    ## 83      K_84           84   0.001529233   0.05707330
+    ## 84      K_85           85   0.001511242   0.05707330
+    ## 85      K_86           86   0.001497222   0.05680281
+    ## 86      K_87           87   0.001480012   0.05680281
+    ## 87      K_88           88   0.001463324   0.05680281
+    ## 88      K_89           89   0.001436875   0.05626183
+    ## 89      K_90           90   0.001429062   0.05626183
+    ## 90      K_91           91   0.001418318   0.05626183
+    ## 91      K_92           92   0.001402902   0.05626183
+    ## 92      K_93           93   0.001389665   0.05626183
+    ## 93      K_94           94   0.001367387   0.05572085
+    ## 94      K_95           95   0.001353125   0.05572085
+    ## 95      K_96           96   0.001339030   0.05572085
+    ## 96   K_100_1          100   0.001285513   0.05490939
+    ## 97   K_100_2          100   0.001285513   0.05490939
+    ## 98   K_100_3          100   0.001285513   0.05490939
+    ## 99   K_100_4          100   0.001285513   0.05490939
 
 ### 3.2 Criteria to choose an optimal number of clusters
 
@@ -948,21 +1097,19 @@ evaluation metrics and store them in `eval_tree4`:
 
 ``` r
 
-vegenet <- mat_to_net(vegemat)
 eval_tree4 <- bioregionalization_metrics(tree4, 
+                                         eval_metrics = "all",
                                          dissimilarity = dissim, 
-                                         net = vegenet, 
-                                         eval_metric = c("pc_distance", "anosim",
-                                                         "avg_endemism", "tot_endemism"))
+                                         comat = vegemat)
 ```
 
 #### 3.2.1 Elbow method
 
 The elbow method consists in find the ‘elbow’ in the form of the
 metric-cluster relationship. This method will typically work for metrics
-which have an L-shaped form (typically, pc_distance and endemism
-metrics), but not for other metrics (e.g. the form of anosim does not
-necessarily follow an L-shape).
+which have an L-shaped form (typically, `prop_between_dissim` and
+endemism metrics), but not for other metrics (e.g. the form of `anosim`
+does not necessarily follow an L-shape).
 
 *The rationale behind the elbow method is to find a cutoff above which
 the metric values stop increasing significantly, such that adding new
@@ -983,15 +1130,11 @@ find_optimal_n(eval_tree4)
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  pc_distance anosim avg_endemism tot_endemism 
+    ##  - Evaluated metric(s):  prop_between_dissim anosim mean_endemics tot_endemics 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 14
-    ## anosim - 35
-    ## avg_endemism - 10
-    ## tot_endemism - 14
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png)
 
@@ -1000,7 +1143,7 @@ the metric, from a minimum of 10 to a maximum of 35. The final choice
 depends on your metric preferences with respect to metrics, and your
 objectives with the clustering. Alternatively, two cut-offs could be
 used, a deep cut-off based on the endemism metrics e.g. at a value of
-10, and a shallow cutoff based on `pc_distance`, at 14.
+10, and a shallow cutoff based on `prop_between_dissim`, at 14.
 
 #### 3.2.2 Step method
 
@@ -1011,17 +1154,17 @@ To do this, the function calculates all successive differences in
 metrics between partitions. It will then keep only the largest positive
 differences (`increasing_step`) or negative differences
 (`decreasing_step`). `increasing_step` is for increasing metrics
-(`pc_distance`) and `decreasing_step` is for decreasing metrics
-(`avg_endemism` and `tot_endemism`). `anosim` values can either increase
-or decrease depending on your dataset, so you would have to explore both
-ways.
+(`prop_between_dissim`) and `decreasing_step` is for decreasing metrics
+(`Mean_Endemics` and `tot_endemics`). `anosim` values can either
+increase or decrease depending on your dataset, so you would have to
+explore both ways.
 
 By default, the function selects the top 1% steps:
 
 ``` r
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "pc_distance"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "increasing_step")
 ```
 
@@ -1030,19 +1173,17 @@ find_optimal_n(eval_tree4,
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  anosim pc_distance 
+    ##  - Evaluated metric(s):  anosim prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 14
-    ## pc_distance - 10
 
 ``` r
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("avg_endemism", "tot_endemism"),
+               metrics_to_use = c("mean_endemics", "tot_endemics"),
                criterion = "decreasing_step")
 ```
 
@@ -1051,14 +1192,12 @@ find_optimal_n(eval_tree4,
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  avg_endemism tot_endemism 
+    ##  - Evaluated metric(s):  mean_endemics tot_endemics 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  decreasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## avg_endemism - 4
-    ## tot_endemism - 4
 
 However, you can adjust it in two different ways. First, choose a number
 of steps to select, e.g. to select the largest 3 steps, use
@@ -1067,7 +1206,7 @@ of steps to select, e.g. to select the largest 3 steps, use
 ``` r
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "pc_distance"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "increasing_step",
                step_levels = 3)
 ```
@@ -1077,14 +1216,12 @@ find_optimal_n(eval_tree4,
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  anosim pc_distance 
+    ##  - Evaluated metric(s):  anosim prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 5 14 35
-    ## pc_distance - 4 10 14
 
 Note that these steps generally correspond to large jumps in the tree,
 which is why we like this approach as it fits well with the hierarchical
@@ -1096,7 +1233,7 @@ largest steps set the quantile to 0.95 (`step_quantile = 0.95`):
 ``` r
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "pc_distance"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "increasing_step",
                step_quantile = 0.95)
 ```
@@ -1106,14 +1243,12 @@ find_optimal_n(eval_tree4,
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  anosim pc_distance 
+    ##  - Evaluated metric(s):  anosim prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.95  (i.e., only the top 5 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 5 10 14 35 100
-    ## pc_distance - 4 5 10 14 57
 
 Finally, a question that may arise is which cluster number to select
 when a large step occurs. For example, if the largest step occurs
@@ -1127,7 +1262,7 @@ in our example above). You can change this by setting
 ``` r
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("avg_endemism", "tot_endemism"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "decreasing_step",
                step_round_above = FALSE)
 ```
@@ -1137,24 +1272,22 @@ find_optimal_n(eval_tree4,
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  avg_endemism tot_endemism 
+    ##  - Evaluated metric(s):  anosim prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  decreasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## avg_endemism - 2
-    ## tot_endemism - 2
 
 #### 3.2.3 Cutting at different cut-off values
 
 The idea of this method is to select specific metric values at which the
 number of clusters should be used. For example, in their study, Holt *et
-al.* (2013) used different cutoffs for `pc_distance` to find the global
-biogeographic regions: 0.90, 0.95, 0.99, 0.999. The higher the value,
-the more -diversity is explained, but also the more clusters there are.
-Therefore, the choice is a trade-off between the total -diversity
-explained and the number of clusters.
+al.* (2013) used different cutoffs for `BetweenDissim` to find the
+global biogeographic regions: 0.90, 0.95, 0.99, 0.999. The higher the
+value, the more -diversity is explained, but also the more clusters
+there are. Therefore, the choice is a trade-off between the total
+-diversity explained and the number of clusters.
 
 Eventually, the choice of these values depends on different factors:
 
@@ -1182,7 +1315,7 @@ use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and 0.9
 ``` r
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = "pc_distance",
+               metrics_to_use = "prop_between_dissim",
                criterion = "cutoff",
                metric_cutoffs = c(.6, .8, .9))
 ```
@@ -1192,13 +1325,12 @@ find_optimal_n(eval_tree4,
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  pc_distance 
+    ##  - Evaluated metric(s):  prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  cutoff 
     ##    --> cutoff(s) chosen:  0.6 0.8 0.9 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 4 14 42
 
 #### 3.2.4 Cutting at the maximum or minimum metric value
 
@@ -1224,10 +1356,9 @@ tree5 <- cut_tree(tree4,
                                    length = 100)) 
 
 eval_tree5 <- bioregionalization_metrics(tree5, 
+                                         eval_metrics = "all",
                                          dissimilarity = dissim, 
-                                         net = vegenet, 
-                                         eval_metric = c("pc_distance", "anosim",
-                                                         "avg_endemism", "tot_endemism"))
+                                         comat = vegemat)
 
 find_optimal_n(eval_tree5,
                criterion = "breakpoints")
@@ -1238,15 +1369,11 @@ find_optimal_n(eval_tree5,
     ## Search for an optimal number of clusters:
     ##  - 100  partition(s) evaluated
     ##  - Range of clusters explored: from  1  to  701 
-    ##  - Evaluated metric(s):  pc_distance anosim avg_endemism tot_endemism 
+    ##  - Evaluated metric(s):  prop_between_dissim anosim mean_endemics tot_endemics 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 17
-    ## anosim - 69
-    ## avg_endemism - 2
-    ## tot_endemism - 6
 
 We can ask for a higher number of breaks:
 
@@ -1264,15 +1391,11 @@ find_optimal_n(eval_tree5,
     ## Search for an optimal number of clusters:
     ##  - 100  partition(s) evaluated
     ##  - Range of clusters explored: from  1  to  701 
-    ##  - Evaluated metric(s):  pc_distance anosim avg_endemism tot_endemism 
+    ##  - Evaluated metric(s):  prop_between_dissim anosim mean_endemics tot_endemics 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 14 102
-    ## anosim - 21 172
-    ## avg_endemism - 2 17
-    ## tot_endemism - 2 90
 
 - 3 breaks
 
@@ -1288,15 +1411,11 @@ find_optimal_n(eval_tree5,
     ## Search for an optimal number of clusters:
     ##  - 100  partition(s) evaluated
     ##  - Range of clusters explored: from  1  to  701 
-    ##  - Evaluated metric(s):  pc_distance anosim avg_endemism tot_endemism 
+    ##  - Evaluated metric(s):  prop_between_dissim anosim mean_endemics tot_endemics 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## pc_distance - 14 64 116
-    ## anosim - 13 15 162
-    ## avg_endemism - 2 15 60
-    ## tot_endemism - 2 15 138
 
 Increasing the number of breaks can be useful in situations where you
 have, for example, non-linear silhouettes of metric ~ n clusters.
@@ -1345,10 +1464,6 @@ and Biogeography* 21, 1223–1232.
 Baselga A (2013) Separating the two components of abundance-based
 dissimilarity: Balanced changes in abundance vs. Abundance gradients.
 *Methods in Ecology and Evolution* 4, 552–557.
-
-Castro-Insua A, Gómez-Rodríguez C & Baselga A (2018) Dissimilarity
-measures affected by richness differences yield biased delimitations of
-biogeographic realms. *Nature Communications* 9, 9–11.
 
 Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of
 zoogeographical boundaries. *Nature Ecology & Evolution* 1, 0089.

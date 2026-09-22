@@ -1,17 +1,17 @@
-# Search for an optimal number of clusters in a list of bioregionalizations
+# Search for an optimal number of bioregions in a bioregionalization
 
 This function aims to optimize one or several criteria on a set of
-ordered bioregionalizations. It is typically used to find one or more
-optimal cluster counts on hierarchical trees to cut or ranges of
-bioregionalizations from k-means or PAM. Users should exercise caution
-in other cases (e.g., unordered bioregionalizations or unrelated
-bioregionalizations).
+ordered partitions from a bioregionalization. It is typically used to
+find one or more optimal bioregion counts on hierarchical trees to cut
+or ranges of partitions from k-means or PAM. Users should exercise
+caution in other cases (e.g., unordered partitions or unrelated
+partitions).
 
 ## Usage
 
 ``` r
 find_optimal_n(
-  bioregionalizations,
+  evaluation_df,
   metrics_to_use = "all",
   criterion = "elbow",
   step_quantile = 0.99,
@@ -20,24 +20,25 @@ find_optimal_n(
   metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
   n_breakpoints = 1,
   plot = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  bioregionalizations = NULL
 )
 ```
 
 ## Arguments
 
-- bioregionalizations:
+- evaluation_df:
 
-  A `bioregion.bioregionalization.metrics` object (output from
+  a `data.frame` output from
   [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md))
-  or a `data.frame` with the first two columns named `K`
-  (bioregionalization name) and `n_clusters` (number of clusters),
-  followed by columns with numeric evaluation metrics.
+  or a `data.frame` with the first two columns with partition name and
+  number of bioregions, followed by columns with numeric evaluation
+  metrics.
 
 - metrics_to_use:
 
   A `character` vector or single string specifying metrics in
-  `bioregionalizations` for calculating optimal clusters. Defaults to
+  `evaluation_df` for calculating optimal bioregions. Defaults to
   `"all"` (uses all metrics).
 
 - criterion:
@@ -83,17 +84,21 @@ find_optimal_n(
   A `boolean` indicating whether to display progress messages. Set to
   `FALSE` to suppress these messages.
 
+- bioregionalizations:
+
+  Deprecated.
+
 ## Value
 
-A `list` of class `bioregion.optimal.n` with these elements:
+A `list`containing these elements:
 
 - `args`: Input arguments.
 
 - `evaluation_df`: The input evaluation `data.frame`, appended with
   `boolean` columns for optimal cluster counts.
 
-- `optimal_nb_clusters`: A `list` with optimal cluster counts for each
-  metric in `"metrics_to_use"`, based on the chosen `criterion`.
+- `optimal_n`: A `list` with optimal cluster counts for each metric in
+  `"metrics_to_use"`, based on the chosen `criterion`.
 
 - `plot`: The plot (if requested).
 
@@ -172,26 +177,12 @@ colnames(comat) <- paste0("Species",1:25)
 dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
-tree <- hclu_hierarclust(dissim,
-                          optimal_tree_method = "best",
-                          n_clust = 5:10)
-#> Randomizing the dissimilarity matrix with 100 trials
-#>  -- range of cophenetic correlation coefficients among trials: 0.8356 - 0.8401
-#> 
-#> Final tree has a 0.8401 cophenetic correlation coefficient with the initial dissimilarity matrix
-#> Determining the cut height to reach 5 groups...
-#> --> 0.234375
-#> Determining the cut height to reach 6 groups...
-#> --> 0.21875
-#> Determining the cut height to reach 7 groups...
-#> --> 0.203125
-#> Determining the cut height to reach 8 groups...
-#> --> 0.1875
-#> Determining the cut height to reach 9 groups...
-#> --> 0.171875
-#> Determining the cut height to reach 10 groups...
-#> --> 0.15625
-tree
+bioreg <- hclu_hierarclust(dissim,
+                           optimal_tree_method = "best",
+                           n_clust = 5:10,
+                           verbose = FALSE)
+#> Warning: The requested number of cluster could not be found for k = 10. Closest number found: 9
+bioreg
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
 #>  - Number of sites:  20 
@@ -199,35 +190,31 @@ tree
 #>  - Tree construction method:  average 
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient 
-#>  - Cophenetic correlation coefficient:  0.84 
+#>  - Cophenetic correlation coefficient:  0.852 
 #>  - Number of clusters requested by the user:  5 
 #> Clustering results:
 #>  - Number of partitions:  6 
 #>  - Partitions are hierarchical
-#>  - Number of clusters:  5 6 7 8 9 10 
-#>  - Height of cut of the hierarchical tree: 0.234 0.219 0.203 0.188 0.172 0.156 
+#>  - Number of clusters:  5 6 7 8 9 9 
+#>  - Height of cut of the hierarchical tree: 0.219 0.188 0.18 0.174 0.172 0.16 
 
-a <- bioregionalization_metrics(tree,
-                                dissimilarity = dissim,
-                                species_col = "Node2",
-                                site_col = "Node1",
-                                eval_metric = "anosim")
-#> Computing similarity-based metrics...
-#>   - anosim OK
+evalmet <- bioregionalization_metrics(bioreg,
+                                      eval_metrics = "anosim",
+                                      dissimilarity = dissim)
                                    
-find_optimal_n(a, criterion = 'increasing_step', plot = FALSE)
-#> Number of bioregionalizations: 6
-#> ...Caveat: be cautious with the interpretation of metric analyses with such a low number of bioregionalizations
+find_optimal_n(evalmet, criterion = 'increasing_step', plot = FALSE)
+#> Number of partitions: 6
+#> ...Caveat: be cautious with the interpretation of metric analyses with such a low number of partitions
 #> Searching for potential optimal number(s) of clusters based on the increasing_step method
 #>  - Step method
 #> Search for an optimal number of clusters:
 #>  - 6  partition(s) evaluated
-#>  - Range of clusters explored: from  5  to  10 
+#>  - Range of clusters explored: from  5  to  9 
 #>  - Evaluated metric(s):  anosim 
 #> 
 #> Potential optimal partition(s):
 #>  - Criterion chosen to optimise the number of clusters:  increasing_step 
 #>    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
 #>  - Optimal partition(s) of clusters for each metric:
-#> anosim - 6
+#> 
 ```

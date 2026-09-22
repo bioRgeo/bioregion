@@ -494,31 +494,46 @@ calcultes several metrics based on the previous clustering attempts.
 
 ``` r
 
-bioregionalization_metrics(ex_pam, dissimilarity = dissim,
-                           eval_metric = "pc_distance")
+bioregionalization_metrics(ex_pam, 
+                           eval_metrics = "prop_between_dissim",
+                           dissimilarity = dissim)
 ```
 
-    ## Partition metrics:
-    ##  - 24  partition(s) evaluated
-    ##  - Range of clusters explored: from  2  to  25 
-    ##  - Requested metric(s):  pc_distance 
-    ##  - Metric summary:
-    ##      pc_distance
-    ## Min    0.5464742
-    ## Mean   0.8022971
-    ## Max    0.8949633
-    ## 
-    ## Access the data.frame of metrics with your_object$evaluation_df
+    ##      partition n_bioregions prop_between_dissim
+    ## K_2        K_2            2           0.5464742
+    ## K_3        K_3            3           0.6990204
+    ## K_4        K_4            4           0.6169429
+    ## K_5        K_5            5           0.8011952
+    ## K_6        K_6            6           0.8110943
+    ## K_7        K_7            7           0.8409687
+    ## K_8        K_8            8           0.8436454
+    ## K_9        K_9            9           0.7656336
+    ## K_10      K_10           10           0.7818119
+    ## K_11      K_11           11           0.7821537
+    ## K_12      K_12           12           0.7827123
+    ## K_13      K_13           13           0.7813637
+    ## K_14      K_14           14           0.7857775
+    ## K_15      K_15           15           0.8817548
+    ## K_16      K_16           16           0.7874855
+    ## K_17      K_17           17           0.8822984
+    ## K_18      K_18           18           0.8024194
+    ## K_19      K_19           19           0.8823401
+    ## K_20      K_20           20           0.8949633
+    ## K_21      K_21           21           0.8810018
+    ## K_22      K_22           22           0.8853041
+    ## K_23      K_23           23           0.8629863
+    ## K_24      K_24           24           0.7882333
+    ## K_25      K_25           25           0.8675503
 
 \*Note For the two metrics `tot_endemism` and `avg_endemism`, you also
 need to provide the site-species matrix.
 
 ``` r
 
-a <- bioregionalization_metrics(ex_pam, dissimilarity = dissim, net = fishdf,
-                                species_col = "Species", site_col = "Site",
-                                eval_metric = c("tot_endemism", "avg_endemism",
-                                                "pc_distance", "anosim"))
+a <- bioregionalization_metrics(ex_pam, 
+                                eval_metrics = "all",
+                                dissimilarity = dissim, 
+                                comat = fishmat)
 ```
 
 Once the
@@ -532,16 +547,16 @@ to get the optimal number of clusters.
 find_optimal_n(a)
 ```
 
-    ## Number of bioregionalizations: 24
+    ## Number of partitions: 24
 
     ## Searching for potential optimal number(s) of clusters based on the elbow method
 
     ##    * elbow found at:
 
-    ## tot_endemism 4
-    ## avg_endemism 4
-    ## pc_distance 7
+    ## prop_between_dissim 7
     ## anosim 2
+    ## mean_endemics 4
+    ## tot_endemics 4
 
     ## Plotting results...
 
@@ -550,15 +565,11 @@ find_optimal_n(a)
     ## Search for an optimal number of clusters:
     ##  - 24  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  25 
-    ##  - Evaluated metric(s):  tot_endemism avg_endemism pc_distance anosim 
+    ##  - Evaluated metric(s):  prop_between_dissim anosim mean_endemics tot_endemics 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
-    ## tot_endemism - 4
-    ## avg_endemism - 4
-    ## pc_distance - 7
-    ## anosim - 2
 
 Based on the metric selected, the optimal number of clusters can vary.
 
