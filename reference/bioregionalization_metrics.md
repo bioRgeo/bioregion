@@ -9,7 +9,7 @@ the optimal number of clusters.
 ``` r
 bioregionalization_metrics(
   bioregionalization,
-  eval_metrics = c("prop_between_dissim", "Anosim"),
+  eval_metrics = c("prop_between_dissim", "anosim"),
   dissimilarity,
   dissimilarity_index = names(dissimilarity)[3],
   comat = NULL,
