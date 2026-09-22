@@ -22,13 +22,13 @@ The first attribute or layer should correspond to the sites' ID
 A \code{data.frame} with 5 columns (Bioregion ID and metrics described below) or
 7 if spatial coherence is computed.
 \itemize{
-\item \strong{NbSites}: Number of sites per bioregion
-\item \strong{Richness}: Number of distinct species per bioregion.
-\item \strong{Rich_Endemics}: Number of species found only in the bioregion.
-\item \strong{Prop_Endemics}: Fraction of endemics species.
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}{\strong{SC_size}}:
+\item \strong{n_sites}: Number of sites per bioregion
+\item \strong{richness}: Number of distinct species per bioregion.
+\item \strong{rich_endemics}: Number of species found only in the bioregion.
+\item \strong{prop_endemics}: Fraction of endemics species.
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}{\strong{sc_size}}:
 Spatial coherence based on size, fraction of the number of site contained in the bioregion's largest contiguous patch.
-\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}{\strong{SC_area}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}{\strong{sc_area}}:
 Spatial coherence based on area, fraction of the bioregion area contained in its largest contiguous patch.
 }
 
@@ -60,13 +60,13 @@ bioregion_metrics(bioregionalization = clust,
 \seealso{
 For more details illustrated with a practical example,
 see the vignette:
-\url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}.
+\url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion}.
 
 Associated functions:
 \link{site_species_metrics} \link{bioregionalization_metrics}
 }
 \author{
+Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
-Boris Leroy (\email{leroy.boris@gmail.com}) \cr
-Maxime Lenormand (\email{maxime.lenormand@inrae.fr})
+Boris Leroy (\email{leroy.boris@gmail.com})
 }

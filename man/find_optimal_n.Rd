@@ -2,10 +2,10 @@
 % Please edit documentation in R/find_optimal_n.R
 \name{find_optimal_n}
 \alias{find_optimal_n}
-\title{Search for an optimal number of clusters in a list of bioregionalizations}
+\title{Search for an optimal number of bioregions in a bioregionalization}
 \usage{
 find_optimal_n(
-  bioregionalizations,
+  evaluation_df,
   metrics_to_use = "all",
   criterion = "elbow",
   step_quantile = 0.99,
@@ -14,18 +14,18 @@ find_optimal_n(
   metric_cutoffs = c(0.5, 0.75, 0.9, 0.95, 0.99, 0.999),
   n_breakpoints = 1,
   plot = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  bioregionalizations = NULL
 )
 }
 \arguments{
-\item{bioregionalizations}{A \code{bioregion.bioregionalization.metrics} object
-(output from
+\item{evaluation_df}{a \code{data.frame} output from
 \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}) or a \code{data.frame} with the first two
-columns named \code{K} (bioregionalization name) and \code{n_clusters} (number of clusters),
+columns with partition name and number of bioregions,
 followed by columns with numeric evaluation metrics.}
 
 \item{metrics_to_use}{A \code{character} vector or single string specifying
-metrics in \code{bioregionalizations} for calculating optimal clusters. Defaults
+metrics in \code{evaluation_df} for calculating optimal bioregions. Defaults
 to \code{"all"} (uses all metrics).}
 
 \item{criterion}{A \code{character} string specifying the criterion to identify
@@ -54,23 +54,26 @@ with identified optimal clusters should be drawn.}
 
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}
+
+\item{bioregionalizations}{Deprecated.}
 }
 \value{
-A \code{list} of class \code{bioregion.optimal.n} with these elements:
+A \code{list}containing these elements:
 \itemize{
 \item{\code{args}: Input arguments.}
 \item{\code{evaluation_df}: The input evaluation \code{data.frame}, appended with
 \code{boolean} columns for optimal cluster counts.}
-\item{\code{optimal_nb_clusters}: A \code{list} with optimal cluster counts for each
+\item{\code{optimal_n}: A \code{list} with optimal cluster counts for each
 metric in \code{"metrics_to_use"}, based on the chosen \code{criterion}.}
 \item{\code{plot}: The plot (if requested).}}
 }
 \description{
 This function aims to optimize one or several criteria on a set of
-ordered bioregionalizations. It is typically used to find one or more optimal
-cluster counts on hierarchical trees to cut or ranges of bioregionalizations
-from k-means or PAM. Users should exercise caution in other cases
-(e.g., unordered bioregionalizations or unrelated bioregionalizations).
+ordered partitions from a bioregionalization. It is typically used to find
+one or more optimal bioregion counts on hierarchical trees to cut or ranges
+of partitions from k-means or PAM. Users should exercise caution in
+other cases (e.g., unordered partitions or unrelated
+partitions).
 }
 \details{
 This function explores evaluation metric ~ cluster relationships, applying
@@ -113,18 +116,17 @@ colnames(comat) <- paste0("Species",1:25)
 dissim <- dissimilarity(comat, metric = "all")
 
 # User-defined number of clusters
-tree <- hclu_hierarclust(dissim,
-                          optimal_tree_method = "best",
-                          n_clust = 5:10)
-tree
+bioreg <- hclu_hierarclust(dissim,
+                           optimal_tree_method = "best",
+                           n_clust = 5:10,
+                           verbose = FALSE)
+bioreg
 
-a <- bioregionalization_metrics(tree,
-                                dissimilarity = dissim,
-                                species_col = "Node2",
-                                site_col = "Node1",
-                                eval_metric = "anosim")
+evalmet <- bioregionalization_metrics(bioreg,
+                                      eval_metrics = "anosim",
+                                      dissimilarity = dissim)
                                    
-find_optimal_n(a, criterion = 'increasing_step', plot = FALSE)
+find_optimal_n(evalmet, criterion = 'increasing_step', plot = FALSE)
 
 }
 \references{

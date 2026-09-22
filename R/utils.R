@@ -940,6 +940,7 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
 
 ###################################################################################################
 # Additional functions                                                                            #
+#  - convert_metric_names                                                                         # 
 #  - reformat_hierarchy                                                                           #                                                                           
 #  - knbclu                                                                                       #
 #  - reorder                                                                                      #
@@ -950,6 +951,66 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
 #  - detect_data_type_from_metric                                                                 #   
 #  - elbow_finder                                                                                 #
 ###################################################################################################
+
+# convert_metric_names
+convert_metric_names <- function(metrics) {
+  
+  if(!is.null(metrics)){
+    old_names <- c(
+      "anosim",
+      "pc_distance",
+      "CoreTerms",
+      "Fidelity",
+      "IndVal",
+      "avg_endemism",
+      "MeanSim",
+      "NIndVal",
+      "NSpecificity",
+      "P",
+      "Prop_Endemics",
+      "Rich_Endemics",
+      "Richness",
+      "Rho",
+      "SdSim",
+      "Silhouette",
+      "Specificity",
+      "tot_endemism"
+    )
+    
+    new_names <- c(
+      "anosim",
+      "prop_between_dissim",
+      "core_terms",
+      "fidelity",
+      "ind_val",
+      "mean_endemics",
+      "mean_sim",
+      "n_ind_val",
+      "n_specificity",
+      "p",
+      "prop_endemics",
+      "rich_endemics",
+      "richness",
+      "rho",
+      "sd_sim",
+      "silhouette",
+      "specificity",
+      "tot_endemics"
+    )
+    
+    names(new_names) <- old_names
+    
+    
+    metrics <- ifelse(
+      metrics %in% names(new_names),
+      unname(new_names[metrics]),
+      metrics
+    )
+  }  
+  
+  metrics
+}
+
 
 # reformat_hierarchy ###########################################################
 reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
@@ -1178,18 +1239,18 @@ sbgc <- function(clusters,
                  data){ # occurrence, abundance or both
   
   # Update bioregion_metrics
-  available_bioregion_metrics<- c("Specificity", "NSpecificity", 
-                                  "Fidelity", 
-                                  "IndVal", "NIndVal", 
-                                  "Rho", 
-                                  "CoreTerms")
+  available_bioregion_metrics<- c("specificity", "n_specificity", 
+                                  "fidelity", 
+                                  "ind_val", "n_ind_val", 
+                                  "rho", 
+                                  "core_terms")
   if(length(intersect(available_bioregion_metrics,
                       bioregion_metrics))==0){
     bioregion_metrics = NULL
   }
   
   # Update bioregionalization_metrics
-  available_bioregionalization_metrics<- c("P")
+  available_bioregionalization_metrics<- c("p")
   if(length(intersect(available_bioregionalization_metrics,
                       bioregionalization_metrics))==0){
     bioregionalization_metrics = NULL
@@ -1204,32 +1265,32 @@ sbgc <- function(clusters,
   res22 <- NULL
   
   # sb
-  col1 <- "Species"
-  col2 <- "Bioregion"
+  col1 <- "species"
+  col2 <- "bioregion"
   colcoren <- c("n_sb", "n_s", "n_b")
   colcorew <- c("w_sb", "w_s", "w_b")
   
   # gc
   if(type == "gc"){
     comat <- t(comat)  
-    col1 <- "Site"
-    col2 <- "Chorotypes"
+    col1 <- "site"
+    col2 <- "chorotype"
     colcoren <- c("n_gc", "n_g", "n_c")
     colcorew <- c("w_gc", "w_g", "w_c")
   }
   
   # Occurrence
   if((data != "abundance") |
-     (data == "abundance" & "Rho" %in% bioregion_metrics) |
-     (data == "abundance" & "NSpecificity" %in% bioregion_metrics) |
-     (data == "abundance" & "Indval" %in% bioregion_metrics) |
-     (data == "abundance" & "NIndval" %in% bioregion_metrics)){
+     (data == "abundance" & "rho" %in% bioregion_metrics) |
+     (data == "abundance" & "n_specificity" %in% bioregion_metrics) |
+     (data == "abundance" & "ind_val" %in% bioregion_metrics) |
+     (data == "abundance" & "n_ind_val" %in% bioregion_metrics)){
     
     # comat_bin
     comat_bin <- comat
     comat_bin[comat_bin > 0] <- 1
   
-    # CoreTerms
+    # core_terms
     temp <- stats::aggregate(comat_bin, list(clusters), sum)
     nij_mat <- t(as.matrix(temp[,-1]))
     rownames(nij_mat) <- colnames(temp)[-1]
@@ -1248,9 +1309,9 @@ sbgc <- function(clusters,
     
     n <- sum(nj_mat[1,])
     
-    # Normalized for NSpecificity & NIndVal
-    if("NSpecificity" %in% bioregion_metrics |
-       "NIndval" %in% bioregion_metrics){
+    # Normalized for n_specificity & n_ind_val
+    if("n_specificity" %in% bioregion_metrics |
+       "n_ind_val" %in% bioregion_metrics){
       Nnij_mat <- nij_mat / nj_mat
       Nnij_mat <- Nnij_mat / apply(Nnij_mat, 1, sum)
       Nnij_mat[is.na(Nnij_mat)] <- 0
@@ -1269,49 +1330,49 @@ sbgc <- function(clusters,
       ni <- res11[,4]
       nj <- res11[,5]
 
-      # Specificity 
-      if("Specificity" %in% bioregion_metrics){
-        res11$Specificity_occ <- nij / ni
+      # specificity 
+      if("specificity" %in% bioregion_metrics){
+        res11$specificity_occ <- nij / ni
       }
       
-      # NSpecificity 
-      if("NSpecificity" %in% bioregion_metrics){
+      # n_specificity 
+      if("n_specificity" %in% bioregion_metrics){
         
         tempnspe <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
         
-        res11$NSpecificity_occ <- tempnspe[,3]
+        res11$n_specificity_occ <- tempnspe[,3]
       }
       
-      # Fidelity 
-      if("Fidelity" %in% bioregion_metrics){
-        res11$Fidelity_occ <- nij / nj
+      # fidelity 
+      if("fidelity" %in% bioregion_metrics){
+        res11$fidelity_occ <- nij / nj
       }
       
-      # IndVal 
-      if("IndVal" %in% bioregion_metrics){
-        res11$IndVal_occ <- (nij / ni) * (nij / nj)
+      # ind_val 
+      if("ind_val" %in% bioregion_metrics){
+        res11$ind_val_occ <- (nij / ni) * (nij / nj)
       }
       
-      # NIndVal 
-      if("NIndVal" %in% bioregion_metrics){
+      # n_ind_val 
+      if("n_ind_val" %in% bioregion_metrics){
         
         tempniv <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
         
-        res11$NIndVal_occ <- tempniv[,3] * (nij / nj)
+        res11$n_ind_val_occ <- tempniv[,3] * (nij / nj)
       }
       
-      # Rho
-      if("Rho" %in% bioregion_metrics){
+      # rho
+      if("rho" %in% bioregion_metrics){
         
         num <- nij-((ni*nj)/n)
         den <- sqrt((nj*(n-nj)/(n-1))*(ni/n)*(1-(ni/n)))
         den[num==0] <- 1
 
-        res11$Rho_occ <- num/den
+        res11$rho_occ <- num/den
       }
       
-      # CoreTerms
-      if(!("CoreTerms" %in% bioregion_metrics)){
+      # core_terms
+      if(!("core_terms" %in% bioregion_metrics)){
         res11 <- res11[,-c(3,4,5)]
       }
     }
@@ -1323,8 +1384,8 @@ sbgc <- function(clusters,
       res21[,1] <- rownames(nij_mat)
       colnames(res21) <- c(col1, "Dummy")
       
-      if("P" %in% bioregionalization_metrics){
-        res21$P_occ <- 1 - apply((nij_mat / ni_mat)*(nij_mat / ni_mat), 1 , sum)
+      if("p" %in% bioregionalization_metrics){
+        res21$p_occ <- 1 - apply((nij_mat / ni_mat)*(nij_mat / ni_mat), 1 , sum)
       }
       
       res21 <- res21[,-2]
@@ -1336,7 +1397,7 @@ sbgc <- function(clusters,
   # Abundance
   if(data != "occurrence"){
     
-    # CoreTerms
+    # core_terms
     temp <- stats::aggregate(comat, list(clusters), sum)
     wij_mat <- t(as.matrix(temp[,-1]))
     rownames(wij_mat) <- colnames(temp)[-1]
@@ -1361,15 +1422,15 @@ sbgc <- function(clusters,
     rownames(wj_mat) <- rownames(wij_mat)
     colnames(wj_mat) <- colnames(wij_mat)
     
-    # Normalized for NSpecificity & NIndVal
-    if("NSpecificity" %in% bioregion_metrics |
-       "NIndval" %in% bioregion_metrics){
+    # Normalized for n_specificity & n_ind_val
+    if("n_specificity" %in% bioregion_metrics |
+       "n_ind_val" %in% bioregion_metrics){
       Nwij_mat <- wij_mat / nj_mat
       Nwij_mat <- Nwij_mat / apply(Nwij_mat, 1, sum)
       Nwij_mat[is.na(Nwij_mat)] <- 0
     }
     
-    if("Rho" %in% bioregion_metrics){
+    if("rho" %in% bioregion_metrics){
       muij_mat <- wij_mat / nj_mat
       muij_mat[is.na(muij_mat)] <- 0
       
@@ -1389,25 +1450,25 @@ sbgc <- function(clusters,
       wi <- res12[,4]
       wj <- res12[,5]
       
-      # Specificity
-      if("Specificity" %in% bioregion_metrics){
-        res12$Specificity_abund <- wij / wi
+      # specificity
+      if("specificity" %in% bioregion_metrics){
+        res12$specificity_abund <- wij / wi
       }
       
-      # NSpecificity
-      if("NSpecificity" %in% bioregion_metrics){
+      # n_specificity
+      if("n_specificity" %in% bioregion_metrics){
         tempnspe <- mat_to_net(Nwij_mat, weight = TRUE, remove_zeroes = FALSE)
         
-        res12$NSpecificity_abund <- tempnspe[,3]
+        res12$n_specificity_abund <- tempnspe[,3]
       }
       
-      # Fidelity 
-      if("Fidelity" %in% bioregion_metrics){
-        res12$Fidelity_abund <- wij / wj
+      # fidelity 
+      if("fidelity" %in% bioregion_metrics){
+        res12$fidelity_abund <- wij / wj
       }
       
-      # IndVal 
-      if("IndVal" %in% bioregion_metrics){
+      # ind_val 
+      if("ind_val" %in% bioregion_metrics){
         tempindval <- cbind(mat_to_net(nij_mat, weight = TRUE, 
                                        remove_zeroes = FALSE),
                             mat_to_net(nj_mat, weight = TRUE, 
@@ -1416,11 +1477,11 @@ sbgc <- function(clusters,
         nij <- tempindval[,3]
         nj <- tempindval[,4]
         
-        res12$IndVal_abund <- (wij / wi) * (nij / nj)
+        res12$ind_val_abund <- (wij / wi) * (nij / nj)
       }
       
-      # NIndVal 
-      if("NIndVal" %in% bioregion_metrics){
+      # n_ind_val 
+      if("n_ind_val" %in% bioregion_metrics){
         tempnindval <- cbind(mat_to_net(Nwij_mat, weight = TRUE, 
                                         remove_zeroes = FALSE),
                              mat_to_net(nij_mat, weight = TRUE, 
@@ -1432,11 +1493,11 @@ sbgc <- function(clusters,
         nij <- tempnindval[,4]
         nj <- tempnindval[,5]
         
-        res12$NIndVal_abund <- Nwij * (nij / nj)
+        res12$n_ind_val_abund <- Nwij * (nij / nj)
       }
       
-      # Rho
-      if("Rho" %in% bioregion_metrics){
+      # rho
+      if("rho" %in% bioregion_metrics){
         temprho <- cbind(mat_to_net(muij_mat, weight = TRUE, remove_zeroes = FALSE),
                          mat_to_net(mui_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
                          mat_to_net(vari_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
@@ -1451,11 +1512,11 @@ sbgc <- function(clusters,
         den <- sqrt((n-nj)/(n-1)*(vari/nj))
         den[num==0] <- 1
         
-        res12$Rho_abund <- num/den
+        res12$rho_abund <- num/den
       }
       
-      # CoreTerms
-      if(!("CoreTerms" %in% bioregion_metrics)){
+      # core_terms
+      if(!("core_terms" %in% bioregion_metrics)){
         res12 <- res12[,-c(3,4,5)]
       }
     }
@@ -1467,8 +1528,8 @@ sbgc <- function(clusters,
       res22[,1] <- rownames(wij_mat)
       colnames(res22) <- c(col1, "Dummy")
       
-      if("P" %in% bioregionalization_metrics){
-        res22$P_abund <- 1 - apply((wij_mat / wi_mat)*(wij_mat / wi_mat),1,sum)
+      if("p" %in% bioregionalization_metrics){
+        res22$p_abund <- 1 - apply((wij_mat / wi_mat)*(wij_mat / wi_mat),1,sum)
       }
       
       res22 <- res22[,-2]
@@ -1519,15 +1580,15 @@ gb <- function(clusters,
                include_cluster){ 
   
   # Update bioregion_metrics
-  available_bioregion_metrics<- c("Richness", "Rich_Endemics", "Prop_Endemics", 
-                                  "MeanSim", "SdSim")
+  available_bioregion_metrics<- c("richness", "rich_endemics", "prop_endemics", 
+                                  "mean_sim", "sd_sim")
   if(length(intersect(available_bioregion_metrics,
                       bioregion_metrics))==0){
     bioregion_metrics = NULL
   }
   
   # Update bioregionalization_metrics
-  available_bioregionalization_metrics<- c("Silhouette")
+  available_bioregionalization_metrics<- c("silhouette")
   if(length(intersect(available_bioregionalization_metrics,
                       bioregionalization_metrics))==0){
     bioregionalization_metrics = NULL
@@ -1538,13 +1599,13 @@ gb <- function(clusters,
   res2 <- NULL
   
   # Check needed inputs
-  comat_needed <- (("Richness" %in% bioregion_metrics) |
-                   ("Rich_Endemics" %in% bioregion_metrics) |
-                   ("Prop_Endemics" %in% bioregion_metrics))
+  comat_needed <- (("richness" %in% bioregion_metrics) |
+                   ("rich_endemics" %in% bioregion_metrics) |
+                   ("prop_endemics" %in% bioregion_metrics))
   
-  sim_needed <- (("MeanSim" %in% bioregion_metrics) |
-                 ("SdSim" %in% bioregion_metrics) |
-                 ("Silhouette" %in% bioregionalization_metrics))
+  sim_needed <- (("mean_sim" %in% bioregion_metrics) |
+                 ("sd_sim" %in% bioregion_metrics) |
+                 ("silhouette" %in% bioregionalization_metrics))
   
   # Precompute muij if sim_needed
   if(sim_needed){
@@ -1582,11 +1643,11 @@ gb <- function(clusters,
     colnames(res1) <- temp[,1]
     
     res1 <- mat_to_net(res1, weight=TRUE, remove_zeroes = FALSE)
-    colnames(res1) <- c("Site", "Bioregion", "Assigned")
+    colnames(res1) <- c("site", "bioregion", "assigned")
     
-    # Richness
-    if("Richness" %in% bioregion_metrics |
-       "Prop_Endemics" %in% bioregion_metrics){
+    # richness
+    if("richness" %in% bioregion_metrics |
+       "prop_endemics" %in% bioregion_metrics){
       
       temp <- comat_bin %*% t(comat_bin)
       temp[!diag(dim(temp)[1])] <- 0
@@ -1598,14 +1659,14 @@ gb <- function(clusters,
       rownames(ng_mat) <- colnames(temp)[-1]
       colnames(ng_mat) <- temp[,1]
 
-      res1$Richness <- mat_to_net(ng_mat, 
+      res1$richness <- mat_to_net(ng_mat, 
                                   weight = TRUE, 
                                   remove_zeroes = FALSE)[,3]
     }
       
-    # Rich_Endemics
-    if("Rich_Endemics" %in% bioregion_metrics|
-       "Prop_Endemics" %in% bioregion_metrics){
+    # rich_endemics
+    if("rich_endemics" %in% bioregion_metrics|
+       "prop_endemics" %in% bioregion_metrics){
       
       # Species x cluster (1 if species in cluster)
       temp <- stats::aggregate(comat_bin, list(clusters), max)
@@ -1616,35 +1677,35 @@ gb <- function(clusters,
       # Set 0 for none endemic
       is_sb[apply(is_sb, 1, sum) > 1] = 0
       
-      # Rich_Endemics
+      # rich_endemics
       nge_mat <- comat_bin %*% is_sb
 
-      res1$Rich_Endemics <- mat_to_net(nge_mat, 
+      res1$rich_endemics <- mat_to_net(nge_mat, 
                                        weight = TRUE, 
                                        remove_zeroes = FALSE)[,3]
 
     }
     
-    # Prop_Endemics
-    if("Prop_Endemics" %in% bioregion_metrics){
+    # prop_endemics
+    if("prop_endemics" %in% bioregion_metrics){
       
-      res1$Prop_Endemics <- res1$Rich_Endemics / res1$Richness
+      res1$prop_endemics <- res1$rich_endemics / res1$richness
       
-      if(!("Richness" %in% bioregion_metrics)){
-        res1$Richness <- NULL
+      if(!("richness" %in% bioregion_metrics)){
+        res1$richness <- NULL
       }
-      if(!("Rich_Endemics" %in% bioregion_metrics)){
-        res1$Rich_Endemics <- NULL
+      if(!("rich_endemics" %in% bioregion_metrics)){
+        res1$rich_endemics <- NULL
       }
       
     }  
     
-    if("MeanSim" %in% bioregion_metrics){
-      res1$MeanSim <- mat_to_net(muij_mat, 
+    if("mean_sim" %in% bioregion_metrics){
+      res1$mean_sim <- mat_to_net(muij_mat, 
                                  weight = TRUE, 
                                  remove_zeroes = FALSE)[,3]
     }
-    if("SdSim" %in% bioregion_metrics){
+    if("sd_sim" %in% bioregion_metrics){
       
       temp <- stats::aggregate(similarity, list(clusters), stats::sd, na.rm=TRUE)
       sdij_mat <- t(as.matrix(temp[,-1]))
@@ -1652,7 +1713,7 @@ gb <- function(clusters,
       colnames(sdij_mat) <- temp[,1]
       sdij_mat[is.na(sdij_mat)] <- 0
       
-      res1$SdSim <- mat_to_net(sdij_mat, 
+      res1$sd_sim <- mat_to_net(sdij_mat, 
                                weight = TRUE, 
                                remove_zeroes = FALSE)[,3]
     }
@@ -1669,7 +1730,7 @@ gb <- function(clusters,
     
     res2 <- data.frame(muij_mat[,1], muij_mat, clusters)
     res2[,1] <- rownames(muij_mat)
-    colnames(res2) <- c("Site", colnames(muij_mat), "Assigned")
+    colnames(res2) <- c("site", colnames(muij_mat), "assigned")
     
     if(dim(res2)[2] == 3){ # Only one site
       nob <- TRUE
@@ -1678,20 +1739,20 @@ gb <- function(clusters,
     }else{
       nob <- FALSE
       res2$a <- apply(res2, 1, function(x) {
-        # x[2:(ncol-1)] = MeanSim
+        # x[2:(ncol-1)] = mean_sim
         meansim_values <- as.numeric(x[2:(ncol(res2)-1)])
-        # Assigned bioregion
+        # assigned bioregion
         assigned <- x[ncol(res2)]
         # POTENTIAL PROBLEM WITH NUMERIC WHEN > 10 [5 become " 5"]
 
-        # Extract meansim corresponding to the assigned bioregion
+        # Extract mean_sim corresponding to the assigned bioregion
         a_val <- meansim_values[which(colnames(res2)[2:(ncol(res2)-1)] == assigned)]
         return(a_val)
       })
       res2$b <- apply(res2, 1, function(x) {
         meansim_values <- as.numeric(x[2:(ncol(res2)-2)])
         assigned <- x[ncol(res2)-1]  # colonne assigned
-        # Put NA for the Assigned
+        # Put NA for the assigned
         meansim_values[colnames(res2)[2:(ncol(res2)-2)] == assigned] <- NA
         # b = max among other bioregions
         b_val <- max(meansim_values, na.rm = TRUE)
@@ -1701,11 +1762,11 @@ gb <- function(clusters,
     
     res2 <- res2[, c(1, (dim(res2)[2]-1), dim(res2)[2])]
     
-    if("Silhouette" %in% bioregionalization_metrics){
+    if("silhouette" %in% bioregionalization_metrics){
       if(nob){
-        res2$Silhouette <- NA
+        res2$silhouette <- NA
       }else{
-        res2$Silhouette <- (res2$a - res2$b) / pmax(res2$a,res2$b)
+        res2$silhouette <- (res2$a - res2$b) / pmax(res2$a,res2$b)
       }
     }
 

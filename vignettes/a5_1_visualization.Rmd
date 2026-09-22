@@ -434,8 +434,11 @@ site-species interactions across `r length(unique(fishdf$Site))` sites and
 
 In gephi, this network can be visualised as follows, after applying a layout 
 algorithm:
+
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/05_network_fish_basic.png">
+  <img align="bottom" width="100%" height="100%" 
+   src="../man/figures/05_network_fish_basic.png"
+   alt="Network fish basic">
 </center> 
 
 
@@ -467,7 +470,9 @@ exportGDF(fish_sim,
 ```
 
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/05_network_fish_unipartite_weighted.png">
+  <img align="bottom" width="100%" height="100%" 
+   src="../man/figures/05_network_fish_unipartite_weighted.png"
+   alt="Network fish unipartite weighted">
 </center> 
 
 This creates a unipartite network where nodes are sites and edges represent 
@@ -518,11 +523,15 @@ exportGDF(fishdf,
 ```
 
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/05_map_fish_bipartite_infomap.png">
+  <img align="bottom" width="100%" height="100%" 
+   src="../man/figures/05_map_fish_bipartite_infomap.png"
+   alt="Network fish bipartite infomap">
 </center> 
 
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/05_network_fish_bipartite_colored.png">
+  <img align="bottom" width="100%" height="100%" 
+   src="../man/figures/05_network_fish_bipartite_colored.png"
+   alt="Network fish bipartite colored">
 </center> 
 
 ## 3.4 Visualizing in Gephi

@@ -50,7 +50,8 @@ Imports:
     sf,
     stats,
     tidyr,
-    utils
+    utils,
+    vegan
 RdMacros: 
     mathjaxr,
     Rdpack
@@ -66,12 +67,11 @@ Suggests:
     rnaturalearth,
     rnaturalearthdata,
     terra,
-    testthat (>= 3.0.0),
-    vegan
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/bioRgeo/bioregion,
     https://bioRgeo.github.io/bioregion/
 BugReports: https://github.com/bioRgeo/bioregion/issues
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

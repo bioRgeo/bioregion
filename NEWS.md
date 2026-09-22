@@ -3,7 +3,22 @@
 This is a list of changes made in the development/GitHub version of the package 
 between **bioregion 1.4.0** (CRAN release 2026-03-29) and the next CRAN release.
 
-* Relaxed matching controls in `site_species_metrics()` and `bioregion_metrics()`.
+* Metric names have been changed to snake_case in `site_species_metrics()`, 
+`bioregion_metrics()` and `bioregionalization_metrics()`. The package is
+being progressively standardized on snake_case metric names. Old metric
+names are still accepted as inputs but are converted to snake_case in
+outputs.
+
+* `find_optimal_n()` has been updated. `bioregionalizations`argument changed to 
+`evaluation_df`.
+
+* `bioregionalization_metrics()` has been updated. The `anosim` metric (along 
+with the associated p-value) is now computed with `vegan`. The `eval_metric` 
+argument changed to `eval_metrics` and `net` to `comat`. `col_sites`, and  
+`col_species` arguments are now deprecated.
+
+* Relaxed matching controls in `site_species_metrics()` and 
+`bioregion_metrics()`.
 
 # bioregion 1.4.0
 

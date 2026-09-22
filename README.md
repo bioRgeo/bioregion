@@ -79,7 +79,7 @@ try to get to it as soon as we can!
 `data.table`, `dbscan`, `dynamicTreeCut`, `fastcluster`, `fastkmedoids`,
 `ggplot2`, `grDevices`, `httr`, `igraph`, `mathjaxr`, `Matrix`,
 `phangorn`, `rcartocolor`, `Rdpack`, `rlang`, `rmarkdown`, `segmented`,`sf`, 
-`stats`, `tidyr` and `utils`.
+`stats`, `tidyr`, `utils` and `vegan`.
 
 ## Citation
 

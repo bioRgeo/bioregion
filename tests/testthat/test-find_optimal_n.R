@@ -1,99 +1,85 @@
 # Inputs -----------------------------------------------------------------------
 dissim <- dissimilarity(fishmat, metric = "all")
 
-tree1 <- hclu_hierarclust(dissim, 
-                          n_clust = 2:48, 
-                          index = "Simpson",
-                          seed = 1,
-                          optimal_tree_method = "best",
-                          verbose = FALSE)
+bioreg <- hclu_hierarclust(dissim, 
+                           n_clust = 2:48, 
+                           index = "Simpson",
+                           seed = 1,
+                           optimal_tree_method = "best",
+                           verbose = FALSE)
 
-#quietly(
-  a <- bioregionalization_metrics(tree1,
+met <- bioregionalization_metrics(bioreg,
+                                  eval_metrics = "all",
                                   dissimilarity = dissim,
-                                  net = fishdf,
-                                  species_col = "Species",
-                                  site_col = "Site",
-                                  eval_metric = c("tot_endemism",
-                                                  "avg_endemism",
-                                                  "pc_distance",
-                                                  "anosim"))
-#)
+                                  comat = fishmat)
 
-#quietly(
-  a1 <- bioregionalization_metrics(tree1,
-                                  dissimilarity = dissim,
-                                  net = fishdf,
-                                  species_col = "Species",
-                                  site_col = "Site",
-                                  eval_metric = c("tot_endemism",
-                                                  "avg_endemism",
-                                                  "pc_distance"))
-#)
+met1 <- bioregionalization_metrics(bioreg,
+                                   eval_metrics = c("mean_endemics",
+                                                    "tot_endemics",
+                                                    "prop_between_dissim"),
+                                   dissimilarity = dissim,
+                                   comat = fishmat)
 
-partdf <- data.frame(K = c(3,5,6,2,3), 
+partdf <- data.frame(K = c(3,5,6,2,3),
                      n_clusters = c(3,5,6,23,6),
                      metric1 = c(NA,0.2,0.6,0.7,13),
                      metric2 = c("1",0.2,0.7,12,8))
 
-partdf1 <- data.frame(K = c(3,5), 
-                      n_cluster = c(3,5),
+partdf2 <- data.frame(K = c(3,5),
+                      n_clusters = c(3,5),
                       metric1 = c(NA,0.2),
                       metric2 = c(1,0.2))
 
-partdf2 <- data.frame(K = c(3,5), 
-                   n_clusters = c(3,5),
-                   metric1 = c(NA,0.2),
-                   metric2 = c(1,0.2))
-
-partdf3 <- data.frame(K = c(3,5,6,2,3), 
+partdf3 <- data.frame(K = c(3,5,6,2,3),
                      n_clusters = c(3,5,6,23,6),
                      metric1 = c(NA,0.2,0.6,0.7,13),
                      metric2 = rep(1,5))
 
-partdf4 <- data.frame(K = c(3,5,6,2,3), 
+partdf4 <- data.frame(K = c(3,5,6,2,3),
                       n_clusters = c(3,5,6,23,6),
                       metric1 = rep(1,5),
                       metric2 = rep(1,5))
 
-a2 <- a
-a2$evaluation_df$tot_endemism <- c(2, rep(1, dim(a2$evaluation_df)[1]-1))
+met2 <- met
+met2$tot_endemics <- c(2, rep(1, dim(met2)[1]-1))
 
-a3 <- a
-a3$evaluation_df <- a3$evaluation_df[1:8,]
-
-
+met3 <- met
+met3 <- met3[1:8,]
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  optim_a <- find_optimal_n(a1, 
+  optim_a <- find_optimal_n(met,
                             plot = FALSE,
                             verbose = FALSE)
-  expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 13)
-  expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 12)
-  expect_equal(optim_a$optimal_nb_clusters$pc_distance, 13)
-  
-  #optim_a <- find_optimal_n(a1, 
-  #                          plot = TRUE)
-  #expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 13)
-  #expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 12)
-  #expect_equal(optim_a$optimal_nb_clusters$pc_distance, 13)
-  
-  #optim_a <- find_optimal_n(a1,
-  #                          criterion = "breakpoints",
-  #                          plot = TRUE)
-  #expect_equal(optim_a$optimal_nb_clusters$tot_endemism, 11)
-  #expect_equal(optim_a$optimal_nb_clusters$avg_endemism, 10)
-  #expect_equal(optim_a$optimal_nb_clusters$pc_distance, 13)
-  
-  #optim_a <- find_optimal_n(a1, 
-  #                          criterion = "max",
-  #                          plot = FALSE)
-  
-  #optim_a <- find_optimal_n(a1, 
-  #                          criterion = "min",
-  #                          plot = FALSE)
+  expect_equal(optim_a$optimal_n$tot_endemics, 13)
+  expect_equal(optim_a$optimal_n$mean_endemics, 12)
+  expect_equal(optim_a$optimal_n$prop_between_dissim, 13)
+
+  # optim_a <- find_optimal_n(met1,
+  #                           plot = TRUE,
+  #                           verbose = FALSE)
+  # expect_equal(optim_a$optimal_n$tot_endemics, 12)
+  # expect_equal(optim_a$optimal_n$mean_endemics, 13)
+  # expect_equal(optim_a$optimal_n$prop_between_dissim, 13)
+  # 
+  # optim_a <- find_optimal_n(met1,
+  #                           criterion = "breakpoints",
+  #                           plot = TRUE,
+  #                           verbose = FALSE)
+  # expect_equal(optim_a$optimal_n$tot_endemics, 10)
+  # expect_equal(optim_a$optimal_n$mean_endemics, 9)
+  # expect_equal(optim_a$optimal_n$prop_between_dissim, 11)
+
+  # optim_a <- find_optimal_n(met1,
+  #                           criterion = "max",
+  #                           plot = FALSE,
+  #                           verbose = FALSE)
+
+  # optim_a <- find_optimal_n(met1,
+  #                           criterion = "min",
+  #                           plot = FALSE,
+  #                           verbose = FALSE)
 
 })
 
@@ -102,212 +88,208 @@ test_that("invalid inputs", {
   
   expect_error(
     find_optimal_n("zz"),
-    "^bioregionalizations should be the output object from")
-  
+    "^evaluation_df should be the output object from")
+
   expect_error(
     find_optimal_n(partdf),
-    "^Your bioregionalization data.frame contains non numeric")
-  
-  expect_error(
-    find_optimal_n(partdf1),
-    "^bioregionalizations should be the output object from")
-  
+    "^evaluation_df contains non numeric")
+
   expect_error(
     find_optimal_n(partdf2),
-    "^The number of bioregionalizations is too low")
-  
+    "^The number of partitions is too low")
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion =  c("zz","zz")),
     "criterion must be of length 1.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion =  TRUE),
     "criterion must be a character.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion =  "zzb"),
     "^Please choose criterion from the following:")
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    metrics_to_use =  c(1,TRUE)),
     "metrics_to_use must be a character.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a, 
+    find_optimal_n(met,
                    metrics_to_use = "zz"),
-    "metrics_to_use should exist in the evaluation table.",
+    "metrics_to_use should exist in evaluation_df.",
     fixed = TRUE)
-  
+
   expect_warning(
     find_optimal_n(partdf3,
                    plot = FALSE,
                    verbose = FALSE),
     "^Metrics metric2")
-  
+
   expect_warning(
     expect_error(
       find_optimal_n(partdf4,
                      plot = FALSE),
-      "^The selected bioregionalization metrics"),
+      "^The selected evaluation metrics"),
     "^Metrics metric1")
-  
+
   expect_warning(
-   find_optimal_n(a2,
+   find_optimal_n(met2,
                   criterion = "breakpoints",
                   plot = FALSE,
                   verbose = FALSE),
-   "^Metrics tot_endemism")
-  
+   "^Metrics tot_endemics")
+
   quietly(
     expect_message(
       expect_warning(
-        find_optimal_n(a3,
+        find_optimal_n(met3,
                        criterion = "increasing_step",
                        plot = FALSE),
         "^Criterion 'increasing_step' cannot work properly with "),
      "^...Caveat: be cautious with the interpretation of")
   )
-  
+
   quietly(
     expect_warning(
-      find_optimal_n(a3,
+      find_optimal_n(met3,
                      criterion = "decreasing_step",
                      plot = FALSE),
       "^Criterion 'decreasing_step' cannot work properly with")
   )
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_quantile = c("zz","zz"),
                    verbose = FALSE),
     "step_quantile must be of length 1.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_quantile = "zz",
                    verbose = FALSE),
     "step_quantile must be numeric.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_quantile = -1.1,
                    verbose = FALSE),
     "step_quantile must be strictly higher than 0.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_quantile = 0,
                    verbose = FALSE),
     "step_quantile must be strictly higher than 0.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_quantile = 1,
                    verbose = FALSE),
     "step_quantile must be in the ]0,1[ interval.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_round_above = c(TRUE, TRUE),
                    verbose = FALSE),
     "step_round_above must be of length 1.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_round_above = 1,
                    verbose = FALSE),
     "step_round_above must be a boolean.",
-     fixed = TRUE)  
-  
+     fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_levels = c(1,1),
                    verbose = FALSE),
     "step_levels must be of length 1.",
-    fixed = TRUE)  
-  
+    fixed = TRUE)
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_levels = "zz",
                    verbose = FALSE),
     "step_levels must be numeric.",
     fixed = TRUE)
-    
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_levels = 1.1,
                    verbose = FALSE),
     "step_levels must be an integer.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    criterion = "increasing_step",
                    step_levels = -1,
                    verbose = FALSE),
     "step_levels must be higher than 0.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a, 
+    find_optimal_n(met,
                    plot = c(TRUE, TRUE)),
     "plot must be of length 1.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a, 
+    find_optimal_n(met,
                    plot = "zz"),
     "plot must be a boolean.",
     fixed = TRUE)
-  
+
   quietly(
     expect_warning(
-      find_optimal_n(a,
+      find_optimal_n(met,
                      criterion = "elbow",
                      plot = FALSE),
       "^The elbow method")
   )
-  
+
   quietly(
     expect_error(
-      find_optimal_n(a,
+      find_optimal_n(met,
                      criterion = "cutoff",
                      plot = FALSE),
       "^Criterion 'cutoff' should probably")
   )
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    plot = FALSE,
                    verbose = 1),
     "verbose must be a boolean.",
     fixed = TRUE)
-  
+
   expect_error(
-    find_optimal_n(a,
+    find_optimal_n(met,
                    plot = FALSE,
                    verbose = c(TRUE, FALSE)),
     "verbose must be of length 1.",

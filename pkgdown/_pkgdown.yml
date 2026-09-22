@@ -11,7 +11,7 @@ navbar:
       - getting-started
       - reference
       - tutorials
-      - applications
+#      - applications
       - news
   components:
     getting-started:
@@ -42,11 +42,11 @@ navbar:
           href: articles/a5_2_summary_metrics.html  
         - text: "5.3 Compare bioregionalizations"
           href: articles/a5_3_compare_bioregionalizations.html
-    applications:
-      text: "Applications"
-      menu:
-        - text: "Citing articles"
-          href: articles/citations.html
+#    applications:
+#      text: "Applications"
+#      menu:
+#        - text: "Citing articles"
+#          href: articles/citations.html
           
 toc:
   depth: 1
@@ -142,9 +142,9 @@ articles:
       - a5_2_summary_metrics
       - a5_3_compare_bioregionalizations
 
-  - title: "Applications"
-    contents:
-      - citations 
+#  - title: "Applications"
+#    contents:
+#      - citations 
   
 news:
   releases:

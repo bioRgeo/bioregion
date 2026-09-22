@@ -82,7 +82,7 @@ test_that("valid output", {
                                  bioregion_metrics = "CoreTerms", 
                                  comat = fishmat,
                                  verbose = FALSE)
-  expect_equal(sum(met$K_3$NbSites == metest$K_3$species_bioregions$n_b[1:3]), 
+  expect_equal(sum(met$K_3$n_sites == metest$K_3$species_bioregions$n_b[1:3]), 
                3)
 
 })

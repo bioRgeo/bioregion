@@ -94,34 +94,34 @@ test_that("valid output", {
                               verbose = FALSE)
   expect_equal(dim(ind$species_bioregions), 
                c(dim(vegemat)[2]*cluinfo$cluster_info[1,2], 20))
-  expect_equal(colnames(ind$species_bioregions)[1:5], c("Species",
-                                                        "Bioregion",
+  expect_equal(colnames(ind$species_bioregions)[1:5], c("species",
+                                                        "bioregion",
                                                         "n_sb","n_s","n_b"))
   expect_equal(colnames(ind$species_bioregions)[12:14], c("w_sb","w_s","w_b"))
   expect_equal(dim(ind$species_bioregionalization), c(dim(vegemat)[2],3))
-  expect_equal(colnames(ind$species_bioregionalization), c("Species",
-                                                           "P_occ", "P_abund"))
+  expect_equal(colnames(ind$species_bioregionalization), c("species",
+                                                           "p_occ", "p_abund"))
   expect_equal(dim(ind$site_chorotypes), 
                c(dim(vegemat)[1]*cluinfo$cluster_info[1,2],20))
-  expect_equal(colnames(ind$site_chorotypes)[1:5], c("Site",
-                                                     "Chorotypes",
+  expect_equal(colnames(ind$site_chorotypes)[1:5], c("site",
+                                                     "chorotype",
                                                      "n_gc","n_g","n_c"))
   expect_equal(colnames(ind$site_chorotypes)[12:14], c("w_gc","w_g","w_c"))
   expect_equal(dim(ind$site_chorological), c(dim(vegemat)[1],3))
-  expect_equal(colnames(ind$site_chorological), c("Site",
-                                                "P_occ", "P_abund"))
+  expect_equal(colnames(ind$site_chorological), c("site",
+                                                  "p_occ", "p_abund"))
   expect_equal(dim(ind$site_bioregions),
                c(dim(vegemat)[1]*cluinfo$cluster_info[1,2],8))
-  expect_equal(colnames(ind$site_bioregions), c("Site",
-                                                "Bioregion",
-                                                "Assigned",
-                                                "Richness",
-                                                "Rich_Endemics",
-                                                "Prop_Endemics",
-                                                "MeanSim","SdSim"))
+  expect_equal(colnames(ind$site_bioregions), c("site",
+                                                "bioregion",
+                                                "assigned",
+                                                "richness",
+                                                "rich_endemics",
+                                                "prop_endemics",
+                                                "mean_sim","sd_sim"))
   expect_equal(dim(ind$site_bioregionalization), c(dim(vegemat)[1],2))
-  expect_equal(colnames(ind$site_bioregionalization), c("Site",
-                                                        "Silhouette"))
+  expect_equal(colnames(ind$site_bioregionalization), c("site",
+                                                        "silhouette"))
   
   ind_abund <- site_species_metrics(bioregionalization = cluinfo,
                                     bioregion_metrics = "all",
@@ -148,7 +148,7 @@ test_that("valid output", {
   expect_equal(ind,ind_shuff)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "Rho",
+                              bioregion_metrics = "rho",
                               bioregionalization_metrics = NULL,
                               data_type = "occurrence",
                               cluster_on = "site",
@@ -157,10 +157,10 @@ test_that("valid output", {
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$species_bioregions)[2], 3)
-  expect_equal(names(ind$species_bioregions)[3], "Rho_occ")
+  expect_equal(names(ind$species_bioregions)[3], "rho_occ")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "Rho",
+                              bioregion_metrics = "rho",
                               bioregionalization_metrics = NULL,
                               data_type = "abundance",
                               cluster_on = "site",
@@ -169,7 +169,7 @@ test_that("valid output", {
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$species_bioregions)[2], 3)
-  expect_equal(names(ind$species_bioregions)[3], "Rho_abund")
+  expect_equal(names(ind$species_bioregions)[3], "rho_abund")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = NULL,
@@ -181,10 +181,10 @@ test_that("valid output", {
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$species_bioregionalization)[2], 2)
-  expect_equal(names(ind$species_bioregionalization)[2], "P_occ")
+  expect_equal(names(ind$species_bioregionalization)[2], "p_occ")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "Rho",
+                              bioregion_metrics = "rho",
                               bioregionalization_metrics = "P",
                               data_type = "abundance",
                               cluster_on = "site",
@@ -193,12 +193,12 @@ test_that("valid output", {
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$species_bioregions)[2], 3)
-  expect_equal(names(ind$species_bioregions)[3], "Rho_abund")
+  expect_equal(names(ind$species_bioregions)[3], "rho_abund")
   expect_equal(dim(ind$species_bioregionalization)[2], 2)
-  expect_equal(names(ind$species_bioregionalization)[2], "P_abund")
+  expect_equal(names(ind$species_bioregionalization)[2], "p_abund")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "MeanSim",
+                              bioregion_metrics = "mean_sim",
                               bioregionalization_metrics = NULL,
                               data_type = "occurrence",
                               cluster_on = "site",
@@ -207,7 +207,7 @@ test_that("valid output", {
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$site_bioregions)[2], 3)
-  expect_equal(names(ind$site_bioregions)[3], "MeanSim")
+  expect_equal(names(ind$site_bioregions)[3], "mean_sim")
 
   ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = "all",
@@ -222,8 +222,8 @@ test_that("valid output", {
   expect_equal(ind$site_chorological, NULL)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "MeanSim",
-                              bioregionalization_metrics = "Silhouette",
+                              bioregion_metrics = "mean_sim",
+                              bioregionalization_metrics = "silhouette",
                               data_type = "occurrence",
                               cluster_on = "site",
                               comat = vegemat,
@@ -231,9 +231,9 @@ test_that("valid output", {
                               index = 3,
                               verbose = FALSE)
   expect_equal(dim(ind$site_bioregions)[2], 3)
-  expect_equal(names(ind$site_bioregions)[3], "MeanSim")
+  expect_equal(names(ind$site_bioregions)[3], "mean_sim")
   expect_equal(dim(ind$site_bioregionalization)[2], 2)
-  expect_equal(names(ind$site_bioregionalization)[2], "Silhouette")
+  expect_equal(names(ind$site_bioregionalization)[2], "silhouette")
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = "all",
@@ -250,7 +250,7 @@ test_that("valid output", {
   expect_equal(ind$site_chorological, NULL)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "Fidelity",
+                              bioregion_metrics = "fidelity",
                               bioregionalization_metrics = NULL,
                               data_type = "auto",
                               cluster_on = "site",
@@ -276,7 +276,7 @@ test_that("valid output", {
   expect_equal(length(ind), 3)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "MeanSim",
+                              bioregion_metrics = "mean_sim",
                               bioregionalization_metrics = NULL,
                               data_type = "both",
                               cluster_on = "both",
@@ -288,7 +288,7 @@ test_that("valid output", {
   expect_equal(dim(ind$site_bioregions)[2], 4)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "MeanSim",
+                              bioregion_metrics = "mean_sim",
                               bioregionalization_metrics = NULL,
                               data_type = "both",
                               cluster_on = "both",
@@ -300,7 +300,7 @@ test_that("valid output", {
   expect_equal(dim(ind$site_bioregions)[2], 3)
   
   ind_base <- site_species_metrics(bioregionalization = cluinfo,
-                                   bioregion_metrics = c("Richness","MeanSim"),
+                                   bioregion_metrics = c("richness", "mean_sim"),
                                    bioregionalization_metrics = NULL,
                                    data_type = "both",
                                    cluster_on = "both",
@@ -316,7 +316,7 @@ test_that("valid output", {
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = "all",
-                              bioregionalization_metrics = "Silhouette",
+                              bioregionalization_metrics = "silhouette",
                               data_type = "occurrence",
                               cluster_on = "site",
                               comat = vegemat,
@@ -327,7 +327,7 @@ test_that("valid output", {
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
                               bioregion_metrics = "all",
-                              bioregionalization_metrics = "P",
+                              bioregionalization_metrics = "p",
                               data_type = "occurrence",
                               cluster_on = "site",
                               comat = vegemat,
@@ -337,7 +337,7 @@ test_that("valid output", {
                               verbose = FALSE)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "MeanSim",
+                              bioregion_metrics = "mean_sim",
                               bioregionalization_metrics = "all",
                               data_type = "occurrence",
                               cluster_on = "site",
@@ -348,7 +348,7 @@ test_that("valid output", {
                               verbose = FALSE)
   
   ind <- site_species_metrics(bioregionalization = cluinfo,
-                              bioregion_metrics = "Fidelity",
+                              bioregion_metrics = "fidelity",
                               bioregionalization_metrics = "all",
                               data_type = "occurrence",
                               cluster_on = "site",
@@ -429,7 +429,7 @@ test_that("invalid inputs", {
   
   expect_error(
     site_species_metrics(cluinfo,
-                         bioregion_metrics = c("Rho","nistenu"),
+                         bioregion_metrics = c("rho","nistenu"),
                          bioregionalization_metrics = NULL),
     "^One or several bioregion metrics chosen are not")
   
@@ -465,7 +465,7 @@ test_that("invalid inputs", {
   
   expect_warning(
     site_species_metrics(cluinfo,
-                         bioregion_metrics = c("Rho", "MeanSim"),
+                         bioregion_metrics = c("rho", "MeanSim"),
                          bioregionalization_metrics = NULL,
                          comat = NULL,
                          similarity = vegesim),
@@ -481,7 +481,7 @@ test_that("invalid inputs", {
 
   expect_warning(
     site_species_metrics(cluinfo,
-                         bioregion_metrics = c("Rho", "MeanSim"),
+                         bioregion_metrics = c("rho", "MeanSim"),
                          bioregionalization_metrics = NULL,
                          data_type = "abundance",
                          comat = vegemat,
@@ -522,7 +522,7 @@ test_that("invalid inputs", {
   expect_error(
     expect_warning(
       site_species_metrics(cluinfo,
-                           bioregion_metrics = "Rho",
+                           bioregion_metrics = "rho",
                            bioregionalization_metrics = NULL,
                            comat = NULL,
                            similarity = vegesim),
@@ -774,7 +774,7 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfona,
                          comat = vegemat_bin,
-                         bioregion_metrics = "Rho",
+                         bioregion_metrics = "rho",
                          bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^No data type detected in bioregionalization and comat is based on occurence data")
@@ -782,7 +782,7 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfona,
                          comat = vegemat,
-                         bioregion_metrics = "Rho",
+                         bioregion_metrics = "rho",
                          bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^No data type detected in bioregionalization and comat is based on abundance data")
@@ -790,7 +790,7 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfoocc,
                          comat = vegemat_bin,
-                         bioregion_metrics = "Rho",
+                         bioregion_metrics = "rho",
                          bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on occurence data and comat is based on occurence data")
@@ -798,7 +798,7 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfoocc,
                          comat = vegemat,
-                         bioregion_metrics = "Rho",
+                         bioregion_metrics = "rho",
                          bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on occurence data but note that even if comat is based on abundance")
@@ -806,7 +806,7 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfoabund,
                          comat = vegemat_bin,
-                         bioregion_metrics = "Rho",
+                         bioregion_metrics = "rho",
                          bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on abundance data but comat is based on occurence data so occurrence")
@@ -814,7 +814,7 @@ test_that("invalid inputs", {
   expect_message(
     site_species_metrics(cluinfoabund,
                          comat = vegemat,
-                         bioregion_metrics = "Rho",
+                         bioregion_metrics = "rho",
                          bioregionalization_metrics = NULL,
                          data_type = "auto"),
     "^The bioregionalization is based on abundance data and comat is based on abundance")
@@ -822,7 +822,7 @@ test_that("invalid inputs", {
   #expect_warning(
   #  site_species_metrics(cluinfo,
   #                       comat = vegemat_bin,
-  #                       bioregion_metrics = "Rho",
+  #                       bioregion_metrics = "rho",
   #                       bioregionalization_metrics = NULL,
   #                       data_type = "abundance"),
   #  "^comat is based on occurence data so abundance-based metrics won't be computed!")

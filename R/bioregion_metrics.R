@@ -19,13 +19,13 @@
 #' A `data.frame` with 5 columns (Bioregion ID and metrics described below) or 
 #' 7 if spatial coherence is computed.
 #' 
-#' - **NbSites**: Number of sites per bioregion
-#' - **Richness**: Number of distinct species per bioregion.
-#' - **Rich_Endemics**: Number of species found only in the bioregion.
-#' - **Prop_Endemics**: Fraction of endemics species.
-#' - [**SC_size**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence): 
+#' - **n_sites**: Number of sites per bioregion
+#' - **richness**: Number of distinct species per bioregion.
+#' - **rich_endemics**: Number of species found only in the bioregion.
+#' - **prop_endemics**: Fraction of endemics species.
+#' - [**sc_size**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence): 
 #' Spatial coherence based on size, fraction of the number of site contained in the bioregion's largest contiguous patch.
-#' - [**SC_area**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence): 
+#' - [**sc_area**](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence): 
 #' Spatial coherence based on area, fraction of the bioregion area contained in its largest contiguous patch.
 #' 
 #' Note that if `bioregionalization` contains multiple partitions 
@@ -41,15 +41,15 @@
 #' @seealso 
 #' For more details illustrated with a practical example, 
 #' see the vignette: 
-#' \url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html}.
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion}.
 #' 
 #' Associated functions: 
 #' [site_species_metrics] [bioregionalization_metrics]
 #'  
 #' @author
+#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
 #' Pierre Denelle (\email{pierre.denelle@gmail.com}) \cr
-#' Boris Leroy (\email{leroy.boris@gmail.com}) \cr
-#' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) 
+#' Boris Leroy (\email{leroy.boris@gmail.com}) 
 #' 
 #' @examples
 #' comat <- matrix(sample(1000, 50), 5, 10)
@@ -153,7 +153,7 @@ bioregion_metrics <- function(bioregionalization,
     
     # nj
     tab <- stats::aggregate(comat_bin[,1], list(partition), length)
-    colnames(tab) <- c("Bioregion", "NbSites")
+    colnames(tab) <- c("bioregion", "n_sites")
     
     # nij
     temp <- stats::aggregate(comat_bin, list(partition), sum)
@@ -162,34 +162,34 @@ bioregion_metrics <- function(bioregionalization,
     rownames(nij) <- colnames(temp)[-1]
     colnames(nij) <- temp[,1]
 
-    # Richness
-    tab$Richness <- apply(nij, 2, sum)
+    # richness
+    tab$richness <- apply(nij, 2, sum)
     
-    # Rich_Endemics
+    # rich_endemics
     endemics <- (apply(nij, 1, sum) == 1)
     endemics <- nij*endemics
-    tab$Rich_Endemics <- apply(endemics, 2, sum)
+    tab$rich_endemics <- apply(endemics, 2, sum)
     
-    # Prop_Endemics
-    tab$Prop_Endemics <- tab$Rich_Endemics / tab$Richness
+    # prop_endemics
+    tab$prop_endemics <- tab$rich_endemics / tab$richness
     
     # Spatial coherence
     if(!is.null(map)){
       
-      SC <- NULL
-      SCs <- NULL
+      sc <- NULL
+      scs <- NULL
       
       # Loop over the bioregions
       for (i in 1:dim(tab)[1]) {
         
-        if(tab$NbSites[i] == 1){
-          SC <- c(SC, 1)
-          SCs <- c(SCs, 1)
+        if(tab$n_sites[i] == 1){
+          sc <- c(sc, 1)
+          scs <- c(scs, 1)
         }else{
           
           # Subset of map
           mapki <- map[, (k+1)]
-          mapki <- mapki[mapki[, 1, drop = TRUE] == tab$Bioregion[i],]
+          mapki <- mapki[mapki[, 1, drop = TRUE] == tab$bioregion[i],]
           
           # Neighbors
           nb <- sf::st_touches(mapki, sparse = TRUE)
@@ -208,14 +208,14 @@ bioregion_metrics <- function(bioregionalization,
           patch_area <- aggregate(areas, list(patch), sum)[,2]
           
           # Spatial coherence
-          SC <- c(SC, max(patch_size) / sum(patch_size))
-          SCs <- c(SCs, max(patch_area) / sum(patch_area))
+          sc <- c(sc, max(patch_size) / sum(patch_size))
+          scs <- c(scs, max(patch_area) / sum(patch_area))
           
         }
       }
        
-      tab$SC_Size <- SC
-      tab$SC_Area <- SCs
+      tab$sc_size <- sc
+      tab$sc_area <- scs
     }
     
     # Update output

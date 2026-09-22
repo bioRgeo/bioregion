@@ -437,8 +437,9 @@ and `find_optimal_n()`.
 clustering attempts.  
 
 ```{r}
-bioregionalization_metrics(ex_pam, dissimilarity = dissim,
-                           eval_metric = "pc_distance")
+bioregionalization_metrics(ex_pam, 
+                           eval_metrics = "BetweenDissim",
+                           dissimilarity = dissim)
 ```
 
 *Note
@@ -446,10 +447,10 @@ For the two metrics `tot_endemism` and `avg_endemism`, you also need to provide
 the site-species matrix.
 
 ```{r}
-a <- bioregionalization_metrics(ex_pam, dissimilarity = dissim, net = fishdf,
-                                species_col = "Species", site_col = "Site",
-                                eval_metric = c("tot_endemism", "avg_endemism",
-                                                "pc_distance", "anosim"))
+a <- bioregionalization_metrics(ex_pam, 
+                                eval_metrics = "all",
+                                dissimilarity = dissim, 
+                                comat = fishmat)
 ```
 
 Once the `bioregionalization_metrics()` function has calculated the

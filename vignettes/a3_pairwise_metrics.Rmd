@@ -85,7 +85,7 @@ function from the R package
 co-occurrence matrix with a large number of sites and/or species.
 
 The second kind of metrics such as Bray-Curtis and the turnover component of 
-Bray-Curtis [@Baselga2012] are based on abundance data with $A$ the sum of the 
+Bray-Curtis [@Baselga2013] are based on abundance data with $A$ the sum of the 
 lesser values for common species shared by a pair of sites. $B$ and $C$ are the 
 total number of specimens counted at both sites minus $A$. Only three loops 
 function is available for the `ABC` based metrics. 

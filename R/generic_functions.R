@@ -663,39 +663,39 @@ print.bioregion.partition.comparison <- function(x, ...) {
   )
 }
 
-#' @export
-#' @method print bioregion.bioregionalization.metrics
-print.bioregion.bioregionalization.metrics <- function(x, ...) {
-  cat("Partition metrics:\n")
-  cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
-  cat(
-    " - Range of clusters explored: from ", min(x$evaluation_df$n_clusters),
-    " to ",
-    max(x$evaluation_df$n_clusters), "\n"
-  )
-  cat(" - Requested metric(s): ", x$args$eval_metric, "\n")
-  cat(" - Metric summary:\n")
-
-  print(data.frame(
-    sapply(
-      x$evaluation_df[x$args$eval_metric],
-      function(x) {
-        c(
-          min(x, na.rm = TRUE),
-          mean(x, na.rm = TRUE),
-          max(x, na.rm = TRUE)
-        )
-      }
-    ),
-    row.names = c("Min", "Mean", "Max")
-  ))
-
-  cat("\nAccess the data.frame of metrics with your_object$evaluation_df\n")
-  if ("endemism_results" %in% names(x)) {
-    cat("Details of endemism % for each bioregionalization are available in
-        your_object$endemism_results\n")
-  }
-}
+# #' @export
+# #' @method print bioregion.bioregionalization.metrics
+# print.bioregion.bioregionalization.metrics <- function(x, ...) {
+#   cat("Partition metrics:\n")
+#   cat(" -", nrow(x), " partition(s) evaluated\n")
+#   cat(
+#     " - Range of clusters explored: from ", min(x$n_bioregions),
+#     " to ",
+#     max(x$n_bioregions), "\n"
+#   )
+#   cat(" - Requested metric(s): ", colnames(x)[-c(1,2)], "\n")
+#   cat(" - Metric summary:\n")
+# 
+#   print(data.frame(
+#     sapply(
+#       x[,-c(1,2)],
+#       function(x) {
+#         c(
+#           min(x, na.rm = TRUE),
+#           mean(x, na.rm = TRUE),
+#           max(x, na.rm = TRUE)
+#         )
+#       }
+#     ),
+#     row.names = c("Min", "Mean", "Max")
+#   ))
+# 
+#   # cat("\nAccess the data.frame of metrics with your_object$evaluation_df\n")
+#   # if ("endemism_results" %in% names(x)) {
+#   #   cat("Details of endemism % for each bioregionalization are available in
+#   #       your_object$endemism_results\n")
+#   # }
+# }
 
 #' @export
 #' @method print bioregion.optimal.n
@@ -703,9 +703,9 @@ print.bioregion.optimal.n <- function(x, ...) {
   cat("Search for an optimal number of clusters:\n")
   cat(" -", nrow(x$evaluation_df), " partition(s) evaluated\n")
   cat(
-    " - Range of clusters explored: from ", min(x$evaluation_df$n_clusters),
+    " - Range of clusters explored: from ", min(x$evaluation_df$n_bioregions),
     " to ",
-    max(x$evaluation_df$n_clusters), "\n"
+    max(x$evaluation_df$n_bioregions), "\n"
   )
   cat(" - Evaluated metric(s): ", x$args$metrics_to_use, "\n")
 
@@ -845,9 +845,9 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   
   # similarity_metrics attribute currently groups richness & sim metrics
   # so we need to split
-  sim_per_cluster <- intersect(sim_idx, c("MeanSim", "SdSim"))
+  sim_per_cluster <- intersect(sim_idx, c("mean_sim", "sd_sim"))
   sim_bioreg <- intersect(sim_idx, c("Silhouette"))
-  richness_metrics <- intersect(sim_idx, c("Richness", "Rich_Endemics", "Prop_Endemics"))
+  richness_metrics <- intersect(sim_idx, c("richness", "rich_endemics", "prop_endemics"))
   
   if(length(bio_occ) > 0)
     cat(" - Per-cluster co-occurrence metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
@@ -964,9 +964,9 @@ str.bioregion.site.species.metrics <- function(object, ...) {
   
   # similarity_metrics attribute currently groups richness & sim metrics
   # so we need to split
-  sim_per_cluster <- intersect(sim_idx, c("MeanSim", "SdSim"))
+  sim_per_cluster <- intersect(sim_idx, c("mean_sim", "sd_sim"))
   sim_bioreg <- intersect(sim_idx, c("Silhouette"))
-  richness_metrics <- intersect(sim_idx, c("Richness", "Rich_Endemics", "Prop_Endemics"))
+  richness_metrics <- intersect(sim_idx, c("richness", "rich_endemics", "Prop_endemics"))
   
   if(length(bio_occ) > 0)
     cat(" - Per-cluster co-occurrence metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")
@@ -990,11 +990,10 @@ str.bioregion.site.species.metrics <- function(object, ...) {
 }
 
 # Helper function to summarize metric columns
-.summarize_metrics_df <- function(df, exclude_cols = c("Species", "Site", 
-                                                        "Bioregion", 
-                                                        "Chorotype",
-                                                        "Chorotypes",
-                                                        "Assigned")) {
+.summarize_metrics_df <- function(df, exclude_cols = c("species", "site", 
+                                                       "bioregion", 
+                                                       "chorotype",
+                                                       "assigned")) {
   metric_cols <- setdiff(names(df), exclude_cols)
   metric_cols <- metric_cols[sapply(df[metric_cols], is.numeric)]
   if(length(metric_cols) == 0) return(NULL)
@@ -1106,19 +1105,19 @@ summary.bioregion.site.species.metrics <- function(object,
       }
       cat("\n")
       
-      # Top contributors by IndVal
+      # Top contributors by ind_val
       if(show_top_contributors) {
-        indval_cols <- grep("IndVal", names(part_data$species_bioregions), 
+        ind_val_cols <- grep("ind_val", names(part_data$species_bioregions), 
                            value = TRUE)
-        if(length(indval_cols) > 0) {
-          indval_col <- indval_cols[1]
+        if(length(ind_val_cols) > 0) {
+          ind_val_col <- ind_val_cols[1]
           df <- part_data$species_bioregions
-          df <- df[order(-df[[indval_col]]), ]
+          df <- df[order(-df[[ind_val_col]]), ]
           n_show <- min(n_top, nrow(df))
-          cat("Top species by ", indval_col, ":\n", sep = "")
+          cat("Top species by ", ind_val_col, ":\n", sep = "")
           for(i in seq_len(n_show)) {
             cat("  ", i, ". ", df$Species[i], " (Bioregion ", df$Bioregion[i], 
-                "): ", round(df[[indval_col]][i], 3), "\n", sep = "")
+                "): ", round(df[[ind_val_col]][i], 3), "\n", sep = "")
           }
           cat("\n")
         }
@@ -1152,19 +1151,19 @@ summary.bioregion.site.species.metrics <- function(object,
       }
       cat("\n")
       
-      # Top contributors by IndVal for sites
+      # Top contributors by ind_val for sites
       if(show_top_contributors) {
-        indval_cols <- grep("IndVal", names(part_data$site_chorotypes), 
+        ind_val_cols <- grep("ind_val", names(part_data$site_chorotypes), 
                            value = TRUE)
-        if(length(indval_cols) > 0) {
-          indval_col <- indval_cols[1]
+        if(length(ind_val_cols) > 0) {
+          ind_val_col <- ind_val_cols[1]
           df <- part_data$site_chorotypes
-          df <- df[order(-df[[indval_col]]), ]
+          df <- df[order(-df[[ind_val_col]]), ]
           n_show <- min(n_top, nrow(df))
-          cat("Top sites by ", indval_col, ":\n", sep = "")
+          cat("Top sites by ", ind_val_col, ":\n", sep = "")
           for(i in seq_len(n_show)) {
             cat("  ", i, ". ", df$Site[i], " (Chorotype ", df$Chorotypes[i], 
-                "): ", round(df[[indval_col]][i], 3), "\n", sep = "")
+                "): ", round(df[[ind_val_col]][i], 3), "\n", sep = "")
           }
           cat("\n")
         }
