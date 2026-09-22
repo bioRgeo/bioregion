@@ -809,7 +809,7 @@ ps
 
 ```
 
-# 9. Bioregion metrics & spatial coherence {#bioregion}
+# 9. Bioregion metrics & spatial coherence
 
 At the bioregion level, we can compute the number of sites and the total  
 species richness across those sites. We can also derived the number and  
@@ -851,7 +851,7 @@ map_bioregions(vege_nhclu,
                map = vegesf)
 ```
 
-# 10. Bioregionalization metrics {#bioregionalization}
+# 10. Bioregionalization metrics
 
 At the bioregionalization level, several metrics described below can be
 computed to assess the quality of the resulting bioregionalization across

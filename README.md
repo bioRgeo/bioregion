@@ -7,7 +7,7 @@ coverage](https://codecov.io/gh/bioRgeo/bioregion/branch/master/graph/badge.svg)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/bioregion)](https://cran.r-project.org/package=bioregion)
 [![rstudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/bioregion)](https://r-pkg.org:443/pkg/bioregion)
-[![DOI](https://zenodo.org/badge/612244739.svg)](https://zenodo.org/doi/10.5281/zenodo.10843109)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10843109.svg)](https://zenodo.org/doi/10.5281/zenodo.10843109)
 <!-- badges: end -->
 
 This **R package** gathers a comprehensive set of algorithms to perform

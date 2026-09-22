@@ -41,7 +41,7 @@
 #' @seealso 
 #' For more details illustrated with a practical example, 
 #' see the vignette: 
-#' \url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion}.
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence}.
 #' 
 #' Associated functions: 
 #' [site_species_metrics] [bioregionalization_metrics]
