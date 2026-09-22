@@ -63,7 +63,7 @@ Note that if `bioregionalization` contains multiple partitions (i.e., if
 ## See also
 
 For more details illustrated with a practical example, see the vignette:
-<https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion>.
+<https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregion-metrics-spatial-coherence>.
 
 Associated functions:
 [site_species_metrics](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
