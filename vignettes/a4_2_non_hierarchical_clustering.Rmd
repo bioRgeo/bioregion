@@ -438,7 +438,7 @@ clustering attempts.
 
 ```{r}
 bioregionalization_metrics(ex_pam, 
-                           eval_metrics = "BetweenDissim",
+                           eval_metrics = "prop_between_dissim",
                            dissimilarity = dissim)
 ```
 
