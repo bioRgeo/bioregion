@@ -351,21 +351,16 @@ get_pairwise_membership <- function(input_clusters) {
   pw_membership <- matrix(FALSE, nrow = choose(n_items, 2),
                           ncol = n_bioregionalizations)
   
-  # Get all unique pairwise comparisons indices
-  pairwise_comps <- t(utils::combn(seq_len(n_items), 2))
-  
   # Compute pairwise membership
   for (col in seq_len(n_bioregionalizations)) {
-    # Extract cluster memberships for this bioregionalization
-    cluster_col <- input_clusters[, col]
-    
     # Compare memberships directly for each pair of items
-    pw_membership[, col] <- cluster_col[pairwise_comps[, 1]] == 
-      cluster_col[pairwise_comps[, 2]]
+    pw_membership[, col] <- as.vector(dist(as.integer(as.factor(input_clusters[, col]))) == 0)
   }
   
   # Set row names based on the pairwise comparisons (optional)
-  rownames(pw_membership) <- apply(pairwise_comps, 1, paste, collapse = "_")
+  cl1 <- rep(seq_len(n_items - 1), times = (n_items - 1):1)
+  cl2 <- sequence((n_items - 1):1) + cl1
+  rownames(pw_membership) <- paste(cl1, cl2, sep = "_")
   colnames(pw_membership) <- colnames(input_clusters)
   
   return(pw_membership)
