@@ -10,7 +10,7 @@ names are still accepted as inputs but are converted to snake_case in
 outputs.
 
 * `find_optimal_n()` has been updated. `bioregionalizations`argument changed to 
-`evaluation_df`.
+`evaluation_df`. 
 
 * `bioregionalization_metrics()` has been updated. The `anosim` metric (along 
 with the associated p-value) is now computed with `vegan`. The `eval_metric` 
