@@ -242,7 +242,11 @@ ex_louvain <- netclu_louvain(fishdf,
 table(ex_louvain$clusters$K_23)
 ```
 
-    ## < table of extent 0 >
+    ## 
+    ##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 
+    ##   6   4   2   3  10   2  22 119   4 129  55   5  46  16   2   3  17  14  16   4 
+    ##   7   8   9 
+    ##  24  25   5
 
 ## 3. Functions from the igraph package
 
@@ -329,7 +333,9 @@ ex_leadingeigen <- netclu_leadingeigen(fishdf,
 table(ex_leadingeigen$clusters$K_17)
 ```
 
-    ## < table of extent 0 >
+    ## 
+    ##   1  10  11  12  13  14  15  16  17   2   3   4   5   6   7   8   9 
+    ## 108   2   1   2   1   1   1   2   2 136  81  69  34  22  28   1  42
 
 ### 3.5 Walktrap
 
