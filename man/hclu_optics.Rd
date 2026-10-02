@@ -8,7 +8,7 @@ hclu_optics(
   dissimilarity,
   index = names(dissimilarity)[3],
   minPts = NULL,
-  eps = NULL,
+  eps = Inf,
   xi = 0.05,
   minimum = FALSE,
   show_hierarchy = FALSE,
@@ -100,7 +100,7 @@ steepness of the reachability plot (see
 }
 \examples{
 dissim <- dissimilarity(fishmat, metric = "all")
-  
+
 clust1 <- hclu_optics(dissim, index = "Simpson")
 clust1
 
