@@ -115,7 +115,7 @@
 hclu_optics <- function(dissimilarity,
                         index = names(dissimilarity)[3],
                         minPts = NULL,
-                        eps = NULL,
+                        eps = Inf,
                         xi = 0.05,
                         minimum = FALSE,
                         show_hierarchy = FALSE,
@@ -161,7 +161,7 @@ hclu_optics <- function(dissimilarity,
     controls(args = minPts, data = NULL, type = "strict_positive_integer")
   }
   if(!is.null(eps)){
-    controls(args = eps, data = NULL, type = "strict_positive_integer")
+    controls(args = eps, data = NULL, type = "strict_positive_numeric")
   }
   controls(args = xi, data = NULL, type = "strict_positive_numeric")
   if (xi >= 1) {
@@ -222,6 +222,8 @@ hclu_optics <- function(dissimilarity,
     # Using a default value of minPts if none provided by the user
     minPts <- log(length(labels(dist.obj)))
   }
+
+  minPts <- floor(minPts)
   
   outputs$algorithm <- dbscan::optics(x = dist.obj,
                                       minPts = minPts,

@@ -126,8 +126,8 @@ test_that("valid output", {
                         index = 5,
                         show_hierarchy = TRUE)
   expect_equal(clust2$inputs$hierarchical, TRUE)
-  tab12 <- table(clust1$clusters$K_18,clust2$clusters$K_18)
-  expect_equal(sum(apply(tab12==0,1,sum)==17),18)
+  tab12 <- table(clust1$clusters$K_19,clust2$clusters$K_19)
+  expect_equal(sum(apply(tab12==0,1,sum)==18),19)
   
   # Test data_type with different dissimilarity metrics
   clust <- hclu_optics(dissim, index = "Simpson", minPts = 3, xi = 0.05)
@@ -262,11 +262,6 @@ test_that("invalid inputs", {
   expect_error(
     hclu_optics(dissim, eps = "zz"),
     "eps must be numeric.",
-    fixed = TRUE)  
-  
-  expect_error(
-    hclu_optics(dissim, eps = 1.1),
-    "eps must be an integer.",
     fixed = TRUE)  
   
   expect_error(

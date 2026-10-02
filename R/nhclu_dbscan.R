@@ -201,7 +201,7 @@ nhclu_dbscan <- function(dissimilarity,
   
   if(is.null(minPts)){
     # Using a default value of minPts if none provided by the user
-    minPts <- log(length(labels(dist.obj)))
+    minPts <- floor(log(length(labels(dist.obj))))
   }
   
   if (is.null(eps) & verbose) {
