@@ -28,7 +28,8 @@ converted.}
 and to give every division of the final tree its height. Should be one of
 \code{"ward.D"}, \code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}
 (= UPGMA, the default), \code{"mcquitty"} (= WPGMA), \code{"median"} (= WPGMC) or
-\code{"centroid"} (= UPGMC). Two of the shortcuts described in Details are only
+\code{"centroid"} (= UPGMC). Two of the optimization parameters described in
+details are only
 available with some of these.}
 
 \item{n_runs}{The number of randomized trees built to decide one division
@@ -39,7 +40,7 @@ tree slower to obtain.}
 ranked by how well they fit the dissimilarities, decide a division (\code{2} by
 default). With \code{1} the division is read straight off the best tree; with
 more, sites are grouped according to how often they end up on the same side
-across those trees. See Details.}
+across those trees. See details.}
 
 \item{variation_drop}{A \code{numeric} value between 0 and 1 (\code{0.2} by default).
 This is a speed optimization parameter: it lets a group of sites reuse the
@@ -99,17 +100,14 @@ names of \code{dist_mat}, in alphabetical order. It can be plotted, cut with
 object is expected.
 }
 \description{
-Builds a hierarchical tree of sites from a matrix of pairwise
+This function builds a hierarchical tree of sites from a matrix of pairwise
 dissimilarities, using the Iterative Hierarchical Consensus Tree (IHCT)
 algorithm. Unlike an ordinary hierarchical clustering, the tree does not
 depend on the order in which the sites happen to be stored in the matrix.
 
-Most users should call \code{\link[=hclu_hierarclust]{hclu_hierarclust()}} rather than this function: it
-takes the output of \code{\link[=dissimilarity]{dissimilarity()}} directly, cuts the tree into
-bioregions for you, and returns a \code{bioregion.clusters} object that the rest
-of the package understands. \code{ihct()} is the engine behind it, exported for
-users who want the tree itself and control over every setting of the
-algorithm.
+Most users should use \code{\link[=hclu_hierarclust]{hclu_hierarclust()}} and not this function.
+\code{ihct()} is an algorithm used in \code{\link[=hclu_hierarclust]{hclu_hierarclust()}}, exported for
+users who want the algorithm itself for their purposes.
 }
 \details{
 \subsection{--- 1. The problem: the order of the sites changes the tree ---}{
