@@ -494,7 +494,9 @@ plot(tree_diana)
 ```
 
 <center>
-<img align="bottom" width="100%" height="100%" src="../man/figures/find_optimal_n.png">
+  <img align="bottom" width="100%" height="100%" 
+   src="../man/figures/find_optimal_n.png"
+   alt="How to find an optimal number of clusters?">
 </center> 
 
 1. Step 1. **Build a tree** with `hclu_hierarclust()`
@@ -515,10 +517,9 @@ number(s) of clusters.
 ## 3.1 A practical example
 
 In this example we will compute the evaluation metric used by @Holt2013,
-which compares the total dissimilarity of the distance matrix (sum of
-all distances) with the inter-cluster dissimilarity (sum of distances between
-clusters). Then we will choose the optimal number of clusters as the elbow of 
-the evaluation plot.
+which compares the total dissimilarity with the inter-cluster dissimilarity (sum 
+of distances between clusters). Then we will choose the optimal number of 
+clusters as the elbow of the evaluation plot.
 
 ```{r, fig.height = 5, fig.width = 8}
 data(vegemat)
@@ -531,10 +532,9 @@ tree4 <- hclu_hierarclust(dissim,
                           n_clust = 2:100)
 
 # Step 3. Calculate the same evaluation metric as Holt et al. 2013
-eval_tree4 <- bioregionalization_metrics(
-  tree4, 
-  dissimilarity = dissim, # Provide distances to compute the metrics
-  eval_metric = "pc_distance")
+eval_tree4 <- bioregionalization_metrics(tree4, 
+                                         eval_metrics = "prop_between_dissim",
+                                         dissimilarity = dissim)
 
 # Step 4. Find the optimal number of clusters
 opti_n_tree4 <- find_optimal_n(eval_tree4)
@@ -542,7 +542,7 @@ opti_n_tree4
 
 # Step 5. Extract the optimal number of clusters
 # We get the name of the correct partition in the next line
-K_name <- opti_n_tree4$evaluation_df$K[opti_n_tree4$evaluation_df$optimal_n_pc_distance]
+K_name <- opti_n_tree4$evaluation_df$partition[opti_n_tree4$evaluation_df$optimal_n_prop_between_dissim]
 # Look at the site-cluster table
 head(tree4$clusters[, c("ID", K_name)])
 
@@ -557,57 +557,31 @@ at the identified optimal number of cut-offs with `cut_tree()`.
 
 ## 3.2 Evaluation metrics
 
-Currently, there are four evaluation metrics available in the package:
-
-1. `pc_distance`: $\sum{between-cluster\beta_{sim }} / \sum{\beta_{sim}}$
-This metric is the metric computed in @Holt2013.
-
-2. `anosim`: this the statistic used in Analysis of Similarities, 
-as suggested in @Castro-Insua2018. It 
-compares the between-cluster dissimilarities to the within-cluster 
-dissimilarities. It is based on the difference of mean ranks between 
-groups and within groups with the following formula: 
-$R=(r_B-r_W)/(N(N-1)/4)$ where $r_B$ and $r_W$ are the average ranks between
-and within clusters respectively, and $N$ is the total number of sites.
-
-3. `avg_endemism`: it is the average percentage of endemism in clusters 
-[@Kreft2010]. It is calculated as follows: 
-$End_{mean} = \frac{\sum_{i=1}^K E_i / S_i}{K}$
-where $E_i$ is the number of endemic species in cluster $i$,
-$S_i$ is the number of
-species in cluster $i$, and $K$ the maximum number of clusters.
-
-4. `tot_endemism`: it is the total endemism across all clusters 
-[@Kreft2010]. It is calculated as follows: 
-$End_{tot} = E / C$ where $E$ is the total number of endemic species 
-(i.e., species occurring in only one cluster) and $C$ is the number of non-
-endemic species.
+Currently, there are four evaluation metrics available in the package described
+[here](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#bioregionalization).
 
 **Important note**
 
-To be able to calculate `pc_distance` and `anosim`, you need to provide
+To be able to calculate `prop_between_dissim` and `anosim`, you need to provide
 your dissimilarity object to the argument `dissimilarity`. In addition, to be
-able to calculate `avg_endemism` and `tot_endemism`, you need to provide your
-species-site network to the argument `net` (don't panick if you only have
-a species x site matrix! We have a function to make the conversion).
+able to calculate `mean_endemics` and `tot_endemics`, you need to provide your
+species-site co-occurrence matrix to the argument `comat`.
 
 Let's see that in practice. 
 Depending on the size of your dataset, computing endemism-based metrics can 
 take a while.
 
 ```{r, cache = TRUE}
-# Calculate pc_distance and anosim
+# Calculate prop_between_dissim and anosim
 bioregionalization_metrics(tree4, 
-                           dissimilarity = dissim, 
-                           eval_metric = c("pc_distance", "anosim"))
+                           eval_metrics = c("prop_between_dissim", "anosim"),
+                           dissimilarity = dissim)
 
-# Calculate avg_endemism and tot_endemism
-# I have an abundance matrix, I need to convert it into network format first:
-vegenet <- mat_to_net(vegemat)
-
-bioregionalization_metrics(tree4, 
-                           net = vegenet, 
-                           eval_metric = c("avg_endemism", "tot_endemism"))
+# Calculate mean_endemics and tot_endemics
+bioregionalization_metrics(tree4,
+                           eval_metrics = c("mean_endemics", "tot_endemics"),
+                           dissimilarity = NULL,
+                           comat = vegemat)
 ```
 
 ## 3.2 Criteria to choose an optimal number of clusters
@@ -632,26 +606,22 @@ Additionally, we implement other approaches, such as using the maximum or
 minimum value of the metrics, or by finding break points in the curve with
 a segmented model.
 
-
 Before we look at these different methods, we will compute all the evaluation 
 metrics and store them in `eval_tree4`:
 
 ```{r, cache = TRUE}
-vegenet <- mat_to_net(vegemat)
 eval_tree4 <- bioregionalization_metrics(tree4, 
+                                         eval_metrics = "all",
                                          dissimilarity = dissim, 
-                                         net = vegenet, 
-                                         eval_metric = c("pc_distance", "anosim",
-                                                         "avg_endemism", "tot_endemism"))
-
+                                         comat = vegemat)
 ```
 
 ### 3.2.1 Elbow method
 
 The elbow method consists in find the 'elbow' in the form of the metric-cluster
 relationship. This method will typically work for metrics which have an 
-L-shaped form (typically, pc_distance and endemism metrics), but not for other
-metrics (e.g. the form of anosim does not necessarily follow an L-shape).
+L-shaped form (typically, `prop_between_dissim` and endemism metrics), but not
+for other metrics (e.g. the form of `anosim` does not necessarily follow an L-shape).
 
 *The rationale behind the elbow method is to find a cutoff above which the
 metric values stop increasing significantly, such that adding new clusters
@@ -669,14 +639,14 @@ a <- find_optimal_n(eval_tree4)
 ```
 
 In our example above, the optimal number of clusters varies depending on the 
-metric, from a minimum of `r min(unlist(a$optimal_nb_clusters))` to a maximum
-of `r max(unlist(a$optimal_nb_clusters))`. The final choice depends on your
+metric, from a minimum of `r min(unlist(a$optimal_n))` to a maximum
+of `r max(unlist(a$optimal_n))`. The final choice depends on your
 metric preferences with respect to metrics, and your objectives with the 
 clustering.
 Alternatively, two cut-offs could be used, a deep cut-off based on the endemism
-metrics e.g. at a value of `r a$optimal_nb_clusters$avg_endemism`, and a
-shallow cutoff based on `pc_distance`,
-at `r a$optimal_nb_clusters$pc_distance`.
+metrics e.g. at a value of `r a$optimal_n$mean_endemics`, and a
+shallow cutoff based on `prop_between_dissim`,
+at `r a$optimal_n$prop_between_dissim`.
 
 ### 3.2.2 Step method
 
@@ -686,20 +656,20 @@ the largest increases or decreases in the value of the metric.
 To do this, the function calculates all successive differences in metrics
 between partitions. It will then keep only the largest positive differences 
 (`increasing_step`) or negative differences (`decreasing_step`). 
-`increasing_step` is for increasing metrics (`pc_distance`) and 
-`decreasing_step` is for decreasing metrics (`avg_endemism` and 
-`tot_endemism`). `anosim` values can either increase or decrease depending on
+`increasing_step` is for increasing metrics (`prop_between_dissim`) and 
+`decreasing_step` is for decreasing metrics (`Mean_Endemics` and 
+`tot_endemics`). `anosim` values can either increase or decrease depending on
 your dataset, so you would have to explore both ways.
 
 By default, the function selects the top 1% steps:
 
 ```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "pc_distance"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "increasing_step")
 
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("avg_endemism", "tot_endemism"),
+               metrics_to_use = c("mean_endemics", "tot_endemics"),
                criterion = "decreasing_step")
 ```
 
@@ -708,7 +678,7 @@ steps to select, e.g. to select the largest 3 steps, use `step_levels = 3`:
 
 ```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "pc_distance"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "increasing_step",
                step_levels = 3)
 ```
@@ -722,7 +692,7 @@ largest steps set the quantile to 0.95 (`step_quantile = 0.95`):
 
 ```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "pc_distance"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "increasing_step",
                step_quantile = 0.95)
 ```
@@ -738,7 +708,7 @@ example above). You can change this by setting `step_round_above = FALSE`:
 
 ```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
-               metrics_to_use = c("avg_endemism", "tot_endemism"),
+               metrics_to_use = c("anosim", "prop_between_dissim"),
                criterion = "decreasing_step",
                step_round_above = FALSE)
 ```
@@ -746,7 +716,7 @@ find_optimal_n(eval_tree4,
 
 The idea of this method is to select specific metric values at which the number
 of clusters should be used. For example, in their study, @Holt2013 
-used different cutoffs for `pc_distance` to find the global biogeographic 
+used different cutoffs for `BetweenDissim` to find the global biogeographic 
 regions: 0.90, 0.95, 0.99, 0.999. The higher the value, the more
 \beta-diversity is explained, but also the more clusters there are. Therefore,
 the choice is a trade-off between the total \beta-diversity explained and the
@@ -776,7 +746,7 @@ cutoff).
 
 ```{r, fig.height = 5, fig.width = 5}
 find_optimal_n(eval_tree4,
-               metrics_to_use = "pc_distance",
+               metrics_to_use = "prop_between_dissim",
                criterion = "cutoff",
                metric_cutoffs = c(.6, .8, .9))
 ```
@@ -804,10 +774,9 @@ tree5 <- cut_tree(tree4,
                                    length = 100)) 
 
 eval_tree5 <- bioregionalization_metrics(tree5, 
+                                         eval_metrics = "all",
                                          dissimilarity = dissim, 
-                                         net = vegenet, 
-                                         eval_metric = c("pc_distance", "anosim",
-                                                         "avg_endemism", "tot_endemism"))
+                                         comat = vegemat)
 
 find_optimal_n(eval_tree5,
                criterion = "breakpoints")

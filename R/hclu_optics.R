@@ -78,7 +78,7 @@
 #' To extract the clusters, we use the
 #' [extractXi][dbscan::extractXi] function which is based on the
 #' steepness of the reachability plot (see
-#' [optics][dbscan::optics])
+#' [optics][dbscan::optics]).
 #'
 #' @references 
 #' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 

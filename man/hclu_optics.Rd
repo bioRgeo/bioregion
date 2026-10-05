@@ -96,7 +96,7 @@ algorithm, how it works, and what the clusters mean.
 To extract the clusters, we use the
 \link[dbscan:extractXi]{extractXi} function which is based on the
 steepness of the reachability plot (see
-\link[dbscan:optics]{optics})
+\link[dbscan:optics]{optics}).
 }
 \examples{
 dissim <- dissimilarity(fishmat, metric = "all")

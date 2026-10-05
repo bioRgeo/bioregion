@@ -1,206 +1,228 @@
 # Inputs -----------------------------------------------------------------------
-comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
-                20, 25)
-rownames(comat) <- paste0("Site", 1:20)
-colnames(comat) <- paste0("Species", 1:25)
+data("fishmat")
+data("vegemat")
+data("vegedf")
 
-d <- dist(comat)
-simil <- similarity(comat, metric = "all")
-dissim <- similarity_to_dissimilarity(simil)
-comat_df <- mat_to_net(comat, weight = TRUE, remove_zeroes = TRUE)
+install_binaries(verbose = FALSE)
 
-comat2 <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
-                10, 50)
-rownames(comat2) <- paste0("Site", 31:40)
-colnames(comat2) <- paste0("Species", 51:100)
+comatneg <- vegemat
+comatneg[1,1] <- -1
 
-d2 <- dist(comat2)
-simil2 <- similarity(comat2, metric = "all")
-dissim2 <- similarity_to_dissimilarity(simil2)
-comat_df2 <- mat_to_net(comat2, weight = TRUE, remove_zeroes = TRUE)
+comatwnames1 <- vegemat
+rownames(comatwnames1) <- NULL
+colnames(comatwnames1) <- NULL
+comatwnames2 <- vegemat
+rownames(comatwnames2)[1] <- "enistanutsi"
+colnames(comatwnames2)[1] <- "enistanutsi"
 
-quietly(
-  clu1 <- hclu_hierarclust(dissim, 
-                           n_clust = 5,
-                           index = "Simpson",
-                           optimal_tree_method = "best",
-                           verbose = FALSE)
-)
+vegemat_shuff <- vegemat[sample(dim(vegemat)[1],dim(vegemat)[1]),
+                         sample(dim(vegemat)[2],dim(vegemat)[2])]
 
-quietly(
-  clu2 <- hclu_hierarclust(dissim,
-                           optimal_tree_method = "best",
-                           n_clust = NULL,
-                           cut_height = NULL,
-                           verbose = FALSE)
-)
+vegesim <- similarity(vegemat, metric = c("Jaccard", "Simpson", "Sorensen"))
+vegedissim <- similarity_to_dissimilarity(vegesim)
+fishsim <- similarity(fishmat, metric = c("Jaccard", "Bray"))
+fishdissim <- similarity_to_dissimilarity(fishsim)
 
-clu3 <- netclu_louvain(simil)
-clu3$clusters <- NULL
+vegedissimwnames <- vegedissim
+vegedissimwnames[vegedissimwnames == "35"] <- "einuastnie"
+vegedissimwnames <- vegedissim
+vegedissimwnames[vegedissimwnames == "35"] <- "einuastnie"
+
+vegesim_shuff <- vegesim[sample(dim(vegesim)[1],dim(vegesim)[1]),]
+vegedissim_shuff <- vegedissim[sample(dim(vegedissim)[1],dim(vegedissim)[1]),]
+
+cluinfo <- netclu_infomap(vegedf, 
+                          seed = 1, 
+                          bipartite = TRUE)
+
+cluinfospe <- site_species_subset(cluinfo, node_type = "species")
+
+cluhier <- hclu_hierarclust(fishdissim,
+                            index = "Jaccard",
+                            method = "average",
+                            randomize = FALSE,
+                            optimal_tree_method = "best",
+                            n_clust = c(1,2,3),
+                            cut_height = NULL,
+                            find_h = TRUE,
+                            h_max = 1,
+                            h_min = 0,
+                            verbose = FALSE)
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
   
-  quietly(
-    a <- bioregionalization_metrics(clu1,
-                                    dissimilarity = dissim,
-                                    net = comat_df,
-                                    site_col = "Node1",
-                                    species_col = "Node2",
-                                    eval_metric = c("tot_endemism",
-                                                    "avg_endemism",
-                                                    "pc_distance",
-                                                    "anosim"))
-  )
-  expect_identical(class(a)[1], "bioregion.bioregionalization.metrics")
-  expect_identical(class(a)[2], "list")
+  eval <-     bioregionalization_metrics(cluhier,
+                                         eval_metrics = c("prop_between_dissim", 
+                                                          "anosim",
+                                                          "mean_endemics",
+                                                          "tot_endemics"), 
+                                         dissimilarity = fishdissim,
+                                         comat = fishmat,
+                                         anosim_permutations = 999)
+  
+  eval
 
 })
 
 # Tests for invalid inputs -----------------------------------------------------
 test_that("invalid inputs", {
   
-  expect_error(
-    bioregionalization_metrics(clu2),
-    "^No clusters have been generated")
+  expect_warning(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "anosim"), 
+                               dissimilarity = vegedissim,
+                               comat = NULL,
+                               eval_metric = "isetnusi",
+                               net = NULL,
+                               site_col = NULL, 
+                               species_col = NULL),
+    "eval_metric is deprecated.",
+    fixed = TRUE)
+  
+  expect_warning(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "anosim"), 
+                               dissimilarity = vegedissim,
+                               comat = NULL,
+                               net = "insetnu",
+                               site_col = NULL, 
+                               species_col = NULL),
+    "net is deprecated.",
+    fixed = TRUE)
+  
+  expect_warning(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "anosim"), 
+                               dissimilarity = vegedissim,
+                               comat = NULL,
+                               net = NULL,
+                               site_col = "ietis", 
+                               species_col = NULL),
+    "site_col is deprecated.",
+    fixed = TRUE)
+  
+  expect_warning(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "anosim"), 
+                               dissimilarity = vegedissim,
+                               comat = NULL,
+                               net = NULL,
+                               site_col = NULL, 
+                               species_col = "ietis"),
+    "species_col is deprecated.",
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu3),
-    "^bioregionalization does not have the expected type of ")
+    bioregionalization_metrics(1),
+    "bioregionalization must be a bioregion.clusters object.",
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(NULL),
-    "^This function is designed to work on bioregion.clusters objects")
+    bioregionalization_metrics(cluinfospe),
+    "No bioregion are assigned to the site in bioregionalization.",
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               eval_metric = c(1,2)),
-    "eval_metric must be a character.")
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = 1, 
+                               dissimilarity,
+                               dissimilarity_index = names(dissimilarity)[3], 
+                               comat = NULL),
+    "eval_metrics must be a character.",
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               eval_metric = c("yy","zz")),
-    "^One or several")
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "instenusti"), 
+                               dissimilarity,
+                               dissimilarity_index = names(dissimilarity)[3], 
+                               comat = NULL),
+    "^One or several evaluation metrics chosen are not")
+  
+  expect_error(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "prop_between_dissim", 
+                               dissimilarity = NULL,
+                               comat = NULL),
+    "At least dissimilarity or comat should be provided.",
+    fixed = TRUE)
+  
+  expect_warning(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "mean_endemics"),
+                               dissimilarity = NULL,
+                               comat = vegemat),
+    "^Some metrics")
+  
+  expect_warning(
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = c("prop_between_dissim", "mean_endemics"), 
+                               dissimilarity = vegedissim,
+                               comat = NULL),
+    "^Some metrics")
   
   expect_error(
     expect_warning(
-      bioregionalization_metrics(clu1,
-                                 eval_metric = "pc_distance"),
-      "^No dissimilarity oject provided"),
-    "^No evaluation metric")
+      bioregionalization_metrics(cluinfo,
+                                eval_metrics = "prop_between_dissim", 
+                                dissimilarity = NULL,
+                                comat = vegemat),
+      "^Some metrics"),
+    "At least one metric with the appropriate input should be specified.",
+  fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = simil,
-                               eval_metric = "all"),
-    "^dissimilarity must be an object containing dissimilarity")
-  
-  expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = c("z","z"),
-                               eval_metric = "all"),
-    "dissimilarity_index must be of length 1.")
-  
-  
-  expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = TRUE,
-                               eval_metric = "all"),
-    "dissimilarity_index must be a character.")
-  
-  expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "shalala",
-                               eval_metric = "all"),
-    "^dissimilarity_index does not exist")
-  
-  expect_error(
-    bioregionalization_metrics(clu1,
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "prop_between_dissim", 
                                dissimilarity = 1,
-                               dissimilarity_index = NULL,
-                               eval_metric = "all"),
-    "^dissimilarity must be a bioregion.pairwise object or")
-
-  expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim2,
-                               dissimilarity_index = "Sorensen",
-                               eval_metric = "all"),
-    "bioregionalization and dissimilarity have different number of sites.")
+                               comat = NULL),
+    "^dissimilarity should be a bioregion.pairwise object created by")
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df,
-                               site_col = "Weight", 
-                               species_col = "Weight"),
-    "site_col and species_col should not be the same."
-    , fixed = TRUE)
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "prop_between_dissim", 
+                               dissimilarity = vegedissim,
+                               dissimilarity_index = c(1, 1),
+                               comat = NULL),
+    "dissimilarity_index must be of length 1.", 
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df,
-                               site_col = "zz"),
-    "If site_col is a character, it should be the first or second column name."
-    , fixed = TRUE)
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "prop_between_dissim", 
+                               dissimilarity = vegedissimwnames,
+                               comat = NULL),
+    "^Some sites are not found in dissimilarity:")
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df,
-                               species_col = "zz"),
-    "If species_col is a character, it should be the first or second column name."
-    , fixed = TRUE)
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "mean_endemics", 
+                               dissimilarity = NULL,
+                               comat = 1),
+    "comat must be a matrix.", 
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df,
-                              site_col = "Weight"),
-    "If site_col is a character, it should be the first or second column name."
-    , fixed = TRUE)
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "mean_endemics", 
+                               dissimilarity = NULL,
+                               comat = comatneg),
+    "Negative value(s) detected in comat!", 
+    fixed = TRUE)
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df, 
-                               site_col = 3),
-    "If site_col is numeric, it should be equal to 1 or 2."
-    , fixed = TRUE)
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "mean_endemics", 
+                               dissimilarity = NULL,
+                               comat = comatwnames1),
+    "^Some sites are not found in comat:")
   
   expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df,
-                               site_col = FALSE),
-    "site_col should be numeric or character."
-    , fixed = TRUE)
-  
-  expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df,
-                               species_col = FALSE),
-    "species_col should be numeric or character."
-    , fixed = TRUE)
-  
-  expect_error(
-    bioregionalization_metrics(clu1,
-                               dissimilarity = dissim,
-                               dissimilarity_index = "Sorensen",
-                               net = comat_df2,
-                               eval_metric = "all"),
-    "^Some elements of the cluster table")
+    bioregionalization_metrics(cluinfo,
+                               eval_metrics = "mean_endemics", 
+                               dissimilarity = NULL,
+                               comat = comatwnames2),
+    "^Some sites are not found in comat:")
   
 })

@@ -3,7 +3,6 @@
 S3method(`[`,bioregion.pairwise)
 S3method(as.dist,bioregion.pairwise)
 S3method(plot,bioregion.clusters)
-S3method(print,bioregion.bioregionalization.metrics)
 S3method(print,bioregion.clusters)
 S3method(print,bioregion.optimal.n)
 S3method(print,bioregion.pairwise)

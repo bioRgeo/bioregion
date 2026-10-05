@@ -818,10 +818,11 @@ test_that("strict_positive_integer", {
   
 })
 
-# Tests for reorder ------------------------------------------------------------
+# Tests for convert_metric_names -----------------------------------------------
 test_that("invalid outputs", {
   
-  
+  metrics <- convert_metric_names(NULL)
+  expect_equal(is.null(metrics), TRUE)
   
 }) 
 
@@ -847,12 +848,12 @@ test_that("invalid outputs", {
 
   # sb
   sb <- sbgc(clusters_g, 
-             bioregion_metrics = c("Specificity", "NSpecificity", 
-                                   "Fidelity", 
-                                   "IndVal", "NIndVal", 
-                                   "Rho", 
-                                   "CoreTerms"),
-             bioregionalization_metrics = c("P"),
+             bioregion_metrics = c("specificity", "n_specificity", 
+                                   "fidelity", 
+                                   "ind_val", "n_ind_val", 
+                                   "rho", 
+                                   "core_terms"),
+             bioregionalization_metrics = c("p"),
              comat,
              type = "sb", 
              data = "both")
@@ -868,16 +869,26 @@ test_that("invalid outputs", {
   n_s <- sum(tab[,2])
   n_b <- sum(clusters_g==b)
   
-  Specificity_occ <- n_sb / n_s
-  NSpecificity_occ <- (n_sb / n_b) / sum(agtab11[,2]/agtab12[,2])
-  Fidelity_occ <- n_sb / n_b
-  IndVal_occ <- Specificity_occ*Fidelity_occ
-  NIndVal_occ <- NSpecificity_occ*Fidelity_occ
+  specificity_occ <- n_sb / n_s
+  n_specificity_occ <- (n_sb / n_b) / sum(agtab11[,2]/agtab12[,2])
+  fidelity_occ <- n_sb / n_b
+  ind_val_occ <- specificity_occ * fidelity_occ
+  n_ind_val_occ <- n_specificity_occ * fidelity_occ
   num <- n_sb - n_s*(n_b / n_sites)
   den <- sqrt((n_b*(n_sites - n_b)/(n_sites - 1))*
               (n_s / n_sites)*
               (1 - (n_s / n_sites)))
-  Rho_occ <- num / den
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_b among n_sites)
+    mub <- c(mub, sum(comat_bin[sample(n_sites, n_b), s]))
+  }
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_occ <- num / den
   
   tab <- cbind(clusters_g, as.numeric(comat[,s]))
   agtab21 <- stats::aggregate(tab[,2], list(tab[,1]), sum)
@@ -887,42 +898,52 @@ test_that("invalid outputs", {
   w_s <- sum(tab[,2])
   w_b <- sum(comat[clusters_g==b,])
   
-  Specificity_abund <- w_sb / w_s
-  NSpecificity_abund <- (w_sb / n_b) / sum(agtab21[,2]/agtab12[,2])
-  Fidelity_abund <- w_sb / w_b
-  IndVal_abund <- Specificity_abund*Fidelity_occ
-  NIndVal_abund <- NSpecificity_abund*Fidelity_occ
+  specificity_abund <- w_sb / w_s
+  n_specificity_abund <- (w_sb / n_b) / sum(agtab21[,2]/agtab12[,2])
+  fidelity_abund <- w_sb / w_b
+  ind_val_abund <- specificity_abund * fidelity_occ
+  n_ind_val_abund <- n_specificity_abund * fidelity_occ
 
   num <- (w_sb / n_b) - mean(tab[,2])
   den <- sqrt(((n_sites - n_b)/(n_sites - 1))*
                 (var(tab[,2]) / n_b))
-  Rho_abund <- num / den
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_b among n_sites)
+    mub <- c(mub, mean(comat[sample(n_sites, n_b), s]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_abund <- num / den
   
   test <- c(s, b,
             n_sb, n_s, n_b,
-            Specificity_occ, 
-            NSpecificity_occ,
-            Fidelity_occ,
-            IndVal_occ,
-            NIndVal_occ,
-            Rho_occ,
+            specificity_occ, 
+            n_specificity_occ,
+            fidelity_occ,
+            ind_val_occ,
+            n_ind_val_occ,
+            rho_occ,
             w_sb, w_s, w_b,
-            Specificity_abund, 
-            NSpecificity_abund,
-            Fidelity_abund,
-            IndVal_abund,
-            NIndVal_abund,
-            Rho_abund)
+            specificity_abund, 
+            n_specificity_abund,
+            fidelity_abund,
+            ind_val_abund,
+            n_ind_val_abund,
+            rho_abund)
   
   check <- sb$bioregion1
   check <- check[check[,1]==s & check[,2]==b,]
   
   expect_equal(as.numeric(test), as.numeric(check))
   
-  P_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
-  P_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
+  p_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
+  p_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
   
-  test <- c(s, P_occ, P_abund)
+  test <- c(s, p_occ, p_abund)
   
   check <- sb$bioregion2
   check <- check[check[,1]==s,]
@@ -931,12 +952,12 @@ test_that("invalid outputs", {
   
   # gc
   gc <- sbgc(clusters_s, 
-             bioregion_metrics = c("Specificity", "NSpecificity", 
-                                   "Fidelity", 
-                                   "IndVal", "NIndVal", 
-                                   "Rho", 
-                                   "CoreTerms"),
-             bioregionalization_metrics = c("P"),
+             bioregion_metrics = c("specificity", "n_specificity", 
+                                   "fidelity", 
+                                   "ind_val", "n_ind_val", 
+                                   "rho", 
+                                   "core_terms"),
+             bioregionalization_metrics = c("p"),
              comat,
              type = "gc", 
              data = "both")
@@ -952,16 +973,26 @@ test_that("invalid outputs", {
   n_g <- sum(tab[,2])
   n_c <- sum(clusters_s==c)
   
-  Specificity_occ <- n_gc / n_g
-  NSpecificity_occ <- (n_gc / n_c) / sum(agtab11[,2]/agtab12[,2])
-  Fidelity_occ <- n_gc / n_c
-  IndVal_occ <- Specificity_occ*Fidelity_occ
-  NIndVal_occ <- NSpecificity_occ*Fidelity_occ
+  specificity_occ <- n_gc / n_g
+  n_specificity_occ <- (n_gc / n_c) / sum(agtab11[,2]/agtab12[,2])
+  fidelity_occ <- n_gc / n_c
+  ind_val_occ <- specificity_occ * fidelity_occ
+  n_ind_val_occ <- n_specificity_occ * fidelity_occ
   num <- n_gc - n_g*(n_c / n_species)
   den <- sqrt((n_c*(n_species - n_c)/(n_species - 1))*
                 (n_g / n_species)*
                 (1 - (n_g / n_species)))
-  Rho_occ <- num / den
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_c among n_species)
+    mub <- c(mub, sum(comat_bin[sample(n_species, n_c), g]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_occ <- num / den
   
   comat <- t(comat)
   tab <- cbind(clusters_s, as.numeric(comat[,g]))
@@ -972,42 +1003,52 @@ test_that("invalid outputs", {
   w_g <- sum(tab[,2])
   w_c <- sum(comat[clusters_s==c,])
   
-  Specificity_abund <- w_gc / w_g
-  NSpecificity_abund <- (w_gc / n_c) / sum(agtab21[,2]/agtab12[,2])
-  Fidelity_abund <- w_gc / w_c
-  IndVal_abund <- Specificity_abund*Fidelity_occ
-  NIndVal_abund <- NSpecificity_abund*Fidelity_occ
+  specificity_abund <- w_gc / w_g
+  n_specificity_abund <- (w_gc / n_c) / sum(agtab21[,2]/agtab12[,2])
+  fidelity_abund <- w_gc / w_c
+  ind_val_abund <- specificity_abund * fidelity_occ
+  n_ind_val_abund <- n_specificity_abund * fidelity_occ
   
   num <- (w_gc / n_c) - mean(tab[,2])
   den <- sqrt(((n_species - n_c)/(n_species - 1))*
                 (var(tab[,2]) / n_c))
-  Rho_abund <- num / den
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_c among n_species)
+    mub <- c(mub, mean(comat[sample(n_species, n_c), g]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_abund <- num / den
   
   test <- c(g, c,
             n_gc, n_g, n_c,
-            Specificity_occ, 
-            NSpecificity_occ,
-            Fidelity_occ,
-            IndVal_occ,
-            NIndVal_occ,
-            Rho_occ,
+            specificity_occ, 
+            n_specificity_occ,
+            fidelity_occ,
+            ind_val_occ,
+            n_ind_val_occ,
+            rho_occ,
             w_gc, w_g, w_c,
-            Specificity_abund, 
-            NSpecificity_abund,
-            Fidelity_abund,
-            IndVal_abund,
-            NIndVal_abund,
-            Rho_abund)
+            specificity_abund, 
+            n_specificity_abund,
+            fidelity_abund,
+            ind_val_abund,
+            n_ind_val_abund,
+            rho_abund)
   
   check <- gc$bioregion1
   check <- check[check[,1]==g & check[,2]==c,]
   
   expect_equal(as.numeric(test), as.numeric(check))
   
-  P_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
-  P_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
+  p_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
+  p_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
   
-  test <- c(g, P_occ, P_abund)
+  test <- c(g, p_occ, p_abund)
   
   check <- gc$bioregion2
   check <- check[check[,1]==g,]
@@ -1016,8 +1057,8 @@ test_that("invalid outputs", {
   
   # gb
   gb <- gb(as.character(clusters_g), 
-           bioregion_metrics = c("MeanSim", "SdSim"),
-           bioregionalization_metrics = c("Silhouette"),
+           bioregion_metrics = c("mean_sim", "sd_sim"),
+           bioregionalization_metrics = c("silhouette"),
            comat = NULL,
            sim,
            include_cluster = FALSE)

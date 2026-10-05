@@ -37,3 +37,18 @@ options(tinytex.verbose = TRUE)
 ```
 
 Work in progress
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
