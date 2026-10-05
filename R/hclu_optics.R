@@ -16,15 +16,14 @@
 #' @param minPts A `numeric` value specifying the minPts argument of
 #' [dbscan][dbscan::dbscan]. minPts is the minimum number of points required
 #' to form a dense region. By default, it is set to the natural logarithm 
-#' of the number of sites in `dissimilarity`.
+#' of the number of sites in `dissimilarity`, rounded down to a whole number.
 #' 
-#' @param eps A `numeric` value specifying the eps argument of
+#' @param eps A positive `numeric` value specifying the eps argument of
 #' [optics][dbscan::optics]. It defines the upper limit of the size
 #' of the epsilon neighborhood. Limiting the neighborhood size improves
 #' performance and has no or very little impact on the ordering as long as it
-#' is not set too low. If not specified (default behavior), the largest
-#' minPts-distance in the dataset is used, which gives the same result as
-#' infinity.
+#' is not set too low. By default, `eps = Inf`, which means that the
+#' neighborhood size is not limited.
 #' 
 #' @param xi A `numeric` value specifying the steepness threshold to
 #' identify clusters hierarchically using the Xi method

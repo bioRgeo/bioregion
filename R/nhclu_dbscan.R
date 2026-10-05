@@ -15,7 +15,8 @@
 #' @param minPts A `numeric` vector or a single `numeric` value specifying the 
 #' `minPts` argument of [dbscan::dbscan()]. `minPts` is the minimum number of 
 #' points to form a dense region. By default, it is set to the natural logarithm 
-#' of the number of sites in `dissimilarity`. See Details for guidance on 
+#' of the number of sites in `dissimilarity`, rounded down to a whole number.
+#' See Details for guidance on 
 #' choosing this parameter.
 #'
 #' @param eps A `numeric` vector or a single `numeric` value specifying the `eps` 
