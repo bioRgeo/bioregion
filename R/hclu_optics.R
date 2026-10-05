@@ -16,15 +16,14 @@
 #' @param minPts A `numeric` value specifying the minPts argument of
 #' [dbscan][dbscan::dbscan]. minPts is the minimum number of points required
 #' to form a dense region. By default, it is set to the natural logarithm 
-#' of the number of sites in `dissimilarity`.
+#' of the number of sites in `dissimilarity`, rounded down to a whole number.
 #' 
-#' @param eps A `numeric` value specifying the eps argument of
+#' @param eps A positive `numeric` value specifying the eps argument of
 #' [optics][dbscan::optics]. It defines the upper limit of the size
 #' of the epsilon neighborhood. Limiting the neighborhood size improves
 #' performance and has no or very little impact on the ordering as long as it
-#' is not set too low. If not specified (default behavior), the largest
-#' minPts-distance in the dataset is used, which gives the same result as
-#' infinity.
+#' is not set too low. By default, `eps = Inf`, which means that the
+#' neighborhood size is not limited.
 #' 
 #' @param xi A `numeric` value specifying the steepness threshold to
 #' identify clusters hierarchically using the Xi method
@@ -115,7 +114,7 @@
 hclu_optics <- function(dissimilarity,
                         index = names(dissimilarity)[3],
                         minPts = NULL,
-                        eps = NULL,
+                        eps = Inf,
                         xi = 0.05,
                         minimum = FALSE,
                         show_hierarchy = FALSE,
@@ -161,7 +160,7 @@ hclu_optics <- function(dissimilarity,
     controls(args = minPts, data = NULL, type = "strict_positive_integer")
   }
   if(!is.null(eps)){
-    controls(args = eps, data = NULL, type = "strict_positive_integer")
+    controls(args = eps, data = NULL, type = "strict_positive_numeric")
   }
   controls(args = xi, data = NULL, type = "strict_positive_numeric")
   if (xi >= 1) {
@@ -222,6 +221,8 @@ hclu_optics <- function(dissimilarity,
     # Using a default value of minPts if none provided by the user
     minPts <- log(length(labels(dist.obj)))
   }
+
+  minPts <- floor(minPts)
   
   outputs$algorithm <- dbscan::optics(x = dist.obj,
                                       minPts = minPts,
