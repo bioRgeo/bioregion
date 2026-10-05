@@ -611,57 +611,57 @@ test_that("invalid inputs", {
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_height_rule = 1,
+                     ihct_height_rule = 1,
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "IHCT_height_rule must be a character.",
+    "ihct_height_rule must be a character.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_height_rule = c("least_squares", "max_child"),
+                     ihct_height_rule = c("least_squares", "max_child"),
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "IHCT_height_rule must be of length 1.",
+    "ihct_height_rule must be of length 1.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_height_rule = "zz",
+                     ihct_height_rule = "zz",
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "^Please choose IHCT_height_rule from the following")
+    "^Please choose ihct_height_rule from the following")
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_variation_drop = "zz",
+                     ihct_variation_drop = "zz",
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "IHCT_variation_drop must be numeric.",
+    "ihct_variation_drop must be numeric.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_variation_drop = c(0.1, 0.2),
+                     ihct_variation_drop = c(0.1, 0.2),
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "IHCT_variation_drop must be of length 1.",
+    "ihct_variation_drop must be of length 1.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_variation_drop = -0.1,
+                     ihct_variation_drop = -0.1,
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "IHCT_variation_drop must be higher than 0.",
+    "ihct_variation_drop must be higher than 0.",
     fixed = TRUE)
 
   expect_error(
     hclu_hierarclust(dissim, 
-                     IHCT_variation_drop = 1.5,
+                     ihct_variation_drop = 1.5,
                      optimal_tree_method = "best",
                      verbose = FALSE),
-    "IHCT_variation_drop must be between 0 and 1.",
+    "ihct_variation_drop must be between 0 and 1.",
     fixed = TRUE)
 
   expect_error(
@@ -1009,27 +1009,27 @@ test_that("summary works on uncut hclu_hierarclust tree", {
   
 })
 
-# Tests for the IHCT_variation_drop argument -----------------------------------------------
-test_that("IHCT_variation_drop reaches IHCT and is reported", {
-  # IHCT_variation_drop = 0 rebuilds the randomised trees at every division, as bioregion
+# Tests for the ihct_variation_drop argument -----------------------------------------------
+test_that("ihct_variation_drop reaches IHCT and is reported", {
+  # ihct_variation_drop = 0 rebuilds the randomised trees at every division, as bioregion
   # 1.4.0 and earlier did; the default lets a group of sites reuse its parent's
   # trees, which changes the tree it ends up with
   old_way <- hclu_hierarclust(dissim,
                               index = "Simpson",
                               optimal_tree_method = "iterative_consensus_tree",
                               n_runs = 20,
-                              IHCT_variation_drop = 0,
+                              ihct_variation_drop = 0,
                               seed = 1,
                               verbose = FALSE)
   inherited <- hclu_hierarclust(dissim,
                                 index = "Simpson",
                                 optimal_tree_method = "iterative_consensus_tree",
                                 n_runs = 20,
-                                IHCT_variation_drop = 0.5,
+                                ihct_variation_drop = 0.5,
                                 seed = 1,
                                 verbose = FALSE)
-  expect_equal(old_way$args$IHCT_variation_drop, 0)
-  expect_equal(inherited$args$IHCT_variation_drop, 0.5)
+  expect_equal(old_way$args$ihct_variation_drop, 0)
+  expect_equal(inherited$args$ihct_variation_drop, 0.5)
   expect_false(identical(old_way$algorithm$final.tree$merge,
                          inherited$algorithm$final.tree$merge))
   # the shortcut may not cost much of the fit of the tree to the data
@@ -1038,7 +1038,7 @@ test_that("IHCT_variation_drop reaches IHCT and is reported", {
 })
 
 
-test_that("large matrices are told about IHCT_sites_drop = Inf", {
+test_that("large matrices are told about ihct_sites_drop = Inf", {
   # A matrix whose dissimilarities are all the same value is resolved in one
   # step, without any randomization, so a matrix large enough to trigger the
   # message costs almost nothing to cluster here.
@@ -1048,7 +1048,7 @@ test_that("large matrices are told about IHCT_sites_drop = Inf", {
     dimnames(d) <- list(sprintf("s%05d", seq_len(n)), sprintf("s%05d", seq_len(n)))
     stats::as.dist(d)
   }
-  advice <- "IHCT_sites_drop = Inf"
+  advice <- "ihct_sites_drop = Inf"
   # The tree of a matrix like this has one height throughout, so there is no
   # variation for a cophenetic correlation to be computed from and no way to
   # cut it into two groups. Both complain, and neither has anything to do with
@@ -1061,10 +1061,38 @@ test_that("large matrices are told about IHCT_sites_drop = Inf", {
   expect_no_message(run(flat(2000)), message = advice)
 
   # ...and only when the rule it is about is doing anything
-  expect_no_message(run(flat(2010), IHCT_sites_drop = Inf), message = advice)
-  expect_no_message(run(flat(2010), IHCT_variation_drop = 0), message = advice)
+  expect_no_message(run(flat(2010), ihct_sites_drop = Inf), message = advice)
+  expect_no_message(run(flat(2010), ihct_variation_drop = 0), message = advice)
   # the rebuild rules only apply to average linkage
   expect_no_message(run(flat(2010), method = "complete"), message = advice)
   # and it is a message, so verbose switches it off
   expect_no_message(run(flat(2010), verbose = FALSE), message = advice)
+})
+
+# Tests for the name of the IHCT method ----------------------------------------
+test_that("optimal_tree_method accepts 'ihct' and its former name", {
+  expect_equal(formals(hclu_hierarclust)$optimal_tree_method, "ihct")
+  new_name <- hclu_hierarclust(dissim,
+                               index = "Simpson",
+                               optimal_tree_method = "ihct",
+                               n_runs = 10,
+                               seed = 1,
+                               verbose = FALSE)
+  old_name <- hclu_hierarclust(dissim,
+                               index = "Simpson",
+                               optimal_tree_method = "iterative_consensus_tree",
+                               n_runs = 10,
+                               seed = 1,
+                               verbose = FALSE)
+  expect_equal(old_name$algorithm$final.tree$merge,
+               new_name$algorithm$final.tree$merge)
+  expect_equal(old_name$algorithm$final.tree$height,
+               new_name$algorithm$final.tree$height)
+  expect_equal(new_name$args$optimal_tree_method, "ihct")
+  expect_equal(old_name$args$optimal_tree_method, "ihct")
+  expect_error(hclu_hierarclust(dissim,
+                                index = "Simpson",
+                                optimal_tree_method = "IHCT",
+                                verbose = FALSE),
+               "optimal_tree_method")
 })

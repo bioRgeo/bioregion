@@ -76,6 +76,7 @@ reference:
   desc: ~
   contents:
   - hclu_hierarclust
+  - ihct
   - cut_tree
   - hclu_diana
   - hclu_optics

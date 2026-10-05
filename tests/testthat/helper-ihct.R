@@ -1,4 +1,4 @@
-# Pure-R references for the C++ helpers of R/IHCT.R (src/ihct_trees.cpp).
+# Pure-R references for the C++ helpers of R/ihct.R (src/ihct_trees.cpp).
 #
 # They are written the slow and obvious way -- the sites of every node are
 # carried around as a set and the heights are read off the dissimilarity matrix
@@ -7,7 +7,7 @@
 #
 # A tree is the merge matrix and heights of an hclust object plus `leaf_site`,
 # the site of the dissimilarity matrix (its row number) that each leaf stands
-# for; see the notes at the top of R/IHCT.R.
+# for; see the notes at the top of R/ihct.R.
 
 # the sites under every node of a tree
 ref_node_members <- function(merge, leaf_site) {

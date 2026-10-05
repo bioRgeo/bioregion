@@ -181,7 +181,7 @@ run_current <- function(D, method = "average", n_runs = 100,
                         top_n_trees = 2, seed = 1,
                         height_rule = "max_child") {
   set.seed(seed)
-  IHCT(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
+  ihct(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
        variation_drop = 0, height_rule = height_rule,
        tie_block_resolution = FALSE, verbose = FALSE)
 }
@@ -312,7 +312,7 @@ trace_current <- function(D, method, n_runs, top_n_trees, seed, keys_at = NULL) 
 
   with_traced(ns, "divide_sites", traced, {
     set.seed(seed)
-    IHCT(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
+    ihct(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
          variation_drop = 0, tie_block_resolution = FALSE, verbose = FALSE)
   })
   log
@@ -682,7 +682,7 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
     with_traced(ns, "tree_fit_score", fit_ccc,
       with_traced(ns, "rank_by_score", rank_exact, {
         set.seed(seed)
-        IHCT(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
+        ihct(D, method = method, n_runs = n_runs, top_n_trees = top_n_trees,
              variation_drop = 0, height_rule = "max_child",
              tie_block_resolution = FALSE, verbose = FALSE)
       }))
@@ -723,7 +723,7 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
 # 4. Whole trees
 # =============================================================================
 
-test_that("IHCT() reproduces the old tree on subsets, for every linkage and top_n_trees", {
+test_that("ihct() reproduces the old tree on subsets, for every linkage and top_n_trees", {
   skip_without_legacy()
 
   for (nm in DATASETS) {
@@ -743,7 +743,7 @@ test_that("IHCT() reproduces the old tree on subsets, for every linkage and top_
   }
 })
 
-test_that("IHCT() reproduces the old tree across seeds", {
+test_that("ihct() reproduces the old tree across seeds", {
   skip_without_legacy()
 
   for (nm in DATASETS) {
@@ -756,7 +756,7 @@ test_that("IHCT() reproduces the old tree across seeds", {
   }
 })
 
-test_that("IHCT() reproduces the old tree on the full fishdf and vegedf", {
+test_that("ihct() reproduces the old tree on the full fishdf and vegedf", {
   skip_without_legacy()
   # the old implementation needs roughly a minute per dataset here
 
@@ -821,9 +821,9 @@ test_that("hclu_hierarclust() reproduces the old output end to end", {
     n <- hclu_hierarclust(dis, index = "Simpson", method = "average",
                           n_runs = 50,
                           optimal_tree_method = "iterative_consensus_tree",
-                          n_clust = 5, seed = 1, IHCT_top_n_trees = 2,
-                          IHCT_variation_drop = 0,
-                          IHCT_height_rule = "max_child", verbose = FALSE)
+                          n_clust = 5, seed = 1, ihct_top_n_trees = 2,
+                          ihct_variation_drop = 0,
+                          ihct_height_rule = "max_child", verbose = FALSE)
 
     if (trees_identical(o$algorithm$final.tree, n$algorithm$final.tree)) {
       expect_equal(n$algorithm$final.tree.coph.cor, o$algorithm$final.tree.coph.cor,
@@ -843,7 +843,7 @@ test_that("hclu_hierarclust() reproduces the old output end to end", {
       # is a different sample of the same distribution. Measured on fish over
       # 8 seeds, the difference it makes averages +0.0004 and ranges
       # -0.0008 to +0.0024, against a seed-to-seed spread of 0.0086. Exactness
-      # is pinned by the IHCT()-level tests above, which switch the resolution
+      # is pinned by the ihct()-level tests above, which switch the resolution
       # off; here the tree only has to be of comparable quality, and the object
       # still has to be a well-formed bioregionalization with the requested cut.
       expect_gte(n$algorithm$final.tree.coph.cor,

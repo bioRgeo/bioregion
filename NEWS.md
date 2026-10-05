@@ -5,6 +5,14 @@ between **bioregion 1.4.0** (CRAN release 2026-03-29) and the next CRAN release.
 
 * Relaxed matching controls in `site_species_metrics()` and `bioregion_metrics()`.
 
+* Huge optimization update for ihct, which now runs 5 to 7 times faster than in 
+bioregion 1.4.0, and now becomes usable on large datasets.
+
+* The iterative hierarchical consensus tree is now available on its own with
+the new function `ihct()`. In `hclu_hierarclust()`, the default of
+`optimal_tree_method` is now called `"ihct"`; the former name
+`"iterative_consensus_tree"` is still accepted and gives the same result.
+
 # bioregion 1.4.0
 
 This is a list of changes made between **bioregion 1.3.0** 

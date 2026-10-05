@@ -324,7 +324,7 @@ reconstruct the entire tree from top to bottom, by selecting for each branch
 a majority decision among multiple randomizations of the distance matrix (100
 times by default, can be increased). This method is called 
 **Iterative Hierarchical Consensus Tree** (argument 
-`optimal_tree_method = "iterative_consensus_tree"`, default value)
+`optimal_tree_method = "ihct"`, default value)
 and it ensures that you obtain a
 consensus tree that it will find a majority decision for each branch of the
 tree. The tree produced with this method generally have a better topology than
