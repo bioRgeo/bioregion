@@ -80,7 +80,7 @@ Clustering Structure).</p>
 <span>  <span class="va">dissimilarity</span>,</span>
 <span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dissimilarity</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
 <span>  minPts <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  eps <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  eps <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  xi <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  minimum <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -110,17 +110,16 @@ default, the third column name of <code>dissimilarity</code> is used.</p></dd>
 <dd><p>A <code>numeric</code> value specifying the minPts argument of
 <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a>. minPts is the minimum number of points required
 to form a dense region. By default, it is set to the natural logarithm
-of the number of sites in <code>dissimilarity</code>.</p></dd>
+of the number of sites in <code>dissimilarity</code>, rounded down to a whole number.</p></dd>
 
 
 <dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
-<dd><p>A <code>numeric</code> value specifying the eps argument of
+<dd><p>A positive <code>numeric</code> value specifying the eps argument of
 <a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">optics</a>. It defines the upper limit of the size
 of the epsilon neighborhood. Limiting the neighborhood size improves
 performance and has no or very little impact on the ordering as long as it
-is not set too low. If not specified (default behavior), the largest
-minPts-distance in the dataset is used, which gives the same result as
-infinity.</p></dd>
+is not set too low. By default, <code>eps = Inf</code>, which means that the
+neighborhood size is not limited.</p></dd>
 
 
 <dt id="arg-xi">xi<a class="anchor" aria-label="anchor" href="#arg-xi"></a></dt>

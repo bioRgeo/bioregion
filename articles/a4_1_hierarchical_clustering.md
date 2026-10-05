@@ -1453,7 +1453,7 @@ clust1
     ##  - Number of sites:  715 
     ## Clustering results:
     ##  - Number of partitions:  1 
-    ##  - Number of clusters:  9
+    ##  - Number of clusters:  10
 
 ## 5. References
 

@@ -43,7 +43,8 @@ nhclu_dbscan(
   [`dbscan::dbscan()`](https://rdrr.io/pkg/dbscan/man/dbscan.html).
   `minPts` is the minimum number of points to form a dense region. By
   default, it is set to the natural logarithm of the number of sites in
-  `dissimilarity`. See Details for guidance on choosing this parameter.
+  `dissimilarity`, rounded down to a whole number. See Details for
+  guidance on choosing this parameter.
 
 - eps:
 

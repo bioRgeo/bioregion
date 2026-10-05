@@ -11,7 +11,7 @@ hclu_optics(
   dissimilarity,
   index = names(dissimilarity)[3],
   minPts = NULL,
-  eps = NULL,
+  eps = Inf,
   xi = 0.05,
   minimum = FALSE,
   show_hierarchy = FALSE,
@@ -43,17 +43,16 @@ hclu_optics(
   [dbscan](https://rdrr.io/pkg/dbscan/man/dbscan.html). minPts is the
   minimum number of points required to form a dense region. By default,
   it is set to the natural logarithm of the number of sites in
-  `dissimilarity`.
+  `dissimilarity`, rounded down to a whole number.
 
 - eps:
 
-  A `numeric` value specifying the eps argument of
+  A positive `numeric` value specifying the eps argument of
   [optics](https://rdrr.io/pkg/dbscan/man/optics.html). It defines the
   upper limit of the size of the epsilon neighborhood. Limiting the
   neighborhood size improves performance and has no or very little
-  impact on the ordering as long as it is not set too low. If not
-  specified (default behavior), the largest minPts-distance in the
-  dataset is used, which gives the same result as infinity.
+  impact on the ordering as long as it is not set too low. By default,
+  `eps = Inf`, which means that the neighborhood size is not limited.
 
 - xi:
 

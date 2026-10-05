@@ -108,7 +108,8 @@ default, the third column name of <code>dissimilarity</code> is used.</p></dd>
 <dd><p>A <code>numeric</code> vector or a single <code>numeric</code> value specifying the
 <code>minPts</code> argument of <code><a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a></code>. <code>minPts</code> is the minimum number of
 points to form a dense region. By default, it is set to the natural logarithm
-of the number of sites in <code>dissimilarity</code>. See Details for guidance on
+of the number of sites in <code>dissimilarity</code>, rounded down to a whole number.
+See Details for guidance on
 choosing this parameter.</p></dd>
 
 
