@@ -106,7 +106,7 @@ default, the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 <dt id="arg-minpts">minPts<a class="anchor" aria-label="anchor" href="#arg-minpts"></a></dt>
 <dd><p>A <code>numeric</code> vector or a single <code>numeric</code> value specifying the
-<code>minPts</code> argument of <code><a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a></code>. <code>minPts</code> is the minimum number of
+<code>minPts</code> argument of <code><a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan::dbscan()</a></code>. <code>minPts</code> is the minimum number of
 points to form a dense region. By default, it is set to the natural logarithm
 of the number of sites in <code>dissimilarity</code>, rounded down to a whole number.
 See Details for guidance on
@@ -115,7 +115,7 @@ choosing this parameter.</p></dd>
 
 <dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
 <dd><p>A <code>numeric</code> vector or a single <code>numeric</code> value specifying the <code>eps</code>
-argument of <code><a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan()</a></code>. <code>eps</code> specifies how similar points should be
+argument of <code><a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan::dbscan()</a></code>. <code>eps</code> specifies how similar points should be
 to each other to be considered part of a cluster. See Details for guidance on
 choosing this parameter.</p></dd>
 
@@ -127,7 +127,7 @@ plot should be displayed.</p></dd>
 
 <dt id="arg-algorithm-in-output">algorithm_in_output<a class="anchor" aria-label="anchor" href="#arg-algorithm-in-output"></a></dt>
 <dd><p>A <code>boolean</code> indicating whether the original output
-of <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan</a> should be included in the output. Defaults to <code>TRUE</code> (see
+of <a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan::dbscan</a> should be included in the output. Defaults to <code>TRUE</code> (see
 Value).</p></dd>
 
 
@@ -138,7 +138,7 @@ display progress messages. Set to <code>FALSE</code> to suppress these messages.
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to <code>dbscan()</code> (see
-<a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan</a>).</p></dd>
+<a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan::dbscan</a>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -151,7 +151,7 @@ procedure, such as original cluster objects (only if
 <code>algorithm_in_output = TRUE</code>).</p></li>
 <li><p><strong>clusters</strong>: A <code>data.frame</code> containing the clustering results.</p></li>
 </ol><p>If <code>algorithm_in_output = TRUE</code>, the <code>algorithm</code> slot includes the output of
-<a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan</a>.</p>
+<a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan::dbscan</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

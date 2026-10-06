@@ -108,14 +108,14 @@ default, the third column name of <code>dissimilarity</code> is used.</p></dd>
 
 <dt id="arg-minpts">minPts<a class="anchor" aria-label="anchor" href="#arg-minpts"></a></dt>
 <dd><p>A <code>numeric</code> value specifying the minPts argument of
-<a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a>. minPts is the minimum number of points required
+<a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan</a>. minPts is the minimum number of points required
 to form a dense region. By default, it is set to the natural logarithm
 of the number of sites in <code>dissimilarity</code>, rounded down to a whole number.</p></dd>
 
 
 <dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
 <dd><p>A positive <code>numeric</code> value specifying the eps argument of
-<a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">optics</a>. It defines the upper limit of the size
+<a href="http://michael.hahsler.net/dbscan/reference/optics.html" class="external-link">optics</a>. It defines the upper limit of the size
 of the epsilon neighborhood. Limiting the neighborhood size improves
 performance and has no or very little impact on the ordering as long as it
 is not set too low. By default, <code>eps = Inf</code>, which means that the
@@ -125,7 +125,7 @@ neighborhood size is not limited.</p></dd>
 <dt id="arg-xi">xi<a class="anchor" aria-label="anchor" href="#arg-xi"></a></dt>
 <dd><p>A <code>numeric</code> value specifying the steepness threshold to
 identify clusters hierarchically using the Xi method
-(see <a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">optics</a>).</p></dd>
+(see <a href="http://michael.hahsler.net/dbscan/reference/optics.html" class="external-link">optics</a>).</p></dd>
 
 
 <dt id="arg-minimum">minimum<a class="anchor" aria-label="anchor" href="#arg-minimum"></a></dt>
@@ -146,13 +146,13 @@ showing the hierarchy of clusters.</p></dd>
 
 <dt id="arg-algorithm-in-output">algorithm_in_output<a class="anchor" aria-label="anchor" href="#arg-algorithm-in-output"></a></dt>
 <dd><p>A <code>boolean</code> indicating whether the original output
-of <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a> should be returned in the output (<code>TRUE</code> by
+of <a href="http://michael.hahsler.net/dbscan/reference/dbscan.html" class="external-link">dbscan</a> should be returned in the output (<code>TRUE</code> by
 default, see Value).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to <code>optics()</code>
-(see <a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">optics</a>).</p></dd>
+(see <a href="http://michael.hahsler.net/dbscan/reference/optics.html" class="external-link">optics</a>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -164,7 +164,7 @@ default, see Value).</p></dd>
 clustering procedure, such as the original cluster objects.</p></li>
 <li><p><strong>clusters</strong>: A <code>data.frame</code> containing the clustering results.</p></li>
 </ol><p>In the <code>algorithm</code> slot, if <code>algorithm_in_output = TRUE</code>, users can
-find the output of <a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">optics</a>.</p>
+find the output of <a href="http://michael.hahsler.net/dbscan/reference/optics.html" class="external-link">optics</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -180,9 +180,9 @@ if <code>algorithm_in_output = TRUE</code>: <code>plot(object$algorithm)</code>.
 We recommend reading (Hahsler et al., 2019) to grasp the
 algorithm, how it works, and what the clusters mean.</p>
 <p>To extract the clusters, we use the
-<a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">extractXi</a> function which is based on the
+<a href="http://michael.hahsler.net/dbscan/reference/optics.html" class="external-link">extractXi</a> function which is based on the
 steepness of the reachability plot (see
-<a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">optics</a>).</p>
+<a href="http://michael.hahsler.net/dbscan/reference/optics.html" class="external-link">optics</a>).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

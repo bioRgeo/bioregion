@@ -40,25 +40,26 @@ hclu_optics(
 - minPts:
 
   A `numeric` value specifying the minPts argument of
-  [dbscan](https://rdrr.io/pkg/dbscan/man/dbscan.html). minPts is the
-  minimum number of points required to form a dense region. By default,
-  it is set to the natural logarithm of the number of sites in
-  `dissimilarity`, rounded down to a whole number.
+  [dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md).
+  minPts is the minimum number of points required to form a dense
+  region. By default, it is set to the natural logarithm of the number
+  of sites in `dissimilarity`, rounded down to a whole number.
 
 - eps:
 
   A positive `numeric` value specifying the eps argument of
-  [optics](https://rdrr.io/pkg/dbscan/man/optics.html). It defines the
-  upper limit of the size of the epsilon neighborhood. Limiting the
-  neighborhood size improves performance and has no or very little
-  impact on the ordering as long as it is not set too low. By default,
-  `eps = Inf`, which means that the neighborhood size is not limited.
+  [optics](http://michael.hahsler.net/dbscan/reference/optics.md). It
+  defines the upper limit of the size of the epsilon neighborhood.
+  Limiting the neighborhood size improves performance and has no or very
+  little impact on the ordering as long as it is not set too low. By
+  default, `eps = Inf`, which means that the neighborhood size is not
+  limited.
 
 - xi:
 
   A `numeric` value specifying the steepness threshold to identify
   clusters hierarchically using the Xi method (see
-  [optics](https://rdrr.io/pkg/dbscan/man/optics.html)).
+  [optics](http://michael.hahsler.net/dbscan/reference/optics.md)).
 
 - minimum:
 
@@ -79,13 +80,13 @@ hclu_optics(
 - algorithm_in_output:
 
   A `boolean` indicating whether the original output of
-  [dbscan](https://rdrr.io/pkg/dbscan/man/dbscan.html) should be
-  returned in the output (`TRUE` by default, see Value).
+  [dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md) should
+  be returned in the output (`TRUE` by default, see Value).
 
 - ...:
 
   Additional arguments to be passed to `optics()` (see
-  [optics](https://rdrr.io/pkg/dbscan/man/optics.html)).
+  [optics](http://michael.hahsler.net/dbscan/reference/optics.md)).
 
 ## Value
 
@@ -104,7 +105,8 @@ A `list` of class `bioregion.clusters` with five slots:
 5.  **clusters**: A `data.frame` containing the clustering results.
 
 In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find
-the output of [optics](https://rdrr.io/pkg/dbscan/man/optics.html).
+the output of
+[optics](http://michael.hahsler.net/dbscan/reference/optics.md).
 
 ## Details
 
@@ -121,9 +123,9 @@ We recommend reading (Hahsler et al., 2019) to grasp the algorithm, how
 it works, and what the clusters mean.
 
 To extract the clusters, we use the
-[extractXi](https://rdrr.io/pkg/dbscan/man/optics.html) function which
-is based on the steepness of the reachability plot (see
-[optics](https://rdrr.io/pkg/dbscan/man/optics.html)).
+[extractXi](http://michael.hahsler.net/dbscan/reference/optics.md)
+function which is based on the steepness of the reachability plot (see
+[optics](http://michael.hahsler.net/dbscan/reference/optics.md)).
 
 ## References
 
