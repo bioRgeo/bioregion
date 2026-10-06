@@ -3,6 +3,7 @@ docs
 documents
 tests
 vignettes
+dev_scripts
 .github
 
 CITATION.cff
@@ -12,6 +13,5 @@ README.Rmd
 
 src/*.gcda
 
-
-
-
+^test_.*\.R$
+^\.claude$

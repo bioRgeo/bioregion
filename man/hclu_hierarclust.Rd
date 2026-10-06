@@ -12,7 +12,7 @@ hclu_hierarclust(
   seed = NULL,
   n_runs = 100,
   keep_trials = "no",
-  optimal_tree_method = "iterative_consensus_tree",
+  optimal_tree_method = "ihct",
   n_clust = NULL,
   cut_height = NULL,
   find_h = TRUE,
@@ -20,6 +20,11 @@ hclu_hierarclust(
   h_min = 0,
   consensus_p = 0.5,
   show_hierarchy = FALSE,
+  ihct_top_n_trees = 2,
+  ihct_variation_drop = 0.2,
+  ihct_sites_drop = 10,
+  ihct_height_rule = "least_squares",
+  ihct_n_workers = 1,
   verbose = TRUE
 )
 }
@@ -52,12 +57,14 @@ default).}
 (including the randomized matrix, the associated tree and metrics for that tree)
 should be stored in the output object. Possible values are \code{"no"} (default),
 \code{"all"} or \code{"metrics"}. Note that this parameter is automatically set to
-\code{"no"} if \code{optimal_tree_method = "iterative_consensus_tree"}.}
+\code{"no"} if \code{optimal_tree_method = "ihct"}.}
 
 \item{optimal_tree_method}{A \code{character} string indicating how the final tree
 should be obtained from all trials. Possible values are
-\code{"iterative_consensus_tree"} (default), \code{"best"} or \code{"consensus"}.
-\strong{We recommend \code{"iterative_consensus_tree"}. See Details.}}
+\code{"ihct"} (default), \code{"best"} or \code{"consensus"}. \code{"iterative_consensus_tree"}
+is still accepted as another name for \code{"ihct"}, so that code written for
+earlier versions of bioregion keeps working.
+\strong{We recommend \code{"ihct"}. See Details.}}
 
 \item{n_clust}{An \code{integer} vector or a single \code{integer} indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
@@ -85,6 +92,48 @@ consensus tree.}
 \item{show_hierarchy}{A \code{boolean} specifying if the hierarchy of clusters
 should be identifiable in the outputs (\code{FALSE} by default). This argument is
 only used if the tree is cut (i.e., \code{n_clust} or \code{cut_height} is provided).}
+
+\item{ihct_top_n_trees}{An \code{integer} (applicable only if
+\code{optimal_tree_method = "ihct"}) indicating how many of
+the best randomized trees are used to decide each division of the tree
+(\code{2} by default). See Details.}
+
+\item{ihct_variation_drop}{A \code{numeric} value between 0 and 1 (applicable
+only if \code{optimal_tree_method = "ihct"} and
+\code{method = "average"}). This is an optimization parameter: it reduces the
+number of times the dissimilarity matrix is randomized while the tree is
+built, which makes the tree faster to obtain for a very small cost in its
+fit to the data. Its rule is based on variation: new randomizations are made
+once a group of sites has lost this share of the variation that was left to
+decide when they were last made. The default \code{0.2} therefore means
+"randomize again once a fifth of what was left to decide has been decided".
+Set it to \code{0} to randomize at every division, or to \code{1} to switch this rule
+off and leave \code{ihct_sites_drop} to decide on its own. See Details.}
+
+\item{ihct_sites_drop}{A \code{numeric} value of 0 or more (applicable only if
+\code{optimal_tree_method = "ihct"}, \code{method = "average"} and
+\code{ihct_variation_drop > 0}). This is a second optimization parameter, used
+together with \code{ihct_variation_drop}, with a rule based on sites rather than
+on variation: new randomizations are also made once a group of sites has
+lost this many sites since they were last made (\code{10} by default). Set it to
+\code{0} or \code{1} to randomize at every division, or to \code{Inf} to switch this rule
+off and leave \code{ihct_variation_drop} to decide on its own. See Details.}
+
+\item{ihct_height_rule}{A \code{character} string (applicable only if
+\code{optimal_tree_method = "ihct"}) indicating how the
+heights of the tree are corrected when a division comes out lower than a
+division it contains. With \code{"least_squares"} (default) the heights are moved
+as little as possible, which fits the dissimilarities better; with
+\code{"max_child"} each division is raised to the highest division it contains,
+as in bioregion 1.4.0 and earlier. See Details.}
+
+\item{ihct_n_workers}{An \code{integer} of 1 or more (applicable only if
+\code{optimal_tree_method = "ihct"}) indicating how many
+processes of your computer may build the randomized trees at the same time.
+With \code{1} (default) they are built one after another, as before. Higher
+values are worth it on large matrices only, and they do not change the
+tree: the same \code{seed} gives the same result whatever this is set to. See
+Details.}
 
 \item{verbose}{A \code{boolean} indicating whether to
 display progress messages. Set to \code{FALSE} to suppress these messages.}
@@ -143,7 +192,7 @@ randomizing the distance matrix.
 Two methods are available to obtain the final tree:
 \itemize{
 
-\item{\code{optimal_tree_method = "iterative_consensus_tree"}: The Iterative
+\item{\code{optimal_tree_method = "ihct"}: The Iterative
 Hierarchical Consensus Tree (IHCT) method reconstructs a consensus tree by
 iteratively splitting the dataset into two subclusters based on the pairwise
 dissimilarity of sites across \code{n_runs} trees based on \code{n_runs} randomizations
@@ -177,7 +226,7 @@ tree preserves
 approximate distances among clusters.}
 }
 
-We recommend using the \code{"iterative_consensus_tree"} as all the branches of
+We recommend using \code{"ihct"} as all the branches of
 this tree will always reflect the majority decision among many randomized
 versions of the distance matrix. This method is inspired by
 Dapporto et al. (2015), which also used the majority decision
@@ -191,6 +240,129 @@ and a very low cophenetic correlation coefficient.
 For a fast exploration of the tree, we recommend using the \code{best} method
 which will only select the tree with the highest cophenetic correlation
 coefficient among all randomized versions of the distance matrix.
+
+~ \strong{Iterative Hierarchical Consensus Tree} details ~
+
+The paragraphs below cover the \verb{ihct_*} arguments of this function. The
+algorithm itself is walked through step by step in \code{\link[=ihct]{ihct()}}, which is the
+function doing the work here, and which can also be called on its own if
+you want the tree without the rest of this function.
+
+--> \emph{Tree quality}
+
+\code{ihct_top_n_trees} sets how many of the randomized trees, ranked by their
+quality (i.e., how well
+they fit the dissimilarities with cophenetic correlation coefficient CCC),
+are used to decide a division: with \code{1} the
+division is the top division of the best tree; with more, sites are grouped
+according to how often they fall on the same side in these trees.
+We recommend leaving this to default values, or to a low number of trees,
+because it provided the best results in
+our tests (highest CCC).
+
+--> \emph{Computation time}
+
+The algorithm can be long to run because at every division of the tree it has
+to randomize \code{n_runs} trees. On large datasets, building new
+trees at every division makes this method slow. To make the function usable
+on large datasets, we provide two optimization parameters. These parameters
+make the
+algorithm reuse previously randomized trees at new division, unless a
+threshold of change is reached:
+\itemize{
+\item{
+\code{ihct_variation_drop} is based on the amount of variation from the
+dissimilarity matrix.
+It triggers a new tree randomization only when the amount of variation
+in the group being divided has reached a threshold since last randomization
+(default: 20\% drop in variation). In other words, new randomizations happen
+only when
+tree divisions reach a certain threshold of variation since the last
+randomization. For example, when a tree peels off only 1 site at a time,
+this argument makes sure no new randomization trigger unless variability
+reaches the desired threshold.}
+\item{
+\code{ihct_sites_drop}is based on how many sites the group has lost.
+It triggers new randomizations only when a certain number of sites have been
+excluded since the last randomization.}
+}
+
+These two parameters with their defaults (\code{ihct_variation_drop = 0.2},
+\code{ihct_sites_drop = 10}) result in marginal
+changes in algorithm performance (loss in CCC <0.001) and make the tree
+1.5 faster to build. In our tests, the larger the datasets, the higher
+the savings with these two optimization parameters. Note, however,
+that reusing trees only works with UPGMA currently, so it only applies to
+\code{method = "average"}.
+
+The two arguments work as a pair, and each of them can be set so that the
+other no longer has any effect. A new randomization is made as soon as
+\emph{either} of them asks for one, so whichever of the two asks more often is
+the one that decides:
+\itemize{
+\item{\code{ihct_sites_drop = 1} (or \code{0}) means new randomizations every time
+a site is treated (so randomizations at every division, and
+\code{ihct_variation_drop} is never used).}
+\item{\code{ihct_variation_drop = 0} likewise means new randomizations at
+every division, and
+\code{ihct_sites_drop} is then never used.}
+\item{\code{ihct_variation_drop = 1} never triggers new randomizations, leaving
+\code{ihct_sites_drop} to decide on its own, and \code{ihct_sites_drop = Inf} never
+triggers randomizations, leaving \code{ihct_variation_drop} to decide on its own.}
+\item{Both switched off (\code{ihct_variation_drop = 1} and
+\code{ihct_sites_drop = Inf}) randomizes once, at the first division, and reuses
+those trees for the whole tree. This is the fastest setting and the one that
+fits the data least well.}}
+
+To reproduce the tree that bioregion 1.4.0 and earlier produced, for the
+same \code{seed}, use:
+
+\preformatted{
+hclu_hierarclust(dissimilarity,
+                 method = "average",
+                 optimal_tree_method = "ihct",
+                 n_runs = 100,
+                 ihct_top_n_trees = 2,
+                 ihct_variation_drop = 0,
+                 ihct_height_rule = "max_child")
+}
+
+--> \emph{Height of nodes in the tree}
+
+The height of nodes in a tree must be monotonous, i.e. a child node cannot
+be have a higher height than its parents. However, this situation can happen
+when building the tree, which is why all tree construction algorithms have a
+monotonicity section where node height is recalculated.
+
+\code{ihct_height_rule} decides how we do it in IHCT. \code{"max_child"} raises every
+division to the
+highest division it contains, which is simple but can push a division far
+above the dissimilarities it summarizes. \code{"least_squares"} (default) instead
+moves the heights as little as possible, which with \code{method = "average"}
+gives the heights that fit the dissimilarities best on the topology at hand,
+so the cophenetic correlation is never below the one \code{"max_child"} gives and
+is usually above it.
+We recommend leaving to default as in our own testing it provides better
+performance (highest CCC).
+
+--> \emph{Parallelization for quicker computation time}
+
+Most of the waiting is spent building the randomized trees, and the runs of
+one group do not depend on each other, so \code{ihct_n_workers} can share them
+between several processes of your computer. This only pays on large
+matrices, where a single run is slow enough to be worth sending to another
+process: groups of fewer than 200 sites are always done in one process, and
+small datasets should be left at \code{ihct_n_workers = 1}. We found that
+4 workers give good gains (about three times faster on a 5,000-site
+matrix); beyond that the processes spend their time waiting for memory
+rather than computing, and on a 10,000-site matrix going from 4 workers
+to 8 provided only limited gains while doubling the memory needed.
+Each worker also needs its own copy of the
+dissimilarity matrix on Windows, about 200 MB for 5,000 sites and 800 MB
+for 10,000, so ask for fewer workers than your memory allows copies.
+Whatever you set, the tree is the same: the random shuffles are always drawn
+in the same order by the main process, and only the building of the trees is
+handed out to workers.
 }
 \examples{
 comat <- matrix(sample(0:1000, size = 500, replace = TRUE, prob = 1/1:1001),
@@ -244,7 +416,7 @@ see the vignette:
 \url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html}.
 
 Associated functions:
-\link{cut_tree}
+\link{cut_tree} \link{ihct}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr
