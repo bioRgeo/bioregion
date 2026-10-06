@@ -354,7 +354,7 @@ get_pairwise_membership <- function(input_clusters) {
   # Compute pairwise membership
   for (col in seq_len(n_bioregionalizations)) {
     # Compare memberships directly for each pair of items
-    pw_membership[, col] <- as.vector(dist(as.integer(as.factor(input_clusters[, col]))) == 0)
+    pw_membership[, col] <- as.vector(stats::dist(as.integer(as.factor(input_clusters[, col]))) == 0)
   }
   
   # Set row names based on the pairwise comparisons (optional)
