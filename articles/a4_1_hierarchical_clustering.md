@@ -150,7 +150,7 @@ tree1
     ##  - Tree construction method:  average 
     ##  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
     ##  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-    ##  - Cophenetic correlation coefficient:  0.7 
+    ##  - Cophenetic correlation coefficient:  0.701 
     ## Clustering procedure incomplete - no clusters yet
 
 The last line tells us that the the clustering procedure is incomplete:
@@ -169,7 +169,7 @@ tree1 <- cut_tree(tree1,
 ```
 
 Here, we asked for 3 clusters, and the algorithm automatically finds the
-height at which 3 clusters are found (h = 0.547).
+height at which 3 clusters are found (h = 0.555).
 
 ``` r
 
@@ -183,12 +183,12 @@ tree1
     ##  - Tree construction method:  average 
     ##  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
     ##  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-    ##  - Cophenetic correlation coefficient:  0.7 
+    ##  - Cophenetic correlation coefficient:  0.701 
     ##  - Number of clusters requested by the user:  3 
     ## Clustering results:
     ##  - Number of partitions:  1 
     ##  - Number of clusters:  3 
-    ##  - Height of cut of the hierarchical tree: 0.547
+    ##  - Height of cut of the hierarchical tree: 0.555
 
 When we type again the name of the object in the console, it gives us
 the results of the clustering: we have
@@ -199,7 +199,7 @@ the results of the clustering: we have
   asked for 3, and we obtained 3, which is good. Sometimes, however, we
   cannot get the number of clusters we asked for - in which case the
   outcome will be indicated.
-- **a height of cut at 0.547**: this is the height of cut at which we
+- **a height of cut at 0.555**: this is the height of cut at which we
   can obtain 4 clusters in our tree.
 
 We can make a quick plot of our partitioned tree with
@@ -269,23 +269,23 @@ summary(tree1)
     ## ------------------------- 
     ## Total clusters:  3 
     ## Top 3 clusters by size:
-    ##   Cluster 1: 538 items
-    ##   Cluster 3: 113 items
-    ##   Cluster 2: 64 items
+    ##   Cluster 1: 518 items
+    ##   Cluster 2: 177 items
+    ##   Cluster 3: 20 items
     ## 
     ## Bioregionalization 3: K_12
     ## -------------------------- 
     ## Total clusters:  12 
     ## Top 10 clusters by size:
-    ##   Cluster 2: 414 items
+    ##   Cluster 2: 412 items
     ##   Cluster 8: 99 items
-    ##   Cluster 1: 63 items
     ##   Cluster 5: 62 items
-    ##   Cluster 3: 36 items
+    ##   Cluster 1: 60 items
+    ##   Cluster 3: 42 items
     ##   Cluster 7: 14 items
     ##   Cluster 11: 10 items
     ##   Cluster 6: 8 items
-    ##   Cluster 4: 5 items
+    ##   Cluster 4: 4 items
     ##   Cluster 12: 2 items
     ##   ... and 2 more cluster(s)
     ## 
@@ -293,23 +293,23 @@ summary(tree1)
     ## ======================
     ## 
     ## 1 (n=538)
-    ## └─1 (n=538)
-    ##   ├─1 (n=63)
+    ## ├─1 (n=518)
+    ## │ ├─1 (n=60)
+    ## │ ├─2 (n=412)
+    ## │ ├─3 (n=42)
+    ## │ └─4 (n=4)
+    ## └─3 (n=20)
     ##   ├─11 (n=10)
     ##   ├─12 (n=2)
-    ##   ├─2 (n=414)
-    ##   ├─3 (n=36)
-    ##   ├─4 (n=5)
     ##   └─6 (n=8)
     ## 
     ## 2 (n=177)
-    ## ├─2 (n=64)
-    ## │ ├─10 (n=1)
-    ## │ ├─5 (n=62)
-    ## │ └─9 (n=1)
-    ## └─3 (n=113)
+    ## └─2 (n=177)
+    ##   ├─10 (n=1)
+    ##   ├─5 (n=62)
     ##   ├─7 (n=14)
-    ##   └─8 (n=99)
+    ##   ├─8 (n=99)
+    ##   └─9 (n=1)
 
 However, it may be more useful to choose the heights of cut, rather than
 the number of clusters. We could, for example, cut the tree at heights
@@ -340,17 +340,17 @@ tree1
     ##  - Tree construction method:  average 
     ##  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
     ##  - Method to compute the final tree:  Iterative hierarchical consensus tree 
-    ##  - Cophenetic correlation coefficient:  0.7 
+    ##  - Cophenetic correlation coefficient:  0.701 
     ##  - Heights of cut requested by the user:  0.4 0.5 0.6 
     ## Clustering results:
     ##  - Number of partitions:  3 
     ##  - Partitions are hierarchical
-    ##  - Number of clusters:  2 9 24 
+    ##  - Number of clusters:  2 9 23 
     ##  - Height of cut of the hierarchical tree: 0.6 0.5 0.4
 
 From the result, we can read that for the deep cut partition (h = 0.6)
 we have clusters, for the intermediate cut partition (h = 0.5) we have 9
-clusters and for the shallow cut partition (h = 0.4) we have 24
+clusters and for the shallow cut partition (h = 0.4) we have 23
 clusters.
 
 Let’s look at the hierarchical structure of clusters with
@@ -381,71 +381,70 @@ summary(tree1)
     ## ------------------------- 
     ## Total clusters:  9 
     ## Top 9 clusters by size:
-    ##   Cluster 2: 450 items
+    ##   Cluster 2: 454 items
     ##   Cluster 6: 113 items
-    ##   Cluster 1: 63 items
     ##   Cluster 4: 62 items
+    ##   Cluster 1: 60 items
     ##   Cluster 5: 18 items
-    ##   Cluster 3: 5 items
+    ##   Cluster 3: 4 items
     ##   Cluster 9: 2 items
     ##   Cluster 7: 1 items
     ##   Cluster 8: 1 items
     ## 
-    ## Bioregionalization 3: K_24
+    ## Bioregionalization 3: K_23
     ## -------------------------- 
-    ## Total clusters:  24 
+    ## Total clusters:  23 
     ## Top 10 clusters by size:
-    ##   Cluster 3: 296 items
-    ##   Cluster 8: 106 items
-    ##   Cluster 12: 97 items
-    ##   Cluster 1: 59 items
-    ##   Cluster 6: 49 items
-    ##   Cluster 4: 33 items
-    ##   Cluster 9: 14 items
-    ##   Cluster 13: 11 items
-    ##   Cluster 22: 10 items
-    ##   Cluster 10: 6 items
-    ##   ... and 14 more cluster(s)
+    ##   Cluster 2: 295 items
+    ##   Cluster 7: 105 items
+    ##   Cluster 11: 97 items
+    ##   Cluster 1: 60 items
+    ##   Cluster 5: 49 items
+    ##   Cluster 3: 39 items
+    ##   Cluster 8: 14 items
+    ##   Cluster 12: 11 items
+    ##   Cluster 21: 10 items
+    ##   Cluster 9: 6 items
+    ##   ... and 13 more cluster(s)
     ## 
     ## Hierarchical structure
     ## ======================
     ## 
     ## 1 (n=538)
-    ## ├─1 (n=63)
-    ## │ ├─1 (n=59)
-    ## │ └─2 (n=4)
-    ## ├─2 (n=450)
-    ## │ ├─11 (n=3)
-    ## │ ├─13 (n=11)
-    ## │ ├─24 (n=1)
-    ## │ ├─3 (n=296)
-    ## │ ├─4 (n=33)
-    ## │ └─8 (n=106)
-    ## ├─3 (n=5)
-    ## │ └─5 (n=5)
+    ## ├─1 (n=60)
+    ## │ └─1 (n=60)
+    ## ├─2 (n=454)
+    ## │ ├─10 (n=3)
+    ## │ ├─12 (n=11)
+    ## │ ├─2 (n=295)
+    ## │ ├─23 (n=1)
+    ## │ ├─3 (n=39)
+    ## │ └─7 (n=105)
+    ## ├─3 (n=4)
+    ## │ └─4 (n=4)
     ## ├─5 (n=18)
-    ## │ ├─10 (n=6)
-    ## │ ├─22 (n=10)
-    ## │ └─7 (n=2)
+    ## │ ├─21 (n=10)
+    ## │ ├─6 (n=2)
+    ## │ └─9 (n=6)
     ## └─9 (n=2)
-    ##   └─23 (n=2)
+    ##   └─22 (n=2)
     ## 
     ## 2 (n=177)
     ## ├─4 (n=62)
-    ## │ ├─14 (n=4)
-    ## │ ├─15 (n=3)
-    ## │ ├─18 (n=4)
+    ## │ ├─13 (n=4)
+    ## │ ├─14 (n=3)
+    ## │ ├─17 (n=4)
+    ## │ ├─18 (n=1)
     ## │ ├─19 (n=1)
-    ## │ ├─20 (n=1)
-    ## │ └─6 (n=49)
+    ## │ └─5 (n=49)
     ## ├─6 (n=113)
-    ## │ ├─12 (n=97)
-    ## │ ├─17 (n=2)
-    ## │ └─9 (n=14)
+    ## │ ├─11 (n=97)
+    ## │ ├─16 (n=2)
+    ## │ └─8 (n=14)
     ## ├─7 (n=1)
-    ## │ └─16 (n=1)
+    ## │ └─15 (n=1)
     ## └─8 (n=1)
-    ##   └─21 (n=1)
+    ##   └─20 (n=1)
 
 Here is how the maps look like:
 
@@ -471,13 +470,13 @@ str(tree1)
 ```
 
     ##  $ name        : chr "hclu_hierarclust"
-    ##  $ args        :List of 16
+    ##  $ args        :List of 20
     ##   ..$ index              : chr "Simpson"
     ##   ..$ method             : chr "average"
     ##   ..$ randomize          : logi TRUE
     ##   ..$ seed               : NULL
     ##   ..$ n_runs             : num 100
-    ##   ..$ optimal_tree_method: chr "iterative_consensus_tree"
+    ##   ..$ optimal_tree_method: chr "ihct"
     ##   ..$ keep_trials        : chr "no"
     ##   ..$ n_clust            : NULL
     ##   ..$ cut_height         : num [1:3] 0.4 0.5 0.6
@@ -486,6 +485,10 @@ str(tree1)
     ##   ..$ h_min              : num 0
     ##   ..$ consensus_p        : num 0.5
     ##   ..$ show_hierarchy     : logi FALSE
+    ##   ..$ ihct_top_n_trees   : num 2
+    ##   ..$ ihct_variation_drop: num 0.2
+    ##   ..$ ihct_sites_drop    : num 10
+    ##   ..$ ihct_height_rule   : chr "least_squares"
     ##   ..$ verbose            : logi TRUE
     ##   ..$ dynamic_tree_cut   : logi FALSE
     ##  $ inputs      :List of 9
@@ -501,21 +504,21 @@ str(tree1)
     ##  $ algorithm   :List of 6
     ##   ..$ final.tree         :List of 5
     ##   .. ..- attr(*, "class")= chr "hclust"
-    ##   ..$ final.tree.coph.cor: num 0.7
+    ##   ..$ final.tree.coph.cor: num 0.701
     ##   ..$ final.tree.msd     : num 0.0221
     ##   ..$ trials             : chr "Trials not stored in output"
-    ##   ..$ output_n_clust     : Named int [1:3] 2 9 24
+    ##   ..$ output_n_clust     : Named int [1:3] 2 9 23
     ##   .. ..- attr(*, "names")= chr [1:3] "h_0.6" "h_0.5" "h_0.4"
     ##   ..$ output_cut_height  : num [1:3] 0.6 0.5 0.4
     ##  $ clusters    :'data.frame':    715 obs. of  4 variables:
     ##   ..$ ID  : chr [1:715] "1003" "1004" "1005" "1006" ...
     ##   ..$ K_2 : chr [1:715] "1" "1" "1" "1" ...
     ##   ..$ K_9 : chr [1:715] "1" "1" "1" "1" ...
-    ##   ..$ K_24: chr [1:715] "1" "1" "1" "1" ...
+    ##   ..$ K_23: chr [1:715] "1" "1" "1" "1" ...
     ##   ..- attr(*, "node_type")= chr [1:715] "site" "site" "site" "site" ...
     ##  $ cluster_info:'data.frame':    3 obs. of  3 variables:
-    ##   ..$ partition_name      : chr [1:3] "K_2" "K_9" "K_24"
-    ##   ..$ n_clust             : int [1:3] 2 9 24
+    ##   ..$ partition_name      : chr [1:3] "K_2" "K_9" "K_23"
+    ##   ..$ n_clust             : int [1:3] 2 9 23
     ##   ..$ requested_cut_height: num [1:3] 0.6 0.5 0.4
 
 It show you the different slots in the object, and how you can access
@@ -546,7 +549,7 @@ tree1$cluster_info
     ##       partition_name n_clust requested_cut_height
     ## h_0.6            K_2       2                  0.6
     ## h_0.5            K_9       9                  0.5
-    ## h_0.4           K_24      24                  0.4
+    ## h_0.4           K_23      23                  0.4
 
 It shows the name of the partition (corresponding to column names in
 `tree1$clusters`), the number of clusters in each partition, and the cut
@@ -594,15 +597,15 @@ will reconstruct the entire tree from top to bottom, by selecting for
 each branch a majority decision among multiple randomizations of the
 distance matrix (100 times by default, can be increased). This method is
 called **Iterative Hierarchical Consensus Tree** (argument
-`optimal_tree_method = "iterative_consensus_tree"`, default value) and
-it ensures that you obtain a consensus tree that it will find a majority
-decision for each branch of the tree. The tree produced with this method
-generally have a better topology than any individual tree. We estimate
-the performance of the topology with the **cophenetic correlation
-coefficient**, which is the *correlation between the initial distance
-\\\beta\_{sim}\\ among sites* and *the cophenetic distance*, which is
-the distance at which sites are connected in the tree. It tells us how
-representative is the tree of the initial distance matrix.
+`optimal_tree_method = "ihct"`, default value) and it ensures that you
+obtain a consensus tree that it will find a majority decision for each
+branch of the tree. The tree produced with this method generally have a
+better topology than any individual tree. We estimate the performance of
+the topology with the **cophenetic correlation coefficient**, which is
+the *correlation between the initial distance \\\beta\_{sim}\\ among
+sites* and *the cophenetic distance*, which is the distance at which
+sites are connected in the tree. It tells us how representative is the
+tree of the initial distance matrix.
 
 Although this method performs better than any other available method, it
 comes with a computing cost: it needs to randomize the distance matrix
@@ -812,13 +815,13 @@ K_name <- opti_n_tree4$evaluation_df$partition[opti_n_tree4$evaluation_df$optima
 head(tree4$clusters[, c("ID", K_name)])
 ```
 
-    ##        ID K_14
+    ##        ID K_16
     ## 1003 1003    1
     ## 1004 1004    1
     ## 1005 1005    1
     ## 1006 1006    1
-    ## 1007 1007    2
-    ## 1008 1008    2
+    ## 1007 1007    1
+    ## 1008 1008    1
 
 ``` r
 
@@ -858,105 +861,105 @@ bioregionalization_metrics(tree4,
 ```
 
     ##    partition n_bioregions prop_between_dissim    anosim
-    ## 1      K_2_1            2           0.5039255 0.7038453
-    ## 2      K_2_2            2           0.5039255 0.7038453
-    ## 3        K_4            4           0.6115668 0.7055336
-    ## 4        K_5            5           0.6476470 0.7255243
-    ## 5        K_6            6           0.6490485 0.7262948
-    ## 6        K_7            7           0.6494868 0.7264502
-    ## 7        K_8            8           0.6497724 0.7265047
-    ## 8        K_9            9           0.6521960 0.7267220
-    ## 9       K_10           10           0.7797049 0.7412313
-    ## 10      K_11           11           0.7810061 0.7419956
-    ## 11      K_12           12           0.7820362 0.7425334
-    ## 12      K_13           13           0.7866725 0.7452144
-    ## 13      K_14           14           0.8304847 0.7763484
-    ## 14      K_15           15           0.8311333 0.7767871
-    ## 15      K_16           16           0.8321952 0.7774242
-    ## 16      K_17           17           0.8339339 0.7784386
-    ## 17      K_18           18           0.8341172 0.7785430
-    ## 18      K_19           19           0.8422558 0.7829579
-    ## 19      K_20           20           0.8462671 0.7855295
-    ## 20      K_21           21           0.8586412 0.7937815
-    ## 21      K_22           22           0.8601130 0.7949075
-    ## 22      K_23           23           0.8601494 0.7949336
-    ## 23      K_24           24           0.8601767 0.7949526
-    ## 24      K_25           25           0.8665417 0.7995322
-    ## 25      K_26           26           0.8665682 0.7995448
-    ## 26      K_27           27           0.8665800 0.7995504
-    ## 27    K_29_1           29           0.8670966 0.7996385
-    ## 28    K_29_2           29           0.8670966 0.7996385
-    ## 29      K_30           30           0.8682584 0.8000748
-    ## 30      K_31           31           0.8683940 0.8001369
-    ## 31      K_32           32           0.8684170 0.8001458
-    ## 32      K_33           33           0.8684199 0.8001461
-    ## 33      K_34           34           0.8701128 0.8004195
-    ## 34      K_35           35           0.8987808 0.8176325
-    ## 35      K_36           36           0.8987950 0.8176437
-    ## 36      K_37           37           0.8992759 0.8181359
-    ## 37      K_38           38           0.8995875 0.8183957
-    ## 38      K_39           39           0.8997950 0.8185833
-    ## 39      K_40           40           0.8998033 0.8185881
-    ## 40      K_41           41           0.8998339 0.8186134
-    ## 41      K_42           42           0.9010559 0.8195488
-    ## 42      K_43           43           0.9010752 0.8195687
-    ## 43      K_44           44           0.9010917 0.8195774
-    ## 44      K_45           45           0.9011191 0.8195968
-    ## 45      K_46           46           0.9012094 0.8196792
-    ## 46      K_47           47           0.9012203 0.8196847
-    ## 47      K_48           48           0.9053491 0.8222804
-    ## 48      K_49           49           0.9055867 0.8223740
-    ## 49      K_50           50           0.9056719 0.8224158
-    ## 50      K_51           51           0.9063492 0.8225512
-    ## 51      K_52           52           0.9063730 0.8225596
-    ## 52      K_53           53           0.9068066 0.8226861
-    ## 53      K_54           54           0.9068429 0.8226932
-    ## 54      K_55           55           0.9068585 0.8226927
-    ## 55    K_57_1           57           0.9407998 0.8318092
-    ## 56    K_57_2           57           0.9407998 0.8318092
-    ## 57      K_58           58           0.9408908 0.8320144
-    ## 58      K_59           59           0.9409134 0.8320387
-    ## 59      K_60           60           0.9411474 0.8322919
-    ## 60      K_61           61           0.9411549 0.8322979
-    ## 61      K_62           62           0.9417502 0.8330224
-    ## 62      K_63           63           0.9417724 0.8330419
-    ## 63      K_64           64           0.9418020 0.8330797
-    ## 64      K_65           65           0.9419761 0.8332177
-    ## 65      K_66           66           0.9419908 0.8332309
-    ## 66      K_67           67           0.9420202 0.8332548
-    ## 67      K_68           68           0.9431480 0.8342166
-    ## 68      K_69           69           0.9431504 0.8342171
-    ## 69      K_70           70           0.9431697 0.8342267
-    ## 70      K_71           71           0.9475710 0.8369940
-    ## 71      K_72           72           0.9504739 0.8397503
-    ## 72      K_73           73           0.9504787 0.8397522
-    ## 73      K_74           74           0.9505097 0.8397891
-    ## 74      K_75           75           0.9526047 0.8419845
-    ## 75      K_76           76           0.9526546 0.8421129
-    ## 76      K_77           77           0.9534397 0.8428665
-    ## 77      K_78           78           0.9534469 0.8428795
-    ## 78      K_79           79           0.9534516 0.8428818
-    ## 79      K_80           80           0.9547543 0.8441475
-    ## 80      K_81           81           0.9547590 0.8441498
-    ## 81      K_82           82           0.9547637 0.8441521
-    ## 82      K_83           83           0.9548903 0.8442458
-    ## 83      K_84           84           0.9552727 0.8444641
-    ## 84      K_85           85           0.9552958 0.8444718
-    ## 85      K_86           86           0.9597738 0.8475812
-    ## 86      K_87           87           0.9597784 0.8475819
-    ## 87      K_88           88           0.9598124 0.8476134
-    ## 88      K_89           89           0.9601166 0.8478113
-    ## 89      K_90           90           0.9601437 0.8478264
-    ## 90      K_91           91           0.9603125 0.8480385
-    ## 91      K_92           92           0.9603147 0.8480383
-    ## 92      K_93           93           0.9619450 0.8493302
-    ## 93      K_94           94           0.9624150 0.8501088
-    ## 94      K_95           95           0.9637310 0.8511409
-    ## 95      K_96           96           0.9637467 0.8511462
-    ## 96   K_100_1          100           0.9805066 0.8635191
-    ## 97   K_100_2          100           0.9805066 0.8635191
-    ## 98   K_100_3          100           0.9805066 0.8635191
-    ## 99   K_100_4          100           0.9805066 0.8635191
+    ## 1        K_2            2           0.5119835 0.7023016
+    ## 2        K_3            3           0.5165863 0.7038016
+    ## 3        K_4            4           0.5555531 0.7065607
+    ## 4        K_5            5           0.5568160 0.7059239
+    ## 5        K_6            6           0.5572628 0.7058640
+    ## 6        K_7            7           0.7234545 0.7397239
+    ## 7        K_8            8           0.7237522 0.7399334
+    ## 8        K_9            9           0.7264643 0.7413423
+    ## 9       K_10           10           0.7264995 0.7413497
+    ## 10    K_12_1           12           0.7275783 0.7413928
+    ## 11    K_12_2           12           0.7275783 0.7413928
+    ## 12      K_13           13           0.7323364 0.7418928
+    ## 13      K_14           14           0.7337700 0.7420267
+    ## 14      K_15           15           0.7422624 0.7416167
+    ## 15      K_16           16           0.8446922 0.7893431
+    ## 16      K_17           17           0.8464397 0.7907869
+    ## 17      K_18           18           0.8471819 0.7913035
+    ## 18    K_19_1           19           0.8510755 0.7939484
+    ## 19    K_19_2           19           0.8510755 0.7939484
+    ## 20    K_19_3           19           0.8510755 0.7939484
+    ## 21      K_22           22           0.8517974 0.7944725
+    ## 22      K_23           23           0.8523847 0.7946816
+    ## 23      K_24           24           0.8607463 0.8002397
+    ## 24      K_25           25           0.8608632 0.8003071
+    ## 25      K_26           26           0.8643934 0.8017103
+    ## 26      K_27           27           0.8644199 0.8017220
+    ## 27      K_28           28           0.8658456 0.8022027
+    ## 28    K_29_1           29           0.8659844 0.8022323
+    ## 29    K_29_2           29           0.8659844 0.8022323
+    ## 30      K_31           31           0.8683174 0.8029426
+    ## 31      K_32           32           0.8683203 0.8029430
+    ## 32      K_33           33           0.8688860 0.8031397
+    ## 33      K_34           34           0.8705847 0.8034989
+    ## 34      K_35           35           0.8709676 0.8035794
+    ## 35      K_36           36           0.8709818 0.8035808
+    ## 36      K_37           37           0.8710215 0.8035858
+    ## 37      K_38           38           0.8713743 0.8036335
+    ## 38      K_39           39           0.8713827 0.8036326
+    ## 39      K_40           40           0.8714715 0.8036496
+    ## 40      K_41           41           0.9029777 0.8163607
+    ## 41      K_42           42           0.9029942 0.8163701
+    ## 42      K_43           43           0.9029969 0.8163714
+    ## 43      K_44           44           0.9030051 0.8163742
+    ## 44      K_45           45           0.9032491 0.8164615
+    ## 45      K_46           46           0.9032627 0.8164672
+    ## 46    K_47_1           47           0.9032979 0.8164869
+    ## 47    K_47_2           47           0.9032979 0.8164869
+    ## 48      K_49           49           0.9048841 0.8171194
+    ## 49      K_50           50           0.9055191 0.8171865
+    ## 50      K_51           51           0.9064402 0.8174775
+    ## 51      K_52           52           0.9077569 0.8180749
+    ## 52      K_53           53           0.9077932 0.8180822
+    ## 53      K_54           54           0.9078164 0.8180862
+    ## 54      K_55           55           0.9078468 0.8180796
+    ## 55      K_56           56           0.9078569 0.8180760
+    ## 56      K_57           57           0.9080844 0.8180236
+    ## 57      K_58           58           0.9081071 0.8180173
+    ## 58    K_59_1           59           0.9081523 0.8180095
+    ## 59    K_59_2           59           0.9081523 0.8180095
+    ## 60      K_61           61           0.9423177 0.8299331
+    ## 61      K_62           62           0.9423473 0.8299712
+    ## 62      K_63           63           0.9424308 0.8301351
+    ## 63      K_64           64           0.9424430 0.8301460
+    ## 64      K_65           65           0.9430171 0.8305961
+    ## 65      K_66           66           0.9430318 0.8306099
+    ## 66      K_67           67           0.9432103 0.8307496
+    ## 67      K_68           68           0.9435381 0.8311228
+    ## 68      K_69           69           0.9435405 0.8311233
+    ## 69      K_70           70           0.9435598 0.8311327
+    ## 70      K_71           71           0.9478587 0.8337823
+    ## 71      K_72           72           0.9478658 0.8337851
+    ## 72      K_73           73           0.9482874 0.8342391
+    ## 73      K_74           74           0.9482922 0.8342400
+    ## 74      K_75           75           0.9511909 0.8369696
+    ## 75      K_76           76           0.9512219 0.8370073
+    ## 76      K_77           77           0.9512290 0.8370185
+    ## 77    K_78_1           78           0.9512338 0.8370198
+    ## 78    K_78_2           78           0.9512338 0.8370198
+    ## 79      K_80           80           0.9527677 0.8384965
+    ## 80      K_81           81           0.9527748 0.8385010
+    ## 81      K_82           82           0.9535339 0.8390197
+    ## 82      K_83           83           0.9535386 0.8390213
+    ## 83      K_84           84           0.9535433 0.8390230
+    ## 84      K_85           85           0.9535784 0.8390487
+    ## 85      K_86           86           0.9564732 0.8416570
+    ## 86      K_87           87           0.9564755 0.8416576
+    ## 87      K_88           88           0.9573813 0.8424440
+    ## 88      K_89           89           0.9574045 0.8424545
+    ## 89      K_90           90           0.9574643 0.8425001
+    ## 90      K_91           91           0.9621875 0.8472390
+    ## 91      K_92           92           0.9630122 0.8483256
+    ## 92      K_93           93           0.9630168 0.8483276
+    ## 93      K_94           94           0.9633024 0.8485970
+    ## 94      K_95           95           0.9633295 0.8486201
+    ## 95      K_96           96           0.9646178 0.8498513
+    ## 96      K_97           97           0.9646493 0.8498770
+    ## 97      K_98           98           0.9646515 0.8498776
+    ## 98      K_99           99           0.9649678 0.8501374
+    ## 99     K_100          100           0.9650300 0.8502351
 
 ``` r
 
@@ -968,105 +971,105 @@ bioregionalization_metrics(tree4,
 ```
 
     ##    partition n_bioregions mean_endemics tot_endemics
-    ## 1      K_2_1            2   0.177309950   0.30916960
-    ## 2      K_2_2            2   0.177309950   0.30916960
-    ## 3        K_4            4   0.046560673   0.15120368
-    ## 4        K_5            5   0.032444543   0.12388423
-    ## 5        K_6            6   0.026866440   0.12253178
-    ## 6        K_7            7   0.023071178   0.12253178
-    ## 7        K_8            8   0.020189595   0.12253178
-    ## 8        K_9            9   0.017978651   0.12226129
-    ## 9       K_10           10   0.015228298   0.10738437
-    ## 10      K_11           11   0.013815277   0.10711388
-    ## 11      K_12           12   0.012589709   0.10657290
-    ## 12      K_13           13   0.012022577   0.10035164
-    ## 13      K_14           14   0.010259001   0.08520422
-    ## 14      K_15           15   0.009604125   0.08520422
-    ## 15      K_16           16   0.009003867   0.08520422
-    ## 16      K_17           17   0.008520651   0.08520422
-    ## 17      K_18           18   0.007993111   0.08466324
-    ## 18      K_19           19   0.007539460   0.08412226
-    ## 19      K_20           20   0.007131691   0.08358128
-    ## 20      K_21           21   0.006761121   0.08222883
-    ## 21      K_22           22   0.006487602   0.08222883
-    ## 22      K_23           23   0.006208174   0.08222883
-    ## 23      K_24           24   0.005950796   0.08222883
-    ## 24      K_25           25   0.005719272   0.08195834
-    ## 25      K_26           26   0.005500096   0.08195834
-    ## 26      K_27           27   0.005296389   0.08195834
-    ## 27    K_29_1           29   0.004932414   0.08195834
-    ## 28    K_29_2           29   0.004932414   0.08195834
-    ## 29      K_30           30   0.004766607   0.08141737
-    ## 30      K_31           31   0.004613189   0.08141737
-    ## 31      K_32           32   0.004470415   0.08141737
-    ## 32      K_33           33   0.004334948   0.08141737
-    ## 33      K_34           34   0.004225648   0.08114688
-    ## 34      K_35           35   0.004094471   0.07952394
-    ## 35      K_36           36   0.003982291   0.07952394
-    ## 36      K_37           37   0.003863717   0.07898296
-    ## 37      K_38           38   0.003748818   0.07871247
-    ## 38      K_39           39   0.003641791   0.07844198
-    ## 39      K_40           40   0.003550746   0.07844198
-    ## 40      K_41           41   0.003468117   0.07844198
-    ## 41      K_42           42   0.003413486   0.07844198
-    ## 42      K_43           43   0.003334384   0.07844198
-    ## 43      K_44           44   0.003267420   0.07844198
-    ## 44      K_45           45   0.003195549   0.07844198
-    ## 45      K_46           46   0.003099440   0.07790100
-    ## 46      K_47           47   0.003033494   0.07790100
-    ## 47      K_48           48   0.002947683   0.07654855
-    ## 48      K_49           49   0.002879376   0.07627806
-    ## 49      K_50           50   0.002877231   0.07600757
-    ## 50      K_51           51   0.002859146   0.07600757
-    ## 51      K_52           52   0.002809455   0.07600757
-    ## 52      K_53           53   0.002758729   0.07600757
-    ## 53      K_54           54   0.002709092   0.07600757
-    ## 54      K_55           55   0.002660079   0.07600757
-    ## 55    K_57_1           57   0.002562755   0.07519610
-    ## 56    K_57_2           57   0.002562755   0.07519610
-    ## 57      K_58           58   0.002566416   0.07519610
-    ## 58      K_59           59   0.002524111   0.07519610
-    ## 59      K_60           60   0.002513575   0.07465513
-    ## 60      K_61           61   0.002472369   0.07465513
-    ## 61      K_62           62   0.002442548   0.07465513
-    ## 62      K_63           63   0.002407113   0.07465513
-    ## 63      K_64           64   0.002369502   0.07465513
-    ## 64      K_65           65   0.002326499   0.07438464
-    ## 65      K_66           66   0.002275835   0.07411415
-    ## 66      K_67           67   0.002245839   0.07411415
-    ## 67      K_68           68   0.002218461   0.07411415
-    ## 68      K_69           69   0.002189388   0.07411415
-    ## 69      K_70           70   0.002159766   0.07411415
-    ## 70      K_71           71   0.002129981   0.07411415
-    ## 71      K_72           72   0.001772702   0.05788477
-    ## 72      K_73           73   0.001760624   0.05788477
-    ## 73      K_74           74   0.001722344   0.05734379
-    ## 74      K_75           75   0.001704328   0.05734379
-    ## 75      K_76           76   0.001685072   0.05734379
-    ## 76      K_77           77   0.001663286   0.05734379
-    ## 77      K_78           78   0.001641962   0.05734379
-    ## 78      K_79           79   0.001621178   0.05734379
-    ## 79      K_80           80   0.001605577   0.05707330
-    ## 80      K_81           81   0.001585755   0.05707330
-    ## 81      K_82           82   0.001566417   0.05707330
-    ## 82      K_83           83   0.001547566   0.05707330
-    ## 83      K_84           84   0.001529233   0.05707330
-    ## 84      K_85           85   0.001511242   0.05707330
-    ## 85      K_86           86   0.001497222   0.05680281
-    ## 86      K_87           87   0.001480012   0.05680281
-    ## 87      K_88           88   0.001463324   0.05680281
-    ## 88      K_89           89   0.001436875   0.05626183
-    ## 89      K_90           90   0.001429062   0.05626183
-    ## 90      K_91           91   0.001418318   0.05626183
-    ## 91      K_92           92   0.001402902   0.05626183
-    ## 92      K_93           93   0.001389665   0.05626183
-    ## 93      K_94           94   0.001367387   0.05572085
-    ## 94      K_95           95   0.001353125   0.05572085
-    ## 95      K_96           96   0.001339030   0.05572085
-    ## 96   K_100_1          100   0.001285513   0.05490939
-    ## 97   K_100_2          100   0.001285513   0.05490939
-    ## 98   K_100_3          100   0.001285513   0.05490939
-    ## 99   K_100_4          100   0.001285513   0.05490939
+    ## 1        K_2            2   0.183770960   0.31674331
+    ## 2        K_3            3   0.122136018   0.31539086
+    ## 3        K_4            4   0.083424624   0.28022721
+    ## 4        K_5            5   0.066707139   0.27968623
+    ## 5        K_6            6   0.055631686   0.27968623
+    ## 6        K_7            7   0.022231814   0.10954828
+    ## 7        K_8            8   0.019455424   0.10954828
+    ## 8        K_9            9   0.017324737   0.10927779
+    ## 9       K_10           10   0.015594565   0.10927779
+    ## 10    K_12_1           12   0.012929653   0.10873681
+    ## 11    K_12_2           12   0.012929653   0.10873681
+    ## 12      K_13           13   0.012258443   0.10170408
+    ## 13      K_14           14   0.011362421   0.10143359
+    ## 14      K_15           15   0.010326698   0.09710576
+    ## 15      K_16           16   0.009180198   0.08709765
+    ## 16      K_17           17   0.008687028   0.08709765
+    ## 17      K_18           18   0.008193279   0.08682716
+    ## 18    K_19_1           19   0.007729305   0.08628618
+    ## 19    K_19_2           19   0.007729305   0.08628618
+    ## 20    K_19_3           19   0.007729305   0.08628618
+    ## 21      K_22           22   0.006631785   0.08574520
+    ## 22      K_23           23   0.006136322   0.08249932
+    ## 23      K_24           24   0.005841894   0.08141737
+    ## 24      K_25           25   0.005611593   0.08141737
+    ## 25      K_26           26   0.005358477   0.08060590
+    ## 26      K_27           27   0.005160782   0.08060590
+    ## 27      K_28           28   0.004977251   0.08006492
+    ## 28    K_29_1           29   0.004807376   0.08006492
+    ## 29    K_29_2           29   0.004807376   0.08006492
+    ## 30      K_31           31   0.004560544   0.08006492
+    ## 31      K_32           32   0.004418027   0.08006492
+    ## 32      K_33           33   0.004272639   0.07952394
+    ## 33      K_34           34   0.004154962   0.07898296
+    ## 34      K_35           35   0.004022500   0.07871247
+    ## 35      K_36           36   0.003912318   0.07871247
+    ## 36      K_37           37   0.003808543   0.07871247
+    ## 37      K_38           38   0.003724374   0.07871247
+    ## 38      K_39           39   0.003628877   0.07871247
+    ## 39      K_40           40   0.003538764   0.07871247
+    ## 40      K_41           41   0.003434501   0.07708953
+    ## 41      K_42           42   0.003361965   0.07708953
+    ## 42      K_43           43   0.003283780   0.07708953
+    ## 43      K_44           44   0.003209149   0.07708953
+    ## 44      K_45           45   0.003128953   0.07681904
+    ## 45      K_46           46   0.003060933   0.07681904
+    ## 46    K_47_1           47   0.003019061   0.07681904
+    ## 47    K_47_2           47   0.003019061   0.07681904
+    ## 48      K_49           49   0.002901561   0.07654855
+    ## 49      K_50           50   0.002882141   0.07654855
+    ## 50      K_51           51   0.002839677   0.07654855
+    ## 51      K_52           52   0.002785182   0.07573708
+    ## 52      K_53           53   0.002734109   0.07573708
+    ## 53      K_54           54   0.002686496   0.07573708
+    ## 54      K_55           55   0.002640495   0.07573708
+    ## 55      K_56           56   0.002593343   0.07573708
+    ## 56      K_57           57   0.002589729   0.07546659
+    ## 57      K_58           58   0.002546292   0.07546659
+    ## 58    K_59_1           59   0.002509746   0.07546659
+    ## 59    K_59_2           59   0.002509746   0.07546659
+    ## 60      K_61           61   0.002423777   0.07465513
+    ## 61      K_62           62   0.002384684   0.07465513
+    ## 62      K_63           63   0.002390713   0.07465513
+    ## 63      K_64           64   0.002354293   0.07465513
+    ## 64      K_65           65   0.002295691   0.07384366
+    ## 65      K_66           66   0.002245494   0.07357317
+    ## 66      K_67           67   0.002205711   0.07330268
+    ## 67      K_68           68   0.002157416   0.07276170
+    ## 68      K_69           69   0.002129228   0.07276170
+    ## 69      K_70           70   0.002100465   0.07276170
+    ## 70      K_71           71   0.002071558   0.07276170
+    ## 71      K_72           72   0.002042786   0.07276170
+    ## 72      K_73           73   0.002030298   0.07276170
+    ## 73      K_74           74   0.002014902   0.07276170
+    ## 74      K_75           75   0.001679035   0.05680281
+    ## 75      K_76           76   0.001642836   0.05626183
+    ## 76      K_77           77   0.001621501   0.05626183
+    ## 77    K_78_1           78   0.001600712   0.05626183
+    ## 78    K_78_2           78   0.001600712   0.05626183
+    ## 79      K_80           80   0.001567895   0.05626183
+    ## 80      K_81           81   0.001549627   0.05626183
+    ## 81      K_82           82   0.001530818   0.05626183
+    ## 82      K_83           83   0.001512375   0.05626183
+    ## 83      K_84           84   0.001494370   0.05626183
+    ## 84      K_85           85   0.001506952   0.05599134
+    ## 85      K_86           86   0.001492551   0.05599134
+    ## 86      K_87           87   0.001475395   0.05599134
+    ## 87      K_88           88   0.001454665   0.05572085
+    ## 88      K_89           89   0.001438320   0.05572085
+    ## 89      K_90           90   0.001422400   0.05572085
+    ## 90      K_91           91   0.001410120   0.05545037
+    ## 91      K_92           92   0.001390216   0.05517988
+    ## 92      K_93           93   0.001375268   0.05517988
+    ## 93      K_94           94   0.001350821   0.05463890
+    ## 94      K_95           95   0.001344325   0.05463890
+    ## 95      K_96           96   0.001330448   0.05463890
+    ## 96      K_97           97   0.001318048   0.05463890
+    ## 97      K_98           98   0.001304599   0.05463890
+    ## 98      K_99           99   0.001291421   0.05463890
+    ## 99     K_100          100   0.001278507   0.05463890
 
 ### 3.2 Criteria to choose an optimal number of clusters
 
@@ -1139,11 +1142,11 @@ find_optimal_n(eval_tree4)
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png)
 
 In our example above, the optimal number of clusters varies depending on
-the metric, from a minimum of 10 to a maximum of 35. The final choice
+the metric, from a minimum of 7 to a maximum of 19. The final choice
 depends on your metric preferences with respect to metrics, and your
 objectives with the clustering. Alternatively, two cut-offs could be
-used, a deep cut-off based on the endemism metrics e.g. at a value of
-10, and a shallow cutoff based on `prop_between_dissim`, at 14.
+used, a deep cut-off based on the endemism metrics e.g. at a value of 9,
+and a shallow cutoff based on `prop_between_dissim`, at 16.
 
 #### 3.2.2 Step method
 

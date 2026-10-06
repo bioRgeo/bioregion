@@ -181,7 +181,6 @@ bioreg <- hclu_hierarclust(dissim,
                            optimal_tree_method = "best",
                            n_clust = 5:10,
                            verbose = FALSE)
-#> Warning: The requested number of cluster could not be found for k = 10. Closest number found: 9
 bioreg
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
@@ -190,13 +189,13 @@ bioreg
 #>  - Tree construction method:  average 
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient 
-#>  - Cophenetic correlation coefficient:  0.852 
+#>  - Cophenetic correlation coefficient:  0.825 
 #>  - Number of clusters requested by the user:  5 
 #> Clustering results:
 #>  - Number of partitions:  6 
 #>  - Partitions are hierarchical
-#>  - Number of clusters:  5 6 7 8 9 9 
-#>  - Height of cut of the hierarchical tree: 0.219 0.188 0.18 0.174 0.172 0.16 
+#>  - Number of clusters:  5 6 7 8 9 10 
+#>  - Height of cut of the hierarchical tree: 0.25 0.219 0.211 0.203 0.191 0.188 
 
 evalmet <- bioregionalization_metrics(bioreg,
                                       eval_metrics = "anosim",
@@ -209,7 +208,7 @@ find_optimal_n(evalmet, criterion = 'increasing_step', plot = FALSE)
 #>  - Step method
 #> Search for an optimal number of clusters:
 #>  - 6  partition(s) evaluated
-#>  - Range of clusters explored: from  5  to  9 
+#>  - Range of clusters explored: from  5  to  10 
 #>  - Evaluated metric(s):  anosim 
 #> 
 #> Potential optimal partition(s):

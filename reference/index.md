@@ -45,6 +45,8 @@
 
 - [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
   : Hierarchical clustering based on dissimilarity or beta-diversity
+- [`ihct()`](https://bioRgeo.github.io/bioregion/reference/ihct.md) :
+  Iterative hierarchical consensus tree from a dissimilarity matrix
 - [`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md)
   : Cut a hierarchical tree
 - [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md)

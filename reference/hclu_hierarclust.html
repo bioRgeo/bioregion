@@ -99,7 +99,7 @@ or by running <code>similarity</code> followed by <code>similarity_to_dissimilar
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_runs <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  keep_trials <span class="op">=</span> <span class="st">"no"</span>,</span>
-<span>  optimal_tree_method <span class="op">=</span> <span class="st">"iterative_consensus_tree"</span>,</span>
+<span>  optimal_tree_method <span class="op">=</span> <span class="st">"ihct"</span>,</span>
 <span>  n_clust <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cut_height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  find_h <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -107,6 +107,11 @@ or by running <code>similarity</code> followed by <code>similarity_to_dissimilar
 <span>  h_min <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  consensus_p <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  show_hierarchy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ihct_top_n_trees <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  ihct_variation_drop <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  ihct_sites_drop <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  ihct_height_rule <span class="op">=</span> <span class="st">"least_squares"</span>,</span>
+<span>  ihct_n_workers <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -156,14 +161,16 @@ default).</p></dd>
 (including the randomized matrix, the associated tree and metrics for that tree)
 should be stored in the output object. Possible values are <code>"no"</code> (default),
 <code>"all"</code> or <code>"metrics"</code>. Note that this parameter is automatically set to
-<code>"no"</code> if <code>optimal_tree_method = "iterative_consensus_tree"</code>.</p></dd>
+<code>"no"</code> if <code>optimal_tree_method = "ihct"</code>.</p></dd>
 
 
 <dt id="arg-optimal-tree-method">optimal_tree_method<a class="anchor" aria-label="anchor" href="#arg-optimal-tree-method"></a></dt>
 <dd><p>A <code>character</code> string indicating how the final tree
 should be obtained from all trials. Possible values are
-<code>"iterative_consensus_tree"</code> (default), <code>"best"</code> or <code>"consensus"</code>.
-<strong>We recommend <code>"iterative_consensus_tree"</code>. See Details.</strong></p></dd>
+<code>"ihct"</code> (default), <code>"best"</code> or <code>"consensus"</code>. <code>"iterative_consensus_tree"</code>
+is still accepted as another name for <code>"ihct"</code>, so that code written for
+earlier versions of bioregion keeps working.
+<strong>We recommend <code>"ihct"</code>. See Details.</strong></p></dd>
 
 
 <dt id="arg-n-clust">n_clust<a class="anchor" aria-label="anchor" href="#arg-n-clust"></a></dt>
@@ -207,6 +214,58 @@ should be identifiable in the outputs (<code>FALSE</code> by default). This argu
 only used if the tree is cut (i.e., <code>n_clust</code> or <code>cut_height</code> is provided).</p></dd>
 
 
+<dt id="arg-ihct-top-n-trees">ihct_top_n_trees<a class="anchor" aria-label="anchor" href="#arg-ihct-top-n-trees"></a></dt>
+<dd><p>An <code>integer</code> (applicable only if
+<code>optimal_tree_method = "ihct"</code>) indicating how many of
+the best randomized trees are used to decide each division of the tree
+(<code>2</code> by default). See Details.</p></dd>
+
+
+<dt id="arg-ihct-variation-drop">ihct_variation_drop<a class="anchor" aria-label="anchor" href="#arg-ihct-variation-drop"></a></dt>
+<dd><p>A <code>numeric</code> value between 0 and 1 (applicable
+only if <code>optimal_tree_method = "ihct"</code> and
+<code>method = "average"</code>). This is an optimization parameter: it reduces the
+number of times the dissimilarity matrix is randomized while the tree is
+built, which makes the tree faster to obtain for a very small cost in its
+fit to the data. Its rule is based on variation: new randomizations are made
+once a group of sites has lost this share of the variation that was left to
+decide when they were last made. The default <code>0.2</code> therefore means
+"randomize again once a fifth of what was left to decide has been decided".
+Set it to <code>0</code> to randomize at every division, or to <code>1</code> to switch this rule
+off and leave <code>ihct_sites_drop</code> to decide on its own. See Details.</p></dd>
+
+
+<dt id="arg-ihct-sites-drop">ihct_sites_drop<a class="anchor" aria-label="anchor" href="#arg-ihct-sites-drop"></a></dt>
+<dd><p>A <code>numeric</code> value of 0 or more (applicable only if
+<code>optimal_tree_method = "ihct"</code>, <code>method = "average"</code> and
+<code>ihct_variation_drop &gt; 0</code>). This is a second optimization parameter, used
+together with <code>ihct_variation_drop</code>, with a rule based on sites rather than
+on variation: new randomizations are also made once a group of sites has
+lost this many sites since they were last made (<code>10</code> by default). Set it to
+<code>0</code> or <code>1</code> to randomize at every division, or to <code>Inf</code> to switch this rule
+off and leave <code>ihct_variation_drop</code> to decide on its own. See Details.</p></dd>
+
+
+<dt id="arg-ihct-height-rule">ihct_height_rule<a class="anchor" aria-label="anchor" href="#arg-ihct-height-rule"></a></dt>
+<dd><p>A <code>character</code> string (applicable only if
+<code>optimal_tree_method = "ihct"</code>) indicating how the
+heights of the tree are corrected when a division comes out lower than a
+division it contains. With <code>"least_squares"</code> (default) the heights are moved
+as little as possible, which fits the dissimilarities better; with
+<code>"max_child"</code> each division is raised to the highest division it contains,
+as in bioregion 1.4.0 and earlier. See Details.</p></dd>
+
+
+<dt id="arg-ihct-n-workers">ihct_n_workers<a class="anchor" aria-label="anchor" href="#arg-ihct-n-workers"></a></dt>
+<dd><p>An <code>integer</code> of 1 or more (applicable only if
+<code>optimal_tree_method = "ihct"</code>) indicating how many
+processes of your computer may build the randomized trees at the same time.
+With <code>1</code> (default) they are built one after another, as before. Higher
+values are worth it on large matrices only, and they do not change the
+tree: the same <code>seed</code> gives the same result whatever this is set to. See
+Details.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>A <code>boolean</code> indicating whether to
 display progress messages. Set to <code>FALSE</code> to suppress these messages.</p></dd>
@@ -243,7 +302,7 @@ from beta diversity dissimilarity (Kreft &amp; Jetz, 2010).</p>
 in the input distance matrix influences the tree topology as explained in
 Dapporto (2013). To address this, the function generates multiple trees by
 randomizing the distance matrix.</p>
-<p>Two methods are available to obtain the final tree:</p><ul><li><p><code>optimal_tree_method = "iterative_consensus_tree"</code>: The Iterative
+<p>Two methods are available to obtain the final tree:</p><ul><li><p><code>optimal_tree_method = "ihct"</code>: The Iterative
 Hierarchical Consensus Tree (IHCT) method reconstructs a consensus tree by
 iteratively splitting the dataset into two subclusters based on the pairwise
 dissimilarity of sites across <code>n_runs</code> trees based on <code>n_runs</code> randomizations
@@ -273,7 +332,7 @@ we use a non-negative least squares method (<a href="https://klausvigo.github.io
 based on the initial distance matrix, ensuring that the consensus
 tree preserves
 approximate distances among clusters.</p></li>
-</ul><p>We recommend using the <code>"iterative_consensus_tree"</code> as all the branches of
+</ul><p>We recommend using <code>"ihct"</code> as all the branches of
 this tree will always reflect the majority decision among many randomized
 versions of the distance matrix. This method is inspired by
 Dapporto et al. (2015), which also used the majority decision
@@ -285,6 +344,107 @@ and a very low cophenetic correlation coefficient.</p>
 <p>For a fast exploration of the tree, we recommend using the <code>best</code> method
 which will only select the tree with the highest cophenetic correlation
 coefficient among all randomized versions of the distance matrix.</p>
+<p>~ <strong>Iterative Hierarchical Consensus Tree</strong> details ~</p>
+<p>The paragraphs below cover the <code>ihct_*</code> arguments of this function. The
+algorithm itself is walked through step by step in <code><a href="ihct.html">ihct()</a></code>, which is the
+function doing the work here, and which can also be called on its own if
+you want the tree without the rest of this function.</p>
+<p>–&gt; <em>Tree quality</em></p>
+<p><code>ihct_top_n_trees</code> sets how many of the randomized trees, ranked by their
+quality (i.e., how well
+they fit the dissimilarities with cophenetic correlation coefficient CCC),
+are used to decide a division: with <code>1</code> the
+division is the top division of the best tree; with more, sites are grouped
+according to how often they fall on the same side in these trees.
+We recommend leaving this to default values, or to a low number of trees,
+because it provided the best results in
+our tests (highest CCC).</p>
+<p>–&gt; <em>Computation time</em></p>
+<p>The algorithm can be long to run because at every division of the tree it has
+to randomize <code>n_runs</code> trees. On large datasets, building new
+trees at every division makes this method slow. To make the function usable
+on large datasets, we provide two optimization parameters. These parameters
+make the
+algorithm reuse previously randomized trees at new division, unless a
+threshold of change is reached:</p><ul><li><p><code>ihct_variation_drop</code> is based on the amount of variation from the
+dissimilarity matrix.
+It triggers a new tree randomization only when the amount of variation
+in the group being divided has reached a threshold since last randomization
+(default: 20% drop in variation). In other words, new randomizations happen
+only when
+tree divisions reach a certain threshold of variation since the last
+randomization. For example, when a tree peels off only 1 site at a time,
+this argument makes sure no new randomization trigger unless variability
+reaches the desired threshold.</p></li>
+<li><p><code>ihct_sites_drop</code>is based on how many sites the group has lost.
+It triggers new randomizations only when a certain number of sites have been
+excluded since the last randomization.</p></li>
+</ul><p>These two parameters with their defaults (<code>ihct_variation_drop = 0.2</code>,
+<code>ihct_sites_drop = 10</code>) result in marginal
+changes in algorithm performance (loss in CCC &lt;0.001) and make the tree
+1.5 faster to build. In our tests, the larger the datasets, the higher
+the savings with these two optimization parameters. Note, however,
+that reusing trees only works with UPGMA currently, so it only applies to
+<code>method = "average"</code>.</p>
+<p>The two arguments work as a pair, and each of them can be set so that the
+other no longer has any effect. A new randomization is made as soon as
+<em>either</em> of them asks for one, so whichever of the two asks more often is
+the one that decides:</p><ul><li><p><code>ihct_sites_drop = 1</code> (or <code>0</code>) means new randomizations every time
+a site is treated (so randomizations at every division, and
+<code>ihct_variation_drop</code> is never used).</p></li>
+<li><p><code>ihct_variation_drop = 0</code> likewise means new randomizations at
+every division, and
+<code>ihct_sites_drop</code> is then never used.</p></li>
+<li><p><code>ihct_variation_drop = 1</code> never triggers new randomizations, leaving
+<code>ihct_sites_drop</code> to decide on its own, and <code>ihct_sites_drop = Inf</code> never
+triggers randomizations, leaving <code>ihct_variation_drop</code> to decide on its own.</p></li>
+<li><p>Both switched off (<code>ihct_variation_drop = 1</code> and
+<code>ihct_sites_drop = Inf</code>) randomizes once, at the first division, and reuses
+those trees for the whole tree. This is the fastest setting and the one that
+fits the data least well.</p></li>
+</ul><p>To reproduce the tree that bioregion 1.4.0 and earlier produced, for the
+same <code>seed</code>, use:</p>
+<div class="sourceCode"><pre><code><span></span>
+<span><span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">dissimilarity</span>,</span>
+<span>                 method <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>                 optimal_tree_method <span class="op">=</span> <span class="st">"ihct"</span>,</span>
+<span>                 n_runs <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>                 ihct_top_n_trees <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                 ihct_variation_drop <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                 ihct_height_rule <span class="op">=</span> <span class="st">"max_child"</span><span class="op">)</span></span></code></pre></div>
+
+<p>–&gt; <em>Height of nodes in the tree</em></p>
+<p>The height of nodes in a tree must be monotonous, i.e. a child node cannot
+be have a higher height than its parents. However, this situation can happen
+when building the tree, which is why all tree construction algorithms have a
+monotonicity section where node height is recalculated.</p>
+<p><code>ihct_height_rule</code> decides how we do it in IHCT. <code>"max_child"</code> raises every
+division to the
+highest division it contains, which is simple but can push a division far
+above the dissimilarities it summarizes. <code>"least_squares"</code> (default) instead
+moves the heights as little as possible, which with <code>method = "average"</code>
+gives the heights that fit the dissimilarities best on the topology at hand,
+so the cophenetic correlation is never below the one <code>"max_child"</code> gives and
+is usually above it.
+We recommend leaving to default as in our own testing it provides better
+performance (highest CCC).</p>
+<p>–&gt; <em>Parallelization for quicker computation time</em></p>
+<p>Most of the waiting is spent building the randomized trees, and the runs of
+one group do not depend on each other, so <code>ihct_n_workers</code> can share them
+between several processes of your computer. This only pays on large
+matrices, where a single run is slow enough to be worth sending to another
+process: groups of fewer than 200 sites are always done in one process, and
+small datasets should be left at <code>ihct_n_workers = 1</code>. We found that
+4 workers give good gains (about three times faster on a 5,000-site
+matrix); beyond that the processes spend their time waiting for memory
+rather than computing, and on a 10,000-site matrix going from 4 workers
+to 8 provided only limited gains while doubling the memory needed.
+Each worker also needs its own copy of the
+dissimilarity matrix on Windows, about 200 MB for 5,000 sites and 800 MB
+for 10,000, so ask for fewer workers than your memory allows copies.
+Whatever you set, the tree is the same: the random shuffles are always drawn
+in the same order by the main process, and only the building of the trees is
+handed out to workers.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -304,7 +464,7 @@ tested on British butterflies. <em>Methods in Ecology and Evolution</em> 6
 see the vignette:
 <a href="https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html" class="external-link">https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html</a>.</p>
 <p>Associated functions:
-<a href="cut_tree.html">cut_tree</a></p></div>
+<a href="cut_tree.html">cut_tree</a> <a href="ihct.html">ihct</a></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -327,9 +487,9 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span>                          n_clust <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5428 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5135 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.078125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.09375</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -338,23 +498,23 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Iterative hierarchical consensus tree </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.543 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.513 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters requested by the user:  5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.078 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.094 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hclu_hierarclust-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ name        : chr "hclu_hierarclust"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ args        :List of 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ args        :List of 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ index              : chr "Simpson"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ method             : chr "average"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ randomize          : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ seed               : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_runs             : num 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ optimal_tree_method: chr "iterative_consensus_tree"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ optimal_tree_method: chr "ihct"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ keep_trials        : chr "no"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_clust            : num 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cut_height         : NULL</span>
@@ -363,6 +523,10 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ h_min              : num 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ consensus_p        : num 0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ show_hierarchy     : logi FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ihct_top_n_trees   : num 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ihct_variation_drop: num 0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ihct_sites_drop    : num 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ihct_height_rule   : chr "least_squares"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ verbose            : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dynamic_tree_cut   : logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ inputs      :List of 9</span>
@@ -378,43 +542,43 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ algorithm   :List of 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree         :List of 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "hclust"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.coph.cor: num 0.543</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.msd     : num 0.00144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.coph.cor: num 0.513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.msd     : num 0.00257</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_n_clust     : int 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height  : Named num 0.0781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height  : Named num 0.0938</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr "k_5"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ trials             : chr "Trials not stored in output"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ clusters    :'data.frame':	20 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID : chr [1:20] "Site1" "Site10" "Site11" "Site12" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ K_5: chr [1:20] "1" "1" "1" "1" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ K_5: chr [1:20] "1" "2" "2" "2" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "node_type")= chr [1:20] "site" "site" "site" "site" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ cluster_info:'data.frame':	1 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ partition_name   : chr "K_5"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_clust          : int 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ requested_n_clust: num 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height: num 0.0781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height: num 0.0938</span>
 <span class="r-in"><span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13   2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site14 Site14   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17   3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site18 Site18   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6   5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7   5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3   4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9   5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># User-defined height cut</span></span></span>
 <span class="r-in"><span><span class="co"># Only one height</span></span></span>
@@ -422,7 +586,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-in"><span>                          cut_height <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5428 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5135 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-in"><span><span class="va">tree2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -431,70 +595,70 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Tree construction method:  average </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Method to compute the final tree:  Iterative hierarchical consensus tree </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.543 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Cophenetic correlation coefficient:  0.513 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Heights of cut requested by the user:  0.05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.05 </span>
 <span class="r-in"><span><span class="va">tree2</span><span class="op">$</span><span class="va">clusters</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        ID K_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Site1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Site10   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site11   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site12   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Site13   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Site14   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  Site15   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site16   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site17   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site18   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Site19   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  Site2   5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 Site20   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  Site3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  Site4   6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  Site5   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  Site6   7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  Site7   8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  Site8   9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  Site9   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ID K_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Site1    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Site10    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Site11    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Site12    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Site13    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Site14    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  Site15    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Site16    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Site17    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Site18    7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Site19    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  Site2    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 Site20    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  Site3    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  Site4    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  Site5    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  Site6    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  Site7    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  Site8    9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  Site9   10</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Multiple heights</span></span></span>
 <span class="r-in"><span><span class="va">tree3</span> <span class="op">&lt;-</span> <span class="fu">hclu_hierarclust</span><span class="op">(</span><span class="va">dissim</span>, </span></span>
 <span class="r-in"><span>                          cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.15</span>, <span class="fl">.25</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5428 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5135 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tree3</span><span class="op">$</span><span class="va">clusters</span> <span class="co"># Mind the order of height cuts: from deep to shallow cuts</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_1_1 K_1_2 K_9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10     1     1   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12     1     1   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13     1     1   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site14 Site14     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site18 Site18     1     1   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19     1     1   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2     1     1   5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3     1     1   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4     1     1   6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5     1     1   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6     1     1   7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7     1     1   8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8     1     1   9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9     1     1   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_1_1 K_1_2 K_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1     1     1    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site10 Site10     1     1    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site11 Site11     1     1    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site12 Site12     1     1    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site13 Site13     1     1    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site14 Site14     1     1    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site15 Site15     1     1    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site16 Site16     1     1    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site17 Site17     1     1    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site18 Site18     1     1    7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site19 Site19     1     1    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site2   Site2     1     1    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site20 Site20     1     1    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site3   Site3     1     1    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site4   Site4     1     1    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site5   Site5     1     1    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site6   Site6     1     1    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site7   Site7     1     1    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site8   Site8     1     1    9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Site9   Site9     1     1   10</span>
 <span class="r-in"><span><span class="co"># Info on each partition can be found in table cluster_info</span></span></span>
 <span class="r-in"><span><span class="va">tree3</span><span class="op">$</span><span class="va">cluster_info</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        partition_name n_clust requested_cut_height</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> h_0.25          K_1_1       1                 0.25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> h_0.15          K_1_2       1                 0.15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.05            K_9       9                 0.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> h_0.05           K_10      10                 0.05</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hclu_hierarclust-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
