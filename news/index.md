@@ -6,6 +6,24 @@ This is a list of changes made in the development/GitHub version of the
 package between **bioregion 1.4.0** (CRAN release 2026-03-29) and the
 next CRAN release.
 
+- The iterative hierarchical consensus tree is now available on its own
+  with the new function
+  [`ihct()`](https://bioRgeo.github.io/bioregion/reference/ihct.md). In
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md),
+  the default of `optimal_tree_method` is now called `"ihct`“” which now
+  runs 5 to 7 times faster. The former name `"iterative_consensus_tree"`
+  is still accepted and gives the same result (PR
+  [\#38](https://github.com/bioRgeo/bioregion/issues/38)).
+
+- Integrated fixes for the upcoming release of dbscan 1.2.7 (PR
+  [\#37](https://github.com/bioRgeo/bioregion/issues/37)).
+
+- Minor fix to the map_bioregions() documentation
+  ([\#35](https://github.com/bioRgeo/bioregion/issues/35)).
+
+- Improved get_pairwise_membership efficiency (PR
+  [\#32](https://github.com/bioRgeo/bioregion/issues/32)).
+
 - Metric names have been changed to snake_case in
   [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md),
   [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
@@ -29,17 +47,6 @@ next CRAN release.
   [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
   and
   [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md).
-
-- Huge optimization update for ihct, which now runs 5 to 7 times faster
-  than in bioregion 1.4.0, and now becomes usable on large datasets.
-
-- The iterative hierarchical consensus tree is now available on its own
-  with the new function
-  [`ihct()`](https://bioRgeo.github.io/bioregion/reference/ihct.md). In
-  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md),
-  the default of `optimal_tree_method` is now called `"ihct"`; the
-  former name `"iterative_consensus_tree"` is still accepted and gives
-  the same result.
 
 ## bioregion 1.4.0
 
