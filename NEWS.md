@@ -3,6 +3,18 @@
 This is a list of changes made in the development/GitHub version of the package 
 between **bioregion 1.4.0** (CRAN release 2026-03-29) and the next CRAN release.
 
+* The iterative hierarchical consensus tree is now available on its own with
+the new function `ihct()`. In `hclu_hierarclust()`, the default of
+`optimal_tree_method` is now called `"ihct`"" which now runs 5 to 7 times faster. 
+The former name `"iterative_consensus_tree"` is still accepted and gives the 
+same result (PR #38).
+
+* Integrated fixes for the upcoming release of dbscan 1.2.7 (PR #37).
+
+* Minor fix to the map_bioregions() documentation (#35).
+
+* Improved get_pairwise_membership efficiency (PR #32).
+
 * Metric names have been changed to snake_case in `site_species_metrics()`, 
 `bioregion_metrics()` and `bioregionalization_metrics()`. The package is
 being progressively standardized on snake_case metric names. Old metric
@@ -19,14 +31,6 @@ argument changed to `eval_metrics` and `net` to `comat`. `col_sites`, and
 
 * Relaxed matching controls in `site_species_metrics()` and 
 `bioregion_metrics()`.
-
-* Huge optimization update for ihct, which now runs 5 to 7 times faster than in 
-bioregion 1.4.0, and now becomes usable on large datasets.
-
-* The iterative hierarchical consensus tree is now available on its own with
-the new function `ihct()`. In `hclu_hierarclust()`, the default of
-`optimal_tree_method` is now called `"ihct"`; the former name
-`"iterative_consensus_tree"` is still accepted and gives the same result.
 
 # bioregion 1.4.0
 
