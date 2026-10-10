@@ -84,7 +84,24 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, FALSE)
   expect_equal(clust$inputs$nb_sites, 5)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[1], 5)
+  
+  clust <- netclu_greedy(simil,
+                         weight = TRUE,
+                         cut_weight = 0,
+                         index = 7,
+                         bipartite = FALSE,
+                         site_col = 1,
+                         species_col = 2,
+                         return_node_type = "both",
+                         algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
+  expect_equal(clust$inputs$node_type, "site")
   
   clust <- netclu_greedy(simil,
                          weight = FALSE,
@@ -119,12 +136,15 @@ test_that("valid output", {
                           return_node_type = "species")
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
+  expect_equal(clust$inputs$node_type, "species")
   
   clust <- netclu_greedy(net, 
                           bipartite = TRUE, 
                           return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "site")
+  expect_equal(clust$inputs$node_type, "site")
+  
   
   clust <- netclu_greedy(net, cut_weight = 100)
   expect_equal(colnames(clust$clusters), c("ID","K_0"))
@@ -144,6 +164,25 @@ test_that("valid output", {
   clust2 <- netclu_greedy(simf)
   expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3), 338)
   
+  # Test data_type with bipartite network (weighted)
+  clust <- netclu_greedy(net, bipartite = TRUE, weight = TRUE)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  # Test data_type with bipartite network (unweighted)
+  clust <- netclu_greedy(net, bipartite = TRUE, weight = FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (occurrence-based)
+  clust <- netclu_greedy(simil, index = "Jaccard")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- netclu_greedy(simil, index = "Simpson")
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  # Test data_type with similarity metrics (abundance-based)
+  clust <- netclu_greedy(simil, index = "Bray")
+  expect_equal(clust$inputs$data_type, "abundance")
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -161,7 +200,7 @@ test_that("invalid inputs", {
   
 #   expect_message(
 #     netclu_greedy(net, bipartite = FALSE),
-#     "net is not a bioregion.pairwise.metric object. 
+#     "net is not a bioregion.pairwise object. 
 # Note that some functions required dissimilarity metrics (hclu_ & nhclu_) and
 # others similarity metrics (netclu_). 
 # Please carefully check your data before using the clustering functions.",

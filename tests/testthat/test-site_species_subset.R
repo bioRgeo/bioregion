@@ -1,5 +1,5 @@
 # Inputs -----------------------------------------------------------------------
-install_binaries()
+quietly(install_binaries(verbose = FALSE))
 
 net <- data.frame(
   Site = c(rep("A", 2), rep("B", 3), rep("C", 2)),
@@ -11,13 +11,12 @@ clu1 <- netclu_louvain(net,
                        lang = "igraph", 
                        bipartite = TRUE)
 clu2 <- hclu_hierarclust(net,
-                         optimal_tree_method = "best")
+                         optimal_tree_method = "best",
+                         verbose = FALSE)
 clu3 <- netclu_louvain(net, 
                        lang = "igraph")
 clu4 <- netclu_louvain(net,
-                       lang = "igraph",
-                       bipartite = TRUE,
-                       return_node_type = "site")
+                       lang = "igraph")
 clu5 <- netclu_beckett(net)
 clu6 <- netclu_infomap(net,
                        bipartite = TRUE)
@@ -28,27 +27,32 @@ test_that("valid outputs", {
   sub <- site_species_subset(clu1, 
                              node_type = "site")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
-  expect_equal(sub$args$return_node_type, "site")
+  expect_equal(sub$inputs$node_type, "site")
 
   sub <- site_species_subset(clu1, 
                              node_type = "species")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
-  expect_equal(sub$args$return_node_type, "species")
+  expect_equal(sub$inputs$node_type, "species")
   
   sub <- site_species_subset(clu5, 
                              node_type = "species")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
-  expect_equal(sub$args$return_node_type, "species")
+  expect_equal(sub$inputs$node_type, "species")  
   
   sub <- site_species_subset(clu6, 
                              node_type = "site")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
-  expect_equal(sub$args$return_node_type, "site")
+  expect_equal(sub$inputs$node_type, "site")
 
 })
 
 # Tests for invalid inputs -----------------------------------------------------
 test_that("indalid inputs", {
+  
+  expect_error(
+    site_species_subset("1"),
+    "bioregionalization must be a bioregion.clusters object.",
+    fixed = TRUE)
 
   expect_error(
     site_species_subset(clu1, 
@@ -68,27 +72,9 @@ test_that("indalid inputs", {
     "^Please choose node_type from the following")
 
   expect_error(
-    site_species_subset("1", 
-                        node_type = "site"),
-    "clusters must be a bioregion.clusters object.",
-    fixed = TRUE)
-
-  expect_error(
-    site_species_subset(clu2, 
-                        node_type = "site"),
-    "clusters must be an output of a 'netclu_' function.",
-    fixed = TRUE)
-
-  expect_error(
-    site_species_subset(clu3, 
-                        node_type = "site"),
-    "clusters must be based on a bipartite network.",
-    fixed = TRUE)
-
-  expect_error(
     site_species_subset(clu4, 
                         node_type = "site"),
-    "clusters must contain both types of node.",
+    "bioregionalization must contain both types of node.",
     fixed = TRUE)
 
 })

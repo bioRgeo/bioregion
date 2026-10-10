@@ -11,6 +11,7 @@ nhclu_dbscan(
   eps = NULL,
   plot = TRUE,
   algorithm_in_output = TRUE,
+  verbose = TRUE,
   ...
 )
 }
@@ -26,7 +27,8 @@ default, the third column name of \code{dissimilarity} is used.}
 \item{minPts}{A \code{numeric} vector or a single \code{numeric} value specifying the
 \code{minPts} argument of \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. \code{minPts} is the minimum number of
 points to form a dense region. By default, it is set to the natural logarithm
-of the number of sites in \code{dissimilarity}. See Details for guidance on
+of the number of sites in \code{dissimilarity}, rounded down to a whole number.
+See Details for guidance on
 choosing this parameter.}
 
 \item{eps}{A \code{numeric} vector or a single \code{numeric} value specifying the \code{eps}
@@ -40,6 +42,9 @@ plot should be displayed.}
 \item{algorithm_in_output}{A \code{boolean} indicating whether the original output
 of \link[dbscan:dbscan]{dbscan::dbscan} should be included in the output. Defaults to \code{TRUE} (see
 Value).}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 
 \item{...}{Additional arguments to be passed to \code{dbscan()} (see
 \link[dbscan:dbscan]{dbscan::dbscan}).}

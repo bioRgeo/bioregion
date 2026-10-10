@@ -84,9 +84,6 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #' 
 #' clust <- nhclu_pam(dissim, n_clust = 2:15, index = "Simpson")
-#'    
-#' @importFrom stats as.dist
-#' @importFrom cluster pam    
 #'                    
 #' @export
 nhclu_pam <- function(dissimilarity,
@@ -112,6 +109,13 @@ nhclu_pam <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -125,6 +129,7 @@ nhclu_pam <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }
   
   if(!is.null(seed)){
@@ -155,17 +160,21 @@ nhclu_pam <- function(dissimilarity,
                        algorithm_in_output = algorithm_in_output,
                        ...)
   
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
+  
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
-                         hierarchical = FALSE)
+                         hierarchical = FALSE,
+                         data_type = data_type,
+                         node_type = "site")
   
   outputs$algorithm <- list()
   
@@ -176,33 +185,22 @@ nhclu_pam <- function(dissimilarity,
   
   outputs$clusters$name <- labels(dist.obj)
   
-  if(is.null(seed)){
-    outputs$algorithm <- lapply(n_clust,
-                                function(x)
-                                  cluster::pam(dist.obj,
-                                               k = x,
-                                               diss = TRUE,
-                                               keep.diss = FALSE,
-                                               keep.data = FALSE,
-                                               nstart = nstart,
-                                               variant = variant,
-                                               cluster.only = cluster_only,
-                                               ...))
-  }else{
-    set.seed(seed)
-    outputs$algorithm <- lapply(n_clust,
-                                function(x)
-                                  cluster::pam(dist.obj,
-                                               k = x,
-                                               diss = TRUE,
-                                               keep.diss = FALSE,
-                                               keep.data = FALSE,
-                                               nstart = nstart,
-                                               variant = variant,
-                                               cluster.only = cluster_only,
-                                               ...))
-    rm(.Random.seed, envir=globalenv())
-  }
+  
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outputs$algorithm <- lapply(n_clust,
+                              function(x)
+                                cluster::pam(dist.obj,
+                                             k = x,
+                                             diss = TRUE,
+                                             keep.diss = FALSE,
+                                             keep.data = FALSE,
+                                             nstart = nstart,
+                                             variant = variant,
+                                             cluster.only = cluster_only,
+                                             ...))
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
   
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
@@ -212,6 +210,9 @@ nhclu_pam <- function(dissimilarity,
                       function(x) outputs$algorithm[[x]]$clustering)))
   
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
+  
+  # Add node_type attribute
+  attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

@@ -24,7 +24,7 @@
 #' 
 #' @return 
 #' A `data.frame` with the additional class 
-#' `bioregion.pairwise.metric`, containing one or several similarity
+#' `bioregion.pairwise`, containing one or several similarity
 #' metrics between pairs of sites. The first two columns represent the pairs of 
 #' sites. There is one column per similarity metric provided in `metric` and
 #' `formula`, except for the `abc` and `ABC` metrics, which are stored in three 
@@ -61,7 +61,7 @@
 #' Note that `pmin` is used in the Simpson formula because `a`, `b`, `c`, `A`, 
 #' `B` and `C` are `numeric` vectors.
 #'
-#' Euclidean computes the Euclidean similarity between each pair of site
+#' Euclidean computes the Euclidean similarity between each pair of sites
 #' following this equation:
 #'
 #' Euclidean = 1 / (1 + d_ij)
@@ -94,8 +94,8 @@
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 #' prob = 1 / 1:1001), 5, 10)
-#' rownames(comat) <- paste0("Site", 1:5)
-#' colnames(comat) <- paste0("Species", 1:10)
+#' rownames(comat) <- paste0("s", 1:5)
+#' colnames(comat) <- paste0("sp", 1:10)
 #'
 #' sim <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 #'
@@ -140,7 +140,7 @@ similarity <- function(comat,
                   " available.\n",
                   "Please choose from the following:\n",
                   "abc, Jaccard, Jaccardturn, Sorensen, Simpson, ABC, ",
-                  "Bray, Brayturn or Euclidean."),
+                  "Bray, Brayturn and Euclidean."),
            call. = FALSE)
     }
   }
@@ -310,7 +310,7 @@ similarity <- function(comat,
   }
 
   # Create output class
-  class(res) <- append("bioregion.pairwise.metric", class(res))
+  class(res) <- append("bioregion.pairwise", class(res))
   
   # Inform nature of the output
   attr(res, "type") <- "similarity"

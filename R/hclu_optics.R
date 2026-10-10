@@ -16,15 +16,14 @@
 #' @param minPts A `numeric` value specifying the minPts argument of
 #' [dbscan][dbscan::dbscan]. minPts is the minimum number of points required
 #' to form a dense region. By default, it is set to the natural logarithm 
-#' of the number of sites in `dissimilarity`.
+#' of the number of sites in `dissimilarity`, rounded down to a whole number.
 #' 
-#' @param eps A `numeric` value specifying the eps argument of
+#' @param eps A positive `numeric` value specifying the eps argument of
 #' [optics][dbscan::optics]. It defines the upper limit of the size
 #' of the epsilon neighborhood. Limiting the neighborhood size improves
 #' performance and has no or very little impact on the ordering as long as it
-#' is not set too low. If not specified (default behavior), the largest
-#' minPts-distance in the dataset is used, which gives the same result as
-#' infinity.
+#' is not set too low. By default, `eps = Inf`, which means that the
+#' neighborhood size is not limited.
 #' 
 #' @param xi A `numeric` value specifying the steepness threshold to
 #' identify clusters hierarchically using the Xi method
@@ -78,7 +77,7 @@
 #' To extract the clusters, we use the
 #' [extractXi][dbscan::extractXi] function which is based on the
 #' steepness of the reachability plot (see
-#' [optics][dbscan::optics])
+#' [optics][dbscan::optics]).
 #'
 #' @references 
 #' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 
@@ -111,16 +110,11 @@
 #' clust1 <- hclu_optics(dissim, index = "Simpson", show_hierarchy = TRUE)
 #' clust1
 #' 
-#' @importFrom stats as.dist
-#' @importFrom dbscan optics extractXi
-#' @importFrom tidyr separate
-#' 
 #' @export
-
 hclu_optics <- function(dissimilarity,
                         index = names(dissimilarity)[3],
                         minPts = NULL,
-                        eps = NULL,
+                        eps = Inf,
                         xi = 0.05,
                         minimum = FALSE,
                         show_hierarchy = FALSE,
@@ -139,6 +133,13 @@ hclu_optics <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -152,13 +153,14 @@ hclu_optics <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }  
   
   if(!is.null(minPts)){
     controls(args = minPts, data = NULL, type = "strict_positive_integer")
   }
   if(!is.null(eps)){
-    controls(args = eps, data = NULL, type = "strict_positive_integer")
+    controls(args = eps, data = NULL, type = "strict_positive_numeric")
   }
   controls(args = xi, data = NULL, type = "strict_positive_numeric")
   if (xi >= 1) {
@@ -190,17 +192,21 @@ hclu_optics <- function(dissimilarity,
                        algorithm_in_output = algorithm_in_output,
                        ...)
   
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
+  
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
-                         hierarchical = show_hierarchy)
+                         hierarchical = show_hierarchy,
+                         data_type = data_type,
+                         node_type = "site")
   
   outputs$algorithm <- list()
   
@@ -215,11 +221,13 @@ hclu_optics <- function(dissimilarity,
     # Using a default value of minPts if none provided by the user
     minPts <- log(length(labels(dist.obj)))
   }
+
+  minPts <- floor(minPts)
   
   outputs$algorithm <- dbscan::optics(x = dist.obj,
-                                             minPts = minPts,
-                                             eps = eps,
-                                             ...)
+                                      minPts = minPts,
+                                      eps = eps,
+                                      ...)
   outputs$algorithm <-
     dbscan::extractXi(outputs$algorithm,
                       xi = xi,
@@ -291,10 +299,14 @@ hclu_optics <- function(dissimilarity,
       cls_hierarchy[match(outputs$algorithm$cluster,
                           cls_hierarchy$cluster_id),
                     paste0("lvl", 1:max.col)])
+    
   }
   
   outputs$clusters[,-1][outputs$clusters[,-1]==0]=NA
   outputs$clusters <- knbclu(outputs$clusters, reorder = FALSE)
+  
+  # Add node_type attribute
+  attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

@@ -96,8 +96,6 @@
 #'
 #' com <- netclu_beckett(net)
 #' 
-#' @importFrom bipartite computeModules
-#' 
 #' @export
 netclu_beckett <- function(net,
                            weight = TRUE,
@@ -140,6 +138,13 @@ netclu_beckett <- function(net,
   if (weight) {
     controls(args = cut_weight, data = net, type = "positive_numeric")
     controls(args = index, data = net, type = "input_net_index")
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_positive_value")
@@ -187,7 +192,10 @@ netclu_beckett <- function(net,
     pairwise_metric = NA,
     dissimilarity = FALSE,
     nb_sites = nbsites,
-    hierarchical = FALSE)
+    hierarchical = FALSE,
+    data_type = ifelse(weight, "abundance", "occurrence"),
+    node_type = return_node_type
+  )
   
   outputs$algorithm <- list()
   
@@ -202,13 +210,12 @@ netclu_beckett <- function(net,
   }
   
   # Run algo (with seed)
-  if(is.null(seed)){
-    outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
-  }else{
-    set.seed(seed)
-    outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
-    rm(.Random.seed, envir=globalenv())
-  }
+  if (!is.null(seed)) set.seed(seed) # generate seed
+  
+  outalg <- bipartite::computeModules(comat, forceLPA = forceLPA)
+  
+  if (!is.null(seed)) rm(.Random.seed, envir = globalenv()) # remove seed
+
   comtemp <- outalg@modules[-1, -c(1, 2)]
   comtemp <- cbind(c(as.numeric(rownames(comat)),
                      as.numeric(colnames(comat))),

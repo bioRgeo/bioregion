@@ -101,6 +101,7 @@ com <- netclu_labelprop(net)
 
 net_bip <- mat_to_net(comat, weight = TRUE)
 clust2 <- netclu_labelprop(net_bip, bipartite = TRUE)
+
 }
 \references{
 Raghavan UN, Albert R & Kumara S (2007) Near linear time algorithm to detect

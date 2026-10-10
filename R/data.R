@@ -22,13 +22,13 @@
 #' @source \doi{10.1002/ece3.4718} 
 "vegemat"
 
-#' Spatial distribution of Mediterranean vegetation (spatial grid)
+#' Spatial distribution of Mediterranean vegetation (sf data.frame)
 #'
 #' A dataset containing the geometry of the 715 sites.
 #'
-#' @format A
+#' @format A `sf` `data.frame` with 715 rows and 2 columns:
 #' \describe{
-#'   \item{ID}{Unique site identifier}
+#'   \item{Site}{Unique site identifier}
 #'   \item{geometry}{Geometry of the site}
 #' }
 #' @source \doi{10.1002/ece3.4718} 
@@ -52,17 +52,17 @@
 #' the 338 sites.
 #'
 #' @format A co-occurrence `matrix` with sites as rows and species as
-#' columns. Each element of the matrix
-#' represents the abundance of the species in the site.
+#' columns. Each element of the matrix represents the abundance of the species 
+#' in the site.
 "fishmat"
 
 #' Spatial distribution of fish in Europe
 #'
 #' A dataset containing the geometry of the 338 sites.
 #'
-#' @format A
+#' @format A `sf` `data.frame` with 338 rows and 2 columns:
 #' \describe{
-#'   \item{ID}{Unique site identifier}
+#'   \item{Site}{Unique site identifier}
 #'   \item{geometry}{Geometry of the site}
 #' }
 "fishsf"

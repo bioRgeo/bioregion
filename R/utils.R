@@ -1,9 +1,13 @@
 # Controls #####################################################################
 controls <- function(args = NULL, data = NULL, type = "input_net") {
   
-  lstype <- c("input_nhandhclu",
+  lstype <- c("input_bioregionalization",
+              "input_partition_index",
+              "input_map",
+              "input_nhandhclu",
               "input_similarity",
               "input_dissimilarity",
+              "input_pairwise",
               "input_conversion_similarity",
               "input_conversion_dissimilarity",
               "input_net",
@@ -35,26 +39,176 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
               "positive_integer",
               "positive_integer_vector",
               "strict_positive_integer",
-              "strict_positive_integer_vector")
+              "strict_positive_integer_vector",
+              "character_or_positive_integer")
   
   if(!(type %in% lstype)){
     stop("Control type not defined!", call.=FALSE)
   }
   
-  # TODO: reformat all error messages to single lines, using the following
-  # format:
-  # paste0("This is a multiline ",
-  #        "error sentence ",
-  #        "with no problematic line ",
-  #        "breaks")
+  # Input bioregionalization ###################################################
+  if (type == "input_bioregionalization") {
+    if (!inherits(data, "bioregion.clusters")) {
+      stop(paste0(deparse(substitute(data)), 
+                  " must be a bioregion.clusters object."),
+           call. = FALSE)
+    }else{
+      if(is.null(data$name)){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+      if(!inherits(data$clusters, "data.frame")) {
+        if(data$name == "hclu_hierarclust" |
+            data$name == "hclu_diana") {
+          stop(paste0("No clusters have been generated for your hierarchical ",
+                      "tree, please extract clusters from the tree.\n",
+                      "See ?hclu_hierarclust, ?hclu_diana or ?cut_tree."), 
+               call. = FALSE)
+        }else{
+          stop(paste0(deparse(substitute(data)),
+                      " does not have the expected type of ",
+                      "'clusters' slot."), 
+               call. = FALSE)
+        }
+      }
+      if (is.null(attr(data$clusters, "node_type"))) {
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+      if(is.null(data$inputs$data_type)){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+              call. = FALSE)
+      }
+      if(!is.na(data$inputs$data_type)){
+        if(!(data$inputs$data_type %in% c("occurrence","abundance"))){
+          stop(paste0(deparse(substitute(data)),
+                      " is a bioregion.cluster object but it has been altered ",
+                      "and some informations regarding the name of the algorithm ",
+                      " data type and node type are missing."),
+               call. = FALSE)
+        }
+      }
+      if(is.null(data$inputs$node_type)){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+      if(!(data$inputs$node_type %in% c("site","species","both"))){
+        stop(paste0(deparse(substitute(data)),
+                    " is a bioregion.cluster object but it has been altered ",
+                    "and some informations regarding the name of the algorithm ",
+                    " data type and node type are missing."),
+             call. = FALSE)
+      }
+    }
+  }
+  
+  # Input partition index ######################################################
+  if (type == "input_partition_index") {
+    partition_name <- colnames(data)[-1]
+    if(sum(duplicated(args))!=0){
+      stop(paste0("Duplicated values detected in ", deparse(substitute(args)),
+                  "."), 
+           call. = FALSE)
+    }
+    if (is.character(args)) {
+      check <- match(args, partition_name)
+      if (sum(is.na(check)!=0)) {
+        stop(paste0("If ", deparse(substitute(args)),
+                    " is a character, it should be a ",
+                    "column name (not the first)."), 
+             call. = FALSE)
+      }
+    } else if (is.numeric(args)) {
+      if (sum(args %% 1 != 0) > 0) {
+        stop(paste0("If ", 
+                    deparse(substitute(args)),
+                    " is numeric, it should be an integer."), 
+             call. = FALSE)
+      } else {
+        if (sum(args <= 1) != 0) {
+          stop(paste0(deparse(substitute(args)),
+                      " should be strictly higher than 1."), 
+               call. = FALSE)
+        }
+        if (sum(args > dim(data)[2]) != 0) {
+          stop(paste0(deparse(substitute(args)),
+                      " should be lower or equal to ", 
+                      dim(data)[2], "."),
+               call. = FALSE)
+        }
+      }
+    } else {
+      stop(paste0(deparse(substitute(args)),
+                  " should be numeric or character."), 
+           call. = FALSE)
+    }
+  }
+  
+  # Input map ##################################################################
+  if (type == "input_map") {
+    
+    if(inherits(data, "sf") | 
+       inherits(data, "SpatVector") | 
+       inherits(data, "SpatRaster")){
+      
+      # sf
+      if(inherits(data, "sf")){
+        if(!inherits(data, "data.frame") ){
+          stop(paste0(deparse(substitute(data)),
+                      " must be a sf data.frame."),
+               call. = FALSE)
+        }else{
+          if(ncol(data) == 1){
+            stop(paste0(deparse(substitute(data)),
+                        " must be a sf data.frame with ",
+                        "at least two columns (ID and geometry).\n",
+                        "The first column is used as ID"),
+                 call. = FALSE)
+          }
+        }
+      }
+      
+      # SpatVector
+      if(inherits(data, "SpatVector")){
+        if(ncol(data) == 0){
+          stop(paste0(deparse(substitute(data)),
+                      " must be a SpatVector with ",
+                      "at least one column for the ID.\n",
+                      "The first column is used as ID"),
+               call. = FALSE)
+        }
+      }
+      
+    }else{
+      stop(paste0(deparse(substitute(data)),
+                  " must be a sf or terra object."),
+           call. = FALSE)
+    }
+    
+    
+
+
+  }  
   
   # Input nhandhclu ############################################################
   if (type == "input_nhandhclu") {
-    if (!inherits(data, "bioregion.pairwise.metric") &
+    if (!inherits(data, "bioregion.pairwise") &
         !inherits(data, "dist") &
         !is.data.frame(data)) {
       stop(paste0(deparse(substitute(data)), 
-                  " is not a bioregion.pairwise.metric object, ", 
+                  " is not a bioregion.pairwise object, ", 
                   "a dissimilarity matrix (class dist) or ",
                   "a data.frame with at least 3 columns ", 
                   "(site1, site2 and your dissimilarity index)."),
@@ -64,9 +218,9 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input similarity ###########################################################
   if (type == "input_similarity") {
-    if(!inherits(data, "bioregion.pairwise.metric")) {
+    if(!inherits(data, "bioregion.pairwise")) {
       # message(paste0(deparse(substitute(data)),
-      #                " is not a bioregion.pairwise.metric object.\n", 
+      #                " is not a bioregion.pairwise object.\n", 
       #                "Note that some functions required dissimilarity metrics ", 
       #                "(hclu_ & nhclu_) and others similarity metrics ",
       #                "(netclu_). Please carefully check your data before ", 
@@ -74,10 +228,10 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     }else{
       if(is.null(attr(data, "type"))){
         message(paste0(deparse(substitute(data)),
-                       " is a bioregion.pairwise.metric object but it has not ",
+                       " is a bioregion.pairwise object but it has not ",
                        "been possible to identify the object's type ",
                        "(similarity or dissimilarity) probably because the ",
-                       "bioregion.pairwise.metric object has been altered.\n",
+                       "bioregion.pairwise object has been altered.\n",
                        "Note that some functions required dissimilarity ",
                        "metrics (hclu_ & nhclu_) and others similarity ",
                        "metrics (netclu_). Please carefully check your data ",
@@ -96,9 +250,9 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   
   # Input dissimilarity ########################################################
   if (type == "input_dissimilarity") {
-    if(!inherits(data, "bioregion.pairwise.metric")) {
+    if(!inherits(data, "bioregion.pairwise")) {
       # message(paste0(deparse(substitute(data)),
-      #                " is not a bioregion.pairwise.metric object.\n", 
+      #                " is not a bioregion.pairwise object.\n", 
       #                "Note that some functions required dissimilarity metrics ", 
       #                "(hclu_ & nhclu_) and others similarity metrics ",
       #                "(netclu_). Please carefully check your data before ", 
@@ -106,10 +260,10 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     }else{
       if(is.null(attr(data, "type"))){
         message(paste0(deparse(substitute(data)),
-                       " is a bioregion.pairwise.metric object but it has not ",
+                       " is a bioregion.pairwise object but it has not ",
                        "been possible to identify the object's type ",
                        "(similarity or dissimilarity) probably because the ",
-                       "bioregion.pairwise.metric object has been altered.\n",
+                       "bioregion.pairwise object has been altered.\n",
                        "Note that some functions required dissimilarity ",
                        "metrics (hclu_ & nhclu_) and others similarity ",
                        "metrics (netclu_). Please carefully check your data ",
@@ -126,21 +280,40 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
     }
   }
   
+  # Input pairwise #############################################################
+  if (type == "input_pairwise") {
+    
+    if (!inherits(data, "bioregion.pairwise")) {
+      stop(paste0(deparse(substitute(data)), 
+                  " should be a bioregion.pairwise object created by ",
+                  "similarity() or dissimilarity_to_similarity()."),
+           call. = FALSE)
+    }
+    if(is.null(attr(data, "type"))){
+      stop(paste0(deparse(substitute(data)),
+                  " is a bioregion.pairwise object but it has not ",
+                  "been possible to identify the object's type (similarity or ",
+                  " dissimilarity) probably because the ",
+                  "bioregion.pairwise object has been altered."),
+           call. = FALSE)
+    }
+  }
+  
   # Input conversion similarity ################################################
   if (type == "input_conversion_similarity") {
     
-    if (!inherits(data, "bioregion.pairwise.metric")) {
+    if (!inherits(data, "bioregion.pairwise")) {
       stop(paste0(deparse(substitute(data)), 
-                  " should be a bioregion.pairwise.metric object created by ",
+                  " should be a bioregion.pairwise object created by ",
                   "similarity() or dissimilarity_to_similarity()."),
                   call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
       stop(paste0(deparse(substitute(data)),
-                  " is a bioregion.pairwise.metric object but it has not ",
+                  " is a bioregion.pairwise object but it has not ",
                   "been possible to identify the object's type (similarity or ",
                   " dissimilarity) probably because the ",
-                  "bioregion.pairwise.metric object has been altered."),
+                  "bioregion.pairwise object has been altered."),
            call. = FALSE)
     }
     if (attr(data, "type") == "dissimilarity") {
@@ -156,18 +329,18 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
   # Input conversion dissimilarity #############################################
   if (type == "input_conversion_dissimilarity") {
     
-    if (!inherits(data, "bioregion.pairwise.metric")) {
+    if (!inherits(data, "bioregion.pairwise")) {
       stop(paste0(deparse(substitute(data)), 
-                  " should be a bioregion.pairwise.metric object created by ",
+                  " should be a bioregion.pairwise object created by ",
                   "dissimilarity() or similarity_to_dissimilarity()."),
            call. = FALSE)
     }
     if(is.null(attr(data, "type"))){
       stop(paste0(deparse(substitute(data)),
-                  " is a bioregion.pairwise.metric object but it has not ",
+                  " is a bioregion.pairwise object but it has not ",
                   "been possible to identify the object's type (similarity or ",
                   "dissimilarity) probably because the ",
-                  "bioregion.pairwise.metric object has been altered."),
+                  "bioregion.pairwise object has been altered."),
            call. = FALSE)
     }
     if (attr(data, "type") == "similarity") {
@@ -736,10 +909,110 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
       }
     }
   }
+  
+  # Character or positive integer ##############################################
+  if (type == "character_or_positive_integer") {
+    if (length(args) > 1) {
+      stop(paste0(deparse(substitute(args)), " must be of length 1."),
+           call. = FALSE
+      )
+    }
+    if (!is.character(args) && !is.numeric(args)) {
+      stop(paste0(deparse(substitute(args)), 
+                  " must be a character string or a positive integer."),
+           call. = FALSE
+      )
+    }
+    if (is.numeric(args)) {
+      if (args %% 1 != 0) {
+        stop(paste0(deparse(substitute(args)), " must be an integer."),
+             call. = FALSE
+        )
+      }
+      if (args <= 0) {
+        stop(paste0(deparse(substitute(args)),
+                    " must be strictly higher than 0."), 
+             call. = FALSE)
+      }
+    }
+  }
 }
 
-# Additional functions #########################################################
-# reformat_hierarchy
+###################################################################################################
+# Additional functions                                                                            #
+#  - convert_metric_names                                                                         # 
+#  - reformat_hierarchy                                                                           #                                                                           
+#  - knbclu                                                                                       #
+#  - reorder                                                                                      #
+#  - make.unique.2                                                                                #
+#  - tree_eval                                                                                    #
+#  - sbgc [Species-to-bioregions/bioregionalization & Site-to-chorotype/chorological metrics]     #
+#  - gb [Site-to-bioregions/bioregionalization metrics]                                           #
+#  - detect_data_type_from_metric                                                                 #   
+#  - elbow_finder                                                                                 #
+###################################################################################################
+
+# convert_metric_names
+convert_metric_names <- function(metrics) {
+  
+  if(!is.null(metrics)){
+    old_names <- c(
+      "anosim",
+      "pc_distance",
+      "CoreTerms",
+      "Fidelity",
+      "IndVal",
+      "avg_endemism",
+      "MeanSim",
+      "NIndVal",
+      "NSpecificity",
+      "P",
+      "Prop_Endemics",
+      "Rich_Endemics",
+      "Richness",
+      "Rho",
+      "SdSim",
+      "Silhouette",
+      "Specificity",
+      "tot_endemism"
+    )
+    
+    new_names <- c(
+      "anosim",
+      "prop_between_dissim",
+      "core_terms",
+      "fidelity",
+      "ind_val",
+      "mean_endemics",
+      "mean_sim",
+      "n_ind_val",
+      "n_specificity",
+      "p",
+      "prop_endemics",
+      "rich_endemics",
+      "richness",
+      "rho",
+      "sd_sim",
+      "silhouette",
+      "specificity",
+      "tot_endemics"
+    )
+    
+    names(new_names) <- old_names
+    
+    
+    metrics <- ifelse(
+      metrics %in% names(new_names),
+      unname(new_names[metrics]),
+      metrics
+    )
+  }  
+  
+  metrics
+}
+
+
+# reformat_hierarchy ###########################################################
 reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
   # Infomap
@@ -811,8 +1084,9 @@ reformat_hierarchy <- function(input, algo = "infomap", integerize = FALSE) {
   
   return(output)
 }
+################################################################################
 
-# knbclu
+# knbclu #######################################################################
 knbclu <- function(partitions, 
                    reorder = TRUE, 
                    rename_duplicates = TRUE) {
@@ -851,8 +1125,62 @@ knbclu <- function(partitions,
   
   partitions
 }
+################################################################################
 
-# make.unique.2
+# reorder ######################################################################
+reorder <- function(tab,
+                    col = 1) {
+  
+  # data.frame
+  if(inherits(tab, "data.frame")) {
+    if(dim(tab)[1] > 1){
+      if(col == 1){
+        if(suppressWarnings(sum(is.na(as.numeric(tab[,1])))>0)){
+          tab <- tab[order(tab[,1]),]
+        }else{
+          tab <- tab[order(as.numeric(tab[,1])),]        
+        }
+      }
+      if(col == 2){
+        if(suppressWarnings(sum(is.na(as.numeric(tab[,1])))>0) |
+           suppressWarnings(sum(is.na(as.numeric(tab[,2])))>0)){
+          tab <- tab[order(tab[,1], tab[,2]),]
+        }else{
+          tab <- tab[order(as.numeric(tab[,1]), 
+                           as.numeric(tab[,2])),]        
+        }
+      }
+      rownames(tab) <- 1:dim(tab)[1]
+    }
+  }
+  
+  # matrix
+  if(inherits(tab, "matrix")){
+    
+    if(!is.null(rownames(tab)) & (dim(tab)[1] > 1)){
+      if(suppressWarnings(sum(is.na(as.numeric(rownames(tab))))>0)){
+        tab <- tab[order(rownames(tab)), , drop = FALSE]
+      }else{
+        tab <- tab[order(as.numeric(rownames(tab))), , drop = FALSE]
+      }
+    }  
+    
+    if(!is.null(colnames(tab)) & (dim(tab)[2] > 1)){
+      if(suppressWarnings(sum(is.na(as.numeric(colnames(tab))))>0)){
+        tab <- tab[, order(colnames(tab)), drop = FALSE]
+      }else{
+        tab <- tab[, order(as.numeric(colnames(tab))), drop = FALSE]
+      }
+    }
+    
+  }
+  
+  return(tab)
+  
+}  
+################################################################################
+
+# make.unique.2 ################################################################
 # from https://stackoverflow.com/questions/7659891/r-make-unique-starting-in-1
 make.unique.2 <- function(x, sep = ".") {
   stats::ave(x, x, FUN = function(a) {
@@ -864,12 +1192,691 @@ make.unique.2 <- function(x, sep = ".") {
   })
 }
 
-# seedrng
-seedrng <- function() {
-  # as.numeric(as.POSIXct(Sys.time())) + sample(-10:10, 1)
-  #sample(1:(.Machine$integer.max), 1)
-  sample(1:10000, 1)
+# randomize_dist
+randomize_dist <- function(dist_mat){
+  ord <- sample(rownames(dist_mat))
+  return(dist_mat[ord, ord])
+}
+################################################################################
+
+# tree_eval ####################################################################
+tree_eval <- function(tree, 
+                      dist_mat, 
+                      method = "pearson") {
+  
+  if(inherits(dist_mat, "dist")){
+    dist_mat <- as.matrix(dist_mat)
+  }
+  
+  coph <- as.matrix(stats::cophenetic(tree))
+  coph <- coph[match(rownames(dist_mat), rownames(coph)), 
+               match(rownames(dist_mat), colnames(coph))]
+
+  lower_tri_idx <- lower.tri(dist_mat)
+  
+  # cophcor
+  cophcor <- stats::cor(dist_mat[lower_tri_idx],
+                        coph[lower_tri_idx], 
+                        method = method)
+  
+  # msd
+  diff_matrix <- dist_mat - coph
+  msd <- mean(diff_matrix[lower_tri_idx]^2)
+  
+  # cophcor: Sokal & Rohlf 1962 Taxon
+  # msd: Maire et al. 2015 GEB
+  return(list(cophcor = cophcor, 
+              msd = msd))
+}
+################################################################################
+
+# sbgc #########################################################################
+sbgc <- function(clusters, 
+                 bioregion_metrics,
+                 bioregionalization_metrics,
+                 comat,
+                 type,  # sb or gc
+                 data){ # occurrence, abundance or both
+  
+  # Update bioregion_metrics
+  available_bioregion_metrics<- c("specificity", "n_specificity", 
+                                  "fidelity", 
+                                  "ind_val", "n_ind_val", 
+                                  "rho", 
+                                  "core_terms")
+  if(length(intersect(available_bioregion_metrics,
+                      bioregion_metrics))==0){
+    bioregion_metrics = NULL
+  }
+  
+  # Update bioregionalization_metrics
+  available_bioregionalization_metrics<- c("p")
+  if(length(intersect(available_bioregionalization_metrics,
+                      bioregionalization_metrics))==0){
+    bioregionalization_metrics = NULL
+  }
+  
+  # Initialization output
+  res1 <- NULL
+  res12 <- NULL
+  res11 <- NULL
+  res2 <- NULL
+  res21 <- NULL
+  res22 <- NULL
+  
+  # sb
+  col1 <- "species"
+  col2 <- "bioregion"
+  colcoren <- c("n_sb", "n_s", "n_b")
+  colcorew <- c("w_sb", "w_s", "w_b")
+  
+  # gc
+  if(type == "gc"){
+    comat <- t(comat)  
+    col1 <- "site"
+    col2 <- "chorotype"
+    colcoren <- c("n_gc", "n_g", "n_c")
+    colcorew <- c("w_gc", "w_g", "w_c")
+  }
+  
+  # Occurrence
+  if((data != "abundance") |
+     (data == "abundance" & "rho" %in% bioregion_metrics) |
+     (data == "abundance" & "n_specificity" %in% bioregion_metrics) |
+     (data == "abundance" & "ind_val" %in% bioregion_metrics) |
+     (data == "abundance" & "n_ind_val" %in% bioregion_metrics)){
+    
+    # comat_bin
+    comat_bin <- comat
+    comat_bin[comat_bin > 0] <- 1
+  
+    # core_terms
+    temp <- stats::aggregate(comat_bin, list(clusters), sum)
+    nij_mat <- t(as.matrix(temp[,-1]))
+    rownames(nij_mat) <- colnames(temp)[-1]
+    colnames(nij_mat) <- temp[,1]
+
+    ni_mat <- matrix(apply(comat_bin, 2, sum), 
+                     dim(comat_bin)[2], 
+                     dim(nij_mat)[2])
+    rownames(ni_mat) <- rownames(nij_mat)
+    colnames(ni_mat) <- colnames(nij_mat)
+    
+    temp <- stats::aggregate(comat_bin, list(clusters), length)
+    nj_mat <- t(as.matrix(temp[,-1]))
+    rownames(nj_mat) <- rownames(nij_mat)
+    colnames(nj_mat) <- colnames(nij_mat)
+    
+    n <- sum(nj_mat[1,])
+    
+    # Normalized for n_specificity & n_ind_val
+    if("n_specificity" %in% bioregion_metrics |
+       "n_ind_val" %in% bioregion_metrics){
+      Nnij_mat <- nij_mat / nj_mat
+      Nnij_mat <- Nnij_mat / apply(Nnij_mat, 1, sum)
+      Nnij_mat[is.na(Nnij_mat)] <- 0
+    }
+
+    
+    # Output bioregions
+    if(!is.null(bioregion_metrics) & data != "abundance"){
+      
+      res11 <- cbind(mat_to_net(nij_mat, weight = TRUE, remove_zeroes = FALSE),
+                     mat_to_net(ni_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                     mat_to_net(nj_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+      colnames(res11) <- c(col1, col2, colcoren) 
+      
+      nij <- res11[,3]
+      ni <- res11[,4]
+      nj <- res11[,5]
+
+      # specificity 
+      if("specificity" %in% bioregion_metrics){
+        res11$specificity_occ <- nij / ni
+      }
+      
+      # n_specificity 
+      if("n_specificity" %in% bioregion_metrics){
+        
+        tempnspe <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
+        
+        res11$n_specificity_occ <- tempnspe[,3]
+      }
+      
+      # fidelity 
+      if("fidelity" %in% bioregion_metrics){
+        res11$fidelity_occ <- nij / nj
+      }
+      
+      # ind_val 
+      if("ind_val" %in% bioregion_metrics){
+        res11$ind_val_occ <- (nij / ni) * (nij / nj)
+      }
+      
+      # n_ind_val 
+      if("n_ind_val" %in% bioregion_metrics){
+        
+        tempniv <- mat_to_net(Nnij_mat, weight = TRUE, remove_zeroes = FALSE)
+        
+        res11$n_ind_val_occ <- tempniv[,3] * (nij / nj)
+      }
+      
+      # rho
+      if("rho" %in% bioregion_metrics){
+        
+        num <- nij-((ni*nj)/n)
+        den <- sqrt((nj*(n-nj)/(n-1))*(ni/n)*(1-(ni/n)))
+        den[num==0] <- 1
+
+        res11$rho_occ <- num/den
+      }
+      
+      # core_terms
+      if(!("core_terms" %in% bioregion_metrics)){
+        res11 <- res11[,-c(3,4,5)]
+      }
+    }
+    
+    # Output bioregionalizations
+    if(!is.null(bioregionalization_metrics) & data != "abundance"){
+      
+      res21 <- data.frame(nij_mat[,1],nij_mat[,1])
+      res21[,1] <- rownames(nij_mat)
+      colnames(res21) <- c(col1, "Dummy")
+      
+      if("p" %in% bioregionalization_metrics){
+        res21$p_occ <- 1 - apply((nij_mat / ni_mat)*(nij_mat / ni_mat), 1 , sum)
+      }
+      
+      res21 <- res21[,-2]
+      rownames(res21) <- 1:dim(res21)[1]
+      
+    }
+  }
+  
+  # Abundance
+  if(data != "occurrence"){
+    
+    # core_terms
+    temp <- stats::aggregate(comat, list(clusters), sum)
+    wij_mat <- t(as.matrix(temp[,-1]))
+    rownames(wij_mat) <- colnames(temp)[-1]
+    colnames(wij_mat) <- temp[,1]
+    
+    wi_mat <- matrix(apply(comat, 2, sum), 
+                     dim(comat)[2], 
+                     dim(wij_mat)[2])
+    rownames(wi_mat) <- rownames(wij_mat)
+    colnames(wi_mat) <- colnames(wij_mat)
+    
+    w2i_mat <- matrix(apply(comat*comat, 2, sum), 
+                     dim(comat)[2], 
+                     dim(wij_mat)[2])
+    rownames(w2i_mat) <- rownames(wij_mat)
+    colnames(w2i_mat) <- colnames(wij_mat)
+    
+    wj_mat <- matrix(apply(wij_mat,2,sum), 
+                     dim(comat)[2], 
+                     dim(wij_mat)[2],
+                     byrow=TRUE)
+    rownames(wj_mat) <- rownames(wij_mat)
+    colnames(wj_mat) <- colnames(wij_mat)
+    
+    # Normalized for n_specificity & n_ind_val
+    if("n_specificity" %in% bioregion_metrics |
+       "n_ind_val" %in% bioregion_metrics){
+      Nwij_mat <- wij_mat / nj_mat
+      Nwij_mat <- Nwij_mat / apply(Nwij_mat, 1, sum)
+      Nwij_mat[is.na(Nwij_mat)] <- 0
+    }
+    
+    if("rho" %in% bioregion_metrics){
+      muij_mat <- wij_mat / nj_mat
+      muij_mat[is.na(muij_mat)] <- 0
+      
+      mui_mat <- wi_mat / n
+      vari_mat <- (1/(n-1)) * (w2i_mat-wi_mat*wi_mat/n)
+    }
+    
+    # Output bioregions
+    if(!is.null(bioregion_metrics)){
+      
+      res12 <- cbind(mat_to_net(wij_mat, weight = TRUE, remove_zeroes = FALSE),
+                     mat_to_net(wi_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                     mat_to_net(wj_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+      colnames(res12) <- c(col1, col2, colcorew)
+      
+      wij <- res12[,3]
+      wi <- res12[,4]
+      wj <- res12[,5]
+      
+      # specificity
+      if("specificity" %in% bioregion_metrics){
+        res12$specificity_abund <- wij / wi
+      }
+      
+      # n_specificity
+      if("n_specificity" %in% bioregion_metrics){
+        tempnspe <- mat_to_net(Nwij_mat, weight = TRUE, remove_zeroes = FALSE)
+        
+        res12$n_specificity_abund <- tempnspe[,3]
+      }
+      
+      # fidelity 
+      if("fidelity" %in% bioregion_metrics){
+        res12$fidelity_abund <- wij / wj
+      }
+      
+      # ind_val 
+      if("ind_val" %in% bioregion_metrics){
+        tempindval <- cbind(mat_to_net(nij_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE),
+                            mat_to_net(nj_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3])
+        
+        nij <- tempindval[,3]
+        nj <- tempindval[,4]
+        
+        res12$ind_val_abund <- (wij / wi) * (nij / nj)
+      }
+      
+      # n_ind_val 
+      if("n_ind_val" %in% bioregion_metrics){
+        tempnindval <- cbind(mat_to_net(Nwij_mat, weight = TRUE, 
+                                        remove_zeroes = FALSE),
+                             mat_to_net(nij_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3],
+                             mat_to_net(nj_mat, weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3])
+        
+        Nwij <- tempnindval[,3]
+        nij <- tempnindval[,4]
+        nj <- tempnindval[,5]
+        
+        res12$n_ind_val_abund <- Nwij * (nij / nj)
+      }
+      
+      # rho
+      if("rho" %in% bioregion_metrics){
+        temprho <- cbind(mat_to_net(muij_mat, weight = TRUE, remove_zeroes = FALSE),
+                         mat_to_net(mui_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                         mat_to_net(vari_mat, weight = TRUE, remove_zeroes = FALSE)[,3],
+                         mat_to_net(nj_mat, weight = TRUE, remove_zeroes = FALSE)[,3])
+        
+        muij <- temprho[,3]
+        mui <- temprho[,4]
+        vari <- temprho[,5]
+        nj <- temprho[,6]
+        
+        num <- muij-mui
+        den <- sqrt((n-nj)/(n-1)*(vari/nj))
+        den[num==0] <- 1
+        
+        res12$rho_abund <- num/den
+      }
+      
+      # core_terms
+      if(!("core_terms" %in% bioregion_metrics)){
+        res12 <- res12[,-c(3,4,5)]
+      }
+    }
+    
+    # Output bioregionalizations
+    if(!is.null(bioregionalization_metrics)){
+      
+      res22 <- data.frame(wij_mat[,1],wij_mat[,1])
+      res22[,1] <- rownames(wij_mat)
+      colnames(res22) <- c(col1, "Dummy")
+      
+      if("p" %in% bioregionalization_metrics){
+        res22$p_abund <- 1 - apply((wij_mat / wi_mat)*(wij_mat / wi_mat),1,sum)
+      }
+      
+      res22 <- res22[,-2]
+      rownames(res22) <- 1:dim(res22)[1]
+      
+    }
+  }  
+  
+  # Combine outputs
+  if(!is.null(res11) & !is.null(res12)){
+    res1 <- cbind(res11, res12[, -c(1,2), drop = FALSE])
+  }else{
+    if(!is.null(res11)){
+      res1 <- res11
+    }
+    if(!is.null(res12)){
+      res1 <- res12
+    }
+  }
+  if(!is.null(res21) & !is.null(res22)){
+    res2 <- cbind(res21, res22[, -1, drop = FALSE])
+  }else{
+    if(!is.null(res21)){
+      res2 <- res21
+    }
+    if(!is.null(res22)){
+      res2 <- res22
+    }
+  }
+  
+  # Return output
+  res <- list()
+  res$bioregion1 <- res1
+  res$bioregion2 <- res2
+  
+  return(res)
+  
+}
+################################################################################
+
+# gb ###########################################################################
+gb <- function(clusters,
+               bioregion_metrics,
+               bioregionalization_metrics,
+               comat,
+               similarity,
+               #data,  # occurrence, abundance or both
+               include_cluster){ 
+  
+  # Update bioregion_metrics
+  available_bioregion_metrics<- c("richness", "rich_endemics", "prop_endemics", 
+                                  "mean_sim", "sd_sim")
+  if(length(intersect(available_bioregion_metrics,
+                      bioregion_metrics))==0){
+    bioregion_metrics = NULL
+  }
+  
+  # Update bioregionalization_metrics
+  available_bioregionalization_metrics<- c("silhouette")
+  if(length(intersect(available_bioregionalization_metrics,
+                      bioregionalization_metrics))==0){
+    bioregionalization_metrics = NULL
+  }
+  
+  # Initialization output
+  res1 <- NULL
+  res2 <- NULL
+  
+  # Check needed inputs
+  comat_needed <- (("richness" %in% bioregion_metrics) |
+                   ("rich_endemics" %in% bioregion_metrics) |
+                   ("prop_endemics" %in% bioregion_metrics))
+  
+  sim_needed <- (("mean_sim" %in% bioregion_metrics) |
+                 ("sd_sim" %in% bioregion_metrics) |
+                 ("silhouette" %in% bioregionalization_metrics))
+  
+  # Precompute muij if sim_needed
+  if(sim_needed){
+    
+    diag(similarity) <- NA
+    
+    temp <- stats::aggregate(similarity, list(clusters), mean, na.rm=TRUE)
+    muij_mat <- t(as.matrix(temp[,-1]))
+    rownames(muij_mat) <- colnames(temp)[-1]
+    colnames(muij_mat) <- temp[,1]
+    muij_mat[is.na(muij_mat)] <- 0
+    
+  }
+  
+  # Output bioregions
+  if(!is.null(bioregion_metrics)){
+    
+    # Create base matrix site x site (diag=1, 0 otherwise)
+    if(comat_needed){
+      comat_bin <- comat
+      comat_bin[comat_bin > 0] <- 1
+      base <- comat_bin %*% t(comat_bin)
+      base[!diag(dim(base)[1])] <- 0
+    }else{
+      base <- similarity
+      base[!diag(dim(base)[1])] <- 0
+      diag(base) <- 1
+    }
+     
+    # Initialize res1
+    temp <- stats::aggregate(base, list(clusters), sum)
+    res1 <- t(as.matrix(temp[,-1]))
+    res1[res1>0] <- 1
+    rownames(res1) <- colnames(temp)[-1]
+    colnames(res1) <- temp[,1]
+    
+    res1 <- mat_to_net(res1, weight=TRUE, remove_zeroes = FALSE)
+    colnames(res1) <- c("site", "bioregion", "assigned")
+    
+    # richness
+    if("richness" %in% bioregion_metrics |
+       "prop_endemics" %in% bioregion_metrics){
+      
+      temp <- comat_bin %*% t(comat_bin)
+      temp[!diag(dim(temp)[1])] <- 0
+      temp <- stats::aggregate(temp, list(clusters), sum)
+      
+      ng_mat <- t(as.matrix(temp[,-1]))
+      ng_mat[] <- apply(ng_mat, 1, sum)
+      
+      rownames(ng_mat) <- colnames(temp)[-1]
+      colnames(ng_mat) <- temp[,1]
+
+      res1$richness <- mat_to_net(ng_mat, 
+                                  weight = TRUE, 
+                                  remove_zeroes = FALSE)[,3]
+    }
+      
+    # rich_endemics
+    if("rich_endemics" %in% bioregion_metrics|
+       "prop_endemics" %in% bioregion_metrics){
+      
+      # Species x cluster (1 if species in cluster)
+      temp <- stats::aggregate(comat_bin, list(clusters), max)
+      is_sb <- t(as.matrix(temp[, -1]))
+      rownames(is_sb) <- colnames(temp)[-1]
+      colnames(is_sb) <- temp[,1]
+      
+      # Set 0 for none endemic
+      is_sb[apply(is_sb, 1, sum) > 1] = 0
+      
+      # rich_endemics
+      nge_mat <- comat_bin %*% is_sb
+
+      res1$rich_endemics <- mat_to_net(nge_mat, 
+                                       weight = TRUE, 
+                                       remove_zeroes = FALSE)[,3]
+
+    }
+    
+    # prop_endemics
+    if("prop_endemics" %in% bioregion_metrics){
+      
+      res1$prop_endemics <- res1$rich_endemics / res1$richness
+      
+      if(!("richness" %in% bioregion_metrics)){
+        res1$richness <- NULL
+      }
+      if(!("rich_endemics" %in% bioregion_metrics)){
+        res1$rich_endemics <- NULL
+      }
+      
+    }  
+    
+    if("mean_sim" %in% bioregion_metrics){
+      res1$mean_sim <- mat_to_net(muij_mat, 
+                                 weight = TRUE, 
+                                 remove_zeroes = FALSE)[,3]
+    }
+    if("sd_sim" %in% bioregion_metrics){
+      
+      temp <- stats::aggregate(similarity, list(clusters), stats::sd, na.rm=TRUE)
+      sdij_mat <- t(as.matrix(temp[,-1]))
+      rownames(sdij_mat) <- colnames(temp)[-1]
+      colnames(sdij_mat) <- temp[,1]
+      sdij_mat[is.na(sdij_mat)] <- 0
+      
+      res1$sd_sim <- mat_to_net(sdij_mat, 
+                               weight = TRUE, 
+                               remove_zeroes = FALSE)[,3]
+    }
+
+    # include_cluster
+    if(!include_cluster){
+      res1 <- res1[,-3]
+    }
+    
+  }
+  
+  # Output bioregionalizations
+  if(!is.null(bioregionalization_metrics)){
+    
+    res2 <- data.frame(muij_mat[,1], muij_mat, clusters)
+    res2[,1] <- rownames(muij_mat)
+    colnames(res2) <- c("site", colnames(muij_mat), "assigned")
+    
+    if(dim(res2)[2] == 3){ # Only one site
+      nob <- TRUE
+      res2$a <- res2[,2]
+      res2$b <- NA
+    }else{
+      nob <- FALSE
+      res2$a <- apply(res2, 1, function(x) {
+        # x[2:(ncol-1)] = mean_sim
+        meansim_values <- as.numeric(x[2:(ncol(res2)-1)])
+        # assigned bioregion
+        assigned <- x[ncol(res2)]
+        # POTENTIAL PROBLEM WITH NUMERIC WHEN > 10 [5 become " 5"]
+
+        # Extract mean_sim corresponding to the assigned bioregion
+        a_val <- meansim_values[which(colnames(res2)[2:(ncol(res2)-1)] == assigned)]
+        return(a_val)
+      })
+      res2$b <- apply(res2, 1, function(x) {
+        meansim_values <- as.numeric(x[2:(ncol(res2)-2)])
+        assigned <- x[ncol(res2)-1]  # colonne assigned
+        # Put NA for the assigned
+        meansim_values[colnames(res2)[2:(ncol(res2)-2)] == assigned] <- NA
+        # b = max among other bioregions
+        b_val <- max(meansim_values, na.rm = TRUE)
+        return(b_val)
+      })
+    }
+    
+    res2 <- res2[, c(1, (dim(res2)[2]-1), dim(res2)[2])]
+    
+    if("silhouette" %in% bioregionalization_metrics){
+      if(nob){
+        res2$silhouette <- NA
+      }else{
+        res2$silhouette <- (res2$a - res2$b) / pmax(res2$a,res2$b)
+      }
+    }
+
+    res2 <- res2[,-c(2,3)]
+    rownames(res2) <- 1:dim(res2)[1]
+    
+  }
+  
+  # Return output
+  res <- list()
+  res$bioregion1 <- res1
+  res$bioregion2 <- res2
+  
+  return(res)
+  
 }
 
+# detect_data_type_from_metric #################################################
+# Determines whether a similarity/dissimilarity metric is based on
+#' occurrence (presence/absence) or abundance (quantitative) data.
+#' 
+#' @param metric Character string with metric name
+#' 
+#' @return Character: "occurrence", "abundance" or NA
+#' 
+#' @details
+#' Occurrence metrics (using abc): Jaccard, Jaccardturn, Sorensen, Simpson, abc
+#' Betapart occurrence metrics (case insensitive): beta.sim, beta.sne,
+#' beta.sor, beta.jtu, beta.jne, beta.jac
+#' Abundance metrics (using ABC): Bray, Brayturn, ABC
+#' Betapart abundance metrics (case insensitive): beta.bray.bal, beta.bray.gra,
+#' beta.bray, beta.ruz.bal, beta.ruz.gra, beta.ruz
+#' Unknown: Euclidean, custom formulas, or NA
+#' 
+#' @noRd
+detect_data_type_from_metric <- function(metric) {
+  if (is.na(metric) || is.null(metric)) {
+    return(NA)
+  }
+
+  occurrence_metrics <- c("abc", "Jaccard", "Jaccardturn", "Sorensen", "Simpson")
+  abundance_metrics <- c("ABC", "Bray", "Brayturn")
+
+  betapart_occurrence <- c("beta.sim", "beta.sne", "beta.sor",
+                           "beta.jtu", "beta.jne", "beta.jac")
+  betapart_abundance <- c("beta.bray.bal", "beta.bray.gra", "beta.bray",
+                          "beta.ruz.bal", "beta.ruz.gra", "beta.ruz")
+
+  metric_lower <- tolower(metric)
+
+  if (metric %in% occurrence_metrics) {
+    return("occurrence")
+  } else if (metric %in% abundance_metrics) {
+    return("abundance")
+  } else if (metric_lower %in% betapart_occurrence) {
+    return("occurrence")
+  } else if (metric_lower %in% betapart_abundance) {
+    return("abundance")
+  } else if (metric == "Euclidean") {
+    return(NA)
+  } else {
+    # Custom formula or unknown metric
+    return(NA)
+  }
+}
+################################################################################
+
+# elbow_finder #################################################################
+# Credit to Jonas for original idea and Esben Eickhardt for R implementation
+# https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve
+elbow_finder <- function(x_values, y_values, correct_decrease = FALSE) {
+  if(correct_decrease){
+    test_increase <- stats::lm(y_values ~ x_values)
+    if (stats::coef(test_increase)[2] > 0) {
+      y_values <- -y_values
+    }
+  }
+  
+  # Max values to create line
+  max_x_x <- max(x_values)
+  max_x_y <- y_values[which.max(x_values)]
+  max_y_y <- max(y_values)
+  max_y_x <- x_values[which.max(y_values)]
+  max_df <- data.frame(x = c(max_y_x, max_x_x),
+                       y = c(max_y_y, max_x_y))
+  
+  # Creating straight line between the max values
+  fit <- stats::lm(max_df$y ~ max_df$x)
+  
+  # Distance from point to line
+  distances <- c()
+  for (i in seq_along(x_values)){
+    distances <- c(
+      distances,
+      abs(stats::coef(fit)[2] * x_values[i] - y_values[i] +
+            stats::coef(fit)[1]) / sqrt(stats::coef(fit)[2]^2 + 1^2))
+  }
+  
+  # Max distance point
+  x_max_dist <- x_values[which.max(distances)]
+  y_max_dist <- y_values[which.max(distances)]
+  
+  if(correct_decrease){
+    if (stats::coef(test_increase)[2] > 0) {
+      y_max_dist <- -y_max_dist
+    }
+  }
+  
+  return(c(x_max_dist, y_max_dist))
+}
+################################################################################
 
 

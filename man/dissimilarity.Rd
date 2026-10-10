@@ -28,7 +28,7 @@ slower.}
 }
 \value{
 A \code{data.frame} with the additional class
-\code{bioregion.pairwise.metric}, containing one or several dissimilarity
+\code{bioregion.pairwise}, containing one or several dissimilarity
 metrics between pairs of sites. The first two columns represent the pairs of
 sites. There is one column per similarity metric provided in \code{metric} and
 \code{formula}, except for the \code{abc} and \code{ABC} metrics, which are stored in three
@@ -74,8 +74,8 @@ Euclidean computes the Euclidean distance between each pair of sites.
 \examples{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
-rownames(comat) <- paste0("Site", 1:5)
-colnames(comat) <- paste0("Species", 1:10)
+rownames(comat) <- paste0("s", 1:5)
+colnames(comat) <- paste0("sp", 1:10)
 
 dissim <- dissimilarity(comat,
 metric = c("abc", "ABC", "Simpson", "Brayturn"))

@@ -15,7 +15,8 @@
 #' @param minPts A `numeric` vector or a single `numeric` value specifying the 
 #' `minPts` argument of [dbscan::dbscan()]. `minPts` is the minimum number of 
 #' points to form a dense region. By default, it is set to the natural logarithm 
-#' of the number of sites in `dissimilarity`. See Details for guidance on 
+#' of the number of sites in `dissimilarity`, rounded down to a whole number.
+#' See Details for guidance on 
 #' choosing this parameter.
 #'
 #' @param eps A `numeric` vector or a single `numeric` value specifying the `eps` 
@@ -29,6 +30,9 @@
 #' @param algorithm_in_output A `boolean` indicating whether the original output 
 #' of [dbscan::dbscan] should be included in the output. Defaults to `TRUE` (see 
 #' Value).
+#' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
 #'
 #' @param ... Additional arguments to be passed to `dbscan()` (see 
 #' [dbscan::dbscan]).
@@ -99,10 +103,6 @@
 #' Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based 
 #' clustering with R. \emph{Journal of Statistical Software}, 91(1), 1--30.
 #'
-#' @importFrom stats as.dist
-#' @importFrom dbscan kNNdist dbscan
-#' @importFrom graphics abline text
-#'
 #' @export
 
 nhclu_dbscan <- function(dissimilarity,
@@ -111,6 +111,7 @@ nhclu_dbscan <- function(dissimilarity,
                          eps = NULL,
                          plot = TRUE,
                          algorithm_in_output = TRUE,
+                         verbose = TRUE,
                          ...){
   
   # 1. Controls ----------------------------------------------------------------
@@ -125,6 +126,13 @@ nhclu_dbscan <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -138,6 +146,7 @@ nhclu_dbscan <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }  
   
   if(!is.null(minPts)){
@@ -152,6 +161,7 @@ nhclu_dbscan <- function(dissimilarity,
   }
   controls(args = plot, data = NULL, type = "boolean")
   controls(args = algorithm_in_output, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
   
   # 2. Function ----------------------------------------------------------------
   # Output format
@@ -162,19 +172,24 @@ nhclu_dbscan <- function(dissimilarity,
                        eps = eps,
                        plot = plot,
                        algorithm_in_output = algorithm_in_output,
+                       verbose = verbose,
                        ...)
+  
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
   
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
-                         hierarchical = FALSE)
+                         hierarchical = FALSE,
+                         data_type = data_type,
+                         node_type = "site")
   
   outputs$algorithm <- list()
   
@@ -187,10 +202,10 @@ nhclu_dbscan <- function(dissimilarity,
   
   if(is.null(minPts)){
     # Using a default value of minPts if none provided by the user
-    minPts <- log(length(labels(dist.obj)))
+    minPts <- floor(log(length(labels(dist.obj))))
   }
   
-  if (is.null(eps)) {
+  if (is.null(eps) & verbose) {
     message(
       "Trying to find a knee in the curve to search for an optimal eps value...
        NOTE: this automatic identification of the knee may not work properly
@@ -214,7 +229,7 @@ nhclu_dbscan <- function(dissimilarity,
     
     # Trying to find the knee, and not the elbow
     if (is.null(eps)) {
-      knee <- .elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
+      knee <- elbow_finder(x_, max(knnp) - knnp, correct_decrease = TRUE)
       
       eps <- knee[2]
     }
@@ -253,6 +268,9 @@ nhclu_dbscan <- function(dissimilarity,
                       function(x) outputs$algorithm[[x]]$cluster)))
   outputs$clusters[,-1][outputs$clusters[,-1]==0]=NA
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
+  
+  # Add node_type attribute
+  attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

@@ -19,7 +19,8 @@ nhclu_affprop(
   prc = NULL,
   bimaxit = NULL,
   exact = NULL,
-  algorithm_in_output = TRUE
+  algorithm_in_output = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -59,7 +60,7 @@ is stored in the output object.}
 the similarity object, which prevents degenerate cases.}
 
 \item{K}{The desired number of clusters. If not \code{NULL}, the function
-\link[apcluster:apclusterK-methods]{apclusterK} is called.}
+\link[apcluster:apclusterK]{apclusterK} is called.}
 
 \item{prc}{A parameter needed when \code{K} is not \code{NULL}. The algorithm stops if
 the number of clusters deviates by less than \code{prc} percent from the desired
@@ -73,8 +74,11 @@ number of clusters remains outside the desired range.}
 range exactly.}
 
 \item{algorithm_in_output}{A \code{boolean} indicating whether to include the
-original output of \link[apcluster:apcluster-methods]{apcluster} in the result. Defaults
+original output of \link[apcluster:apcluster]{apcluster} in the result. Defaults
 to \code{TRUE}.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -89,7 +93,7 @@ procedure, such as original cluster objects
 \item{\strong{clusters}: A \code{data.frame} containing the clustering results.}}
 
 If \code{algorithm_in_output = TRUE}, the \code{algorithm} slot includes the output of
-\link[apcluster:apcluster-methods]{apcluster}.
+\link[apcluster:apcluster]{apcluster}.
 }
 \description{
 This function performs non-hierarchical clustering using the Affinity
@@ -98,7 +102,7 @@ Propagation algorithm.
 \details{
 This function is based on the
 \href{https://cran.r-project.org/package=apcluster}{apcluster}
-package (\link[apcluster:apcluster-methods]{apcluster}).
+package (\link[apcluster:apcluster]{apcluster}).
 }
 \examples{
 comat_1 <- matrix(sample(0:1000, size = 10*12, replace = TRUE,
@@ -133,7 +137,7 @@ clust2 <- nhclu_affprop(sim, q = 1)
 
 # Fixed number of clusters 
 clust3 <- nhclu_affprop(sim, K = 2, prc = 10, bimaxit = 20, exact = FALSE)
-
+        
 }
 \references{
 Frey B & Dueck D (2007) Clustering by Passing Messages Between Data Points.

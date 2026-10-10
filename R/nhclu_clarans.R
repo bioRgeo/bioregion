@@ -72,12 +72,8 @@
 #' dissim <- dissimilarity(comat, metric = "all")
 #'
 #' #clust <- nhclu_clarans(dissim, index = "Simpson", n_clust = 5)
-#'    
-#' @importFrom stats as.dist
-#' @importFrom fastkmedoids fastclarans    
 #'                    
 #' @export
-
 nhclu_clarans <- function(dissimilarity,
                           index = names(dissimilarity)[3],
                           seed = NULL,
@@ -98,6 +94,13 @@ nhclu_clarans <- function(dissimilarity,
     if(inherits(net, "tbl_df")){
       net <- as.data.frame(net)
     }
+    colnameindex <- index
+    if(is.numeric(colnameindex)){
+      colnameindex <- colnames(net)[index]
+      if(is.null(colnameindex)){
+        colnameindex <- NA
+      }
+    }
     net[, 3] <- net[, index]
     net <- net[, 1:3]
     controls(args = NULL, data = net, type = "input_net_index_value")
@@ -111,6 +114,7 @@ nhclu_clarans <- function(dissimilarity,
       attr(dist.obj, "Labels") <- paste0(1:attr(dist.obj, "Size"))
       message("No labels detected, they have been assigned automatically.")
     }
+    colnameindex <- NA
   }
   
   if(!is.null(seed)){
@@ -133,17 +137,21 @@ nhclu_clarans <- function(dissimilarity,
                        maxneighbor = maxneighbor,
                        algorithm_in_output = algorithm_in_output)
   
+  # Determine pairwise_metric and data_type
+  pairwise_metric <- ifelse(!inherits(dissimilarity, "dist"), 
+                            colnameindex, 
+                            NA)
+  data_type <- detect_data_type_from_metric(pairwise_metric)
+  
   outputs$inputs <- list(bipartite = FALSE,
                          weight = TRUE,
                          pairwise = TRUE,
-                         pairwise_metric = ifelse(!inherits(dissimilarity, 
-                                                            "dist"), 
-                                                  ifelse(is.numeric(index), 
-                                                         names(net)[3], index), 
-                                                  NA),
+                         pairwise_metric = pairwise_metric,
                          dissimilarity = TRUE,
                          nb_sites = attr(dist.obj, "Size"),
-                         hierarchical = FALSE)
+                         hierarchical = FALSE,
+                         data_type = data_type,
+                         node_type = "site")
   
   outputs$algorithm <- list()
   
@@ -154,28 +162,21 @@ nhclu_clarans <- function(dissimilarity,
   
   outputs$clusters$name <- labels(dist.obj)
   
-  # CLARANS algorithm
+  # CLARANS algorithm (with seed)
+  claraseed <- sample(1:10000, 1)
   if(!is.null(seed)){
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclarans(rdist = dist.obj,
-                                         n = nrow(dist.obj),
-                                         k = x,
-                                         numlocal = numlocal,
-                                         maxneighbor = maxneighbor,
-                                         seed = seed))
-  }else{
-    outputs$algorithm <-
-      lapply(n_clust,
-             function(x)
-               fastkmedoids::fastclarans(rdist = dist.obj,
-                                         n = nrow(dist.obj),
-                                         k = x,
-                                         numlocal = numlocal,
-                                         maxneighbor = maxneighbor,
-                                         seed = seedrng()))
-  }  
+    claraseed <- seed
+  }
+  outputs$algorithm <-
+    lapply(n_clust,
+           function(x)
+             fastkmedoids::fastclarans(rdist = dist.obj,
+                                       n = nrow(dist.obj),
+                                       k = x,
+                                       numlocal = numlocal,
+                                       maxneighbor = maxneighbor,
+                                       seed = claraseed))
+  
   names(outputs$algorithm) <- paste0("K_", n_clust)
   
   outputs$clusters <- data.frame(
@@ -184,6 +185,9 @@ nhclu_clarans <- function(dissimilarity,
                       function(x) outputs$algorithm[[x]]@assignment)))
   
   outputs$clusters <- knbclu(outputs$clusters, reorder = TRUE)
+  
+  # Add node_type attribute
+  attr(outputs$clusters, "node_type") <- rep("site", dim(outputs$clusters)[1])
   
   outputs$cluster_info <- data.frame(
     partition_name = names(outputs$clusters)[2:length(outputs$clusters),

@@ -70,7 +70,33 @@ test_that("valid output", {
   expect_equal(clust$inputs$dissimilarity, TRUE)
   expect_equal(clust$inputs$nb_sites, 338)
   expect_equal(clust$inputs$hierarchical, FALSE)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  expect_equal(clust$inputs$node_type, "site")
+  expect_equal(sum(attr(clust$clusters, "node_type")=="site"), 
+               dim(clust$clusters)[1])
   expect_equal(dim(clust$clusters)[2], 4)
+  
+  clust <- nhclu_kmeans(dissim,
+                        index = 7,
+                        seed = NULL,
+                        n_clust = c(1,2,3),
+                        iter_max = 10,
+                        nstart = 10,
+                        algorithm = "Hartigan-Wong",
+                        algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, "Bray")
+  
+  clust <- nhclu_kmeans(d,
+                        index = 7,
+                        seed = NULL,
+                        n_clust = c(1,2,3),
+                        iter_max = 10,
+                        nstart = 10,
+                        algorithm = "Hartigan-Wong",
+                        algorithm_in_output = TRUE)
+  expect_equal(clust$args$index, 7)
+  expect_equal(clust$inputs$pairwise_metric, NA)
   
   clust <- nhclu_kmeans(dissim,
                        index = "Euclidean",
@@ -109,6 +135,19 @@ test_that("valid output", {
   expect_equal(r2!=r3, TRUE)
   expect_equal(r1!=r3, TRUE)
   
+  # Test data_type with different dissimilarity metrics
+  clust <- nhclu_kmeans(dissim, index = "Simpson", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_kmeans(dissim, index = "Jaccard", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "occurrence")
+  
+  clust <- nhclu_kmeans(dissim, index = "Bray", n_clust = 3)
+  expect_equal(clust$inputs$data_type, "abundance")
+  
+  clust <- nhclu_kmeans(dissim, index = "Euclidean", n_clust = 3)
+  expect_equal(clust$inputs$data_type, NA)
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------
@@ -116,7 +155,7 @@ test_that("invalid inputs", {
   
   expect_error(
     nhclu_kmeans(dissimilarity = "zz"),
-    "^dissimilarity is not a bioregion.pairwise.metric object")
+    "^dissimilarity is not a bioregion.pairwise object")
   
   expect_error(
     nhclu_kmeans(dissim2),

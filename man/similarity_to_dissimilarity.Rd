@@ -15,7 +15,7 @@ formula(s) should also be converted (see Details). The default is \code{TRUE}.}
 }
 \value{
 A \code{data.frame} with additional class
-\code{bioregion.pairwise.metric}, providing dissimilarity
+\code{bioregion.pairwise}, providing dissimilarity
 metric(s) between each pair of sites based on a similarity object.
 }
 \description{
@@ -45,8 +45,8 @@ dissimilarity = 1 - similarity
 \examples{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
-rownames(comat) <- paste0("Site", 1:5)
-colnames(comat) <- paste0("Species", 1:10)
+rownames(comat) <- paste0("s", 1:5)
+colnames(comat) <- paste0("sp", 1:10)
 
 simil <- similarity(comat, metric = "all")
 simil

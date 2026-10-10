@@ -17,7 +17,7 @@ test_that("input_nhandhclu", {
     controls(args=NULL, 
              data=data, 
              type = "input_nhandhclu"),
-    "^data is not a bioregion.pairwise.metric object")
+    "^data is not a bioregion.pairwise object")
   
 })
 
@@ -36,7 +36,7 @@ test_that("input_similarity", {
     controls(args=NULL, 
              data=simil, 
              type = "input_similarity"),
-    "^simil is a bioregion.pairwise.metric object but")
+    "^simil is a bioregion.pairwise object but")
   attr(simil, "type") <- "dissimilarity"
   expect_error(
     controls(args=NULL, 
@@ -61,7 +61,7 @@ test_that("input_dissimilarity", {
     controls(args=NULL, 
              data=dissimil, 
              type = "input_dissimilarity"),
-    "^dissimil is a bioregion.pairwise.metric object but")
+    "^dissimil is a bioregion.pairwise object but")
   attr(dissimil, "type") <- "similarity"
   expect_error(
     controls(args=NULL, 
@@ -87,12 +87,12 @@ test_that("input_conversion_similarity", {
     controls(args=NULL, 
              data=test, 
              type = "input_conversion_similarity"),
-    "^test should be a bioregion.pairwise.metric object created by")
+    "^test should be a bioregion.pairwise object created by")
   expect_error(
     controls(args=NULL, 
              data=simil, 
              type = "input_conversion_similarity"),
-    "^simil is a bioregion.pairwise.metric object but")
+    "^simil is a bioregion.pairwise object but")
   attr(simil, "type") <- "dissimilarity"
   expect_error(
     controls(args=NULL, 
@@ -118,12 +118,12 @@ test_that("input_conversion_dissimilarity", {
     controls(args=NULL, 
              data=test, 
              type = "input_conversion_dissimilarity"),
-    "^test should be a bioregion.pairwise.metric object created by")
+    "^test should be a bioregion.pairwise object created by")
   expect_error(
     controls(args=NULL, 
              data=dissimil, 
              type = "input_conversion_dissimilarity"),
-    "^dissimil is a bioregion.pairwise.metric object but")
+    "^dissimil is a bioregion.pairwise object but")
   attr(dissimil, "type") <- "similarity"
   expect_error(
     controls(args=NULL, 
@@ -409,7 +409,7 @@ test_that("input_dist", {
              type = "input_dist"),
     "mat must be a dist object.")
   
-  mat <- as.dist(matrix(1, 10, 10))
+  mat <- stats::as.dist(matrix(1, 10, 10))
   mat[1] <- "1"
   expect_error(
     controls(args=NULL, 
@@ -417,7 +417,7 @@ test_that("input_dist", {
              type = "input_dist"),
     "mat must be numeric.")
   
-  mat <- as.dist(matrix(NA, 10, 10))
+  mat <- stats::as.dist(matrix(NA, 10, 10))
   expect_error(
     controls(args=NULL, 
              data=mat, 
@@ -817,6 +817,504 @@ test_that("strict_positive_integer", {
   )
   
 })
+
+# Tests for convert_metric_names -----------------------------------------------
+test_that("invalid outputs", {
+  
+  metrics <- convert_metric_names(NULL)
+  expect_equal(is.null(metrics), TRUE)
+  
+}) 
+
+# Tests for sbgc & gb ----------------------------------------------------------
+test_that("invalid outputs", {
+  
+  # Inputs
+  n_sites  <- sample(100:1000, 1)     
+  n_species <- sample(100:1000, 1) 
+  n_clusters <- sample(10, 1)
+  clusters_g <- sample(n_clusters, n_sites, replace = TRUE) 
+  clusters_s <- sample(n_clusters, n_species, replace = TRUE) 
+  comat <- matrix(runif(n_sites*n_species), n_sites, n_species)
+  rownames(comat) <- 1:n_sites
+  colnames(comat) <- 1:n_species
+  comat[comat < runif(1)] <- 0
+  sim <- matrix(runif(n_sites*n_sites), n_sites, n_sites)
+  diag(sim) <- 1
+  temp <- t(sim)
+  sim[lower.tri(sim)] <- temp[lower.tri(sim)]
+  rownames(sim) <- 1:n_sites
+  colnames(sim) <- 1:n_sites
+
+  # sb
+  sb <- sbgc(clusters_g, 
+             bioregion_metrics = c("specificity", "n_specificity", 
+                                   "fidelity", 
+                                   "ind_val", "n_ind_val", 
+                                   "rho", 
+                                   "core_terms"),
+             bioregionalization_metrics = c("p"),
+             comat,
+             type = "sb", 
+             data = "both")
+  s <- sample(n_species, 1)
+  b <- sample(n_clusters, 1)
+
+  comat_bin <- comat>0
+  tab <- cbind(clusters_g, as.numeric(comat_bin[,s]))
+  agtab11 <- stats::aggregate(tab[,2], list(tab[,1]), sum)
+  agtab12 <- stats::aggregate(tab[,2], list(tab[,1]), length)
+  
+  n_sb <- agtab11[agtab11[,1]==b, 2]
+  n_s <- sum(tab[,2])
+  n_b <- sum(clusters_g==b)
+  
+  specificity_occ <- n_sb / n_s
+  n_specificity_occ <- (n_sb / n_b) / sum(agtab11[,2]/agtab12[,2])
+  fidelity_occ <- n_sb / n_b
+  ind_val_occ <- specificity_occ * fidelity_occ
+  n_ind_val_occ <- n_specificity_occ * fidelity_occ
+  num <- n_sb - n_s*(n_b / n_sites)
+  den <- sqrt((n_b*(n_sites - n_b)/(n_sites - 1))*
+              (n_s / n_sites)*
+              (1 - (n_s / n_sites)))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_b among n_sites)
+    mub <- c(mub, sum(comat_bin[sample(n_sites, n_b), s]))
+  }
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_occ <- num / den
+  
+  tab <- cbind(clusters_g, as.numeric(comat[,s]))
+  agtab21 <- stats::aggregate(tab[,2], list(tab[,1]), sum)
+  agtab22 <- stats::aggregate(tab[,2], list(tab[,1]), length)
+  
+  w_sb <- agtab21[agtab21[,1]==b, 2]
+  w_s <- sum(tab[,2])
+  w_b <- sum(comat[clusters_g==b,])
+  
+  specificity_abund <- w_sb / w_s
+  n_specificity_abund <- (w_sb / n_b) / sum(agtab21[,2]/agtab12[,2])
+  fidelity_abund <- w_sb / w_b
+  ind_val_abund <- specificity_abund * fidelity_occ
+  n_ind_val_abund <- n_specificity_abund * fidelity_occ
+
+  num <- (w_sb / n_b) - mean(tab[,2])
+  den <- sqrt(((n_sites - n_b)/(n_sites - 1))*
+                (var(tab[,2]) / n_b))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_b among n_sites)
+    mub <- c(mub, mean(comat[sample(n_sites, n_b), s]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_abund <- num / den
+  
+  test <- c(s, b,
+            n_sb, n_s, n_b,
+            specificity_occ, 
+            n_specificity_occ,
+            fidelity_occ,
+            ind_val_occ,
+            n_ind_val_occ,
+            rho_occ,
+            w_sb, w_s, w_b,
+            specificity_abund, 
+            n_specificity_abund,
+            fidelity_abund,
+            ind_val_abund,
+            n_ind_val_abund,
+            rho_abund)
+  
+  check <- sb$bioregion1
+  check <- check[check[,1]==s & check[,2]==b,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  p_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
+  p_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
+  
+  test <- c(s, p_occ, p_abund)
+  
+  check <- sb$bioregion2
+  check <- check[check[,1]==s,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  # gc
+  gc <- sbgc(clusters_s, 
+             bioregion_metrics = c("specificity", "n_specificity", 
+                                   "fidelity", 
+                                   "ind_val", "n_ind_val", 
+                                   "rho", 
+                                   "core_terms"),
+             bioregionalization_metrics = c("p"),
+             comat,
+             type = "gc", 
+             data = "both")
+  g <- sample(n_sites, 1)
+  c <- sample(n_clusters, 1)
+  
+  comat_bin <- t(comat>0)
+  tab <- cbind(clusters_s, as.numeric(comat_bin[,g]))
+  agtab11 <- stats::aggregate(tab[,2], list(tab[,1]), sum)
+  agtab12 <- stats::aggregate(tab[,2], list(tab[,1]), length)
+  
+  n_gc <- agtab11[agtab11[,1]==c, 2]
+  n_g <- sum(tab[,2])
+  n_c <- sum(clusters_s==c)
+  
+  specificity_occ <- n_gc / n_g
+  n_specificity_occ <- (n_gc / n_c) / sum(agtab11[,2]/agtab12[,2])
+  fidelity_occ <- n_gc / n_c
+  ind_val_occ <- specificity_occ * fidelity_occ
+  n_ind_val_occ <- n_specificity_occ * fidelity_occ
+  num <- n_gc - n_g*(n_c / n_species)
+  den <- sqrt((n_c*(n_species - n_c)/(n_species - 1))*
+                (n_g / n_species)*
+                (1 - (n_g / n_species)))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_c among n_species)
+    mub <- c(mub, sum(comat_bin[sample(n_species, n_c), g]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_occ <- num / den
+  
+  comat <- t(comat)
+  tab <- cbind(clusters_s, as.numeric(comat[,g]))
+  agtab21 <- stats::aggregate(tab[,2], list(tab[,1]), sum)
+  agtab22 <- stats::aggregate(tab[,2], list(tab[,1]), length)
+  
+  w_gc <- agtab21[agtab21[,1]==c, 2]
+  w_g <- sum(tab[,2])
+  w_c <- sum(comat[clusters_s==c,])
+  
+  specificity_abund <- w_gc / w_g
+  n_specificity_abund <- (w_gc / n_c) / sum(agtab21[,2]/agtab12[,2])
+  fidelity_abund <- w_gc / w_c
+  ind_val_abund <- specificity_abund * fidelity_occ
+  n_ind_val_abund <- n_specificity_abund * fidelity_occ
+  
+  num <- (w_gc / n_c) - mean(tab[,2])
+  den <- sqrt(((n_species - n_c)/(n_species - 1))*
+                (var(tab[,2]) / n_c))
+  
+  mub <- NULL
+  for(k in 1:10000){ # Check that den is the sd of mean (random n_c among n_species)
+    mub <- c(mub, mean(comat[sample(n_species, n_c), g]))
+  } 
+  if(den > 0){
+    expect_equal(abs(den-sd(mub))/den < 0.05, TRUE)
+  }
+  
+  den[num==0] <- 1
+  rho_abund <- num / den
+  
+  test <- c(g, c,
+            n_gc, n_g, n_c,
+            specificity_occ, 
+            n_specificity_occ,
+            fidelity_occ,
+            ind_val_occ,
+            n_ind_val_occ,
+            rho_occ,
+            w_gc, w_g, w_c,
+            specificity_abund, 
+            n_specificity_abund,
+            fidelity_abund,
+            ind_val_abund,
+            n_ind_val_abund,
+            rho_abund)
+  
+  check <- gc$bioregion1
+  check <- check[check[,1]==g & check[,2]==c,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  p_occ <- 1 - sum((agtab11[,2]/sum(agtab11[,2]))*(agtab11[,2]/sum(agtab11[,2])))
+  p_abund <- 1 - sum((agtab21[,2]/sum(agtab21[,2]))*(agtab21[,2]/sum(agtab21[,2])))
+  
+  test <- c(g, p_occ, p_abund)
+  
+  check <- gc$bioregion2
+  check <- check[check[,1]==g,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  # gb
+  gb <- gb(as.character(clusters_g), 
+           bioregion_metrics = c("mean_sim", "sd_sim"),
+           bioregionalization_metrics = c("silhouette"),
+           comat = NULL,
+           sim,
+           include_cluster = FALSE)
+  
+  tab <- cbind(clusters_g[-g], as.numeric(sim[-g,g]))
+  agtab11 <- stats::aggregate(tab[,2], list(tab[,1]), mean)
+  agtab12 <- stats::aggregate(tab[,2], list(tab[,1]), stats::sd)
+  
+  test <- c(g, b,
+            agtab11[agtab11[,1]==b,2],
+            agtab12[agtab12[,1]==b,2])
+  
+  check <- gb$bioregion1
+  check <- check[check[,1]==g & check[,2]==b,]
+  
+  expect_equal(as.numeric(test), as.numeric(check))
+  
+  if(n_clusters == 1){
+    sil <- NA
+  }else{
+    sil <- (agtab11[agtab11[,1]==clusters_g[g],2] - max(agtab11[agtab11[,1]!=clusters_g[g],2])) /
+      max(agtab11[agtab11[,1]==clusters_g[g],2], max(agtab11[agtab11[,1]!=clusters_g[g],2]))
+    sil[is.infinite(sil)] <- NA  
+  }
+  
+  test <- c(g,sil)
+  
+  check <- gb$bioregion2
+  check <- check[check[,1]==g,]
+  
+  expect_equal(round(as.numeric(test),digits=2), 
+               round(as.numeric(check),digits=2))
+  
+
+})
+
+################################################################################
+
+# # Test detect_data_type_from_metric --------------------------------------------
+# test_that("detect_data_type_from_metric works with occurrence metrics", {
+#   
+#   # Standard occurrence metrics
+#   expect_equal(detect_data_type_from_metric("Jaccard"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("Simpson"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("Sorensen"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("Jaccardturn"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("abc"), "occurrence")
+#   
+# })
+# 
+# test_that("detect_data_type_from_metric works with abundance metrics", {
+#   
+#   # Standard abundance metrics
+#   expect_equal(detect_data_type_from_metric("Bray"), "abundance")
+#   expect_equal(detect_data_type_from_metric("ABC"), "abundance")
+#   expect_equal(detect_data_type_from_metric("Brayturn"), "abundance")
+#   
+# })
+# 
+# test_that("detect_data_type_from_metric works with betapart occurrence metrics", {
+#   
+#   # Betapart occurrence metrics (case-insensitive)
+#   expect_equal(detect_data_type_from_metric("beta.sim"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("BETA.SIM"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("Beta.Sim"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.sne"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.sor"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.jtu"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.jne"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.jac"), "occurrence")
+#   
+# })
+# 
+# test_that("detect_data_type_from_metric works with betapart abundance metrics", {
+#   
+#   # Betapart abundance metrics (case-insensitive)
+#   expect_equal(detect_data_type_from_metric("beta.bray.bal"), "abundance")
+#   expect_equal(detect_data_type_from_metric("BETA.BRAY.BAL"), "abundance")
+#   expect_equal(detect_data_type_from_metric("Beta.Bray.Bal"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.bray.gra"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.bray"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.ruz.bal"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.ruz.gra"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.ruz"), "abundance")
+#   
+# })
+# 
+# test_that("detect_data_type_from_metric works with unknown metrics", {
+#   
+#   # Euclidean is explicitly unknown
+#   expect_equal(detect_data_type_from_metric("Euclidean"), NA)
+#   
+#   # NA and NULL return unknown
+#   expect_equal(detect_data_type_from_metric(NA), NA)
+#   expect_equal(detect_data_type_from_metric(NULL), NA)
+#   
+#   # Custom or unknown metrics
+#   expect_equal(detect_data_type_from_metric("custom_metric"), NA)
+#   expect_equal(detect_data_type_from_metric("a/(a+b+c)"), NA)
+#   expect_equal(detect_data_type_from_metric(NA), NA)
+#   
+# })
+# 
+# 
+# # Test betapart integration ----------------------------------------------------
+# test_that("detect_data_type_from_metric works with betapart occurrence metrics (beta.pair)", {
+#   
+#   skip_if_not_installed_quiet("betapart")
+#   quietly(library(betapart))
+#   
+#   # Create a small binary matrix
+#   comat_bin <- matrix(sample(0:1, 50, replace = TRUE), 5, 10)
+#   rownames(comat_bin) <- paste0("Site", 1:5)
+#   colnames(comat_bin) <- paste0("Species", 1:10)
+#   
+#   # Test with betapart::beta.pair (occurrence-based)
+#   beta_result <- betapart::beta.pair(comat_bin, index.family = "jaccard")
+#   
+#   # Convert to bioregion format
+#   dissim_beta <- as_bioregion_pairwise(beta_result, pkg = "betapart")
+#   
+#   # Check that betapart metric names are correctly detected as occurrence
+#   expect_equal(detect_data_type_from_metric("beta.jac"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.jtu"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.jne"), "occurrence")
+#   
+#   # Test with Sorensen family
+#   beta_result_sor <- betapart::beta.pair(comat_bin, index.family = "sorensen")
+#   dissim_beta_sor <- as_bioregion_pairwise(beta_result_sor, pkg = "betapart")
+#   
+#   expect_equal(detect_data_type_from_metric("beta.sor"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.sim"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.sne"), "occurrence")
+#   
+# })
+# 
+# test_that("detect_data_type_from_metric works with betapart abundance metrics (beta.pair.abund)", {
+#   
+#   skip_if_not_installed_quiet("betapart")
+#   quietly(library(betapart))
+#   
+#   # Create a small abundance matrix
+#   comat <- matrix(sample(0:100, 50, replace = TRUE), 5, 10)
+#   rownames(comat) <- paste0("Site", 1:5)
+#   colnames(comat) <- paste0("Species", 1:10)
+#   
+#   # Test with betapart::beta.pair.abund (abundance-based)
+#   beta_result <- betapart::beta.pair.abund(comat, index.family = "bray")
+#   
+#   # Convert to bioregion format
+#   dissim_beta <- as_bioregion_pairwise(beta_result, pkg = "betapart")
+#   
+#   # Check that betapart abundance metric names are correctly detected
+#   expect_equal(detect_data_type_from_metric("beta.bray"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.bray.bal"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.bray.gra"), "abundance")
+#   
+#   # Test with Ruzicka family
+#   beta_result_ruz <- betapart::beta.pair.abund(comat, index.family = "ruzicka")
+#   dissim_beta_ruz <- as_bioregion_pairwise(beta_result_ruz, pkg = "betapart")
+#   
+#   expect_equal(detect_data_type_from_metric("beta.ruz"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.ruz.bal"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.ruz.gra"), "abundance")
+#   
+# })
+# 
+# test_that("betapart metrics are case-insensitive", {
+#   
+#   # Test case insensitivity for occurrence metrics
+#   expect_equal(detect_data_type_from_metric("BETA.JAC"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("Beta.Jac"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("beta.JAC"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("BETA.SOR"), "occurrence")
+#   expect_equal(detect_data_type_from_metric("Beta.Sim"), "occurrence")
+#   
+#   # Test case insensitivity for abundance metrics
+#   expect_equal(detect_data_type_from_metric("BETA.BRAY"), "abundance")
+#   expect_equal(detect_data_type_from_metric("Beta.Bray"), "abundance")
+#   expect_equal(detect_data_type_from_metric("beta.BRAY"), "abundance")
+#   expect_equal(detect_data_type_from_metric("BETA.RUZ.BAL"), "abundance")
+#   expect_equal(detect_data_type_from_metric("Beta.Ruz.Gra"), "abundance")
+#   
+# })
+# 
+# test_that("betapart integration with clustering functions preserves data_type", {
+#   
+#   skip_if_not_installed_quiet("betapart")
+#   quietly(library(betapart))
+#   
+#   # Create test matrices
+#   comat_bin <- matrix(sample(0:1, 100, replace = TRUE), 10, 10)
+#   rownames(comat_bin) <- paste0("Site", 1:10)
+#   colnames(comat_bin) <- paste0("Species", 1:10)
+#   
+#   comat_abund <- matrix(sample(0:50, 100, replace = TRUE), 10, 10)
+#   rownames(comat_abund) <- paste0("Site", 1:10)
+#   colnames(comat_abund) <- paste0("Species", 1:10)
+#   
+#   # Test occurrence-based betapart metrics
+#   beta_occ <- betapart::beta.pair(comat_bin, index.family = "jaccard")
+#   dissim_occ <- as_bioregion_pairwise(beta_occ, pkg = "betapart")
+#   
+#   # Run clustering with occurrence-based betapart metrics
+#   clust_occ <- nhclu_pam(dissim_occ, index = "beta.jac", n_clust = 3)
+#   expect_equal(clust_occ$inputs$data_type, "occurrence")
+#   expect_equal(clust_occ$inputs$pairwise_metric, "beta.jac")
+#   
+#   # Test abundance-based betapart metrics
+#   beta_abund <- betapart::beta.pair.abund(comat_abund, index.family = "bray")
+#   dissim_abund <- as_bioregion_pairwise(beta_abund, pkg = "betapart")
+#   
+#   # Run clustering with abundance-based betapart metrics
+#   clust_abund <- nhclu_pam(dissim_abund, index = "beta.bray", n_clust = 3)
+#   expect_equal(clust_abund$inputs$data_type, "abundance")
+#   expect_equal(clust_abund$inputs$pairwise_metric, "beta.bray")
+#   
+# })
+# 
+# test_that("betapart.core and betapart.core.abund work correctly", {
+#   
+#   skip_if_not_installed_quiet("betapart")
+#   quietly(library(betapart))
+#   
+#   # Create test matrices
+#   comat_bin <- matrix(sample(0:1, 100, replace = TRUE), 10, 10)
+#   rownames(comat_bin) <- paste0("Site", 1:10)
+#   colnames(comat_bin) <- paste0("Species", 1:10)
+#   
+#   comat_abund <- matrix(sample(0:50, 100, replace = TRUE), 10, 10)
+#   rownames(comat_abund) <- paste0("Site", 1:10)
+#   colnames(comat_abund) <- paste0("Species", 1:10)
+#   
+#   # Test betapart.core (occurrence) - converts to a, b, c format
+#   beta_core_occ <- betapart::betapart.core(comat_bin)
+#   dissim_core_occ <- as_bioregion_pairwise(beta_core_occ, pkg = "betapart")
+#   
+#   # Verify that a, b, c columns exist (converted from betapart occurrence format)
+#   expect_true("a" %in% colnames(dissim_core_occ))
+#   expect_true("b" %in% colnames(dissim_core_occ))
+#   expect_true("c" %in% colnames(dissim_core_occ))
+#   expect_true("min(b,c)" %in% colnames(dissim_core_occ))
+#   
+#   # Test betapart.core.abund (abundance) - converts to A and derived columns
+#   beta_core_abund <- betapart::betapart.core.abund(comat_abund)
+#   dissim_core_abund <- as_bioregion_pairwise(beta_core_abund, pkg = "betapart")
+#   
+#   # Verify that A and derived columns exist (converted from betapart abundance format)
+#   expect_true("A" %in% colnames(dissim_core_abund))
+#   expect_true("min(B,C)" %in% colnames(dissim_core_abund))
+#   expect_true("max(B,C)" %in% colnames(dissim_core_abund))
+#   expect_true("sum(B,C)" %in% colnames(dissim_core_abund))
+#   
+# })
+
+
 
 
 

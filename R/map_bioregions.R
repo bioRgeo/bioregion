@@ -1,30 +1,62 @@
 #' Create a map of bioregions
 #'
 #' This plot function can be used to visualize bioregions based on a 
-#' `bioregion.clusters` object combined with a geometry (`sf` objects). 
+#' `bioregion.clusters` object combined with a spatial object (`sf` or `terra`). 
 #'
-#' @param clusters An object of class `bioregion.clusters` or a `data.frame`. 
-#' If a `data.frame` is used, the first column should represent the sites' 
-#' ID, and the subsequent column(s) should represent the clusters.
+#' @param bioregionalization A `bioregion.clusters` object.
 #'  
-#' @param geometry A spatial object that can be handled by the `sf` package. 
-#' The first attribute should correspond to the sites' ID (see Details).
+#' @param map A spatial object that can be handled by `sf` or `terra`. 
+#' The first attribute or layer should correspond to the sites' ID 
+#' (see Details).
 #' 
-#' @param write_clusters A `boolean` indicating if the `clusters` should be 
-#' added to the `geometry`.
+#' @param partition_index An `integer`, `character`, or `NULL` specifying 
+#' which `bioregionalization`'s partition(s) to plot. By default (`NULL`), all 
+#' partitions are plotted. If an `integer` or vector of `integers` is provided, 
+#' partition(s) are selected by column number(s) in the `bioregionalization` 
+#' data.frame. If a `character` or vector of `characters`, partition(s) are 
+#' selected by name(s) matching column names in `bioregionalization`.
+#' 
+#' @param map_as_output A `boolean` indicating if the `sf` `data.frame` object 
+#' used for the plot should be returned.
 #' 
 #' @param plot A `boolean` indicating if the plot should be drawn.
 #' 
 #' @param ... Further arguments to be passed to `sf::plot()`.
 #' 
+#' @param clusters Deprecated. Use `bioregionalization` instead. The former
+#' `bioregionalization` has been replaced by `partition_index`.
+#' 
+#' @param geometry Deprecated. Use `map` instead.
+#' 
+#' @param write_clusters Deprecated. Use `map_as_output` instead.
+#' 
 #' @return One or several maps of bioregions if `plot = TRUE` and the 
-#' geometry with additional clusters' attributes if `write_clusters = TRUE`.
+#' `sf` `data.frame` object used for the plot if `map_as_output = TRUE`.
 #' 
 #' @details
-#' The `clusters` and `geometry` site IDs should correspond. They should 
-#' have the same type (i.e., `character` if `clusters` is a 
-#' `bioregion.clusters` object) and the sites of `clusters` should be 
-#' included in the sites of `geometry`.
+#' The site IDs in `bioregionalization` and `map` should correspond. They must 
+#' have the same type (i.e., `character` if `bioregionalization` is a 
+#' `bioregion.clusters` object), and the sites in `bioregionalization` should be 
+#' included among the sites in `map`. If `map` is an `sf` or a `SpatVector` 
+#' (`terra`) object, it should contain an attribute table with the IDs in the 
+#' first column. If `map` is a `SpatRaster` (`terra`) object, it should contain 
+#' the IDs in the first layer.
+#' 
+#' If the `bioregionalization` object contains both types of nodes (sites and 
+#' species), only site  will be mapped. The function automatically filters to 
+#' site nodes using the `node_type` attribute.
+#' 
+#' **Colors**: If the `bioregionalization` object contains colors (added via 
+#' `bioregion_colors()`), these colors will be automatically used for plotting. 
+#' Otherwise, the default `sf` color scheme will be applied.
+#' 
+#' @seealso 
+#' For more details illustrated with a practical example, 
+#' see the vignette: 
+#' \url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
+#' 
+#' Associated functions: 
+#' [bioregion_colors]
 #' 
 #' @author
 #' Maxime Lenormand (\email{maxime.lenormand@inrae.fr}) \cr
@@ -37,107 +69,249 @@
 #' 
 #' net <- similarity(fishmat, metric = "Simpson")
 #' clu <- netclu_greedy(net)
-#' map <- map_bioregions(clu, fishsf, write_clusters = TRUE, plot = FALSE)
+#' mapclu <- map_bioregions(clu, 
+#'                          map = fishsf, 
+#'                          map_as_output = TRUE, 
+#'                          plot = FALSE)
 #' 
-#' @importFrom sf st_geometry
-#' 
+#' # With colors
+#' clu_colored <- bioregion_colors(clu)
+#' mapclu <- map_bioregions(clu_colored, 
+#'                          map = fishsf, 
+#'                          map_as_output = TRUE, 
+#'                          plot = FALSE)
+#'            
 #' @export
-
-map_bioregions <- function(clusters, 
-                           geometry, 
-                           write_clusters = FALSE,
+map_bioregions <- function(bioregionalization,
+                           map,
+                           partition_index = NULL,
+                           map_as_output = FALSE,
                            plot = TRUE, 
+                           clusters = NULL, 
+                           geometry = NULL,
+                           write_clusters = NULL,
                            ...) {
+  
+  # Deprecated arguments
+  if (!is.null(clusters)) {
+     warning(paste0("clusters is deprecated. ", 
+                    "It has been replaced by bioregionalization.",
+                   " Old bioregionalization argument has been replaced by",
+                   " partition_index."), 
+            call. = FALSE)
+  }
+  if (!is.null(geometry)) {
+    stop("geometry is deprecated. It has been replaced by map.", 
+         call. = FALSE)
+  }
+  if (!is.null(write_clusters)) {
+    stop("write_clusters is deprecated. It has been replaced by map_as_output.", 
+         call. = FALSE)
+  }
+  
+  # Control write_clusters & plot
+  controls(args = map_as_output, data = NULL, type = "boolean")
+  controls(args = plot, data = NULL, type = "boolean")
+  if(!map_as_output & !plot){
+    stop(paste0("At least one argument among map_as_output and plot should ",
+                "be set to TRUE."),
+         call. = FALSE)
+  }
+  
+  # Control bioregionalization 
+  controls(args = NULL, 
+           data = bioregionalization, 
+           type ="input_bioregionalization")
+  
+  # Extract sites
+  if(bioregionalization$inputs$node_type == "species"){
+    stop(paste0("No bioregions are assigned to the sites in ",
+                "bioregionalization."),
+         call. = FALSE)
+  }else{
+    clusters <- as.data.frame(bioregionalization$clusters[attr(bioregionalization$clusters, 
+                                                               "node_type") == "site",])
+    attr(clusters, "node_type") <- NULL
+    b_site <- clusters[,1]
+    partition_names <- colnames(clusters)[-1]
+  }
 
-  controls(args = write_clusters, data = NULL, type = "boolean")
-  controls(args = plot, data = NULL, type = "boolean")
-  
-  # Control clusters 
-  if (inherits(clusters, "bioregion.clusters")) {
-    clu <- TRUE
-    df <- clusters$clusters
-  }else{  
-    # data.frame
-    if (!is.data.frame(clusters)) {
-      stop(
-        "If not a bioregion.clusters's object, clusters must be a data.frame.",
-        call. = FALSE)
-    }
-    # at least two columns
-    if (dim(clusters)[2] < 2) {
-      stop("clusters must be a data.frame with at least two columns.",
-           call. = FALSE)
-    }
-    # no duplictaed ID
-    if (sum(duplicated(clusters[,1])) > 0) {
-      message("Duplicated site ID detected!")
-    }
-    # no NAs
-    nbna <- sum(is.na(clusters))
-    if (nbna > 0) {
-      stop("NA(s) detected in the data.frame!", 
-           call. = FALSE)
-    }
-    clu <- FALSE
-    df <- clusters
+  # Check if colors are available
+  has_colors <- FALSE
+  color_list <- NULL
+  if (!is.null(bioregionalization$colors) && is.list(bioregionalization$colors)) {
+    has_colors <- TRUE
+    # Extract colors for each partition
+    # colors is a list with one data.frame per partition
+    color_list <- lapply(bioregionalization$colors, function(color_df) {
+      # Create a named vector: cluster ID -> color
+      stats::setNames(color_df$color, color_df$cluster)
+    })
+    names(color_list) <- names(bioregionalization$colors)
   }
   
-  # Control geometry
-  if(class(geometry)[1] != "sf"){
-    stop("It seems that the geometry used is not an sf object.",
+  # Control partition_index 
+  if (!is.null(partition_index)) {
+    
+    controls(args = partition_index, 
+             data = clusters, 
+             type = "input_partition_index")
+    
+    if(is.character(partition_index)){
+      clusters <- clusters[, c(1, match(partition_index, colnames(clusters)))]
+    }else{
+      clusters <- clusters[, c(1, partition_index)]
+    }
+    partition_names <- colnames(clusters)[-1]
+    
+    # Update color_list if colors are present
+    if (has_colors && !is.null(color_list)) {
+      # Filter color_list to keep only selected partitions
+      color_list <- color_list[names(color_list) %in% partition_names]
+    }
+    
+  }
+  
+  # Control map
+  controls(args = NULL, data = map, type = "input_map")
+  
+  # Convert SpatVector in sf data.frame 
+  if(inherits(map, "SpatVector")){
+    map <- sf::st_as_sf(map)
+    map[[1]] <- as.character(map[[1]])
+  }
+  
+  # Convert SpatRaster in sf data.frame
+  if(inherits(map, "SpatRaster")){
+    if (!requireNamespace("terra", quietly = TRUE)) {
+      stop(paste0("The 'terra' package is required to use this function.\n", 
+                  "Please install it with install.packages('terra')."),
+           .call = FALSE)
+    }
+    pols <- terra::as.polygons(map, dissolve=FALSE, na.rm=TRUE)
+    map <- sf::st_as_sf(pols)
+    map[[1]] <- as.character(map[[1]])
+  }
+  
+  # Clean map
+  map <- map[, c(1, which(colnames(map) == attr(map, "sf_column")))]
+  colnames(map)[1] <- "Site"
+  map_site <- map$Site
+  
+  # Check map_site & b_site 
+  missing_sites <- setdiff(b_site, map_site)
+  if(length(missing_sites) > 0){
+    stop(paste0("Some sites are not found in map:\n",
+                "  Missing sites: ", paste(utils::head(missing_sites, 10), collapse = ", "),
+                if(length(missing_sites) > 10) paste0(" ... (", length(missing_sites) - 10, " more)") else "",
+                "\n  Please ensure that all sites in 'bioregionalization' have corresponding entries in 'map'."),
          call. = FALSE)
   }
-  
-  # Control clusters in geometry
-  idc <- df[,1]
-  idg <- geometry[, 1, drop = TRUE]
-  if(length(setdiff(idc, idg)) > 0){
-    stop("The site of clusters should be included in the sites of geometry.",
-         call. = FALSE)
-  }
-  
-  # Control parameters
-  controls(args = write_clusters, data = NULL, type = "boolean")
-  controls(args = plot, data = NULL, type = "boolean")
   
   # Prepare geometry
-  sp <- geometry[match(idc, idg), ]
-  nbsp <- dim(sp)[2]
-  nbdf <- dim(df)[2]
-  sp <- cbind(sp, df[, -1])
-  colnames(sp)[nbsp:(nbsp+nbdf-2)] <- colnames(df)[-1]
+  map <- map[match(b_site, map_site), ]
+  map <- cbind(map, clusters[, -1])
+  colnames(map)[2:(dim(clusters)[2])] <- colnames(clusters)[-1]
+  
+  #print(map[1:10,])
+  #if(has_colors){
+  #  print(color_list)
+  #}
   
   # Plot
   if(plot){
-    
-    geomsp <- sf::st_geometry(sp)
-    plotsp <- sp[, -(1:(nbsp-1))]
-    nbplotsp <- dim(plotsp)[2]-1
-    
-    if(nbplotsp == 1){ 
-      plot(plotsp)
-    }else{ 
-      mod4q <- floor(nbplotsp/4)
-      mod4r <- nbplotsp-mod4q*4
 
-      if(mod4q == 0){
+    geomsp <- sf::st_geometry(map)
+    plotsp <- map[, -1]
+    nbplotsp <- dim(plotsp)[2]-1
+
+    # Single partition plot
+    if(nbplotsp == 1){
+      
+      partition_name <- partition_names[1]
+
+      if(has_colors) {
+        # Use colors from bioregion_colors
+        cluster_values <- plotsp[[partition_name]]
+        colors_map <- color_list[[partition_name]]
+
+        # sf::plot expects colors in order of sorted unique values
+        unique_vals <- sort(unique(cluster_values))
+        pal <- colors_map[as.character(unique_vals)]
+
+        plot(plotsp, pal = pal, ...)
+      } else {
+        # Use default coloring
         plot(plotsp, ...)
-      }else{
-        for(k in 1:mod4q){
-          grDevices::dev.new()
-          plot(plotsp[((k-1)*4+1):((k-1)*4+4)], ...)
+      }
+    }else{
+      # Multiple partitions
+      # Note: sf::plot() does not support different palettes for each attribute
+      # when plotting multiple attributes at once. We need to plot each partition
+      # individually to preserve custom colors.
+
+      if(has_colors) {
+        # Plot each partition individually to preserve custom colors
+        # Set up grid layout based on number of partitions
+        if(nbplotsp <= 4) {
+          # Single row layout for 2-4 partitions
+          ncols <- nbplotsp
+          nrows <- 1
+        } else {
+          # Multiple rows: 2 columns per row
+          ncols <- 2
+          nrows <- ceiling(nbplotsp / 2)
         }
-        if(mod4r>0){
-          grDevices::dev.new()
-          plot(plotsp[((mod4q)*4+1):((mod4q)*4+mod4r)], key.pos=NULL, ...)
+
+        # Set up the plotting layout
+        old_par <- graphics::par(mfrow = c(nrows, ncols))
+        on.exit(graphics::par(old_par), add = TRUE)
+
+        # Plot each partition with its colors
+        for(i in seq_len(nbplotsp)) {
+          partition_name <- partition_names[i]
+          
+          # Get colors for this partition
+          cluster_values <- plotsp[[partition_name]]
+          colors_map <- color_list[[partition_name]]
+          # sf::plot expects colors in order of sorted unique values
+          unique_vals <- sort(unique(cluster_values))
+          pal <- colors_map[as.character(unique_vals)]
+          
+          # Plot with custom colors
+          # Per sf documentation: when using par(mfrow), must set key.pos=NULL and reset=FALSE
+          plot(plotsp[i], pal = pal, key.pos = NULL, reset = FALSE, ...)
+
         }
-        
+      } else {
+        # No colors - use standard multi-panel layout
+        mod4q <- floor(nbplotsp/4)
+        mod4r <- nbplotsp - mod4q*4
+
+        if(mod4q == 0){
+          # Plot all partitions at once
+          plot(plotsp, ...)
+        }else{
+          # Multiple panels of 4
+          for(k in 1:mod4q){
+            grDevices::dev.new()
+            start_idx <- (k-1)*4+1
+            end_idx <- (k-1)*4+4
+            plot(plotsp[start_idx:end_idx], ...)
+          }
+          if(mod4r>0){
+            grDevices::dev.new()
+            start_idx <- (mod4q)*4+1
+            end_idx <- (mod4q)*4+mod4r
+            plot(plotsp[start_idx:end_idx], ...)
+          }
+        }
       }
     }
   }
   
-  # Write
-  if(write_clusters){
-    return(sp)
+  # Return map with added partition(s)
+  if(map_as_output){
+    return(map)
   }
 }

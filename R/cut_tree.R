@@ -42,6 +42,12 @@
 #' @param dissimilarity Relevant only if `dynamic_method = "hybrid"`. Provide 
 #' the dissimilarity `data.frame` used to build the `tree`.
 #' 
+#' @param show_hierarchy A `boolean` specifying if the hierarchy of clusters
+#' should be identifiable in the outputs (`FALSE` by default).
+#' 
+#' @param verbose A `boolean` indicating whether to 
+#' display progress messages. Set to `FALSE` to suppress these messages.
+#' 
 #' @param ... Additional arguments passed to
 #' [dynamicTreeCut::cutreeDynamic()][dynamicTreeCut::cutreeDynamic] to
 #' customize the dynamic tree cut method.
@@ -116,9 +122,6 @@
 #' cluster_dynamic <- cut_tree(tree1, dynamic_tree_cut = TRUE,
 #'                             dissimilarity = dissimilarity)
 #' 
-#' @importFrom stats as.dist cutree na.omit
-#' @importFrom dynamicTreeCut cutreeDynamic
-#' 
 #'@export
 cut_tree <- function(tree,
                      n_clust = NULL,
@@ -130,6 +133,8 @@ cut_tree <- function(tree,
                      dynamic_method = "tree",
                      dynamic_minClusterSize = 5,
                      dissimilarity = NULL,
+                     show_hierarchy = FALSE,
+                     verbose = TRUE,
                      ...){
   
   # Control n_clust
@@ -179,6 +184,10 @@ cut_tree <- function(tree,
     }
   }
   
+  # Control show_hierarchy and verbose
+  controls(args = show_hierarchy, data = NULL, type = "boolean")
+  controls(args = verbose, data = NULL, type = "boolean")
+  
   # Control dynamic_tree_cut, dynamic_method, dynamic_minClusterSize 
   # and dissimilarity
   controls(args = dynamic_tree_cut, data = NULL, type = "boolean")
@@ -201,7 +210,7 @@ cut_tree <- function(tree,
            call. = FALSE)
     }
     if(dynamic_method == "hybrid"){
-      if(inherits(dissimilarity, "bioregion.pairwise.metric"))
+      if(inherits(dissimilarity, "bioregion.pairwise"))
       {
         if(attr(dissimilarity, "type") == "similarity")
         {
@@ -220,17 +229,17 @@ cut_tree <- function(tree,
             weight = TRUE, squared = TRUE, symmetrical = TRUE))
         
         
-      } else if(!any(inherits(dissimilarity, "bioregion.pairwise.metric"),
+      } else if(!any(inherits(dissimilarity, "bioregion.pairwise"),
                      inherits(dissimilarity, "dist"))){
         if(!is.data.frame(dissimilarity)){
-          stop(paste0("dissimilarity is not a bioregion.pairwise.metric ",
+          stop(paste0("dissimilarity is not a bioregion.pairwise ",
                       "object, a dissimilarity matrix (class dist) or a ",
                       "data.frame with at least 3 columns (site1, site2, and ",
                       "your dissimilarity index)"), 
                call. = FALSE)
         }
         if(ncol(dissimilarity) != 3){
-          stop(paste0("dissimilarity is not a bioregion.pairwise.metric ",
+          stop(paste0("dissimilarity is not a bioregion.pairwise ",
                       "object, a dissimilarity matrix (class dist) or a ",
                       "data.frame with at least 3 columns (site1, site2, and ",
                       "your dissimilarity index)"), 
@@ -254,8 +263,9 @@ cut_tree <- function(tree,
       cur.tree <- tree$algorithm$final.tree
       # Update args
       tree$args[c("n_clust", "cut_height", "find_h", "h_max", "h_min",
-                  "dynamic_tree_cut")] <-
-        list(n_clust, cut_height, find_h, h_max, h_min, dynamic_tree_cut)
+                  "dynamic_tree_cut", "show_hierarchy")] <-
+        list(n_clust, cut_height, find_h, h_max, h_min, dynamic_tree_cut, 
+             show_hierarchy)
       
       if(dynamic_tree_cut){
         tree$args[c("dynamic_method",
@@ -305,7 +315,7 @@ cut_tree <- function(tree,
                         c("name", paste0("k_", n_clust)))))
       clusters$name <- cur.tree$labels
       for(cur_n in n_clust){
-        if(length(n_clust) < 10){
+        if(length(n_clust) < 10 & verbose){
           message("Determining the cut height to reach ", cur_n, " groups...")
         }
         k <- 0
@@ -327,7 +337,7 @@ cut_tree <- function(tree,
           }
           iter <- iter + 1
         }
-        if(length(n_clust) < 10){
+        if(length(n_clust) < 10 & verbose){
           message(paste0("--> ", h))
         }
         if(k != cur_n) {
@@ -381,11 +391,17 @@ cut_tree <- function(tree,
     output_cut_height <- cut_height
   }
   
+  # Note: show_hierarchy is stored in args but doesn't change behavior 
+  # significantly for hierarchical clustering since cutree returns integers.
+  # The hierarchy is already preserved through multiple partition columns.
   clusters <- knbclu(clusters, reorder = TRUE)
   
   if(inherits(tree, "bioregion.clusters")) {
     cur.tree$args$cut_height <- cut_height
     tree$clusters <- clusters
+    # Set node_type attribute based on inputs
+    attr(tree$clusters, "node_type") <- rep(
+      tree$inputs$node_type, nrow(tree$clusters))
     tree$algorithm$output_n_clust <- output_n_clust
     tree$algorithm$output_cut_height <- output_cut_height
     
@@ -402,6 +418,11 @@ cut_tree <- function(tree,
     } else if(!is.null(cut_height)) {
       tree$cluster_info$requested_cut_height <- cut_height
     }
+    
+    # Update hierarchical status based on number of partitions
+    tree$inputs$hierarchical <- ifelse(ncol(tree$clusters) > 2,
+                                       TRUE,
+                                       FALSE)
     
     return(tree)
   } else if (inherits(tree, "hclust")){

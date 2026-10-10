@@ -86,7 +86,7 @@ colnames(comat) <- paste0("Species",1:25)
 dissim <- dissimilarity(comat, metric = "all")
 
 #clust <- nhclu_clara(dissim, index = "Simpson", n_clust = 5)
-   
+                   
 }
 \references{
 Schubert E & Rousseeuw PJ (2019) Faster k-Medoids Clustering: Improving the

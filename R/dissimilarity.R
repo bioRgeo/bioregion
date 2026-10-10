@@ -25,7 +25,7 @@
 #' 
 #' @return 
 #' A `data.frame` with the additional class 
-#' `bioregion.pairwise.metric`, containing one or several dissimilarity
+#' `bioregion.pairwise`, containing one or several dissimilarity
 #' metrics between pairs of sites. The first two columns represent the pairs of 
 #' sites. There is one column per similarity metric provided in `metric` and
 #' `formula`, except for the `abc` and `ABC` metrics, which are stored in three 
@@ -79,8 +79,8 @@
 #' @examples
 #' comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 #' prob = 1 / 1:1001), 5, 10)
-#' rownames(comat) <- paste0("Site", 1:5)
-#' colnames(comat) <- paste0("Species", 1:10)
+#' rownames(comat) <- paste0("s", 1:5)
+#' colnames(comat) <- paste0("sp", 1:10)
 #'
 #' dissim <- dissimilarity(comat,
 #' metric = c("abc", "ABC", "Simpson", "Brayturn"))

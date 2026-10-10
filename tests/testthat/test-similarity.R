@@ -28,12 +28,13 @@ comat3[1,1] <- NA
 comat4 <- comat
 comat4[1,1] <- -1
 
-
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
-  
-  simil <- similarity(comat0, metric = c("abc", "ABC", "Euclidean"))
-  expect_equal(inherits(simil, "bioregion.pairwise.metric"), TRUE)
+
+  quietly(
+    simil <- similarity(comat0, metric = c("abc", "ABC", "Euclidean"))
+  )
+  expect_equal(inherits(simil, "bioregion.pairwise"), TRUE)
   expect_equal(dim(simil)[1], 10)
   expect_equal(dim(simil)[2], 9)
   expect_equal(simil$Site1, c(rep("1",4), rep("2",3), rep("3",2),"4"))

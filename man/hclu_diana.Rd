@@ -11,7 +11,8 @@ hclu_diana(
   cut_height = NULL,
   find_h = TRUE,
   h_max = 1,
-  h_min = 0
+  h_min = 0,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ for the chosen \code{index}.}
 
 \item{h_min}{A \code{numeric} value indicating the minimum possible height in the
 tree for the chosen \code{index}.}
+
+\item{verbose}{A \code{boolean} indicating whether to
+display progress messages. Set to \code{FALSE} to suppress these messages.}
 }
 \value{
 A \code{list} of class \code{bioregion.clusters} with five slots:
@@ -58,7 +62,7 @@ correlation coefficient, and can generate clusters from the tree if requested
 by the user. The function implements randomization of the dissimilarity matrix
 to generate the tree, with a selection method based on the optimal cophenetic
 correlation coefficient. Typically, the dissimilarity \code{data.frame} is a
-\code{bioregion.pairwise.metric} object obtained by running \code{similarity}
+\code{bioregion.pairwise} object obtained by running \code{similarity}
 or \code{similarity} followed by \code{similarity_to_dissimilarity}.
 }
 \details{
@@ -79,7 +83,6 @@ dissim <- dissimilarity(comat, metric = "all")
 data("fishmat")
 fishdissim <- dissimilarity(fishmat)
 fish_diana <- hclu_diana(fishdissim, index = "Simpson")
-
 
 }
 \references{

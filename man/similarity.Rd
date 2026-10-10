@@ -27,7 +27,7 @@ slower.}
 }
 \value{
 A \code{data.frame} with the additional class
-\code{bioregion.pairwise.metric}, containing one or several similarity
+\code{bioregion.pairwise}, containing one or several similarity
 metrics between pairs of sites. The first two columns represent the pairs of
 sites. There is one column per similarity metric provided in \code{metric} and
 \code{formula}, except for the \code{abc} and \code{ABC} metrics, which are stored in three
@@ -69,7 +69,7 @@ will compute the Simpson and Bray-Curtis similarity metrics, respectively.
 Note that \code{pmin} is used in the Simpson formula because \code{a}, \code{b}, \code{c}, \code{A},
 \code{B} and \code{C} are \code{numeric} vectors.
 
-Euclidean computes the Euclidean similarity between each pair of site
+Euclidean computes the Euclidean similarity between each pair of sites
 following this equation:
 
 Euclidean = 1 / (1 + d_ij)
@@ -80,8 +80,8 @@ site j in terms of species composition.
 \examples{
 comat <- matrix(sample(0:1000, size = 50, replace = TRUE,
 prob = 1 / 1:1001), 5, 10)
-rownames(comat) <- paste0("Site", 1:5)
-colnames(comat) <- paste0("Species", 1:10)
+rownames(comat) <- paste0("s", 1:5)
+colnames(comat) <- paste0("sp", 1:10)
 
 sim <- similarity(comat, metric = c("abc", "ABC", "Simpson", "Brayturn"))
 

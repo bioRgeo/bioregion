@@ -1,9 +1,117 @@
-# bioregion 1.2.0.9000
+# bioregion 1.4.0.9000
 
 This is a list of changes made in the development/GitHub version of the package 
-between bioregion 1.2.0 (CRAN release 2025-01-31) and the next CRAN release.
+between **bioregion 1.4.0** (CRAN release 2026-03-29) and the next CRAN release.
 
-* 
+* The iterative hierarchical consensus tree is now available on its own with
+the new function `ihct()`. In `hclu_hierarclust()`, the default of
+`optimal_tree_method` is now called `"ihct`"" which now runs 5 to 7 times faster. 
+The former name `"iterative_consensus_tree"` is still accepted and gives the 
+same result (PR #38).
+
+* Integrated fixes for the upcoming release of dbscan 1.2.7 (PR #37).
+
+* Minor fix to the map_bioregions() documentation (#35).
+
+* Improved get_pairwise_membership efficiency (PR #32).
+
+* Metric names have been changed to snake_case in `site_species_metrics()`, 
+`bioregion_metrics()` and `bioregionalization_metrics()`. The package is
+being progressively standardized on snake_case metric names. Old metric
+names are still accepted as inputs but are converted to snake_case in
+outputs.
+
+* `find_optimal_n()` has been updated. `bioregionalizations`argument changed to 
+`evaluation_df`. 
+
+* `bioregionalization_metrics()` has been updated. The `anosim` metric (along 
+with the associated p-value) is now computed with `vegan`. The `eval_metric` 
+argument changed to `eval_metrics` and `net` to `comat`. `col_sites`, and  
+`col_species` arguments are now deprecated.
+
+* Relaxed matching controls in `site_species_metrics()` and 
+`bioregion_metrics()`.
+
+# bioregion 1.4.0
+
+This is a list of changes made between **bioregion 1.3.0** 
+(CRAN release 2026-01-23) and **bioregion 1.4.0** (CRAN release 2026-03-29).
+
+* `bioregion_metrics()` has been updated. It now supports multiple bioregion  
+partitions and spatial coherence can be computed using either the size or  
+the area of the largest contiguous component. The `col_bioregion` argument  
+is now deprecated.
+
+* `map_bioregion()` has been reformatted: `bioregionalization`
+argument changed to `partition_index`, `clusters` to `bioregionalization`,
+`geometry` to `map` and `write_clusters` to `map_as_output`.
+
+* `map_bioregion()` can now handle `terra` inputs (`terra` added in `Suggests`).
+
+* `clusters` argument changed to `bioregionalization` in `site_species_subset()`. 
+
+* Added `seed` argument to `hclu_hierarclust()` (issue #10).
+
+* Fixed invalid input, control and output in `nhclu_affprop()` (issue #14).
+
+# bioregion 1.3.0
+
+This is a list of changes made between **bioregion 1.2.0** 
+(CRAN release 2025-01-31) and **bioregion 1.3.0** (CRAN release 2026-01-23).
+
+***Function changes***
+
+* Added the `inputs$data_type` field to all clustering outputs to explicitly
+  track whether original co-occurrence data were occurrence-based or
+  abundance-based. This field is automatically determined based on the algorithm
+  type and the similarity/dissimilarity metric used.
+  
+* Added the `inputs$node_type` field to all clustering outputs to explicitly
+ indicate whether the clustering includes only sites or both sites and species.
+ This changes include the hidden `node_type` attributes.
+
+* `site_species_metrics()` has been thoroughly reformatted and now provides: 
+  species-per-bioregions metrics, species-in-bioregionalization metrics, 
+  site-per-chorotypes metrics, site-in-chorological classification metrics, 
+  site-per-bioregions metrics, and site-in-bioregionalization metrics, all of 
+  which are rigorously defined in the corresponding vignette.
+
+* `site_species_subset()` has been simplified taking advantage on 
+  `inputs$node_type`.
+
+* Renamed the class `bioregion.pairwise.metric` to `bioregion.pairwise`.
+
+* Added a `verbose` argument to all talkative functions allowing users to
+  control the display of progress messages.
+
+***New features***
+
+* Added export of the function `exportGDF()` with documentation and tests.
+
+* Added `bioregion_colors()` to provide consistent bioregion color palettes for
+  use across multiple visualizations (maps, networks, graphs, etc.).
+
+* Updated `map_bioregions()` to handle bioregion colors.
+
+* Added a generic function `summary()` for a clearer display of results.
+
+* Added `bind_pairwise()` to combine pairwise (dis)similarity objects.
+
+* Added `as_bioregion_pairwise()` to replace and improve upon
+  `betapart_to_bioregion()`, which is now deprecated.
+
+* Added a comparison with other R packages for computing dissimilarity metrics
+  in tutorial 3 (*Pairwise similarity/dissimilarity metrics*).
+
+***Bug fixes***
+
+* Fixed an tibble input problem with `net_to_mat()` (issue #11).
+
+* Fixed a problem in `inputs$pairwise_metric` when numeric `index` in all 
+clustering outputs.
+
+* Modified the `keep_trials` argument in `hclu_hierarclust()` and fixed a
+  potential issue with randomized matrix storage.
 
 # bioregion 1.2.0
 
@@ -84,14 +192,14 @@ matrices using `include_diag` and `include_lower`.
 * Added a function to extract a subset of nodes (sites or species) from 
 `bioregion.clusters` objects containing both types.
 
-* Added a generic function to maintain attributes of `bioregion.pairwise.metric`
+* Added a generic function to maintain attributes of `bioregion.pairwise`
 objects and track the number of sites and species.
 
 * Added new functions: `nhclu_clara()` and `nhclu_clarans()`.
 
 * Edited vignettes to document new functions.
 
-* Modified controls for `bioregion.pairwise.metric` objects.
+* Modified controls for `bioregion.pairwise` objects.
 
 * Added the `include_formula` argument to 
 `similarity_dissimilarity_conversion()` to (not) select formula metrics.

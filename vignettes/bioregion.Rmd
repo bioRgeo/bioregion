@@ -52,13 +52,20 @@ composition
 
 <br>
 <center>
-  <img align="bottom" width="100%" height="100%" src="../man/figures/workflow.png">
+  <img align="bottom" 
+  width="100%" height="100%" 
+  src="../man/figures/workflow.png"
+  alt="Workflow of the bioregion package.">
 </center> 
 <br>
 <center>
   <b>Figure 1: Workflow of the bioregion's package.</b>
 </center> 
 <br>
+
+Please see this 
+[tutorial page](https://bioRgeo.github.io/bioregion/articles/a0_terminology.html) 
+for notes on the terminology used in the package.
 
 ## 1. Install binary files
 
@@ -69,12 +76,12 @@ files to run.
 * [netclu_louvain](https://bioRgeo.github.io/bioregion/reference/netclu_louvain.html) (Cpp version)
 * [netclu_oslom](https://bioRgeo.github.io/bioregion/reference/netclu_oslom.html)
 
-Please check this 
+Please see this 
 [tutorial page](https://bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html) 
 to get instructions regarding the installation of the binary files.
 
 
-## 2. Matrix or Network formats
+## 2. Matrix or network formats
 
 The `bioregion`'s package takes as input site-species information stored in a 
 bipartite network or a co-occurrence matrix. Relying on the function
@@ -82,7 +89,7 @@ bipartite network or a co-occurrence matrix. Relying on the function
 and [net_to_mat](https://bioRgeo.github.io/bioregion/reference/net_to_mat.html)
 , it handles both the matrix and network formats throughout the workflow. 
 
-Please have a look at this
+Please see this
 [tutorial page](https://bioRgeo.github.io/bioregion/articles/a2_matrix_and_network_formats.html) 
 to better understand how these two functions work.
 
@@ -92,14 +99,22 @@ The functions [similarity](https://bioRgeo.github.io/bioregion/reference/similar
 and [dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity.html)
 compute respectively pairwise similarity and dissimilarity metrics based on a 
 (site-species) co-occurrence matrix. The resulting `data.frame` is stored in a 
-`bioregion.pairwise.metric` object containing all requested metrics between each 
+`bioregion.pairwise` object containing all requested metrics between each 
 pair of sites.
 
-The functions [dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and [similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html)
+The functions 
+[dissimilarity_to_similarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html) and 
+[similarity_to_dissimilarity](https://bioRgeo.github.io/bioregion/reference/dissimilarity_to_similarity.html)
 can be used to transform a similarity object into a dissimilarity object 
 and vice versa.
 
-Please have a look at this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html) 
+The function 
+[as_bioregion_pairwise](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.html)
+allows to convert a (dis)similarity `matrix` or a `list` of such matrices into a 
+`bioregion.pairwise` object compatible with the `bioregion` package. 
+The input can come from base R, `dist` objects, or outputs from other packages. 
+
+Please see this [tutorial page](https://bioRgeo.github.io/bioregion/articles/a3_pairwise_metrics.html) 
 to better understand how these functions work.
  
 ## 4. Bioregionalization algorithms
@@ -124,7 +139,7 @@ With these algorithms, the bioregions are placed into a dendrogram that ranges
 from two extremes: all sites belong to the same bioregion (top of the tree) or
 all sites belong to a different bioregion (bottom of the tree).  
 
-See the following 
+Please see this 
 [tutorial page](https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html) 
 for more details.
 
@@ -135,7 +150,7 @@ The functions relying on hierarchical clustering start with the prefix
 of clusters, although this number can be determined by estimating the optimal
 bioregionalization.
 
-See this
+Please see this 
 [tutorial page](https://biorgeo.github.io/bioregion/articles/a4_2_non_hierarchical_clustering.html)
 for more details.
 
@@ -169,17 +184,17 @@ visualized with the function `map_bioregions()`.
 This [tutorial page](https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html)
 details different ways to plot your bioregionalization.
 
-## 5.2 Compare bioregionalizations
-
-In this section, we look at how sites are assigned to bioregions within a
-single bioregionalization and also compare this assignment across different
-bioregionalizations. The following
-[page](https://biorgeo.github.io/bioregion/articles/a5_2_compare_bioregionalizations.html)
-illustrates this.
-
-## 5.3 Summary metrics
+## 5.2 Summary metrics
 
 In this section, we compute summary statistics at different scales, either
 at the bioregion or at the site or species level. Related functions are
 detailed in this
-[page](https://biorgeo.github.io/bioregion/articles/a5_3_summary_metrics.html).
+[page](https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html).
+
+## 5.3 Compare bioregionalizations
+
+In this section, we look at how sites are assigned to bioregions within a
+single bioregionalization and also compare this assignment across different
+bioregionalizations. The following
+[page](https://biorgeo.github.io/bioregion/articles/a5_3_compare_bioregionalizations.html)
+illustrates this.

@@ -21,9 +21,79 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ihct_node_sizes
+List ihct_node_sizes(IntegerMatrix merge);
+RcppExport SEXP _bioregion_ihct_node_sizes(SEXP mergeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type merge(mergeSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_node_sizes(merge));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ihct_shuffled_dist
+NumericVector ihct_shuffled_dist(NumericMatrix dist_mat, IntegerVector sites);
+RcppExport SEXP _bioregion_ihct_shuffled_dist(SEXP dist_matSEXP, SEXP sitesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type dist_mat(dist_matSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type sites(sitesSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_shuffled_dist(dist_mat, sites));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ihct_cophenetic_correlation
+double ihct_cophenetic_correlation(IntegerMatrix merge, NumericVector height, NumericMatrix d, Nullable<IntegerVector> leaf_site);
+RcppExport SEXP _bioregion_ihct_cophenetic_correlation(SEXP mergeSEXP, SEXP heightSEXP, SEXP dSEXP, SEXP leaf_siteSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type merge(mergeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type height(heightSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< Nullable<IntegerVector> >::type leaf_site(leaf_siteSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_cophenetic_correlation(merge, height, d, leaf_site));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ihct_prune_tree
+List ihct_prune_tree(IntegerMatrix merge, NumericVector height, NumericVector pairs, IntegerVector leaf_site, LogicalVector keep, NumericMatrix d);
+RcppExport SEXP _bioregion_ihct_prune_tree(SEXP mergeSEXP, SEXP heightSEXP, SEXP pairsSEXP, SEXP leaf_siteSEXP, SEXP keepSEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type merge(mergeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type height(heightSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pairs(pairsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type leaf_site(leaf_siteSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type keep(keepSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_prune_tree(merge, height, pairs, leaf_site, keep, d));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ihct_top_division
+List ihct_top_division(IntegerMatrix merge, IntegerVector leaf_site);
+RcppExport SEXP _bioregion_ihct_top_division(SEXP mergeSEXP, SEXP leaf_siteSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type merge(mergeSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type leaf_site(leaf_siteSEXP);
+    rcpp_result_gen = Rcpp::wrap(ihct_top_division(merge, leaf_site));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_bioregion_abc", (DL_FUNC) &_bioregion_abc, 1},
+    {"_bioregion_ihct_node_sizes", (DL_FUNC) &_bioregion_ihct_node_sizes, 1},
+    {"_bioregion_ihct_shuffled_dist", (DL_FUNC) &_bioregion_ihct_shuffled_dist, 2},
+    {"_bioregion_ihct_cophenetic_correlation", (DL_FUNC) &_bioregion_ihct_cophenetic_correlation, 4},
+    {"_bioregion_ihct_prune_tree", (DL_FUNC) &_bioregion_ihct_prune_tree, 6},
+    {"_bioregion_ihct_top_division", (DL_FUNC) &_bioregion_ihct_top_division, 2},
     {NULL, NULL, 0}
 };
 

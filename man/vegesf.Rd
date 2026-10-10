@@ -3,11 +3,11 @@
 \docType{data}
 \name{vegesf}
 \alias{vegesf}
-\title{Spatial distribution of Mediterranean vegetation (spatial grid)}
+\title{Spatial distribution of Mediterranean vegetation (sf data.frame)}
 \format{
-A
+A \code{sf} \code{data.frame} with 715 rows and 2 columns:
 \describe{
-\item{ID}{Unique site identifier}
+\item{Site}{Unique site identifier}
 \item{geometry}{Geometry of the site}
 }
 }
