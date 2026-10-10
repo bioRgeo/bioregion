@@ -497,7 +497,7 @@ This creates a GDF file with nodes (sites and species) and edges
 In gephi, this network can be visualised as follows, after applying a
 layout algorithm:
 
-![Network fish basic](../reference/figures/05_network_fish_basic.png)
+![Network fish basic](figures/05_network_fish_basic.png)
 
 ### 3.2 Unipartite network with edge weights
 
@@ -528,7 +528,7 @@ exportGDF(fish_sim,
 ```
 
 ![Network fish unipartite
-weighted](../reference/figures/05_network_fish_unipartite_weighted.png)
+weighted](figures/05_network_fish_unipartite_weighted.png)
 
 This creates a unipartite network where nodes are sites and edges
 represent the Jaccard similarity index. The edge weight indicates how
@@ -580,10 +580,10 @@ exportGDF(fishdf,
 ```
 
 ![Network fish bipartite
-infomap](../reference/figures/05_map_fish_bipartite_infomap.png)
+infomap](figures/05_map_fish_bipartite_infomap.png)
 
 ![Network fish bipartite
-colored](../reference/figures/05_network_fish_bipartite_colored.png)
+colored](figures/05_network_fish_bipartite_colored.png)
 
 ### 3.4 Visualizing in Gephi
 

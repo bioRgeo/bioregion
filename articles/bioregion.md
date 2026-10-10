@@ -18,7 +18,7 @@ steps:
 
   
 
-![Workflow of the bioregion package.](../reference/figures/workflow.png)
+![Workflow of the bioregion package.](reference/figures/workflow.png)
 
   
 

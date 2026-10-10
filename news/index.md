@@ -1,16 +1,22 @@
 # Changelog
 
-## bioregion 1.4.0.9000
+## bioregion 1.5.0
 
 This is a list of changes made in the development/GitHub version of the
-package between **bioregion 1.4.0** (CRAN release 2026-03-29) and the
+package between **bioregion 1.5.0** (CRAN release 2026-10-10) and the
 next CRAN release.
 
-- The tree evaluation function is now implemented in C++ to be faster
-  across all methods in hclu_hierarclust().
+- 
 
-- Fixed a bug in hclu_hierarclust() where consensus_p was not passed to
-  the consensus function
+## bioregion 1.4.0
+
+This is a list of changes made in the development/GitHub version of the
+package between **bioregion 1.4.0** (CRAN release 2026-03-29) and
+**bioregion 1.5.0** (CRAN release 2026-10-10).
+
+- The tree evaluation function is now implemented in C++ to be faster
+  across all methods in
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
 
 - The iterative hierarchical consensus tree is now available on its own
   with the new function
@@ -53,8 +59,7 @@ next CRAN release.
   [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
   and
   [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md).
-
-## bioregion 1.4.0
+  \# bioregion 1.4.0
 
 This is a list of changes made between **bioregion 1.3.0** (CRAN release
 2026-01-23) and **bioregion 1.4.0** (CRAN release 2026-03-29).

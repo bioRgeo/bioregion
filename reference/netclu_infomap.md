@@ -201,8 +201,8 @@ for more details.
 Infomap has been designed to deal with bipartite networks. To use this
 functionality, set the `bipartite_version` argument to TRUE in order to
 approximate a two-step random walker (see
-<https://www.mapequation.org/infomap/> for more information). Note that
-a bipartite network can also be considered as a unipartite network
+<https://mapequation.org/infomap/> for more information). Note that a
+bipartite network can also be considered as a unipartite network
 (`bipartite = TRUE`).
 
 In both cases, do not forget to indicate which of the first two columns
@@ -245,5 +245,5 @@ colnames(comat) <- paste0("Species", 1:10)
 net <- similarity(comat, metric = "Simpson")
 com <- netclu_infomap(net)
 #> Infomap 2.8.0 is not installed... Please have a look at https//bioRgeo.github.io/bioregion/articles/a1_install_binary_files.html for more details.
-#> It should be located in /tmp/RtmpZKqei4/bin/INFOMAP/2.8.0/
+#> It should be located in /tmp/RtmpskJkTI/bin/INFOMAP/2.8.0/
 ```

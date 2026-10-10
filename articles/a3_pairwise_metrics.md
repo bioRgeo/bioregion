@@ -444,23 +444,23 @@ we proceed with a comparison of their computation times.
 comp_j
 ```
 
-    ## Unit: milliseconds
+    ## Unit: microseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 292.319962 294.466120 298.568956 298.265661 302.273448
-    ##        betapart   1.755598   1.868849   1.930860   1.880196   1.936797
-    ##       bioregion   9.978823  11.147225  15.822040  15.374073  16.891581
-    ##    ecodist_dist 125.568552 131.215937 154.224128 163.778875 167.683893
-    ##  ecodist_bcdist   3.383809   3.593570   3.595387   3.606935   3.641179
-    ##       vegan_veg   1.250535   1.541147   2.081418   2.318795   2.355008
-    ##    vegan_design   1.273939   1.298956   1.377856   1.332283   1.351894
+    ##      adespatial 321283.105 325051.801 327812.216 328320.243 330209.789
+    ##        betapart   1309.425   1406.188   1458.833   1456.153   1507.798
+    ##       bioregion   7638.762   8708.500  11691.829  11089.780  12050.472
+    ##    ecodist_dist 109032.360 111318.554 122478.686 112508.690 139809.554
+    ##  ecodist_bcdist   2847.307   2898.583   3052.170   2979.699   3241.993
+    ##       vegan_veg   1068.076   1136.457   1478.944   1347.801   1910.827
+    ##    vegan_design    809.121    963.981   1049.934   1080.745   1163.908
     ##         max neval
-    ##  305.260185    10
-    ##    2.404249    10
-    ##   29.826544    10
-    ##  169.317973    10
-    ##    3.665014    10
-    ##    2.738664    10
-    ##    1.889047    10
+    ##  332149.359    10
+    ##    1654.637    10
+    ##   24262.582    10
+    ##  140748.428    10
+    ##    3327.681    10
+    ##    1927.873    10
+    ##    1246.160    10
 
 On this very small example, the functions from
 [vegan](https://cran.r-project.org/package=vegan) outperform the others
@@ -558,23 +558,23 @@ we proceed with a comparison of their computation times.
 comp_bc
 ```
 
-    ## Unit: milliseconds
+    ## Unit: microseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 292.705733 294.729431 298.249982 297.928059 300.704719
-    ##        betapart 307.275829 319.507649 333.983947 323.888169 353.239817
-    ##       bioregion  10.461013  10.679411  11.484452  10.821817  11.266748
-    ##    ecodist_dist  87.465122  91.200697 130.265284  93.157395 123.216019
-    ##  ecodist_bcdist   6.017035   6.043255   6.146406   6.139519   6.258807
-    ##       vegan_veg   1.209088   1.265073   1.695508   1.313478   2.327216
-    ##    vegan_design   1.242150   1.283026   1.452031   1.393543   1.706166
+    ##      adespatial 328575.813 330189.870 333762.242 333742.995 336075.498
+    ##        betapart 237946.897 241896.120 248356.768 247824.002 254937.052
+    ##       bioregion   9331.374   9498.091   9657.867   9653.793   9807.912
+    ##    ecodist_dist  75378.714  76929.837 111623.301  79158.485  81379.072
+    ##  ecodist_bcdist   5167.231   5171.178   5191.402   5191.884   5205.549
+    ##       vegan_veg   1045.422   1081.266   1100.670   1109.157   1116.828
+    ##    vegan_design    986.395   1063.650   1120.086   1139.903   1152.201
     ##         max neval
-    ##  308.148348    10
-    ##  370.298370    10
-    ##   14.273713    10
-    ##  382.422208    10
-    ##    6.266832    10
-    ##    2.360527    10
-    ##    1.728057    10
+    ##  341986.574    10
+    ##  258517.498    10
+    ##   10106.125    10
+    ##  405812.025    10
+    ##    5221.182    10
+    ##    1143.147    10
+    ##    1233.862    10
 
 The functions from [vegan](https://cran.r-project.org/package=vegan)
 continue to outperform the others. They are again followed by `bcdist`,
@@ -598,7 +598,7 @@ also include the results from a single simulation with 10,000 sites and
 species.
 
 ![Computation times for the Jaccard dissimilarity
-metric.](../reference/figures/comparison_Jaccard.png)
+metric.](figures/comparison_Jaccard.png)
 
 A similar plot showing the results obtained for the Bray-Curtis
 dissimilarity metric is available below. In this case, the results based
@@ -606,7 +606,7 @@ on a single simulation with 10,000 sites and species exclude
 `beta.pair.abund` because it took too much time to compute.
 
 ![Computation times for the Bray-Curtis dissimilarity
-metric.](../reference/figures/comparison_Bray-Curtis.png)
+metric.](figures/comparison_Bray-Curtis.png)
 
 ## 5. Importing pairwise (dis)similarity metrics from other packages into bioregion
 

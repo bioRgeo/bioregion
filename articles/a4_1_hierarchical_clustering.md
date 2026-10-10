@@ -14,7 +14,7 @@ Hierarchical clustering takes place on the right-hand side of the
 `bioregion` conceptual diagram:
 
 ![Workflow of the bioregion package for hierarchical
-clustering.](../reference/figures/workflow_nonetwork.png)
+clustering.](figures/workflow_nonetwork.png)
 
 ## 1. Compute dissimilarity indices from input data
 
@@ -744,7 +744,7 @@ plot(tree_diana)
 ## 3. How to find an optimal number of clusters?
 
 ![How to find an optimal number of
-clusters?](../reference/figures/find_optimal_n.png)
+clusters?](figures/find_optimal_n.png)
 
 1.  Step 1. **Build a tree** with
     [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
