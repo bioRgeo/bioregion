@@ -2,9 +2,6 @@ dev_scripts/
 docs/
 documents/
 
-inst/CITATION
-inst/REFERENCES.bib
-
 man/figures/logo.svg
 pkgdown/
 
