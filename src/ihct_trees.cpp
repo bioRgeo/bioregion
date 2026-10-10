@@ -1,4 +1,5 @@
-// Helpers for the Iterative Hierarchical Consensus Tree (IHCT), see R/IHCT.R.
+// Helpers for the Iterative Hierarchical Consensus Tree (IHCT), see R/IHCT.R,
+// and for tree_eval() in R/utils.R.
 //
 // A tree is described the way stats::hclust does: a "merge" matrix with one
 // row per node (n - 1 rows for n sites), each row giving the two things joined
@@ -11,6 +12,7 @@
 
 #include <Rcpp.h>
 #include <vector>
+#include <algorithm>
 using namespace Rcpp;
 
 // Depth-first walk of a tree, left child first. It places the sites in a
@@ -95,25 +97,52 @@ NumericVector ihct_shuffled_dist(NumericMatrix dist_mat, IntegerVector sites) {
   return out;
 }
 
-// Cophenetic correlation of a tree with a dissimilarity matrix, computed by
-// listing every pair of sites once. The cophenetic distance of two sites is
-// the height of the node where they are first joined.
+// Fit of a tree to a dissimilarity matrix, over every pair of sites:
+// - cophcor: the cophenetic correlation, i.e. the Pearson correlation between
+//   the dissimilarities and the cophenetic distances (Sokal & Rohlf 1962);
+// - msd: the mean squared difference between them (Maire et al. 2015).
+// The cophenetic distance of two sites is the height of the node where they
+// are first joined, so the pairs are listed node by node and no cophenetic
+// matrix is ever built. Works for any linkage method, at a cost proportional
+// to the number of pairs.
 //
 // By default `d` is the dissimilarity matrix in the order of the tree's sites
 // (site number i in `merge` is row/column i of `d`). Give `leaf_site` -- the
 // row of `d` each site of the tree stands for, as ihct_prune_tree() takes it --
 // to read the dissimilarities from a larger matrix instead, which saves
-// building the sub-matrix of the group. Works for any linkage method, at a
-// cost proportional to the number of pairs.
+// building the sub-matrix of the group.
+//
+// The correlation is computed in two passes, as stats::cor() does: the means
+// first, then the sums of products of the deviations from the means. The
+// one-pass formula (sum of squares minus squared sum over n) loses most of its
+// digits when the dissimilarities are close to each other compared to their
+// mean, e.g. when many are near 1, and all the more so where long double is
+// no wider than double (macOS arm64). The first pass is cheap: the mean of
+// the cophenetic distances comes from the heights and node sizes alone, and
+// the mean of the dissimilarities is read straight through the matrix.
+// For the same reason the msd sums the squared differences themselves.
+//
+// cophcor is NA when the dissimilarities or the heights are all equal.
 // [[Rcpp::export]]
-double ihct_cophenetic_correlation(IntegerMatrix merge, NumericVector height,
-                                   NumericMatrix d,
-                                   Nullable<IntegerVector> leaf_site = R_NilValue) {
+NumericVector tree_eval_cpp(IntegerMatrix merge, NumericVector height,
+                            NumericMatrix d,
+                            Nullable<IntegerVector> leaf_site = R_NilValue) {
   int n_nodes = merge.nrow();
   int n = n_nodes + 1;
   // the sites of every node are then the block of positions lo[k]..hi[k]
   std::vector<int> lo(n_nodes), hi(n_nodes), position(n), site_at(n);
   tree_blocks(merge, lo, hi, position, site_at);
+  // the two children of node k are the blocks a_lo[k]..a_hi[k] and
+  // b_lo[k]..b_hi[k], and node k joins every site of one to every site of the
+  // other
+  std::vector<int> a_lo(n_nodes), a_hi(n_nodes), b_lo(n_nodes), b_hi(n_nodes);
+  for (int k = 0; k < n_nodes; k++) {
+    int a = merge(k, 0), b = merge(k, 1);
+    a_lo[k] = a < 0 ? position[-a - 1] : lo[a - 1];
+    a_hi[k] = a < 0 ? position[-a - 1] : hi[a - 1];
+    b_lo[k] = b < 0 ? position[-b - 1] : lo[b - 1];
+    b_hi[k] = b < 0 ? position[-b - 1] : hi[b - 1];
+  }
 
   // where each site of the tree sits in `d`
   std::vector<int> row(n);
@@ -124,30 +153,67 @@ double ihct_cophenetic_correlation(IntegerMatrix merge, NumericVector height,
     for (int i = 0; i < n; i++) row[i] = site[i] - 1;
   }
 
-  long double sum_d = 0, sum_d2 = 0, sum_c = 0, sum_c2 = 0, sum_dc = 0;
-  double n_pairs = 0;
+  // first pass: the means
+  long double n_pairs = 0, sum_c = 0, sum_d = 0;
+  bool same_c = true, same_d = true;
   for (int k = 0; k < n_nodes; k++) {
-    double h = height[k];
-    int a = merge(k, 0), b = merge(k, 1);
-    int a_lo = a < 0 ? position[-a - 1] : lo[a - 1];
-    int a_hi = a < 0 ? position[-a - 1] : hi[a - 1];
-    int b_lo = b < 0 ? position[-b - 1] : lo[b - 1];
-    int b_hi = b < 0 ? position[-b - 1] : hi[b - 1];
-    for (int p = a_lo; p <= a_hi; p++) {
-      int i = row[site_at[p]];
-      for (int q = b_lo; q <= b_hi; q++) {
-        double dij = d(i, row[site_at[q]]);
-        sum_d += dij; sum_d2 += dij * dij;
-        sum_c += h; sum_c2 += h * h; sum_dc += dij * h;
-        n_pairs += 1;
-      }
+    double pairs = (double) (a_hi[k] - a_lo[k] + 1) * (b_hi[k] - b_lo[k] + 1);
+    n_pairs += pairs;
+    sum_c += pairs * height[k];
+    same_c = same_c && height[k] == height[0];
+  }
+  // the rows sorted, so that each column of `d` is read downwards
+  std::vector<int> sorted_row(row);
+  std::sort(sorted_row.begin(), sorted_row.end());
+  const double* src = &d[0];
+  R_xlen_t n_row = d.nrow();
+  double d_first = n > 1 ? src[(R_xlen_t) sorted_row[0] * n_row + sorted_row[1]] : 0;
+  for (int j = 0; j < n - 1; j++) {
+    const double* column = src + (R_xlen_t) sorted_row[j] * n_row;
+    for (int i = j + 1; i < n; i++) {
+      double dij = column[sorted_row[i]];
+      sum_d += dij;
+      same_d = same_d && dij == d_first;
     }
   }
-  long double cov = sum_dc - sum_d * sum_c / n_pairs;
-  long double var_d = sum_d2 - sum_d * sum_d / n_pairs;
-  long double var_c = sum_c2 - sum_c * sum_c / n_pairs;
-  if (var_d <= 0 || var_c <= 0) return NA_REAL;
-  return (double) (cov / std::sqrt(var_d * var_c));
+  long double mean_c = sum_c / n_pairs, mean_d = sum_d / n_pairs;
+  // When all the values are equal, the sum divided by n can still be a hair
+  // off that value, and every deviation from the mean would then be the same
+  // tiny non-zero number: cophcor would come out as some arbitrary value
+  // instead of NA. stats::cor() avoids this by refining the mean; here the
+  // mean is set to the value itself.
+  if (same_c && n_nodes > 0) mean_c = height[0];
+  if (same_d && n > 1) mean_d = d_first;
+
+  // second pass: the deviations from the means
+  long double sum_dev_dc = 0, sum_dev_d2 = 0, sum_dev_c2 = 0, sum_err2 = 0;
+  for (int k = 0; k < n_nodes; k++) {
+    double h = height[k];
+    long double dev_c = h - mean_c;   // the same for every pair of the node
+    long double node_dev_d = 0;
+    for (int p = a_lo[k]; p <= a_hi[k]; p++) {
+      int i = row[site_at[p]];
+      for (int q = b_lo[k]; q <= b_hi[k]; q++) {
+        double dij = d(i, row[site_at[q]]);
+        long double dev_d = dij - mean_d;
+        node_dev_d += dev_d;
+        sum_dev_d2 += dev_d * dev_d;
+        double err = dij - h;
+        sum_err2 += err * err;
+      }
+    }
+    double pairs = (double) (a_hi[k] - a_lo[k] + 1) * (b_hi[k] - b_lo[k] + 1);
+    sum_dev_dc += dev_c * node_dev_d;
+    sum_dev_c2 += pairs * dev_c * dev_c;
+  }
+
+  double cophcor = NA_REAL;
+  if (sum_dev_d2 > 0 && sum_dev_c2 > 0) {
+    cophcor = (double) (sum_dev_dc / std::sqrt(sum_dev_d2 * sum_dev_c2));
+    cophcor = std::min(1.0, std::max(-1.0, cophcor));   // as stats::cor()
+  }
+  return NumericVector::create(_["cophcor"] = cophcor,
+                               _["msd"] = (double) (sum_err2 / n_pairs));
 }
 
 // Remove sites from a tree and recompute the heights that change.

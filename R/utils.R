@@ -1200,33 +1200,48 @@ randomize_dist <- function(dist_mat){
 ################################################################################
 
 # tree_eval ####################################################################
-tree_eval <- function(tree, 
-                      dist_mat, 
-                      method = "pearson") {
-  
+# Evaluation of the fit of a tree to a distance matrix
+# works (or should work) for hclust, or anything as.hclust() converts: phylo, diana...
+tree_eval <- function(tree,
+                      dist_mat) {
+
   if(inherits(dist_mat, "dist")){
     dist_mat <- as.matrix(dist_mat)
   }
-  
-  coph <- as.matrix(stats::cophenetic(tree))
-  coph <- coph[match(rownames(dist_mat), rownames(coph)), 
-               match(rownames(dist_mat), colnames(coph))]
+  if(!inherits(tree, "hclust")){
+    tree <- stats::as.hclust(tree)
+  }
 
-  lower_tri_idx <- lower.tri(dist_mat)
+  # match rownames of dist_mat to tree labels
+  n_sites <- nrow(tree$merge) + 1
+  if(!is.null(tree$labels) && !is.null(rownames(dist_mat))){
+    leaf_site <- match(tree$labels, rownames(dist_mat))
+  } else {
+    leaf_site <- seq_len(n_sites)
+  }
+  if(anyNA(leaf_site) || n_sites != nrow(dist_mat)){
+    stop("The sites of the tree do not match those of the dissimilarity ",
+         "matrix.", call. = FALSE)
+  }
+  # tree_eval_cpp() walks the tree down from its last merge, which must 
+  # be the root: a merge that no other merge joins
+  # (e.g. it happened when problematic trees with negative branch lengths
+  # existed due to ape::nnls.tree(), resulting in a wrong order of merges)
+  if(any(tree$merge == n_sites - 1)){
+    stop("The last merge of the tree is not its root.", call. = FALSE)
+  }
   
-  # cophcor
-  cophcor <- stats::cor(dist_mat[lower_tri_idx],
-                        coph[lower_tri_idx], 
-                        method = method)
-  
-  # msd
-  diff_matrix <- dist_mat - coph
-  msd <- mean(diff_matrix[lower_tri_idx]^2)
-  
+  # cpp implementation of cophcor + msd, based on the cpp implementation
+  # of stats::cor()
+  fit <- tree_eval_cpp(tree$merge, tree$height, dist_mat, leaf_site)
+  if(is.na(fit[["cophcor"]])){
+    warning("the standard deviation is zero")   # same behaviour as stats::cor()
+  }
+
   # cophcor: Sokal & Rohlf 1962 Taxon
   # msd: Maire et al. 2015 GEB
-  return(list(cophcor = cophcor, 
-              msd = msd))
+  return(list(cophcor = fit[["cophcor"]],
+              msd = fit[["msd"]]))
 }
 ################################################################################
 

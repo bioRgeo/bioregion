@@ -1096,3 +1096,34 @@ test_that("optimal_tree_method accepts 'ihct' and its former name", {
                                 verbose = FALSE),
                "optimal_tree_method")
 })
+
+
+test_that("the consensus tree is a valid hclust tree", {
+  # nnls.tree() can leave branches a hair below 0, which used to put a node
+  # above its parent in the hclust tree: its merge was then listed before the
+  # merge of its child, the heights were not sorted, and the tree could not
+  # be cut. These sites and seed gave such a tree.
+  dissim <- dissimilarity(fishmat[1:150, ], metric = "Simpson")
+  clust <- hclu_hierarclust(dissim, n_runs = 10, seed = 1,
+                            optimal_tree_method = "consensus",
+                            n_clust = NULL, verbose = FALSE)
+  tree <- clust$algorithm$final.tree
+  merge <- tree$merge
+
+  # every merge only joins sites and nodes created before it
+  expect_true(all(merge < seq_len(nrow(merge))))
+  expect_false(is.unsorted(tree$height))
+  expect_no_error(stats::cophenetic(tree))
+  # cutting by merge order (not by height) gives as many groups as asked,
+  # whatever the ties, only when the merges are in order
+  for (k in c(2, 5, 10)) {
+    expect_length(unique(stats::cutree(tree, k = k)), k)
+  }
+
+  # the tree can be cut at a height (the default): the number of clusters
+  # asked may not be reachable on a rake, which is only worth a warning
+  expect_no_error(suppressWarnings(
+    hclu_hierarclust(dissim, n_runs = 10, seed = 1,
+                     optimal_tree_method = "consensus",
+                     n_clust = 5, verbose = FALSE)))
+})

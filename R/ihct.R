@@ -889,7 +889,7 @@ tree_fit_score <- function(tree, d, method, leaf_site = NULL) {
     sizes <- ihct_node_sizes(tree$merge)
     sum(sizes$pairs * tree$height^2)
   } else {
-    ihct_cophenetic_correlation(tree$merge, tree$height, d, leaf_site)
+    tree_eval_cpp(tree$merge, tree$height, d, leaf_site)[["cophcor"]]
   }
 }
 

@@ -451,7 +451,7 @@ test_that("ihct_node_sizes() matches a plain R implementation", {
   }
 })
 
-test_that("ihct_cophenetic_correlation() reproduces the old CCC computation", {
+test_that("tree_eval_cpp() reproduces the old CCC computation", {
   skip_without_legacy()
 
   # verbatim logic of utils.R::tree_eval(), which is what the old IHCT called
@@ -469,10 +469,10 @@ test_that("ihct_cophenetic_correlation() reproduces the old CCC computation", {
       p <- sample(nrow(D)); Dp <- D[p, p]
       for (meth in LINKAGES) {
         hc <- fastcluster::hclust(stats::as.dist(Dp), meth)
-        expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, Dp),
+        expect_equal(tree_eval_cpp(hc$merge, hc$height, Dp)[["cophcor"]],
                      coph_R_old(hc, Dp), tolerance = 1e-12,
                      label = paste(nm, meth, "cophenetic correlation"))
-        expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, Dp),
+        expect_equal(tree_eval_cpp(hc$merge, hc$height, Dp)[["cophcor"]],
                      tree_eval(hc, Dp)$cophcor, tolerance = 1e-12)
       }
     }
@@ -480,7 +480,7 @@ test_that("ihct_cophenetic_correlation() reproduces the old CCC computation", {
     set.seed(12)
     p <- sample(nrow(D)); Dp <- D[p, p]
     hc <- fastcluster::hclust(stats::as.dist(Dp), "complete")
-    expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, Dp),
+    expect_equal(tree_eval_cpp(hc$merge, hc$height, Dp)[["cophcor"]],
                  tree_eval(hc, D)$cophcor, tolerance = 1e-12)
   }
 })
@@ -676,7 +676,7 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
   run_old_ranking <- function(D, method, n_runs, top_n_trees, seed) {
     ns <- asNamespace("bioregion")
     fit_ccc <- function(tree, d, method, leaf_site = NULL) {
-      ihct_cophenetic_correlation(tree$merge, tree$height, d, leaf_site)
+      tree_eval_cpp(tree$merge, tree$height, d, leaf_site)[["cophcor"]]
     }
     rank_exact <- function(scores, tolerance = 1e-10) order(scores, decreasing = TRUE)
     with_traced(ns, "tree_fit_score", fit_ccc,

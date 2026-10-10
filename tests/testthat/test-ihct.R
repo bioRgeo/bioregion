@@ -58,7 +58,7 @@ test_that("pair-enumeration cophenetic correlation equals tree_eval for any link
   d <- make_matrix()
   for (method in c("complete", "single", "mcquitty", "ward.D2")) {
     hc <- fastcluster::hclust(stats::as.dist(d), method)
-    expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d),
+    expect_equal(tree_eval_cpp(hc$merge, hc$height, d)[["cophcor"]],
                  tree_eval(hc, d)$cophcor, tolerance = 1e-12)
   }
 })
@@ -170,17 +170,17 @@ test_that("cophenetic correlation reads the whole matrix when given leaf_site", 
       sub <- d[sites, sites]
       hc <- fastcluster::hclust(stats::as.dist(sub), method)
       # site i of the tree is row i of `sub`, or row sites[i] of `d`
-      expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d, sites),
-                   ihct_cophenetic_correlation(hc$merge, hc$height, sub),
+      expect_equal(tree_eval_cpp(hc$merge, hc$height, d, sites)[["cophcor"]],
+                   tree_eval_cpp(hc$merge, hc$height, sub)[["cophcor"]],
                    tolerance = 1e-12)
-      expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d, sites),
+      expect_equal(tree_eval_cpp(hc$merge, hc$height, d, sites)[["cophcor"]],
                    tree_eval(hc, sub)$cophcor, tolerance = 1e-12)
     }
   }
   # leaf_site left out is the same as the identity
   hc <- fastcluster::hclust(stats::as.dist(d), "complete")
-  expect_equal(ihct_cophenetic_correlation(hc$merge, hc$height, d, seq_len(n)),
-               ihct_cophenetic_correlation(hc$merge, hc$height, d))
+  expect_equal(tree_eval_cpp(hc$merge, hc$height, d, seq_len(n))[["cophcor"]],
+               tree_eval_cpp(hc$merge, hc$height, d)[["cophcor"]])
 })
 
 test_that("tree_fit_score scores a tree the same way from either matrix", {

@@ -717,18 +717,21 @@ hclu_hierarclust <- function(dissimilarity,
 
         trees <- lapply(results, function(trial) ape::as.phylo(trial$hierartree))
 
-        consensus_tree <- ape::consensus(trees, p = 0.5)
+        consensus_tree <- ape::consensus(trees, p = consensus_p)
         consensus_tree <- phangorn::nnls.tree(stats::as.dist(dist_mat), 
                                               consensus_tree, 
                                               method = "ultrametric", 
                                               trace = 0)
+        # nnls.tree() results in some branches with NEGATIVE branch lengths
+        # at about -1e-16 instead of 0, which
+        # can put a node above its parent. 
+        # We correct the negative branch lengths to 0 before converting to hclust
+        consensus_tree$edge.length[consensus_tree$edge.length < 0] <- 0
         consensus_tree <- ape::multi2di(consensus_tree)
-
-        tree_ape_for_coph <- consensus_tree
         consensus_tree <- ape::as.hclust.phylo(consensus_tree)
-        
+
         final.tree <- consensus_tree
-        evals <- tree_eval(tree_ape_for_coph, dist_mat)
+        evals <- tree_eval(consensus_tree, dist_mat)
         final.tree.metrics <- list(cophcor = evals$cophcor, 
                                    msd = evals$msd)
       }
