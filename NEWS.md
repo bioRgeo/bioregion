@@ -1,11 +1,11 @@
-# bioregion 1.5.0
+# bioregion 1.5.0.9000
 
 This is a list of changes made in the development/GitHub version of the package 
 between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
 
 *
 
-# bioregion 1.4.0
+# bioregion 1.5.0
 
 This is a list of changes made in the development/GitHub version of the package 
 between **bioregion 1.4.0** (CRAN release 2026-03-29) and **bioregion 1.5.0** 
@@ -42,6 +42,7 @@ argument changed to `eval_metrics` and `net` to `comat`. `col_sites`, and
 
 * Relaxed matching controls in `site_species_metrics()` and 
 `bioregion_metrics()`.
+
 # bioregion 1.4.0
 
 This is a list of changes made between **bioregion 1.3.0** 
