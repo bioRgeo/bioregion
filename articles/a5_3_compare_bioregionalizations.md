@@ -143,7 +143,7 @@ Let’s first look at pairwise membership within bioregionalization.
 ### 3.1 Pairwise membership
 
 The number of pairwise combinations for \\n\\ sites equals \\n(n-1)/2\\.
-So in our case, where we have 715 sites, we do end up with 2.55255^{5}
+So in our case, where we have 715 sites, we do end up with 255255
 pairwise combinations.
 
 ``` r

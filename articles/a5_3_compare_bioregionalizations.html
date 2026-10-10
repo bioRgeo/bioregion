@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">Pierre Denelle,
 Boris Leroy and Maxime Lenormand</h4>
             
-            <h4 data-toc-skip class="date">2026-10-09</h4>
+            <h4 data-toc-skip class="date">2026-10-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_3_compare_bioregionalizations.Rmd" class="external-link"><code>vignettes/a5_3_compare_bioregionalizations.Rmd</code></a></small>
       <div class="d-none name"><code>a5_3_compare_bioregionalizations.Rmd</code></div>
@@ -221,7 +221,7 @@ bioregionalization.</p>
 <h3 id="pairwise-membership">3.1 Pairwise membership<a class="anchor" aria-label="anchor" href="#pairwise-membership"></a>
 </h3>
 <p>The number of pairwise combinations for <span class="math inline">\(n\)</span> sites equals <span class="math inline">\(n(n-1)/2\)</span>. So in our case, where we have
-715 sites, we do end up with 2.55255^{5} pairwise combinations.</p>
+715 sites, we do end up with 255255 pairwise combinations.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">hclu_vs_netclu</span><span class="op">$</span><span class="va">pairwise_membership</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
