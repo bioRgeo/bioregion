@@ -11,8 +11,6 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
-bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
-csl: journal-of-biogeography.csl
 vignette: >
   %\VignetteIndexEntry{Tutorial for bioregion}
   %\VignetteEngine{knitr::rmarkdown}
@@ -54,7 +52,7 @@ composition
 <center>
   <img align="bottom" 
   width="100%" height="100%" 
-  src="../man/figures/workflow.png"
+  src="man/figures/workflow.png"
   alt="Workflow of the bioregion package.">
 </center> 
 <br>

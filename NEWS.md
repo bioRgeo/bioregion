@@ -1,13 +1,18 @@
-# bioregion 1.4.0.9000
+# bioregion 1.5.0
 
 This is a list of changes made in the development/GitHub version of the package 
-between **bioregion 1.4.0** (CRAN release 2026-03-29) and the next CRAN release.
+between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
+
+*
+
+# bioregion 1.4.0
+
+This is a list of changes made in the development/GitHub version of the package 
+between **bioregion 1.4.0** (CRAN release 2026-03-29) and **bioregion 1.5.0** 
+(CRAN release 2026-10-10).
 
 * The tree evaluation function is now implemented in C++ to be faster across all
-methods in hclu_hierarclust().
-
-* Fixed a bug in hclu_hierarclust() where consensus_p was not passed to the
-consensus function
+methods in `hclu_hierarclust()`.
 
 * The iterative hierarchical consensus tree is now available on its own with
 the new function `ihct()`. In `hclu_hierarclust()`, the default of
@@ -37,8 +42,6 @@ argument changed to `eval_metrics` and `net` to `comat`. `col_sites`, and
 
 * Relaxed matching controls in `site_species_metrics()` and 
 `bioregion_metrics()`.
-
-
 # bioregion 1.4.0
 
 This is a list of changes made between **bioregion 1.3.0** 

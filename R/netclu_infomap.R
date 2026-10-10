@@ -117,7 +117,7 @@
 #' Infomap has been designed to deal with bipartite networks. To use this
 #' functionality, set the `bipartite_version` argument to TRUE in order to
 #' approximate a two-step random walker (see
-#' <https://www.mapequation.org/infomap/> for more information). Note that
+#' <https://mapequation.org/infomap/> for more information). Note that
 #' a bipartite network can also be considered as a unipartite network
 #' (`bipartite = TRUE`).
 #'
