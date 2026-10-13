@@ -224,8 +224,14 @@ bioregion_colors <- function(bioregionalization,
     
     if (cluster_ordering == "n_sites") {
       # Count number of sites in each cluster for this partition
+      # (for bipartite networks, species nodes must be excluded)
+      node_type <- attr(bioregionalization$clusters, "node_type")
       cluster_sizes <- sapply(partition_cluster_ids, function(cid) {
-        sum(as.character(partition_col) == cid, na.rm = TRUE)
+        matches <- as.character(partition_col) == cid
+        if (!is.null(node_type)) {
+          matches <- matches & node_type == "site"
+        }
+        sum(matches, na.rm = TRUE)
       })
       names(cluster_sizes) <- partition_cluster_ids
       

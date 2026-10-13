@@ -155,6 +155,31 @@ test_that("n_species and n_both ordering work for bipartite", {
   expect_true(!is.null(clust_both$colors))
 })
 
+test_that("n_sites ordering counts only site nodes for bipartite", {
+  node_type <- attr(clust_bip$clusters, "node_type")
+  cl <- as.character(clust_bip$clusters[[2]])
+  site_counts <- table(cl[node_type == "site"])
+  all_counts <- table(cl)
+  cutoff_val <- 5
+
+  # The cutoff must separate site-only counts from site + species counts,
+  # otherwise this test cannot detect species being counted as sites
+  expect_false(identical(names(site_counts)[site_counts <= cutoff_val],
+                         names(all_counts)[all_counts <= cutoff_val]))
+
+  clust_sites <- bioregion_colors(clust_bip, cluster_ordering = "n_sites",
+                                  cutoff_insignificant = cutoff_val)
+  cols_sites <- clust_sites$colors[[1]]
+  black_sites <- cols_sites$cluster[cols_sites$color == "#000000"]
+  expect_setequal(black_sites, names(site_counts)[site_counts <= cutoff_val])
+
+  clust_both <- bioregion_colors(clust_bip, cluster_ordering = "n_both",
+                                 cutoff_insignificant = cutoff_val)
+  cols_both <- clust_both$colors[[1]]
+  black_both <- cols_both$cluster[cols_both$color == "#000000"]
+  expect_setequal(black_both, names(all_counts)[all_counts <= cutoff_val])
+})
+
 test_that("error thrown for bipartite ordering on non-bipartite data", {
   expect_error(
     bioregion_colors(clust_fish, cluster_ordering = "n_species"),
