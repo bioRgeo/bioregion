@@ -81,6 +81,18 @@ nav.navbar {
   font-size: 18px;
 }
 
+// Prevent long navbar dropdowns from being clipped by the viewport.
+// Only applies to menus with 6+ items (i.e. the Tutorials menu).
+.navbar .dropdown-menu:has(.dropdown-item:nth-child(6)) {
+  column-count: 2;
+  column-gap: 0;
+  min-width: 520px;
+}
+
+.navbar .dropdown-menu:has(.dropdown-item:nth-child(6)) .dropdown-item {
+  break-inside: avoid;
+}
+
 
 // Sidebar ----------------------------------------------------------------
 

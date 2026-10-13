@@ -13,9 +13,8 @@
 #' which `bioregionalization`'s partition(s) to plot. By default (`NULL`), all 
 #' partitions are plotted. If an `integer` or vector of `integers` is provided, 
 #' partition(s) are selected by column number(s) in the `bioregionalization` 
-#' data.frame (starting from 1 after the ID column). If a `character` or 
-#' vector of `characters`, partition(s) are selected by name(s) 
-#' matching column names in `bioregionalization`.
+#' data.frame. If a `character` or vector of `characters`, partition(s) are 
+#' selected by name(s) matching column names in `bioregionalization`.
 #' 
 #' @param map_as_output A `boolean` indicating if the `sf` `data.frame` object 
 #' used for the plot should be returned.

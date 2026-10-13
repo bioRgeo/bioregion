@@ -147,7 +147,7 @@ Several versions of Infomap are available in the package. See
 Infomap has been designed to deal with bipartite networks. To use this
 functionality, set the \code{bipartite_version} argument to TRUE in order to
 approximate a two-step random walker (see
-\url{https://www.mapequation.org/infomap/} for more information). Note that
+\url{https://mapequation.org/infomap/} for more information). Note that
 a bipartite network can also be considered as a unipartite network
 (\code{bipartite = TRUE}).
 

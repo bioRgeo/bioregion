@@ -76,6 +76,7 @@ reference:
   desc: ~
   contents:
   - hclu_hierarclust
+  - ihct
   - cut_tree
   - hclu_diana
   - hclu_optics
@@ -148,6 +149,8 @@ articles:
   
 news:
   releases:
+  - text: "Version 1.5.0"
+    href: https://github.com/bioRgeo/bioregion/releases/tag/v1.5.0   
   - text: "Version 1.4.0"
     href: https://github.com/bioRgeo/bioregion/releases/tag/v1.4.0  
   - text: "Version 1.3.0"

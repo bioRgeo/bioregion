@@ -611,6 +611,61 @@ test_that("invalid inputs", {
 
   expect_error(
     hclu_hierarclust(dissim, 
+                     ihct_height_rule = 1,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "ihct_height_rule must be a character.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     ihct_height_rule = c("least_squares", "max_child"),
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "ihct_height_rule must be of length 1.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     ihct_height_rule = "zz",
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "^Please choose ihct_height_rule from the following")
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     ihct_variation_drop = "zz",
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "ihct_variation_drop must be numeric.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     ihct_variation_drop = c(0.1, 0.2),
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "ihct_variation_drop must be of length 1.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     ihct_variation_drop = -0.1,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "ihct_variation_drop must be higher than 0.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
+                     ihct_variation_drop = 1.5,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "ihct_variation_drop must be between 0 and 1.",
+    fixed = TRUE)
+
+  expect_error(
+    hclu_hierarclust(dissim, 
                      n_clust = "zz",
                      optimal_tree_method = "best",
                      verbose = FALSE),
@@ -952,4 +1007,123 @@ test_that("summary works on uncut hclu_hierarclust tree", {
   expect_true(is.data.frame(tree_cut$clusters))
   expect_equal(ncol(tree_cut$clusters), 2) # ID + 1 partition
   
+})
+
+# Tests for the ihct_variation_drop argument -----------------------------------------------
+test_that("ihct_variation_drop reaches IHCT and is reported", {
+  # ihct_variation_drop = 0 rebuilds the randomised trees at every division, as bioregion
+  # 1.4.0 and earlier did; the default lets a group of sites reuse its parent's
+  # trees, which changes the tree it ends up with
+  old_way <- hclu_hierarclust(dissim,
+                              index = "Simpson",
+                              optimal_tree_method = "iterative_consensus_tree",
+                              n_runs = 20,
+                              ihct_variation_drop = 0,
+                              seed = 1,
+                              verbose = FALSE)
+  inherited <- hclu_hierarclust(dissim,
+                                index = "Simpson",
+                                optimal_tree_method = "iterative_consensus_tree",
+                                n_runs = 20,
+                                ihct_variation_drop = 0.5,
+                                seed = 1,
+                                verbose = FALSE)
+  expect_equal(old_way$args$ihct_variation_drop, 0)
+  expect_equal(inherited$args$ihct_variation_drop, 0.5)
+  expect_false(identical(old_way$algorithm$final.tree$merge,
+                         inherited$algorithm$final.tree$merge))
+  # the shortcut may not cost much of the fit of the tree to the data
+  expect_gt(inherited$algorithm$final.tree.coph.cor,
+            old_way$algorithm$final.tree.coph.cor - 0.01)
+})
+
+
+test_that("large matrices are told about ihct_sites_drop = Inf", {
+  # A matrix whose dissimilarities are all the same value is resolved in one
+  # step, without any randomization, so a matrix large enough to trigger the
+  # message costs almost nothing to cluster here.
+  flat <- function(n) {
+    d <- matrix(0.5, n, n)
+    diag(d) <- 0
+    dimnames(d) <- list(sprintf("s%05d", seq_len(n)), sprintf("s%05d", seq_len(n)))
+    stats::as.dist(d)
+  }
+  advice <- "ihct_sites_drop = Inf"
+  # The tree of a matrix like this has one height throughout, so there is no
+  # variation for a cophenetic correlation to be computed from and no way to
+  # cut it into two groups. Both complain, and neither has anything to do with
+  # what is being tested here, so the tree is left uncut and the warnings are
+  # set aside.
+  run <- function(...) suppressWarnings(hclu_hierarclust(n_runs = 1, ...))
+
+  # the message is about the size of the matrix
+  expect_message(run(flat(2010)), advice)
+  expect_no_message(run(flat(2000)), message = advice)
+
+  # ...and only when the rule it is about is doing anything
+  expect_no_message(run(flat(2010), ihct_sites_drop = Inf), message = advice)
+  expect_no_message(run(flat(2010), ihct_variation_drop = 0), message = advice)
+  # the rebuild rules only apply to average linkage
+  expect_no_message(run(flat(2010), method = "complete"), message = advice)
+  # and it is a message, so verbose switches it off
+  expect_no_message(run(flat(2010), verbose = FALSE), message = advice)
+})
+
+# Tests for the name of the IHCT method ----------------------------------------
+test_that("optimal_tree_method accepts 'ihct' and its former name", {
+  expect_equal(formals(hclu_hierarclust)$optimal_tree_method, "ihct")
+  new_name <- hclu_hierarclust(dissim,
+                               index = "Simpson",
+                               optimal_tree_method = "ihct",
+                               n_runs = 10,
+                               seed = 1,
+                               verbose = FALSE)
+  old_name <- hclu_hierarclust(dissim,
+                               index = "Simpson",
+                               optimal_tree_method = "iterative_consensus_tree",
+                               n_runs = 10,
+                               seed = 1,
+                               verbose = FALSE)
+  expect_equal(old_name$algorithm$final.tree$merge,
+               new_name$algorithm$final.tree$merge)
+  expect_equal(old_name$algorithm$final.tree$height,
+               new_name$algorithm$final.tree$height)
+  expect_equal(new_name$args$optimal_tree_method, "ihct")
+  expect_equal(old_name$args$optimal_tree_method, "ihct")
+  expect_error(hclu_hierarclust(dissim,
+                                index = "Simpson",
+                                optimal_tree_method = "IHCT",
+                                verbose = FALSE),
+               "optimal_tree_method")
+})
+
+
+test_that("the consensus tree is a valid hclust tree", {
+  # nnls.tree() can leave branches a hair below 0, which used to put a node
+  # above its parent in the hclust tree: its merge was then listed before the
+  # merge of its child, the heights were not sorted, and the tree could not
+  # be cut. These sites and seed gave such a tree.
+  dissim <- dissimilarity(fishmat[1:150, ], metric = "Simpson")
+  clust <- hclu_hierarclust(dissim, n_runs = 10, seed = 1,
+                            optimal_tree_method = "consensus",
+                            n_clust = NULL, verbose = FALSE)
+  tree <- clust$algorithm$final.tree
+  merge <- tree$merge
+
+  # every merge only joins sites and nodes created before it
+  expect_true(all(merge < seq_len(nrow(merge))))
+  expect_false(is.unsorted(tree$height))
+  expect_no_error(stats::cophenetic(tree))
+  # cutting by merge order (not by height) gives as many groups as asked,
+  # whatever the ties, only when the merges are in order
+  for (k in c(2, 5, 10)) {
+    expect_length(unique(stats::cutree(tree, k = k)), k)
+  }
+
+  # the tree can be cut at a height (the default): the number of clusters
+  # asked may not be reachable on a rake, which is only worth a warning
+  expect_no_error(suppressWarnings(
+    hclu_hierarclust(dissim, n_runs = 10, seed = 1,
+                     optimal_tree_method = "consensus",
+                     n_clust = 5, verbose = FALSE)))
 })
