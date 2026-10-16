@@ -29,6 +29,16 @@ find_optimal_n
     - Test valeurs NA (et d'autres tests) pour le data.frame ?
     - Problème avec les valeurs min et max (voir tests) ?
 
+cut_tree (find_h = TRUE)
+    - Some requested numbers of clusters cannot be reached by a single height
+      of cut, because several branches merge at the same height. This is
+      expected (we do not want to split these branches arbitrarily), but the
+      search loop should be checked. Example: hclu_diana(dissimilarity(fishmat,
+      metric = "Simpson"), n_clust = c(7, 13)). The top merge is at exactly
+      h = 1 (sites sharing no species), and cutting just below gives 18
+      clusters, so 2 to 17 clusters are unreachable.
+
+
 compare_bioregionalizations
     - Ajouter un test pour vérifier les data.frame et adapter les contrôles pour les listes de
       data.frame ?

@@ -238,8 +238,8 @@ test_that("invalid inputs", {
     "n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from bioregionalization_metrics()",
-    fixed = TRUE)  
+        * the output from find_optimal_n()",
+    fixed = TRUE)
   
   expect_error(
     hclu_diana(dissim, n_clust = c(1.1,2)),

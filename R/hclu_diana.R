@@ -20,8 +20,9 @@
 #'  
 #' @param n_clust An `integer` vector or a single `integer` indicating the 
 #' number of clusters to be obtained from the hierarchical tree, or the output 
-#' from [bioregionalization_metrics]. Should not be used concurrently with
-#' `cut_height`.
+#' from [find_optimal_n()] (in which case the tree is cut at all the optimal
+#' numbers of clusters found across metrics). Should not be used concurrently
+#' with `cut_height`.
 #' 
 #' @param cut_height A `numeric` vector indicating the height(s) at which the
 #' tree should be cut. Should not be used concurrently with `n_clust`.
@@ -132,23 +133,17 @@ hclu_diana <- function(dissimilarity,
   }
   
   if(!is.null(n_clust)) {
+    if(inherits(n_clust, "bioregion.optimal.n")){
+      n_clust <- n_clust_from_optimal_n(n_clust)
+    }
     if(is.numeric(n_clust)) {
-      controls(args = n_clust, data = NULL, 
+      controls(args = n_clust, data = NULL,
                type = "strict_positive_integer_vector")
-    } else if(inherits(n_clust, "bioregion.bioregionalization.metrics")){
-      if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
-        n_clust <- n_clust$algorithm$optimal_nb_clusters
-      } else {
-        stop(paste0("n_clust does not have an optimal number of clusters. ",
-                    "Did you specify partition_optimisation = TRUE in ",
-                    "bioregionalization_metrics()?"), 
-             call. = FALSE)
-      }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from bioregionalization_metrics()", 
+        * the output from find_optimal_n()",
            call. = FALSE)
     }
     if(!is.null(cut_height)){
@@ -234,7 +229,8 @@ hclu_diana <- function(dissimilarity,
     outputs$cluster_info <- data.frame(
       partition_name = names(outputs$clusters)[2:length(outputs$clusters),
                                                drop = FALSE],
-      n_clust = length(unique(outputs$clusters[, 2])))
+      n_clust = unname(sapply(outputs$clusters[, -1, drop = FALSE],
+                              function(x) length(unique(stats::na.omit(x))))))
     
     outputs$inputs$hierarchical <- ifelse(ncol(outputs$clusters) > 2,
                                           TRUE,

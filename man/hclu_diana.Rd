@@ -27,8 +27,9 @@ the third column name of \code{dissimilarity} is used.}
 
 \item{n_clust}{An \code{integer} vector or a single \code{integer} indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
-from \link{bioregionalization_metrics}. Should not be used concurrently with
-\code{cut_height}.}
+from \code{\link[=find_optimal_n]{find_optimal_n()}} (in which case the tree is cut at all the optimal
+numbers of clusters found across metrics). Should not be used concurrently
+with \code{cut_height}.}
 
 \item{cut_height}{A \code{numeric} vector indicating the height(s) at which the
 tree should be cut. Should not be used concurrently with \code{n_clust}.}

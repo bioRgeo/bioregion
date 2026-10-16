@@ -48,8 +48,9 @@
 #' 
 #' @param n_clust An `integer` vector or a single `integer` indicating the 
 #' number of clusters to be obtained from the hierarchical tree, or the output 
-#' from [bioregionalization_metrics]. This parameter should not be used 
-#' simultaneously with `cut_height`.
+#' from [find_optimal_n()] (in which case the tree is cut at all the optimal
+#' numbers of clusters found across metrics). This parameter should not be
+#' used simultaneously with `cut_height`.
 #' 
 #' @param cut_height A `numeric` vector indicating the height(s) at which the
 #' tree should be cut. This parameter should not be used simultaneously with 
@@ -516,24 +517,18 @@ hclu_hierarclust <- function(dissimilarity,
   }
 
   if(!is.null(n_clust)) {
+    if(inherits(n_clust, "bioregion.optimal.n")){
+      n_clust <- n_clust_from_optimal_n(n_clust)
+    }
     if(is.numeric(n_clust)) {
-        controls(args = n_clust, 
-                 data = NULL, 
+        controls(args = n_clust,
+                 data = NULL,
                  type = "strict_positive_integer_vector")
-    } else if(inherits(n_clust, "bioregion.bioregionalization.metrics")){
-      if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
-        n_clust <- n_clust$algorithm$optimal_nb_clusters
-      } else {
-        stop(paste0("n_clust does not have an optimal number of clusters. ",
-                    "Did you specify partition_optimisation = TRUE in ",
-                    "bioregionalization_metrics()?"), 
-             call. = FALSE)
-      }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from bioregionalization_metrics()", 
+        * the output from find_optimal_n()",
            call. = FALSE)
     }
     if(!is.null(cut_height)){

@@ -443,7 +443,7 @@ bioregionalization_metrics(ex_pam,
 ```
 
 *Note
-For the two metrics `tot_endemism` and `avg_endemism`, you also need to provide
+For the two metrics `tot_endemics` and `mean_endemics`, you also need to provide
 the site-species matrix.
 
 ```{r}

@@ -940,7 +940,8 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
 
 ###################################################################################################
 # Additional functions                                                                            #
-#  - convert_metric_names                                                                         # 
+#  - convert_metric_names                                                                         #
+#  - n_clust_from_optimal_n                                                                       #
 #  - reformat_hierarchy                                                                           #                                                                           
 #  - knbclu                                                                                       #
 #  - reorder                                                                                      #
@@ -1009,6 +1010,24 @@ convert_metric_names <- function(metrics) {
   }  
   
   metrics
+}
+
+# n_clust_from_optimal_n
+# Extracts the optimal number(s) of clusters from a find_optimal_n() output
+# so that it can be used as n_clust in cut_tree(), hclu_hierarclust() and
+# hclu_diana(). The optimal numbers of all metrics are pooled.
+n_clust_from_optimal_n <- function(optimal_n) {
+
+  n_clust <- unlist(optimal_n$optimal_n)
+  n_clust <- sort(unique(n_clust[!is.na(n_clust)]))
+
+  if(length(n_clust) == 0){
+    stop(paste0("n_clust does not contain any optimal number of clusters. ",
+                "Please check the output of find_optimal_n()."),
+         call. = FALSE)
+  }
+
+  n_clust
 }
 
 

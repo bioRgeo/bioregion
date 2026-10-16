@@ -188,6 +188,9 @@ find_optimal_n <- function(evaluation_df,
   
   # Control metrics_to_use
   controls(args = metrics_to_use, data = NULL, type = "character_vector")
+  # Convert old metric names, unless they are column names of evaluation_df
+  not_in_df <- !(metrics_to_use %in% colnames(evaluation_df))
+  metrics_to_use[not_in_df] <- convert_metric_names(metrics_to_use[not_in_df])
   if("all" %in% metrics_to_use) {
     metrics_to_use <- colnames(evaluation_df)[-c(1,2)]
   } else if(any(!(metrics_to_use %in% colnames(evaluation_df)))) {

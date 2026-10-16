@@ -10,9 +10,10 @@
 #' @param tree A `bioregion.hierar.tree` or an `hclust` object.
 #' 
 #' @param n_clust An `integer` vector or a single `integer` indicating the 
-#' number of clusters to be obtained from the hierarchical tree, or the output 
-#' from [bioregionalization_metrics()]. This should not be used concurrently 
-#' with `cut_height`.
+#' number of clusters to be obtained from the hierarchical tree, or the output
+#' from [find_optimal_n()] (in which case the tree is cut at all the optimal
+#' numbers of clusters found across metrics). This should not be used
+#' concurrently with `cut_height`.
 #' 
 #' @param cut_height A `numeric` vector specifying the height(s) at which the
 #' tree should be cut. This should not be used concurrently with `n_clust` or
@@ -139,26 +140,20 @@ cut_tree <- function(tree,
   
   # Control n_clust
   if(!is.null(n_clust)){
+    if(inherits(n_clust, "bioregion.optimal.n")){
+      n_clust <- n_clust_from_optimal_n(n_clust)
+    }
     if(is.numeric(n_clust)){
       if(any(!(n_clust %% 1 == 0))) {
         stop(paste0("n_clust must an integer or a vector of ",
-                    "integers determining the number of clusters."), 
-             call. = FALSE)
-      }
-    } else if(inherits(n_clust, "bioregion.partition.metrics")){
-      if(!is.null(n_clust$algorithm$optimal_nb_clusters)) {
-        n_clust <- n_clust$algorithm$optimal_nb_clusters
-      } else {
-        stop(paste0("n_clust does not have an optimal number of clusters. ",
-                    "Did you specify partition_optimisation = TRUE in ",
-                    "bioregionalization_metrics()?"), 
+                    "integers determining the number of clusters."),
              call. = FALSE)
       }
     } else{
       stop("n_clust must be one of those:
         * an integer determining the number of clusters
         * a vector of integers determining the numbers of clusters for each cut
-        * the output from bioregionalization_metrics()", 
+        * the output from find_optimal_n()",
            call. = FALSE)
     }
     if(!is.null(cut_height)){

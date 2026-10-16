@@ -33,8 +33,8 @@ and \code{"anosim"}.}
 dissimilarity. By default, the third column name of \code{dissimilarity} is used.}
 
 \item{comat}{A site-species \code{matrix} with sites as rows and species as
-columns. Should be provided if \code{eval_metrics} includes \code{"avg_endemism"} or
-\code{"tot_endemism"}.}
+columns. Should be provided if \code{eval_metrics} includes \code{"mean_endemics"} or
+\code{"tot_endemics"}.}
 
 \item{anosim_permutations}{The number of permutations used to compute the
 p-value associated with the ANOSIM statistic. Defaults to 1, in which

@@ -314,7 +314,7 @@ print.bioregion.clusters <- function(x, ...) {
               " ... (with ",
               length(x$args$n_clust) - 10, " more values)"
             ),
-            x$args$n_clust
+            paste(x$args$n_clust, collapse = " ")
           ), "\n"
         )
       }
@@ -731,10 +731,16 @@ print.bioregion.optimal.n <- function(x, ...) {
   cat(" - Optimal partition(s) of clusters for each metric:\n")
 
   cat(paste(
-    paste(names(x$optimal_nb_clusters),
-      sapply(x$optimal_nb_clusters,
-        paste,
-        collapse = " "
+    paste(names(x$optimal_n),
+      sapply(x$optimal_n,
+        function(n) {
+          n <- n[!is.na(n)]
+          if (length(n) == 0) {
+            "none found"
+          } else {
+            paste(n, collapse = " ")
+          }
+        }
       ),
       sep = " - "
     ),
@@ -847,7 +853,7 @@ print.bioregion.site.species.metrics <- function(x, n_preview = 3, ...) {
   # similarity_metrics attribute currently groups richness & sim metrics
   # so we need to split
   sim_per_cluster <- intersect(sim_idx, c("mean_sim", "sd_sim"))
-  sim_bioreg <- intersect(sim_idx, c("Silhouette"))
+  sim_bioreg <- intersect(sim_idx, c("silhouette"))
   richness_metrics <- intersect(sim_idx, c("richness", "rich_endemics", "prop_endemics"))
   
   if(length(bio_occ) > 0)
@@ -966,8 +972,8 @@ str.bioregion.site.species.metrics <- function(object, ...) {
   # similarity_metrics attribute currently groups richness & sim metrics
   # so we need to split
   sim_per_cluster <- intersect(sim_idx, c("mean_sim", "sd_sim"))
-  sim_bioreg <- intersect(sim_idx, c("Silhouette"))
-  richness_metrics <- intersect(sim_idx, c("richness", "rich_endemics", "Prop_endemics"))
+  sim_bioreg <- intersect(sim_idx, c("silhouette"))
+  richness_metrics <- intersect(sim_idx, c("richness", "rich_endemics", "prop_endemics"))
   
   if(length(bio_occ) > 0)
     cat(" - Per-cluster co-occurrence metrics (occurrence):", paste(bio_occ, collapse = ", "), "\n")

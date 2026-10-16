@@ -19,8 +19,8 @@
 #' dissimilarity. By default, the third column name of `dissimilarity` is used.
 #' 
 #' @param comat A site-species `matrix` with sites as rows and species as
-#' columns. Should be provided if `eval_metrics` includes `"avg_endemism"` or 
-#' `"tot_endemism"`.
+#' columns. Should be provided if `eval_metrics` includes `"mean_endemics"` or
+#' `"tot_endemics"`.
 #'
 #' @param anosim_permutations The number of permutations used to compute the
 #' p-value associated with the ANOSIM statistic. Defaults to 1, in which

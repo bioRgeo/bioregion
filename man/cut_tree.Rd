@@ -25,8 +25,9 @@ cut_tree(
 
 \item{n_clust}{An \code{integer} vector or a single \code{integer} indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
-from \code{\link[=bioregionalization_metrics]{bioregionalization_metrics()}}. This should not be used concurrently
-with \code{cut_height}.}
+from \code{\link[=find_optimal_n]{find_optimal_n()}} (in which case the tree is cut at all the optimal
+numbers of clusters found across metrics). This should not be used
+concurrently with \code{cut_height}.}
 
 \item{cut_height}{A \code{numeric} vector specifying the height(s) at which the
 tree should be cut. This should not be used concurrently with \code{n_clust} or

@@ -68,8 +68,9 @@ earlier versions of bioregion keeps working.
 
 \item{n_clust}{An \code{integer} vector or a single \code{integer} indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
-from \link{bioregionalization_metrics}. This parameter should not be used
-simultaneously with \code{cut_height}.}
+from \code{\link[=find_optimal_n]{find_optimal_n()}} (in which case the tree is cut at all the optimal
+numbers of clusters found across metrics). This parameter should not be
+used simultaneously with \code{cut_height}.}
 
 \item{cut_height}{A \code{numeric} vector indicating the height(s) at which the
 tree should be cut. This parameter should not be used simultaneously with
