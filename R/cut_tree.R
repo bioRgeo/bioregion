@@ -19,10 +19,14 @@
 #' tree should be cut. This should not be used concurrently with `n_clust` or
 #' `optim_method`.
 #' 
-#' @param find_h A `boolean` indicating whether the cutting height should be 
-#' determined for the requested `n_clust`.
-#' 
-#' @param h_max A `numeric` value indicating the maximum possible tree height 
+#' @param find_h A `boolean` indicating whether the cutting height should be
+#' determined for the requested `n_clust`. If no
+#' height gives the requested number of clusters (e.g., when several branches
+#' merge at the same
+#' height), the closest possible number of clusters is used and a warning is
+#' issued.
+#'
+#' @param h_max A `numeric` value indicating the maximum possible tree height
 #' for determining the cutting height when `find_h = TRUE`.
 #' 
 #' @param h_min A `numeric` value specifying the minimum possible height in the 
@@ -309,29 +313,47 @@ cut_tree <- function(tree,
         dimnames = list(cur.tree$labels,
                         c("name", paste0("k_", n_clust)))))
       clusters$name <- cur.tree$labels
+
+      # Possible cuts of the tree between h_min and h_max:
+      # If we cut at height h, the number of clusters is always
+      # 1 + (number of merges higher than h)
+      # Hence, the number of clusters is constant between two
+      # successive merge heights. Each of these intervals of heights [lo, hi)
+      # gives one reachable number of clusters (k_cut), and we cut in the
+      # middle of the interval (h_cut).
+      merge_h <- sort(cur.tree$height)
+      # We put a tolerance here below which merge heights are considered equal
+      # This is because of rounding errors
+      # (edge case example w efound was that a mean dissimilarity of 1/6 can be 
+      # 0.16666666666666663 or 0.16666666666666666)
+      tol <- 1e-10 * max(1, abs(merge_h))
+      # Here we check diff between all ordered heights, and consider there's a new level
+      # only when diff > tol
+      new_level <- c(TRUE, diff(merge_h) > tol)
+      level_min <- merge_h[new_level]
+      level_max <- merge_h[c(new_level[-1], TRUE)]
+      lo <- c(-Inf, level_max)
+      hi <- c(level_min, Inf)
+      k_cut <- 1 + length(merge_h) - findInterval(lo, merge_h)
+      # Restrict to [h_min, h_max]
+      lo_cut <- pmax(lo, h_min)
+      hi_cut <- pmin(hi, h_max)
+      in_range <- lo_cut < hi_cut | (lo_cut == hi_cut & hi_cut < hi)
+      k_cut <- k_cut[in_range]
+      h_cut <- (lo_cut[in_range] + hi_cut[in_range]) / 2
+
       for(cur_n in n_clust){
         if(length(n_clust) < 10 & verbose){
           message("Determining the cut height to reach ", cur_n, " groups...")
         }
-        k <- 0
-        h1 <- h_max
-        h0 <- h_min
-        h <- h0 + (h1 - h0) / 2
-        # Algorithm to quickly find the height of cut corresponding to the
-        # requested number of clusters
-        iter <- 0
-        max_iter <- 500
-        while(k != cur_n &  h1 != h0 & iter < max_iter){
-          h <- h0 + (h1 - h0) / 2
-          cls <- stats::cutree(cur.tree, h = h)
-          k <- max(cls)
-          if(k < cur_n) {
-            h1 <- h
-          } else if (k > cur_n) {
-            h0 <- h
-          }
-          iter <- iter + 1
-        }
+        # The requested number of clusters cannot always be reached (several
+        # branches can merge at the same height), so we take the closest
+        # reachable number of clusters (the larger one in case of ties)
+        closest <- which(abs(k_cut - cur_n) == min(abs(k_cut - cur_n)))
+        closest <- closest[which.max(k_cut[closest])]
+        k <- k_cut[closest]
+        h <- h_cut[closest]
+        cls <- stats::cutree(cur.tree, h = h)
         if(length(n_clust) < 10 & verbose){
           message(paste0("--> ", h))
         }

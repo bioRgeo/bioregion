@@ -34,7 +34,11 @@ tree should be cut. This should not be used concurrently with \code{n_clust} or
 \code{optim_method}.}
 
 \item{find_h}{A \code{boolean} indicating whether the cutting height should be
-determined for the requested \code{n_clust}.}
+determined for the requested \code{n_clust}. If no
+height gives the requested number of clusters (e.g., when several branches
+merge at the same
+height), the closest possible number of clusters is used and a warning is
+issued.}
 
 \item{h_max}{A \code{numeric} value indicating the maximum possible tree height
 for determining the cutting height when \code{find_h = TRUE}.}
