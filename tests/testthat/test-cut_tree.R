@@ -426,3 +426,147 @@ test_that("node_type is not set when cut_tree is used on raw hclust object", {
 })
 
 
+
+# Tests for find_h with a toy tree ---------------------------------------------
+# A hand-built tree with 8 sites (A to H) and 7 merges:
+#
+#   merge  joins           height
+#   1      A + B           0.1
+#   2      C + D           0.16666666666666663  <- 1/6 with a rounding error
+#   3      E + F           0.16666666666666666  <- 1/6
+#   4      (AB) + (CD)     0.4                  <- exactly the same height
+#   5      G + H           0.4                  <-   as merge 4
+#   6      (EF) + (GH)     0.7
+#   7      root            0.9
+#
+# Cutting this tree can give 8, 7, 5, 3, 2 or 1 clusters. 6 clusters would
+# split merges 2 and 3 (the same height up to a rounding error), and 4 clusters
+# would split merges 4 and 5 (exactly the same height).
+toy_tree <- structure(
+  list(merge = matrix(c(-1, -2,
+                        -3, -4,
+                        -5, -6,
+                         1,  2,
+                        -7, -8,
+                         3,  5,
+                         4,  6),
+                      ncol = 2, byrow = TRUE),
+       # Merges 2 and 3 reproduce a real case found in a fishmat tree: both
+       # are a mean Simpson dissimilarity of 1/6, but dissimilarity()
+       # computes 1 - similarity, which gives 0.33333333333333326 instead of
+       # 0.33333333333333331 for 1/3
+       height = c(0.1,
+                  mean(c(0, 1 - (1 - 1/3), 1 - (1 - 1/3), 0)),
+                  mean(c(0, 1/4, 1/4)),
+                  0.4, 0.4, 0.7, 0.9),
+       order = 1:8,
+       labels = LETTERS[1:8],
+       method = "average"),
+  class = "hclust")
+
+n_distinct <- function(x) length(unique(x))
+
+test_that("find_h finds reachable numbers of clusters exactly", {
+
+  expect_no_warning(
+    res <- cut_tree(toy_tree, n_clust = c(1, 2, 3, 5, 7, 8), verbose = FALSE))
+  expect_equal(names(res)[-1], paste0("K_", c(1, 2, 3, 5, 7, 8)))
+  expect_equal(unname(sapply(res[, -1], n_distinct)), c(1, 2, 3, 5, 7, 8))
+})
+
+test_that("find_h returns the closest reachable number of clusters", {
+
+  # 4 is not reachable: 3 and 5 are equally close, the larger one is returned
+  expect_warning(
+    res <- cut_tree(toy_tree, n_clust = 4, verbose = FALSE),
+    "for k = 4. Closest number found: 5", fixed = TRUE)
+  expect_equal(names(res)[-1], "K_5")
+  expect_equal(n_distinct(res$K_5), 5)
+
+  # 6 is not reachable: 5 and 7 are equally close, the larger one is returned
+  expect_warning(
+    res <- cut_tree(toy_tree, n_clust = 6, verbose = FALSE),
+    "for k = 6. Closest number found: 7", fixed = TRUE)
+  expect_equal(n_distinct(res$K_7), 7)
+
+  # More clusters than sites: the largest reachable number
+  expect_warning(
+    res <- cut_tree(toy_tree, n_clust = 20, verbose = FALSE),
+    "for k = 20. Closest number found: 8", fixed = TRUE)
+  expect_equal(n_distinct(res$K_8), 8)
+})
+
+test_that("find_h never splits heights equal up to rounding errors", {
+
+  # C + D and E + F merge at 1/6 (up to a rounding error): whatever the
+  # number of clusters requested, both pairs are either merged or not
+  res <- suppressWarnings(cut_tree(toy_tree, n_clust = 1:8, verbose = FALSE))
+  rownames(res) <- res[, 1]
+  for (p in names(res)[-1]) {
+    expect_equal(res["C", p] == res["D", p], res["E", p] == res["F", p],
+                 info = p)
+  }
+})
+
+test_that("find_h works when h_min equals h_max", {
+
+  res <- cut_tree(toy_tree, n_clust = 3, h_min = 0.5, h_max = 0.5,
+                  verbose = FALSE)
+  expect_equal(n_distinct(res$K_3), 3)
+
+  # At a merge height, the merges at this height are done
+  res <- cut_tree(toy_tree, n_clust = 3, h_min = 0.4, h_max = 0.4,
+                  verbose = FALSE)
+  expect_equal(n_distinct(res$K_3), 3)
+})
+
+test_that("the heights of cut give the numbers of clusters reported", {
+
+  tree_cut <- suppressWarnings(
+    cut_tree(tree, n_clust = 2:15, verbose = FALSE))
+  info <- tree_cut$cluster_info
+  n_at_height <- sapply(info$output_cut_height, function(h) {
+    max(stats::cutree(tree_cut$algorithm$final.tree, h = h))
+  })
+  expect_equal(unname(n_at_height), info$n_clust)
+  expect_equal(unname(sapply(tree_cut$clusters[, -1], n_distinct)),
+               info$n_clust)
+})
+
+# Tests for n_clust as an output of find_optimal_n() ---------------------------
+test_that("n_clust can be the output of find_optimal_n()", {
+
+  tree_k <- hclu_hierarclust(wf_dissim,
+                             n_clust = 2:10,
+                             n_runs = 10,
+                             seed = 1,
+                             verbose = FALSE)
+  ev <- bioregionalization_metrics(tree_k,
+                                   eval_metrics = "prop_between_dissim",
+                                   dissimilarity = wf_dissim)
+  opt <- find_optimal_n(ev, plot = FALSE, verbose = FALSE)
+  n_opt <- sort(unique(unlist(opt$optimal_n)))
+
+  res <- cut_tree(tree_k, n_clust = opt, verbose = FALSE)
+  expect_equal(res$args$n_clust, n_opt)
+  expect_equal(res$cluster_info$requested_n_clust, n_opt)
+  expect_equal(res$clusters,
+               cut_tree(tree_k, n_clust = n_opt, verbose = FALSE)$clusters)
+
+  # Also on a raw hclust tree
+  res_hclust <- cut_tree(tree_k$algorithm$final.tree, n_clust = opt,
+                         verbose = FALSE)
+  expect_equal(res_hclust[, -1], res$clusters[, -1], ignore_attr = TRUE)
+
+  # Another object
+  expect_error(
+    cut_tree(tree_k, n_clust = ev),
+    "^n_clust must be one of those")
+
+  # No optimal number of clusters found
+  opt_none <- opt
+  opt_none$optimal_n[] <- list(numeric(0))
+  expect_error(
+    cut_tree(tree_k, n_clust = opt_none),
+    "^n_clust does not contain any optimal number of clusters")
+})

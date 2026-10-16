@@ -170,3 +170,58 @@ test_that("Test generic functions for bioregion.site.species.metrics", {
 
 
 
+
+# Tests bioregion.optimal.n
+test_that("print and str of find_optimal_n() outputs", {
+
+  tree <- hclu_hierarclust(wf_dissim,
+                           n_clust = 2:15,
+                           n_runs = 10,
+                           seed = 1,
+                           verbose = FALSE)
+  ev <- bioregionalization_metrics(tree,
+                                   eval_metrics = "all",
+                                   dissimilarity = wf_dissim,
+                                   comat = wf_comat)
+  opt <- find_optimal_n(ev, plot = FALSE, verbose = FALSE)
+
+  # print() shows each metric followed by its optimal numbers of clusters
+  expect_output_contains(
+    print(opt),
+    c("Search for an optimal number of clusters:",
+      paste(nrow(ev), "partition(s) evaluated"),
+      paste("Range of clusters explored: from", min(ev$n_bioregions), "to",
+            max(ev$n_bioregions)),
+      paste("Evaluated metric(s):", paste(names(opt$optimal_n),
+                                          collapse = " ")),
+      "Criterion chosen to optimise the number of clusters: elbow"))
+  expect_output_contains(print(opt), optimal_n_lines(opt), whole_line = TRUE)
+
+  # Several optimal numbers for one metric, and metrics without any optimal
+  # number (empty or NA, e.g. breakpoints on a metric that does not vary)
+  opt_none <- opt
+  opt_none$optimal_n[[1]] <- c(3, 8)
+  opt_none$optimal_n[[2]] <- numeric(0)
+  opt_none$optimal_n[[3]] <- NA
+  metrics <- names(opt_none$optimal_n)
+  expect_output_contains(
+    print(opt_none),
+    c(paste(metrics[1], "- 3 8"),
+      paste(metrics[2], "- none found"),
+      paste(metrics[3], "- none found")),
+    whole_line = TRUE)
+
+  # Step criteria give the step quantile, cutoff the cutoffs
+  opt_step <- find_optimal_n(ev, criterion = "increasing_step",
+                             plot = FALSE, verbose = FALSE)
+  expect_output_contains(print(opt_step), "step quantile chosen: 0.99")
+  opt_cut <- find_optimal_n(ev, criterion = "cutoff",
+                            metrics_to_use = "prop_between_dissim",
+                            metric_cutoffs = c(0.5, 0.9),
+                            plot = FALSE, verbose = FALSE)
+  expect_output_contains(print(opt_cut), "cutoff(s) chosen: 0.5 0.9")
+
+  # str() shows the components of the object
+  expect_output_contains(str(opt),
+                         c("args", "evaluation_df", "optimal_n", "plot"))
+})

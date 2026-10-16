@@ -1127,3 +1127,39 @@ test_that("the consensus tree is a valid hclust tree", {
                      optimal_tree_method = "consensus",
                      n_clust = 5, verbose = FALSE)))
 })
+
+test_that("n_clust can be the output of find_optimal_n()", {
+
+  tree_k <- hclu_hierarclust(wf_dissim,
+                             n_clust = 2:10,
+                             n_runs = 10,
+                             seed = 1,
+                             verbose = FALSE)
+  ev <- bioregionalization_metrics(tree_k,
+                                   eval_metrics = "prop_between_dissim",
+                                   dissimilarity = wf_dissim)
+  opt <- find_optimal_n(ev, plot = FALSE, verbose = FALSE)
+  n_opt <- sort(unique(unlist(opt$optimal_n)))
+
+  res <- hclu_hierarclust(wf_dissim,
+                          n_clust = opt,
+                          n_runs = 10,
+                          seed = 1,
+                          verbose = FALSE)
+  res_num <- hclu_hierarclust(wf_dissim,
+                              n_clust = n_opt,
+                              n_runs = 10,
+                              seed = 1,
+                              verbose = FALSE)
+  expect_equal(res$args$n_clust, n_opt)
+  expect_equal(res$cluster_info, res_num$cluster_info)
+  expect_equal(res$clusters, res_num$clusters)
+
+  # Another object
+  expect_error(
+    hclu_hierarclust(wf_dissim,
+                     n_clust = ev,
+                     optimal_tree_method = "best",
+                     verbose = FALSE),
+    "^n_clust must be one of those")
+})

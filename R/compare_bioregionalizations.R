@@ -149,7 +149,8 @@ compare_bioregionalizations <- function(bioregionalizations,
   if (inherits(bioregionalizations, "bioregion.clusters")) {
     if (inherits(bioregionalizations$clusters, "data.frame")) {
       has.clusters <- TRUE
-      clusters <- bioregionalizations$clusters
+      # Remove the first column which contains IDs 
+      clusters <- bioregionalizations$clusters[, -1, drop = FALSE]
     } else {
       if (bioregionalizations$name == "hclu_hierarclust") {
         stop(paste0("No clusters have been generated for your hierarchical ",

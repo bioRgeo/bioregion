@@ -358,7 +358,7 @@ print.bioregion.clusters <- function(x, ...) {
 
     nclust <- apply(
       x$clusters[, 2:ncol(x$clusters), drop = FALSE],
-      2, function(y) length(unique(y))
+      2, function(y) length(unique(y[!is.na(y)]))
     )
 
     cat(
@@ -595,28 +595,20 @@ plot.bioregion.clusters <- function(x, ...) {
 }
 
 #' @export
-#' @method print bioregion.partition.comparison
-print.bioregion.partition.comparison <- function(x, ...) {
-  cat("Partition comparison:\n")
-  cat(" -", x$inputs["number_partitions"], "partitions compared\n")
+#' @method print bioregion.bioregionalization.comparison
+print.bioregion.bioregionalization.comparison <- function(x, ...) {
+  cat("Bioregionalization comparison:\n")
+  cat(" -", x$inputs["number_bioregionalizations"],
+      "bioregionalizations compared\n")
   cat(" -", x$inputs["number_items"], "items in the clustering\n")
-
-  if (!is.null(x$args$sample_lines)) {
-    cat(
-      " - ", x$args$sample_lines,
-      " items used to compute comparisons among partitions\n"
-    )
-  }
 
   if (!is.null(x$args$indices)) {
     cat(" - Requested indices: ", x$args$indices, "\n")
     cat(" - Metric summary:\n")
 
-
-
     print(data.frame(
       sapply(
-        x$partition_comparison[, x$args$indices],
+        x$bioregionalization_comparison[, x$args$indices, drop = FALSE],
         function(x) {
           c(
             min(x, na.rm = TRUE),
@@ -632,20 +624,21 @@ print.bioregion.partition.comparison <- function(x, ...) {
   }
 
   if (x$args$cor_frequency) {
+    freq_cor <- x$bioregionalization_freq_cor
     cat(
-      " - Correlation between each partition and the total frequency of item",
-      " pairwise membership computed:\n"
+      " - Correlation between each bioregionalization and the total frequency",
+      "of item pairwise membership computed:\n"
     )
     cat(
-      "   # Range: ", round(min(x$partition_freq_cor), 3), " - ",
-      round(max(x$partition_freq_cor), 3), "\n"
+      "   # Range: ", round(min(freq_cor), 3), " - ",
+      round(max(freq_cor), 3), "\n"
     )
     cat(
-      "   # Partition(s) most representative (i.e., highest correlation): \n",
-      paste(names(x$partition_freq_cor)[
-        which(x$partition_freq_cor == max(x$partition_freq_cor))
-      ], collapse = ", "),
-      "\n Correlation = ", round(max(x$partition_freq_cor), 3), "\n"
+      "   # Bioregionalization(s) most representative (i.e., highest",
+      "correlation): \n",
+      paste(names(freq_cor)[which(freq_cor == max(freq_cor))],
+            collapse = ", "),
+      "\n Correlation = ", round(max(freq_cor), 3), "\n"
     )
   }
 
@@ -656,7 +649,7 @@ print.bioregion.partition.comparison <- function(x, ...) {
     "stored in outputs\n"
   )
   cat(
-    " - Confusion matrices of partition comparisons",
+    " - Confusion matrices of bioregionalization comparisons",
     ifelse(x$args$store_confusion_matrix,
       "", "not"
     ),
@@ -1080,12 +1073,12 @@ summary.bioregion.site.species.metrics <- function(object,
     n_bio <- NA
     n_choro <- NA
     if(!is.null(part_data$species_bioregions)) {
-      n_bio <- length(unique(part_data$species_bioregions$Bioregion))
+      n_bio <- length(unique(part_data$species_bioregions$bioregion))
     } else if(!is.null(part_data$site_bioregions)) {
-      n_bio <- length(unique(part_data$site_bioregions$Bioregion))
+      n_bio <- length(unique(part_data$site_bioregions$bioregion))
     }
     if(!is.null(part_data$site_chorotypes)) {
-      n_choro <- length(unique(part_data$site_chorotypes$Chorotypes))
+      n_choro <- length(unique(part_data$site_chorotypes$chorotype))
     }
     
     clust_str <- ""
@@ -1106,7 +1099,7 @@ summary.bioregion.site.species.metrics <- function(object,
       if(!is.null(stats)) {
         stats$Min <- round(stats$Min, 3)
         stats$Mean <- round(stats$Mean, 3)
-        stats$Mean <- round(stats$Median, 3)
+        stats$Median <- round(stats$Median, 3)
         stats$Max <- round(stats$Max, 3)
         print(stats, row.names = FALSE)
       }
@@ -1123,7 +1116,7 @@ summary.bioregion.site.species.metrics <- function(object,
           n_show <- min(n_top, nrow(df))
           cat("Top species by ", ind_val_col, ":\n", sep = "")
           for(i in seq_len(n_show)) {
-            cat("  ", i, ". ", df$Species[i], " (Bioregion ", df$Bioregion[i], 
+            cat("  ", i, ". ", df$species[i], " (Bioregion ", df$bioregion[i], 
                 "): ", round(df[[ind_val_col]][i], 3), "\n", sep = "")
           }
           cat("\n")
@@ -1169,7 +1162,7 @@ summary.bioregion.site.species.metrics <- function(object,
           n_show <- min(n_top, nrow(df))
           cat("Top sites by ", ind_val_col, ":\n", sep = "")
           for(i in seq_len(n_show)) {
-            cat("  ", i, ". ", df$Site[i], " (Chorotype ", df$Chorotypes[i], 
+            cat("  ", i, ". ", df$site[i], " (Chorotype ", df$chorotype[i], 
                 "): ", round(df[[ind_val_col]][i], 3), "\n", sep = "")
           }
           cat("\n")

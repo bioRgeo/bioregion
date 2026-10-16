@@ -1,12 +1,14 @@
 # Inputs -----------------------------------------------------------------------
 dissim <- dissimilarity(fishmat, metric = "all")
 
-bioreg <- hclu_hierarclust(dissim, 
-                           n_clust = 2:48, 
-                           index = "Simpson",
-                           seed = 1,
-                           optimal_tree_method = "best",
-                           verbose = FALSE)
+# 43 clusters cannot be reached on this tree (two merges at 1/7 up to a
+# rounding error), hence the warning of cut_tree()
+bioreg <- suppressWarnings(hclu_hierarclust(dissim, 
+                                            n_clust = 2:48, 
+                                            index = "Simpson",
+                                            seed = 1,
+                                            optimal_tree_method = "best",
+                                            verbose = FALSE))
 
 met <- bioregionalization_metrics(bioreg,
                                   eval_metrics = "all",
@@ -299,3 +301,64 @@ test_that("invalid inputs", {
 
 # metric_cutoffs = c(.5, .75, .9, .95, .99, .999) # not tested but error message
 # exists
+
+# Tests for the min, max and cutoff criteria -----------------------------------
+test_that("criteria min and max", {
+
+  for (criterion in c("min", "max")) {
+    fun <- match.fun(criterion)
+    opt <- find_optimal_n(met,
+                          criterion = criterion,
+                          plot = FALSE,
+                          verbose = FALSE)
+    metrics <- colnames(met)[-c(1, 2)]
+    expect_equal(names(opt$optimal_n), metrics)
+    for (m in metrics) {
+      is_optimal <- met[[m]] == fun(met[[m]])
+      expect_equal(opt$optimal_n[[m]], unique(met$n_bioregions[is_optimal]),
+                   info = paste(criterion, m))
+      # Only the optimal partitions of this metric are flagged
+      expect_equal(opt$evaluation_df[[paste0("optimal_n_", m)]], is_optimal,
+                   info = paste(criterion, m))
+    }
+  }
+
+  # Nothing printed when verbose = FALSE
+  expect_silent(find_optimal_n(met, criterion = "max",
+                               plot = FALSE, verbose = FALSE))
+})
+
+test_that("criterion cutoff", {
+
+  vals <- met$prop_between_dissim
+  cutoffs <- c(0.5, 0.75, 0.9)
+  opt <- find_optimal_n(met,
+                        criterion = "cutoff",
+                        metrics_to_use = "prop_between_dissim",
+                        metric_cutoffs = cutoffs,
+                        plot = FALSE,
+                        verbose = FALSE)
+  expected <- met$n_bioregions[sapply(cutoffs, function(x) which(vals >= x)[1])]
+  expect_equal(opt$optimal_n$prop_between_dissim, expected)
+
+  # A cutoff never reached by the metric gives no partition
+  opt <- find_optimal_n(met,
+                        criterion = "cutoff",
+                        metrics_to_use = "prop_between_dissim",
+                        metric_cutoffs = c(0.5, max(vals) + 1),
+                        plot = FALSE,
+                        verbose = FALSE)
+  expect_equal(opt$optimal_n$prop_between_dissim,
+               met$n_bioregions[which(vals >= 0.5)[1]])
+
+  # No cutoff reached
+  opt <- find_optimal_n(met,
+                        criterion = "cutoff",
+                        metrics_to_use = "prop_between_dissim",
+                        metric_cutoffs = max(vals) + 1,
+                        plot = FALSE,
+                        verbose = FALSE)
+  expect_length(opt$optimal_n$prop_between_dissim, 0)
+  expect_false(any(opt$evaluation_df$optimal_n_prop_between_dissim))
+  expect_output(print(opt), "prop_between_dissim - none found")
+})

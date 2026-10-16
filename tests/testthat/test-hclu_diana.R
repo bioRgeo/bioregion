@@ -340,3 +340,46 @@ test_that("invalid inputs", {
     fixed = TRUE)   
   
 })
+
+test_that("cluster_info describes each partition", {
+
+  # find_h = FALSE: cutree() at the requested numbers of clusters
+  clust <- hclu_diana(wf_dissim,
+                      n_clust = c(2, 5, 10),
+                      find_h = FALSE,
+                      verbose = FALSE)
+  expect_equal(clust$cluster_info$partition_name, names(clust$clusters)[-1])
+  expect_equal(clust$cluster_info$n_clust, c(2, 5, 10))
+
+  # find_h = TRUE: the numbers of clusters actually obtained
+  clust <- suppressWarnings(hclu_diana(wf_dissim,
+                                       n_clust = c(2, 5, 10, 15),
+                                       verbose = FALSE))
+  n_observed <- unname(sapply(clust$clusters[, -1],
+                              function(x) length(unique(x))))
+  expect_equal(clust$cluster_info$partition_name, names(clust$clusters)[-1])
+  expect_equal(clust$cluster_info$n_clust, n_observed)
+})
+
+test_that("n_clust can be the output of find_optimal_n()", {
+
+  clust_k <- suppressWarnings(hclu_diana(wf_dissim,
+                                         n_clust = 2:15,
+                                         verbose = FALSE))
+  ev <- bioregionalization_metrics(clust_k,
+                                   eval_metrics = "prop_between_dissim",
+                                   dissimilarity = wf_dissim)
+  opt <- find_optimal_n(ev, plot = FALSE, verbose = FALSE)
+  n_opt <- sort(unique(unlist(opt$optimal_n)))
+
+  res <- hclu_diana(wf_dissim, n_clust = opt, verbose = FALSE)
+  res_num <- hclu_diana(wf_dissim, n_clust = n_opt, verbose = FALSE)
+  expect_equal(res$args$n_clust, n_opt)
+  expect_equal(res$cluster_info, res_num$cluster_info)
+  expect_equal(res$clusters, res_num$clusters)
+
+  # Another object
+  expect_error(
+    hclu_diana(wf_dissim, n_clust = ev, verbose = FALSE),
+    "^n_clust must be one of those")
+})

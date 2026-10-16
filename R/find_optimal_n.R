@@ -499,6 +499,8 @@ find_optimal_n <- function(evaluation_df,
       optim_index <- sapply(metric_cutoffs,
                             function(cutoff, vals) which(vals >= cutoff)[1],
                             vals = evaluation_df[, metrics_to_use])
+      # Cutoffs never reached by the metric give no partition
+      optim_index <- optim_index[!is.na(optim_index)]
       
       evaluation_df[, paste0("optimal_n_", metrics_to_use)] <- FALSE
       evaluation_df[optim_index, paste0("optimal_n_", 
@@ -524,10 +526,8 @@ find_optimal_n <- function(evaluation_df,
         optim_index,
         function(x) unique(evaluation_df$n_bioregions[x]))
       
-      print(optim_index)
-      
       for(metric in names(optim_n)) {
-        evaluation_df[optim_index,
+        evaluation_df[optim_index[[metric]],
                                  paste0("optimal_n_", metric)] <- TRUE
       }
     }
@@ -549,7 +549,7 @@ find_optimal_n <- function(evaluation_df,
         function(x) unique(evaluation_df$n_bioregions[x]))
       
       for(metric in names(optim_n)) {
-        evaluation_df[optim_index, paste0("optimal_n_", metric)] <- 
+        evaluation_df[optim_index[[metric]], paste0("optimal_n_", metric)] <- 
           TRUE
       }
     }

@@ -1781,6 +1781,10 @@ gb <- function(clusters,
 
         # Extract mean_sim corresponding to the assigned bioregion
         a_val <- meansim_values[which(colnames(res2)[2:(ncol(res2)-1)] == assigned)]
+        # Sites assigned to no bioregion (NA) get no silhouette
+        if(length(a_val) == 0){
+          a_val <- NA
+        }
         return(a_val)
       })
       res2$b <- apply(res2, 1, function(x) {
