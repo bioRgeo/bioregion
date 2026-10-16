@@ -27,7 +27,7 @@ or similarity followed by similarity_to_dissimilarity."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,8 +124,9 @@ the third column name of <code>dissimilarity</code> is used.</p></dd>
 <dt id="arg-n-clust">n_clust<a class="anchor" aria-label="anchor" href="#arg-n-clust"></a></dt>
 <dd><p>An <code>integer</code> vector or a single <code>integer</code> indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
-from <a href="bioregionalization_metrics.html">bioregionalization_metrics</a>. Should not be used concurrently with
-<code>cut_height</code>.</p></dd>
+from <code><a href="find_optimal_n.html">find_optimal_n()</a></code> (in which case the tree is cut at all the optimal
+numbers of clusters found across metrics). Should not be used concurrently
+with <code>cut_height</code>.</p></dd>
 
 
 <dt id="arg-cut-height">cut_height<a class="anchor" aria-label="anchor" href="#arg-cut-height"></a></dt>

@@ -525,7 +525,7 @@ bioregionalization_metrics(ex_pam,
     ## K_24      K_24           24           0.7882333
     ## K_25      K_25           25           0.8675503
 
-\*Note For the two metrics `tot_endemism` and `avg_endemism`, you also
+\*Note For the two metrics `tot_endemics` and `mean_endemics`, you also
 need to provide the site-species matrix.
 
 ``` r
@@ -570,6 +570,10 @@ find_optimal_n(a)
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 7
+    ## anosim - 2
+    ## mean_endemics - 4
+    ## tot_endemics - 4
 
 Based on the metric selected, the optimal number of clusters can vary.
 

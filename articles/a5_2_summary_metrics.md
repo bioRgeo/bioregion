@@ -121,7 +121,7 @@ vege_hclu$cluster_info
 ```
 
     ##   partition_name n_clust requested_n_clust output_cut_height
-    ## 1            K_3       3                 3            0.5625
+    ## 1            K_3       3                 3         0.5489444
 
 ``` r
 
@@ -377,6 +377,7 @@ all_metrics
     ##  - Per-cluster similarity-based metrics: mean_sim, sd_sim 
     ##  - Bioregionalization co-occurrence metrics (occurrence): p 
     ##  - Bioregionalization co-occurrence metrics (abundance): p 
+    ##  - Bioregionalization similarity-based metrics: silhouette 
     ## 
     ## Data preview:
     ## $species_bioregions (29576 rows x 20 cols):
@@ -464,36 +465,36 @@ summary(all_metrics)
     ##  - Clustering data type: abundance 
     ##  - Metric data type: occurrence and abundance 
     ## 
-    ## Partition 1: Single partition (0 bioregions, 0 chorotypes)
+    ## Partition 1: Single partition (8 bioregions, 8 chorotypes)
     ## ---------------------------------------------------------- 
     ## 
     ## Species-per-bioregion metrics ($species_bioregions):
-    ##               Metric      Min      Mean        Median         Max
-    ##                 n_sb    0.000     0.000     0.0000000     500.000
-    ##                  n_s    1.000    72.000    72.0000000     671.000
-    ##                  n_b    1.000    15.000    15.0000000     515.000
-    ##      specificity_occ    0.000     0.000     0.0000000       1.000
-    ##    n_specificity_occ    0.000     0.000     0.0000000       1.000
-    ##         fidelity_occ    0.000     0.000     0.0000000       1.000
-    ##          ind_val_occ    0.000     0.000     0.0000000       0.844
-    ##        n_ind_val_occ    0.000     0.000     0.0000000       0.996
-    ##              rho_occ  -18.940    -0.335    -0.3346268      24.233
-    ##                 w_sb    0.000     0.000     0.0000000   22716.000
-    ##                  w_s    1.000   422.000   422.0000000   27353.000
-    ##                  w_b 5558.000 55402.000 55402.0000000 2831323.000
-    ##    specificity_abund    0.000     0.000     0.0000000       1.000
-    ##  n_specificity_abund    0.000     0.000     0.0000000       1.000
-    ##       fidelity_abund    0.000     0.000     0.0000000       0.161
-    ##        ind_val_abund    0.000     0.000     0.0000000       0.973
-    ##      n_ind_val_abund    0.000     0.000     0.0000000       1.000
-    ##            rho_abund  -12.483    -0.239    -0.2393045      26.693
+    ##               Metric      Min       Mean    Median         Max
+    ##                 n_sb    0.000     15.583     0.000     500.000
+    ##                  n_s    1.000    124.663    72.000     671.000
+    ##                  n_b    1.000     89.375    15.000     515.000
+    ##      specificity_occ    0.000      0.125     0.000       1.000
+    ##    n_specificity_occ    0.000      0.125     0.000       1.000
+    ##         fidelity_occ    0.000      0.177     0.000       1.000
+    ##          ind_val_occ    0.000      0.036     0.000       0.844
+    ##        n_ind_val_occ    0.000      0.059     0.000       0.996
+    ##              rho_occ  -18.940     -0.022    -0.335      24.233
+    ##                 w_sb    0.000    143.432     0.000   22716.000
+    ##                  w_s    1.000   1147.455   422.000   27353.000
+    ##                  w_b 5558.000 530267.625 55402.000 2831323.000
+    ##    specificity_abund    0.000      0.125     0.000       1.000
+    ##  n_specificity_abund    0.000      0.125     0.000       1.000
+    ##       fidelity_abund    0.000      0.000     0.000       0.161
+    ##        ind_val_abund    0.000      0.039     0.000       0.973
+    ##      n_ind_val_abund    0.000      0.058     0.000       1.000
+    ##            rho_abund  -12.483      0.000    -0.239      26.693
     ## 
     ## Top species by ind_val_occ:
-    ##   1.  (Bioregion ): 0.844
-    ##   2.  (Bioregion ): 0.841
-    ##   3.  (Bioregion ): 0.841
-    ##   4.  (Bioregion ): 0.838
-    ##   5.  (Bioregion ): 0.837
+    ##   1. 12553 (Bioregion 2): 0.844
+    ##   2. 12749 (Bioregion 1): 0.841
+    ##   3. 11513 (Bioregion 1): 0.841
+    ##   4. 11285 (Bioregion 2): 0.838
+    ##   5. 13550 (Bioregion 2): 0.837
     ## 
     ## Species summary metrics ($species_bioregionalization):
     ##   Metric Min  Mean Median   Max
@@ -522,11 +523,11 @@ summary(all_metrics)
     ##            rho_abund  -20.999     -0.462    -0.777      43.653
     ## 
     ## Top sites by ind_val_occ:
-    ##   1.  (Chorotype ): 0.524
-    ##   2.  (Chorotype ): 0.522
-    ##   3.  (Chorotype ): 0.497
-    ##   4.  (Chorotype ): 0.488
-    ##   5.  (Chorotype ): 0.482
+    ##   1. 238 (Chorotype 2): 0.524
+    ##   2. 433 (Chorotype 2): 0.522
+    ##   3. 286 (Chorotype 2): 0.497
+    ##   4. 86 (Chorotype 2): 0.488
+    ##   5. 384 (Chorotype 2): 0.482
     ## 
     ## Site chorological summary metrics ($site_chorological):
     ##   Metric Min  Mean Median   Max
@@ -564,10 +565,11 @@ str(all_metrics)
     ##  - Metric data type: occurrence and abundance 
     ##  - Per-cluster co-occurrence metrics (occurrence): specificity, n_specificity, fidelity, ind_val, n_ind_val, rho, core_terms 
     ##  - Per-cluster co-occurrence metrics (abundance): specificity, n_specificity, fidelity, ind_val, n_ind_val, rho, core_terms 
-    ##  - Per-cluster richness & endemism metrics: richness, rich_endemics 
+    ##  - Per-cluster richness & endemism metrics: richness, rich_endemics, prop_endemics 
     ##  - Per-cluster similarity-based metrics: mean_sim, sd_sim 
     ##  - Bioregionalization co-occurrence metrics (occurrence): p 
     ##  - Bioregionalization co-occurrence metrics (abundance): p 
+    ##  - Bioregionalization similarity-based metrics: silhouette 
     ## 
     ##  $ species_bioregions        :'data.frame':  29576 obs. of  20 variables:
     ##   ..$ species            : chr [1:29576] "10017" "10017" "10017" "10017" ...
@@ -1126,6 +1128,7 @@ sil_metrics
     ##  - Clustering data type: occurrence 
     ## 
     ## Computed metrics:
+    ##  - Bioregionalization similarity-based metrics: silhouette 
     ## 
     ## Data preview:
     ## $site_bioregionalization (715 rows x 2 cols):

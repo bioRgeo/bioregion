@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,56 +67,64 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0.9000" id="bioregion-1509000">bioregion 1.5.0.9000<a class="anchor" aria-label="anchor" href="#bioregion-1509000"></a></h2>
 <p>This is a list of changes made in the development/GitHub version of the package between <strong>bioregion 1.5.0</strong> (CRAN release 2026-10-10) and the next CRAN release.</p>
-<ul><li>
-</li></ul></div>
+<ul><li>Multiple bug fixes following recent name changes in bioregionalization_metrics(): fixed <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> outputs of <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code>, fixed the <code>cluster_info</code> of <code><a href="../reference/hclu_diana.html">hclu_diana()</a></code>, re-implemented the inclusion of the output of <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> into <code>n_clust</code> argument of <code><a href="../reference/cut_tree.html">cut_tree()</a></code>, <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and <code><a href="../reference/hclu_diana.html">hclu_diana()</a></code> (documented but broke in recent updates), fixed <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">str()</a></code> on the output of <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>, which did not list the <code>silhouette</code> metric and, for <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">str()</a></code>, the <code>prop_endemics</code> metric), fixed <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> on the output of <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0" id="bioregion-150">bioregion 1.5.0<a class="anchor" aria-label="anchor" href="#bioregion-150"></a></h2>
 <p>This is a list of changes made in the development/GitHub version of the package between <strong>bioregion 1.4.0</strong> (CRAN release 2026-03-29) and <strong>bioregion 1.5.0</strong> (CRAN release 2026-10-10).</p>
-<ul><li><p>The tree evaluation function is now implemented in C++ to be faster across all methods in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>.</p></li>
-<li><p>The iterative hierarchical consensus tree is now available on its own with the new function <code><a href="../reference/ihct.html">ihct()</a></code>. In <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>, the default of <code>optimal_tree_method</code> is now called <code>"ihct</code>“” which now runs 5 to 7 times faster. The former name <code>"iterative_consensus_tree"</code> is still accepted and gives the same result (PR <a href="https://github.com/bioRgeo/bioregion/issues/38" class="external-link">#38</a>).</p></li>
-<li><p>Integrated fixes for the upcoming release of dbscan 1.2.7 (PR <a href="https://github.com/bioRgeo/bioregion/issues/37" class="external-link">#37</a>).</p></li>
-<li><p>Minor fix to the map_bioregions() documentation (<a href="https://github.com/bioRgeo/bioregion/issues/35" class="external-link">#35</a>).</p></li>
-<li><p>Improved get_pairwise_membership efficiency (PR <a href="https://github.com/bioRgeo/bioregion/issues/32" class="external-link">#32</a>).</p></li>
-<li><p>Metric names have been changed to snake_case in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>, <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code> and <code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code>. The package is being progressively standardized on snake_case metric names. Old metric names are still accepted as inputs but are converted to snake_case in outputs.</p></li>
-<li><p><code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> has been updated. <code>bioregionalizations</code>argument changed to <code>evaluation_df</code>.</p></li>
-<li><p><code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> has been updated. The <code>anosim</code> metric (along with the associated p-value) is now computed with <code>vegan</code>. The <code>eval_metric</code> argument changed to <code>eval_metrics</code> and <code>net</code> to <code>comat</code>. <code>col_sites</code>, and<br><code>col_species</code> arguments are now deprecated.</p></li>
-<li><p>Relaxed matching controls in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> and <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code>.</p></li>
+<ul><li>The tree evaluation function is now implemented in C++ to be faster across all methods in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>.</li>
+<li>The iterative hierarchical consensus tree is now available on its own with the new function <code><a href="../reference/ihct.html">ihct()</a></code>. In <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>, the default of <code>optimal_tree_method</code> is now called <code>"ihct</code>“” which now runs 5 to 7 times faster. The former name <code>"iterative_consensus_tree"</code> is still accepted and gives the same result (PR <a href="https://github.com/bioRgeo/bioregion/issues/38" class="external-link">#38</a>).</li>
+<li>Integrated fixes for the upcoming release of dbscan 1.2.7 (PR <a href="https://github.com/bioRgeo/bioregion/issues/37" class="external-link">#37</a>).</li>
+<li>Minor fix to the map_bioregions() documentation (<a href="https://github.com/bioRgeo/bioregion/issues/35" class="external-link">#35</a>).</li>
+<li>Improved get_pairwise_membership efficiency (PR <a href="https://github.com/bioRgeo/bioregion/issues/32" class="external-link">#32</a>).</li>
+<li>Metric names have been changed to snake_case in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code>, <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code> and <code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code>. The package is being progressively standardized on snake_case metric names. Old metric names are still accepted as inputs but are converted to snake_case in outputs.</li>
+<li>
+<code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> has been updated. <code>bioregionalizations</code>argument changed to <code>evaluation_df</code>.</li>
+<li>
+<code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> has been updated. The <code>anosim</code> metric (along with the associated p-value) is now computed with <code>vegan</code>. The <code>eval_metric</code> argument changed to <code>eval_metrics</code> and <code>net</code> to <code>comat</code>. <code>col_sites</code>, and<code>col_species</code> arguments are now deprecated.</li>
+<li>Relaxed matching controls in <code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> and <code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="bioregion-140">bioregion 1.4.0<a class="anchor" aria-label="anchor" href="#bioregion-140"></a></h2>
 <p>This is a list of changes made between <strong>bioregion 1.3.0</strong> (CRAN release 2026-01-23) and <strong>bioregion 1.4.0</strong> (CRAN release 2026-03-29).</p>
-<ul><li><p><code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code> has been updated. It now supports multiple bioregion<br>
-partitions and spatial coherence can be computed using either the size or<br>
-the area of the largest contiguous component. The <code>col_bioregion</code> argument<br>
-is now deprecated.</p></li>
-<li><p><code>map_bioregion()</code> has been reformatted: <code>bioregionalization</code> argument changed to <code>partition_index</code>, <code>clusters</code> to <code>bioregionalization</code>, <code>geometry</code> to <code>map</code> and <code>write_clusters</code> to <code>map_as_output</code>.</p></li>
-<li><p><code>map_bioregion()</code> can now handle <code>terra</code> inputs (<code>terra</code> added in <code>Suggests</code>).</p></li>
-<li><p><code>clusters</code> argument changed to <code>bioregionalization</code> in <code><a href="../reference/site_species_subset.html">site_species_subset()</a></code>.</p></li>
-<li><p>Added <code>seed</code> argument to <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> (issue <a href="https://github.com/bioRgeo/bioregion/issues/10" class="external-link">#10</a>).</p></li>
-<li><p>Fixed invalid input, control and output in <code><a href="../reference/nhclu_affprop.html">nhclu_affprop()</a></code> (issue <a href="https://github.com/bioRgeo/bioregion/issues/14" class="external-link">#14</a>).</p></li>
+<ul><li>
+<code><a href="../reference/bioregion_metrics.html">bioregion_metrics()</a></code> has been updated. It now supports multiple bioregionpartitions and spatial coherence can be computed using either the size orthe area of the largest contiguous component. The <code>col_bioregion</code> argumentis now deprecated.</li>
+<li>
+<code>map_bioregion()</code> has been reformatted: <code>bioregionalization</code> argument changed to <code>partition_index</code>, <code>clusters</code> to <code>bioregionalization</code>, <code>geometry</code> to <code>map</code> and <code>write_clusters</code> to <code>map_as_output</code>.</li>
+<li>
+<code>map_bioregion()</code> can now handle <code>terra</code> inputs (<code>terra</code> added in <code>Suggests</code>).</li>
+<li>
+<code>clusters</code> argument changed to <code>bioregionalization</code> in <code><a href="../reference/site_species_subset.html">site_species_subset()</a></code>.</li>
+<li>Added <code>seed</code> argument to <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> (issue <a href="https://github.com/bioRgeo/bioregion/issues/10" class="external-link">#10</a>).</li>
+<li>Fixed invalid input, control and output in <code><a href="../reference/nhclu_affprop.html">nhclu_affprop()</a></code> (issue <a href="https://github.com/bioRgeo/bioregion/issues/14" class="external-link">#14</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.0" id="bioregion-130">bioregion 1.3.0<a class="anchor" aria-label="anchor" href="#bioregion-130"></a></h2>
 <p>This is a list of changes made between <strong>bioregion 1.2.0</strong> (CRAN release 2025-01-31) and <strong>bioregion 1.3.0</strong> (CRAN release 2026-01-23).</p>
 <p><strong><em>Function changes</em></strong></p>
-<ul><li><p>Added the <code>inputs$data_type</code> field to all clustering outputs to explicitly track whether original co-occurrence data were occurrence-based or abundance-based. This field is automatically determined based on the algorithm type and the similarity/dissimilarity metric used.</p></li>
-<li><p>Added the <code>inputs$node_type</code> field to all clustering outputs to explicitly indicate whether the clustering includes only sites or both sites and species. This changes include the hidden <code>node_type</code> attributes.</p></li>
-<li><p><code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> has been thoroughly reformatted and now provides: species-per-bioregions metrics, species-in-bioregionalization metrics, site-per-chorotypes metrics, site-in-chorological classification metrics, site-per-bioregions metrics, and site-in-bioregionalization metrics, all of which are rigorously defined in the corresponding vignette.</p></li>
-<li><p><code><a href="../reference/site_species_subset.html">site_species_subset()</a></code> has been simplified taking advantage on <code>inputs$node_type</code>.</p></li>
-<li><p>Renamed the class <code>bioregion.pairwise.metric</code> to <code>bioregion.pairwise</code>.</p></li>
-<li><p>Added a <code>verbose</code> argument to all talkative functions allowing users to control the display of progress messages.</p></li>
+<ul><li>Added the <code>inputs$data_type</code> field to all clustering outputs to explicitly track whether original co-occurrence data were occurrence-based or abundance-based. This field is automatically determined based on the algorithm type and the similarity/dissimilarity metric used.</li>
+<li>Added the <code>inputs$node_type</code> field to all clustering outputs to explicitly indicate whether the clustering includes only sites or both sites and species. This changes include the hidden <code>node_type</code> attributes.</li>
+<li>
+<code><a href="../reference/site_species_metrics.html">site_species_metrics()</a></code> has been thoroughly reformatted and now provides: species-per-bioregions metrics, species-in-bioregionalization metrics, site-per-chorotypes metrics, site-in-chorological classification metrics, site-per-bioregions metrics, and site-in-bioregionalization metrics, all of which are rigorously defined in the corresponding vignette.</li>
+<li>
+<code><a href="../reference/site_species_subset.html">site_species_subset()</a></code> has been simplified taking advantage on <code>inputs$node_type</code>.</li>
+<li>Renamed the class <code>bioregion.pairwise.metric</code> to <code>bioregion.pairwise</code>.</li>
+<li>Added a <code>verbose</code> argument to all talkative functions allowing users to control the display of progress messages.</li>
+<li>
+<code><a href="../reference/bioregionalization_metrics.html">bioregionalization_metrics()</a></code> now returns a <code>data.frame</code> (columns <code>partition</code>, <code>n_bioregions</code>, then one column per metric) instead of a <code>list</code> with an <code>evaluation_df</code> element. Code that used <code>x$evaluation_df</code> should now use <code>x</code> directly.</li>
 </ul><p><strong><em>New features</em></strong></p>
-<ul><li><p>Added export of the function <code><a href="../reference/exportGDF.html">exportGDF()</a></code> with documentation and tests.</p></li>
-<li><p>Added <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code> to provide consistent bioregion color palettes for use across multiple visualizations (maps, networks, graphs, etc.).</p></li>
-<li><p>Updated <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> to handle bioregion colors.</p></li>
-<li><p>Added a generic function <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> for a clearer display of results.</p></li>
-<li><p>Added <code><a href="../reference/bind_pairwise.html">bind_pairwise()</a></code> to combine pairwise (dis)similarity objects.</p></li>
-<li><p>Added <code><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise()</a></code> to replace and improve upon <code><a href="../reference/betapart_to_bioregion.html">betapart_to_bioregion()</a></code>, which is now deprecated.</p></li>
-<li><p>Added a comparison with other R packages for computing dissimilarity metrics in tutorial 3 (<em>Pairwise similarity/dissimilarity metrics</em>).</p></li>
+<ul><li>Added export of the function <code><a href="../reference/exportGDF.html">exportGDF()</a></code> with documentation and tests.</li>
+<li>Added <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code> to provide consistent bioregion color palettes for use across multiple visualizations (maps, networks, graphs, etc.).</li>
+<li>Updated <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> to handle bioregion colors.</li>
+<li>Added a generic function <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> for a clearer display of results.</li>
+<li>Added <code><a href="../reference/bind_pairwise.html">bind_pairwise()</a></code> to combine pairwise (dis)similarity objects.</li>
+<li>Added <code><a href="../reference/as_bioregion_pairwise.html">as_bioregion_pairwise()</a></code> to replace and improve upon <code><a href="../reference/betapart_to_bioregion.html">betapart_to_bioregion()</a></code>, which is now deprecated.</li>
+<li>Added a comparison with other R packages for computing dissimilarity metrics in tutorial 3 (<em>Pairwise similarity/dissimilarity metrics</em>).</li>
 </ul><p><strong><em>Bug fixes</em></strong></p>
-<ul><li><p>Fixed an tibble input problem with <code><a href="../reference/net_to_mat.html">net_to_mat()</a></code> (issue <a href="https://github.com/bioRgeo/bioregion/issues/11" class="external-link">#11</a>).</p></li>
-<li><p>Fixed a problem in <code>inputs$pairwise_metric</code> when numeric <code>index</code> in all clustering outputs.</p></li>
-<li><p>Modified the <code>keep_trials</code> argument in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and fixed a potential issue with randomized matrix storage.</p></li>
+<ul><li>Fixed an tibble input problem with <code><a href="../reference/net_to_mat.html">net_to_mat()</a></code> (issue <a href="https://github.com/bioRgeo/bioregion/issues/11" class="external-link">#11</a>).</li>
+<li>Fixed a problem in <code>inputs$pairwise_metric</code> when numeric <code>index</code> in all clustering outputs.</li>
+<li>Modified the <code>keep_trials</code> argument in <code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code> and fixed a potential issue with randomized matrix storage.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="bioregion-120">bioregion 1.2.0<a class="anchor" aria-label="anchor" href="#bioregion-120"></a></h2>
@@ -133,8 +141,7 @@ is now deprecated.</p></li>
 <p>Updated <code><a href="../reference/install_binaries.html">install_binaries()</a></code>:</p>
 <ul><li>Archive <code>bin.zip</code> now stored on GitHub and backed up on NextCloud.</li>
 <li>Added Infomap version 2.8.0.</li>
-<li>Added argument <code>download_only</code> to execute only the download step.<br>
- </li>
+<li>Added argument <code>download_only</code> to execute only the download step.  </li>
 </ul></li>
 <li><p>Added <code>check_install</code> argument to <code><a href="../reference/netclu_infomap.html">netclu_infomap()</a></code>, <code><a href="../reference/netclu_louvain.html">netclu_louvain()</a></code>, and <code><a href="../reference/netclu_oslom.html">netclu_oslom()</a></code>.</p></li>
 <li><p>Added <code><a href="../reference/betapart_to_bioregion.html">betapart_to_bioregion()</a></code> to the package.</p></li>
@@ -146,26 +153,26 @@ is now deprecated.</p></li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="bioregion-111">bioregion 1.1.1<a class="anchor" aria-label="anchor" href="#bioregion-111"></a></h2>
 <p>This is a list of changes made between <strong>bioregion 1.1.0</strong> (CRAN release 2024-03-19) and <strong>bioregion 1.1.1</strong> (CRAN release 2024-04-19).</p>
-<ul><li><p>Added hierarchy support for Louvain (C++).</p></li>
-<li><p>Added <code>seed</code> argument to stochastic algorithms (except Louvain C++).</p></li>
-<li><p>Added <code>cut_weight</code> argument to <code>netclu_*</code> functions.</p></li>
-<li><p>Changed value for sites without clusters from <code>0</code> to <code>NA</code>.</p></li>
-<li><p>Updated automated tests (code coverage &gt; 60%).</p></li>
-<li><p>Standardized controls, inputs, and outputs.</p></li>
-<li><p>Fixed a bug in <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> for cases where partition metrics did not vary.</p></li>
+<ul><li>Added hierarchy support for Louvain (C++).</li>
+<li>Added <code>seed</code> argument to stochastic algorithms (except Louvain C++).</li>
+<li>Added <code>cut_weight</code> argument to <code>netclu_*</code> functions.</li>
+<li>Changed value for sites without clusters from <code>0</code> to <code>NA</code>.</li>
+<li>Updated automated tests (code coverage &gt; 60%).</li>
+<li>Standardized controls, inputs, and outputs.</li>
+<li>Fixed a bug in <code><a href="../reference/find_optimal_n.html">find_optimal_n()</a></code> for cases where partition metrics did not vary.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="bioregion-110">bioregion 1.1.0<a class="anchor" aria-label="anchor" href="#bioregion-110"></a></h2>
 <p>This is a list of changes made between <strong>bioregion 1.0.0</strong> (CRAN release 2023-04-15) and <strong>bioregion 1.1.0</strong> (CRAN release 2024-03-19).</p>
-<ul><li><p>Added the <code>resolution</code> parameter to the igraph Louvain implementation.</p></li>
-<li><p>Added options to <code><a href="../reference/mat_to_net.html">mat_to_net()</a></code> to exclude diagonal and lower triangular matrices using <code>include_diag</code> and <code>include_lower</code>.</p></li>
-<li><p>Added a function to extract a subset of nodes (sites or species) from <code>bioregion.clusters</code> objects containing both types.</p></li>
-<li><p>Added a generic function to maintain attributes of <code>bioregion.pairwise</code> objects and track the number of sites and species.</p></li>
-<li><p>Added new functions: <code><a href="../reference/nhclu_clara.html">nhclu_clara()</a></code> and <code><a href="../reference/nhclu_clarans.html">nhclu_clarans()</a></code>.</p></li>
-<li><p>Edited vignettes to document new functions.</p></li>
-<li><p>Modified controls for <code>bioregion.pairwise</code> objects.</p></li>
-<li><p>Added the <code>include_formula</code> argument to <code>similarity_dissimilarity_conversion()</code> to (not) select formula metrics.</p></li>
-<li><p>Allowed negative values in <code><a href="../reference/similarity.html">similarity()</a></code> with the Euclidean metric.</p></li>
+<ul><li>Added the <code>resolution</code> parameter to the igraph Louvain implementation.</li>
+<li>Added options to <code><a href="../reference/mat_to_net.html">mat_to_net()</a></code> to exclude diagonal and lower triangular matrices using <code>include_diag</code> and <code>include_lower</code>.</li>
+<li>Added a function to extract a subset of nodes (sites or species) from <code>bioregion.clusters</code> objects containing both types.</li>
+<li>Added a generic function to maintain attributes of <code>bioregion.pairwise</code> objects and track the number of sites and species.</li>
+<li>Added new functions: <code><a href="../reference/nhclu_clara.html">nhclu_clara()</a></code> and <code><a href="../reference/nhclu_clarans.html">nhclu_clarans()</a></code>.</li>
+<li>Edited vignettes to document new functions.</li>
+<li>Modified controls for <code>bioregion.pairwise</code> objects.</li>
+<li>Added the <code>include_formula</code> argument to <code>similarity_dissimilarity_conversion()</code> to (not) select formula metrics.</li>
+<li>Allowed negative values in <code><a href="../reference/similarity.html">similarity()</a></code> with the Euclidean metric.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="bioregion-100">bioregion 1.0.0<a class="anchor" aria-label="anchor" href="#bioregion-100"></a></h2>

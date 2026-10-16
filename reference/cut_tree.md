@@ -37,8 +37,10 @@ cut_tree(
 
   An `integer` vector or a single `integer` indicating the number of
   clusters to be obtained from the hierarchical tree, or the output from
-  [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md).
-  This should not be used concurrently with `cut_height`.
+  [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
+  (in which case the tree is cut at all the optimal numbers of clusters
+  found across metrics). This should not be used concurrently with
+  `cut_height`.
 
 - cut_height:
 
@@ -49,7 +51,10 @@ cut_tree(
 - find_h:
 
   A `boolean` indicating whether the cutting height should be determined
-  for the requested `n_clust`.
+  for the requested `n_clust`. If no height gives the requested number
+  of clusters (e.g., when several branches merge at the same height),
+  the closest possible number of clusters is used and a warning is
+  issued.
 
 - h_max:
 
@@ -171,22 +176,22 @@ tree1 <- hclu_hierarclust(dissimilarity,
 #> 
 #> Final tree has a 0.8792 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 5 groups...
-#> --> 0.25
+#> --> 0.243409048680788
 tree2 <- cut_tree(tree1, cut_height = .05)
 tree3 <- cut_tree(tree1, n_clust = c(3, 5, 10))
 #> Determining the cut height to reach 3 groups...
-#> --> 0.3125
+#> --> 0.304998697546652
 #> Determining the cut height to reach 5 groups...
-#> --> 0.25
+#> --> 0.243409048680788
 #> Determining the cut height to reach 10 groups...
-#> --> 0.15625
+#> --> 0.153511904761905
 tree4 <- cut_tree(tree1, cut_height = c(.05, .1, .15, .2, .25))
 tree5 <- cut_tree(tree1, n_clust = c(3, 5, 10), find_h = FALSE)
 
 hclust_tree <- tree2$algorithm$final.tree
 clusters_2 <- cut_tree(hclust_tree, n_clust = 10)
 #> Determining the cut height to reach 10 groups...
-#> --> 0.15625
+#> --> 0.153511904761905
 
 cluster_dynamic <- cut_tree(tree1, dynamic_tree_cut = TRUE,
                             dissimilarity = dissimilarity)

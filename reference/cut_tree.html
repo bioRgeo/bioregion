@@ -23,7 +23,7 @@ height for the requested number(s) of clusters."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,8 +114,9 @@ height for the requested number(s) of clusters.</p>
 <dt id="arg-n-clust">n_clust<a class="anchor" aria-label="anchor" href="#arg-n-clust"></a></dt>
 <dd><p>An <code>integer</code> vector or a single <code>integer</code> indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
-from <code><a href="bioregionalization_metrics.html">bioregionalization_metrics()</a></code>. This should not be used concurrently
-with <code>cut_height</code>.</p></dd>
+from <code><a href="find_optimal_n.html">find_optimal_n()</a></code> (in which case the tree is cut at all the optimal
+numbers of clusters found across metrics). This should not be used
+concurrently with <code>cut_height</code>.</p></dd>
 
 
 <dt id="arg-cut-height">cut_height<a class="anchor" aria-label="anchor" href="#arg-cut-height"></a></dt>
@@ -126,7 +127,11 @@ tree should be cut. This should not be used concurrently with <code>n_clust</cod
 
 <dt id="arg-find-h">find_h<a class="anchor" aria-label="anchor" href="#arg-find-h"></a></dt>
 <dd><p>A <code>boolean</code> indicating whether the cutting height should be
-determined for the requested <code>n_clust</code>.</p></dd>
+determined for the requested <code>n_clust</code>. If no
+height gives the requested number of clusters (e.g., when several branches
+merge at the same
+height), the closest possible number of clusters is used and a warning is
+issued.</p></dd>
 
 
 <dt id="arg-h-max">h_max<a class="anchor" aria-label="anchor" href="#arg-h-max"></a></dt>
@@ -243,22 +248,22 @@ Boris Leroy (<a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>)</
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.8792 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.243409048680788</span>
 <span class="r-in"><span><span class="va">tree2</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, cut_height <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tree3</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 3 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.3125</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.304998697546652</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.25</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.243409048680788</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.15625</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.153511904761905</span>
 <span class="r-in"><span><span class="va">tree4</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.1</span>, <span class="fl">.15</span>, <span class="fl">.2</span>, <span class="fl">.25</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tree5</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>, find_h <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">hclust_tree</span> <span class="op">&lt;-</span> <span class="va">tree2</span><span class="op">$</span><span class="va">algorithm</span><span class="op">$</span><span class="va">final.tree</span></span></span>
 <span class="r-in"><span><span class="va">clusters_2</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">hclust_tree</span>, n_clust <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 10 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.15625</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.153511904761905</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cluster_dynamic</span> <span class="op">&lt;-</span> <span class="fu">cut_tree</span><span class="op">(</span><span class="va">tree1</span>, dynamic_tree_cut <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                            dissimilarity <span class="op">=</span> <span class="va">dissimilarity</span><span class="op">)</span></span></span>

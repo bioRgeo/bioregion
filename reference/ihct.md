@@ -392,7 +392,7 @@ plot(tree)
 
 cut_tree(tree, n_clust = 3)
 #> Determining the cut height to reach 3 groups...
-#> --> 0.07421875
+#> --> 0.0738586725862941
 #>            ID K_3
 #> Site1   Site1   1
 #> Site10 Site10   1

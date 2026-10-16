@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2026-10-10</h4>
+            <h4 data-toc-skip class="date">2026-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a5_2_summary_metrics.Rmd" class="external-link"><code>vignettes/a5_2_summary_metrics.Rmd</code></a></small>
       <div class="d-none name"><code>a5_2_summary_metrics.Rmd</code></div>
@@ -261,7 +261,7 @@ non-hierarchical and hierarchical bioregionalizations. <br></p>
 <span>                              verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">vege_hclu</span><span class="op">$</span><span class="va">cluster_info</span></span></code></pre></div>
 <pre><code><span><span class="co">##   partition_name n_clust requested_n_clust output_cut_height</span></span>
-<span><span class="co">## 1            K_3       3                 3            0.5625</span></span></code></pre>
+<span><span class="co">## 1            K_3       3                 3         0.5489444</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Network bioregionalization</span></span>
 <span><span class="va">vege_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_walktrap.html">netclu_walktrap</a></span><span class="op">(</span><span class="va">vegesim</span>,</span>
@@ -905,6 +905,7 @@ instructions for accessing the data.</p>
 <span><span class="co">##  - Per-cluster similarity-based metrics: mean_sim, sd_sim </span></span>
 <span><span class="co">##  - Bioregionalization co-occurrence metrics (occurrence): p </span></span>
 <span><span class="co">##  - Bioregionalization co-occurrence metrics (abundance): p </span></span>
+<span><span class="co">##  - Bioregionalization similarity-based metrics: silhouette </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Data preview:</span></span>
 <span><span class="co">## $species_bioregions (29576 rows x 20 cols):</span></span>
@@ -987,36 +988,36 @@ rows and summary statistics for numeric columns.</p>
 <span><span class="co">##  - Clustering data type: abundance </span></span>
 <span><span class="co">##  - Metric data type: occurrence and abundance </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Partition 1: Single partition (0 bioregions, 0 chorotypes)</span></span>
+<span><span class="co">## Partition 1: Single partition (8 bioregions, 8 chorotypes)</span></span>
 <span><span class="co">## ---------------------------------------------------------- </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Species-per-bioregion metrics ($species_bioregions):</span></span>
-<span><span class="co">##               Metric      Min      Mean        Median         Max</span></span>
-<span><span class="co">##                 n_sb    0.000     0.000     0.0000000     500.000</span></span>
-<span><span class="co">##                  n_s    1.000    72.000    72.0000000     671.000</span></span>
-<span><span class="co">##                  n_b    1.000    15.000    15.0000000     515.000</span></span>
-<span><span class="co">##      specificity_occ    0.000     0.000     0.0000000       1.000</span></span>
-<span><span class="co">##    n_specificity_occ    0.000     0.000     0.0000000       1.000</span></span>
-<span><span class="co">##         fidelity_occ    0.000     0.000     0.0000000       1.000</span></span>
-<span><span class="co">##          ind_val_occ    0.000     0.000     0.0000000       0.844</span></span>
-<span><span class="co">##        n_ind_val_occ    0.000     0.000     0.0000000       0.996</span></span>
-<span><span class="co">##              rho_occ  -18.940    -0.335    -0.3346268      24.233</span></span>
-<span><span class="co">##                 w_sb    0.000     0.000     0.0000000   22716.000</span></span>
-<span><span class="co">##                  w_s    1.000   422.000   422.0000000   27353.000</span></span>
-<span><span class="co">##                  w_b 5558.000 55402.000 55402.0000000 2831323.000</span></span>
-<span><span class="co">##    specificity_abund    0.000     0.000     0.0000000       1.000</span></span>
-<span><span class="co">##  n_specificity_abund    0.000     0.000     0.0000000       1.000</span></span>
-<span><span class="co">##       fidelity_abund    0.000     0.000     0.0000000       0.161</span></span>
-<span><span class="co">##        ind_val_abund    0.000     0.000     0.0000000       0.973</span></span>
-<span><span class="co">##      n_ind_val_abund    0.000     0.000     0.0000000       1.000</span></span>
-<span><span class="co">##            rho_abund  -12.483    -0.239    -0.2393045      26.693</span></span>
+<span><span class="co">##               Metric      Min       Mean    Median         Max</span></span>
+<span><span class="co">##                 n_sb    0.000     15.583     0.000     500.000</span></span>
+<span><span class="co">##                  n_s    1.000    124.663    72.000     671.000</span></span>
+<span><span class="co">##                  n_b    1.000     89.375    15.000     515.000</span></span>
+<span><span class="co">##      specificity_occ    0.000      0.125     0.000       1.000</span></span>
+<span><span class="co">##    n_specificity_occ    0.000      0.125     0.000       1.000</span></span>
+<span><span class="co">##         fidelity_occ    0.000      0.177     0.000       1.000</span></span>
+<span><span class="co">##          ind_val_occ    0.000      0.036     0.000       0.844</span></span>
+<span><span class="co">##        n_ind_val_occ    0.000      0.059     0.000       0.996</span></span>
+<span><span class="co">##              rho_occ  -18.940     -0.022    -0.335      24.233</span></span>
+<span><span class="co">##                 w_sb    0.000    143.432     0.000   22716.000</span></span>
+<span><span class="co">##                  w_s    1.000   1147.455   422.000   27353.000</span></span>
+<span><span class="co">##                  w_b 5558.000 530267.625 55402.000 2831323.000</span></span>
+<span><span class="co">##    specificity_abund    0.000      0.125     0.000       1.000</span></span>
+<span><span class="co">##  n_specificity_abund    0.000      0.125     0.000       1.000</span></span>
+<span><span class="co">##       fidelity_abund    0.000      0.000     0.000       0.161</span></span>
+<span><span class="co">##        ind_val_abund    0.000      0.039     0.000       0.973</span></span>
+<span><span class="co">##      n_ind_val_abund    0.000      0.058     0.000       1.000</span></span>
+<span><span class="co">##            rho_abund  -12.483      0.000    -0.239      26.693</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Top species by ind_val_occ:</span></span>
-<span><span class="co">##   1.  (Bioregion ): 0.844</span></span>
-<span><span class="co">##   2.  (Bioregion ): 0.841</span></span>
-<span><span class="co">##   3.  (Bioregion ): 0.841</span></span>
-<span><span class="co">##   4.  (Bioregion ): 0.838</span></span>
-<span><span class="co">##   5.  (Bioregion ): 0.837</span></span>
+<span><span class="co">##   1. 12553 (Bioregion 2): 0.844</span></span>
+<span><span class="co">##   2. 12749 (Bioregion 1): 0.841</span></span>
+<span><span class="co">##   3. 11513 (Bioregion 1): 0.841</span></span>
+<span><span class="co">##   4. 11285 (Bioregion 2): 0.838</span></span>
+<span><span class="co">##   5. 13550 (Bioregion 2): 0.837</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Species summary metrics ($species_bioregionalization):</span></span>
 <span><span class="co">##   Metric Min  Mean Median   Max</span></span>
@@ -1045,11 +1046,11 @@ rows and summary statistics for numeric columns.</p>
 <span><span class="co">##            rho_abund  -20.999     -0.462    -0.777      43.653</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Top sites by ind_val_occ:</span></span>
-<span><span class="co">##   1.  (Chorotype ): 0.524</span></span>
-<span><span class="co">##   2.  (Chorotype ): 0.522</span></span>
-<span><span class="co">##   3.  (Chorotype ): 0.497</span></span>
-<span><span class="co">##   4.  (Chorotype ): 0.488</span></span>
-<span><span class="co">##   5.  (Chorotype ): 0.482</span></span>
+<span><span class="co">##   1. 238 (Chorotype 2): 0.524</span></span>
+<span><span class="co">##   2. 433 (Chorotype 2): 0.522</span></span>
+<span><span class="co">##   3. 286 (Chorotype 2): 0.497</span></span>
+<span><span class="co">##   4. 86 (Chorotype 2): 0.488</span></span>
+<span><span class="co">##   5. 384 (Chorotype 2): 0.482</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Site chorological summary metrics ($site_chorological):</span></span>
 <span><span class="co">##   Metric Min  Mean Median   Max</span></span>
@@ -1081,10 +1082,11 @@ of each data frame component.</p>
 <span><span class="co">##  - Metric data type: occurrence and abundance </span></span>
 <span><span class="co">##  - Per-cluster co-occurrence metrics (occurrence): specificity, n_specificity, fidelity, ind_val, n_ind_val, rho, core_terms </span></span>
 <span><span class="co">##  - Per-cluster co-occurrence metrics (abundance): specificity, n_specificity, fidelity, ind_val, n_ind_val, rho, core_terms </span></span>
-<span><span class="co">##  - Per-cluster richness &amp; endemism metrics: richness, rich_endemics </span></span>
+<span><span class="co">##  - Per-cluster richness &amp; endemism metrics: richness, rich_endemics, prop_endemics </span></span>
 <span><span class="co">##  - Per-cluster similarity-based metrics: mean_sim, sd_sim </span></span>
 <span><span class="co">##  - Bioregionalization co-occurrence metrics (occurrence): p </span></span>
 <span><span class="co">##  - Bioregionalization co-occurrence metrics (abundance): p </span></span>
+<span><span class="co">##  - Bioregionalization similarity-based metrics: silhouette </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##  $ species_bioregions        :'data.frame':  29576 obs. of  20 variables:</span></span>
 <span><span class="co">##   ..$ species            : chr [1:29576] "10017" "10017" "10017" "10017" ...</span></span>
@@ -1663,6 +1665,7 @@ between bioregions.</p>
 <span><span class="co">##  - Clustering data type: occurrence </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Computed metrics:</span></span>
+<span><span class="co">##  - Bioregionalization similarity-based metrics: silhouette </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Data preview:</span></span>
 <span><span class="co">## $site_bioregionalization (715 rows x 2 cols):</span></span>

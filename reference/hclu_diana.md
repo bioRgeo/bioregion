@@ -46,8 +46,10 @@ hclu_diana(
 
   An `integer` vector or a single `integer` indicating the number of
   clusters to be obtained from the hierarchical tree, or the output from
-  [bioregionalization_metrics](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md).
-  Should not be used concurrently with `cut_height`.
+  [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
+  (in which case the tree is cut at all the optimal numbers of clusters
+  found across metrics). Should not be used concurrently with
+  `cut_height`.
 
 - cut_height:
 

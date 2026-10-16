@@ -6,7 +6,28 @@ This is a list of changes made in the development/GitHub version of the
 package between **bioregion 1.5.0** (CRAN release 2026-10-10) and the
 next CRAN release.
 
-- 
+- Multiple bug fixes following recent name changes in
+  bioregionalization_metrics(): fixed
+  [`print()`](https://rdrr.io/r/base/print.html) outputs of
+  [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md),
+  fixed the `cluster_info` of
+  [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md),
+  re-implemented the inclusion of the output of
+  [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
+  into `n_clust` argument of
+  [`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md),
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
+  and
+  [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md)
+  (documented but broke in recent updates), fixed
+  [`print()`](https://rdrr.io/r/base/print.html) and
+  [`str()`](https://rdrr.io/r/utils/str.html) on the output of
+  [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md),
+  which did not list the `silhouette` metric and, for
+  [`str()`](https://rdrr.io/r/utils/str.html), the `prop_endemics`
+  metric), fixed [`print()`](https://rdrr.io/r/base/print.html) on the
+  output of
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
 
 ## bioregion 1.5.0
 
@@ -17,7 +38,6 @@ package between **bioregion 1.4.0** (CRAN release 2026-03-29) and
 - The tree evaluation function is now implemented in C++ to be faster
   across all methods in
   [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
-
 - The iterative hierarchical consensus tree is now available on its own
   with the new function
   [`ihct()`](https://bioRgeo.github.io/bioregion/reference/ihct.md). In
@@ -26,16 +46,12 @@ package between **bioregion 1.4.0** (CRAN release 2026-03-29) and
   runs 5 to 7 times faster. The former name `"iterative_consensus_tree"`
   is still accepted and gives the same result (PR
   [\#38](https://github.com/bioRgeo/bioregion/issues/38)).
-
 - Integrated fixes for the upcoming release of dbscan 1.2.7 (PR
   [\#37](https://github.com/bioRgeo/bioregion/issues/37)).
-
 - Minor fix to the map_bioregions() documentation
   ([\#35](https://github.com/bioRgeo/bioregion/issues/35)).
-
 - Improved get_pairwise_membership efficiency (PR
   [\#32](https://github.com/bioRgeo/bioregion/issues/32)).
-
 - Metric names have been changed to snake_case in
   [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md),
   [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
@@ -44,17 +60,14 @@ package between **bioregion 1.4.0** (CRAN release 2026-03-29) and
   The package is being progressively standardized on snake_case metric
   names. Old metric names are still accepted as inputs but are converted
   to snake_case in outputs.
-
 - [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
   has been updated. `bioregionalizations`argument changed to
   `evaluation_df`.
-
 - [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md)
   has been updated. The `anosim` metric (along with the associated
   p-value) is now computed with `vegan`. The `eval_metric` argument
-  changed to `eval_metrics` and `net` to `comat`. `col_sites`, and  
-  `col_species` arguments are now deprecated.
-
+  changed to `eval_metrics` and `net` to `comat`. `col_sites`,
+  and`col_species` arguments are now deprecated.
 - Relaxed matching controls in
   [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
   and
@@ -66,27 +79,20 @@ This is a list of changes made between **bioregion 1.3.0** (CRAN release
 2026-01-23) and **bioregion 1.4.0** (CRAN release 2026-03-29).
 
 - [`bioregion_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregion_metrics.md)
-  has been updated. It now supports multiple bioregion  
-  partitions and spatial coherence can be computed using either the size
-  or  
-  the area of the largest contiguous component. The `col_bioregion`
-  argument  
-  is now deprecated.
-
+  has been updated. It now supports multiple bioregionpartitions and
+  spatial coherence can be computed using either the size orthe area of
+  the largest contiguous component. The `col_bioregion` argumentis now
+  deprecated.
 - `map_bioregion()` has been reformatted: `bioregionalization` argument
   changed to `partition_index`, `clusters` to `bioregionalization`,
   `geometry` to `map` and `write_clusters` to `map_as_output`.
-
 - `map_bioregion()` can now handle `terra` inputs (`terra` added in
   `Suggests`).
-
 - `clusters` argument changed to `bioregionalization` in
   [`site_species_subset()`](https://bioRgeo.github.io/bioregion/reference/site_species_subset.md).
-
 - Added `seed` argument to
   [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
   (issue [\#10](https://github.com/bioRgeo/bioregion/issues/10)).
-
 - Fixed invalid input, control and output in
   [`nhclu_affprop()`](https://bioRgeo.github.io/bioregion/reference/nhclu_affprop.md)
   (issue [\#14](https://github.com/bioRgeo/bioregion/issues/14)).
@@ -103,12 +109,10 @@ This is a list of changes made between **bioregion 1.2.0** (CRAN release
   occurrence-based or abundance-based. This field is automatically
   determined based on the algorithm type and the
   similarity/dissimilarity metric used.
-
 - Added the `inputs$node_type` field to all clustering outputs to
   explicitly indicate whether the clustering includes only sites or both
   sites and species. This changes include the hidden `node_type`
   attributes.
-
 - [`site_species_metrics()`](https://bioRgeo.github.io/bioregion/reference/site_species_metrics.md)
   has been thoroughly reformatted and now provides:
   species-per-bioregions metrics, species-in-bioregionalization metrics,
@@ -116,44 +120,39 @@ This is a list of changes made between **bioregion 1.2.0** (CRAN release
   metrics, site-per-bioregions metrics, and site-in-bioregionalization
   metrics, all of which are rigorously defined in the corresponding
   vignette.
-
 - [`site_species_subset()`](https://bioRgeo.github.io/bioregion/reference/site_species_subset.md)
   has been simplified taking advantage on `inputs$node_type`.
-
 - Renamed the class `bioregion.pairwise.metric` to `bioregion.pairwise`.
-
 - Added a `verbose` argument to all talkative functions allowing users
   to control the display of progress messages.
+- [`bioregionalization_metrics()`](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md)
+  now returns a `data.frame` (columns `partition`, `n_bioregions`, then
+  one column per metric) instead of a `list` with an `evaluation_df`
+  element. Code that used `x$evaluation_df` should now use `x` directly.
 
 ***New features***
 
 - Added export of the function
   [`exportGDF()`](https://bioRgeo.github.io/bioregion/reference/exportGDF.md)
   with documentation and tests.
-
 - Added
   [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
   to provide consistent bioregion color palettes for use across multiple
   visualizations (maps, networks, graphs, etc.).
-
 - Updated
   [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
   to handle bioregion colors.
-
 - Added a generic function
   [`summary()`](https://rdrr.io/r/base/summary.html) for a clearer
   display of results.
-
 - Added
   [`bind_pairwise()`](https://bioRgeo.github.io/bioregion/reference/bind_pairwise.md)
   to combine pairwise (dis)similarity objects.
-
 - Added
   [`as_bioregion_pairwise()`](https://bioRgeo.github.io/bioregion/reference/as_bioregion_pairwise.md)
   to replace and improve upon
   [`betapart_to_bioregion()`](https://bioRgeo.github.io/bioregion/reference/betapart_to_bioregion.md),
   which is now deprecated.
-
 - Added a comparison with other R packages for computing dissimilarity
   metrics in tutorial 3 (*Pairwise similarity/dissimilarity metrics*).
 
@@ -162,10 +161,8 @@ This is a list of changes made between **bioregion 1.2.0** (CRAN release
 - Fixed an tibble input problem with
   [`net_to_mat()`](https://bioRgeo.github.io/bioregion/reference/net_to_mat.md)
   (issue [\#11](https://github.com/bioRgeo/bioregion/issues/11)).
-
 - Fixed a problem in `inputs$pairwise_metric` when numeric `index` in
   all clustering outputs.
-
 - Modified the `keep_trials` argument in
   [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
   and fixed a potential issue with randomized matrix storage.
@@ -211,8 +208,7 @@ This is a list of changes made between **bioregion 1.1.1** (CRAN release
 
   - Archive `bin.zip` now stored on GitHub and backed up on NextCloud.
   - Added Infomap version 2.8.0.
-  - Added argument `download_only` to execute only the download step.  
-     
+  - Added argument `download_only` to execute only the download step.  
 
 - Added `check_install` argument to
   [`netclu_infomap()`](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.md),
@@ -245,17 +241,11 @@ This is a list of changes made between **bioregion 1.1.0** (CRAN release
 2024-03-19) and **bioregion 1.1.1** (CRAN release 2024-04-19).
 
 - Added hierarchy support for Louvain (C++).
-
 - Added `seed` argument to stochastic algorithms (except Louvain C++).
-
 - Added `cut_weight` argument to `netclu_*` functions.
-
 - Changed value for sites without clusters from `0` to `NA`.
-
 - Updated automated tests (code coverage \> 60%).
-
 - Standardized controls, inputs, and outputs.
-
 - Fixed a bug in
   [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
   for cases where partition metrics did not vary.
@@ -266,32 +256,24 @@ This is a list of changes made between **bioregion 1.0.0** (CRAN release
 2023-04-15) and **bioregion 1.1.0** (CRAN release 2024-03-19).
 
 - Added the `resolution` parameter to the igraph Louvain implementation.
-
 - Added options to
   [`mat_to_net()`](https://bioRgeo.github.io/bioregion/reference/mat_to_net.md)
   to exclude diagonal and lower triangular matrices using `include_diag`
   and `include_lower`.
-
 - Added a function to extract a subset of nodes (sites or species) from
   `bioregion.clusters` objects containing both types.
-
 - Added a generic function to maintain attributes of
   `bioregion.pairwise` objects and track the number of sites and
   species.
-
 - Added new functions:
   [`nhclu_clara()`](https://bioRgeo.github.io/bioregion/reference/nhclu_clara.md)
   and
   [`nhclu_clarans()`](https://bioRgeo.github.io/bioregion/reference/nhclu_clarans.md).
-
 - Edited vignettes to document new functions.
-
 - Modified controls for `bioregion.pairwise` objects.
-
 - Added the `include_formula` argument to
   `similarity_dissimilarity_conversion()` to (not) select formula
   metrics.
-
 - Allowed negative values in
   [`similarity()`](https://bioRgeo.github.io/bioregion/reference/similarity.md)
   with the Euclidean metric.

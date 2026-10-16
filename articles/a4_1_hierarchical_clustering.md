@@ -169,7 +169,7 @@ tree1 <- cut_tree(tree1,
 ```
 
 Here, we asked for 3 clusters, and the algorithm automatically finds the
-height at which 3 clusters are found (h = 0.555).
+height at which 3 clusters are found (h = 0.554).
 
 ``` r
 
@@ -188,7 +188,7 @@ tree1
     ## Clustering results:
     ##  - Number of partitions:  1 
     ##  - Number of clusters:  3 
-    ##  - Height of cut of the hierarchical tree: 0.555
+    ##  - Height of cut of the hierarchical tree: 0.554
 
 When we type again the name of the object in the console, it gives us
 the results of the clustering: we have
@@ -199,7 +199,7 @@ the results of the clustering: we have
   asked for 3, and we obtained 3, which is good. Sometimes, however, we
   cannot get the number of clusters we asked for - in which case the
   outcome will be indicated.
-- **a height of cut at 0.555**: this is the height of cut at which we
+- **a height of cut at 0.554**: this is the height of cut at which we
   can obtain 4 clusters in our tree.
 
 We can make a quick plot of our partitioned tree with
@@ -805,6 +805,7 @@ opti_n_tree4
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 16
 
 ``` r
 
@@ -880,17 +881,17 @@ bioregionalization_metrics(tree4,
     ## 17      K_18           18           0.8471819 0.7913035
     ## 18    K_19_1           19           0.8510755 0.7939484
     ## 19    K_19_2           19           0.8510755 0.7939484
-    ## 20    K_19_3           19           0.8510755 0.7939484
-    ## 21      K_22           22           0.8517974 0.7944725
+    ## 20    K_22_1           22           0.8517974 0.7944725
+    ## 21    K_22_2           22           0.8517974 0.7944725
     ## 22      K_23           23           0.8523847 0.7946816
     ## 23      K_24           24           0.8607463 0.8002397
     ## 24      K_25           25           0.8608632 0.8003071
     ## 25      K_26           26           0.8643934 0.8017103
     ## 26      K_27           27           0.8644199 0.8017220
     ## 27      K_28           28           0.8658456 0.8022027
-    ## 28    K_29_1           29           0.8659844 0.8022323
-    ## 29    K_29_2           29           0.8659844 0.8022323
-    ## 30      K_31           31           0.8683174 0.8029426
+    ## 28      K_29           29           0.8659844 0.8022323
+    ## 29    K_31_1           31           0.8683174 0.8029426
+    ## 30    K_31_2           31           0.8683174 0.8029426
     ## 31      K_32           32           0.8683203 0.8029430
     ## 32      K_33           33           0.8688860 0.8031397
     ## 33      K_34           34           0.8705847 0.8034989
@@ -906,9 +907,9 @@ bioregionalization_metrics(tree4,
     ## 43      K_44           44           0.9030051 0.8163742
     ## 44      K_45           45           0.9032491 0.8164615
     ## 45      K_46           46           0.9032627 0.8164672
-    ## 46    K_47_1           47           0.9032979 0.8164869
-    ## 47    K_47_2           47           0.9032979 0.8164869
-    ## 48      K_49           49           0.9048841 0.8171194
+    ## 46      K_47           47           0.9032979 0.8164869
+    ## 47    K_49_1           49           0.9048841 0.8171194
+    ## 48    K_49_2           49           0.9048841 0.8171194
     ## 49      K_50           50           0.9055191 0.8171865
     ## 50      K_51           51           0.9064402 0.8174775
     ## 51      K_52           52           0.9077569 0.8180749
@@ -918,9 +919,9 @@ bioregionalization_metrics(tree4,
     ## 55      K_56           56           0.9078569 0.8180760
     ## 56      K_57           57           0.9080844 0.8180236
     ## 57      K_58           58           0.9081071 0.8180173
-    ## 58    K_59_1           59           0.9081523 0.8180095
-    ## 59    K_59_2           59           0.9081523 0.8180095
-    ## 60      K_61           61           0.9423177 0.8299331
+    ## 58      K_59           59           0.9081523 0.8180095
+    ## 59    K_61_1           61           0.9423177 0.8299331
+    ## 60    K_61_2           61           0.9423177 0.8299331
     ## 61      K_62           62           0.9423473 0.8299712
     ## 62      K_63           63           0.9424308 0.8301351
     ## 63      K_64           64           0.9424430 0.8301460
@@ -937,9 +938,9 @@ bioregionalization_metrics(tree4,
     ## 74      K_75           75           0.9511909 0.8369696
     ## 75      K_76           76           0.9512219 0.8370073
     ## 76      K_77           77           0.9512290 0.8370185
-    ## 77    K_78_1           78           0.9512338 0.8370198
-    ## 78    K_78_2           78           0.9512338 0.8370198
-    ## 79      K_80           80           0.9527677 0.8384965
+    ## 77      K_78           78           0.9512338 0.8370198
+    ## 78    K_80_1           80           0.9527677 0.8384965
+    ## 79    K_80_2           80           0.9527677 0.8384965
     ## 80      K_81           81           0.9527748 0.8385010
     ## 81      K_82           82           0.9535339 0.8390197
     ## 82      K_83           83           0.9535386 0.8390213
@@ -990,17 +991,17 @@ bioregionalization_metrics(tree4,
     ## 17      K_18           18   0.008193279   0.08682716
     ## 18    K_19_1           19   0.007729305   0.08628618
     ## 19    K_19_2           19   0.007729305   0.08628618
-    ## 20    K_19_3           19   0.007729305   0.08628618
-    ## 21      K_22           22   0.006631785   0.08574520
+    ## 20    K_22_1           22   0.006631785   0.08574520
+    ## 21    K_22_2           22   0.006631785   0.08574520
     ## 22      K_23           23   0.006136322   0.08249932
     ## 23      K_24           24   0.005841894   0.08141737
     ## 24      K_25           25   0.005611593   0.08141737
     ## 25      K_26           26   0.005358477   0.08060590
     ## 26      K_27           27   0.005160782   0.08060590
     ## 27      K_28           28   0.004977251   0.08006492
-    ## 28    K_29_1           29   0.004807376   0.08006492
-    ## 29    K_29_2           29   0.004807376   0.08006492
-    ## 30      K_31           31   0.004560544   0.08006492
+    ## 28      K_29           29   0.004807376   0.08006492
+    ## 29    K_31_1           31   0.004560544   0.08006492
+    ## 30    K_31_2           31   0.004560544   0.08006492
     ## 31      K_32           32   0.004418027   0.08006492
     ## 32      K_33           33   0.004272639   0.07952394
     ## 33      K_34           34   0.004154962   0.07898296
@@ -1016,9 +1017,9 @@ bioregionalization_metrics(tree4,
     ## 43      K_44           44   0.003209149   0.07708953
     ## 44      K_45           45   0.003128953   0.07681904
     ## 45      K_46           46   0.003060933   0.07681904
-    ## 46    K_47_1           47   0.003019061   0.07681904
-    ## 47    K_47_2           47   0.003019061   0.07681904
-    ## 48      K_49           49   0.002901561   0.07654855
+    ## 46      K_47           47   0.003019061   0.07681904
+    ## 47    K_49_1           49   0.002901561   0.07654855
+    ## 48    K_49_2           49   0.002901561   0.07654855
     ## 49      K_50           50   0.002882141   0.07654855
     ## 50      K_51           51   0.002839677   0.07654855
     ## 51      K_52           52   0.002785182   0.07573708
@@ -1028,9 +1029,9 @@ bioregionalization_metrics(tree4,
     ## 55      K_56           56   0.002593343   0.07573708
     ## 56      K_57           57   0.002589729   0.07546659
     ## 57      K_58           58   0.002546292   0.07546659
-    ## 58    K_59_1           59   0.002509746   0.07546659
-    ## 59    K_59_2           59   0.002509746   0.07546659
-    ## 60      K_61           61   0.002423777   0.07465513
+    ## 58      K_59           59   0.002509746   0.07546659
+    ## 59    K_61_1           61   0.002423777   0.07465513
+    ## 60    K_61_2           61   0.002423777   0.07465513
     ## 61      K_62           62   0.002384684   0.07465513
     ## 62      K_63           63   0.002390713   0.07465513
     ## 63      K_64           64   0.002354293   0.07465513
@@ -1047,9 +1048,9 @@ bioregionalization_metrics(tree4,
     ## 74      K_75           75   0.001679035   0.05680281
     ## 75      K_76           76   0.001642836   0.05626183
     ## 76      K_77           77   0.001621501   0.05626183
-    ## 77    K_78_1           78   0.001600712   0.05626183
-    ## 78    K_78_2           78   0.001600712   0.05626183
-    ## 79      K_80           80   0.001567895   0.05626183
+    ## 77      K_78           78   0.001600712   0.05626183
+    ## 78    K_80_1           80   0.001567895   0.05626183
+    ## 79    K_80_2           80   0.001567895   0.05626183
     ## 80      K_81           81   0.001549627   0.05626183
     ## 81      K_82           82   0.001530818   0.05626183
     ## 82      K_83           83   0.001512375   0.05626183
@@ -1138,6 +1139,10 @@ find_optimal_n(eval_tree4)
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  elbow 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 16
+    ## anosim - 19
+    ## mean_endemics - 9
+    ## tot_endemics - 7
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png)
 
@@ -1182,6 +1187,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
+    ## anosim - 16
+    ## prop_between_dissim - 7
 
 ``` r
 
@@ -1201,6 +1208,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  decreasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
+    ## mean_endemics - 3
+    ## tot_endemics - 7
 
 However, you can adjust it in two different ways. First, choose a number
 of steps to select, e.g. to select the largest 3 steps, use
@@ -1225,6 +1234,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
+    ## anosim - 7 16 41
+    ## prop_between_dissim - 4 7 16
 
 Note that these steps generally correspond to large jumps in the tree,
 which is why we like this approach as it fits well with the hierarchical
@@ -1252,6 +1263,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.95  (i.e., only the top 5 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
+    ## anosim - 7 16 24 41 61
+    ## prop_between_dissim - 4 7 16 41 61
 
 Finally, a question that may arise is which cluster number to select
 when a large step occurs. For example, if the largest step occurs
@@ -1281,6 +1294,8 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  decreasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
+    ## anosim - 4
+    ## prop_between_dissim - none found
 
 #### 3.2.3 Cutting at different cut-off values
 
@@ -1334,6 +1349,7 @@ find_optimal_n(eval_tree4,
     ##  - Criterion chosen to optimise the number of clusters:  cutoff 
     ##    --> cutoff(s) chosen:  0.6 0.8 0.9 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 7 16 41
 
 #### 3.2.4 Cutting at the maximum or minimum metric value
 
@@ -1377,6 +1393,10 @@ find_optimal_n(eval_tree5,
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 18
+    ## anosim - 108
+    ## mean_endemics - 2
+    ## tot_endemics - 9
 
 We can ask for a higher number of breaks:
 
@@ -1399,6 +1419,10 @@ find_optimal_n(eval_tree5,
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 10 71
+    ## anosim - 18 191
+    ## mean_endemics - 2 8
+    ## tot_endemics - 2 10
 
 - 3 breaks
 
@@ -1419,6 +1443,10 @@ find_optimal_n(eval_tree5,
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  breakpoints 
     ##  - Optimal partition(s) of clusters for each metric:
+    ## prop_between_dissim - 2 16 108
+    ## anosim - 18 177 597
+    ## mean_endemics - 2 7 25
+    ## tot_endemics - 2 10 125
 
 Increasing the number of breaks can be useful in situations where you
 have, for example, non-linear silhouettes of metric ~ n clusters.

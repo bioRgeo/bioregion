@@ -27,7 +27,7 @@ or by running similarity followed by similarity_to_dissimilarity."><meta propert
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -177,8 +177,9 @@ earlier versions of bioregion keeps working.
 <dt id="arg-n-clust">n_clust<a class="anchor" aria-label="anchor" href="#arg-n-clust"></a></dt>
 <dd><p>An <code>integer</code> vector or a single <code>integer</code> indicating the
 number of clusters to be obtained from the hierarchical tree, or the output
-from <a href="bioregionalization_metrics.html">bioregionalization_metrics</a>. This parameter should not be used
-simultaneously with <code>cut_height</code>.</p></dd>
+from <code><a href="find_optimal_n.html">find_optimal_n()</a></code> (in which case the tree is cut at all the optimal
+numbers of clusters found across metrics). This parameter should not be
+used simultaneously with <code>cut_height</code>.</p></dd>
 
 
 <dt id="arg-cut-height">cut_height<a class="anchor" aria-label="anchor" href="#arg-cut-height"></a></dt>
@@ -490,7 +491,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Final tree has a 0.5135 cophenetic correlation coefficient with the initial dissimilarity matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Determining the cut height to reach 5 groups...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.09375</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --&gt; 0.0891433128275234</span>
 <span class="r-in"><span><span class="va">tree1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results for algorithm : hclu_hierarclust </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	(hierarchical clustering based on a dissimilarity matrix)</span>
@@ -504,7 +505,7 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span> Clustering results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of partitions:  1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters:  5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.094 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Height of cut of the hierarchical tree: 0.089 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hclu_hierarclust-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tree1</span><span class="op">)</span></span></span>
@@ -545,8 +546,8 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "hclust"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.coph.cor: num 0.513</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ final.tree.msd     : num 0.00257</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_n_clust     : int 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height  : Named num 0.0938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_n_clust     : num 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height  : Named num 0.0891</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr "k_5"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ trials             : chr "Trials not stored in output"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ clusters    :'data.frame':	20 obs. of  2 variables:</span>
@@ -555,9 +556,9 @@ Maxime Lenormand (<a href="mailto:maxime.lenormand@inrae.fr">maxime.lenormand@in
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "node_type")= chr [1:20] "site" "site" "site" "site" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ cluster_info:'data.frame':	1 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ partition_name   : chr "K_5"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_clust          : int 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n_clust          : num 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ requested_n_clust: num 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height: num 0.0938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ output_cut_height: num 0.0891</span>
 <span class="r-in"><span><span class="va">tree1</span><span class="op">$</span><span class="va">clusters</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID K_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Site1   Site1   1</span>

@@ -157,7 +157,7 @@ clust1
 #>  - Number of sites:  338 
 #> Clustering results:
 #>  - Number of partitions:  1 
-#>  - Number of clusters:  4 
+#>  - Number of clusters:  3 
 
 # Visualize the optics plot (the hierarchy of clusters is illustrated at the
 # bottom)
@@ -172,5 +172,5 @@ clust1
 #> Clustering results:
 #>  - Number of partitions:  2 
 #>  - Partitions are hierarchical
-#>  - Number of clusters:  2 4 
+#>  - Number of clusters:  1 3 
 ```

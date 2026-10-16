@@ -51,8 +51,8 @@ bioregionalization_metrics(
 - comat:
 
   A site-species `matrix` with sites as rows and species as columns.
-  Should be provided if `eval_metrics` includes `"avg_endemism"` or
-  `"tot_endemism"`.
+  Should be provided if `eval_metrics` includes `"mean_endemics"` or
+  `"tot_endemics"`.
 
 - anosim_permutations:
 

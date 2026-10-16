@@ -49,7 +49,7 @@ vege_hclu_hierarclust$cluster_info # 3
 ```
 
     ##   partition_name n_clust requested_n_clust output_cut_height
-    ## 1            K_3       3                 3             0.625
+    ## 1            K_3       3                 3         0.6363026
 
 ``` r
 

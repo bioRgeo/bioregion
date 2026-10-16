@@ -98,8 +98,10 @@ hclu_hierarclust(
 
   An `integer` vector or a single `integer` indicating the number of
   clusters to be obtained from the hierarchical tree, or the output from
-  [bioregionalization_metrics](https://bioRgeo.github.io/bioregion/reference/bioregionalization_metrics.md).
-  This parameter should not be used simultaneously with `cut_height`.
+  [`find_optimal_n()`](https://bioRgeo.github.io/bioregion/reference/find_optimal_n.md)
+  (in which case the tree is cut at all the optimal numbers of clusters
+  found across metrics). This parameter should not be used
+  simultaneously with `cut_height`.
 
 - cut_height:
 
@@ -459,7 +461,7 @@ tree1 <- hclu_hierarclust(dissim,
 #> 
 #> Final tree has a 0.5135 cophenetic correlation coefficient with the initial dissimilarity matrix
 #> Determining the cut height to reach 5 groups...
-#> --> 0.09375
+#> --> 0.0891433128275234
 tree1
 #> Clustering results for algorithm : hclu_hierarclust 
 #>  (hierarchical clustering based on a dissimilarity matrix)
@@ -473,7 +475,7 @@ tree1
 #> Clustering results:
 #>  - Number of partitions:  1 
 #>  - Number of clusters:  5 
-#>  - Height of cut of the hierarchical tree: 0.094 
+#>  - Height of cut of the hierarchical tree: 0.089 
 plot(tree1)
 
 str(tree1)
@@ -514,8 +516,8 @@ str(tree1)
 #>   .. ..- attr(*, "class")= chr "hclust"
 #>   ..$ final.tree.coph.cor: num 0.513
 #>   ..$ final.tree.msd     : num 0.00257
-#>   ..$ output_n_clust     : int 5
-#>   ..$ output_cut_height  : Named num 0.0938
+#>   ..$ output_n_clust     : num 5
+#>   ..$ output_cut_height  : Named num 0.0891
 #>   .. ..- attr(*, "names")= chr "k_5"
 #>   ..$ trials             : chr "Trials not stored in output"
 #>  $ clusters    :'data.frame':    20 obs. of  2 variables:
@@ -524,9 +526,9 @@ str(tree1)
 #>   ..- attr(*, "node_type")= chr [1:20] "site" "site" "site" "site" ...
 #>  $ cluster_info:'data.frame':    1 obs. of  4 variables:
 #>   ..$ partition_name   : chr "K_5"
-#>   ..$ n_clust          : int 5
+#>   ..$ n_clust          : num 5
 #>   ..$ requested_n_clust: num 5
-#>   ..$ output_cut_height: num 0.0938
+#>   ..$ output_cut_height: num 0.0891
 tree1$clusters
 #>            ID K_5
 #> Site1   Site1   1

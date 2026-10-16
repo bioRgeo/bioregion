@@ -190,12 +190,12 @@ bioreg
 #>  - Randomization of the dissimilarity matrix:  yes, number of trials 100 
 #>  - Method to compute the final tree:  Tree with the best cophenetic correlation coefficient 
 #>  - Cophenetic correlation coefficient:  0.825 
-#>  - Number of clusters requested by the user:  5 
+#>  - Number of clusters requested by the user:  5 6 7 8 9 10 
 #> Clustering results:
 #>  - Number of partitions:  6 
 #>  - Partitions are hierarchical
 #>  - Number of clusters:  5 6 7 8 9 10 
-#>  - Height of cut of the hierarchical tree: 0.25 0.219 0.211 0.203 0.191 0.188 
+#>  - Height of cut of the hierarchical tree: 0.255 0.232 0.214 0.201 0.19 0.181 
 
 evalmet <- bioregionalization_metrics(bioreg,
                                       eval_metrics = "anosim",
@@ -215,5 +215,5 @@ find_optimal_n(evalmet, criterion = 'increasing_step', plot = FALSE)
 #>  - Criterion chosen to optimise the number of clusters:  increasing_step 
 #>    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
 #>  - Optimal partition(s) of clusters for each metric:
-#> 
+#> anosim - 6
 ```

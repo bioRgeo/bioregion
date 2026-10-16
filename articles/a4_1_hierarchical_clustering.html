@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bioregion</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@
                         <h4 data-toc-skip class="author">Boris Leroy,
 Maxime Lenormand and Pierre Denelle</h4>
             
-            <h4 data-toc-skip class="date">2026-10-10</h4>
+            <h4 data-toc-skip class="date">2026-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioRgeo/bioregion/blob/master/vignettes/a4_1_hierarchical_clustering.Rmd" class="external-link"><code>vignettes/a4_1_hierarchical_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>a4_1_hierarchical_clustering.Rmd</code></div>
@@ -240,7 +240,7 @@ there are no clusters in the object yet.</p>
 <span><span class="va">tree1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree1</span>,</span>
 <span>                  n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>Here, we asked for 3 clusters, and the algorithm automatically finds
-the height at which 3 clusters are found (h = 0.555).</p>
+the height at which 3 clusters are found (h = 0.554).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree1</span></span></code></pre></div>
 <pre><code><span><span class="co">## Clustering results for algorithm : hclu_hierarclust </span></span>
@@ -255,7 +255,7 @@ the height at which 3 clusters are found (h = 0.555).</p>
 <span><span class="co">## Clustering results:</span></span>
 <span><span class="co">##  - Number of partitions:  1 </span></span>
 <span><span class="co">##  - Number of clusters:  3 </span></span>
-<span><span class="co">##  - Height of cut of the hierarchical tree: 0.555</span></span></code></pre>
+<span><span class="co">##  - Height of cut of the hierarchical tree: 0.554</span></span></code></pre>
 <p>When we type again the name of the object in the console, it gives us
 the results of the clustering: we have</p>
 <ul>
@@ -268,7 +268,7 @@ partition. We asked for 3, and we obtained 3, which is good. Sometimes,
 however, we cannot get the number of clusters we asked for - in which
 case the outcome will be indicated.</li>
 <li>
-<strong>a height of cut at 0.555</strong>: this is the height of cut
+<strong>a height of cut at 0.554</strong>: this is the height of cut
 at which we can obtain 4 clusters in our tree.</li>
 </ul>
 <p>We can make a quick plot of our partitioned tree with</p>
@@ -809,7 +809,8 @@ clusters as the elbow of the evaluation plot.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## prop_between_dissim - 16</span></span></code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 5. Extract the optimal number of clusters</span></span>
 <span><span class="co"># We get the name of the correct partition in the next line</span></span>
@@ -871,17 +872,17 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 17      K_18           18           0.8471819 0.7913035</span></span>
 <span><span class="co">## 18    K_19_1           19           0.8510755 0.7939484</span></span>
 <span><span class="co">## 19    K_19_2           19           0.8510755 0.7939484</span></span>
-<span><span class="co">## 20    K_19_3           19           0.8510755 0.7939484</span></span>
-<span><span class="co">## 21      K_22           22           0.8517974 0.7944725</span></span>
+<span><span class="co">## 20    K_22_1           22           0.8517974 0.7944725</span></span>
+<span><span class="co">## 21    K_22_2           22           0.8517974 0.7944725</span></span>
 <span><span class="co">## 22      K_23           23           0.8523847 0.7946816</span></span>
 <span><span class="co">## 23      K_24           24           0.8607463 0.8002397</span></span>
 <span><span class="co">## 24      K_25           25           0.8608632 0.8003071</span></span>
 <span><span class="co">## 25      K_26           26           0.8643934 0.8017103</span></span>
 <span><span class="co">## 26      K_27           27           0.8644199 0.8017220</span></span>
 <span><span class="co">## 27      K_28           28           0.8658456 0.8022027</span></span>
-<span><span class="co">## 28    K_29_1           29           0.8659844 0.8022323</span></span>
-<span><span class="co">## 29    K_29_2           29           0.8659844 0.8022323</span></span>
-<span><span class="co">## 30      K_31           31           0.8683174 0.8029426</span></span>
+<span><span class="co">## 28      K_29           29           0.8659844 0.8022323</span></span>
+<span><span class="co">## 29    K_31_1           31           0.8683174 0.8029426</span></span>
+<span><span class="co">## 30    K_31_2           31           0.8683174 0.8029426</span></span>
 <span><span class="co">## 31      K_32           32           0.8683203 0.8029430</span></span>
 <span><span class="co">## 32      K_33           33           0.8688860 0.8031397</span></span>
 <span><span class="co">## 33      K_34           34           0.8705847 0.8034989</span></span>
@@ -897,9 +898,9 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 43      K_44           44           0.9030051 0.8163742</span></span>
 <span><span class="co">## 44      K_45           45           0.9032491 0.8164615</span></span>
 <span><span class="co">## 45      K_46           46           0.9032627 0.8164672</span></span>
-<span><span class="co">## 46    K_47_1           47           0.9032979 0.8164869</span></span>
-<span><span class="co">## 47    K_47_2           47           0.9032979 0.8164869</span></span>
-<span><span class="co">## 48      K_49           49           0.9048841 0.8171194</span></span>
+<span><span class="co">## 46      K_47           47           0.9032979 0.8164869</span></span>
+<span><span class="co">## 47    K_49_1           49           0.9048841 0.8171194</span></span>
+<span><span class="co">## 48    K_49_2           49           0.9048841 0.8171194</span></span>
 <span><span class="co">## 49      K_50           50           0.9055191 0.8171865</span></span>
 <span><span class="co">## 50      K_51           51           0.9064402 0.8174775</span></span>
 <span><span class="co">## 51      K_52           52           0.9077569 0.8180749</span></span>
@@ -909,9 +910,9 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 55      K_56           56           0.9078569 0.8180760</span></span>
 <span><span class="co">## 56      K_57           57           0.9080844 0.8180236</span></span>
 <span><span class="co">## 57      K_58           58           0.9081071 0.8180173</span></span>
-<span><span class="co">## 58    K_59_1           59           0.9081523 0.8180095</span></span>
-<span><span class="co">## 59    K_59_2           59           0.9081523 0.8180095</span></span>
-<span><span class="co">## 60      K_61           61           0.9423177 0.8299331</span></span>
+<span><span class="co">## 58      K_59           59           0.9081523 0.8180095</span></span>
+<span><span class="co">## 59    K_61_1           61           0.9423177 0.8299331</span></span>
+<span><span class="co">## 60    K_61_2           61           0.9423177 0.8299331</span></span>
 <span><span class="co">## 61      K_62           62           0.9423473 0.8299712</span></span>
 <span><span class="co">## 62      K_63           63           0.9424308 0.8301351</span></span>
 <span><span class="co">## 63      K_64           64           0.9424430 0.8301460</span></span>
@@ -928,9 +929,9 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 74      K_75           75           0.9511909 0.8369696</span></span>
 <span><span class="co">## 75      K_76           76           0.9512219 0.8370073</span></span>
 <span><span class="co">## 76      K_77           77           0.9512290 0.8370185</span></span>
-<span><span class="co">## 77    K_78_1           78           0.9512338 0.8370198</span></span>
-<span><span class="co">## 78    K_78_2           78           0.9512338 0.8370198</span></span>
-<span><span class="co">## 79      K_80           80           0.9527677 0.8384965</span></span>
+<span><span class="co">## 77      K_78           78           0.9512338 0.8370198</span></span>
+<span><span class="co">## 78    K_80_1           80           0.9527677 0.8384965</span></span>
+<span><span class="co">## 79    K_80_2           80           0.9527677 0.8384965</span></span>
 <span><span class="co">## 80      K_81           81           0.9527748 0.8385010</span></span>
 <span><span class="co">## 81      K_82           82           0.9535339 0.8390197</span></span>
 <span><span class="co">## 82      K_83           83           0.9535386 0.8390213</span></span>
@@ -977,17 +978,17 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 17      K_18           18   0.008193279   0.08682716</span></span>
 <span><span class="co">## 18    K_19_1           19   0.007729305   0.08628618</span></span>
 <span><span class="co">## 19    K_19_2           19   0.007729305   0.08628618</span></span>
-<span><span class="co">## 20    K_19_3           19   0.007729305   0.08628618</span></span>
-<span><span class="co">## 21      K_22           22   0.006631785   0.08574520</span></span>
+<span><span class="co">## 20    K_22_1           22   0.006631785   0.08574520</span></span>
+<span><span class="co">## 21    K_22_2           22   0.006631785   0.08574520</span></span>
 <span><span class="co">## 22      K_23           23   0.006136322   0.08249932</span></span>
 <span><span class="co">## 23      K_24           24   0.005841894   0.08141737</span></span>
 <span><span class="co">## 24      K_25           25   0.005611593   0.08141737</span></span>
 <span><span class="co">## 25      K_26           26   0.005358477   0.08060590</span></span>
 <span><span class="co">## 26      K_27           27   0.005160782   0.08060590</span></span>
 <span><span class="co">## 27      K_28           28   0.004977251   0.08006492</span></span>
-<span><span class="co">## 28    K_29_1           29   0.004807376   0.08006492</span></span>
-<span><span class="co">## 29    K_29_2           29   0.004807376   0.08006492</span></span>
-<span><span class="co">## 30      K_31           31   0.004560544   0.08006492</span></span>
+<span><span class="co">## 28      K_29           29   0.004807376   0.08006492</span></span>
+<span><span class="co">## 29    K_31_1           31   0.004560544   0.08006492</span></span>
+<span><span class="co">## 30    K_31_2           31   0.004560544   0.08006492</span></span>
 <span><span class="co">## 31      K_32           32   0.004418027   0.08006492</span></span>
 <span><span class="co">## 32      K_33           33   0.004272639   0.07952394</span></span>
 <span><span class="co">## 33      K_34           34   0.004154962   0.07898296</span></span>
@@ -1003,9 +1004,9 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 43      K_44           44   0.003209149   0.07708953</span></span>
 <span><span class="co">## 44      K_45           45   0.003128953   0.07681904</span></span>
 <span><span class="co">## 45      K_46           46   0.003060933   0.07681904</span></span>
-<span><span class="co">## 46    K_47_1           47   0.003019061   0.07681904</span></span>
-<span><span class="co">## 47    K_47_2           47   0.003019061   0.07681904</span></span>
-<span><span class="co">## 48      K_49           49   0.002901561   0.07654855</span></span>
+<span><span class="co">## 46      K_47           47   0.003019061   0.07681904</span></span>
+<span><span class="co">## 47    K_49_1           49   0.002901561   0.07654855</span></span>
+<span><span class="co">## 48    K_49_2           49   0.002901561   0.07654855</span></span>
 <span><span class="co">## 49      K_50           50   0.002882141   0.07654855</span></span>
 <span><span class="co">## 50      K_51           51   0.002839677   0.07654855</span></span>
 <span><span class="co">## 51      K_52           52   0.002785182   0.07573708</span></span>
@@ -1015,9 +1016,9 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 55      K_56           56   0.002593343   0.07573708</span></span>
 <span><span class="co">## 56      K_57           57   0.002589729   0.07546659</span></span>
 <span><span class="co">## 57      K_58           58   0.002546292   0.07546659</span></span>
-<span><span class="co">## 58    K_59_1           59   0.002509746   0.07546659</span></span>
-<span><span class="co">## 59    K_59_2           59   0.002509746   0.07546659</span></span>
-<span><span class="co">## 60      K_61           61   0.002423777   0.07465513</span></span>
+<span><span class="co">## 58      K_59           59   0.002509746   0.07546659</span></span>
+<span><span class="co">## 59    K_61_1           61   0.002423777   0.07465513</span></span>
+<span><span class="co">## 60    K_61_2           61   0.002423777   0.07465513</span></span>
 <span><span class="co">## 61      K_62           62   0.002384684   0.07465513</span></span>
 <span><span class="co">## 62      K_63           63   0.002390713   0.07465513</span></span>
 <span><span class="co">## 63      K_64           64   0.002354293   0.07465513</span></span>
@@ -1034,9 +1035,9 @@ computing endemism-based metrics can take a while.</p>
 <span><span class="co">## 74      K_75           75   0.001679035   0.05680281</span></span>
 <span><span class="co">## 75      K_76           76   0.001642836   0.05626183</span></span>
 <span><span class="co">## 76      K_77           77   0.001621501   0.05626183</span></span>
-<span><span class="co">## 77    K_78_1           78   0.001600712   0.05626183</span></span>
-<span><span class="co">## 78    K_78_2           78   0.001600712   0.05626183</span></span>
-<span><span class="co">## 79      K_80           80   0.001567895   0.05626183</span></span>
+<span><span class="co">## 77      K_78           78   0.001600712   0.05626183</span></span>
+<span><span class="co">## 78    K_80_1           80   0.001567895   0.05626183</span></span>
+<span><span class="co">## 79    K_80_2           80   0.001567895   0.05626183</span></span>
 <span><span class="co">## 80      K_81           81   0.001549627   0.05626183</span></span>
 <span><span class="co">## 81      K_82           82   0.001530818   0.05626183</span></span>
 <span><span class="co">## 82      K_83           83   0.001512375   0.05626183</span></span>
@@ -1112,7 +1113,11 @@ the curve is not elbow-shaped, it may give spurious results.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  elbow </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## prop_between_dissim - 16</span></span>
+<span><span class="co">## anosim - 19</span></span>
+<span><span class="co">## mean_endemics - 9</span></span>
+<span><span class="co">## tot_endemics - 7</span></span></code></pre>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="480"></p>
 <p>In our example above, the optimal number of clusters varies depending
 on the metric, from a minimum of 7 to a maximum of 19. The final choice
@@ -1151,7 +1156,9 @@ your dataset, so you would have to explore both ways.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  increasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## anosim - 16</span></span>
+<span><span class="co">## prop_between_dissim - 7</span></span></code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_optimal_n.html">find_optimal_n</a></span><span class="op">(</span><span class="va">eval_tree4</span>,</span>
 <span>               metrics_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean_endemics"</span>, <span class="st">"tot_endemics"</span><span class="op">)</span>,</span>
@@ -1165,7 +1172,9 @@ your dataset, so you would have to explore both ways.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  decreasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## mean_endemics - 3</span></span>
+<span><span class="co">## tot_endemics - 7</span></span></code></pre>
 <p>However, you can adjust it in two different ways. First, choose a
 number of steps to select, e.g. to select the largest 3 steps, use
 <code>step_levels = 3</code>:</p>
@@ -1183,7 +1192,9 @@ number of steps to select, e.g. to select the largest 3 steps, use
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  increasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## anosim - 7 16 41</span></span>
+<span><span class="co">## prop_between_dissim - 4 7 16</span></span></code></pre>
 <p>Note that these steps generally correspond to large jumps in the
 tree, which is why we like this approach as it fits well with the
 hierarchical nature of the tree.</p>
@@ -1204,7 +1215,9 @@ hierarchical nature of the tree.</p>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  increasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.95  (i.e., only the top 5 %  increase  in evaluation metrics  are used as break points for the number of clusters)</span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## anosim - 7 16 24 41 61</span></span>
+<span><span class="co">## prop_between_dissim - 4 7 16 41 61</span></span></code></pre>
 <p>Finally, a question that may arise is which cluster number to select
 when a large step occurs. For example, if the largest step occurs
 between partitions with 4 and 5 clusters, should we keep the partition
@@ -1226,7 +1239,9 @@ You can change this by setting
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  decreasing_step </span></span>
 <span><span class="co">##    (step quantile chosen:  0.99  (i.e., only the top 1 %  decrease  in evaluation metrics  are used as break points for the number of clusters)</span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## anosim - 4</span></span>
+<span><span class="co">## prop_between_dissim - none found</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="cutting-at-different-cut-off-values">3.2.3 Cutting at different cut-off values<a class="anchor" aria-label="anchor" href="#cutting-at-different-cut-off-values"></a>
@@ -1274,7 +1289,8 @@ can use three cutoffs: 0.6 (deep cutoff), 0.8 (intermediate cutoff), and
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  cutoff </span></span>
 <span><span class="co">##    --&gt; cutoff(s) chosen:  0.6 0.8 0.9 </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## prop_between_dissim - 7 16 41</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="cutting-at-the-maximum-or-minimum-metric-value">3.2.4 Cutting at the maximum or minimum metric value<a class="anchor" aria-label="anchor" href="#cutting-at-the-maximum-or-minimum-metric-value"></a>
@@ -1314,7 +1330,11 @@ the tree to have enough values.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  breakpoints </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## prop_between_dissim - 18</span></span>
+<span><span class="co">## anosim - 108</span></span>
+<span><span class="co">## mean_endemics - 2</span></span>
+<span><span class="co">## tot_endemics - 9</span></span></code></pre>
 <p>We can ask for a higher number of breaks:</p>
 <ul>
 <li>2 breaks</li>
@@ -1331,7 +1351,11 @@ the tree to have enough values.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  breakpoints </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## prop_between_dissim - 10 71</span></span>
+<span><span class="co">## anosim - 18 191</span></span>
+<span><span class="co">## mean_endemics - 2 8</span></span>
+<span><span class="co">## tot_endemics - 2 10</span></span></code></pre>
 <ul>
 <li>3 breaks</li>
 </ul>
@@ -1347,7 +1371,11 @@ the tree to have enough values.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Potential optimal partition(s):</span></span>
 <span><span class="co">##  - Criterion chosen to optimise the number of clusters:  breakpoints </span></span>
-<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span></code></pre>
+<span><span class="co">##  - Optimal partition(s) of clusters for each metric:</span></span>
+<span><span class="co">## prop_between_dissim - 2 16 108</span></span>
+<span><span class="co">## anosim - 18 177 597</span></span>
+<span><span class="co">## mean_endemics - 2 7 25</span></span>
+<span><span class="co">## tot_endemics - 2 10 125</span></span></code></pre>
 <p>Increasing the number of breaks can be useful in situations where you
 have, for example, non-linear silhouettes of metric ~ n clusters.</p>
 </div>
