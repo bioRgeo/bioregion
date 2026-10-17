@@ -550,9 +550,11 @@ test_that("only average linkage inherits trees, and the cutoff is checked", {
     without <- ihct(d, method = method, n_runs = 10, variation_drop = 0, verbose = FALSE)
     expect_identical(with_cutoff, without)
   }
-  expect_message(ihct(d, method = "complete", n_runs = 5, variation_drop = 0.5,
-                      verbose = TRUE),
-                 "only available with method")
+  quietly(
+    expect_message(ihct(d, method = "complete", n_runs = 5, variation_drop = 0.5,
+                        verbose = TRUE),
+                  "only available with method")
+  )
   expect_error(ihct(d, n_runs = 5, variation_drop = 2, verbose = FALSE),
                "between 0 and 1")
   expect_error(ihct(d, n_runs = 5, variation_drop = -0.1, verbose = FALSE),
@@ -704,8 +706,10 @@ test_that("tied blocks are only resolved where the linkage gives them their own 
   }
   # the centroid-based linkages define their heights otherwise, so the block is
   # divided from randomised trees like any other group and the user is told
-  expect_message(ihct(d, method = "ward.D2", n_runs = 5, verbose = TRUE),
-                 "only available with method")
+  quietly(
+    expect_message(ihct(d, method = "ward.D2", n_runs = 5, verbose = TRUE),
+                  "only available with method")
+  )
   set.seed(2)
   expect_silent(ihct(d, method = "ward.D2", n_runs = 5,
                      tie_block_resolution = FALSE, verbose = FALSE))

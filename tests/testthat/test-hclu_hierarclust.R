@@ -1055,18 +1055,30 @@ test_that("large matrices are told about ihct_sites_drop = Inf", {
   # what is being tested here, so the tree is left uncut and the warnings are
   # set aside.
   run <- function(...) suppressWarnings(hclu_hierarclust(n_runs = 1, ...))
-
+  
   # the message is about the size of the matrix
-  expect_message(run(flat(2010)), advice)
-  expect_no_message(run(flat(2000)), message = advice)
+  quietly(
+    expect_message(run(flat(2010)), advice)
+  )
+  quietly(
+    expect_no_message(run(flat(2000)), message = advice)
+  )
 
   # ...and only when the rule it is about is doing anything
-  expect_no_message(run(flat(2010), ihct_sites_drop = Inf), message = advice)
-  expect_no_message(run(flat(2010), ihct_variation_drop = 0), message = advice)
+  quietly(
+    expect_no_message(run(flat(2010), ihct_sites_drop = Inf), message = advice)
+  )
+  quietly(
+    expect_no_message(run(flat(2010), ihct_variation_drop = 0), message = advice)
+  )  
   # the rebuild rules only apply to average linkage
-  expect_no_message(run(flat(2010), method = "complete"), message = advice)
+  quietly(
+    expect_no_message(run(flat(2010), method = "complete"), message = advice)
+  )
   # and it is a message, so verbose switches it off
-  expect_no_message(run(flat(2010), verbose = FALSE), message = advice)
+  quietly(
+    expect_no_message(run(flat(2010), verbose = FALSE), message = advice)
+  )
 })
 
 # Tests for the name of the IHCT method ----------------------------------------

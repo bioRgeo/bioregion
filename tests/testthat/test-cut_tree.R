@@ -121,17 +121,21 @@ test_that("invalid inputs", {
     "dynamic_tree_cut must be of length 1.",
     fixed = TRUE)
   
-  expect_message(
-    cut_tree(tree, 
-             n_clust = 1,
-             dynamic_tree_cut = TRUE),
-    "^The dynamic tree cut method was requested,")
+  quietly(
+    expect_message(
+      cut_tree(tree, 
+               n_clust = 1,
+               dynamic_tree_cut = TRUE),
+      "^The dynamic tree cut method was requested,")
+  )  
   
-  expect_message(
-    cut_tree(tree, 
-             cut_height = 1,
-             dynamic_tree_cut = TRUE),
-    "^The dynamic tree cut method was requested,")
+  quietly(
+    expect_message(
+      cut_tree(tree, 
+               cut_height = 1,
+               dynamic_tree_cut = TRUE),
+      "^The dynamic tree cut method was requested,")
+  )
   
   expect_error(
     cut_tree(tree, 
@@ -376,11 +380,19 @@ test_that("node_type is set after cut_tree with dynamic_tree_cut hybrid", {
 
   tree_no_cut <- hclu_hierarclust(dissim, verbose = FALSE)
 
-  result <- suppressMessages(
-    cut_tree(tree_no_cut, dynamic_tree_cut = TRUE,
-             dynamic_method = "hybrid",
-             dissimilarity = dissim,
-             verbose = FALSE))
+  quietly(
+    result <- cut_tree(tree_no_cut, 
+                       dynamic_tree_cut = TRUE,
+                       dynamic_method = "hybrid",
+                       dissimilarity = dissim,
+                       verbose = FALSE)
+  )
+  
+  #cut_tree(tree_no_cut, 
+  #         dynamic_tree_cut = TRUE,
+  #         dynamic_method = "hybrid",
+  #         dissimilarity = dissim,
+  #         verbose = FALSE)
 
   nt <- attr(result$clusters, "node_type")
   expect_false(is.null(nt))
@@ -560,13 +572,13 @@ test_that("n_clust can be the output of find_optimal_n()", {
 
   # Another object
   expect_error(
-    cut_tree(tree_k, n_clust = ev),
+    cut_tree(tree_k, n_clust = ev, verbose = FALSE),
     "^n_clust must be one of those")
 
   # No optimal number of clusters found
   opt_none <- opt
   opt_none$optimal_n[] <- list(numeric(0))
   expect_error(
-    cut_tree(tree_k, n_clust = opt_none),
+    cut_tree(tree_k, n_clust = opt_none, verbose = FALSE),
     "^n_clust does not contain any optimal number of clusters")
 })

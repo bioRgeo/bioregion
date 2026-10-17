@@ -4,10 +4,14 @@ This is a list of changes made in the development/GitHub version of the package
 between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
 
 * Multiple bug fixes following recent name changes in bioregionalization_metrics():
-  fixed `print()` outputs of `find_optimal_n()`, fixed the `cluster_info` of `hclu_diana()`, re-implemented the inclusion of the output of `find_optimal_n()` into `n_clust` argument
-  of `cut_tree()`, `hclu_hierarclust()` and `hclu_diana()` (documented but broke in recent updates), fixed `print()` and `str()` on the output of `site_species_metrics()`, which
-  did not list the `silhouette` metric and, for `str()`, the `prop_endemics`
-  metric), fixed `print()` on the output of `hclu_hierarclust()`
+  fixed `print()` outputs of `find_optimal_n()`, fixed the `cluster_info` of 
+  `hclu_diana()`, re-implemented the inclusion of the output of 
+  `find_optimal_n()` into `n_clust` argument of `cut_tree()`, 
+  `hclu_hierarclust()` and `hclu_diana()` (documented but broke in recent 
+  updates), fixed `print()` and `str()` on the output of 
+  `site_species_metrics()`, which did not list the `silhouette` metric and, 
+  for `str()`, the `prop_endemics` metric), fixed `print()` on the output of 
+  `hclu_hierarclust()`.
 
 # bioregion 1.5.0
 
