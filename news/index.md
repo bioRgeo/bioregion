@@ -27,7 +27,7 @@ next CRAN release.
   [`str()`](https://rdrr.io/r/utils/str.html), the `prop_endemics`
   metric), fixed [`print()`](https://rdrr.io/r/base/print.html) on the
   output of
-  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md)
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
 
 ## bioregion 1.5.0
 
