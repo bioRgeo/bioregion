@@ -150,7 +150,6 @@ bioreg <- hclu_hierarclust(dissim,
                            n_clust = 10:15, 
                            index = "Simpson",
                            verbose = FALSE)
-#> Warning: The requested number of cluster could not be found for k = 15. Closest number found: 14
 
 met <- bioregionalization_metrics(bioreg,
                                   eval_metrics = "all",
