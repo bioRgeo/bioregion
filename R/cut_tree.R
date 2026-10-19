@@ -294,12 +294,15 @@ cut_tree <- function(tree,
                              method = dynamic_method,
                              minClusterSize = dynamic_minClusterSize,
                              distM = dist_matrix,
+                             verbose = ifelse(verbose, 2, 0),
                              ...))
     
     # Set NAs for unassigned sites
     if(any(clusters$cluster == 0)){
-      message(paste0("Some sites were not assigned to any cluster. ",
-                     "They will have a NA in the cluster data.frame."))
+      if(verbose) {
+        message(paste0("Some sites were not assigned to any cluster. ",
+                       "They will have a NA in the cluster data.frame."))
+      }
       clusters$cluster[which(clusters$cluster == 0)] <- NA
     }
     output_n_clust <- length(unique(stats::na.omit(clusters$cluster)))
@@ -357,8 +360,8 @@ cut_tree <- function(tree,
         if(length(n_clust) < 10 & verbose){
           message(paste0("--> ", h))
         }
-        if(k != cur_n) {
-          warning(paste0("The requested number of cluster could not be found ",
+        if(k != cur_n & verbose) {
+          message(paste0("The requested number of cluster could not be found ",
                          "for k = ",
                          cur_n, 
                          ". Closest number found: ", 

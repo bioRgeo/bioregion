@@ -375,7 +375,7 @@ print.bioregion.clusters <- function(x, ...) {
     )
 
     if (x$name == "hclu_hierarclust") {
-      if (x$args$find_h) {
+      if (x$args$find_h && !x$args$dynamic_tree_cut) {
         cat(
           " - Height of cut of the hierarchical tree:",
           ifelse(length(x$algorithm$output_cut_height) > 10,
@@ -392,6 +392,9 @@ print.bioregion.clusters <- function(x, ...) {
             )
           ), "\n"
         )
+      } else if (x$args$dynamic_tree_cut) {
+        # cat(" - Dynamic tree cut") # Check if cut heights can be obtained
+        # with dynamic tree cuts
       } else {
         cat(" - Height of cut not searched for.", "\n")
       }

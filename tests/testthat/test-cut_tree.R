@@ -388,11 +388,11 @@ test_that("node_type is set after cut_tree with dynamic_tree_cut hybrid", {
                        verbose = FALSE)
   )
   
-  #cut_tree(tree_no_cut, 
-  #         dynamic_tree_cut = TRUE,
-  #         dynamic_method = "hybrid",
-  #         dissimilarity = dissim,
-  #         verbose = FALSE)
+  expect_no_error(cut_tree(tree_no_cut,
+                           dynamic_tree_cut = TRUE,
+                           dynamic_method = "hybrid",
+                           dissimilarity = dissim,
+                           verbose = FALSE))
 
   nt <- attr(result$clusters, "node_type")
   expect_false(is.null(nt))
@@ -489,21 +489,24 @@ test_that("find_h finds reachable numbers of clusters exactly", {
 test_that("find_h returns the closest reachable number of clusters", {
 
   # 4 is not reachable: 3 and 5 are equally close, the larger one is returned
-  expect_warning(
-    res <- cut_tree(toy_tree, n_clust = 4, verbose = FALSE),
+  expect_no_message(
+    res <- cut_tree(toy_tree, n_clust = 4, verbose = FALSE))
+  
+  expect_message(
+    res <- cut_tree(toy_tree, n_clust = 4, verbose = TRUE),
     "for k = 4. Closest number found: 5", fixed = TRUE)
   expect_equal(names(res)[-1], "K_5")
   expect_equal(n_distinct(res$K_5), 5)
 
   # 6 is not reachable: 5 and 7 are equally close, the larger one is returned
-  expect_warning(
-    res <- cut_tree(toy_tree, n_clust = 6, verbose = FALSE),
+  expect_message(
+    res <- cut_tree(toy_tree, n_clust = 6, verbose = TRUE),
     "for k = 6. Closest number found: 7", fixed = TRUE)
   expect_equal(n_distinct(res$K_7), 7)
 
   # More clusters than sites: the largest reachable number
-  expect_warning(
-    res <- cut_tree(toy_tree, n_clust = 20, verbose = FALSE),
+  expect_message(
+    res <- cut_tree(toy_tree, n_clust = 20, verbose = TRUE),
     "for k = 20. Closest number found: 8", fixed = TRUE)
   expect_equal(n_distinct(res$K_8), 8)
 })
