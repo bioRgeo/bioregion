@@ -116,31 +116,54 @@ test_that("valid output", {
   expect_equal(clust, clust2)
   
   # Test data_type with different dissimilarity metrics
-  # We expect warnings here as the algo cannot find 3 clusters with those metrics
-  # on this dataset
-  expect_warning(clust <- hclu_diana(dissim, 
-                                     index = "Simpson", 
-                                     n_clust = 3,
-                                     verbose = FALSE),)
+  # The algo cannot find 3 clusters with those metrics on this dataset, but
+  # this is only reported as a message when verbose = TRUE
+  expect_no_message(
+    clust <- hclu_diana(dissim,
+                        index = "Simpson",
+                        n_clust = 3,
+                        verbose = FALSE))
+  expect_equal(clust$inputs$data_type, "occurrence")
+  # With verbose = TRUE, a message gives the number of clusters returned
+  quietly(
+    msg <- expect_message(
+      clust_v <- hclu_diana(dissim,
+                            index = "Simpson",
+                            n_clust = 3,
+                            verbose = TRUE),
+      "for k = 3. Closest number found: ", fixed = TRUE))
+  expect_equal(as.numeric(sub(".*found: ", "", conditionMessage(msg))),
+               clust_v$cluster_info$n_clust)
+  expect_equal(clust_v$clusters, clust$clusters)
+
+  clust <- hclu_diana(dissim,
+                      index = "Jaccard",
+                      n_clust = 3,
+                      verbose = FALSE)
   expect_equal(clust$inputs$data_type, "occurrence")
 
-  expect_warning(clust <- hclu_diana(dissim, 
-                                     index = "Jaccard", 
-                                     n_clust = 3,
-                                     verbose = FALSE))
-  expect_equal(clust$inputs$data_type, "occurrence")
-
-  expect_warning(clust <- hclu_diana(dissim, 
-                                     index = "Bray", 
-                                     n_clust = 3,
-                                     verbose = FALSE))
+  clust <- hclu_diana(dissim,
+                      index = "Bray",
+                      n_clust = 3,
+                      verbose = FALSE)
   expect_equal(clust$inputs$data_type, "abundance")
 
-  expect_warning(clust <- hclu_diana(dissim, 
-                                     index = "Euclidean", 
-                                     n_clust = 3,
-                                     verbose = FALSE))
+  expect_no_message(
+    clust <- hclu_diana(dissim,
+                        index = "Euclidean",
+                        n_clust = 3,
+                        verbose = FALSE))
   expect_equal(clust$inputs$data_type, NA)
+  quietly(
+    msg <- expect_message(
+      clust_v <- hclu_diana(dissim,
+                            index = "Euclidean",
+                            n_clust = 3,
+                            verbose = TRUE),
+      "for k = 3. Closest number found: ", fixed = TRUE))
+  expect_equal(as.numeric(sub(".*found: ", "", conditionMessage(msg))),
+               clust_v$cluster_info$n_clust)
+  expect_equal(clust_v$clusters, clust$clusters)
   
 })
 

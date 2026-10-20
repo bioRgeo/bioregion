@@ -301,10 +301,22 @@ test_that("valid output", {
                             optimal_tree_method = "best", verbose = FALSE)
   expect_equal(clust$inputs$data_type, "abundance")
 
-  # Expect warning as the algo cannot find 3 clusters here
-  expect_warning(clust <- hclu_hierarclust(dissim, index = "Euclidean", n_clust = 3,
-                            optimal_tree_method = "best", verbose = FALSE))
+  # The algo cannot find 3 clusters here, but this is only reported as a
+  # message when verbose = TRUE
+  expect_no_message(
+    clust <- hclu_hierarclust(dissim, index = "Euclidean", n_clust = 3,
+                              optimal_tree_method = "best", verbose = FALSE))
   expect_equal(clust$inputs$data_type, NA)
+  quietly(
+    msg <- expect_message(
+      clust_v <- hclu_hierarclust(dissim, index = "Euclidean", n_clust = 3,
+                                  optimal_tree_method = "best",
+                                  verbose = TRUE),
+      "for k = 3. Closest number found: ", fixed = TRUE))
+  # (the partitions are not compared to those obtained with verbose = FALSE, as
+  # the "best" tree is chosen among trees built with randomised site orders)
+  expect_equal(as.numeric(sub(".*found: ", "", conditionMessage(msg))),
+               clust_v$cluster_info$n_clust)
 
 })
 

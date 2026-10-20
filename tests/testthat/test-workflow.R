@@ -108,24 +108,31 @@ test_that("workflow 2: DIANA", {
 
   # DIANA trees of Simpson dissimilarities often have many branches merging at
   # height 1 (sites sharing no species), so several requested numbers of
-  # clusters cannot be reached. Each of them must give a warning naming the
-  # number of clusters actually returned.
+  # clusters cannot be reached. With verbose = TRUE, each of them must give a
+  # message naming the number of clusters actually returned.
   requested <- 2:15
-  warns <- character(0)
+  msgs <- character(0)
   dia <- withCallingHandlers(
-    hclu_diana(wf_dissim, n_clust = requested, verbose = FALSE),
-    warning = function(w) {
-      warns <<- c(warns, conditionMessage(w))
-      invokeRestart("muffleWarning")
+    hclu_diana(wf_dissim, n_clust = requested, verbose = TRUE),
+    message = function(m) {
+      msgs <<- c(msgs, trimws(conditionMessage(m)))
+      invokeRestart("muffleMessage")
     })
+  pattern <- "^.*for k = ([0-9]+)\\. Closest number found: ([0-9]+)$"
+  warns <- msgs[grepl("Closest number found", msgs, fixed = TRUE)]
   expect_valid_bioregion_clusters(dia)
   # This dataset does have unreachable numbers of clusters with DIANA (if this
-  # fails, the rest of the test no longer checks the warnings)
+  # fails, the rest of the test no longer checks the messages)
   expect_gt(length(warns), 0)
 
+  # With verbose = FALSE, these messages are not shown and the partitions are
+  # the same
+  expect_no_message(
+    dia_quiet <- hclu_diana(wf_dissim, n_clust = requested, verbose = FALSE))
+  expect_equal(dia_quiet$clusters, dia$clusters)
+
   # The partitions are in the order of the requested numbers of clusters:
-  # each one has the requested number, or the number given in its warning
-  pattern <- "^.*for k = ([0-9]+)\\. Closest number found: ([0-9]+)$"
+  # each one has the requested number, or the number given in its message
   expect_true(all(grepl(pattern, warns)))
   warned_k <- as.numeric(sub(pattern, "\\1", warns))
   warned_found <- as.numeric(sub(pattern, "\\2", warns))
