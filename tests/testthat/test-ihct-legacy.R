@@ -657,9 +657,9 @@ test_that("a different pick among tied trees never keeps a worse tree", {
     }
     # a division can only change if the selection did
     expect_lte(n_split, n_clash)
-    message(sprintf(
-      "  [%s] tree selection differed on %d of 30 groups; %d changed the split",
-      nm, n_clash, n_split))
+    # message(sprintf(
+    #   "  [%s] tree selection differed on %d of 30 groups; %d changed the split",
+    #   nm, n_clash, n_split))
   }
 })
 
@@ -710,10 +710,10 @@ test_that("with the old ranking restored, the new algorithm gives old trees", {
       expect_gt(n_tied, 1,
                 label = paste0(nm, "/seed ", s, ": trees tied on the best ",
                                "fit at division ", i))
-      message(sprintf(
-        paste("  [%s] seed %d: %d of %d randomised trees are exactly tied at",
-              "division %d; the winner is decided by rounding, not by the data"),
-        nm, s, n_tied, length(k$ccc), i))
+      # message(sprintf(
+      #   paste("  [%s] seed %d: %d of %d randomised trees are exactly tied at",
+      #         "division %d; the winner is decided by rounding, not by the data"),
+      #   nm, s, n_tied, length(k$ccc), i))
     }
   }
 })
@@ -851,10 +851,12 @@ test_that("hclu_hierarclust() reproduces the old output end to end", {
                  label = paste0(nm, ": cophenetic correlation of the new tree"))
       expect_identical(dim(n$clusters), dim(o$clusters))
       expect_setequal(n$clusters$ID, o$clusters$ID)
-      message(sprintf(paste0("  [%s] hclu_hierarclust trees differ (tied blocks ",
-                             "are resolved directly; CCC %+.5f)"),
-                      nm, n$algorithm$final.tree.coph.cor -
-                        o$algorithm$final.tree.coph.cor))
+      # Differences are expected for tied blocks, uncomment to display the 
+      # message
+      # message(sprintf(paste0("  [%s] hclu_hierarclust trees differ (tied blocks ",
+      #                        "are resolved directly; CCC %+.5f)"),
+      #                 nm, n$algorithm$final.tree.coph.cor -
+      #                   o$algorithm$final.tree.coph.cor))
     }
   }
 })

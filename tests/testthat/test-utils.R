@@ -1327,3 +1327,27 @@ test_that("invalid outputs", {
 
 
 
+
+# cluster_colors ---------------------------------------------------------------
+test_that("cluster_colors() uses stored colors only if they match", {
+  tree <- hclu_hierarclust(wf_dissim, n_clust = c(3, 6),
+                           optimal_tree_method = "best", verbose = FALSE)
+
+  # No stored colors: default colors of bioregion_colors()
+  expect_identical(cluster_colors(tree), bioregion_colors(tree)$colors)
+
+  # Stored colors matching the partitions are kept
+  colored <- bioregion_colors(tree, palette = "Bold")
+  expect_identical(cluster_colors(colored), colored$colors)
+
+  # Stored colors that do not cover all partitions or all clusters are
+  # replaced by the default colors
+  missing_partition <- colored
+  missing_partition$colors <- missing_partition$colors[1]
+  expect_identical(cluster_colors(missing_partition),
+                   bioregion_colors(tree)$colors)
+  missing_cluster <- colored
+  missing_cluster$colors[[2]] <- missing_cluster$colors[[2]][-1, ]
+  expect_identical(cluster_colors(missing_cluster),
+                   bioregion_colors(tree)$colors)
+})

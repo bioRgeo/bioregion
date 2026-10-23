@@ -492,22 +492,22 @@ test_that("find_h returns the closest reachable number of clusters", {
   expect_no_message(
     res <- cut_tree(toy_tree, n_clust = 4, verbose = FALSE))
   
-  expect_message(
+  suppressMessages(expect_message(
     res <- cut_tree(toy_tree, n_clust = 4, verbose = TRUE),
-    "for k = 4. Closest number found: 5", fixed = TRUE)
+    "for k = 4. Closest number found: 5", fixed = TRUE))
   expect_equal(names(res)[-1], "K_5")
   expect_equal(n_distinct(res$K_5), 5)
 
   # 6 is not reachable: 5 and 7 are equally close, the larger one is returned
-  expect_message(
+  suppressMessages(expect_message(
     res <- cut_tree(toy_tree, n_clust = 6, verbose = TRUE),
-    "for k = 6. Closest number found: 7", fixed = TRUE)
+    "for k = 6. Closest number found: 7", fixed = TRUE))
   expect_equal(n_distinct(res$K_7), 7)
 
   # More clusters than sites: the largest reachable number
-  expect_message(
+  suppressMessages(expect_message(
     res <- cut_tree(toy_tree, n_clust = 20, verbose = TRUE),
-    "for k = 20. Closest number found: 8", fixed = TRUE)
+    "for k = 20. Closest number found: 8", fixed = TRUE))
   expect_equal(n_distinct(res$K_8), 8)
 })
 

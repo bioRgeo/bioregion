@@ -363,6 +363,50 @@ test_that("workflow 5: map_bioregions()", {
   }
 })
 
+test_that("workflow 5: trees and maps share the same colors", {
+
+  map <- fishsf[fishsf$Site %in% rownames(wf_comat), ]
+  tree <- cut_tree(wf_tree, n_clust = c(3, 6, 10), verbose = FALSE)
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off())
+
+  # Records the colors used by each function
+  real_cluster_colors <- cluster_colors
+  used <- list()
+  local_mocked_bindings(cluster_colors = function(bioregionalization) {
+    out <- real_cluster_colors(bioregionalization)
+    used[[length(used) + 1]] <<- out
+    out
+  })
+  colors_of_tree_and_map <- function(x) {
+    used <<- list()
+    plot(x)
+    map_bioregions(x, map = map)
+    used
+  }
+
+  # Without colors: default colors of bioregion_colors() in both
+  used_default <- colors_of_tree_and_map(tree)
+  expect_length(used_default, 2)
+  expect_identical(used_default[[1]], used_default[[2]])
+  expect_identical(used_default[[1]], bioregion_colors(tree)$colors)
+
+  # With colors chosen by the user: these colors in both
+  colored <- bioregion_colors(tree, palette = "Bold")
+  used_colored <- colors_of_tree_and_map(colored)
+  expect_identical(used_colored[[1]], used_colored[[2]])
+  expect_identical(used_colored[[1]], colored$colors)
+
+  # Colors that no longer match the partitions (tree cut again after
+  # bioregion_colors()): default colors of the new partitions in both
+  recut <- cut_tree(colored, n_clust = c(4, 8), verbose = FALSE)
+  used_recut <- colors_of_tree_and_map(recut)
+  expect_identical(used_recut[[1]], used_recut[[2]])
+  expect_identical(used_recut[[1]],
+                   bioregion_colors(cut_tree(tree, n_clust = c(4, 8),
+                                             verbose = FALSE))$colors)
+})
+
 
 # Workflow 6: old names still accepted ------------------------------------------
 # NEWS states that the old metric names are still accepted as inputs

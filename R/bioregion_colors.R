@@ -327,7 +327,10 @@ bioregion_colors <- function(bioregionalization,
         # All significant clusters get vivid colors
         if (has_trailing_grey) {
           # Request one extra color and drop the trailing grey
-          n_request <- min(nb_significant + 1L, 12L)
+          # (at least 3 colors, the minimum of the CARTO palettes: for a
+          # single cluster, carto_pal() would otherwise warn and return 3
+          # colors anyway)
+          n_request <- max(min(nb_significant + 1L, 12L), 3L)
           vivid_colors <- rcartocolor::carto_pal(n = n_request, 
                                                  name = palette)
           vivid_colors <- vivid_colors[-length(vivid_colors)]

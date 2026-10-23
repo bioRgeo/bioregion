@@ -12,6 +12,17 @@ between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
   `site_species_metrics()`, which did not list the `silhouette` metric and, 
   for `str()`, the `prop_endemics` metric), fixed `print()` on the output of 
   `hclu_hierarclust()`.
+* New `plot()` for the outputs of `hclu_hierarclust()`, `hclu_diana()` and
+  `cut_tree()`. The clusters are now shown as coloured bars under the tree
+  (one bar per partition) instead of rectangles. The colours are those of `bioregion_colors()`, so
+  that trees and maps share the same colours. Trees can now be mirrored
+  (`tree_flip = TRUE`) or drawn horizontally (`tree_horizontal = TRUE`), and
+  site names can be removed (`tree_labels = FALSE`). The plot method has its own help page
+  (`?plot.bioregion.clusters`).
+* `map_bioregions()` now uses the default colors of `bioregion_colors()` when
+  the bioregionalization has no colors (instead of the default colors of
+  `sf`), so that colors match among the package visualization functions when
+  default parameters are used. 
 
 # bioregion 1.5.0
 

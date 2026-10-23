@@ -67,7 +67,8 @@ site nodes using the \code{node_type} attribute.
 
 \strong{Colors}: If the \code{bioregionalization} object contains colors (added via
 \code{bioregion_colors()}), these colors will be automatically used for plotting.
-Otherwise, the default \code{sf} color scheme will be applied.
+Otherwise, colors are assigned with \code{bioregion_colors()} and its default
+parameters, to match other visualization functions of the package.
 }
 \examples{
 data(fishmat)

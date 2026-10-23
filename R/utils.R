@@ -1918,3 +1918,28 @@ elbow_finder <- function(x_values, y_values, correct_decrease = FALSE) {
 ################################################################################
 
 
+
+# cluster_colors ###############################################################
+# Colours of the clusters of each partition, as a list with one data.frame
+# (columns cluster and color) per partition, like the colors element added by
+# bioregion_colors(). The colours stored by bioregion_colors() are used if they
+# cover all the clusters of all the partitions; otherwise (no colours, or
+# colours made before the partitions changed, e.g., after cutting a tree
+# again), colours are assigned with bioregion_colors() and its default
+# parameters.
+# Used by plot() and map_bioregions(), so that trees and maps share the same
+# colours.
+cluster_colors <- function(bioregionalization) {
+  colors <- bioregionalization$colors
+  partitions <- colnames(bioregionalization$clusters)[-1]
+  colors_ok <- is.list(colors) &&
+    all(vapply(partitions, function(p) {
+      cl <- stats::na.omit(as.character(bioregionalization$clusters[, p]))
+      !is.null(colors[[p]]) && all(cl %in% colors[[p]]$cluster)
+    }, logical(1)))
+  if (!colors_ok) {
+    colors <- bioregion_colors(bioregionalization)$colors
+  }
+  colors
+}
+################################################################################

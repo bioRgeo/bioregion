@@ -46,9 +46,10 @@
 #' species), only site  will be mapped. The function automatically filters to 
 #' site nodes using the `node_type` attribute.
 #' 
-#' **Colors**: If the `bioregionalization` object contains colors (added via 
-#' `bioregion_colors()`), these colors will be automatically used for plotting. 
-#' Otherwise, the default `sf` color scheme will be applied.
+#' **Colors**: If the `bioregionalization` object contains colors (added via
+#' `bioregion_colors()`), these colors will be automatically used for plotting.
+#' Otherwise, colors are assigned with `bioregion_colors()` and its default 
+#' parameters, to match other visualization functions of the package.
 #' 
 #' @seealso 
 #' For more details illustrated with a practical example, 
@@ -136,19 +137,13 @@ map_bioregions <- function(bioregionalization,
     partition_names <- colnames(clusters)[-1]
   }
 
-  # Check if colors are available
-  has_colors <- FALSE
-  color_list <- NULL
-  if (!is.null(bioregionalization$colors) && is.list(bioregionalization$colors)) {
-    has_colors <- TRUE
-    # Extract colors for each partition
-    # colors is a list with one data.frame per partition
-    color_list <- lapply(bioregionalization$colors, function(color_df) {
-      # Create a named vector: cluster ID -> color
-      stats::setNames(color_df$color, color_df$cluster)
-    })
-    names(color_list) <- names(bioregionalization$colors)
-  }
+  # Colors of the clusters: those stored by bioregion_colors(), or the default
+  # ones of bioregion_colors() (the same as in plot())
+  # colors is a list with one data.frame per partition
+  color_list <- lapply(cluster_colors(bioregionalization), function(color_df) {
+    # Create a named vector: cluster ID -> color
+    stats::setNames(color_df$color, color_df$cluster)
+  })
   
   # Control partition_index 
   if (!is.null(partition_index)) {
@@ -163,13 +158,10 @@ map_bioregions <- function(bioregionalization,
       clusters <- clusters[, c(1, partition_index)]
     }
     partition_names <- colnames(clusters)[-1]
-    
-    # Update color_list if colors are present
-    if (has_colors && !is.null(color_list)) {
-      # Filter color_list to keep only selected partitions
-      color_list <- color_list[names(color_list) %in% partition_names]
-    }
-    
+
+    # Keep only the colors of the selected partitions
+    color_list <- color_list[partition_names]
+
   }
   
   # Control map
@@ -230,82 +222,51 @@ map_bioregions <- function(bioregionalization,
       
       partition_name <- partition_names[1]
 
-      if(has_colors) {
-        # Use colors from bioregion_colors
-        cluster_values <- plotsp[[partition_name]]
-        colors_map <- color_list[[partition_name]]
+      # Use colors from bioregion_colors
+      cluster_values <- plotsp[[partition_name]]
+      colors_map <- color_list[[partition_name]]
 
-        # sf::plot expects colors in order of sorted unique values
-        unique_vals <- sort(unique(cluster_values))
-        pal <- colors_map[as.character(unique_vals)]
+      # sf::plot expects colors in order of sorted unique values
+      unique_vals <- sort(unique(cluster_values))
+      pal <- colors_map[as.character(unique_vals)]
 
-        plot(plotsp, pal = pal, ...)
-      } else {
-        # Use default coloring
-        plot(plotsp, ...)
-      }
+      plot(plotsp, pal = pal, ...)
     }else{
       # Multiple partitions
       # Note: sf::plot() does not support different palettes for each attribute
       # when plotting multiple attributes at once. We need to plot each partition
       # individually to preserve custom colors.
 
-      if(has_colors) {
-        # Plot each partition individually to preserve custom colors
-        # Set up grid layout based on number of partitions
-        if(nbplotsp <= 4) {
-          # Single row layout for 2-4 partitions
-          ncols <- nbplotsp
-          nrows <- 1
-        } else {
-          # Multiple rows: 2 columns per row
-          ncols <- 2
-          nrows <- ceiling(nbplotsp / 2)
-        }
-
-        # Set up the plotting layout
-        old_par <- graphics::par(mfrow = c(nrows, ncols))
-        on.exit(graphics::par(old_par), add = TRUE)
-
-        # Plot each partition with its colors
-        for(i in seq_len(nbplotsp)) {
-          partition_name <- partition_names[i]
-          
-          # Get colors for this partition
-          cluster_values <- plotsp[[partition_name]]
-          colors_map <- color_list[[partition_name]]
-          # sf::plot expects colors in order of sorted unique values
-          unique_vals <- sort(unique(cluster_values))
-          pal <- colors_map[as.character(unique_vals)]
-          
-          # Plot with custom colors
-          # Per sf documentation: when using par(mfrow), must set key.pos=NULL and reset=FALSE
-          plot(plotsp[i], pal = pal, key.pos = NULL, reset = FALSE, ...)
-
-        }
+      # Set up grid layout based on number of partitions
+      if(nbplotsp <= 4) {
+        # Single row layout for 2-4 partitions
+        ncols <- nbplotsp
+        nrows <- 1
       } else {
-        # No colors - use standard multi-panel layout
-        mod4q <- floor(nbplotsp/4)
-        mod4r <- nbplotsp - mod4q*4
+        # Multiple rows: 2 columns per row
+        ncols <- 2
+        nrows <- ceiling(nbplotsp / 2)
+      }
 
-        if(mod4q == 0){
-          # Plot all partitions at once
-          plot(plotsp, ...)
-        }else{
-          # Multiple panels of 4
-          for(k in 1:mod4q){
-            grDevices::dev.new()
-            start_idx <- (k-1)*4+1
-            end_idx <- (k-1)*4+4
-            plot(plotsp[start_idx:end_idx], ...)
-          }
-          if(mod4r>0){
-            grDevices::dev.new()
-            start_idx <- (mod4q)*4+1
-            end_idx <- (mod4q)*4+mod4r
-            plot(plotsp[start_idx:end_idx], ...)
-          }
-        }
+      # Set up the plotting layout
+      old_par <- graphics::par(mfrow = c(nrows, ncols))
+      on.exit(graphics::par(old_par), add = TRUE)
+
+      # Plot each partition with its colors
+      for(i in seq_len(nbplotsp)) {
+        partition_name <- partition_names[i]
+
+        # Get colors for this partition
+        cluster_values <- plotsp[[partition_name]]
+        colors_map <- color_list[[partition_name]]
+        # sf::plot expects colors in order of sorted unique values
+        unique_vals <- sort(unique(cluster_values))
+        pal <- colors_map[as.character(unique_vals)]
+
+        # Plot with custom colors
+        # Per sf documentation: when using par(mfrow), must set key.pos=NULL and reset=FALSE
+        plot(plotsp[i], pal = pal, key.pos = NULL, reset = FALSE, ...)
+
       }
     }
   }
