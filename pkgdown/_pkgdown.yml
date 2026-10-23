@@ -117,6 +117,7 @@ reference:
   - map_bioregions
   - bioregion_colors
   - exportGDF
+  - plot.bioregion.clusters
   
 - title: Data
   desc: ~
