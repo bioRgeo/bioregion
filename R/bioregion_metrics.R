@@ -141,26 +141,27 @@ bioregion_metrics <- function(bioregionalization,
   output <- list()
   length(output) <- nb_partitions
   names(output) <- colnames(bioregionalization)[-1]
-  
+
+  # comat_bin
+  # If we calculate this before the loop, we avoid duplicated
+  # calculations, for the exact same result
+  comat_bin <- comat
+  comat_bin[comat_bin > 0] <- 1
+
   for(k in 1:nb_partitions){
-    
+
     # partition
     partition <- clusters[,(k+1)]
-    
-    # comat_bin
-    comat_bin <- comat
-    comat_bin[comat_bin > 0] <- 1
-    
+
     # nj
     tab <- stats::aggregate(comat_bin[,1], list(partition), length)
     colnames(tab) <- c("bioregion", "n_sites")
-    
-    # nij
-    temp <- stats::aggregate(comat_bin, list(partition), sum)
-    nij <- t(as.matrix(temp[,-1]))
-    nij <- (nij > 0)*1
-    rownames(nij) <- colnames(temp)[-1]
-    colnames(nij) <- temp[,1]
+
+    # nij (species x bioregions)
+    # first we exclude sites without a bioregion (NA) from calculations
+    assigned <- !is.na(partition)
+    nij <- t(rowsum(comat_bin[assigned, , drop = FALSE],
+                    partition[assigned]) > 0)*1
 
     # richness
     tab$richness <- apply(nij, 2, sum)
