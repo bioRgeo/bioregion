@@ -90,8 +90,11 @@ filters to site nodes using the `node_type` attribute.
 **Colors**: If the `bioregionalization` object contains colors (added
 via
 [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)),
-these colors will be automatically used for plotting. Otherwise, the
-default `sf` color scheme will be applied.
+these colors will be automatically used for plotting. Otherwise, colors
+are assigned with
+[`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
+and its default parameters, to match other visualization functions of
+the package.
 
 ## See also
 

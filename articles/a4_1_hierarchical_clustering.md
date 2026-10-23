@@ -125,12 +125,17 @@ The basic use of the function is as follows:
 tree1 <- hclu_hierarclust(dissim)
 ```
 
+    ## Building the iterative hierarchical consensus tree... Note that this process can take time especially if you have a lot of sites.
+
+    ## 
+    ## Final tree has a 0.7006 cophenetic correlation coefficient with the initial dissimilarity matrix
+
 The function gives us some information as it proceeds. Notably, it talks
 about a randomization of the dissimilarity matrix - this is a very
 important feature because hierarchical clustering is strongly influenced
 by the order of the sites in the distance matrix. Therefore, by default,
 the function performs a randomization of the order of sites in the
-distance matrix with 30 trials ([more information in the randomization
+distance matrix with many trials ([more information in the randomization
 section](#randomization)). It also tells us that it built a consensus
 tree based on an iterative hierarchical consensus algorithm, and it
 found a tree with a cophenetic correlation coefficient of 0.7.
@@ -216,8 +221,8 @@ Let’s see how it looks like on a map:
 
 ``` r
 
-#data(vegesf)
-#map_bioregions(tree1, map = vegesf)
+data(vegesf)
+map_bioregions(tree1, map = vegesf)
 ```
 
 Now, this is a hierarchical tree, and cutting it only once (= only 1
@@ -227,7 +232,7 @@ shallow cuts to the tree, likewise to Ficetola *et al.* (2017), which
 would allow us to see broad- to fine-scale relationships among sites in
 our tree.
 
-We can specify, e.g. 4, 10 and 20 clusters:
+We can specify, e.g. 2, 3 and 12 clusters:
 
 ``` r
 
@@ -239,6 +244,10 @@ plot(tree1, cex = .2)
 ```
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-9-1.png)
+Rectangles at the bottom show the three partitions: K_2 (2 clusters),
+K_3 (3 clusters) and K_12 (12 clusters). Note that branches are coloured
+by default on the basis of the most detailed partition (highest number
+of clusters).
 
 We can also see directly in the console the hierarchical structure of
 the tree, with info on each cluster, by using the convenient
@@ -325,8 +334,18 @@ plot(tree1, cex = .2)
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-11-1.png)
 
-The plot is not easy to read because of the large number of sites. We
-can rather extract the information directly from the object:
+The plot is not easy to read because of the large number of sites. Two
+options in thiscase: (1) we render the tree horizontally, in a long page
+
+``` r
+
+plot(tree1, cex = .3,
+     tree_horizontal = TRUE)
+```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-12-1.png)
+
+2.  we can rather extract the information directly from the object:
 
 ``` r
 
@@ -450,12 +469,13 @@ Here is how the maps look like:
 
 ``` r
 
-#for(i in 2:ncol(tree1$clusters)){
-#  map_bioregions(tree1$clusters[, c(1, i)], vegesf)
-#}
+map_bioregions(tree1,
+               vegesf)
 ```
 
-In the next section we will see what are the default settings and why we
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-15-1.png)
+
+In section 2.3 we will see what are the default settings and why we
 chose them, and then we will see how to find optimal numbers of
 clusters.
 
@@ -570,7 +590,7 @@ tree2 <- hclu_hierarclust(dissim,
 plot(tree2, cex = .1)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-17-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-18-1.png)
 
 This is how the tree looks like when the matrix is not randomized. Now
 let’s randomize it and regenerate the tree:
@@ -586,35 +606,34 @@ tree3 <- hclu_hierarclust(dissim_random,
 plot(tree3, cex = .1)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-18-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-19-1.png)
 
 See how the tree looks different? This is problematic because it means
 that the outcome is heavily influenced by the order of sites in the
 distance matrix.
 
-To address this issue, we have developed an iterative algorithm that
-will reconstruct the entire tree from top to bottom, by selecting for
-each branch a majority decision among multiple randomizations of the
-distance matrix (100 times by default, can be increased). This method is
-called **Iterative Hierarchical Consensus Tree** (argument
-`optimal_tree_method = "ihct"`, default value) and it ensures that you
-obtain a consensus tree that it will find a majority decision for each
-branch of the tree. The tree produced with this method generally have a
-better topology than any individual tree. We estimate the performance of
-the topology with the **cophenetic correlation coefficient**, which is
-the *correlation between the initial distance \\\beta\_{sim}\\ among
-sites* and *the cophenetic distance*, which is the distance at which
-sites are connected in the tree. It tells us how representative is the
-tree of the initial distance matrix.
+To address this issue, we need to randomize many times the distance
+matrix and reconstruct an optimal tree from all randomizations. Multiple
+approaches are possible to do this, all available in `bioregion`, and
+the best approach consists in reconstructing the tree iteratively from
+top to bottom, by selecting for each branch a majority decision among
+multiple randomizations of the distance matrix (100 times by default,
+can be increased). This method is called **Iterative Hierarchical
+Consensus Tree** (argument `optimal_tree_method = "ihct"`, default
+value). The tree produced with this method generally have a better
+topology than any individual tree. We estimate the performance of the
+topology with the **cophenetic correlation coefficient**, which is the
+*correlation between the initial distance \\\beta\\ among sites* and
+*the cophenetic distance*, which is the distance at which sites are
+connected in the tree. It tells us how representative is the tree of the
+initial distance matrix.
 
-Although this method performs better than any other available method, it
-comes with a computing cost: it needs to randomize the distance matrix
-multiple times for each branching of the tree. Therefore, we recommend
-using it to obtain a robust tree - be patient in that case. Otherwise,
-if you only need a very fast look at a *good* tree, you can simply
-select the single best tree among multiple randomization trials. It will
-never be as good as the **Iterative Hierarchical Consensus Tree**, but
-it will be a best choice for a fast exploration. To do that, choose
+This optimal approach requires many computations, so we optimized the
+algorithm to work as fast as possible. There are options to make the
+computation faster and parallelize it if need be.
+
+On very large datasets, for faster exploratory analyses, you can switch
+off the algorithm to only display the *best* tree. To do that, choose
 `optimal_tree_method = "best"`. It will select the tree that best
 represents the distance matrix; i.e., the one that has the highest
 cophenetic correlation coefficient among all trials.
@@ -624,8 +643,8 @@ ask the function to keep all individual trees for further exploration
 with `keep_trials = "all"` (including, for each trial, the randomized
 matrix,  
 the associated tree, and metrics for that tree).  
-By default, `keep_trials = "no"` and `keep_trials = "metrics"` can be
-used to  
+By default, trials are discarded (`keep_trials = "no"`). You can set
+`keep_trials = "metrics"` can be used to  
 keep only the metrics associated with each tree.
 
 ``` r
@@ -636,8 +655,15 @@ tree_best <- hclu_hierarclust(dissim_random,
                               keep_trials = "all")
 ```
 
+    ## Randomizing the dissimilarity matrix with 100 trials
+
+    ##  -- range of cophenetic correlation coefficients among trials: 0.6693 - 0.6953
+
+    ## 
+    ## Final tree has a 0.6953 cophenetic correlation coefficient with the initial dissimilarity matrix
+
 Another possible approach is to build a simple consensus tree among all
-the trials. However, we generally do not recommend constructing a
+the trials. However, we generally do not recommend constructing a simple
 consensus tree, because the topology of simple consensus trees can be
 very problematic if there are a lot of ties in the distance matrix.
 Let’s see it in action here:
@@ -649,6 +675,11 @@ tree_consensus <- hclu_hierarclust(dissim_random,
                                    optimal_tree_method = "consensus",
                                    keep_trials = "no")
 ```
+
+    ## Randomizing the dissimilarity matrix with 100 trials
+
+    ## 
+    ## Final tree has a 0.1801 cophenetic correlation coefficient with the initial dissimilarity matrix
 
 See how the cophenetic correlation coefficient for the consensus tree is
 terrible compared to the IHCT and best tree ?
@@ -662,7 +693,7 @@ looks like:
 plot(tree_consensus)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-21-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-22-1.png)
 
 Booo, this is just a large rake, not a tree!!!
 
@@ -709,7 +740,9 @@ between 0 and 1.
     tree at once, this alternative approach consists in cutting
     individual branches at different heights. This method can be
     requested by using `dynamic_tree_cut = TRUE`, and is based on the
-    dynamicTreeCut R package.
+    dynamicTreeCut R package. Check the results carefully as the dynamic
+    tree cut method may not necessarily provide cuts that are consistent
+    with biogeographical expectations.
 
 ### 2.4. Divisive clustering
 
@@ -739,7 +772,7 @@ tree_diana <- hclu_diana(dissim)
 plot(tree_diana)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-22-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-23-1.png)
 
 ## 3. How to find an optimal number of clusters?
 
@@ -790,7 +823,7 @@ eval_tree4 <- bioregionalization_metrics(tree4,
 opti_n_tree4 <- find_optimal_n(eval_tree4)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-24-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-25-1.png)
 
 ``` r
 
@@ -826,15 +859,31 @@ head(tree4$clusters[, c("ID", K_name)])
 
 ``` r
 
-# Make a map of the clusters
-#data("vegesf")
-#library("sf")
-#map_bioregions(tree4$clusters[, c("ID", K_name)], vegesf)
+# Make three maps to illustrate some of the partitions
+map_bioregions(tree4, vegesf, partition_index = c(2, 11, 31))
 ```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-25-2.png)
 
 Or if you are allergic to lines of code, you could also simply recut
 your tree at the identified optimal number of cut-offs with
-[`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md).
+[`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md):
+
+``` r
+
+tree4_cutonce <- cut_tree(tree4, opti_n_tree4)
+
+plot(tree4_cutonce, tree_labels = FALSE)
+```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-26-1.png)
+
+``` r
+
+map_bioregions(tree4_cutonce, vegesf)
+```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-26-2.png)
 
 ### 3.2 Evaluation metrics
 
@@ -1129,7 +1178,7 @@ it may give spurious results.
 find_optimal_n(eval_tree4)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-27-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
@@ -1144,7 +1193,7 @@ find_optimal_n(eval_tree4)
     ## mean_endemics - 9
     ## tot_endemics - 7
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-28-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-30-1.png)
 
 In our example above, the optimal number of clusters varies depending on
 the metric, from a minimum of 7 to a maximum of 19. The final choice
@@ -1163,7 +1212,7 @@ metrics between partitions. It will then keep only the largest positive
 differences (`increasing_step`) or negative differences
 (`decreasing_step`). `increasing_step` is for increasing metrics
 (`prop_between_dissim`) and `decreasing_step` is for decreasing metrics
-(`Mean_Endemics` and `tot_endemics`). `anosim` values can either
+(`mean_endemics` and `tot_endemics`). `anosim` values can either
 increase or decrease depending on your dataset, so you would have to
 explore both ways.
 
@@ -1176,7 +1225,7 @@ find_optimal_n(eval_tree4,
                criterion = "increasing_step")
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-31-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
@@ -1197,7 +1246,7 @@ find_optimal_n(eval_tree4,
                criterion = "decreasing_step")
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-29-2.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-31-2.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
@@ -1217,29 +1266,39 @@ of steps to select, e.g. to select the largest 3 steps, use
 
 ``` r
 
-find_optimal_n(eval_tree4,
-               metrics_to_use = c("anosim", "prop_between_dissim"),
-               criterion = "increasing_step",
-               step_levels = 3)
+(n_3steps <- find_optimal_n(eval_tree4,
+                            metrics_to_use = "prop_between_dissim",
+                            criterion = "increasing_step",
+                            step_levels = 3))
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-30-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-32-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
     ##  - Range of clusters explored: from  2  to  100 
-    ##  - Evaluated metric(s):  anosim prop_between_dissim 
+    ##  - Evaluated metric(s):  prop_between_dissim 
     ## 
     ## Potential optimal partition(s):
     ##  - Criterion chosen to optimise the number of clusters:  increasing_step 
     ##    (step quantile chosen:  0.99  (i.e., only the top 1 %  increase  in evaluation metrics  are used as break points for the number of clusters)
     ##  - Optimal partition(s) of clusters for each metric:
-    ## anosim - 7 16 41
     ## prop_between_dissim - 4 7 16
 
-Note that these steps generally correspond to large jumps in the tree,
-which is why we like this approach as it fits well with the hierarchical
-nature of the tree.
+Why is this method appropriate? It will tend to identify the largest
+changes in the tree, such as when the tree splits into largest groups of
+sites. This is why we like this approach as it fits well with the
+hierarchical nature of the tree. We can see this by plotting the tree:
+
+``` r
+
+tree4_3steps <- cut_tree(tree4, n_3steps)
+plot(tree4_3steps, 
+     tree_labels = FALSE,
+     tree_horizontal = TRUE)
+```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-33-1.png)
 
 Second, you can set a quantile of steps to select, e.g. to select the 5%
 largest steps set the quantile to 0.95 (`step_quantile = 0.95`):
@@ -1252,7 +1311,7 @@ find_optimal_n(eval_tree4,
                step_quantile = 0.95)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-31-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-34-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
@@ -1272,8 +1331,8 @@ between partitions with 4 and 5 clusters, should we keep the partition
 with 4 clusters, or the partition with 5 clusters?
 
 By default, the function keeps the partition with \\N + 1\\ (5 clusters
-in our example above). You can change this by setting
-`step_round_above = FALSE`:
+in our example above). This is what you should use normally.
+Nevertheless, you can change this by setting `step_round_above = FALSE`:
 
 ``` r
 
@@ -1283,7 +1342,7 @@ find_optimal_n(eval_tree4,
                step_round_above = FALSE)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-32-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-35-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
@@ -1338,7 +1397,7 @@ find_optimal_n(eval_tree4,
                metric_cutoffs = c(.6, .8, .9))
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-33-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-36-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 99  partition(s) evaluated
@@ -1358,6 +1417,44 @@ This criterion finds the maximum (`criterion = "max"`) or minimum
 selects the corresponding partition. Such a criterion can be interesting
 in the case of `anosim`, but is probably much less useful for the other
 metrics implemented in the package.
+
+``` r
+
+find_optimal_n(eval_tree4,
+               metrics_to_use = "anosim",
+               criterion = "max")
+```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-37-1.png)
+
+    ## Search for an optimal number of clusters:
+    ##  - 99  partition(s) evaluated
+    ##  - Range of clusters explored: from  2  to  100 
+    ##  - Evaluated metric(s):  anosim 
+    ## 
+    ## Potential optimal partition(s):
+    ##  - Criterion chosen to optimise the number of clusters:  max 
+    ##  - Optimal partition(s) of clusters for each metric:
+    ## anosim - 100
+
+``` r
+
+find_optimal_n(eval_tree4,
+               metrics_to_use = "anosim",
+               criterion = "min")
+```
+
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-37-2.png)
+
+    ## Search for an optimal number of clusters:
+    ##  - 99  partition(s) evaluated
+    ##  - Range of clusters explored: from  2  to  100 
+    ##  - Evaluated metric(s):  anosim 
+    ## 
+    ## Potential optimal partition(s):
+    ##  - Criterion chosen to optimise the number of clusters:  min 
+    ##  - Optimal partition(s) of clusters for each metric:
+    ## anosim - 2
 
 #### 3.2.5 Finding break points in the curve
 
@@ -1383,7 +1480,7 @@ find_optimal_n(eval_tree5,
                criterion = "breakpoints")
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-34-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-38-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 100  partition(s) evaluated
@@ -1409,7 +1506,7 @@ find_optimal_n(eval_tree5,
                n_breakpoints = 2)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-35-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-39-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 100  partition(s) evaluated
@@ -1433,7 +1530,7 @@ find_optimal_n(eval_tree5,
                n_breakpoints = 3)
 ```
 
-![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-36-1.png)
+![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-40-1.png)
 
     ## Search for an optimal number of clusters:
     ##  - 100  partition(s) evaluated

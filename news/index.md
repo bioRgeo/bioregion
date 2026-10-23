@@ -28,6 +28,26 @@ next CRAN release.
   metric), fixed [`print()`](https://rdrr.io/r/base/print.html) on the
   output of
   [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
+- New [`plot()`](https://rdrr.io/r/graphics/plot.default.html) for the
+  outputs of
+  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md),
+  [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md)
+  and
+  [`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md).
+  The clusters are now shown as coloured bars under the tree (one bar
+  per partition) instead of rectangles. The colours are those of
+  [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md),
+  so that trees and maps share the same colours. Trees can now be
+  mirrored (`tree_flip = TRUE`) or drawn horizontally
+  (`tree_horizontal = TRUE`), and site names can be removed
+  (`tree_labels = FALSE`). The plot method has its own help page
+  ([`?plot.bioregion.clusters`](https://bioRgeo.github.io/bioregion/reference/plot.bioregion.clusters.md)).
+- [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
+  now uses the default colors of
+  [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
+  when the bioregionalization has no colors (instead of the default
+  colors of `sf`), so that colors match among the package visualization
+  functions when default parameters are used.
 
 ## bioregion 1.5.0
 

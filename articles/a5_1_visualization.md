@@ -38,7 +38,7 @@ world <- rnaturalearth::ne_coastline(returnclass = "sf", scale = "medium")
 vegesf <- st_transform(vegesf, crs = st_crs(world))
 ```
 
-## 2. Plots
+## 2. Maps
 
 In this section, we show three ways to plot your results.  
 
@@ -458,7 +458,108 @@ final_plot
 
 ![](a5_1_visualization_files/figure-html/unnamed-chunk-16-1.png)
 
-## 3. Exporting networks to Gephi
+## 3. Plot cluster objects
+
+### 3.1 Hierarchical / tree-like clusters
+
+Tree-like clustering results can be visualized with
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html). If the tree
+was cut, clustering results will be displayed as coloured bars below the
+tree.
+
+``` r
+
+tree <- hclu_hierarclust(vegedissim)
+tree <- cut_tree(tree,
+                 cut_height = .6)
+
+plot(tree)
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-17-1.png)
+
+On large trees, labels are difficult to read, so we can turn them off:
+
+``` r
+
+plot(tree, tree_labels = FALSE)
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-18-1.png)
+
+If there are multiple cut heights, multiple bars display from coarsest
+to finest:
+
+``` r
+
+tree <- cut_tree(tree,
+                 cut_height = c(.4, .5, .6))
+
+plot(tree, tree_labels = FALSE)
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-19-1.png)
+
+The tree can be flipped (i.e., mirrored) if need be:
+
+``` r
+
+plot(tree, tree_flip = TRUE,
+     tree_labels = FALSE)
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-20-1.png)
+
+To read complex labels, it is possible to plot the tree horizontally in
+long page format (note that you can also flip the horizontal tree if you
+want):
+
+``` r
+
+plot(tree, tree_horizontal = TRUE,
+     cex = .4) # Reduce label font size
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-21-1.png)
+
+The tree can displayed many layers of cuts, which becomes interesting as
+it shows how the hierarchy evolves as new cuts are drawn:
+
+``` r
+
+tree <- cut_tree(tree,
+                 cut_height = seq(0, .6, length = 30))
+
+plot(tree, tree_labels = FALSE)
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-22-1.png)
+
+Note, however, that only 12 colours can be displayed simultaneously, and
+so as the number of clusters increases, there are more and more clusters
+displayed in shades of grey, which makes them more difficult to read
+past a certain point.
+
+You can predefine your colours before plotting the tree with
+[`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md):
+
+``` r
+
+tree <- cut_tree(tree,
+                 cut_height = .5)
+# Choose a colorblind-friendly palette
+tree <- bioregion_colors(tree, palette = "Safe")
+plot(tree, tree_horizontal = TRUE,
+     tree_labels = FALSE)
+```
+
+![](a5_1_visualization_files/figure-html/unnamed-chunk-23-1.png)
+
+### 3.2 Non-hierarchical clusters
+
+No method implemented at the moment.
+
+## 4. Exporting networks to Gephi
 
 In addition to visualizing bioregions on maps, you may want to visualize
 the network structure of your data using specialized network
@@ -476,7 +577,7 @@ data(fishdf)
 data(fishmat)
 ```
 
-### 3.1 Basic network export
+### 4.1 Basic network export
 
 Let’s start by creating a simple bipartite network from the fish data
 and exporting it without weights or colors:
@@ -499,7 +600,7 @@ layout algorithm:
 
 ![Network fish basic](figures/05_network_fish_basic.png)
 
-### 3.2 Unipartite network with edge weights
+### 4.2 Unipartite network with edge weights
 
 In addition to bipartite networks, you can create unipartite networks
 where sites are connected based on shared species richness. Edge weights
@@ -536,7 +637,7 @@ similar is each each pair of sites. In Gephi, these weights can be used
 to size edges or influence layout algorithms, helping to visualize which
 sites have similar fish communities.
 
-### 3.3 Network with node attributes and colors
+### 4.3 Network with node attributes and colors
 
 To create more sophisticated visualizations, you can add node attributes
 and colors. For example, we can color sites according to their bioregion
@@ -585,7 +686,7 @@ infomap](figures/05_map_fish_bipartite_infomap.png)
 ![Network fish bipartite
 colored](figures/05_network_fish_bipartite_colored.png)
 
-### 3.4 Visualizing in Gephi
+### 4.4 Visualizing in Gephi
 
 Once you have exported your network to GDF format, you can visualize it
 in Gephi:
