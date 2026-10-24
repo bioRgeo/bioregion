@@ -32,10 +32,11 @@ plot(
 - tree_branch_partition:
 
   Trees only. The partition whose clusters give their colours to the
-  branches of the tree: either a column number of `x$clusters` (the
-  first partition is in column 2) or the name of a partition (e.g.,
-  `"K_8"`). By default (`NULL`), the finest partition (i.e. with the
-  most clusters) is used.
+  branches of the tree: either a partition number (`1` for the first
+  partition, as in
+  [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md))
+  or the name of a partition (e.g., `"K_8"`). By default (`NULL`), the
+  finest partition (i.e. with the most clusters) is used.
 
 - tree_labels:
 

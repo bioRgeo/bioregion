@@ -105,9 +105,10 @@ The first attribute or layer should correspond to the sites' ID
 <dd><p>An <code>integer</code>, <code>character</code>, or <code>NULL</code> specifying
 which <code>bioregionalization</code>'s partition(s) to plot. By default (<code>NULL</code>), all
 partitions are plotted. If an <code>integer</code> or vector of <code>integers</code> is provided,
-partition(s) are selected by column number(s) in the <code>bioregionalization</code>
-data.frame. If a <code>character</code> or vector of <code>characters</code>, partition(s) are
-selected by name(s) matching column names in <code>bioregionalization</code>.</p></dd>
+partition(s) are selected by their number (<code>1</code> for the first partition,
+i.e. the first column of clusters in <code>bioregionalization$clusters</code>, <code>2</code> for
+the second, etc.). If a <code>character</code> or vector of <code>characters</code>, partition(s)
+are selected by name(s) matching column names in <code>bioregionalization</code>.</p></dd>
 
 
 <dt id="arg-map-as-output">map_as_output<a class="anchor" aria-label="anchor" href="#arg-map-as-output"></a></dt>

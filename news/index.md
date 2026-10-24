@@ -42,6 +42,14 @@ next CRAN release.
   (`tree_horizontal = TRUE`), and site names can be removed
   (`tree_labels = FALSE`). The plot method has its own help page
   ([`?plot.bioregion.clusters`](https://bioRgeo.github.io/bioregion/reference/plot.bioregion.clusters.md)).
+- **Breaking change**: in
+  [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md),
+  a numeric `partition_index` now gives the number of the partition (`1`
+  for the first partition) instead of its column in
+  `bioregionalization$clusters` (where the first partition was `2`).
+  Code using numbers must subtract 1 from them; names are not affected.
+  A message recalls this change the first time numbers are used in a
+  session.
 - [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
   now uses the default colors of
   [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)

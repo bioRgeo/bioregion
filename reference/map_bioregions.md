@@ -36,10 +36,11 @@ map_bioregions(
   An `integer`, `character`, or `NULL` specifying which
   `bioregionalization`'s partition(s) to plot. By default (`NULL`), all
   partitions are plotted. If an `integer` or vector of `integers` is
-  provided, partition(s) are selected by column number(s) in the
-  `bioregionalization` data.frame. If a `character` or vector of
-  `characters`, partition(s) are selected by name(s) matching column
-  names in `bioregionalization`.
+  provided, partition(s) are selected by their number (`1` for the first
+  partition, i.e. the first column of clusters in
+  `bioregionalization$clusters`, `2` for the second, etc.). If a
+  `character` or vector of `characters`, partition(s) are selected by
+  name(s) matching column names in `bioregionalization`.
 
 - map_as_output:
 

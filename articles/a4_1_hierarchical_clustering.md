@@ -860,7 +860,7 @@ head(tree4$clusters[, c("ID", K_name)])
 ``` r
 
 # Make three maps to illustrate some of the partitions
-map_bioregions(tree4, vegesf, partition_index = c(2, 11, 31))
+map_bioregions(tree4, vegesf, partition_index = c(1, 10, 30))
 ```
 
 ![](a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-25-2.png)
