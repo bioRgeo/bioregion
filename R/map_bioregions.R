@@ -12,9 +12,10 @@
 #' @param partition_index An `integer`, `character`, or `NULL` specifying 
 #' which `bioregionalization`'s partition(s) to plot. By default (`NULL`), all 
 #' partitions are plotted. If an `integer` or vector of `integers` is provided, 
-#' partition(s) are selected by column number(s) in the `bioregionalization` 
-#' data.frame. If a `character` or vector of `characters`, partition(s) are 
-#' selected by name(s) matching column names in `bioregionalization`.
+#' partition(s) are selected by their number (`1` for the first partition, 
+#' i.e. the first column of clusters in `bioregionalization$clusters`, `2` for 
+#' the second, etc.). If a `character` or vector of `characters`, partition(s) 
+#' are selected by name(s) matching column names in `bioregionalization`.
 #' 
 #' @param map_as_output A `boolean` indicating if the `sf` `data.frame` object 
 #' used for the plot should be returned.
@@ -155,7 +156,17 @@ map_bioregions <- function(bioregionalization,
     if(is.character(partition_index)){
       clusters <- clusters[, c(1, match(partition_index, colnames(clusters)))]
     }else{
-      clusters <- clusters[, c(1, partition_index)]
+      # Numbers counted the columns of bioregionalization$clusters in versions
+      # 1.4.0 and 1.5.0: tell users once per session about the change
+      rlang::inform(
+        paste0("NOTE: Since bioregion 1.5.1, numbers in partition_index ",
+               "count the ",
+               "partitions (1 for the first partition), as in plot(). In ",
+               "versions 1.4.0 and 1.5.0, they counted the columns of ",
+               "bioregionalization$clusters (2 for the first partition)."),
+        .frequency = "once",
+        .frequency_id = "bioregion_map_partition_index")
+      clusters <- clusters[, c(1, partition_index + 1)]
     }
     partition_names <- colnames(clusters)[-1]
 

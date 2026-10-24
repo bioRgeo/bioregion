@@ -10,8 +10,9 @@
 #'
 #' @param tree_branch_partition Trees only. The partition
 #' whose clusters give their colours to the branches of the tree: either a
-#' column number of `x$clusters` (the first partition is in column 2) or the
-#' name of a partition (e.g., `"K_8"`). By default (`NULL`), the finest
+#' partition number (`1` for the first partition, as in
+#' `map_bioregions()`) or the name of a partition (e.g., `"K_8"`). By
+#' default (`NULL`), the finest
 #' partition (i.e. with the most clusters) is used.
 #'
 #' @param tree_labels Trees only. A `boolean` indicating
@@ -195,7 +196,7 @@ plot_tree <- function(x, tree_branch_partition, tree_labels, tree_flip,
       controls(args = tree_branch_partition, data = x$clusters,
                type = "input_partition_index")
       if (is.numeric(tree_branch_partition)) {
-        tree_branch_partition <- colnames(x$clusters)[tree_branch_partition]
+        tree_branch_partition <- colnames(x$clusters)[-1][tree_branch_partition]
       }
     }
 

@@ -18,8 +18,9 @@
 
 \item{tree_branch_partition}{Trees only. The partition
 whose clusters give their colours to the branches of the tree: either a
-column number of \code{x$clusters} (the first partition is in column 2) or the
-name of a partition (e.g., \code{"K_8"}). By default (\code{NULL}), the finest
+partition number (\code{1} for the first partition, as in
+\code{map_bioregions()}) or the name of a partition (e.g., \code{"K_8"}). By
+default (\code{NULL}), the finest
 partition (i.e. with the most clusters) is used.}
 
 \item{tree_labels}{Trees only. A \code{boolean} indicating

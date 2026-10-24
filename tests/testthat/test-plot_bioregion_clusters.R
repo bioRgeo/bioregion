@@ -28,7 +28,7 @@ test_that("plot of hierarchical trees", {
   diana <- hclu_diana(wf_dissim, n_clust = c(3, 5), verbose = FALSE)
   expect_no_error(suppressWarnings(plot(diana)))
 
-  # Branches coloured by a partition chosen by its column or its name
+  # Branches coloured by a partition chosen by its number or its name
   expect_no_error(plot(tree_3, tree_branch_partition = 2))
   expect_no_error(plot(tree_3,
                        tree_branch_partition = colnames(tree_3$clusters)[3]))
@@ -68,8 +68,8 @@ test_that("invalid inputs", {
                "tree_branch_partition must be of length 1.", fixed = TRUE)
   expect_error(plot(tree_3, tree_branch_partition = "zz"),
                "^If tree_branch_partition is a character, it should be a")
-  expect_error(plot(tree_3, tree_branch_partition = 1),
-               "tree_branch_partition should be strictly higher than 1.",
+  expect_error(plot(tree_3, tree_branch_partition = 0),
+               "tree_branch_partition should be strictly higher than 0.",
                fixed = TRUE)
   expect_error(plot(tree_3, tree_branch_partition = 10),
                "^tree_branch_partition should be lower or equal to")

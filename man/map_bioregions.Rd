@@ -26,9 +26,10 @@ The first attribute or layer should correspond to the sites' ID
 \item{partition_index}{An \code{integer}, \code{character}, or \code{NULL} specifying
 which \code{bioregionalization}'s partition(s) to plot. By default (\code{NULL}), all
 partitions are plotted. If an \code{integer} or vector of \code{integers} is provided,
-partition(s) are selected by column number(s) in the \code{bioregionalization}
-data.frame. If a \code{character} or vector of \code{characters}, partition(s) are
-selected by name(s) matching column names in \code{bioregionalization}.}
+partition(s) are selected by their number (\code{1} for the first partition,
+i.e. the first column of clusters in \code{bioregionalization$clusters}, \code{2} for
+the second, etc.). If a \code{character} or vector of \code{characters}, partition(s)
+are selected by name(s) matching column names in \code{bioregionalization}.}
 
 \item{map_as_output}{A \code{boolean} indicating if the \code{sf} \code{data.frame} object
 used for the plot should be returned.}

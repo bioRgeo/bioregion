@@ -137,15 +137,16 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
                     " is numeric, it should be an integer."), 
              call. = FALSE)
       } else {
-        if (sum(args <= 1) != 0) {
+        if (sum(args < 1) != 0) {
           stop(paste0(deparse(substitute(args)),
-                      " should be strictly higher than 1."), 
+                      " should be strictly higher than 0."), 
                call. = FALSE)
         }
-        if (sum(args > dim(data)[2]) != 0) {
+        if (sum(args > length(partition_name)) != 0) {
           stop(paste0(deparse(substitute(args)),
                       " should be lower or equal to ", 
-                      dim(data)[2], "."),
+                      length(partition_name),
+                      " (the number of partitions)."),
                call. = FALSE)
         }
       }

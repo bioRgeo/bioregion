@@ -89,11 +89,16 @@ test_that("valid outputs", {
                         partition_index = c("K_2","K_3"),
                         map_as_output = TRUE, 
                         plot = FALSE)
-  map2 <- map_bioregions(cluhier, 
-                         map = fishsf, 
-                         partition_index = c(3,4),
-                         map_as_output = TRUE, 
-                         plot = FALSE)
+  # Numbers count the partitions: a message tells it once per session
+  # (shown at every call here, to be tested)
+  rlang::local_options(rlib_message_verbosity = "verbose")
+  suppressMessages(expect_message(
+    map2 <- map_bioregions(cluhier,
+                           map = fishsf,
+                           partition_index = c(2,3),
+                           map_as_output = TRUE,
+                           plot = FALSE),
+    "numbers in partition_index count the partitions"))
   #map3 <- map_bioregions(cluhiercol, 
   #                       map = fishsf, 
   #                       partition_index = c(3,4),
@@ -227,10 +232,10 @@ test_that("invalid inputs", {
                    partition_index = c(1.1,2)),
     "^If partition_index is numeric") 
   
-  expect_error(
+  suppressMessages(expect_error(
     map_bioregions(cluinfo,
-                   partition_index = c(1,2)),
-    "^partition_index should be strictly higher") 
+                   partition_index = c(0,1)),
+    "^partition_index should be strictly higher than 0")) 
   
   expect_error(
     map_bioregions(cluinfo,
