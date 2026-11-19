@@ -116,7 +116,7 @@
 - [`exportGDF()`](https://bioRgeo.github.io/bioregion/reference/exportGDF.md)
   : Export a network to GDF format for Gephi visualization
 - [`plot(`*`<bioregion.clusters>`*`)`](https://bioRgeo.github.io/bioregion/reference/plot.bioregion.clusters.md)
-  : Plot a hierarchical clustering bioregionalization
+  : Plot a bioregionalization
 
 ## Data
 

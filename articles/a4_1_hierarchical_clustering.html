@@ -20,7 +20,7 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="4.1 Hierarchical clustering">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><script src="../extra.js"></script><meta property="og:title" content="4.1 Hierarchical clustering">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -297,7 +297,7 @@ fine-scale relationships among sites in our tree.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="1152">
 Rectangles at the bottom show the three partitions: K_2 (2 clusters),
-K_3 (3 clusters) and K_12 (12 clusters). Note that branches are coloured
+K_3 (3 clusters) and K_12 (12 clusters). Note that branches are colored
 by default on the basis of the most detailed partition (highest number
 of clusters).</p>
 <p>We can also see directly in the console the hierarchical structure of
@@ -381,7 +381,7 @@ Two options in thiscase: (1) we render the tree horizontally, in a long
 page</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree1</span>, cex <span class="op">=</span> <span class="fl">.3</span>,</span>
-<span>     tree_horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>     horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="768"></p>
 <ol start="2" style="list-style-type: decimal">
 <li>we can rather extract the information directly from the object:</li>
@@ -854,7 +854,7 @@ your tree at the identified optimal number of cut-offs with
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree4_cutonce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree4</span>, <span class="va">opti_n_tree4</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree4_cutonce</span>, tree_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree4_cutonce</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="768"></p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">tree4_cutonce</span>, <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
@@ -1229,8 +1229,8 @@ tree:</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree4_3steps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree4</span>, <span class="va">n_3steps</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree4_3steps</span>, </span>
-<span>     tree_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>     tree_horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>     labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>     horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a4_1_hierarchical_clustering_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" alt="" width="768"></p>
 <p>Second, you can set a quantile of steps to select, e.g. to select the
 5% largest steps set the quantile to 0.95
@@ -1481,42 +1481,42 @@ function:</p>
 <div id="ref-Baselga2012" class="csl-entry">
 Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. <em>Global
-Ecology and Biogeography</em> 21, 1223–1232. <a href="https://doi.org/10.1111/j.1466-8238.2011.00756.x" class="external-link">https://doi.org/10.1111/j.1466-8238.2011.00756.x</a>
+Ecology and Biogeography</em> 21, 1223–1232. <a href="https://doi.org/10.1111/j.1466-8238.2011.00756.x" class="external-link">10.1111/j.1466-8238.2011.00756.x</a>
 </div>
 <div id="ref-Baselga2013" class="csl-entry">
 Baselga A (2013) Separating the two components of abundance-based
 dissimilarity: Balanced changes in abundance vs. <span class="nocase">abundance</span> gradients. <em>Methods in Ecology and
-Evolution</em> 4, 552–557. <a href="https://doi.org/10.1111/2041-210X.12029" class="external-link">https://doi.org/10.1111/2041-210X.12029</a>
+Evolution</em> 4, 552–557. <a href="https://doi.org/10.1111/2041-210X.12029" class="external-link">10.1111/2041-210X.12029</a>
 </div>
 <div id="ref-Ficetola2017" class="csl-entry">
 Ficetola GF, Mazel F &amp; Thuiller W (2017) <span class="nocase">Global
 determinants of zoogeographical boundaries</span>. <em>Nature Ecology
-&amp; Evolution</em> 1, 0089. <a href="https://doi.org/10.1038/s41559-017-0089" class="external-link">https://doi.org/10.1038/s41559-017-0089</a>
+&amp; Evolution</em> 1, 0089. <a href="https://doi.org/10.1038/s41559-017-0089" class="external-link">10.1038/s41559-017-0089</a>
 </div>
 <div id="ref-Hahsler2019" class="csl-entry">
 Hahsler M, Piekenbrock M &amp; Doran D (2019) Dbscan: Fast density-based
 clustering with <span>R</span>. <em>Journal of Statistical Software</em>
-91, 1–30. <a href="https://doi.org/10.18637/jss.v091.i01" class="external-link">https://doi.org/10.18637/jss.v091.i01</a>
+91, 1–30. <a href="https://doi.org/10.18637/jss.v091.i01" class="external-link">10.18637/jss.v091.i01</a>
 </div>
 <div id="ref-Holt2013" class="csl-entry">
 Holt BG, Lessard J-P, Borregaard MK <em>et al.</em> (2013) <span class="nocase">An update of Wallace’s zoogeographic regions of the
-world</span>. <em>Science</em> 339, 74–78. <a href="https://doi.org/10.1126/science.1228282" class="external-link">https://doi.org/10.1126/science.1228282</a>
+world</span>. <em>Science</em> 339, 74–78. <a href="https://doi.org/10.1126/science.1228282" class="external-link">10.1126/science.1228282</a>
 </div>
 <div id="ref-Kaufman2009" class="csl-entry">
 Kaufman L &amp; Rousseeuw PJ (2009) <em>Finding groups in data: An
 introduction to cluster analysis</em>. John Wiley &amp; Sons, Hoboken,
-NJ. <a href="https://doi.org/10.1002/9780470316801" class="external-link">https://doi.org/10.1002/9780470316801</a>
+NJ. <a href="https://doi.org/10.1002/9780470316801" class="external-link">10.1002/9780470316801</a>
 </div>
 <div id="ref-Kreft2010" class="csl-entry">
 Kreft H &amp; Jetz W (2010) <span class="nocase">A framework for
 delineating biogeographical regions based on species
-distributions</span>. <em>Journal of Biogeography</em> 37, 2029–2053. <a href="https://doi.org/10.1111/j.1365-2699.2010.02375.x" class="external-link">https://doi.org/10.1111/j.1365-2699.2010.02375.x</a>
+distributions</span>. <em>Journal of Biogeography</em> 37, 2029–2053. <a href="https://doi.org/10.1111/j.1365-2699.2010.02375.x" class="external-link">10.1111/j.1365-2699.2010.02375.x</a>
 </div>
 <div id="ref-Leprieur2014" class="csl-entry">
 Leprieur F &amp; Oikonomou A (2014) <span class="nocase">The need for
 richness-independent measures of turnover when delineating
 biogeographical regions</span>. <em>Journal of Biogeography</em> 41,
-417–420. <a href="https://doi.org/10.1111/jbi.12266" class="external-link">https://doi.org/10.1111/jbi.12266</a>
+417–420. <a href="https://doi.org/10.1111/jbi.12266" class="external-link">10.1111/jbi.12266</a>
 </div>
 </div>
 </div>

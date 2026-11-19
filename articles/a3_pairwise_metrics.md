@@ -445,22 +445,22 @@ comp_j
 ```
 
     ## Unit: microseconds
-    ##            expr        min         lq        mean      median         uq
-    ##      adespatial 339382.855 339558.436 351843.1733 343212.4955 346182.047
-    ##        betapart   1261.344   1273.262   1381.1452   1324.7835   1465.237
-    ##       bioregion   7594.273   8642.050   9950.4832  10010.2930  11207.582
-    ##    ecodist_dist 104493.052 111631.499 152966.5692 121803.8580 126179.284
-    ##  ecodist_bcdist   2993.548   3022.571   3045.7784   3035.6155   3049.251
-    ##       vegan_veg   1052.694   1113.024   1363.0891   1323.7865   1646.496
-    ##    vegan_design    813.659    898.325    978.1093    945.4895   1013.246
+    ##            expr        min         lq       mean     median         uq
+    ##      adespatial 330397.868 331972.598 335092.558 335791.122 336046.502
+    ##        betapart   1264.990   1288.444   1427.876   1386.050   1417.136
+    ##       bioregion   7147.311   8435.376  10978.477  10057.341  11606.548
+    ##    ecodist_dist 114905.889 118643.313 161040.181 130154.090 138877.463
+    ##  ecodist_bcdist   2990.043   3011.626   3037.256   3030.032   3046.687
+    ##       vegan_veg   1059.775   1116.519   1361.596   1323.307   1644.504
+    ##    vegan_design    823.624    954.809   1013.028    981.609   1054.367
     ##         max neval
-    ##  427256.745    10
-    ##    1701.979    10
-    ##   11837.218    10
-    ##  452706.218    10
-    ##    3139.585    10
-    ##    1656.842    10
-    ##    1321.364    10
+    ##  341507.537    10
+    ##    2031.609    10
+    ##   21770.272    10
+    ##  454706.060    10
+    ##    3142.680    10
+    ##    1662.370    10
+    ##    1337.888    10
 
 On this very small example, the functions from
 [vegan](https://cran.r-project.org/package=vegan) outperform the others
@@ -560,21 +560,21 @@ comp_bc
 
     ## Unit: milliseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 338.688033 344.184269 352.877008 353.790452 360.202929
-    ##        betapart 248.663538 249.932342 257.553507 255.360823 261.319822
-    ##       bioregion   8.292271   8.580409   8.799135   8.766300   8.924670
-    ##    ecodist_dist  88.241296  93.412620 135.643050 101.769251 121.427764
-    ##  ecodist_bcdist   5.234868   5.276740   5.314130   5.300756   5.332994
-    ##       vegan_veg   1.030811   1.054847   1.210590   1.078442   1.116058
-    ##    vegan_design   1.054617   1.159122   1.191764   1.207229   1.237409
+    ##      adespatial 330.872002 332.718757 336.288709 336.164453 339.673522
+    ##        betapart 246.790451 250.648514 258.282023 257.351455 266.906715
+    ##       bioregion   8.121419   8.430718   8.804104   8.681611   8.857373
+    ##    ecodist_dist  88.566127  97.621974 135.522024 101.791370 118.992513
+    ##  ecodist_bcdist   5.272736   5.276441   5.307311   5.296551   5.312045
+    ##       vegan_veg   1.022079   1.053456   1.232467   1.082995   1.124721
+    ##    vegan_design   1.055649   1.112303   1.179968   1.198141   1.237630
     ##         max neval
-    ##  362.622965    10
-    ##  279.395058    10
-    ##    9.735205    10
-    ##  426.292834    10
-    ##    5.479752    10
-    ##    1.995946    10
-    ##    1.276236    10
+    ##  341.629770    10
+    ##  269.105813    10
+    ##   10.716646    10
+    ##  413.342160    10
+    ##    5.440796    10
+    ##    2.007544    10
+    ##    1.278861    10
 
 The functions from [vegan](https://cran.r-project.org/package=vegan)
 continue to outperform the others. They are again followed by `bcdist`,
@@ -1293,9 +1293,9 @@ dissim[1:10,]
 Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. *Global Ecology
 and Biogeography* 21, 1223–1232.
-<https://doi.org/10.1111/j.1466-8238.2011.00756.x>
+[10.1111/j.1466-8238.2011.00756.x](https://doi.org/10.1111/j.1466-8238.2011.00756.x)
 
 Baselga A (2013) Separating the two components of abundance-based
 dissimilarity: Balanced changes in abundance vs. abundance gradients.
 *Methods in Ecology and Evolution* 4, 552–557.
-<https://doi.org/10.1111/2041-210X.12029>
+[10.1111/2041-210X.12029](https://doi.org/10.1111/2041-210X.12029)

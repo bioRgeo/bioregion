@@ -582,20 +582,22 @@ Based on the metric selected, the optimal number of clusters can vary.
 Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. *Global Ecology
 and Biogeography* 21, 1223–1232.
-<https://doi.org/10.1111/j.1466-8238.2011.00756.x>
+[10.1111/j.1466-8238.2011.00756.x](https://doi.org/10.1111/j.1466-8238.2011.00756.x)
 
 Frey B & Dueck D (2007) Clustering by passing messages between data
 points. *Science* 315, 972–976.
-<https://doi.org/10.1126/science.1136800>
+[10.1126/science.1136800](https://doi.org/10.1126/science.1136800)
 
 Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based
 clustering with R. *Journal of Statistical Software* 91, 1–30.
-<https://doi.org/10.18637/jss.v091.i01>
+[10.18637/jss.v091.i01](https://doi.org/10.18637/jss.v091.i01)
 
 Hartigan JA & Wong MA (1979) Algorithm AS 136: A k-means clustering
 algorithm. *Journal of the royal statistical society. series c (applied
-statistics)* 28, 100–108. <https://doi.org/10.2307/2346830>
+statistics)* 28, 100–108.
+[10.2307/2346830](https://doi.org/10.2307/2346830)
 
 Leprieur F & Oikonomou A (2014) The need for richness-independent
 measures of turnover when delineating biogeographical regions. *Journal
-of Biogeography* 41, 417–420. <https://doi.org/10.1111/jbi.12266>
+of Biogeography* 41, 417–420.
+[10.1111/jbi.12266](https://doi.org/10.1111/jbi.12266)

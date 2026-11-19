@@ -28,20 +28,30 @@ next CRAN release.
   metric), fixed [`print()`](https://rdrr.io/r/base/print.html) on the
   output of
   [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md).
-- New [`plot()`](https://rdrr.io/r/graphics/plot.default.html) for the
-  outputs of
-  [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md),
-  [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md)
-  and
-  [`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md).
-  The clusters are now shown as coloured bars under the tree (one bar
-  per partition) instead of rectangles. The colours are those of
-  [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md),
-  so that trees and maps share the same colours. Trees can now be
-  mirrored (`tree_flip = TRUE`) or drawn horizontally
-  (`tree_horizontal = TRUE`), and site names can be removed
-  (`tree_labels = FALSE`). The plot method has its own help page
-  ([`?plot.bioregion.clusters`](https://bioRgeo.github.io/bioregion/reference/plot.bioregion.clusters.md)).
+- New [`plot()`](https://rdrr.io/r/graphics/plot.default.html) for all
+  clustering outputs
+  ([`?plot.bioregion.clusters`](https://bioRgeo.github.io/bioregion/reference/plot.bioregion.clusters.md)),
+  with three types of plots (`plot_type`):
+  - `"bars"`, for all algorithms: one bar per cluster, made of one
+    square per site, and, if bipartite, one circle per species.
+  - `"tree"`, for
+    [`hclu_hierarclust()`](https://bioRgeo.github.io/bioregion/reference/hclu_hierarclust.md),
+    [`hclu_diana()`](https://bioRgeo.github.io/bioregion/reference/hclu_diana.md)
+    and
+    [`cut_tree()`](https://bioRgeo.github.io/bioregion/reference/cut_tree.md)
+    (the default for these functions), and for nested partitions such as
+    the levels of
+    [`netclu_infomap()`](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.md).
+    The clusters are shown as colored bars under the tree (one bar per
+    partition) instead of rectangles.
+  - `"cluster_tree"`: the tree drawn down to the clusters, with the bar
+    of each cluster at the tip of its branch (the default for
+    hierarchical
+    [`netclu_infomap()`](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.md)).
+  - cool customizations for all three plots, check out the visualization
+    vignette
+  - arguments that do not apply to the chosen plot (e.g., `collapse` for
+    bars) are ignored with a warning.
 - **Breaking change**: in
   [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md),
   a numeric `partition_index` now gives the number of the partition (`1`
@@ -50,6 +60,17 @@ next CRAN release.
   Code using numbers must subtract 1 from them; names are not affected.
   A message recalls this change the first time numbers are used in a
   session.
+- [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
+  now ranks clusters of the same size by name, with numbers sorted as
+  numbers (`2.1`, `2.2`, …, `2.10`), instead of by their order of
+  appearance, and its `colors` element lists clusters in the same order.
+- With `map_as_output = TRUE`,
+  [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
+  now adds the colors of
+  [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
+  to its output when the bioregionalization has them: one column per
+  partition, named after the partition with the suffix `_color` (e.g.,
+  `K_3_color`), to reuse the colors in custom maps.
 - [`map_bioregions()`](https://bioRgeo.github.io/bioregion/reference/map_bioregions.md)
   now uses the default colors of
   [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)

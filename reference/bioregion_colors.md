@@ -48,6 +48,8 @@ bioregion_colors(
     only)
 
   Larger clusters (by the chosen criterion) receive vivid colors first.
+  Clusters of the same size are ranked by name (e.g., `2.1`, `2.2`, ...,
+  `2.10`).
 
 - cutoff_insignificant:
 

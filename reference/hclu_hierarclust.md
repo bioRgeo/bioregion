@@ -416,18 +416,21 @@ workers.
 
 ## References
 
-Kreft H & Jetz W (2010) A framework for delineating biogeographical
-regions based on species distributions. *Journal of Biogeography* 37,
-2029-2053.
-
-Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH
-(2013) Recluster: an unbiased clustering procedure for beta-diversity
-turnover. *Ecography* 36, 1070–1075.
-
 Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new
 procedure for extrapolating turnover regionalization at mid-small
 spatial scales, tested on British butterflies. *Methods in Ecology and
-Evolution* 6 , 1287–1297.
+Evolution* 6, 1287–1297.
+[10.1111/2041-210X.12415](https://doi.org/10.1111/2041-210X.12415)
+
+Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis RLH
+(2013) Recluster: An unbiased clustering procedure for beta-diversity
+turnover. *Ecography* 36, 1070–1075.
+[10.1111/j.1600-0587.2013.00444.x](https://doi.org/10.1111/j.1600-0587.2013.00444.x)
+
+Kreft H & Jetz W (2010) A framework for delineating biogeographical
+regions based on species distributions. *Journal of Biogeography* 37,
+2029–2053.
+[10.1111/j.1365-2699.2010.02375.x](https://doi.org/10.1111/j.1365-2699.2010.02375.x)
 
 ## See also
 

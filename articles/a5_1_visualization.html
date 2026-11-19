@@ -20,7 +20,7 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5.1 Visualization">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><script src="../extra.js"></script><meta property="og:title" content="5.1 Visualization">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -104,16 +104,16 @@ Boris Leroy and Maxime Lenormand</h4>
     
 <p>In this vignette, we aim at illustrating how to plot the bioregions
 identified with the diferent algorithms available in
-<code>bioregion</code>. <br> Using one of the dataset coming along with
-<code>bioregion</code>, we show three strategies to plot your
+<code>bioregion</code>. <br> Using datasets coming along with
+<code>bioregion</code>, we show different methods to plot your
 results.</p>
 <div class="section level2">
 <h2 id="data">1. Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h2>
-<p>For this vignette, we rely on the dataset describing the distribution
-of vascular plants in the Mediterranean part of France. We first load
-the matrix format of this dataset, computes the dissimilarity matrix out
-of it and also load the data.frame format of the data.</p>
+<p>For this vignette, we mostly rely on the dataset describing the
+distribution of vascular plants in the Mediterranean part of France. We
+first load the matrix format of this dataset, computes the dissimilarity
+matrix out of it and also load the data.frame format of the data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegedf</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vegemat</span><span class="op">)</span></span>
@@ -131,429 +131,486 @@ of it and also load the data.frame format of the data.</p>
 <span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu">st_crs</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="maps">2. Maps<a class="anchor" aria-label="anchor" href="#maps"></a>
+<h2 id="summary-of-visualization-methods-in-the-bioregion-r-package">2. Summary of visualization methods in the bioregion R package<a class="anchor" aria-label="anchor" href="#summary-of-visualization-methods-in-the-bioregion-r-package"></a>
 </h2>
-<p>In this section, we show three ways to plot your results. <br></p>
-<div class="section level3">
-<h3 id="map_bioregions">2.1 map_bioregions()<a class="anchor" aria-label="anchor" href="#map_bioregions"></a>
-</h3>
-<p>The first possibility is to use the function
-<code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> from the package. This function can
-directly provide a plot of each site colored according to the cluster
-they belong to. <br> Let’s take an example with a K-means clustering,
-with a number of clusters set to 3.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, </span>
-<span>                                  n_clust <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>                                  index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
-<span>                                  seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> function can now simply takes the
-object <code>fish_nhclu_kmeans</code>, which is of
-<code>bioregion.clusters</code> class, and the spatial distribution of
-sites, stored in <code>fishsf</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
-<span>               map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="576"></p>
-</div>
-<div class="section level3">
-<h3 id="color-palettes-with-bioregion_colors">2.2 Color palettes with bioregion_colors()<a class="anchor" aria-label="anchor" href="#color-palettes-with-bioregion_colors"></a>
-</h3>
-<p>The <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code> function is designed to define
-and manage consistent color palettes across all your visualizations.
-This function assigns fixed colors to bioregions and ensures that these
-colors remain consistent across different types of plots. The same
-bioregion should have the same color in all your figures (maps, summary
-plots, networks, etc.)</p>
+<p>The package provides functions for three visualization methods:</p>
+<ol style="list-style-type: decimal">
+<li>Maps (directly in R): <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code>: <a href="#maps">section 3</a>
+</li>
+<li>Bar plots and trees of clusters (directly in R) <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>:
+<a href="#clusterplots">section 4</a>
+</li>
+<li>Export of networks (for visualization in external software Gephi)
+<code>exportGDF</code>: <a href="#networkplots">section 5</a>
+</li>
+</ol>
+<p>To facilitate graphical analysis, the package also provides a
+function to make sure colors are consistent across all visualizations:
+<code>bioregion_colors</code>. This function assigns fixed colors to
+bioregions and ensures that these colors remain consistent across
+different types of plots. The same bioregion should have the same color
+in all your figures (maps, summary plots, networks, etc.).</p>
 <div class="section level4">
-<h4 id="available-color-palettes">Available color palettes<a class="anchor" aria-label="anchor" href="#available-color-palettes"></a>
+<h4 id="example-visualization-with-a-colorblind-safe-palette">Example visualization with a colorblind-safe palette<a class="anchor" aria-label="anchor" href="#example-visualization-with-a-colorblind-safe-palette"></a>
 </h4>
-<p>The function uses qualitative color palettes from the
-<code>rcartocolor</code> package. Let’s explore a few examples with
-different palettes:</p>
-<div class="section level5">
-<h5 id="example-1-vivid-palette-default">Example 1: Vivid palette (default)<a class="anchor" aria-label="anchor" href="#example-1-vivid-palette-default"></a>
-</h5>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Apply the Vivid palette (default)</span></span>
-<span><span class="va">vege_kmeans_vivid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
-<span>                                      palette <span class="op">=</span> <span class="st">"Vivid"</span>,</span>
-<span>                                      cluster_ordering <span class="op">=</span> <span class="st">"n_sites"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>,</span>
+<span>                                  n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># View the color assignments</span></span>
-<span><span class="va">vege_kmeans_vivid</span><span class="op">$</span><span class="va">colors</span></span></code></pre></div>
-<pre><code><span><span class="co">## $K_3</span></span>
-<span><span class="co">##   cluster   color</span></span>
-<span><span class="co">## 1       1 #E58606</span></span>
-<span><span class="co">## 2       2 #52BCA3</span></span>
-<span><span class="co">## 3       3 #5D69B1</span></span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Map with Vivid colors</span></span>
-<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_vivid</span>, </span>
-<span>               map <span class="op">=</span> <span class="va">vegesf</span>, </span>
-<span>               plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="576"></p>
-<p>Note that vege_kmeans_vivid is identical to vege_kmeans with two new
-slots: * colors: a small data.frame summarising the color assigned to
-each bioregion * clusters_colors: a data.frame identical to the clusters
-slot, but with content modified to include colors</p>
-</div>
-<div class="section level5">
-<h5 id="example-2-bold-palette">Example 2: Bold palette<a class="anchor" aria-label="anchor" href="#example-2-bold-palette"></a>
-</h5>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Apply the Bold palette</span></span>
-<span><span class="va">vege_kmeans_bold</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
-<span>                                     palette <span class="op">=</span> <span class="st">"Bold"</span>,</span>
-<span>                                     cluster_ordering <span class="op">=</span> <span class="st">"n_sites"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># View the color assignments</span></span>
-<span><span class="va">vege_kmeans_bold</span><span class="op">$</span><span class="va">colors</span></span></code></pre></div>
-<pre><code><span><span class="co">## $K_3</span></span>
-<span><span class="co">##   cluster   color</span></span>
-<span><span class="co">## 1       1 #7F3C8D</span></span>
-<span><span class="co">## 2       2 #3969AC</span></span>
-<span><span class="co">## 3       3 #11A579</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Map with Bold colors</span></span>
-<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_bold</span>, </span>
-<span>               map <span class="op">=</span> <span class="va">vegesf</span>, </span>
-<span>               plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="576"></p>
-</div>
-<div class="section level5">
-<h5 id="example-3-safe-palette">Example 3: Safe palette<a class="anchor" aria-label="anchor" href="#example-3-safe-palette"></a>
-</h5>
-<p>The Safe palette is designed to be colorblind-friendly.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Apply the Safe palette</span></span>
+<span><span class="co"># Apply the Safe palette</span></span>
 <span><span class="va">vege_kmeans_safe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
-<span>                                     palette <span class="op">=</span> <span class="st">"Safe"</span>,</span>
-<span>                                     cluster_ordering <span class="op">=</span> <span class="st">"n_sites"</span><span class="op">)</span></span>
+<span>                                     palette <span class="op">=</span> <span class="st">"Safe"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View the color assignments</span></span>
 <span><span class="va">vege_kmeans_safe</span><span class="op">$</span><span class="va">colors</span></span></code></pre></div>
 <pre><code><span><span class="co">## $K_3</span></span>
 <span><span class="co">##   cluster   color</span></span>
 <span><span class="co">## 1       1 #88CCEE</span></span>
-<span><span class="co">## 2       2 #DDCC77</span></span>
-<span><span class="co">## 3       3 #CC6677</span></span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Map with Safe colors</span></span>
+<span><span class="co">## 2       2 #CC6677</span></span>
+<span><span class="co">## 3       3 #DDCC77</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 1. Map with Safe colors</span></span>
 <span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_kmeans_safe</span>, </span>
-<span>               map <span class="op">=</span> <span class="va">vegesf</span>, </span>
-<span>               plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="576"></p>
-</div>
-</div>
-<div class="section level4">
-<h4 id="using-consistent-colors-across-different-plot-types">Using consistent colors across different plot types<a class="anchor" aria-label="anchor" href="#using-consistent-colors-across-different-plot-types"></a>
-</h4>
-<p>Once you’ve assigned colors to your bioregions, you can use them
-consistently across all your visualizations. Here’s an example creating
-a summary bar chart showing the number of sites per bioregion with the
-same colors as the map:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Use the colored cluster object (e.g., with Vivid palette)</span></span>
-<span><span class="co"># Extract cluster assignments</span></span>
-<span><span class="va">clusters_df</span> <span class="op">&lt;-</span> <span class="va">vege_kmeans_vivid</span><span class="op">$</span><span class="va">clusters</span></span>
-<span></span>
-<span><span class="co"># Count number of sites per bioregion</span></span>
-<span><span class="va">bioregion_summary</span> <span class="op">&lt;-</span> <span class="va">clusters_df</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">K_3</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span>n_sites <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">n_sites</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># Another simpler option: dplyr::count(clusters_df, K_3)</span></span>
-<span></span>
-<span><span class="co"># Extract colors for plotting</span></span>
-<span><span class="va">colors_df_K3</span> <span class="op">&lt;-</span> <span class="va">vege_kmeans_vivid</span><span class="op">$</span><span class="va">colors</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>  <span class="co"># First (and only) partition</span></span>
-<span><span class="va">color_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">colors_df_K3</span><span class="op">$</span><span class="va">color</span>, <span class="va">colors_df_K3</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create bar plot with matching colors</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">bioregion_summary</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">K_3</span>, <span class="op">-</span><span class="va">n_sites</span><span class="op">)</span>, </span>
-<span>                               y <span class="op">=</span> <span class="va">n_sites</span>, </span>
-<span>                               fill <span class="op">=</span> <span class="va">K_3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="va">color_vector</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Number of sites per bioregion"</span>,</span>
-<span>       x <span class="op">=</span> <span class="st">"Bioregion"</span>,</span>
-<span>       y <span class="op">=</span> <span class="st">"Number of sites"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="576"></p>
-<p>Colors in the bar chart match exactly those on the map. This makes it
-easier for readers to connect the spatial patterns with the summary
-statistics. The same color scheme can also be applied when exporting
-networks to Gephi (see section 3.3 on “Network with node attributes and
-colors”). The <code><a href="../reference/exportGDF.html">exportGDF()</a></code> function automatically uses the
+<span>               map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 2. Bar plot of clusters</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans_safe</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" alt="" width="576"></p>
+<p>Note that <code>vege_kmeans_safe</code> is identical to
+<code>vege_kmeans</code> with two new slots: * <code>colors</code>: a
+small data.frame summarising the color assigned to each bioregion *
+<code>clusters_colors</code>: a data.frame identical to the clusters
+slot, but with content modified to include colors</p>
+<p>The same color scheme can also be applied when exporting networks to
+Gephi. The <code><a href="../reference/exportGDF.html">exportGDF()</a></code> function automatically uses the
 colors defined by <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code>, ensuring consistency
 between your maps and network visualizations.</p>
 </div>
 </div>
+<div class="section level2">
+<h2 id="maps">3. Maps<a class="anchor" aria-label="anchor" href="#maps"></a>
+</h2>
 <div class="section level3">
-<h3 id="custom-plot">2.3 Custom plot<a class="anchor" aria-label="anchor" href="#custom-plot"></a>
+<h3 id="map_bioregions">3.1 <code>map_bioregions()</code><a class="anchor" aria-label="anchor" href="#map_bioregions"></a>
+</h3>
+<p>The simplest method is to use the function
+<code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> from the package. This function can
+directly provide a plot of each site colored according to the cluster
+they belong to.</p>
+<p>Let’s take an example with a K-means clustering, with a number of
+clusters set to 3.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, </span>
+<span>                                  n_clust <span class="op">=</span> <span class="fl">3</span>, </span>
+<span>                                  index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> function can now simply takes the
+object <code>vege_nhclu_kmeans</code>, which is of
+<code>bioregion.clusters</code> class, and the spatial distribution of
+sites, stored in <code>vegesf</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="576"></p>
+<p>If we define the color set beforehand, the maps will follow the
+chosen colors:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Notice how we overwrite the object when using bioregion_colors.</span></span>
+<span><span class="co"># In reality, it is just appending colors to the object</span></span>
+<span><span class="va">vege_nhclu_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>,</span>
+<span>                                      palette <span class="op">=</span> <span class="st">"Antique"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
+<span>               map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="576"></p>
+</div>
+<div class="section level3">
+<h3 id="custom-plot">3.2 Custom plot<a class="anchor" aria-label="anchor" href="#custom-plot"></a>
 </h3>
 <p>If you want to customize yourself the plot and not simply rely on the
 default option, <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code> gives you the possibility
 to extract each site as well as its geometry and cluster number.<br>
 For this purpose, you can set the arguments like in the chunk below:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, </span>
 <span>                         map <span class="op">=</span> <span class="va">vegesf</span>,</span>
 <span>                         map_as_output <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                         plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co"># Notice the partition is in output, as well as the colors</span></span>
 <span><span class="va">custom</span></span></code></pre></div>
-<pre><code><span><span class="co">## Simple feature collection with 715 features and 2 fields</span></span>
+<pre><code><span><span class="co">## Simple feature collection with 715 features and 3 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
 <span><span class="co">## Bounding box:  xmin: 1.686171 ymin: 42.29604 xmax: 7.798711 ymax: 45.13742</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">## First 10 features:</span></span>
-<span><span class="co">##    Site K_3                       geometry</span></span>
-<span><span class="co">## 1    35   2 POLYGON ((6.098099 45.13742...</span></span>
-<span><span class="co">## 2    36   2 POLYGON ((6.22521 45.13381,...</span></span>
-<span><span class="co">## 3    37   2 POLYGON ((6.352304 45.13007...</span></span>
-<span><span class="co">## 4    38   2 POLYGON ((6.47938 45.12617,...</span></span>
-<span><span class="co">## 5    39   2 POLYGON ((6.606438 45.12213...</span></span>
-<span><span class="co">## 6    84   2 POLYGON ((6.093117 45.04745...</span></span>
-<span><span class="co">## 7    85   2 POLYGON ((6.220024 45.04385...</span></span>
-<span><span class="co">## 8    86   2 POLYGON ((6.346914 45.04011...</span></span>
-<span><span class="co">## 9    87   2 POLYGON ((6.473786 45.03622...</span></span>
-<span><span class="co">## 10   88   2 POLYGON ((6.600641 45.03219...</span></span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<span><span class="co">##    Site K_3 K_3_color                       geometry</span></span>
+<span><span class="co">## 1    35   1   #AF6458 POLYGON ((6.098099 45.13742...</span></span>
+<span><span class="co">## 2    36   1   #AF6458 POLYGON ((6.22521 45.13381,...</span></span>
+<span><span class="co">## 3    37   1   #AF6458 POLYGON ((6.352304 45.13007...</span></span>
+<span><span class="co">## 4    38   1   #AF6458 POLYGON ((6.47938 45.12617,...</span></span>
+<span><span class="co">## 5    39   1   #AF6458 POLYGON ((6.606438 45.12213...</span></span>
+<span><span class="co">## 6    84   1   #AF6458 POLYGON ((6.093117 45.04745...</span></span>
+<span><span class="co">## 7    85   1   #AF6458 POLYGON ((6.220024 45.04385...</span></span>
+<span><span class="co">## 8    86   1   #AF6458 POLYGON ((6.346914 45.04011...</span></span>
+<span><span class="co">## 9    87   1   #AF6458 POLYGON ((6.473786 45.03622...</span></span>
+<span><span class="co">## 10   88   1   #AF6458 POLYGON ((6.600641 45.03219...</span></span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
 <span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">custom</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span></span>
 <span><span class="co"># Plot</span></span>
+<span><span class="co"># To get identical colors identical to other plots, we</span></span>
+<span><span class="co"># fill with the color and use scale_fill_identity()</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">custom</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">K_3</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">K_3_color</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_fill_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Kmeans with 3 clusters"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="576"></p>
+<p>Another option which adds a legend consists in filling the sites by
+bioregion (<code>K_3</code>) instead of by color, and give
+<code>scale_fill_manual()</code> the color of each bioregion:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the bioregion-color table for the partition we want to plot</span></span>
+<span><span class="co"># (here, K_3)</span></span>
+<span><span class="va">bioregion_cols</span> <span class="op">&lt;-</span> <span class="va">vege_nhclu_kmeans</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">K_3</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Named vector: bioregion -&gt; color</span></span>
+<span><span class="va">legend_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">bioregion_cols</span><span class="op">$</span><span class="va">color</span>, <span class="va">bioregion_cols</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">custom</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">K_3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="va">legend_colors</span>, name <span class="op">=</span> <span class="st">"Bioregion"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Kmeans with 3 clusters"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level3">
-<h3 id="plot-with-facets">2.4 Plot with facets<a class="anchor" aria-label="anchor" href="#plot-with-facets"></a>
+<h3 id="plot-with-facets">3.3 Plot with facets<a class="anchor" aria-label="anchor" href="#plot-with-facets"></a>
 </h3>
-<p>Finally, you can be interested in plotting several
-bioregionalizations at once. For this purpose, we can build a single
-<code>data.frame</code> gathering all the bioregions obtained from
-distinct algorithms and then take advantage of the <code>facets</code>
-implemented in <code>ggplot2</code>. <br></p>
-<p>We first compute a few more bioregionalizations on the same dataset
-using other algorithms. <br></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Hierarchical clustering</span></span>
-<span><span class="va">vege_hclu_hierarclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span>dissimilarity <span class="op">=</span> <span class="va">vegedissim</span>,</span>
-<span>                                          index <span class="op">=</span> <span class="st">"Simpson"</span>,</span>
-<span>                                          seed <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                                          method <span class="op">=</span> <span class="st">"mcquitty"</span>, </span>
-<span>                                          n_clust <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                                          optimal_tree_method <span class="op">=</span> <span class="st">"best"</span><span class="op">)</span></span>
-<span><span class="va">vege_hclu_hierarclust</span><span class="op">$</span><span class="va">cluster_info</span></span></code></pre></div>
-<pre><code><span><span class="co">##   partition_name n_clust requested_n_clust output_cut_height</span></span>
-<span><span class="co">## 1            K_3       3                 3         0.6363026</span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Walktrap network bioregionalization</span></span>
-<span><span class="va">vegesim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span></span>
+<p>Two methods are available:</p>
+<ul>
+<li>the simplest consists in using <code><a href="../reference/map_bioregions.html">map_bioregions()</a></code>
+directly:</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">vege_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">vege_tree</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_tree</span>, map <span class="op">=</span> <span class="va">vegesf</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="864"></p>
+<ul>
+<li>a more complex method consists in exporting the object and using it
+with ggplot. For this, you will need to transform from wide to long
+format, we provide an example code below:</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">vege_tree</span>, map <span class="op">=</span> <span class="va">vegesf</span>,</span>
+<span>                           map_as_output <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">partitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">vege_tree</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">vege_netclu_walktrap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_walktrap.html">netclu_walktrap</a></span><span class="op">(</span><span class="va">vegesim</span>,</span>
-<span>                                          index <span class="op">=</span> <span class="st">"Simpson"</span><span class="op">)</span></span>
-<span><span class="va">vege_netclu_walktrap</span><span class="op">$</span><span class="va">cluster_info</span> <span class="co"># 3</span></span></code></pre></div>
-<pre><code><span><span class="co">##     partition_name n_clust</span></span>
-<span><span class="co">## K_3            K_3       3</span></span></code></pre>
-<p>We can now make a single <code>data.frame</code> with an extra-column
-indicating the algorithm used.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vege_kmeans</span> <span class="op">&lt;-</span> <span class="va">vege_nhclu_kmeans</span><span class="op">$</span><span class="va">clusters</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">vege_kmeans</span><span class="op">)</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"NHCLU_KMEANS"</span><span class="op">)</span></span>
-<span><span class="va">vege_hieraclust</span> <span class="op">&lt;-</span> <span class="va">vege_hclu_hierarclust</span><span class="op">$</span><span class="va">clusters</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">vege_hieraclust</span><span class="op">)</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"HCLU_HIERARCLUST"</span><span class="op">)</span></span>
-<span><span class="va">vege_walktrap</span> <span class="op">&lt;-</span> <span class="va">vege_netclu_walktrap</span><span class="op">$</span><span class="va">clusters</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">vege_walktrap</span><span class="op">)</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"NETCLU_Walktrap"</span><span class="op">)</span></span>
+<span><span class="co"># One block of rows per partition, stacked</span></span>
+<span><span class="va">vege_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">partitions</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>partition <span class="op">=</span> <span class="va">p</span>,</span>
+<span>             bioregion <span class="op">=</span> <span class="va">vege_map</span><span class="op">[[</span><span class="va">p</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>             color <span class="op">=</span> <span class="va">vege_map</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"_color"</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>             geometry <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">vege_map</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">all_clusters</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">vege_kmeans</span>, <span class="va">vege_hieraclust</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
-<span><span class="va">all_clusters</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">all_clusters</span>, <span class="va">vege_walktrap</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></code></pre></div>
-<p>We now convert this <code>data.frame</code> into a long-format
-<code>data.frame</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">all_long</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">all_clusters</span>,</span>
-<span>                                cols <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"_"</span><span class="op">)</span>,</span>
-<span>                                names_to <span class="op">=</span> <span class="st">"Algorithm"</span>,</span>
-<span>                                values_to <span class="op">=</span> <span class="st">"Clusters"</span><span class="op">)</span></span>
-<span><span class="va">all_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">all_long</span><span class="op">)</span></span></code></pre></div>
-<p>We now add back the geometry as an extra column to make this object
-spatial.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">all_long_sf</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">all_long</span>,</span>
-<span>                                <span class="va">vegesf</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Site"</span>, <span class="st">"geometry"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                                <span class="fu">join_by</span><span class="op">(</span><span class="va">ID</span> <span class="op">==</span> <span class="va">Site</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">all_long_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">)</span></span></code></pre></div>
-<p>Now that we have a long-format spatial <code>data.frame</code>, we
-can take advantage of the facets implemented in
-<code>ggplot2</code>.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">Clusters</span>, fill <span class="op">=</span> <span class="va">Clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe</span>, fill <span class="op">=</span> <span class="st">"gray80"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_color_viridis_d</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">Algorithm</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="576"></p>
-<p>We can refine the above map by:<br>
-* reordering the 3 bioregions so that they follow the same order<br>
-* add some background for the Mediterranean sea and the mainland<br>
-* crop the cells by the mainland<br>
-* adjust labels</p>
-<p><br></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">world_countries</span> <span class="op">&lt;-</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_countries.html" class="external-link">ne_countries</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="st">"medium"</span>,</span>
-<span>                                               returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Background box</span></span>
-<span><span class="va">xmin</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"xmin"</span><span class="op">]</span><span class="op">]</span>; <span class="va">xmax</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"xmax"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">ymin</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"ymin"</span><span class="op">]</span><span class="op">]</span>; <span class="va">ymax</span> <span class="op">&lt;-</span> <span class="fu">st_bbox</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">[[</span><span class="st">"ymax"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="fu">st_bbox</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">xmin</span>,</span>
-<span>                                              xmax <span class="op">=</span> <span class="va">xmax</span>,</span>
-<span>                                              ymax <span class="op">=</span> <span class="va">ymax</span>,</span>
-<span>                                              ymin <span class="op">=</span> <span class="va">ymin</span><span class="op">)</span>,</span>
-<span>                                            crs <span class="op">=</span> <span class="fu">st_crs</span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                    n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Crop world coastlines to the extent of the sf object of interest</span></span>
-<span><span class="va">vegesf</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">vegesf</span>, crs <span class="op">=</span> <span class="fu">st_crs</span><span class="op">(</span><span class="va">world</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">larger_bbox</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vegesf</span><span class="op">)</span></span>
-<span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span>
-<span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">42.15</span></span>
-<span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">8.1</span></span>
-<span><span class="va">larger_bbox</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">45.3</span></span>
-<span></span>
-<span><span class="va">europe</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">larger_bbox</span><span class="op">)</span></span>
-<span><span class="fu">sf_use_s2</span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">europe_countries</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">world_countries</span>, <span class="va">larger_bbox</span><span class="op">)</span></span>
-<span><span class="va">europe_bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">bb</span>, <span class="va">larger_bbox</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">plot_basis</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">europe</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe_bb</span>, fill <span class="op">=</span> <span class="st">"aliceblue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe_countries</span>, fill <span class="op">=</span> <span class="st">"ivory"</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Reordering bioregions</span></span>
-<span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span></span>
-<span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"2"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"3"</span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"3"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"2"</span></span>
-<span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"2"</span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"2"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"3"</span></span>
-<span><span class="va">all_long_sf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NETCLU_Walktrap"</span> <span class="op">&amp;</span></span>
-<span>                    <span class="va">all_long_sf</span><span class="op">$</span><span class="va">Clusters</span> <span class="op">==</span> <span class="st">"3"</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">bioregion</span> <span class="op">&lt;-</span> <span class="st">"1"</span></span>
-<span></span>
-<span><span class="co"># More readable labels for algorithms</span></span>
-<span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algo</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_KMEANS"</span>, <span class="st">"K-Means"</span>,</span>
-<span>         <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"NHCLU_PAM"</span>, <span class="st">"PAM"</span>,</span>
-<span>                <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">all_long_sf</span><span class="op">$</span><span class="va">Algorithm</span> <span class="op">==</span> <span class="st">"HCLU_HIERARCLUST"</span>,</span>
-<span>                       <span class="st">"Hierarchical Clustering"</span>, <span class="st">"Walktrap"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Cropping with borders of France</span></span>
-<span><span class="va">all_long_sf_france</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">st_intersection</span><span class="op">(</span><span class="va">all_long_sf</span>,</span>
-<span>                  <span class="va">europe_countries</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">europe_countries</span><span class="op">$</span><span class="va">sovereignt</span> <span class="op">==</span> <span class="st">"France"</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot</span></span>
-<span><span class="va">final_plot</span> <span class="op">&lt;-</span> <span class="va">plot_basis</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">all_long_sf_france</span>,</span>
-<span>          <span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">bioregion</span>, fill <span class="op">=</span> <span class="va">bioregion</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">st_union</span><span class="op">(</span><span class="va">all_long_sf_france</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"NA"</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe</span>, fill <span class="op">=</span> <span class="st">"gray50"</span>, linewidth <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_color_viridis_d</span><span class="op">(</span><span class="st">"Bioregion"</span>, option <span class="op">=</span> <span class="st">"magma"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="st">"Bioregion"</span>, option <span class="op">=</span> <span class="st">"magma"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">Algo</span><span class="op">)</span></span>
-<span><span class="va">final_plot</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="576"></p>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">vege_long</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">color</span><span class="op">)</span>, color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">europe</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_fill_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">partition</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="plot-cluster-objects">3. Plot cluster objects<a class="anchor" aria-label="anchor" href="#plot-cluster-objects"></a>
+<h2 id="clusterplots">4. Plot cluster objects<a class="anchor" aria-label="anchor" href="#clusterplots"></a>
 </h2>
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> draws three types of plots for clustering
+results: trees (for hierarchical clustering and nested partitions), bars
+showing the size of each cluster (for all algorithms), and trees of the
+clusters, with the bar of each cluster at the tip of its branch. The
+type is chosen automatically, or with the argument
+<code>plot_type</code>. All plots use the colors of
+<code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code>, so that they match the maps.</p>
+<p>Three types of plots are available:</p>
+<ol style="list-style-type: decimal">
+<li>Bar plots: plots showing the size of clusters, filled with one
+square per site (and one circle per species for bipartite clusters).
+This method works for all clustering methods.</li>
+</ol>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="576"></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Tree plots: plots showing hierarchical trees, only working for
+hierarchical clustering methods (<code><a href="../reference/hclu_hierarclust.html">hclu_hierarclust()</a></code>,
+<code><a href="../reference/hclu_diana.html">hclu_diana()</a></code>, <code><a href="../reference/netclu_infomap.html">netclu_infomap()</a></code>).</li>
+</ol>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="576"></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Tree-cluster plots (or tree-bars): plots combining trees with bar
+plots, only for hierarchical clustering methods.</li>
+</ol>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="576"></p>
+<p>Plot types can be changed with argument <code>plot_type</code>. When
+<code>plot_type = "auto"</code> (default), the plot is automatically
+chosen depending on the clustering algorithm: bars for non-hierarchical
+and trees for hierarchical clusterings.</p>
 <div class="section level3">
-<h3 id="hierarchical-tree-like-clusters">3.1 Hierarchical / tree-like clusters<a class="anchor" aria-label="anchor" href="#hierarchical-tree-like-clusters"></a>
+<h3 id="bar-plots">4.1 Bar plots<a class="anchor" aria-label="anchor" href="#bar-plots"></a>
+</h3>
+<div class="section level4">
+<h4 id="simple-bar-plots-all-cluster-types">4.1.1 Simple bar plots (all cluster types)<a class="anchor" aria-label="anchor" href="#simple-bar-plots-all-cluster-types"></a>
+</h4>
+<p>For all algorithms, clusters can be shown as bars, one per cluster,
+with one square per site. Clusters are sorted by decreasing number of
+sites:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="576"></p>
+<p>It works when there are multiple partitions with multiple cuts:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="576"></p>
+<p>With many sites, each square can stand for several sites. This is
+chosen automatically, or you can define it with
+<code>items_per_unit</code>.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans</span>, items_per_unit <span class="op">=</span> <span class="fl">5</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="576"></p>
+<p>With many clusters, the smallest clusters beyond
+<code>max_clusters</code> (25 by default) are grouped in a last, wide
+bar, <code>"other"</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vege_kmeans_15</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nhclu_kmeans.html">nhclu_kmeans</a></span><span class="op">(</span><span class="va">vegedissim</span>, n_clust <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans_15</span>, max_clusters <span class="op">=</span> <span class="fl">8</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="576"></p>
+<p>With several partitions, each partition is drawn in its own panel. By
+default, all panels share the same axis of the numbers of sites, so that
+they can be compared; with <code>scales = "free"</code>, each panel has
+its own axis:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="864"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_kmeans</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-20-2.png" class="r-plt" alt="" width="864"></p>
+<p>Titles and axes are set as in other plots of R, with
+<code>main</code>, <code>xlab</code>, <code>ylab</code> and
+<code>axes</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vege_nhclu_kmeans</span>, main <span class="op">=</span> <span class="st">"k-means, 3 clusters"</span>, ylab <span class="op">=</span> <span class="st">"Sites"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="576"></p>
+</div>
+<div class="section level4">
+<h4 id="bipartite-bar-plots-bipartite-clustering">4.1.2 Bipartite bar plots (bipartite clustering)<a class="anchor" aria-label="anchor" href="#bipartite-bar-plots-bipartite-clustering"></a>
+</h4>
+<p>In bipartite clustering, i.e. when both sites AND species are
+clustered, we can distinguish on the bar plot the contents in terms of
+sites and species.</p>
+<p>Species are drawn as circles, below the sites by default
+(<code>bipartite_layout = "mirror"</code>), above them in the same bar
+(<code>"stack"</code>), or in a second bar (<code>"side"</code>):</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span></span>
+<span><span class="va">fish_greedy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_greedy.html">netclu_greedy</a></span><span class="op">(</span><span class="va">fishdf</span>, bipartite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fish_greedy</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fish_greedy</span>, bipartite_layout <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-22-2.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fish_greedy</span>, bipartite_layout <span class="op">=</span> <span class="st">"side"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-22-3.png" class="r-plt" alt="" width="576"></p>
+</div>
+<div class="section level4">
+<h4 id="plotting-one-partition-with-colors-of-another-partition-try-it-if-you-do-hierarchical-clustering">4.1.3 Plotting one partition with colors of another partition (try
+it if you do hierarchical clustering!!)<a class="anchor" aria-label="anchor" href="#plotting-one-partition-with-colors-of-another-partition-try-it-if-you-do-hierarchical-clustering"></a>
+</h4>
+<p>You can plot a partition with the colors of another partition,
+e.g. showing how child partitions are grouped in their parent
+partition:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># We cut the tree twice, to have a parent partition and a child partition</span></span>
+<span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree</span>, cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.6</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, plot_type <span class="op">=</span> <span class="st">"bars"</span>,</span>
+<span>     partitions <span class="op">=</span> <span class="fl">2</span>, <span class="co"># Bars to be drawn</span></span>
+<span>     color_partition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># Colors to apply</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="576">
+Here we see which clusters belong to the orange cluster in the parent
+partition, and which clusters belong to the purple cluster.</p>
+<p>Now, we can do it the other way around: how the parent clusters are
+split into children clusters.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, plot_type <span class="op">=</span> <span class="st">"bars"</span>, partitions <span class="op">=</span> <span class="fl">1</span>, color_partition <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="" width="576"></p>
+<p>This allows you to represent more layers of information in a single
+graph.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="hierarchical-tree-like-clusters">4.2 Hierarchical / tree-like clusters<a class="anchor" aria-label="anchor" href="#hierarchical-tree-like-clusters"></a>
 </h3>
 <p>Tree-like clustering results can be visualized with
 <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. If the tree was cut, clustering results will be
-displayed as coloured bars below the tree.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+displayed as colored bars below the tree.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hclu_hierarclust.html">hclu_hierarclust</a></span><span class="op">(</span><span class="va">vegedissim</span><span class="op">)</span></span>
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree</span>,</span>
 <span>                 cut_height <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" alt="" width="576"></p>
 <p>On large trees, labels are difficult to read, so we can turn them
 off:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, tree_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="576"></p>
 <p>If there are multiple cut heights, multiple bars display from
 coarsest to finest:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree</span>,</span>
 <span>                 cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.5</span>, <span class="fl">.6</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, tree_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="576"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" alt="" width="576"></p>
 <p>The tree can be flipped (i.e., mirrored) if need be:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, tree_flip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>     tree_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, flip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>     labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="576"></p>
 <p>To read complex labels, it is possible to plot the tree horizontally
 in long page format (note that you can also flip the horizontal tree if
 you want):</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, tree_horizontal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>     cex <span class="op">=</span> <span class="fl">.4</span><span class="op">)</span> <span class="co"># Reduce label font size</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="576"></p>
-<p>The tree can displayed many layers of cuts, which becomes interesting
-as it shows how the hierarchy evolves as new cuts are drawn:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>     cex <span class="op">=</span> <span class="fl">.4</span><span class="op">)</span> <span class="co"># Reduce label font size</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" alt="" width="576"></p>
+<p>The clusters of finer partitions can be collapsed into triangles, as
+wide as their number of sites and as high as the height at which their
+sites are joined. The argument <code>partitions</code> chooses the
+partitions to show, by their number (1 for the first partition, 2 for
+the second, etc.) or their name; the clusters of the last one are
+collapsed:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># No partitions: collapse only the finest one</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Specify the partitions to display with arg partitions</span></span>
+<span><span class="co"># e.g. here, only partitions 1 and 2</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, partitions <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-30-2.png" class="r-plt" alt="" width="576"></p>
+<p>The tree can also be drawn down to the clusters only, with the size
+of each cluster at the tip of its branch (one square per site). The
+height axis then starts just below the lowest cut, to spread the merges
+between clusters:</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, plot_type <span class="op">=</span> <span class="st">"cluster_tree"</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-31-1.png" class="r-plt" alt="" width="672"></p>
+<p>Again, you can choose which partition to display at the finest level
+with arg <code>partitions</code></p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, partitions <span class="op">=</span> <span class="fl">2</span>, plot_type <span class="op">=</span> <span class="st">"cluster_tree"</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" alt="" width="672"></p>
+<p>When the merges between clusters are crowded at the top of the tree,
+they can be evenly spaced, keeping their order
+(<code>heights = "rank"</code>), or drawn with one step per partition
+(<code>heights = "levels"</code>):</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, plot_type <span class="op">=</span> <span class="st">"cluster_tree"</span>, heights <span class="op">=</span> <span class="st">"rank"</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" alt="" width="672"></p>
+<p><em>Notice that when heights correspond to rank, the axis disappears,
+because it loses the ‘dissimilarity’ meaning</em>.</p>
+<p>The tree can displayed many layers of cuts, which becomes fascinating
+as it shows how the hierarchy evolves as new cuts are drawn:</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree</span>,</span>
 <span>                 cut_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.6</span>, length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, tree_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="576"></p>
-<p>Note, however, that only 12 colours can be displayed simultaneously,
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" alt="" width="576"></p>
+<p>Note, however, that only 12 colors can be displayed simultaneously,
 and so as the number of clusters increases, there are more and more
 clusters displayed in shades of grey, which makes them more difficult to
 read past a certain point.</p>
-<p>You can predefine your colours before plotting the tree with
+<p>You can predefine your colors before plotting the tree with
 <code><a href="../reference/bioregion_colors.html">bioregion_colors()</a></code>:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_tree.html">cut_tree</a></span><span class="op">(</span><span class="va">tree</span>,</span>
 <span>                 cut_height <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span>
 <span><span class="co"># Choose a colorblind-friendly palette</span></span>
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">tree</span>, palette <span class="op">=</span> <span class="st">"Safe"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, tree_horizontal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>     tree_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="576"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>     labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" alt="" width="576"></p>
+<div class="section level4">
+<h4 id="how-to-plot-infomap-map-equation-and-other-non-standard-hierarchical-trees">How to plot Infomap (Map Equation) and other non-standard
+hierarchical trees<a class="anchor" aria-label="anchor" href="#how-to-plot-infomap-map-equation-and-other-non-standard-hierarchical-trees"></a>
+</h4>
+<p>Some algorithms produce nested partitions without building a
+dendrogram. For example, <code><a href="../reference/netclu_infomap.html">netclu_infomap()</a></code> with
+<code>show_hierarchy = TRUE</code> returns several levels of clusters.
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> draws these levels as a tree, with one step per
+level. The main difference with previous trees is that infomap is not a
+“height-based” tree. Branch lengths have no meaning in infomap trees.
+They rather represent nested partitions, called <em>levels</em>:</p>
+<ul>
+<li>the first level divides the sites into a few large bioregions</li>
+<li>the second level divides each of these bioregions into smaller
+sub-bioregions</li>
+<li>and so on, until the algorithm finds no further meaningful
+subdivision</li>
+</ul>
+<p>The tree simply shows how the clusters of one level fit inside the
+clusters of the level above, like countries divided into regions, and
+regions into departments. Consequently, it is NOT a tree you can cut,
+and, contrary to standard hierarchical trees, a cluster can split into
+more than two sub-clusters. Furthermore, some clusters are not
+subdivided further: their branches stop earlier than others. In the
+output, these clusters keep the same name at all deeper levels.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fish_infomap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/netclu_infomap.html">netclu_infomap</a></span><span class="op">(</span><span class="va">fishdf</span>, bipartite_version <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                               markovtime <span class="op">=</span> <span class="fl">.7</span>, <span class="co"># we specify a lower markov time</span></span>
+<span>                               <span class="co"># than the default here, to get at least 2 levels</span></span>
+<span>                               show_hierarchy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The default plot is a cluster tree</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fish_infomap</span>, horizontal <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-36-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># You can ask for a simple tree with plot_type = "tree"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fish_infomap</span>, plot_type <span class="op">=</span> <span class="st">"tree"</span>, </span>
+<span>     horizontal <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-36-2.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># You can also collapse the tree leaves to make it more readable</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fish_infomap</span>, plot_type <span class="op">=</span> <span class="st">"tree"</span>, </span>
+<span>     horizontal <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">.3</span>,</span>
+<span>     collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a5_1_visualization_files/figure-html/unnamed-chunk-37-1.png" class="r-plt" alt="" width="576"></p>
+<p>And that’s all for now for cluster plots, but keep checking this file
+regularly, as we might come up with more plot ideas!</p>
 </div>
-<div class="section level3">
-<h3 id="non-hierarchical-clusters">3.2 Non-hierarchical clusters<a class="anchor" aria-label="anchor" href="#non-hierarchical-clusters"></a>
-</h3>
-<p>No method implemented at the moment.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="exporting-networks-to-gephi">4. Exporting networks to Gephi<a class="anchor" aria-label="anchor" href="#exporting-networks-to-gephi"></a>
+<h2 id="networkplots">5. Exporting networks for visualization in Gephi<a class="anchor" aria-label="anchor" href="#networkplots"></a>
 </h2>
 <p>In addition to visualizing bioregions on maps, you may want to
 visualize the network structure of your data using specialized network
@@ -562,16 +619,16 @@ visualization software like <a href="https://gephi.org/" class="external-link">G
 (Graph Data Format), which can be directly imported into Gephi.</p>
 <p>For these examples, we will use the fish dataset which provides a
 clearer network structure that is easier to visualize:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load the fish dataset</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishdf</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fishmat</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="basic-network-export">4.1 Basic network export<a class="anchor" aria-label="anchor" href="#basic-network-export"></a>
+<h3 id="basic-network-export">5.1 Basic network export<a class="anchor" aria-label="anchor" href="#basic-network-export"></a>
 </h3>
 <p>Let’s start by creating a simple bipartite network from the fish data
 and exporting it without weights or colors:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Export the entire bipartite (site-species) fish network to GDF format </span></span>
 <span><span class="fu"><a href="../reference/exportGDF.html">exportGDF</a></span><span class="op">(</span><span class="va">fishdf</span>,</span>
 <span>          col1 <span class="op">=</span> <span class="st">"Site"</span>,</span>
@@ -587,12 +644,12 @@ layout algorithm:</p>
 </center>
 </div>
 <div class="section level3">
-<h3 id="unipartite-network-with-edge-weights">4.2 Unipartite network with edge weights<a class="anchor" aria-label="anchor" href="#unipartite-network-with-edge-weights"></a>
+<h3 id="unipartite-network-with-edge-weights">5.2 Unipartite network with edge weights<a class="anchor" aria-label="anchor" href="#unipartite-network-with-edge-weights"></a>
 </h3>
 <p>In addition to bipartite networks, you can create unipartite networks
-where sites are connected based on shared species richness. Edge weights
-represent the number of species shared between pairs of sites:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+where sites are connected based on shared species composition. Edge
+weights represent jaccard similarity between sites:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a site-to-site network based on shared species</span></span>
 <span><span class="co"># First, convert the matrix to a dissimilarity object</span></span>
 <span><span class="va">fish_dissim_jac</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">fishmat</span>, metric <span class="op">=</span> <span class="st">"Jaccard"</span><span class="op">)</span></span>
@@ -603,7 +660,7 @@ represent the number of species shared between pairs of sites:</p>
 <span><span class="va">fish_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dissimilarity_to_similarity.html">dissimilarity_to_similarity</a></span><span class="op">(</span><span class="va">fish_dissim_jac</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Remove all links with weight 0 BEFORE exporting to GDF</span></span>
-<span><span class="va">fish_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">fish_sim</span>, <span class="va">Jaccard</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>  <span class="co"># Remove zero similarity links</span></span>
+<span><span class="va">fish_sim</span> <span class="op">&lt;-</span> <span class="va">fish_sim</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">fish_sim</span><span class="op">$</span><span class="va">Jaccard</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, <span class="op">]</span>  <span class="co"># Remove zero similarity links</span></span>
 <span></span>
 <span><span class="co"># Export the unipartite network with shared species as weights</span></span>
 <span><span class="fu"><a href="../reference/exportGDF.html">exportGDF</a></span><span class="op">(</span><span class="va">fish_sim</span>,</span>
@@ -621,12 +678,12 @@ to size edges or influence layout algorithms, helping to visualize which
 sites have similar fish communities.</p>
 </div>
 <div class="section level3">
-<h3 id="network-with-node-attributes-and-colors">4.3 Network with node attributes and colors<a class="anchor" aria-label="anchor" href="#network-with-node-attributes-and-colors"></a>
+<h3 id="network-with-node-attributes-and-colors">5.3 Network with node attributes and colors<a class="anchor" aria-label="anchor" href="#network-with-node-attributes-and-colors"></a>
 </h3>
 <p>To create more sophisticated visualizations, you can add node
 attributes and colors. For example, we can color sites according to
 their bioregion assignment:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install binaries if not already installed</span></span>
 <span><span class="fu"><a href="../reference/install_binaries.html">install_binaries</a></span><span class="op">(</span>binpath <span class="op">=</span> <span class="st">"tempdir"</span><span class="op">)</span></span>
 <span></span>
@@ -644,13 +701,13 @@ their bioregion assignment:</p>
 <span>                             species_col <span class="op">=</span> <span class="st">"Species"</span>, <span class="co"># Column name for species</span></span>
 <span>                             seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span> <span class="co"># Set seed for reproducibility</span></span>
 <span></span>
-<span><span class="va">fish_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">fish_nhclu</span>, <span class="co"># Assign colors to bioregions</span></span>
+<span><span class="va">fish_netclu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioregion_colors.html">bioregion_colors</a></span><span class="op">(</span><span class="va">fish_netclu</span>, <span class="co"># Assign colors to bioregions</span></span>
 <span>                                   palette <span class="op">=</span> <span class="st">"Vivid"</span>, <span class="co"># Color palette from rcartocolor</span></span>
 <span>                                   cluster_ordering <span class="op">=</span> <span class="st">"n_both"</span><span class="op">)</span> <span class="co"># Order clusters by total size (sites + species)</span></span>
 <span></span>
 <span><span class="co"># Let's make the map for the first bioregionalization</span></span>
 <span><span class="fu"><a href="../reference/map_bioregions.html">map_bioregions</a></span><span class="op">(</span><span class="va">fish_netclu</span>, map <span class="op">=</span> <span class="va">fishsf</span>,</span>
-<span>                partition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>               partition_index <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Export the first bioregionalization to GDF with colors and attributes</span></span>
 <span><span class="fu"><a href="../reference/exportGDF.html">exportGDF</a></span><span class="op">(</span><span class="va">fishdf</span>, </span>
@@ -668,7 +725,7 @@ their bioregion assignment:</p>
 </center>
 </div>
 <div class="section level3">
-<h3 id="visualizing-in-gephi">4.4 Visualizing in Gephi<a class="anchor" aria-label="anchor" href="#visualizing-in-gephi"></a>
+<h3 id="visualizing-in-gephi">5.4 Visualizing in Gephi<a class="anchor" aria-label="anchor" href="#visualizing-in-gephi"></a>
 </h3>
 <p>Once you have exported your network to GDF format, you can visualize
 it in Gephi:</p>

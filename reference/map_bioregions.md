@@ -72,7 +72,14 @@ map_bioregions(
 ## Value
 
 One or several maps of bioregions if `plot = TRUE` and the `sf`
-`data.frame` object used for the plot if `map_as_output = TRUE`.
+`data.frame` object used for the plot if `map_as_output = TRUE`. This
+`sf` `data.frame` has one row per site, with the site ID (`Site`), one
+column per partition giving the bioregion of each site, and the
+geometry. If `bioregionalization` had colors (added with
+[`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)),
+it also has one column per partition giving the color of each site's
+bioregion, named after the partition with the suffix `_color` (e.g.,
+`K_3_color` for partition `K_3`).
 
 ## Details
 
@@ -95,7 +102,10 @@ these colors will be automatically used for plotting. Otherwise, colors
 are assigned with
 [`bioregion_colors()`](https://bioRgeo.github.io/bioregion/reference/bioregion_colors.md)
 and its default parameters, to match other visualization functions of
-the package.
+the package. When the `bioregionalization` object contains colors, they
+are also added to the output of `map_as_output = TRUE` (see Value), so
+you can reuse them in your own maps (e.g., with
+[`ggplot2::scale_fill_identity()`](https://ggplot2.tidyverse.org/reference/scale_identity.html)).
 
 ## See also
 
