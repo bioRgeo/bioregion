@@ -416,31 +416,37 @@ ex_beckett$clusters$K_23
 
 Beckett SJ (2016) Improved community detection in weighted bipartite
 networks. *Royal Society Open Science* 3, 140536.
+<https://doi.org/10.1098/rsos.140536>
 
-Blondel VD, Guillaume JL, Lambiotte R & Mech ELJS (2008) Fast unfolding
+Blondel VD, Guillaume JL, Lambiotte R & Lefebvre E (2008) Fast unfolding
 of communities in large networks. *J. Stat. Mech* 2008, P10008.
+<https://doi.org/10.1088/1742-5468/2008/10/P10008>
 
 Clauset A, Newman MEJ & Moore C (2004) Finding community structure in
 very large networks. *Phys. Rev. E* 70, 066111.
+<https://doi.org/10.1103/PhysRevE.70.066111>
 
 Lancichinetti A, Radicchi F, Ramasco JJ & Fortunato S (2011) Finding
 statistically significant communities in networks. *PLOS ONE* 6, e18961.
+<https://doi.org/10.1371/journal.pone.0018961>
 
 Newman MEJ (2006) Finding community structure in networks using the
 eigenvectors of matrices. *Physical Review E* 74, 036104.
+<https://doi.org/10.1103/PhysRevE.74.036104>
 
 Pons P & Latapy M (2005) Computing Communities in Large Networks Using
 Random Walks. In: *Computer and Information Sciences - ISCIS 2005* (eds
 I Yolum, T Güngör, F Gürgen & C Özturan) pp. 284–293. Springer, Berlin,
-Heidelberg.
+Heidelberg. <https://doi.org/10.1007/11569596_31>
 
 Raghavan UN, Albert R & Kumara S (2007) Near linear time algorithm to
 detect community structures in large-scale networks. *Physical Review E*
-76, 036106.
+76, 036106. <https://doi.org/10.1103/PhysRevE.76.036106>
 
 Rosvall M & Bergstrom CT (2008) Maps of random walks on complex networks
 reveal community structure. *Proceedings of the National Academy of
-Sciences* 105, 1118–1123.
+Sciences* 105, 1118–1123. <https://doi.org/10.1073/pnas.0706851105>
 
 Traag VA, Waltman L & Van Eck NJ (2019) From Louvain to Leiden:
 Guaranteeing well-connected communities. *Scientific reports* 9, 5233.
+<https://doi.org/10.1038/s41598-019-41695-z>

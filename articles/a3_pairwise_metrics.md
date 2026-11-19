@@ -444,23 +444,23 @@ we proceed with a comparison of their computation times.
 comp_j
 ```
 
-    ## Unit: milliseconds
-    ##            expr        min         lq       mean     median         uq
-    ##      adespatial 364.687208 364.967909 368.971692 368.618709 372.255761
-    ##        betapart   1.737240   1.820236   1.878635   1.848940   1.897290
-    ##       bioregion  10.378564  11.144490  14.628462  14.338247  15.614899
-    ##    ecodist_dist 140.172732 141.447403 163.812337 164.982105 167.882519
-    ##  ecodist_bcdist   2.716417   2.879703   3.140100   2.903106   3.560645
-    ##       vegan_veg   1.316059   1.393075   1.858818   1.643235   2.428654
-    ##    vegan_design   1.090031   1.367202   1.387991   1.411871   1.443500
+    ## Unit: microseconds
+    ##            expr        min         lq        mean      median         uq
+    ##      adespatial 339382.855 339558.436 351843.1733 343212.4955 346182.047
+    ##        betapart   1261.344   1273.262   1381.1452   1324.7835   1465.237
+    ##       bioregion   7594.273   8642.050   9950.4832  10010.2930  11207.582
+    ##    ecodist_dist 104493.052 111631.499 152966.5692 121803.8580 126179.284
+    ##  ecodist_bcdist   2993.548   3022.571   3045.7784   3035.6155   3049.251
+    ##       vegan_veg   1052.694   1113.024   1363.0891   1323.7865   1646.496
+    ##    vegan_design    813.659    898.325    978.1093    945.4895   1013.246
     ##         max neval
-    ##  374.697671    10
-    ##    2.198612    10
-    ##   26.195601    10
-    ##  198.614472    10
-    ##    3.654298    10
-    ##    2.521816    10
-    ##    1.700092    10
+    ##  427256.745    10
+    ##    1701.979    10
+    ##   11837.218    10
+    ##  452706.218    10
+    ##    3139.585    10
+    ##    1656.842    10
+    ##    1321.364    10
 
 On this very small example, the functions from
 [vegan](https://cran.r-project.org/package=vegan) outperform the others
@@ -560,21 +560,21 @@ comp_bc
 
     ## Unit: milliseconds
     ##            expr        min         lq       mean     median         uq
-    ##      adespatial 363.296851 364.034023 369.007712 369.786357 372.448030
-    ##        betapart 284.791018 289.678812 296.010105 298.469798 301.470654
-    ##       bioregion   8.695397   8.825626   9.009936   8.982362   9.182399
-    ##    ecodist_dist  99.369825 107.100073 146.318746 112.762941 123.068100
-    ##  ecodist_bcdist   5.151436   5.234045   5.328765   5.337691   5.368499
-    ##       vegan_veg   1.303057   1.343983   1.390039   1.406389   1.424433
-    ##    vegan_design   1.057209   1.137369   1.198335   1.218671   1.249095
+    ##      adespatial 338.688033 344.184269 352.877008 353.790452 360.202929
+    ##        betapart 248.663538 249.932342 257.553507 255.360823 261.319822
+    ##       bioregion   8.292271   8.580409   8.799135   8.766300   8.924670
+    ##    ecodist_dist  88.241296  93.412620 135.643050 101.769251 121.427764
+    ##  ecodist_bcdist   5.234868   5.276740   5.314130   5.300756   5.332994
+    ##       vegan_veg   1.030811   1.054847   1.210590   1.078442   1.116058
+    ##    vegan_design   1.054617   1.159122   1.191764   1.207229   1.237409
     ##         max neval
-    ##  376.633741    10
-    ##  304.222039    10
-    ##    9.441515    10
-    ##  448.378828    10
-    ##    5.532430    10
-    ##    1.447931    10
-    ##    1.303969    10
+    ##  362.622965    10
+    ##  279.395058    10
+    ##    9.735205    10
+    ##  426.292834    10
+    ##    5.479752    10
+    ##    1.995946    10
+    ##    1.276236    10
 
 The functions from [vegan](https://cran.r-project.org/package=vegan)
 continue to outperform the others. They are again followed by `bcdist`,
@@ -1293,7 +1293,9 @@ dissim[1:10,]
 Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. *Global Ecology
 and Biogeography* 21, 1223–1232.
+<https://doi.org/10.1111/j.1466-8238.2011.00756.x>
 
 Baselga A (2013) Separating the two components of abundance-based
-dissimilarity: Balanced changes in abundance vs. Abundance gradients.
+dissimilarity: Balanced changes in abundance vs. abundance gradients.
 *Methods in Ecology and Evolution* 4, 552–557.
+<https://doi.org/10.1111/2041-210X.12029>

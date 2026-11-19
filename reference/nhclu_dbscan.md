@@ -40,7 +40,7 @@ nhclu_dbscan(
 
   A `numeric` vector or a single `numeric` value specifying the `minPts`
   argument of
-  [`dbscan::dbscan()`](http://michael.hahsler.net/dbscan/reference/dbscan.md).
+  [`dbscan::dbscan()`](https://michael.hahsler.net/dbscan/reference/dbscan.html).
   `minPts` is the minimum number of points to form a dense region. By
   default, it is set to the natural logarithm of the number of sites in
   `dissimilarity`, rounded down to a whole number. See Details for
@@ -50,7 +50,7 @@ nhclu_dbscan(
 
   A `numeric` vector or a single `numeric` value specifying the `eps`
   argument of
-  [`dbscan::dbscan()`](http://michael.hahsler.net/dbscan/reference/dbscan.md).
+  [`dbscan::dbscan()`](https://michael.hahsler.net/dbscan/reference/dbscan.html).
   `eps` specifies how similar points should be to each other to be
   considered part of a cluster. See Details for guidance on choosing
   this parameter.
@@ -63,7 +63,7 @@ nhclu_dbscan(
 - algorithm_in_output:
 
   A `boolean` indicating whether the original output of
-  [dbscan::dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md)
+  [dbscan::dbscan](https://michael.hahsler.net/dbscan/reference/dbscan.html)
   should be included in the output. Defaults to `TRUE` (see Value).
 
 - verbose:
@@ -74,7 +74,7 @@ nhclu_dbscan(
 - ...:
 
   Additional arguments to be passed to `dbscan()` (see
-  [dbscan::dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md)).
+  [dbscan::dbscan](https://michael.hahsler.net/dbscan/reference/dbscan.html)).
 
 ## Value
 
@@ -94,7 +94,7 @@ A `list` of class `bioregion.clusters` with five components:
 
 If `algorithm_in_output = TRUE`, the `algorithm` slot includes the
 output of
-[dbscan::dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md).
+[dbscan::dbscan](https://michael.hahsler.net/dbscan/reference/dbscan.html).
 
 ## Details
 

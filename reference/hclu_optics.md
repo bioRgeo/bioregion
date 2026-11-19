@@ -40,7 +40,7 @@ hclu_optics(
 - minPts:
 
   A `numeric` value specifying the minPts argument of
-  [dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md).
+  [dbscan](https://michael.hahsler.net/dbscan/reference/dbscan.html).
   minPts is the minimum number of points required to form a dense
   region. By default, it is set to the natural logarithm of the number
   of sites in `dissimilarity`, rounded down to a whole number.
@@ -48,7 +48,7 @@ hclu_optics(
 - eps:
 
   A positive `numeric` value specifying the eps argument of
-  [optics](http://michael.hahsler.net/dbscan/reference/optics.md). It
+  [optics](https://michael.hahsler.net/dbscan/reference/optics.html). It
   defines the upper limit of the size of the epsilon neighborhood.
   Limiting the neighborhood size improves performance and has no or very
   little impact on the ordering as long as it is not set too low. By
@@ -59,7 +59,7 @@ hclu_optics(
 
   A `numeric` value specifying the steepness threshold to identify
   clusters hierarchically using the Xi method (see
-  [optics](http://michael.hahsler.net/dbscan/reference/optics.md)).
+  [optics](https://michael.hahsler.net/dbscan/reference/optics.html)).
 
 - minimum:
 
@@ -80,13 +80,13 @@ hclu_optics(
 - algorithm_in_output:
 
   A `boolean` indicating whether the original output of
-  [dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md) should
-  be returned in the output (`TRUE` by default, see Value).
+  [dbscan](https://michael.hahsler.net/dbscan/reference/dbscan.html)
+  should be returned in the output (`TRUE` by default, see Value).
 
 - ...:
 
   Additional arguments to be passed to `optics()` (see
-  [optics](http://michael.hahsler.net/dbscan/reference/optics.md)).
+  [optics](https://michael.hahsler.net/dbscan/reference/optics.html)).
 
 ## Value
 
@@ -106,7 +106,7 @@ A `list` of class `bioregion.clusters` with five slots:
 
 In the `algorithm` slot, if `algorithm_in_output = TRUE`, users can find
 the output of
-[optics](http://michael.hahsler.net/dbscan/reference/optics.md).
+[optics](https://michael.hahsler.net/dbscan/reference/optics.html).
 
 ## Details
 
@@ -123,9 +123,9 @@ We recommend reading (Hahsler et al., 2019) to grasp the algorithm, how
 it works, and what the clusters mean.
 
 To extract the clusters, we use the
-[extractXi](http://michael.hahsler.net/dbscan/reference/optics.md)
+[extractXi](https://michael.hahsler.net/dbscan/reference/optics.html)
 function which is based on the steepness of the reachability plot (see
-[optics](http://michael.hahsler.net/dbscan/reference/optics.md)).
+[optics](https://michael.hahsler.net/dbscan/reference/optics.html)).
 
 ## References
 

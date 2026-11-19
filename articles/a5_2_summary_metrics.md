@@ -1604,33 +1604,39 @@ Italiana* 56, 35–92.
 
 De Cáceres M & Legendre P (2009) Associations between species and groups
 of sites: Indices and statistical inference. *Ecology* 90, 3566–3574.
+<https://doi.org/10.1890/08-1823.1>
 
 Denelle P, Violle C & Munoz F (2020) Generalist plants are more
 competitive and more functionally similar to each other than specialist
 plants: Insights from network analyses. *Journal of Biogeography* 47,
-1922–1933.
+1922–1933. <https://doi.org/10.1111/jbi.13848>
 
 Divíšek J, Storch D, Zelený D & Culek M (2016) Towards the spatial
 coherence of biogeographical regionalizations at subcontinental and
 landscape scales. *Journal of biogeography* 43, 2489–2501.
+<https://doi.org/10.1111/jbi.12832>
 
 Fattorini S (2015) On the concept of chorotype. *Journal of
-Biogeography* 42, 2246–2251.
+Biogeography* 42, 2246–2251. <https://doi.org/10.1111/jbi.12589>
 
 Holt BG, Lessard J-P, Borregaard MK *et al.* (2013) An update of
 Wallace’s zoogeographic regions of the world. *Science* 339, 74–78.
+<https://doi.org/10.1126/science.1228282>
 
 Kreft H & Jetz W (2010) A framework for delineating biogeographical
 regions based on species distributions. *Journal of Biogeography* 37,
-2029–2053.
+2029–2053. <https://doi.org/10.1111/j.1365-2699.2010.02375.x>
 
 Lenormand M, Papuga G, Argagnon O, Soubeyrand M, Alleaume S & Luque S
 (2019) Biogeographical network analysis of plant species distribution in
-the mediterranean region. *Ecology and evolution* 9, 237–250.
+the Mediterranean region. *Ecology and evolution* 9, 237–250.
+<https://doi.org/10.1002/ece3.4718>
 
 Leroy B, Dias MS, Giraud E *et al.* (2019) Global biogeographical
-regions of freshwater fish species. *Journal of Biogeography* 2407–2419.
+regions of freshwater fish species. *Journal of Biogeography* 46,
+2407–2419. <https://doi.org/10.1111/jbi.13674>
 
 Rousseeuw PJ (1987) Silhouettes: A graphical aid to the interpretation
 and validation of cluster analysis. *Journal of Computational and
 Applied Mathematics* 20, 53–65.
+<https://doi.org/10.1016/0377-0427(87)90125-7>

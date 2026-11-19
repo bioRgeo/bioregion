@@ -1581,35 +1581,40 @@ clust1
     ##  - Number of sites:  715 
     ## Clustering results:
     ##  - Number of partitions:  1 
-    ##  - Number of clusters:  10
+    ##  - Number of clusters:  12
 
 ## 5. References
 
 Baselga A (2012) The relationship between species replacement,
 dissimilarity derived from nestedness, and nestedness. *Global Ecology
 and Biogeography* 21, 1223–1232.
+<https://doi.org/10.1111/j.1466-8238.2011.00756.x>
 
 Baselga A (2013) Separating the two components of abundance-based
-dissimilarity: Balanced changes in abundance vs. Abundance gradients.
+dissimilarity: Balanced changes in abundance vs. abundance gradients.
 *Methods in Ecology and Evolution* 4, 552–557.
+<https://doi.org/10.1111/2041-210X.12029>
 
 Ficetola GF, Mazel F & Thuiller W (2017) Global determinants of
 zoogeographical boundaries. *Nature Ecology & Evolution* 1, 0089.
+<https://doi.org/10.1038/s41559-017-0089>
 
 Hahsler M, Piekenbrock M & Doran D (2019) Dbscan: Fast density-based
-clustering with r. *Journal of Statistical Software* 91, 1–30.
+clustering with R. *Journal of Statistical Software* 91, 1–30.
+<https://doi.org/10.18637/jss.v091.i01>
 
 Holt BG, Lessard J-P, Borregaard MK *et al.* (2013) An update of
 Wallace’s zoogeographic regions of the world. *Science* 339, 74–78.
+<https://doi.org/10.1126/science.1228282>
 
-Kaufman L & Rousseeuw PJ (2009) Finding groups in data: An introduction
-to cluster analysis. In: *Finding groups in data: An introduction to
-cluster analysis.* (ed JW & Sons.). John Wiley & Sons.
+Kaufman L & Rousseeuw PJ (2009) *Finding groups in data: An introduction
+to cluster analysis*. John Wiley & Sons, Hoboken, NJ.
+<https://doi.org/10.1002/9780470316801>
 
 Kreft H & Jetz W (2010) A framework for delineating biogeographical
 regions based on species distributions. *Journal of Biogeography* 37,
-2029–2053.
+2029–2053. <https://doi.org/10.1111/j.1365-2699.2010.02375.x>
 
 Leprieur F & Oikonomou A (2014) The need for richness-independent
 measures of turnover when delineating biogeographical regions. *Journal
-of Biogeography* 41, 417–420.
+of Biogeography* 41, 417–420. <https://doi.org/10.1111/jbi.12266>
