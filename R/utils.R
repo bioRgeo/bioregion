@@ -952,6 +952,8 @@ controls <- function(args = NULL, data = NULL, type = "input_net") {
 #  - gb [Site-to-bioregions/bioregionalization metrics]                                           #
 #  - detect_data_type_from_metric                                                                 #   
 #  - elbow_finder                                                                                 #
+#  - cluster_colors                                                                               #
+#  - natural_order                                                                                #
 ###################################################################################################
 
 # convert_metric_names
@@ -1921,15 +1923,15 @@ elbow_finder <- function(x_values, y_values, correct_decrease = FALSE) {
 
 
 # cluster_colors ###############################################################
-# Colours of the clusters of each partition, as a list with one data.frame
+# Colors of the clusters of each partition, as a list with one data.frame
 # (columns cluster and color) per partition, like the colors element added by
-# bioregion_colors(). The colours stored by bioregion_colors() are used if they
-# cover all the clusters of all the partitions; otherwise (no colours, or
-# colours made before the partitions changed, e.g., after cutting a tree
-# again), colours are assigned with bioregion_colors() and its default
+# bioregion_colors(). The colors stored by bioregion_colors() are used if they
+# cover all the clusters of all the partitions; otherwise (no colors, or
+# colors made before the partitions changed, e.g., after cutting a tree
+# again), colors are assigned with bioregion_colors() and its default
 # parameters.
 # Used by plot() and map_bioregions(), so that trees and maps share the same
-# colours.
+# colors.
 cluster_colors <- function(bioregionalization) {
   colors <- bioregionalization$colors
   partitions <- colnames(bioregionalization$clusters)[-1]
@@ -1942,5 +1944,27 @@ cluster_colors <- function(bioregionalization) {
     colors <- bioregion_colors(bioregionalization)$colors
   }
   colors
+}
+################################################################################
+
+
+# natural_order ################################################################
+# Order of cluster names, with numbers sorted as numbers: 2, 2.1, 2.2, ..., 2.10
+# instead of 2, 2.1, 2.10, 2.2 (names of the hierarchical levels of
+# netclu_infomap()). Names that are not numbers come after, in alphabetical
+# order.
+natural_order <- function(x) {
+  x <- as.character(x)
+  parts <- lapply(strsplit(x, ".", fixed = TRUE),
+                  function(p) suppressWarnings(as.numeric(p)))
+  is_number <- vapply(parts, function(p) length(p) > 0 && !anyNA(p),
+                      logical(1))
+  # One key per level, -Inf when a name has fewer levels so that 2 comes
+  # before 2.1
+  keys <- lapply(seq_len(max(1, lengths(parts))), function(k) {
+    vapply(parts, function(p) if (length(p) >= k) p[k] else -Inf, numeric(1))
+  })
+  keys <- lapply(keys, function(key) ifelse(is_number, key, 0))
+  do.call(order, c(list(!is_number), keys, list(x)))
 }
 ################################################################################

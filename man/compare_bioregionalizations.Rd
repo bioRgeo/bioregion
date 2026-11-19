@@ -40,23 +40,23 @@ display progress messages. Set to \code{FALSE} to suppress these messages.}
 A \code{list} containing 4 to 7 elements:
 
 \enumerate{
-\item{\strong{args}: A \code{list} of user-provided arguments.}
-\item{\strong{inputs}: A \code{list} containing information on the input
-bioregionalizations, such as the number of items clustered.}
-\item{\strong{pairwise_membership} (optional): If \code{store_pairwise_membership = TRUE},
+\item \strong{args}: A \code{list} of user-provided arguments.
+\item \strong{inputs}: A \code{list} containing information on the input
+bioregionalizations, such as the number of items clustered.
+\item \strong{pairwise_membership} (optional): If \code{store_pairwise_membership = TRUE},
 a \verb{boolean matrix} where \code{TRUE} indicates two items are in the same cluster,
-and \code{FALSE} indicates they are not.}
-\item{\strong{freq_item_pw_membership}: A \verb{numeric vector} containing the number of
+and \code{FALSE} indicates they are not.
+\item \strong{freq_item_pw_membership}: A \verb{numeric vector} containing the number of
 times each item pair is clustered together, corresponding to the sum of rows
-in \code{pairwise_membership}.}
-\item{\strong{bioregionalization_freq_cor} (optional): If \code{cor_frequency = TRUE},
+in \code{pairwise_membership}.
+\item \strong{bioregionalization_freq_cor} (optional): If \code{cor_frequency = TRUE},
 a \verb{numeric vector} of correlations between individual bioregionalizations
-and the total frequency of pairwise membership.}
-\item{\strong{confusion_matrix} (optional): If \code{store_confusion_matrix = TRUE},
-a \code{list} of confusion matrices for each pair of bioregionalizations.}
-\item{\strong{bioregionalization_comparison}: A \code{data.frame} containing comparison
+and the total frequency of pairwise membership.
+\item \strong{confusion_matrix} (optional): If \code{store_confusion_matrix = TRUE},
+a \code{list} of confusion matrices for each pair of bioregionalizations.
+\item \strong{bioregionalization_comparison}: A \code{data.frame} containing comparison
 results, where the first column indicates the bioregionalizations compared,
-and the remaining columns contain the requested \code{indices}.}}
+and the remaining columns contain the requested \code{indices}.}
 }
 \description{
 This function computes pairwise comparisons for several

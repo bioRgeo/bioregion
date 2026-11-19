@@ -12,19 +12,35 @@ between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
   `site_species_metrics()`, which did not list the `silhouette` metric and, 
   for `str()`, the `prop_endemics` metric), fixed `print()` on the output of 
   `hclu_hierarclust()`.
-* New `plot()` for the outputs of `hclu_hierarclust()`, `hclu_diana()` and
-  `cut_tree()`. The clusters are now shown as coloured bars under the tree
-  (one bar per partition) instead of rectangles. The colours are those of `bioregion_colors()`, so
-  that trees and maps share the same colours. Trees can now be mirrored
-  (`tree_flip = TRUE`) or drawn horizontally (`tree_horizontal = TRUE`), and
-  site names can be removed (`tree_labels = FALSE`). The plot method has its own help page
-  (`?plot.bioregion.clusters`).
+* New `plot()` for all clustering outputs (`?plot.bioregion.clusters`), with
+  three types of plots (`plot_type`):
+  * `"bars"`, for all algorithms: one bar per cluster, made of one square per
+    site, and, if bipartite, one circle per species.
+  * `"tree"`, for `hclu_hierarclust()`, `hclu_diana()` and `cut_tree()` (the
+    default for these functions), and for nested partitions such as the
+    levels of `netclu_infomap()`. The clusters are shown as colored bars
+    under the tree (one bar per partition) instead of rectangles.
+  * `"cluster_tree"`: the tree drawn down to the clusters, with the bar of
+    each cluster at the tip of its branch (the default for hierarchical
+    `netclu_infomap()`).
+  * cool customizations for all three plots, check out the
+    visualization vignette
+  * arguments that do not apply to the chosen plot (e.g., `collapse` for
+    bars) are ignored with a warning.
 * **Breaking change**: in `map_bioregions()`, a numeric `partition_index` now
   gives the number of the partition (`1` for the first partition) instead of
   its column in `bioregionalization$clusters` (where the first partition was
   `2`). Code using numbers
   must subtract 1 from them; names are not affected. A message recalls this
   change the first time numbers are used in a session.
+* `bioregion_colors()` now ranks clusters of the same size by name, with
+  numbers sorted as numbers (`2.1`, `2.2`, ..., `2.10`), instead of by their
+  order of appearance, and its `colors` element lists clusters in the same
+  order.
+* With `map_as_output = TRUE`, `map_bioregions()` now adds the colors of
+  `bioregion_colors()` to its output when the bioregionalization has them: one
+  column per partition, named after the partition with the suffix `_color`
+  (e.g., `K_3_color`), to reuse the colors in custom maps.
 * `map_bioregions()` now uses the default colors of `bioregion_colors()` when
   the bioregionalization has no colors (instead of the default colors of
   `sf`), so that colors match among the package visualization functions when

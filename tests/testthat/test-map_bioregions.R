@@ -161,6 +161,45 @@ test_that("valid outputs", {
                    plot = TRUE)
   )
 
+  # No color columns in the output without bioregion_colors()
+  map <- map_bioregions(cluhier7,
+                        map = fishsf,
+                        map_as_output = TRUE,
+                        plot = FALSE)
+  expect_false(any(grepl("_color$", colnames(map))))
+
+  # Color columns of bioregion_colors(), after the partitions
+  partitions <- colnames(cluhiercol7$clusters)[-1]
+  map <- map_bioregions(cluhiercol7,
+                        map = fishsf,
+                        map_as_output = TRUE,
+                        plot = FALSE)
+  expect_s3_class(map, "sf")
+  expect_equal(colnames(map),
+               c("Site", partitions, paste0(partitions, "_color"),
+                 "geometry"))
+  idx <- match(map$Site, cluhiercol7$clusters_colors$ID)
+  for (p in partitions) {
+    expect_equal(map[[paste0(p, "_color")]],
+                 cluhiercol7$clusters_colors[[p]][idx])
+  }
+
+  # Only the colors of the selected partitions
+  map <- map_bioregions(cluhiercol7,
+                        map = fishsf,
+                        partition_index = "K_5",
+                        map_as_output = TRUE,
+                        plot = FALSE)
+  expect_equal(colnames(map), c("Site", "K_5", "K_5_color", "geometry"))
+
+  # Bipartite: colors of the sites only
+  map <- map_bioregions(cluinfocol,
+                        map = vegesf,
+                        map_as_output = TRUE,
+                        plot = FALSE)
+  idx <- match(map$Site, cluinfocol$clusters_colors$ID)
+  expect_equal(map$K_8_color, cluinfocol$clusters_colors$K_8[idx])
+
 })
  
 # Tests for invalid inputs -----------------------------------------------------

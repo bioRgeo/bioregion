@@ -28,7 +28,9 @@ ranking clusters to determine color assignment priority. Options are:
 \item \code{"n_species"}: Rank by number of species (bipartite networks only)
 \item \code{"n_both"}: Rank by combined sites + species (bipartite networks only)
 }
-Larger clusters (by the chosen criterion) receive vivid colors first.}
+Larger clusters (by the chosen criterion) receive vivid colors first.
+Clusters of the same size are ranked by name (e.g., \code{2.1}, \code{2.2}, ...,
+\code{2.10}).}
 
 \item{cutoff_insignificant}{A \code{numeric} value or \code{NULL} (default). When
 specified, clusters with values at or below this threshold (based on the

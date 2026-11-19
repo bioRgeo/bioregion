@@ -78,23 +78,23 @@
 #' A `list` containing 4 to 7 elements:
 #' 
 #' \enumerate{
-#' \item{**args**: A `list` of user-provided arguments.}
-#' \item{**inputs**: A `list` containing information on the input 
-#' bioregionalizations, such as the number of items clustered.}
-#' \item{**pairwise_membership** (optional): If `store_pairwise_membership = TRUE`, 
-#' a `boolean matrix` where `TRUE` indicates two items are in the same cluster, 
-#' and `FALSE` indicates they are not.}
-#' \item{**freq_item_pw_membership**: A `numeric vector` containing the number of 
-#' times each item pair is clustered together, corresponding to the sum of rows 
-#' in `pairwise_membership`.}
-#' \item{**bioregionalization_freq_cor** (optional): If `cor_frequency = TRUE`, 
-#' a `numeric vector` of correlations between individual bioregionalizations 
-#' and the total frequency of pairwise membership.}
-#' \item{**confusion_matrix** (optional): If `store_confusion_matrix = TRUE`, 
-#' a `list` of confusion matrices for each pair of bioregionalizations.}
-#' \item{**bioregionalization_comparison**: A `data.frame` containing comparison 
-#' results, where the first column indicates the bioregionalizations compared, 
-#' and the remaining columns contain the requested `indices`.}}
+#' \item **args**: A `list` of user-provided arguments.
+#' \item **inputs**: A `list` containing information on the input
+#' bioregionalizations, such as the number of items clustered.
+#' \item **pairwise_membership** (optional): If `store_pairwise_membership = TRUE`,
+#' a `boolean matrix` where `TRUE` indicates two items are in the same cluster,
+#' and `FALSE` indicates they are not.
+#' \item **freq_item_pw_membership**: A `numeric vector` containing the number of
+#' times each item pair is clustered together, corresponding to the sum of rows
+#' in `pairwise_membership`.
+#' \item **bioregionalization_freq_cor** (optional): If `cor_frequency = TRUE`,
+#' a `numeric vector` of correlations between individual bioregionalizations
+#' and the total frequency of pairwise membership.
+#' \item **confusion_matrix** (optional): If `store_confusion_matrix = TRUE`,
+#' a `list` of confusion matrices for each pair of bioregionalizations.
+#' \item **bioregionalization_comparison**: A `data.frame` containing comparison
+#' results, where the first column indicates the bioregionalizations compared,
+#' and the remaining columns contain the requested `indices`.}
 #'  
 #' @seealso 
 #' For more details illustrated with a practical example, 

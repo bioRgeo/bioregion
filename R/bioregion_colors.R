@@ -22,6 +22,8 @@
 #'   \item `"n_both"`: Rank by combined sites + species (bipartite networks only)
 #' }
 #' Larger clusters (by the chosen criterion) receive vivid colors first.
+#' Clusters of the same size are ranked by name (e.g., `2.1`, `2.2`, ...,
+#' `2.10`).
 #' 
 #' @param cutoff_insignificant A `numeric` value or `NULL` (default). When
 #' specified, clusters with values at or below this threshold (based on the
@@ -277,9 +279,11 @@ bioregion_colors <- function(bioregionalization,
     # 5. Rank significant clusters ---------------------------------------------
     
     if (length(significant_clusters) > 0) {
-      # Sort by size descending
-      ranked_clusters <- significant_clusters[order(cluster_sizes[significant_clusters], 
-                                                     decreasing = TRUE)]
+      # Sort by size descending, then by name (2.1, 2.2, ..., 2.10)
+      name_rank <- match(seq_along(significant_clusters),
+                         natural_order(significant_clusters))
+      ranked_clusters <- significant_clusters[
+        order(-cluster_sizes[significant_clusters], name_rank)]
     } else {
       ranked_clusters <- character(0)
     }
@@ -385,13 +389,9 @@ bioregion_colors <- function(bioregionalization,
     # Ensure cluster column is character
     partition_colors_df$cluster <- as.character(partition_colors_df$cluster)
     
-    # Reorder by cluster ID (numeric order if possible, otherwise 
-    # alphabetical)
-    cluster_order <- tryCatch(
-      order(as.numeric(partition_colors_df$cluster)),
-      warning = function(w) order(partition_colors_df$cluster)
-    )
-    partition_colors_df <- partition_colors_df[cluster_order, , drop = FALSE]
+    # Reorder by cluster ID (2.1, 2.2, ..., 2.10)
+    partition_colors_df <- partition_colors_df[
+      natural_order(partition_colors_df$cluster), , drop = FALSE]
     rownames(partition_colors_df) <- NULL
     
     # Store colors for this partition

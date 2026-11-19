@@ -207,7 +207,7 @@ tree1 <- cut_tree(tree1,
 
 plot(tree1, cex = .2)
 ```
-Rectangles at the bottom show the three partitions: K_2 (2 clusters), K_3 (3 clusters) and K_12 (12 clusters). Note that branches are coloured by default on the basis of the most detailed partition (highest number of clusters).
+Rectangles at the bottom show the three partitions: K_2 (2 clusters), K_3 (3 clusters) and K_12 (12 clusters). Note that branches are colored by default on the basis of the most detailed partition (highest number of clusters).
 
 We can also see directly in the console the hierarchical structure of the tree,
 with info on each cluster, by using the convenient `summary()` function.

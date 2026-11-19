@@ -62,27 +62,27 @@ optimal number of clusters.
 
 \itemize{
 
-\item{\href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#prop_between_dissim}{\strong{prop_between_dissim}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#prop_between_dissim}{\strong{prop_between_dissim}}:
 The proportion of total dissimilarity occurring between
 bioregions, following Holt et al. (2013), calculated as the sum of
 between-bioregion dissimilarities divided by the total sum of
-dissimilarities.}
+dissimilarities.
 
-\item{\href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#anosim}{\strong{anosim}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#anosim}{\strong{anosim}}:
 The Analysis of Similarities (ANOSIM) statistic, based on
 \link[vegan:anosim]{vegan::anosim()}. It measures the separation between
 within- and between-bioregion dissimilarities. When \code{permutation > 1},
-a p-value is calculated using permutation testing.}
+a p-value is calculated using permutation testing.
 
-\item{\href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#mean_endemics}{\strong{mean_endemics}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#mean_endemics}{\strong{mean_endemics}}:
 The mean proportion of endemic species across bioregions,
 following Kreft & Jetz (2010). For each bioregion, the proportion of endemic
-species is calculated and then averaged across bioregions.}
+species is calculated and then averaged across bioregions.
 
-\item{\href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#tot_endemics}{\strong{tot_endemics}}:
+\item \href{https://biorgeo.github.io/bioregion/articles/a5_2_summary_metrics.html#tot_endemics}{\strong{tot_endemics}}:
 The proportion of endemic species across all bioregion.
 It is calculated as the total number of endemic species divided by the total
-number of species. Endemic species are those occurring in only one bioregion.}
+number of species. Endemic species are those occurring in only one bioregion.
 
 }
 }

@@ -48,6 +48,12 @@ used for the plot should be returned.}
 \value{
 One or several maps of bioregions if \code{plot = TRUE} and the
 \code{sf} \code{data.frame} object used for the plot if \code{map_as_output = TRUE}.
+This \code{sf} \code{data.frame} has one row per site, with the site ID (\code{Site}),
+one column per partition giving the bioregion of each site, and the
+geometry. If \code{bioregionalization} had colors (added with
+\code{bioregion_colors()}), it also has one column per partition giving the
+color of each site's bioregion, named after the partition with the suffix
+\verb{_color} (e.g., \code{K_3_color} for partition \code{K_3}).
 }
 \description{
 This plot function can be used to visualize bioregions based on a
@@ -69,7 +75,10 @@ site nodes using the \code{node_type} attribute.
 \strong{Colors}: If the \code{bioregionalization} object contains colors (added via
 \code{bioregion_colors()}), these colors will be automatically used for plotting.
 Otherwise, colors are assigned with \code{bioregion_colors()} and its default
-parameters, to match other visualization functions of the package.
+parameters, to match other visualization functions of the package. When
+the \code{bioregionalization} object contains colors, they are also added to the
+output of \code{map_as_output = TRUE} (see Value), so you can reuse them in your
+own maps (e.g., with \code{ggplot2::scale_fill_identity()}).
 }
 \examples{
 data(fishmat)

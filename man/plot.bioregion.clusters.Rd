@@ -2,135 +2,263 @@
 % Please edit documentation in R/plot_bioregion_clusters.R
 \name{plot.bioregion.clusters}
 \alias{plot.bioregion.clusters}
-\title{Plot a hierarchical clustering bioregionalization}
+\title{Plot a bioregionalization}
 \usage{
 \method{plot}{bioregion.clusters}(
   x,
-  tree_branch_partition = NULL,
-  tree_labels = TRUE,
-  tree_flip = FALSE,
-  tree_horizontal = FALSE,
+  plot_type = "auto",
+  partitions = NULL,
+  heights = "auto",
+  collapse = FALSE,
+  branch_partition = NULL,
+  color_partition = NULL,
+  items_per_unit = "auto",
+  bipartite_layout = "mirror",
+  max_clusters = 25,
+  scales = "fixed",
+  horizontal = FALSE,
+  flip = FALSE,
+  labels = TRUE,
+  axes = TRUE,
+  main = NULL,
+  xlab = NULL,
+  ylab = NULL,
   ...
 )
 }
 \arguments{
 \item{x}{A \code{bioregion.clusters} object.}
 
-\item{tree_branch_partition}{Trees only. The partition
-whose clusters give their colours to the branches of the tree: either a
-partition number (\code{1} for the first partition, as in
-\code{map_bioregions()}) or the name of a partition (e.g., \code{"K_8"}). By
-default (\code{NULL}), the finest
-partition (i.e. with the most clusters) is used.}
+\item{plot_type}{A \code{character} string indicating the type of plot:
+\code{"bars"}, \code{"tree"}, \code{"cluster_tree"} or \code{"auto"} (default). With \code{"auto"},
+the plot is a tree for \code{\link[=hclu_hierarclust]{hclu_hierarclust()}} and \code{\link[=hclu_diana]{hclu_diana()}}, a tree of
+the clusters for hierarchical results (e.g., \code{\link[=netclu_infomap]{netclu_infomap()}} with
+several levels), and bars otherwise. See Details.}
 
-\item{tree_labels}{Trees only. A \code{boolean} indicating
-whether the site names should be written next to the bars (default \code{TRUE}).}
+\item{partitions}{The partitions to plot, given by their number (\code{1} for
+the first partition, i.e. the first column of clusters in \code{x$clusters}, \code{2}
+for the second, etc.) or by their names (e.g., \code{c("K_3", "K_8")}). By
+default (\code{NULL}), all partitions are plotted. For trees, the partition with
+the most clusters is the one at the tips of the tree.}
 
-\item{tree_flip}{Trees only. A \code{boolean} indicating
-whether the order of the sites should be reversed, i.e., the tree drawn as
-in a mirror (default \code{FALSE}). The tree remains the same: only the two
-branches of each node are swapped.}
+\item{heights}{Trees only. A \code{character} string indicating the heights of
+the branches of trees: \code{"tree"} (the heights of the tree of
+\code{\link[=hclu_hierarclust]{hclu_hierarclust()}} or \code{\link[=hclu_diana]{hclu_diana()}}), \code{"rank"} (the merges of that tree
+in the same order, but evenly spaced; trees of clusters only), \code{"levels"}
+(one step per partition) or \code{"auto"} (default: \code{"tree"} when the tree is
+available, \code{"levels"} otherwise). See Details.}
 
-\item{tree_horizontal}{Trees only. A \code{boolean} indicating
-whether the tree should be drawn horizontally, with its root on the left and
-the sites on the right, which makes site names easier to read (default
+\item{collapse}{A \code{boolean} indicating whether the clusters at the tips of
+a tree (\code{plot_type = "tree"}) should be collapsed into triangles (default
 \code{FALSE}).}
 
-\item{...}{Trees only. Further arguments passed to
-\code{\link[graphics:text]{graphics::text()}} to customize the site names (e.g., \code{cex} to change their
-size).}
+\item{branch_partition}{Trees only. The partition whose clusters give their
+colors to the branches, given by its number or name (see \code{partitions}). By
+default (\code{NULL}), the partition at the tips of the tree.}
+
+\item{color_partition}{Bars and trees of clusters only. The partition whose
+clusters give their colors to the squares, given by its number or name (see
+\code{partitions}). By default (\code{NULL}), each partition is colored by its own
+clusters.}
+
+\item{items_per_unit}{Bars and trees of clusters only. The number of sites
+drawn by each square and of species drawn by each circle: \code{"auto"}
+(default; one, or more for large datasets), one number for both, or two
+numbers (sites, species).}
+
+\item{bipartite_layout}{Bars of bipartite clusterings only. A \code{character}
+string indicating how sites and species are shown: \code{"mirror"} (default;
+sites above the baseline, species below), \code{"stack"} (species above the
+sites, in the same bar) or \code{"side"} (sites and species in two bars, side by
+side).}
+
+\item{max_clusters}{Bars only. The maximum number of bars (default 25).
+The smallest clusters beyond this number are grouped in a last bar,
+\code{"other"}.}
+
+\item{scales}{Bars of several partitions only. A \code{character} string
+indicating whether the axis of the numbers of sites is the same in all
+panels (\code{"fixed"}, default), so that panels can be compared, or adapted to
+each panel (\code{"free"}).}
+
+\item{horizontal}{A \code{boolean} indicating whether the plot should be drawn
+horizontally (default \code{FALSE}): bars from left to right, trees with their
+root on the left.}
+
+\item{flip}{A \code{boolean} indicating whether the order of the bars or of the
+branches of the trees should be reversed (default \code{FALSE}). A tree remains
+the same: it is drawn as in a mirror.}
+
+\item{labels}{A \code{boolean} indicating whether the names of the sites
+(trees) or of the clusters (bars and trees of clusters) should be written
+(default \code{TRUE}).}
+
+\item{axes}{A \code{boolean} indicating whether the axis of the numbers of sites
+(bars) or of the heights (trees) should be drawn (default \code{TRUE}).}
+
+\item{main}{A \code{character} string giving a title. For bars of several
+partitions, one title per partition can be given. By default (\code{NULL}), bars
+are titled with the name of their partition and trees have no title.}
+
+\item{xlab, ylab}{\code{character} strings giving the titles of the horizontal
+and vertical axes. By default (\code{NULL}), the axis of the numbers of sites or
+of the heights has a title, and the other axis has none. Use \code{""} to remove
+a title.}
+
+\item{...}{Further arguments passed to \code{\link[graphics:text]{graphics::text()}} to customize the
+names of the sites (trees) or of the clusters (bars and trees of clusters),
+e.g., \code{cex} to change their size.}
+}
+\value{
+Nothing; the plot is drawn on the current graphics device.
 }
 \description{
-Plots the output of a clustering function. For hierarchical clustering
-(\code{\link[=hclu_hierarclust]{hclu_hierarclust()}}, \code{\link[=hclu_diana]{hclu_diana()}} and \code{\link[=cut_tree]{cut_tree()}}), the tree is drawn
-with coloured bars under it showing the cluster of each site. Plots are not
-available for the other clustering algorithms. Arguments starting with
-\code{tree_} apply to trees only.
+Plots the clusters of a bioregionalization, whatever the algorithm used to
+obtain them. Three types of plots are available: bars showing the size of
+each cluster (all algorithms), trees (hierarchical clustering and nested
+partitions, such as the levels of \code{\link[=netclu_infomap]{netclu_infomap()}}), and trees of the
+clusters, with the bar of each cluster at the tip of its branch.
 }
 \details{
-\strong{Tree plots (currently, only \code{hclu_} functions)}
+\strong{Bars (\code{plot_type = "bars"})}
 
-The tree is drawn with one coloured bar for each partition (i.e., each cut
-of the tree), from coarsest to finest cuts. Each bar is labelled with
-the name of its partition. In each bar, the colour next to a site shows the
+Each cluster is a bar made of small squares, one per site (or per group of
+sites, see \code{items_per_unit}), and its number of sites is written at the end
+of the bar. For bipartite clusterings, species are drawn as circles.
+Clusters are sorted by decreasing number of sites, as in
+\code{\link[=bioregion_colors]{bioregion_colors()}}, and clusters of the same size by name (\code{2.1}, \code{2.2},
+..., \code{2.10}). The smallest clusters beyond \code{max_clusters} are grouped in a
+wide bar, \code{"other"}, as high as the highest bar: they are not one cluster,
+so their total size is not compared with the other bars. With several
+partitions, each partition is plotted in its own panel, with the same axis
+of the numbers of sites in all panels (\code{scales = "fixed"}) or with an axis
+adapted to each panel (\code{scales = "free"}). The squares are always square,
+so their size can differ between panels. The axis does not apply to the
+\code{"other"} bar, whose squares are spread over a wider bar.
+
+With \code{color_partition}, the squares take the colors of another partition.
+With a partition with more clusters, the bars show how each cluster is
+split; with a partition with fewer clusters, bars of the same color show
+which clusters are grouped together (they are placed side by side).
+
+\strong{Trees (\code{plot_type = "tree"})}
+
+The tree is drawn with one colored bar for each partition, from the fewest
+to the most clusters. In each bar, the color next to a site shows the
 cluster of that site. Sites that were not assigned to any cluster (\code{NA})
-are left blank.
+are left blank. The branches that contain sites of a single cluster of
+\code{branch_partition} are drawn in the color of that cluster, the other
+branches are black. When the tree was cut at given heights (or heights
+found for given numbers of clusters), dashed lines show these heights.
 
-The branches that contain sites of a single cluster of
-\code{tree_branch_partition} are drawn in the colour of that cluster. The other
-branches, which join several clusters, are black. When the tree was cut at
-given heights (or heights found for given numbers of clusters), dashed lines
-show these heights.
+With \code{collapse = TRUE}, each cluster of the partition at the tips is drawn
+as a triangle, as wide as its number of sites and as high as the height at
+which its sites are joined. Clusters must then be single branches of the
+tree: this is not always the case with the dynamic tree cut
+(\code{cut_tree(dynamic_tree_cut = TRUE)}), whose clusters cannot be collapsed.
 
-With the dynamic tree cut (\code{cut_tree(dynamic_tree_cut = TRUE)}), the
-clusters are not obtained by cutting the whole tree at a single height,
-and a cluster is not always a whole branch of the tree: it can be made of
-neighbouring sites hanging from different branches. With
-\code{dynamic_method = "hybrid"}, a cluster can even appear in several places
-of the tree. The bars show these clusters as they are.
+\strong{Trees of clusters (\code{plot_type = "cluster_tree"})}
 
-The colours are those stored in \code{x} by \code{\link[=bioregion_colors]{bioregion_colors()}}, so that the
-tree and the maps made with \code{\link[=map_bioregions]{map_bioregions()}} share the same colours. If
-\code{x} has no colours, or if its colours do not match its partitions (e.g.,
-after cutting the tree again), colours are assigned with
-\code{\link[=bioregion_colors]{bioregion_colors()}} and its default parameters.
+The tree is drawn down to the clusters of the partition at the tips only,
+and the bar of each cluster is drawn at the tip of its branch, with its
+name and number of sites (and species). The other partitions are shown by
+dashed lines (\code{heights = "tree"} or \code{"rank"}) or by the levels of the tree
+(\code{heights = "levels"}).
 
-The site names are written in the bottom margin of the plot, or in its right
-margin if \code{tree_horizontal = TRUE}. Long site names may not fit in it:
-either reduce their size (e.g., \code{cex = 0.5}), enlarge the margin with
-\code{\link[graphics:par]{graphics::par()}} before plotting (e.g., \code{par(mar = c(8, 4, 1, 1))}, or
-\code{par(mar = c(4, 1, 4, 8))} for a horizontal tree), or remove them with
-\code{tree_labels = FALSE}.
+\strong{Heights of the trees}
+\itemize{
+\item \code{"tree"}: the heights of the tree of \code{\link[=hclu_hierarclust]{hclu_hierarclust()}} or
+\code{\link[=hclu_diana]{hclu_diana()}}, i.e. the dissimilarities at which sites and clusters are
+joined. For trees of clusters, the height axis starts just below the
+lowest cut, to spread the merges between clusters.
+\item \code{"rank"}: the same tree, with its merges in the same order, but evenly
+spaced. Useful when the merges between clusters are crowded at the top
+of the tree. Trees of clusters only.
+\item \code{"levels"}: a tree rebuilt from the partitions, with one step per
+partition. A cluster split into more than two clusters at the next level
+is drawn as a rake, i.e. with all its branches at the same height. This
+is the only option for algorithms without a tree, such as
+\code{\link[=netclu_infomap]{netclu_infomap()}}. The partitions must be nested: each cluster of a
+partition must be included in a single cluster of the partitions with
+fewer clusters. Sites without a cluster (\code{NA}) in any of the partitions
+are left out of the tree.
+}
+
+\strong{Arguments that do not apply to a plot}
+
+Some arguments only apply to some types of plots (e.g., \code{max_clusters} to
+bars, \code{collapse} to trees). When such an argument is changed from its
+default value but does not apply to the plot, it is ignored with a
+warning.
+
+\strong{Colors}
+
+The colors are those stored in \code{x} by \code{\link[=bioregion_colors]{bioregion_colors()}}, so that plots
+and maps made with \code{\link[=map_bioregions]{map_bioregions()}} share the same colors. If \code{x} has no
+colors, or if its colors do not match its partitions (e.g., after cutting
+the tree again), colors are assigned with \code{\link[=bioregion_colors]{bioregion_colors()}} and its
+default parameters.
+
+\strong{Names of sites and clusters}
+
+Site names are written in the bottom margin of trees, or in their right
+margin if \code{horizontal = TRUE}. Long names may not fit in it: either reduce
+their size (e.g., \code{cex = 0.5}), enlarge the margin with \code{\link[graphics:par]{graphics::par()}}
+before plotting (e.g., \code{par(mar = c(8, 4, 1, 1))}), or remove them with
+\code{labels = FALSE}.
 }
 \examples{
 data(fishmat)
+data(fishdf)
 dissim <- dissimilarity(fishmat, metric = "Simpson")
 
-# One partition
-tree1 <- hclu_hierarclust(dissim, n_clust = 8,
-                          optimal_tree_method = "best", verbose = FALSE)
-plot(tree1, cex = 0.3)
+# Bars, for any algorithm
+clust <- nhclu_pam(dissim, n_clust = c(4, 8))
+plot(clust)
+plot(clust, scales = "free")
+plot(clust, partitions = 2, horizontal = TRUE, main = "PAM, 8 clusters")
 
-# Several partitions, branches coloured with the partition with the fewest
-# clusters (column 2 of tree2$clusters)
-tree2 <- cut_tree(tree1, n_clust = c(4, 8, 16), verbose = FALSE)
-plot(tree2, tree_branch_partition = 2, tree_labels = FALSE)
+# Bars of a bipartite clustering: sites (squares) and species (circles)
+clust_bip <- netclu_greedy(fishdf, bipartite = TRUE)
+plot(clust_bip)
+plot(clust_bip, bipartite_layout = "stack")
 
-# Same tree, mirrored
-plot(tree2, tree_flip = TRUE, tree_labels = FALSE)
+# Tree of a hierarchical clustering, cut into 3, 6 and 12 clusters
+tree <- hclu_hierarclust(dissim, n_clust = c(3, 6, 12),
+                         optimal_tree_method = "best", verbose = FALSE)
+plot(tree, labels = FALSE)
 
-# Dynamic tree cut
-tree3 <- cut_tree(tree1, dynamic_tree_cut = TRUE, verbose = FALSE)
-plot(tree3, tree_labels = FALSE)
+# Same tree, with the 12 clusters collapsed
+plot(tree, collapse = TRUE, labels = FALSE)
 
+# Tree of the 6 clusters of the second partition, with their sizes
+plot(tree, plot_type = "cluster_tree", partitions = 1:2,
+     horizontal = TRUE)
 
-# Same colours as on maps
-tree3 <- bioregion_colors(tree2,
-                          palette = "Antique")
-plot(tree3, tree_labels = FALSE)
+# Same, with the merges evenly spaced
+plot(tree, plot_type = "cluster_tree", partitions = 1:2,
+     heights = "rank", horizontal = TRUE)
+
+# Bars of the 12 clusters, colored by the 3 clusters they belong to
+plot(tree, plot_type = "bars", partitions = 3, color_partition = 1)
+
 \dontrun{
-data(fishsf)
-map_bioregions(tree3, fishsf)
+# Hierarchy of the levels of Infomap
+clust_infomap <- netclu_infomap(fishdf, bipartite_version = TRUE,
+                                show_hierarchy = TRUE)
+plot(clust_infomap, horizontal = TRUE)
+plot(clust_infomap, plot_type = "tree", collapse = TRUE)
 }
-
-# Horizontal tree, with room for the site names in the right margin
-small_mat <- fishmat[1:30, ]
-small_mat <- small_mat[, colSums(small_mat) > 0]
-tree4 <- hclu_hierarclust(dissimilarity(small_mat, metric = "Simpson"),
-                          n_clust = c(3, 6), optimal_tree_method = "best",
-                          verbose = FALSE)
-old_par <- par(mar = c(4, 1, 4, 7))
-plot(tree4, tree_horizontal = TRUE, cex = 0.7)
-par(old_par)
 
 }
 \seealso{
 For more details illustrated with a practical example,
 see the vignette:
-\url{https://biorgeo.github.io/bioregion/articles/a4_1_hierarchical_clustering.html}.
+\url{https://biorgeo.github.io/bioregion/articles/a5_1_visualization.html}.
 
 Associated functions:
-\link{hclu_hierarclust} \link{cut_tree} \link{bioregion_colors} \link{map_bioregions}
+\link{hclu_hierarclust} \link{cut_tree} \link{netclu_infomap} \link{bioregion_colors}
+\link{map_bioregions}
 }
 \author{
 Boris Leroy (\email{leroy.boris@gmail.com}) \cr

@@ -1351,3 +1351,11 @@ test_that("cluster_colors() uses stored colors only if they match", {
   expect_identical(cluster_colors(missing_cluster),
                    bioregion_colors(tree)$colors)
 })
+
+test_that("natural_order() sorts numbers as numbers", {
+  x <- c("2.10", "2.1", "2", "10", "1.1.2", "a", "2.2")
+  expect_identical(x[natural_order(x)],
+                   c("1.1.2", "2", "2.1", "2.2", "2.10", "10", "a"))
+  expect_identical(natural_order(c(3, 1, 2)), c(2L, 3L, 1L))
+  expect_identical(natural_order(character(0)), integer(0))
+})

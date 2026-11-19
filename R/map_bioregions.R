@@ -32,7 +32,13 @@
 #' @param write_clusters Deprecated. Use `map_as_output` instead.
 #' 
 #' @return One or several maps of bioregions if `plot = TRUE` and the 
-#' `sf` `data.frame` object used for the plot if `map_as_output = TRUE`.
+#' `sf` `data.frame` object used for the plot if `map_as_output = TRUE`. 
+#' This `sf` `data.frame` has one row per site, with the site ID (`Site`), 
+#' one column per partition giving the bioregion of each site, and the 
+#' geometry. If `bioregionalization` had colors (added with 
+#' `bioregion_colors()`), it also has one column per partition giving the 
+#' color of each site's bioregion, named after the partition with the suffix 
+#' `_color` (e.g., `K_3_color` for partition `K_3`).
 #' 
 #' @details
 #' The site IDs in `bioregionalization` and `map` should correspond. They must 
@@ -50,7 +56,10 @@
 #' **Colors**: If the `bioregionalization` object contains colors (added via
 #' `bioregion_colors()`), these colors will be automatically used for plotting.
 #' Otherwise, colors are assigned with `bioregion_colors()` and its default 
-#' parameters, to match other visualization functions of the package.
+#' parameters, to match other visualization functions of the package. When 
+#' the `bioregionalization` object contains colors, they are also added to the 
+#' output of `map_as_output = TRUE` (see Value), so you can reuse them in your 
+#' own maps (e.g., with `ggplot2::scale_fill_identity()`).
 #' 
 #' @seealso 
 #' For more details illustrated with a practical example, 
@@ -284,6 +293,16 @@ map_bioregions <- function(bioregionalization,
   
   # Return map with added partition(s)
   if(map_as_output){
+    # Add colors of bioregion_colors() if present in input object
+    # One column per partition, named after the partition with 
+    # suffix _color (e.g. K_3_color)
+    if(!is.null(bioregionalization$colors)){
+      colors <- as.data.frame(lapply(partition_names, function(p) {
+        unname(color_list[[p]][as.character(map[[p]])])
+      }))
+      colnames(colors) <- paste0(partition_names, "_color")
+      map <- cbind(map, colors)
+    }
     return(map)
   }
 }

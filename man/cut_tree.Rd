@@ -95,12 +95,12 @@ positions.
 
 The dynamic tree cut method has two variants:
 \itemize{
-\item{The tree-based variant (\code{dynamic_method = "tree"}) uses a top-down
-approach, relying solely on the tree and the order of clustered objects.}
-\item{The hybrid variant (\code{dynamic_method = "hybrid"}) employs a bottom-up
+\item The tree-based variant (\code{dynamic_method = "tree"}) uses a top-down
+approach, relying solely on the tree and the order of clustered objects.
+\item The hybrid variant (\code{dynamic_method = "hybrid"}) employs a bottom-up
 approach, leveraging both the tree and the dissimilarity matrix to identify
 clusters based on dissimilarity among sites. This approach is useful for
-detecting outliers within clusters.}
+detecting outliers within clusters.
 }
 }
 \note{
