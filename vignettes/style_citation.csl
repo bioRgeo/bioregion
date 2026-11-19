@@ -15,6 +15,7 @@
     <issn>2052-174X</issn>
     <eissn>2052-1758</eissn>
     <updated>2024-12-19T15:17:32+00:00</updated>
+    <summary>Modified for the bioregion package</summary>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -222,16 +223,19 @@
       <key macro="author"/>
       <key macro="issued" sort="ascending"/>
     </sort>
-    <layout suffix=".">
+    <layout>
       <group delimiter=" ">
-        <text macro="author"/>
-        <text macro="issued" prefix=" (" suffix=") "/>
-        <group delimiter=" ">
-          <text macro="title" suffix="."/>
-          <text macro="container"/>
+        <group delimiter=" " suffix=".">
+          <text macro="author"/>
+          <text macro="issued" prefix=" (" suffix=") "/>
+          <group delimiter=" ">
+            <text macro="title" suffix="."/>
+            <text macro="container"/>
+          </group>
+          <text macro="locators"/>
+          <text macro="access"/>
         </group>
-        <text macro="locators"/>
-        <text macro="access"/>
+        <text variable="DOI" prefix="https://doi.org/"/>
       </group>
     </layout>
   </bibliography>
