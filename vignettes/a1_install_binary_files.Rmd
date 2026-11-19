@@ -15,7 +15,8 @@ vignette: >
   %\VignetteIndexEntry{1. Installation of the binary files}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`'
+bibliography: ../inst/REFERENCES.bib
+csl: style_citation.csl    
 editor_options: 
   markdown: 
     wrap: 72

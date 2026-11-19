@@ -11,7 +11,7 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
-bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
+bibliography: ../inst/REFERENCES.bib
 csl: style_citation.csl
 vignette: >
   %\VignetteIndexEntry{4.2 Non-hierarchical clustering}

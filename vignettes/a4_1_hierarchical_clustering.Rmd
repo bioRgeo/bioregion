@@ -11,7 +11,7 @@ output:
     collapsed: false
     smooth_scroll: false
     toc_depth: 2
-bibliography: '`r system.file("REFERENCES.bib", package="bioregion")`' 
+bibliography: ../inst/REFERENCES.bib
 csl: style_citation.csl
 vignette: >
   %\VignetteIndexEntry{4.1 Hierarchical clustering}
@@ -232,7 +232,7 @@ The plot is not easy to read because of the large number of sites. Two options i
 
 ```{r, fig.width=8, fig.height=24}
 plot(tree1, cex = .3,
-     tree_horizontal = TRUE)
+     horizontal = TRUE)
 ```
 
 (2) we can rather
@@ -570,7 +570,7 @@ at the identified optimal number of cut-offs with `cut_tree()`:
 ```{r}
 tree4_cutonce <- cut_tree(tree4, opti_n_tree4)
 
-plot(tree4_cutonce, tree_labels = FALSE)
+plot(tree4_cutonce, labels = FALSE)
 
 map_bioregions(tree4_cutonce, vegesf)
 ```
@@ -713,8 +713,8 @@ tree. We can see this by plotting the tree:
 ```{r}
 tree4_3steps <- cut_tree(tree4, n_3steps)
 plot(tree4_3steps, 
-     tree_labels = FALSE,
-     tree_horizontal = TRUE)
+     labels = FALSE,
+     horizontal = TRUE)
 ```
  
 

@@ -399,17 +399,11 @@ plot(tree3)
 
 }
 \references{
-Kreft H & Jetz W (2010) A framework for delineating biogeographical regions
-based on species distributions. \emph{Journal of Biogeography} 37, 2029-2053.
+Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure for extrapolating turnover regionalization at mid-small spatial scales, tested on British butterflies. \emph{Methods in Ecology and Evolution} 6, 1287–1297. \href{https://doi.org/10.1111/2041-210X.12415}{10.1111/2041-210X.12415}
 
-Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis, RLH
-(2013) Recluster: an unbiased clustering procedure for beta-diversity
-turnover. \emph{Ecography} 36, 1070--1075.
+Dapporto L, Ramazzotti M, Fattorini S, Talavera G, Vila R & Dennis RLH (2013) Recluster: An unbiased clustering procedure for beta-diversity turnover. \emph{Ecography} 36, 1070–1075. \href{https://doi.org/10.1111/j.1600-0587.2013.00444.x}{10.1111/j.1600-0587.2013.00444.x}
 
-Dapporto L, Ciolli G, Dennis RLH, Fox R & Shreeve TG (2015) A new procedure
-for extrapolating turnover regionalization at mid-small spatial scales,
-tested on British butterflies. \emph{Methods in Ecology and Evolution} 6
-, 1287--1297.
+Kreft H & Jetz W (2010) A framework for delineating biogeographical regions based on species distributions. \emph{Journal of Biogeography} 37, 2029–2053. \href{https://doi.org/10.1111/j.1365-2699.2010.02375.x}{10.1111/j.1365-2699.2010.02375.x}
 }
 \seealso{
 For more details illustrated with a practical example,

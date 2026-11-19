@@ -235,7 +235,8 @@
           <text macro="locators"/>
           <text macro="access"/>
         </group>
-        <text variable="DOI" prefix="https://doi.org/"/>
+        <!-- Bare DOI as text: pandoc turns it into a link to https://doi.org/ -->
+        <text variable="DOI"/>
       </group>
     </layout>
   </bibliography>
