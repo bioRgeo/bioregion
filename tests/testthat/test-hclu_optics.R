@@ -115,7 +115,8 @@ test_that("valid output", {
                        minimum = FALSE,
                        show_hierarchy = FALSE,
                        algorithm_in_output = TRUE)
-  expect_equal(sum(clust1$clusters$K_3==clust2$clusters$K_3, na.rm = TRUE), 337)
+  # behaviour changed in optics 1.3.0, so we test equality differently now
+  expect_identical(clust1$clusters, clust2$clusters)
   
   clust1 <- hclu_optics(dissim,
                         index = 5,
@@ -126,8 +127,13 @@ test_that("valid output", {
                         index = 5,
                         show_hierarchy = TRUE)
   expect_equal(clust2$inputs$hierarchical, TRUE)
-  tab12 <- table(clust1$clusters$K_19,clust2$clusters$K_19)
-  expect_equal(sum(apply(tab12==0,1,sum)==18),19)
+  # the number of clusters depends on the dbscan version, so it is read from
+  # the output rather than hard-coded
+  k_flat <- colnames(clust1$clusters)[2]
+  expect_true(k_flat %in% colnames(clust2$clusters))
+  tab12 <- table(clust1$clusters[[k_flat]], clust2$clusters[[k_flat]])
+  expect_equal(nrow(tab12), ncol(tab12))
+  expect_true(all(rowSums(tab12 > 0) == 1))
   
   # Test data_type with different dissimilarity metrics
   clust <- hclu_optics(dissim, index = "Simpson", minPts = 3, xi = 0.05)
