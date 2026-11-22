@@ -6,6 +6,10 @@ This is a list of changes made in the development/GitHub version of the
 package between **bioregion 1.5.0** (CRAN release 2026-10-10) and the
 next CRAN release.
 
+- Fixed a bug in `node_type` attribute in `netclu_` and
+  [`site_species_subset()`](https://bioRgeo.github.io/bioregion/reference/site_species_subset.md)
+  functions ([\#44](https://github.com/bioRgeo/bioregion/issues/44)).
+- Added Infomap version 2.16.0.
 - Multiple bug fixes following recent name changes in
   bioregionalization_metrics(): fixed
   [`print()`](https://rdrr.io/r/base/print.html) outputs of
@@ -49,7 +53,7 @@ next CRAN release.
     hierarchical
     [`netclu_infomap()`](https://bioRgeo.github.io/bioregion/reference/netclu_infomap.md)).
   - cool customizations for all three plots, check out the visualization
-    vignette
+    vignette.
   - arguments that do not apply to the chosen plot (e.g., `collapse` for
     bars) are ignored with a warning.
 - **Breaking change**: in

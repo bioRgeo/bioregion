@@ -83,13 +83,13 @@ Euclidean computes the Euclidean distance between each pair of sites.
 
 ## References
 
-Baselga, A. (2012) The Relationship between Species Replacement,
+Baselga A (2012) The Relationship between Species Replacement,
 Dissimilarity Derived from Nestedness, and Nestedness. *Global Ecology
-and Biogeography*, 21(12), 1223–1232.
+and Biogeography* 21, 1223–1232.
 
-Baselga, A. (2013) Separating the two components of abundance-based
+Baselga A (2013) Separating the two components of abundance-based
 dissimilarity: balanced changes in abundance vs. abundance gradients.
-*Methods in Ecology and Evolution*, 4(6), 552–557.
+*Methods in Ecology and Evolution* 4, 552–557.
 
 ## See also
 

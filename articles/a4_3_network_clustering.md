@@ -242,11 +242,7 @@ ex_louvain <- netclu_louvain(fishdf,
 table(ex_louvain$clusters$K_23)
 ```
 
-    ## 
-    ##   1  10  11  12  13  14  15  16  17  18  19   2  20  21  22  23   3   4   5   6 
-    ##   6   4  55  16   3  11  20 113  97  49   7  44   3   5   4   3  49   5  17   8 
-    ##   7   8   9 
-    ##   8   4   2
+    ## < table of extent 0 >
 
 ## 3. Functions from the igraph package
 
