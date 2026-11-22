@@ -99,12 +99,18 @@ test_that("valid output", {
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "species")
   expect_equal(clust$inputs$node_type, "species")
+  expect_equal(length(attr(clust$clusters, "node_type")), 4)
+  expect_equal(length(table(attr(clust$clusters, "node_type"))), 1)
+  expect_equal(attr(clust$clusters, "node_type")[1], "species")
   
   clust <- netclu_beckett(net, return_node_type = "site")
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(dim(clust$clusters)[2], 2)
   expect_equal(clust$args$return_node_type, "site")
   expect_equal(clust$inputs$node_type, "site")
+  expect_equal(length(attr(clust$clusters, "node_type")), 3)
+  expect_equal(length(table(attr(clust$clusters, "node_type"))), 1)
+  expect_equal(attr(clust$clusters, "node_type")[1], "site")
   
   clust <- netclu_beckett(net, cut_weight = 40, seed = 1)
   expect_equal(colnames(clust$clusters), c("ID","K_2"))

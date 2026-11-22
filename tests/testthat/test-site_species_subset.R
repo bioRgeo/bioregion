@@ -28,22 +28,34 @@ test_that("valid outputs", {
                              node_type = "site")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
   expect_equal(sub$inputs$node_type, "site")
+  expect_equal(length(attr(sub$clusters, "node_type")), dim(sub$clusters)[1])
+  expect_equal(length(table(attr(sub$clusters, "node_type"))), 1)
+  expect_equal(attr(sub$clusters, "node_type")[1], "site")
 
   sub <- site_species_subset(clu1, 
                              node_type = "species")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
   expect_equal(sub$inputs$node_type, "species")
+  expect_equal(length(attr(sub$clusters, "node_type")), dim(sub$clusters)[1])
+  expect_equal(length(table(attr(sub$clusters, "node_type"))), 1)
+  expect_equal(attr(sub$clusters, "node_type")[1], "species")
   
   sub <- site_species_subset(clu5, 
                              node_type = "species")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
   expect_equal(sub$inputs$node_type, "species")  
+  expect_equal(length(attr(sub$clusters, "node_type")), dim(sub$clusters)[1])
+  expect_equal(length(table(attr(sub$clusters, "node_type"))), 1)
+  expect_equal(attr(sub$clusters, "node_type")[1], "species")
   
   sub <- site_species_subset(clu6, 
                              node_type = "site")
   expect_equal(inherits(sub, "bioregion.clusters"), TRUE)
   expect_equal(sub$inputs$node_type, "site")
-
+  expect_equal(length(attr(sub$clusters, "node_type")), dim(sub$clusters)[1])
+  expect_equal(length(table(attr(sub$clusters, "node_type"))), 1)
+  expect_equal(attr(sub$clusters, "node_type")[1], "site")
+  
 })
 
 # Tests for invalid inputs -----------------------------------------------------

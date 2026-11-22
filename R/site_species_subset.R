@@ -72,13 +72,16 @@ site_species_subset <- function(bioregionalization,
   }
   
   # Get type
+  node_type_bip <- attr(bioregionalization$clusters, "node_type")
   if(node_type == "site"){
-    bioregionalization$clusters <- bioregionalization$clusters[
-      attributes(bioregionalization$clusters)$node_type == "site", ]
+    idx <- node_type_bip == "site"
+    bioregionalization$clusters <- bioregionalization$clusters[idx, ]
+    attr(bioregionalization$clusters, "node_type") <- node_type_bip[idx]
   }
   if(node_type == "species"){
-    bioregionalization$clusters <- bioregionalization$clusters[
-      attributes(bioregionalization$clusters)$node_type == "species", ]
+    idx <- node_type_bip == "species"
+    bioregionalization$clusters <- bioregionalization$clusters[idx, ]
+    attr(bioregionalization$clusters, "node_type") <- node_type_bip[idx]
   }
   
   # Update return_node_type

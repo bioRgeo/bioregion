@@ -3,6 +3,9 @@
 This is a list of changes made in the development/GitHub version of the package
 between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
 
+* Fixed a bug in `node_type` attribute in `netclu_` and `site_species_subset()` 
+functions (#44).
+* Added Infomap version 2.16.0.
 * Multiple bug fixes following recent name changes in bioregionalization_metrics():
   fixed `print()` outputs of `find_optimal_n()`, fixed the `cluster_info` of 
   `hclu_diana()`, re-implemented the inclusion of the output of 
@@ -24,7 +27,7 @@ between **bioregion 1.5.0** (CRAN release 2026-10-10) and the next CRAN release.
     each cluster at the tip of its branch (the default for hierarchical
     `netclu_infomap()`).
   * cool customizations for all three plots, check out the
-    visualization vignette
+    visualization vignette.
   * arguments that do not apply to the chosen plot (e.g., `collapse` for
     bars) are ignored with a warning.
 * **Breaking change**: in `map_bioregions()`, a numeric `partition_index` now

@@ -1,5 +1,9 @@
 # Inputs -----------------------------------------------------------------------
-infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
+infomap_versiondispo <- c("2.1.0", 
+                          "2.6.0", 
+                          "2.7.1", 
+                          "2.8.0",
+                          "2.16.0")
 
 # Tests for valid outputs ------------------------------------------------------
 test_that("valid output", {
@@ -9,7 +13,8 @@ test_that("valid output", {
                    infomap_version = c("2.1.0", 
                                        "2.6.0", 
                                        "2.7.1",
-                                       "2.8.0"),
+                                       "2.8.0",
+                                       "2.16.0"),
                    verbose = FALSE)
   
   install_binaries(binpath = "pkgfolder",
@@ -17,7 +22,8 @@ test_that("valid output", {
                    infomap_version = c("2.1.0", 
                                        "2.6.0", 
                                        "2.7.1",
-                                       "2.8.0"),
+                                       "2.8.0",
+                                       "2.16.0"),
                    verbose = FALSE)
   
 })

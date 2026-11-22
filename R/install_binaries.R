@@ -35,7 +35,8 @@
 #' [netclu_oslom].**
 #'
 #' @note
-#' Currently, only Infomap versions 2.1.0, 2.6.0, 2.7.1, and 2.8.0 are available.
+#' Currently, only Infomap versions 2.1.0, 2.6.0, 2.7.1, 2.8.0 and 2.16.0 are 
+#' available.
 #'
 #' @seealso
 #' For more details illustrated with a practical example, 
@@ -53,7 +54,8 @@ install_binaries <- function(binpath = "tempdir",
                              infomap_version = c("2.1.0", 
                                                  "2.6.0", 
                                                  "2.7.1",
-                                                 "2.8.0"),
+                                                 "2.8.0",
+                                                 "2.16.0"),
                              verbose = TRUE) {
   
   # Control verbose
@@ -86,7 +88,11 @@ install_binaries <- function(binpath = "tempdir",
   binpath <- normalizePath(binpath)
   
   # Control infomap_version
-  infomap_versiondispo <- c("2.1.0", "2.6.0", "2.7.1", "2.8.0")
+  infomap_versiondispo <- c("2.1.0", 
+                            "2.6.0", 
+                            "2.7.1", 
+                            "2.8.0",
+                            "2.16.0")
   controls(args = infomap_version, data = NULL, type = "character_vector")
   
   infomap_version <- infomap_version[!duplicated(infomap_version)]

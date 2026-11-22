@@ -7,7 +7,7 @@
 install_binaries(
   binpath = "tempdir",
   download_only = FALSE,
-  infomap_version = c("2.1.0", "2.6.0", "2.7.1", "2.8.0"),
+  infomap_version = c("2.1.0", "2.6.0", "2.7.1", "2.8.0", "2.16.0"),
   verbose = TRUE
 )
 }
@@ -49,7 +49,8 @@ parameters accordingly in \link{netclu_infomap}, \link{netclu_louvain}, and
 \link{netclu_oslom}.}
 }
 \note{
-Currently, only Infomap versions 2.1.0, 2.6.0, 2.7.1, and 2.8.0 are available.
+Currently, only Infomap versions 2.1.0, 2.6.0, 2.7.1, 2.8.0 and 2.16.0 are
+available.
 }
 \seealso{
 For more details illustrated with a practical example,

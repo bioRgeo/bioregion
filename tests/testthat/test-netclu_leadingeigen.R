@@ -131,6 +131,8 @@ test_that("valid output", {
   expect_equal(clust$name, "netclu_leadingeigen")
   expect_equal(dim(clust$clusters)[1], 7)
   expect_equal(clust$args$return_node_type, "both")
+  expect_equal(length(attr(clust$clusters, "node_type")), 7)
+  expect_equal(length(table(attr(clust$clusters, "node_type"))), 2)
   
   clust <- netclu_leadingeigen(net, 
                             bipartite = TRUE, 
@@ -140,6 +142,9 @@ test_that("valid output", {
   expect_equal(dim(clust$clusters)[1], 4)
   expect_equal(clust$args$return_node_type, "species")
   expect_equal(clust$inputs$node_type, "species")
+  expect_equal(length(attr(clust$clusters, "node_type")), 4)
+  expect_equal(length(table(attr(clust$clusters, "node_type"))), 1)
+  expect_equal(attr(clust$clusters, "node_type")[1], "species")
   
   clust <- netclu_leadingeigen(net, 
                             bipartite = TRUE, 
@@ -149,6 +154,9 @@ test_that("valid output", {
   expect_equal(dim(clust$clusters)[1], 3)
   expect_equal(clust$args$return_node_type, "site")
   expect_equal(clust$inputs$node_type, "site")
+  expect_equal(length(attr(clust$clusters, "node_type")), 3)
+  expect_equal(length(table(attr(clust$clusters, "node_type"))), 1)
+  expect_equal(attr(clust$clusters, "node_type")[1], "site")
   
   clust <- netclu_leadingeigen(net, cut_weight = 100)
   expect_equal(colnames(clust$clusters), c("ID","K_0"))

@@ -528,20 +528,26 @@ netclu_infomap <- function(net,
     com <- knbclu(com)
 
     # Add node_type attribute and return_node_type
-    attr(com, "node_type") <- rep("site", dim(com)[1])
     if (isbip) {
-      attributes(com)$node_type[!is.na(match(
-        com[, 1],
-        idfeat$ID_NODE
-      ))] <- "species"
+      node_type_bip <- rep("site", dim(com)[1])
+      node_type_bip[!is.na(match(com[, 1],idfeat$ID_NODE))] <- "species"
+      if (return_node_type == "both") {
+        attr(com, "node_type") <- node_type_bip
+      }
       if (return_node_type == "site") {
-        com <- com[attributes(com)$node_type == "site", ]
+        idx <- node_type_bip == "site"
+        com <- com[idx, ]
+        attr(com, "node_type") <- node_type_bip[idx]
       }
       if (return_node_type == "species") {
-        com <- com[attributes(com)$node_type == "species", ]
+        idx <- node_type_bip == "species"
+        com <- com[idx, ]
+        attr(com, "node_type") <- node_type_bip[idx]
       }
+    }else{
+      attr(com, "node_type") <- rep("site", dim(com)[1])
     }
-
+  
     # Set algorithm in outputs
     outputs$algorithm$cmd <- cmd
     outputs$algorithm$version <- version
