@@ -1225,7 +1225,8 @@ randomize_dist <- function(dist_mat){
 # Evaluation of the fit of a tree to a distance matrix
 # works (or should work) for hclust, or anything as.hclust() converts: phylo, diana...
 tree_eval <- function(tree,
-                      dist_mat) {
+                      dist_mat,
+                      extra = FALSE) {
 
   if(inherits(dist_mat, "dist")){
     dist_mat <- as.matrix(dist_mat)
@@ -1259,12 +1260,63 @@ tree_eval <- function(tree,
   if(is.na(fit[["cophcor"]])){
     warning("the standard deviation is zero")   # same behaviour as stats::cor()
   }
-
+  
   # cophcor: Sokal & Rohlf 1962 Taxon
   # msd: Maire et al. 2015 GEB
-  return(list(cophcor = fit[["cophcor"]],
-              msd = fit[["msd"]]))
+  L <- list(cophcor = fit[["cophcor"]],
+            msd = fit[["msd"]])
+  
+  # extra
+  # sdr: Space distortion ratio (Fernandez and Gomez, 2020)
+  # ac: Agglomerative coefficient (Rousseeuw, 1986)
+  if(extra){
+    extra <- tree_eval_extra(tree, dist_mat)
+  }
+  L[["sdr"]] = extra[1]
+  L[["ac"]] = extra[2]
+  #L[["ccc2"]] = extra[3]
+  
+  # return
+  return(L)
 }
+
+# extra for sdr and ac
+tree_eval_extra <- function(tree, dist_mat) {
+  
+  n <- length(tree$labels)
+  
+  # Original distances
+  d <- as.vector(as.dist(dist_mat))
+  
+  # Cophenetic distances
+  cophen <- as.vector(stats::cophenetic(tree))
+  
+  # SDR: Space Distortion Ratio
+  sdr <- diff(range(cophen)) / diff(range(d))
+  
+  # AC: Agglomerative Coefficient
+  n <- nrow(tree$merge) + 1
+  
+  first_merge <- rep(NA_real_, n)
+  
+  for (i in seq_len(n - 1)) {
+    
+    leaves <- tree$merge[i, ]
+    leaves <- -leaves[leaves < 0]
+    
+    new_sites <- leaves[is.na(first_merge[leaves])]
+    
+    first_merge[new_sites] <- tree$height[i]
+  }
+  
+  ac <- mean(1 - first_merge / max(tree$height))
+  
+  # CCC check
+  #ccc2 <- stats::cor(d, cophen, method = "pearson")
+  
+  c(sdr, ac)
+}
+
 ################################################################################
 
 # sbgc #########################################################################
